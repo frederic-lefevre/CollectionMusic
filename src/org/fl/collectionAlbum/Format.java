@@ -33,10 +33,10 @@ public class Format {
 		DVD(	 "DVD",		 "xnbdvd", 	   JsonMusicProperties.DVD, 	 1) ,
 		BlueRay( "Blue Ray", "xnbblueray", JsonMusicProperties.BLUERAY,  1) ;
 		
-		private String nom ;
-		private String cssClass ; 
-		private String jsonPropertyName ;
-		private double poidsSupport ;
+		private final String nom ;
+		private final String cssClass ; 
+		private final String jsonPropertyName ;
+		private final double poidsSupport ;
 		
 		private SupportPhysique(String n, String cssCl, String jp, double ps) {
 			nom 	 	 	 = n ;
@@ -69,12 +69,12 @@ public class Format {
 		RangementK7("Ordre de rangement des K7"), 
 		RangementVHS("Ordre de rangement des DVD, VHS et Blue Ray") ;
 		
-		private String nom ;
+		private final String description ;
 		private RangementSupportPhysique(String n) {
-			nom = n ;
+			description = n ;
 		}
 		public String getDescription() {
-			return nom ;
+			return description ;
 		}
 	}
 	
