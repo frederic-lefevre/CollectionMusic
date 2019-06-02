@@ -14,9 +14,9 @@ import com.ibm.lge.fl.util.date.FuzzyPeriod;
 public class Album extends MusicArtefact {
 
     // titre de l'album
-    private String titre;
+    private final String titre;
     
-    private FuzzyPeriod periodeEnregistrement ;
+    private final FuzzyPeriod periodeEnregistrement ;
     private FuzzyPeriod periodeComposition ;
     
     private Format formatAlbum;
