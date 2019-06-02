@@ -16,9 +16,8 @@ import com.google.gson.JsonElement;
 public class Concert extends MusicArtefact {
 
     private TemporalAccessor dateConcert ;   
-    private String lieuConcert;
-    
-    private String urlInfos;
+    private final String lieuConcert;    
+    private final String urlInfos;
     
     private String titres[];
     
