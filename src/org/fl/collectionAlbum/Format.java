@@ -19,7 +19,7 @@ import com.google.gson.JsonObject;
  */
 public class Format {
 
-	// Définition des diff�rents supports physiques
+	// Définition des différents physiques
 	private enum SupportPhysique {
 		CD(		 "CD",  	 "xnbcd",  	   JsonMusicProperties.CD, 		 1) ,
 		K7(		 "K7",  	 "xnbk7", 	   JsonMusicProperties.K7, 		 1) ,
