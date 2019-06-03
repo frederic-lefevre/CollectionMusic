@@ -2,29 +2,18 @@ package org.fl.collectionAlbum;
 
 public class StatAnnee {
 	
-	private int an ;
+	private final int an ;
 	private double nombre ;
 
-	/**
-	 * @param aan
-	 * @param anombre
-	 * 
-	 */
 	public StatAnnee(int aan, double anombre) {
 		an = aan ;
 		nombre = anombre ;
 	}
 
-	/**
-	 * @return An
-	 */
 	public int getAn() {
 		return an;
 	}
 
-	/**
-	 * @return number as a string
-	 */
 	public String getNombre() {
 		
 		if (nombre == 0) {
@@ -40,12 +29,7 @@ public class StatAnnee {
 		}
 	}
 
-	/**
-	 * Increment the stat
-	 * @param n
-	 */
 	public void incrementNombre(double n) {
 		nombre = nombre + n ;
 	}
-
 }

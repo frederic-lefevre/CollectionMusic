@@ -9,10 +9,6 @@ import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * @author lefevre
- *
- */
 public class StatChrono implements HtmlReportPrintable {
 	
 	private static String styles[] = {"main","stat"} ;
@@ -21,9 +17,6 @@ public class StatChrono implements HtmlReportPrintable {
 	private List<StatAnnee> StatSiecle ;
 	private Logger statLogger;
 	
-    /**
-     * 
-     */
     public StatChrono(Logger sl) {
         super();
         statLogger = sl ;
@@ -35,11 +28,7 @@ public class StatChrono implements HtmlReportPrintable {
 	public String[] getCssStyles() {
 		return styles ;
 	}
-	/**
-	 * Add an album to the statistique
-	 * @param dateAlbum
-	 * @param poidsAlbum
-	 */
+
 	public void AddAlbum(TemporalAccessor dateAlbum, double poidsAlbum) {
 		
 		int year = getYearFromDate(dateAlbum) ;
