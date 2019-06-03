@@ -45,21 +45,10 @@ public class Format {
 			poidsSupport 	 = ps ;
 		}
 		
-		private String getJsonPropertyName() {
-			return jsonPropertyName ;
-		}
-		
-		private String getCssClass() {
-			return cssClass ;
-		}
-		
-		private String getNom() {
-			return nom ;
-		}
-		
-		private double getPoidsSupport() {
-			return poidsSupport ;
-		}
+		private String getJsonPropertyName() {	return jsonPropertyName ;}
+		private String getCssClass() 		 {	return cssClass 		;}		
+		private String getNom() 			 {	return nom 				;}	
+		private double getPoidsSupport() 	 {	return poidsSupport 	;}
 	}
 	
 	// Définition des rangements des supports physiques
@@ -95,7 +84,6 @@ public class Format {
 		}
 	}
 
-	
     /**
      * Get rangement for this format
      * @return Rangement (Vinyl, CD, VHS, K7)
@@ -137,7 +125,6 @@ public class Format {
 		return res ;
 	}
 	
-
 	/**
 	 * Increment format
 	 * @param addFormat
@@ -171,7 +158,6 @@ public class Format {
 		rowFormat(rapport, avecTotal, rows, "total") ;
 	}
 	
-
 	public void rowFormat(RapportHtml rapport, boolean avecTotal, int rows, String cssTotal) {
 		
 		if (avecTotal) {
@@ -179,11 +165,9 @@ public class Format {
 		}
 		for (SupportPhysique sPhys : SupportPhysique.values()) {
 			rapport.write(F_ROW1).write(rows).write(F_ROW3).write(sPhys.getCssClass()).write(F_ROW4).write(displayDouble(getNb(sPhys))).write(F_ROW5) ;			 
-		}
-		
+		}		
 	}
 	
-
 	private String displayDouble(double d) {
 		if (d == 0) {
 			return "" ;
@@ -197,6 +181,4 @@ public class Format {
 			}
 		}
 	}
-
 }
-
