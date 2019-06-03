@@ -135,6 +135,7 @@ public class Format {
 		}
 	}
 	
+	private final static String F_ROW0 = "    <td class=\"" ;
 	private final static String F_ROW1 = "    <td rowspan=\"" ;
 	private final static String F_ROW2 = "\" class=\"total\">Total</td>\n" ;
 	private final static String F_ROW3 = "\" class=\"" ;
@@ -156,10 +157,10 @@ public class Format {
 	public void rowFormat(RapportHtml rapport, String cssTotal) {
 		
 		if (cssTotal != null) {
-			rapport.write(F_ROW1).write(1).write(F_ROW3).write(cssTotal).write(F_ROW6).write(cssTotal).write(F_ROW4).write(displayDouble(getPoids())).write(F_ROW7) ;
+			rapport.write(F_ROW0).write(cssTotal).write(F_ROW6).write(cssTotal).write(F_ROW4).write(displayDouble(getPoids())).write(F_ROW7) ;
 		}
 		for (SupportPhysique sPhys : SupportPhysique.values()) {
-			rapport.write(F_ROW1).write(1).write(F_ROW3).write(sPhys.getCssClass()).write(F_ROW4).write(displayDouble(getNb(sPhys))).write(F_ROW5) ;			 
+			rapport.write(F_ROW0).write(sPhys.getCssClass()).write(F_ROW4).write(displayDouble(getNb(sPhys))).write(F_ROW5) ;			 
 		}		
 	}
 	
