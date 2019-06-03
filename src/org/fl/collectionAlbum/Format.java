@@ -153,11 +153,6 @@ public class Format {
 		}
 	}
 	
-
-	public void rowFormat(RapportHtml rapport, boolean avecTotal) {
-		rowFormat(rapport, avecTotal, "total") ;
-	}
-	
 	public void rowFormat(RapportHtml rapport, boolean avecTotal, String cssTotal) {
 		
 		if (avecTotal) {
