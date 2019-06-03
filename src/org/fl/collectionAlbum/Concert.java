@@ -6,7 +6,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.time.temporal.TemporalAccessor;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -62,15 +61,14 @@ public class Concert extends MusicArtefact {
         	urlInfos = jElem.getAsString() ;
         }
         
+        Type listType = new TypeToken<List<String>>() {}.getType();
+        
         // Traitement des titres
 		 jElem = arteFactJson.get(JsonMusicProperties.MORCEAUX) ;
 		 if (jElem != null) {
-			if (jElem.isJsonArray()) {
-				
-				JsonArray jTitres = jElem.getAsJsonArray() ;
-				Type listType = new TypeToken<List<String>>() {}.getType();
+			if (jElem.isJsonArray()) {				
+				JsonArray jTitres = jElem.getAsJsonArray() ;			
 				titres = new Gson().fromJson(jTitres, listType);
-
 			} else {
 				artefactLog.warning(JsonMusicProperties.MORCEAUX + " n'est pas un JsonArray pour le concert " + arteFactJson) ;
 			}
@@ -83,16 +81,12 @@ public class Concert extends MusicArtefact {
 			 artefactLog.info("Pas de ticket pour le concert " + arteFactJson) ;
 		 } else {
 			 if (jElem.isJsonArray()) {
-				 ticketImages = new ArrayList<String>() ;
 				 JsonArray jTickets = jElem.getAsJsonArray() ; 
-				 for (JsonElement jTicket : jTickets) {
-					 ticketImages.add(jTicket.getAsString()) ;
-				 }
+				 ticketImages =  new Gson().fromJson(jTickets,  listType);
 			 } else {
 				 artefactLog.warning(JsonMusicProperties.TICKET_IMG + " n'est pas un JsonArray pour le concert " + arteFactJson) ;
 			 }
-		 }
-        
+		 }  
 	}
 	
     
