@@ -1,6 +1,7 @@
 package org.fl.collectionAlbum;
 
 import java.io.File;
+import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
@@ -10,8 +11,10 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.reflect.TypeToken;
 
 public class Concert extends MusicArtefact {
 
@@ -19,7 +22,7 @@ public class Concert extends MusicArtefact {
     private final String lieuConcert;    
     private final String urlInfos;
     
-    private String titres[];
+    private List<String> titres;
     
     private List<String> ticketImages;
     
@@ -65,11 +68,9 @@ public class Concert extends MusicArtefact {
 			if (jElem.isJsonArray()) {
 				
 				JsonArray jTitres = jElem.getAsJsonArray() ;
-				titres = new String[jTitres.size()] ;
+				Type listType = new TypeToken<List<String>>() {}.getType();
+				titres = new Gson().fromJson(jTitres, listType);
 
-	        	for (int idx = 0; idx < jTitres.size(); idx++) {
-	        		titres[idx] = jTitres.get(idx).getAsString() ;
-	        	}
 			} else {
 				artefactLog.warning(JsonMusicProperties.MORCEAUX + " n'est pas un JsonArray pour le concert " + arteFactJson) ;
 			}
@@ -113,11 +114,11 @@ public class Concert extends MusicArtefact {
 					}
 				}
 				
-				if ((titres != null) && (titres.length >0)) {
+				if ((titres != null) && (titres.size() >0)) {
 					rapport.write("<h3>Titres</h3>") ;
 					rapport.write("<ol>") ;
-					for (int i=0; i < titres.length; i++) {
-						rapport.write("<li>").write(titres[i]).write("</li>") ;
+					for (String titre : titres) {
+						rapport.write("<li>").write(titre).write("</li>") ;
 					}
 					rapport.write("</ol>") ;
 				}
