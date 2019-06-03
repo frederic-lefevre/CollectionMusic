@@ -142,8 +142,8 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 		}
 
 		rapport.write("</ul>\n<h3>Statistiques</h3>\n<ul>\n") ;
-		generationRapportHtml(rapport, rapportDir, "Statistiques par ann�e d'enregistrement: Nombre d'unit&eacute;s physiques",  albumsContainer.getStatChronoEnregistrement(), 0, "") ;
-		generationRapportHtml(rapport, rapportDir, "Statistiques par d�cennie de composition: Nombre d'unit&eacute;s physiques", albumsContainer.getStatChronoComposition(), 	0, "") ;
+		generationRapportHtml(rapport, rapportDir, "Statistiques par année d'enregistrement: Nombre d'unit&eacute;s physiques",  albumsContainer.getStatChronoEnregistrement(), 0, "") ;
+		generationRapportHtml(rapport, rapportDir, "Statistiques par décennie de composition: Nombre d'unit&eacute;s physiques", albumsContainer.getStatChronoComposition(), 	0, "") ;
 
 		rapport.write("  <li>Nombre d'albums: " + albumsContainer.getCollectionAlbumsMusiques().getNombreAlbums()) ;
 		rapport.write("</li>\n  <li>Nombre d'artistes, de groupes et d'ensemble: " + albumsContainer.getCollectionArtistes().getNombreArtistes()) ;
