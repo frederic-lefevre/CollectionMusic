@@ -165,7 +165,7 @@ public class Album extends MusicArtefact {
     		JsonElement jElem = arteFactJson.get(JsonMusicProperties.FORMAT) ;
             if (jElem == null) {
             	artefactLog.warning("Format d'album null pour l'album " + arteFactJson) ;
-                formatAlbum = new Format(artefactLog) ;
+                formatAlbum = new Format(null, artefactLog) ;
             } else {
             	formatAlbum = new Format(jElem.getAsJsonObject(), artefactLog) ;
             }

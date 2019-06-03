@@ -25,7 +25,7 @@ public class ListeAlbum implements HtmlReportPrintable {
 	public ListeAlbum(Logger al) {
 		
 		listeAlbumLog = al ;
-		formatListeAlbum = new Format(listeAlbumLog) ;
+		formatListeAlbum = new Format(null, listeAlbumLog) ;
 		albums  = new ArrayList<Album>() ;
 	}
 	

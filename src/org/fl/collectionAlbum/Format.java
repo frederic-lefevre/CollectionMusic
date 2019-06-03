@@ -82,21 +82,15 @@ public class Format {
 	private EnumMap<SupportPhysique, Double> tableFormat ;
 	
 	// Create a format
-	public Format(Logger fl) {
-		tableFormat = new EnumMap<SupportPhysique, Double>(SupportPhysique.class) ;
-		
-	}
-	
-	/**
-	 * Create format
-	 */
 	public Format(JsonObject formatJson, Logger fl) {
 		
 		tableFormat = new EnumMap<SupportPhysique, Double>(SupportPhysique.class) ;
-		for (SupportPhysique sPhys : SupportPhysique.values()) {
-			JsonElement elemFormat = formatJson.get(sPhys.getJsonPropertyName()) ;
-			if (elemFormat != null) {
-				tableFormat.put(sPhys, new Double(elemFormat.getAsDouble())) ;
+		if (formatJson != null) {
+			for (SupportPhysique sPhys : SupportPhysique.values()) {
+				JsonElement elemFormat = formatJson.get(sPhys.getJsonPropertyName()) ;
+				if (elemFormat != null) {
+					tableFormat.put(sPhys, new Double(elemFormat.getAsDouble())) ;
+				}
 			}
 		}
 	}

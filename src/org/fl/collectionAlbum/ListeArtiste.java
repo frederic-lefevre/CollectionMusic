@@ -113,7 +113,7 @@ public class ListeArtiste implements HtmlReportPrintable {
 	
 	private void rapportTable(RapportHtml rapport, List<Artiste> Auteurs, int typeRapport) {
    	
-		Format entete = new Format(listeArtisteLog) ;
+		Format entete = new Format(null, listeArtisteLog) ;
 		try {
 			
 			if (typeRapport != rapportSimpleAlpha) {			    
