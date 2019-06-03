@@ -124,7 +124,7 @@ public class ListeAlbum implements HtmlReportPrintable {
 				}
 				printIntervenant( rapport, unAlbum, urlOffset) ;
 				rapport.write("    </td>\n") ;
-				unAlbum.getFormatAlbum().rowFormat(rapport, false, 1) ;
+				unAlbum.getFormatAlbum().rowFormat(rapport, false) ;
 				rapport.write("  </tr>\n") ;
 			}
 			rapport.write("</table>\n") ;
