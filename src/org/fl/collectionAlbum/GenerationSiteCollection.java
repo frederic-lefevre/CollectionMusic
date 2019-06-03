@@ -150,7 +150,7 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 		rapport.write("</li>\n  <li>Nombre d'unit&eacute;s physiques:\n<table>\n  <tr>\n") ;
 		albumsContainer.getCollectionAlbumsMusiques().getFormatListeAlbum().enteteFormat(rapport, true, 1) ;
 		rapport.write("  </tr>\n  <tr>\n") ;
-		albumsContainer.getCollectionAlbumsMusiques().getFormatListeAlbum().rowFormat(rapport, true, "total") ;
+		albumsContainer.getCollectionAlbumsMusiques().getFormatListeAlbum().rowFormat(rapport, "total") ;
 		rapport.write("  </tr>\n</table>\n</li>\n</ul>\n") ;
 		rapport.finRapport() ;			
 	}

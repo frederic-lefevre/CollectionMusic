@@ -153,9 +153,9 @@ public class Format {
 		}
 	}
 	
-	public void rowFormat(RapportHtml rapport, boolean avecTotal, String cssTotal) {
+	public void rowFormat(RapportHtml rapport, String cssTotal) {
 		
-		if (avecTotal) {
+		if (cssTotal != null) {
 			rapport.write(F_ROW1).write(1).write(F_ROW3).write(cssTotal).write(F_ROW6).write(cssTotal).write(F_ROW4).write(displayDouble(getPoids())).write(F_ROW7) ;
 		}
 		for (SupportPhysique sPhys : SupportPhysique.values()) {

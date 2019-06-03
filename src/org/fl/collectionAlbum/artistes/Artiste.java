@@ -321,7 +321,7 @@ public class Artiste {
 				rapport.write("</span> (").write(getDateNaissance()).write(" - ").write(getDateMort()).write(")</td>\n") ;
 				getPoids().enteteFormat(rapport, true, 1) ;
 				rapport.write("  </tr>\n  <tr>\n") ;
-				getPoids().rowFormat(rapport, true, "artotal") ;
+				getPoids().rowFormat(rapport, "artotal") ;
 				rapport.write("  </tr>\n</table>\n") ;
 				albums.rapport(rapport, ListeAlbum.rapportChronoComposition, "../../") ;
 				rapport.finRapport() ;
