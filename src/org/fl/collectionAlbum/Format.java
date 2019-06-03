@@ -137,17 +137,17 @@ public class Format {
 	
 	private final static String F_ROW0 = "    <td class=\"" ;
 	private final static String F_ROW1 = "    <td rowspan=\"" ;
-	private final static String F_ROW2 = "\" class=\"total\">Total</td>\n" ;
+	private final static String F_ROW2 = "\">Total</td>\n" ;
 	private final static String F_ROW3 = "\" class=\"" ;
 	private final static String F_ROW4 = "\">" ;
 	private final static String F_ROW5 = "</td>\n" ;
 	private final static String F_ROW6 = "\"><span class=\"" ;
 	private final static String F_ROW7 = "</span></td>\n" ;
 	
-	public void enteteFormat(RapportHtml rapport, boolean avecTotal, int rows) {
+	public void enteteFormat(RapportHtml rapport, String cssTotal, int rows) {
 		
-		if (avecTotal) {
-			rapport.write(F_ROW1).write(rows).write(F_ROW2) ;
+		if (cssTotal != null) {
+			rapport.write(F_ROW1).write(rows).write(F_ROW3).write(cssTotal).write(F_ROW2) ;
 		}
 		for (SupportPhysique sPhys : SupportPhysique.values()) {
 			rapport.write(F_ROW1).write(rows).write(F_ROW3).write(sPhys.getCssClass()).write(F_ROW4).write(sPhys.getNom()).write(F_ROW5) ;

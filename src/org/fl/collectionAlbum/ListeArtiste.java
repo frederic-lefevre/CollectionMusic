@@ -121,13 +121,13 @@ public class ListeArtiste implements HtmlReportPrintable {
 				if (isConcert(typeRapport)) {
 					rapport.write(F2) ;
 				} else {
-					entete.enteteFormat(rapport, true, 1) ;
+					entete.enteteFormat(rapport, "total", 1) ;
 				}
 				rapport.write(F3) ;
 				if (isConcert(typeRapport)) {
 					rapport.write("    <td class=\"total\">Nombre<br/>concerts</td>\n") ;
 				} else {
-					entete.enteteFormat(rapport, true, 1) ;
+					entete.enteteFormat(rapport, "total", 1) ;
 				}
 				rapport.write("  </tr>\n") ;
 			} else {

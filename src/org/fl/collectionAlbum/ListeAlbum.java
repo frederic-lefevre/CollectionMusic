@@ -83,9 +83,9 @@ public class ListeAlbum implements HtmlReportPrintable {
 		
 		try {
 			rapport.write(table1) ;
-	        formatListeAlbum.enteteFormat(rapport, false, 2) ;
+	        formatListeAlbum.enteteFormat(rapport, null, 2) ;
 	        rapport.write(table2) ;
-			formatListeAlbum.enteteFormat(rapport, false, 2) ;
+			formatListeAlbum.enteteFormat(rapport, null, 2) ;
 			rapport.write(table3) ;
 			for (Album unAlbum : listeAlbums) {
 				

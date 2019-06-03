@@ -148,7 +148,7 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 		rapport.write("  <li>Nombre d'albums: " + albumsContainer.getCollectionAlbumsMusiques().getNombreAlbums()) ;
 		rapport.write("</li>\n  <li>Nombre d'artistes, de groupes et d'ensemble: " + albumsContainer.getCollectionArtistes().getNombreArtistes()) ;
 		rapport.write("</li>\n  <li>Nombre d'unit&eacute;s physiques:\n<table>\n  <tr>\n") ;
-		albumsContainer.getCollectionAlbumsMusiques().getFormatListeAlbum().enteteFormat(rapport, true, 1) ;
+		albumsContainer.getCollectionAlbumsMusiques().getFormatListeAlbum().enteteFormat(rapport, "total", 1) ;
 		rapport.write("  </tr>\n  <tr>\n") ;
 		albumsContainer.getCollectionAlbumsMusiques().getFormatListeAlbum().rowFormat(rapport, "total") ;
 		rapport.write("  </tr>\n</table>\n</li>\n</ul>\n") ;
