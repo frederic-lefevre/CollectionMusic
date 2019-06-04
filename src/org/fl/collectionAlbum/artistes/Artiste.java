@@ -42,9 +42,6 @@ public class Artiste {
 
 	protected ListeConcert concerts ;
 	
-	/**
-	 * <code>styles</code>: styles pour les rapports 
-	 */
 	private static String styles[] = {"main","format","rapport", "artiste"} ;
 	
 	private Logger artisteLog;
@@ -83,8 +80,8 @@ public class Artiste {
 	
 	public boolean isSameArtiste(JsonObject jArtiste) {
 		
-		JsonElement jNom    	= jArtiste.get(JsonMusicProperties.NOM) ;
-		JsonElement jPrenom 	= jArtiste.get(JsonMusicProperties.PRENOM) ;
+		JsonElement jNom    = jArtiste.get(JsonMusicProperties.NOM) ;
+		JsonElement jPrenom = jArtiste.get(JsonMusicProperties.PRENOM) ;
 		
 		String lastName  = JsonUtils.getAsStringOrBlank(jNom) ;
 		String firstName = JsonUtils.getAsStringOrBlank(jPrenom) ;
@@ -101,8 +98,8 @@ public class Artiste {
     protected void setArtiste(String aNom, String aPrenoms, String n, String m) {
 		
     	htmlFileName = null ;
-    	albums  = new ListeAlbum(artisteLog) ;
-    	concerts  = new ListeConcert(artisteLog) ;
+    	albums  	 = new ListeAlbum(artisteLog) ;
+    	concerts  	 = new ListeConcert(artisteLog) ;
 		if (aNom == null) {
 			artisteLog.warning("Nom d'artiste null") ;
 			aNom = "" ;
@@ -113,7 +110,7 @@ public class Artiste {
 			aPrenoms = "" ;
 		}
 
-		nom = aNom ;
+		nom 	= aNom ;
 		prenoms = aPrenoms ;
 		
 		try {
@@ -158,8 +155,8 @@ public class Artiste {
 		JsonElement jNaissance 	= jArtiste.get(JsonMusicProperties.NAISSANCE) ;
 		JsonElement jMort      	= jArtiste.get(JsonMusicProperties.MORT) ;
 
-		String birth 	 = JsonUtils.getAsStringOrNull(jNaissance) ;
-		String death	 = JsonUtils.getAsStringOrNull(jMort) ;
+		String birth = JsonUtils.getAsStringOrNull(jNaissance) ;
+		String death = JsonUtils.getAsStringOrNull(jMort) ;
 		update(birth, death) ;
     }
         
@@ -176,75 +173,46 @@ public class Artiste {
     	}
     }
     
-    /**
-     * Ajouter un concert
-     * @param crt concert
-     */
-    public void addConcert(Concert crt) {
-    	concerts.addConcert(crt) ;
-    }
-    /**
-     * @return nombre d'album d'un artiste
-     */
     public Format getPoids() {
     	return albums.getFormatListeAlbum() ;
-//    	return Poids ;
     }
     
-    /**
-     * @return nombre de concerts
-     */
+
     public int getNbConcert() {
     	return concerts.getNombreConcerts() ;
     }
     
-    /**
-     * @return nombre d'albums
-     */
+
     public int getNbAlbum() {
     	return albums.getNombreAlbums() ;
     }
     
-    /**
-     * @return date naissance as a string
-     */
+
     public String getDateNaissance() {
 		return Control.formatDate(naissance) ;
     }
     
-	/**
-	 * @return Date mort as a string
-	 */
+
 	public String getDateMort() {
 		return Control.formatDate(mort) ;
 	}
 	
-	/**
-	 * @return date naissance
-	 */
+
 	public TemporalAccessor getNaissance() {
 		return naissance ;
 	}
     
-	/**
-	 * @return date mort
-	 */
+
 	public TemporalAccessor getMort() {
 		return mort ;
 	}
     
-	/**
-	 * Returns the nom.
-	 * @return String
-	 */
+
 	public String getNom() {
 		return nom;
 	}
 
-	/**
-	 * Returns the prenoms.
-	 * @return String
-	 */
+
 	public String getPrenoms() {
 		return prenoms;
 	}
@@ -253,18 +221,12 @@ public class Artiste {
 		return instruments;
 	}
 	
-	/**
-	 * Get the url for album rapport
-	 * @return the url for album rapport
-	 */
+
 	public String getUrlHtml() {
 		return Control.getArtistedir() + "/" + relativePathHtml + "/" + htmlFileName;
 	}
 	
-	/**
-	 * Get the url for concert rapport
-	 * @return the url for concert rapport
-	 */
+
 	public String getConcertUrlHtml() {
 		return Control.getArtistedir() + "/" + relativePathHtml + "/" + htmlConcertFileName;
 	}
@@ -283,9 +245,7 @@ public class Artiste {
 		htmlConcertFile = new File(htmlDirNameComplete + File.separator + htmlConcertFileName) ;
 	}
 	
-	/**
-	 * Generate Html files corresponding to this artiste
-	 */
+
 	public void generateHtml() {
 		
 		if (artisteLog.isLoggable(Level.FINE)) {
@@ -351,9 +311,7 @@ public class Artiste {
 		}
 	} 
 	
-    /**
-     * @param id The id to set.
-     */
+
     public int setHtmlNames(int id) {
 
     	if (htmlFileName == null) {
