@@ -35,7 +35,7 @@ public class Groupe extends Artiste {
 		String lastName  = JsonUtils.getAsStringOrBlank(jNom) ;
 		String firstName = JsonUtils.getAsStringOrBlank(jArticle) ;
 		
-		return (Nom.equals(lastName) && Prenoms.equals(firstName)) ;
+		return (nom.equals(lastName) && prenoms.equals(firstName)) ;
 	}
 	
 }

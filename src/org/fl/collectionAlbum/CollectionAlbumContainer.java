@@ -1,6 +1,7 @@
 package org.fl.collectionAlbum;
 
 import java.util.EnumMap;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.artistes.Artiste;
@@ -125,20 +126,23 @@ public class CollectionAlbumContainer {
 	// if it does not exists, create it
 	public Artiste createGetOrUpdateArtiste(Class<? extends Artiste> cls, JsonObject jArtiste) {
 		
-		Artiste a = collectionArtistes.getArtisteKnown(jArtiste) ;
-		if (a == null) {
-			a = concertsArtistes.getArtisteKnown(jArtiste) ;
-		}
-		if (a == null) {
+		Artiste artiste;
+		Optional<Artiste> eventualArtiste = collectionArtistes.getArtisteKnown(jArtiste) ;
+		if (! eventualArtiste.isPresent()) {
+			eventualArtiste = concertsArtistes.getArtisteKnown(jArtiste) ;
+		} 
+		
+		if (! eventualArtiste.isPresent()) {
 			if (cls == Groupe.class) {
-				a = new Groupe(jArtiste, albumLog) ;
+				artiste = new Groupe(jArtiste, albumLog) ;
 			} else {
-				a = new Artiste(jArtiste, albumLog) ;
+				artiste = new Artiste(jArtiste, albumLog) ;
 			}
 		} else {
-			a.update(jArtiste);
+			artiste = eventualArtiste.get() ;
+			artiste.update(jArtiste);
 		}
-		return a ;
+		return artiste ;
 	}
 	
 	public void setHtmlIds() {

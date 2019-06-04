@@ -27,18 +27,18 @@ import java.io.File;
 
 public class Artiste {
 	
-	protected String Nom ;
-	protected String Prenoms ;
+	protected String 		   nom ;
+	protected String 		   prenoms ;
 	protected TemporalAccessor naissance;
 	protected TemporalAccessor mort ;
-	protected List<String> instruments;
+	protected List<String> 	   instruments;
 
-	protected String relativePathHtml ;
-	protected String htmlFileName ;
-	protected File htmlFile ;
-	protected String htmlConcertFileName ;
-	protected File htmlConcertFile ;
-	protected ListeAlbum albums ;
+	protected String 		   relativePathHtml ;
+	protected String 		   htmlFileName ;
+	protected File 			   htmlFile ;
+	protected String 		   htmlConcertFileName ;
+	protected File 			   htmlConcertFile ;
+	protected ListeAlbum 	   albums ;
 
 	protected ListeConcert concerts ;
 	
@@ -89,12 +89,9 @@ public class Artiste {
 		String lastName  = JsonUtils.getAsStringOrBlank(jNom) ;
 		String firstName = JsonUtils.getAsStringOrBlank(jPrenom) ;
 		
-		return (Nom.equals(lastName) && Prenoms.equals(firstName)) ;
+		return (nom.equals(lastName) && prenoms.equals(firstName)) ;
 	}
 	
-    /**
-     * 
-     */
     public Artiste(Logger al) {
 		super();
     	artisteLog = al ;
@@ -116,8 +113,8 @@ public class Artiste {
 			aPrenoms = "" ;
 		}
 
-		Nom = aNom ;
-		Prenoms = aPrenoms ;
+		nom = aNom ;
+		prenoms = aPrenoms ;
 		
 		try {
             naissance = Control.parseDate(n) ;
@@ -127,30 +124,30 @@ public class Artiste {
         }
 
 		if (artisteLog.isLoggable(Level.FINEST)) {
-			artisteLog.finest("Nouvel artiste: " + Nom + " " + Prenoms + " (" + getDateNaissance() + " - " + getDateMort() + ")") ;
+			artisteLog.finest("Nouvel artiste: " + nom + " " + prenoms + " (" + getDateNaissance() + " - " + getDateMort() + ")") ;
 		}
 	}
     
     public void update(String n, String m) {
     	if ((n != null) && (! n.isEmpty())) {
     		if (naissance != null) {
-    			artisteLog.warning("Date de naissance définie 2 fois pour " + Prenoms + " " + Nom) ;
+    			artisteLog.warning("Date de naissance définie 2 fois pour " + prenoms + " " + nom) ;
     		} else {
     			try {
     	            naissance = Control.parseDate(n) ;
     	        } catch (Exception e) {
-    	        	artisteLog.severe("Erreur dans les dates de " + Prenoms + " " + Nom);
+    	        	artisteLog.severe("Erreur dans les dates de " + prenoms + " " + nom);
     	        }
     		}
     	}
     	if ((m != null) && (! m.isEmpty())) {
     		if (mort != null) {
-    			artisteLog.warning("Date de décés définie 2 fois pour " + Prenoms + " " + Nom) ;
+    			artisteLog.warning("Date de décés définie 2 fois pour " + prenoms + " " + nom) ;
     		} else {
     			try {
     	            mort = Control.parseDate(m) ;
     	        } catch (Exception e) {
-    	        	artisteLog.severe("Erreur dans les dates de " + Prenoms + " " + Nom);
+    	        	artisteLog.severe("Erreur dans les dates de " + prenoms + " " + nom);
     	        }
     		}
     	}
@@ -241,7 +238,7 @@ public class Artiste {
 	 * @return String
 	 */
 	public String getNom() {
-		return Nom;
+		return nom;
 	}
 
 	/**
@@ -249,7 +246,7 @@ public class Artiste {
 	 * @return String
 	 */
 	public String getPrenoms() {
-		return Prenoms;
+		return prenoms;
 	}
 
 	public List<String> getInstruments() {
@@ -282,7 +279,7 @@ public class Artiste {
 				artisteLog.severe("Impossible de créer la directorie: " + htmlDir.getAbsolutePath()) ;
 			}
 		}
-		htmlFile = new File(htmlDirNameComplete + File.separator + htmlFileName) ;
+		htmlFile 		= new File(htmlDirNameComplete + File.separator + htmlFileName) ;
 		htmlConcertFile = new File(htmlDirNameComplete + File.separator + htmlConcertFileName) ;
 	}
 	
@@ -292,7 +289,7 @@ public class Artiste {
 	public void generateHtml() {
 		
 		if (artisteLog.isLoggable(Level.FINE)) {
-			artisteLog.fine("Génération des rapport html pour " + Nom + " " + Prenoms);
+			artisteLog.fine("Génération des rapport html pour " + nom + " " + prenoms);
 		}
 		initHtmFiles() ;
 		if (albums.getNombreAlbums() > 0) {
@@ -328,7 +325,7 @@ public class Artiste {
 		
 			}
 		} catch (Exception e) {
-			artisteLog.log(Level.SEVERE, "Exception dans la génération du html de " + Nom + " " + Prenoms, e);
+			artisteLog.log(Level.SEVERE, "Exception dans la génération du html de " + nom + " " + prenoms, e);
 		}
 	} 
 	

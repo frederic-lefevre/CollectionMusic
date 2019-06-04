@@ -2,6 +2,7 @@ package org.fl.collectionAlbum;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -66,14 +67,8 @@ public class ListeArtiste implements HtmlReportPrintable {
 		return null ;
 	}
 	
-	public Artiste getArtisteKnown(JsonObject jArtiste) {
-
-		for (Artiste a : artistes) {
-			if (a.isSameArtiste(jArtiste)) {
-				return a ;
-			}
-		}
-		return null ;
+	public Optional<Artiste> getArtisteKnown(JsonObject jArtiste) {
+		return artistes.stream().filter(a -> a.isSameArtiste(jArtiste)).findFirst() ;
 	}
 	
 	/**
