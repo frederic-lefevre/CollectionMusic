@@ -198,30 +198,12 @@ public class Artiste {
 	}
 	
 
-	public TemporalAccessor getNaissance() {
-		return naissance ;
-	}
-    
-
-	public TemporalAccessor getMort() {
-		return mort ;
-	}
-    
-
-	public String getNom() {
-		return nom;
-	}
-
-
-	public String getPrenoms() {
-		return prenoms;
-	}
-
-	public List<String> getInstruments() {
-		return instruments;
-	}
+	public TemporalAccessor getNaissance() 	 { return naissance   ; }   
+	public TemporalAccessor getMort() 	   	 { return mort		  ; }
+	public String 			getNom() 	   	 { return nom		  ; }
+	public String 			getPrenoms()   	 { return prenoms	  ; }
+	public List<String> 	getInstruments() { return instruments ; }
 	
-
 	public String getUrlHtml() {
 		return Control.getArtistedir() + "/" + relativePathHtml + "/" + htmlFileName;
 	}
