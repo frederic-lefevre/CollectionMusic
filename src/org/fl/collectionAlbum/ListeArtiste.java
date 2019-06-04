@@ -15,10 +15,10 @@ import com.google.gson.JsonObject;
 public class ListeArtiste implements HtmlReportPrintable {
 	
 
-	public static int rapportAlpha = 0 ;
-	public static int rapportPoids = 1 ;
-	public static int rapportChrono = 2 ;
-	public static int rapportSimpleAlpha = 3 ;
+	public static int rapportAlpha 		  = 0 ;
+	public static int rapportPoids 		  = 1 ;
+	public static int rapportChrono 	  = 2 ;
+	public static int rapportSimpleAlpha  = 3 ;
 	public static int rapportConcertAlpha = 4 ;
 	public static int rapportConcertPoids = 5 ;
 	
@@ -26,15 +26,15 @@ public class ListeArtiste implements HtmlReportPrintable {
 	
 	private static String styles[] = {"main","format","rapport","chrono"} ;
 	
-	private ArrayList<Artiste> artistes;
-	private List<Character> balises  ;
+	private List<Artiste> artistes;
+	private List<Character>    balises  ;
 		
 
 	public ListeArtiste(Logger laLog) {
 		super();
 		listeArtisteLog = laLog;
-		artistes  = new ArrayList<Artiste>() ;
-		balises = new ArrayList<Character>() ;
+		artistes  		= new ArrayList<Artiste>() ;
+		balises 		= new ArrayList<Character>() ;
 	}
 
 	public String[] getCssStyles() {
@@ -50,11 +50,13 @@ public class ListeArtiste implements HtmlReportPrintable {
 		if (! artistes.contains(a)) {
 			artistes.add(a) ;
 		}
-		listeArtisteLog.finest("  Nom: " + a.getNom() + "  Prenoms: " + a.getPrenoms());
+		if (listeArtisteLog.isLoggable(Level.FINEST)) {
+			listeArtisteLog.finest("  Nom: " + a.getNom() + "  Prenoms: " + a.getPrenoms()) ;
+		}
 	}
 	
 	public Artiste getArtisteKnown(String nom, String prenom) {
-		if (nom == null) nom = "" ;
+		if (nom    == null) nom    = "" ;
 		if (prenom == null) prenom = "" ;
 		for (Artiste a : artistes) {
 			if (nom.equals(a.getNom()) && (prenom.equals(a.getPrenoms()))) {
@@ -193,7 +195,7 @@ public class ListeArtiste implements HtmlReportPrintable {
 		return ((typeRapport == rapportAlpha) || (typeRapport == rapportConcertAlpha)) ;
 	}
 	
-	public ArrayList<Artiste> getArtistes() {
+	public List<Artiste> getArtistes() {
 		return artistes;
 	}
 
