@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.albums.Album;
+import org.fl.collectionAlbum.albums.ListeAlbum;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.Groupe;
 import org.fl.collectionAlbum.artistes.ListeArtiste;

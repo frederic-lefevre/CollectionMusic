@@ -1,4 +1,4 @@
-package org.fl.collectionAlbum;
+package org.fl.collectionAlbum.albums;
 
 import java.util.ArrayList;
 import java.time.temporal.TemporalAccessor;
@@ -6,7 +6,13 @@ import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.fl.collectionAlbum.albums.Album;
+import org.fl.collectionAlbum.AlbumCompositionComparator;
+import org.fl.collectionAlbum.AlbumEnregistrementComparator;
+import org.fl.collectionAlbum.Control;
+import org.fl.collectionAlbum.Format;
+import org.fl.collectionAlbum.HtmlReportPrintable;
+import org.fl.collectionAlbum.RangementComparator;
+import org.fl.collectionAlbum.RapportHtml;
 import org.fl.collectionAlbum.artistes.Artiste;
 
 public class ListeAlbum implements HtmlReportPrintable {
