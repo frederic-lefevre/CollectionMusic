@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingWorker;
 
+import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbumGui.ProgressInformation;

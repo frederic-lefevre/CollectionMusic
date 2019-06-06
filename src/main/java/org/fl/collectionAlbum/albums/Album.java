@@ -1,4 +1,4 @@
-package org.fl.collectionAlbum;
+package org.fl.collectionAlbum.albums;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -6,6 +6,11 @@ import java.time.temporal.TemporalAccessor;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.fl.collectionAlbum.Control;
+import org.fl.collectionAlbum.Format;
+import org.fl.collectionAlbum.JsonMusicProperties;
+import org.fl.collectionAlbum.MusicArtefact;
+import org.fl.collectionAlbum.RapportHtml;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 
 import com.google.gson.JsonArray;

@@ -4,6 +4,8 @@ import java.time.temporal.TemporalAccessor;
 import java.util.Comparator;
 import java.util.logging.Logger;
 
+import org.fl.collectionAlbum.albums.Album;
+
 import com.ibm.lge.fl.util.date.TemporalUtils;
 
 public class AlbumCompositionComparator  implements Comparator<Album> {
