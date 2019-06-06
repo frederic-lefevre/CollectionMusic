@@ -18,14 +18,14 @@ public class StatChrono implements HtmlReportPrintable {
 	private List<StatAnnee> StatAnnuelle ; 
 	private List<StatAnnee> StatDecennale ;
 	private List<StatAnnee> StatSiecle ;
-	private Logger statLogger;
+	private Logger 			statLogger;
 	
     public StatChrono(Logger sl) {
         super();
         statLogger = sl ;
         StatAnnuelle  = new ArrayList<StatAnnee>(2000) ;
-        StatDecennale  = new ArrayList<StatAnnee>(200) ;
-        StatSiecle  = new ArrayList<StatAnnee>(20) ;
+        StatDecennale = new ArrayList<StatAnnee>(200) ;
+        StatSiecle    = new ArrayList<StatAnnee>(20) ;
     }
     
 	public String[] getCssStyles() {
