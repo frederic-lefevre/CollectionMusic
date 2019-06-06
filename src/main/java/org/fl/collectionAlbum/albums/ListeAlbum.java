@@ -6,8 +6,6 @@ import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.fl.collectionAlbum.AlbumCompositionComparator;
-import org.fl.collectionAlbum.AlbumEnregistrementComparator;
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.Format;
 import org.fl.collectionAlbum.HtmlReportPrintable;
