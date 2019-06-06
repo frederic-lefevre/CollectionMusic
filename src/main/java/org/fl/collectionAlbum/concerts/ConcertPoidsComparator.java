@@ -1,4 +1,4 @@
-package org.fl.collectionAlbum;
+package org.fl.collectionAlbum.concerts;
 
 import java.util.Comparator;
 

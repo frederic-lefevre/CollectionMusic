@@ -1,4 +1,4 @@
-package org.fl.collectionAlbum;
+package org.fl.collectionAlbum.concerts;
 
 import java.io.File;
 import java.lang.reflect.Type;
@@ -10,6 +10,10 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.fl.collectionAlbum.Control;
+import org.fl.collectionAlbum.JsonMusicProperties;
+import org.fl.collectionAlbum.MusicArtefact;
+import org.fl.collectionAlbum.RapportHtml;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 
 import com.google.gson.Gson;

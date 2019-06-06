@@ -7,16 +7,16 @@ import java.time.temporal.TemporalAccessor;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.fl.collectionAlbum.Concert;
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.Format;
 import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.LinkList;
-import org.fl.collectionAlbum.ListeConcert;
 import org.fl.collectionAlbum.MusicArtefact;
 import org.fl.collectionAlbum.RapportHtml;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.albums.ListeAlbum;
+import org.fl.collectionAlbum.concerts.Concert;
+import org.fl.collectionAlbum.concerts.ListeConcert;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;

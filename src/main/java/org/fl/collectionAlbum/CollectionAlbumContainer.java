@@ -9,6 +9,8 @@ import org.fl.collectionAlbum.albums.ListeAlbum;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.Groupe;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
+import org.fl.collectionAlbum.concerts.Concert;
+import org.fl.collectionAlbum.concerts.ListeConcert;
 
 import com.google.gson.JsonObject;
 
