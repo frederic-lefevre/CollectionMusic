@@ -13,7 +13,6 @@ public class Control {
 	// Logger
 	private static Logger albumLog ;
 	
-	private static CollectionAlbumContainer collectionContainer ;
 	private static String rapportPath ;
 	private static String concertTicketImgPath ;
 	private static String oldRapportPath ;
@@ -65,8 +64,6 @@ public class Control {
 			accueils.addLink("Accueil Collection", homeCollectionFile) ;
 			accueils.addLink("Accueil Concert",    homeConcertFile) ;
 			
-			collectionContainer = new CollectionAlbumContainer(albumLog) ;
-		
 		} catch (URISyntaxException e) {
 			System.out.println("URI syntax exception for property file: " + propFile);
 			e.printStackTrace();
@@ -89,8 +86,4 @@ public class Control {
 	public static String getMusicfileExtension() 	{return musicFileExtension;		}
 	public static Charset getCharset() 				{return charset;				}
 	
-	public static CollectionAlbumContainer getCollectionContainer() {
-		return collectionContainer;
-	}	
-
 }

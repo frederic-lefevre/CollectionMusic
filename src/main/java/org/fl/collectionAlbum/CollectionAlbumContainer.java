@@ -42,7 +42,17 @@ public class CollectionAlbumContainer {
 	
 	private Logger albumLog ;
 	
-	public CollectionAlbumContainer(Logger aLog) {
+	private static CollectionAlbumContainer collectionAlbumContainer ;
+	
+	public static CollectionAlbumContainer getInstance(Logger aLog) {
+		
+		if (collectionAlbumContainer == null) {
+			collectionAlbumContainer = new CollectionAlbumContainer(aLog) ;
+		}
+		return collectionAlbumContainer ;
+	}
+	
+	private CollectionAlbumContainer(Logger aLog) {
 		
 		albumLog = aLog;
 		reset() ;

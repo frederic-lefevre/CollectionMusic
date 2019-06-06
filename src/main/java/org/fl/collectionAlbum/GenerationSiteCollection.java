@@ -37,7 +37,7 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 	 @Override 
 	 public String doInBackground() {
   		
-  		albumsContainer = Control.getCollectionContainer() ;
+  		albumsContainer = CollectionAlbumContainer.getInstance(albumLog) ;
   		
 		albumLog.info("Nettoyage de l'ancien site");
 		publish(new ProgressInformation("En cours de génération", "Nettoyage de l'ancien site")) ;

@@ -101,9 +101,9 @@ public abstract class MusicArtefact {
 				
 		Artiste unArtiste ;
 		if (cls == Groupe.class) {
-			unArtiste = (Groupe)Control.getCollectionContainer().createGetOrUpdateArtiste(cls, jArtiste) ;
+			unArtiste = (Groupe)CollectionAlbumContainer.getInstance(artefactLog).createGetOrUpdateArtiste(cls, jArtiste) ;
 		} else {
-			unArtiste = Control.getCollectionContainer().createGetOrUpdateArtiste(cls, jArtiste) ;
+			unArtiste = CollectionAlbumContainer.getInstance(artefactLog).createGetOrUpdateArtiste(cls, jArtiste) ;
 		}
 		
 		listeArtistes.addArtiste(unArtiste);
