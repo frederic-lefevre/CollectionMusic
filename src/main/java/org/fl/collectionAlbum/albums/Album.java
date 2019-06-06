@@ -12,6 +12,7 @@ import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.MusicArtefact;
 import org.fl.collectionAlbum.RapportHtml;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
+import org.fl.collectionAlbum.utils.TemporalUtils;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -92,7 +93,7 @@ public class Album extends MusicArtefact {
 						String debut = jDates.get(0).getAsString();
 						String fin = jDates.get(1).getAsString();
 
-						period = new FuzzyPeriod(Control.parseDate(debut), Control.parseDate(fin), artefactLog) ;
+						period = new FuzzyPeriod(TemporalUtils.parseDate(debut), TemporalUtils.parseDate(fin), artefactLog) ;
 						
 						if (! period.isValid()) {
 							artefactLog.warning(periodProp + " : Erreur dans les dates de l'album " + albumJson);

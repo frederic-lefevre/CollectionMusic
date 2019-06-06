@@ -17,6 +17,7 @@ import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.albums.ListeAlbum;
 import org.fl.collectionAlbum.concerts.Concert;
 import org.fl.collectionAlbum.concerts.ListeConcert;
+import org.fl.collectionAlbum.utils.TemporalUtils;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -114,8 +115,8 @@ public class Artiste {
 		prenoms = aPrenoms ;
 		
 		try {
-            naissance = Control.parseDate(n) ;
-            mort 	  = Control.parseDate(m) ;
+            naissance = TemporalUtils.parseDate(n) ;
+            mort 	  = TemporalUtils.parseDate(m) ;
         } catch (Exception e) {
         	artisteLog.severe("Erreur dans les dates de " + aPrenoms + " " + aNom);
         }
@@ -131,7 +132,7 @@ public class Artiste {
     			artisteLog.warning("Date de naissance définie 2 fois pour " + prenoms + " " + nom) ;
     		} else {
     			try {
-    	            naissance = Control.parseDate(n) ;
+    	            naissance = TemporalUtils.parseDate(n) ;
     	        } catch (Exception e) {
     	        	artisteLog.severe("Erreur dans les dates de " + prenoms + " " + nom);
     	        }
@@ -142,7 +143,7 @@ public class Artiste {
     			artisteLog.warning("Date de décés définie 2 fois pour " + prenoms + " " + nom) ;
     		} else {
     			try {
-    	            mort = Control.parseDate(m) ;
+    	            mort = TemporalUtils.parseDate(m) ;
     	        } catch (Exception e) {
     	        	artisteLog.severe("Erreur dans les dates de " + prenoms + " " + nom);
     	        }
@@ -189,12 +190,12 @@ public class Artiste {
     
 
     public String getDateNaissance() {
-		return Control.formatDate(naissance) ;
+		return TemporalUtils.formatDate(naissance) ;
     }
     
 
 	public String getDateMort() {
-		return Control.formatDate(mort) ;
+		return TemporalUtils.formatDate(mort) ;
 	}
 	
 

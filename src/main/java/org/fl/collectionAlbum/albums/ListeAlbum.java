@@ -6,12 +6,12 @@ import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.Format;
 import org.fl.collectionAlbum.HtmlReportPrintable;
 import org.fl.collectionAlbum.RangementComparator;
 import org.fl.collectionAlbum.RapportHtml;
 import org.fl.collectionAlbum.artistes.Artiste;
+import org.fl.collectionAlbum.utils.TemporalUtils;
 
 public class ListeAlbum implements HtmlReportPrintable {
 	
@@ -102,15 +102,15 @@ public class ListeAlbum implements HtmlReportPrintable {
 				
 				boolean displayDateEnregistrement =  unAlbum.isSpecifiedCompositionDate() ;
 				
-				rapport.write("    <td class=\"an\">").write(Control.formatDate(debutComp)) ;
+				rapport.write("    <td class=\"an\">").write(TemporalUtils.formatDate(debutComp)) ;
 				if (displayDateEnregistrement) {
-					rapport.write("<br/>").write( Control.formatDate(debutEnr)) ;
+					rapport.write("<br/>").write( TemporalUtils.formatDate(debutEnr)) ;
 				}
 				rapport.write("</td>\n") ;
 				
-				rapport.write("    <td class=\"an\">").write(Control.formatDate(finComp)) ;
+				rapport.write("    <td class=\"an\">").write(TemporalUtils.formatDate(finComp)) ;
 				if (displayDateEnregistrement) {
-					rapport.write("<br/>").write(Control.formatDate(finEnr)) ;
+					rapport.write("<br/>").write(TemporalUtils.formatDate(finEnr)) ;
 				}
 				rapport.write("</td>\n    <td class=\"auteur\">\n") ;
 				

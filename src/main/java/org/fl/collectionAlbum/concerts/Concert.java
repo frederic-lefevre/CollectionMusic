@@ -15,6 +15,7 @@ import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.MusicArtefact;
 import org.fl.collectionAlbum.RapportHtml;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
+import org.fl.collectionAlbum.utils.TemporalUtils;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -44,7 +45,7 @@ public class Concert extends MusicArtefact {
         	artefactLog.warning("Pas de date dans le concert " + arteFactJson);
         } else {
         	 try {
-        		 dateConcert = Control.parseDate(jElem.getAsString()) ;
+        		 dateConcert = TemporalUtils.parseDate(jElem.getAsString()) ;
              } catch (Exception e) {
             	 artefactLog.log(Level.SEVERE, "Erreur dans les dates du concert " + arteFactJson, e) ;
              }
