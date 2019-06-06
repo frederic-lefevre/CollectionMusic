@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.Groupe;
+import org.fl.collectionAlbum.artistes.ListeArtiste;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;

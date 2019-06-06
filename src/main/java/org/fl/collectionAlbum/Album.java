@@ -6,6 +6,8 @@ import java.time.temporal.TemporalAccessor;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.fl.collectionAlbum.artistes.ListeArtiste;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.artistes.Artiste;
+import org.fl.collectionAlbum.artistes.ListeArtiste;
 
 public class ChronoArtistes  implements HtmlReportPrintable {
 

@@ -1,4 +1,4 @@
-package org.fl.collectionAlbum;
+package org.fl.collectionAlbum.artistes;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,9 +7,11 @@ import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.fl.collectionAlbum.artistes.Artiste;
-import org.fl.collectionAlbum.artistes.AuteurComparator;
-import org.fl.collectionAlbum.artistes.AuteurDateComparator;
+import org.fl.collectionAlbum.ConcertPoidsComparator;
+import org.fl.collectionAlbum.Format;
+import org.fl.collectionAlbum.HtmlReportPrintable;
+import org.fl.collectionAlbum.PoidsComparator;
+import org.fl.collectionAlbum.RapportHtml;
 
 import com.google.gson.JsonObject;
 
