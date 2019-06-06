@@ -1,4 +1,4 @@
-package org.fl.collectionAlbum;
+package org.fl.collectionAlbum.stat;
 
 import java.util.Comparator;
 

@@ -11,6 +11,7 @@ import org.fl.collectionAlbum.artistes.Groupe;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.concerts.Concert;
 import org.fl.collectionAlbum.concerts.ListeConcert;
+import org.fl.collectionAlbum.stat.StatChrono;
 
 import com.google.gson.JsonObject;
 

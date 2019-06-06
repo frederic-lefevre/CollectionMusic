@@ -1,4 +1,4 @@
-package org.fl.collectionAlbum;
+package org.fl.collectionAlbum.stat;
 
 public class StatAnnee {
 	

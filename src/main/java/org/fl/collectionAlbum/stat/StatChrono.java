@@ -1,4 +1,4 @@
-package org.fl.collectionAlbum;
+package org.fl.collectionAlbum.stat;
 
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
@@ -8,6 +8,9 @@ import java.util.Iterator;
 import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.fl.collectionAlbum.HtmlReportPrintable;
+import org.fl.collectionAlbum.RapportHtml;
 
 public class StatChrono implements HtmlReportPrintable {
 	
