@@ -113,25 +113,11 @@ public abstract class MusicArtefact {
 	}
 	
 	
-    public List<Artiste> getAuteurs() {
-        return auteurs;
-    }
-
-    public List<Artiste> getInterpretes() {
-        return interpretes;
-    }
-
-    public List<Artiste> getEnsembles() {
-        return ensembles;
-    }
-
-    public List<Artiste> getChefsOrchestre() {
-        return chefsOrchestre;
-    }
-        
-    public List<String> getNotes() {
-		return notes;
-	}
+    public List<Artiste> getAuteurs() 		 { return auteurs		 ; }
+    public List<Artiste> getInterpretes() 	 { return interpretes	 ; }
+    public List<Artiste> getEnsembles() 	 { return ensembles		 ; }
+    public List<Artiste> getChefsOrchestre() { return chefsOrchestre ; }        
+    public List<String>  getNotes() 		 { return notes			 ; }
     
 	public int setHtmlName(int id) {
 		if ((artefactHtml == null) && (additionnalInfo())) {
