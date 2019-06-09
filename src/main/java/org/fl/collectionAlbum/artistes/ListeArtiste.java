@@ -44,10 +44,6 @@ public class ListeArtiste implements HtmlReportPrintable {
 		return styles ;
 	}
 	
-	/**
-	 * @param a
-	 * @return Artiste
-	 */
 	public void addArtiste(Artiste a) {
 		
 		if (! artistes.contains(a)) {
@@ -56,6 +52,10 @@ public class ListeArtiste implements HtmlReportPrintable {
 		if (listeArtisteLog.isLoggable(Level.FINEST)) {
 			listeArtisteLog.finest("  Nom: " + a.getNom() + "  Prenoms: " + a.getPrenoms()) ;
 		}
+	}
+	
+	public void addAllArtistes(List<Artiste> artistes) {
+		artistes.stream().forEach(a -> addArtiste(a));
 	}
 	
 	public Artiste getArtisteKnown(String nom, String prenom) {

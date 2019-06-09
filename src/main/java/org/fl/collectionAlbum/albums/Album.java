@@ -1,9 +1,7 @@
 package org.fl.collectionAlbum.albums;
 
 import java.io.File;
-import java.nio.file.Path;
 import java.time.temporal.TemporalAccessor;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.Control;
@@ -11,10 +9,7 @@ import org.fl.collectionAlbum.Format;
 import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.MusicArtefact;
 import org.fl.collectionAlbum.RapportHtml;
-import org.fl.collectionAlbum.artistes.ListeArtiste;
-import org.fl.collectionAlbum.utils.TemporalUtils;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.ibm.lge.fl.util.date.FuzzyPeriod;
@@ -22,91 +17,19 @@ import com.ibm.lge.fl.util.date.FuzzyPeriod;
 public class Album extends MusicArtefact {
 
     // titre de l'album
-    private final String titre;
+    private String titre;
     
-    private final FuzzyPeriod periodeEnregistrement ;
+    private FuzzyPeriod periodeEnregistrement ;
     private FuzzyPeriod periodeComposition ;
     
     private Format formatAlbum;
     
     private boolean specifiedCompositionDate ;
     
-	public Album(Path srcFile, ListeArtiste listeArtistes, Logger aLog) {
-		
-		super(srcFile, listeArtistes, aLog) ;
-
-        // traitement du titre
-		JsonElement jElem = arteFactJson.get(JsonMusicProperties.TITRE) ;
-		if (jElem == null) {
-			artefactLog.warning("Titre de l'album null pour l'album " + srcFile);
-            titre  = "";
-        } else {
-        	titre = jElem.getAsString() ;
-        }
-		if (artefactLog.isLoggable(Level.FINEST)) {
-			artefactLog.finest("Titre: " + titre);
-		}
-		
-        // Traitement des dates d'enregistrement
-        periodeEnregistrement = processPeriod(arteFactJson, JsonMusicProperties.ENREGISTREMENT) ;
-        if (periodeEnregistrement == null) {
-        	artefactLog.warning(" Pas de dates d'enregistrement pour l'album " + arteFactJson);
-        }
-        
-        // Traitement des dates de composition
-        periodeComposition = processPeriod(arteFactJson, JsonMusicProperties.COMPOSITION) ;
-        if (periodeComposition == null) {   
-        	periodeComposition = periodeEnregistrement ;
-        	specifiedCompositionDate = false ;
-        } else {
-	        if (periodeComposition.getDebut() == null) {
-	        	periodeComposition.setDebut(periodeEnregistrement.getDebut()) ;
-	        	 if (periodeComposition.getFin() == null) {
-	        		 specifiedCompositionDate = false ;
-	        	 } else {
-	        		 specifiedCompositionDate = true ;
-	        	 }
-	        } else if (periodeComposition.getFin() == null) {
-	        	periodeComposition.setFin(periodeEnregistrement.getFin()) ;
-	        	specifiedCompositionDate = true ;
-	        } else {
-	        	specifiedCompositionDate = true ;
-	        }
-        }
-	}
-	
-	
-	private FuzzyPeriod processPeriod(JsonObject albumJson, String periodProp) {
-		
-		FuzzyPeriod period = null ;
-		JsonElement jElem = albumJson.get(periodProp) ;
-		if (jElem != null) {
-			if (!jElem.isJsonArray()) {
-				artefactLog.warning(periodProp + " n'est pas un JsonArray pour l'album " + albumJson);
-			} else {
-				JsonArray jDates = jElem.getAsJsonArray();
-				if (jDates.size() != 2) {
-					artefactLog.warning(periodProp + " ne contient pas 2 éléments pour l'album " + albumJson);
-				} else {
-
-					try {
-						String debut = jDates.get(0).getAsString();
-						String fin = jDates.get(1).getAsString();
-
-						period = new FuzzyPeriod(TemporalUtils.parseDate(debut), TemporalUtils.parseDate(fin), artefactLog) ;
-						
-						if (! period.isValid()) {
-							artefactLog.warning(periodProp + " : Erreur dans les dates de l'album " + albumJson);
-						}
-					} catch (Exception e) {
-						artefactLog.log(Level.SEVERE, periodProp + " : Erreur dans les dates de " + albumJson, e);
-					}					
-				}
-			}
-		}
-		return period ;
-	}
-	
+    public Album(JsonObject albumJson, Logger aLog) {
+    	super(albumJson, aLog) ;
+    }
+    
 	public void generateHtml() {
 
 		if (additionnalInfo()) {
@@ -134,8 +57,12 @@ public class Album extends MusicArtefact {
         return titre;
     }
 
+    public void setTitre(String t) {
+    	titre = t ;
+    }
+    
 	public TemporalAccessor getDebutEnregistrement() {
-    	if (periodeEnregistrement != null) {
+    	if ((periodeEnregistrement != null) && periodeEnregistrement.isValid()) {
     		return periodeEnregistrement.getDebut() ;
     	} else {
     		return null ;
@@ -143,7 +70,7 @@ public class Album extends MusicArtefact {
     }
 
     public TemporalAccessor getFinEnregistrement() {
-    	if (periodeEnregistrement != null) {
+    	if ((periodeEnregistrement != null) && periodeEnregistrement.isValid()) {
     		return periodeEnregistrement.getFin() ;
     	} else {
     		return null ;
@@ -152,7 +79,7 @@ public class Album extends MusicArtefact {
 
 
     public TemporalAccessor getDebutComposition() {
-    	if (periodeComposition != null) {
+    	if ((periodeComposition != null)  && periodeComposition.isValid()) {
     		return periodeComposition.getDebut() ;
     	} else {
     		return null ;
@@ -160,7 +87,7 @@ public class Album extends MusicArtefact {
     }
 
     public TemporalAccessor getFinComposition() {
-    	if (periodeComposition != null) {
+    	if ((periodeComposition != null) && periodeComposition.isValid()) {
     		return periodeComposition.getFin() ;
     	} else {
     		return null ;
@@ -188,6 +115,20 @@ public class Album extends MusicArtefact {
 
 	public boolean isSpecifiedCompositionDate() {
 		return specifiedCompositionDate;
+	}
+
+	public void setPeriodeEnregistrementEtComposition(FuzzyPeriod pe, FuzzyPeriod pc) {
+		periodeEnregistrement = pe;
+        if (periodeEnregistrement == null) {
+        	artefactLog.warning(" Pas de dates d'enregistrement pour l'album " + arteFactJson);
+        }
+
+		periodeComposition = pc;
+		specifiedCompositionDate = true ;
+        if ((periodeComposition == null) && (periodeEnregistrement != null) && (periodeEnregistrement.isValid())) {   
+        	periodeComposition = periodeEnregistrement ;
+        	specifiedCompositionDate = false ;
+        } 
 	}
 	
 }

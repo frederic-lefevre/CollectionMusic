@@ -14,10 +14,8 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingWorker;
 
-import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
-import org.fl.collectionAlbum.concerts.Concert;
 import org.fl.collectionAlbumGui.ProgressInformation;
 import org.fl.collectionAlbumGui.ProgressInformationPanel;
 
@@ -104,9 +102,9 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
     		if (Files.isRegularFile(file)) {
 	    		if (matcher.matches(name)) {
 	    			if (musicFileType == ALBUM) {
-	    				albumsContainer.addAlbum(new Album(file, albumsContainer.getCollectionArtistes(), albumLog)) ;
+	    				albumsContainer.addAlbum(file) ;
 	    			} else if (musicFileType == CONCERT) {
-	    				albumsContainer.addConcert(new Concert(file, albumsContainer.getConcertsArtistes(), albumLog)) ;
+	    				albumsContainer.addConcert(file) ;
 	    			}
 	    		}
     		}

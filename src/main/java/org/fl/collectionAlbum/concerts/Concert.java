@@ -1,102 +1,33 @@
 package org.fl.collectionAlbum.concerts;
 
 import java.io.File;
-import java.lang.reflect.Type;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.file.Path;
 import java.time.temporal.TemporalAccessor;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.Control;
-import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.MusicArtefact;
 import org.fl.collectionAlbum.RapportHtml;
-import org.fl.collectionAlbum.artistes.ListeArtiste;
-import org.fl.collectionAlbum.utils.TemporalUtils;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.reflect.TypeToken;
+import com.google.gson.JsonObject;
 
 public class Concert extends MusicArtefact {
 
     private TemporalAccessor dateConcert ;   
-    private final String lieuConcert;    
-    private final String urlInfos;
+    private String lieuConcert;    
+    private String urlInfos;
     
     private List<String> titres;
     
     private List<String> ticketImages;
     
-	public Concert(Path srcFile, ListeArtiste listeArtistes, Logger cl) {
-	       
-		super(srcFile, listeArtistes, cl) ;
-		
-		JsonElement jElem ;
-       
-        // Traitement de la date
-        jElem = arteFactJson.get(JsonMusicProperties.DATE) ;
-        if (jElem == null) {
-        	dateConcert = null ;
-        	artefactLog.warning("Pas de date dans le concert " + arteFactJson);
-        } else {
-        	 try {
-        		 dateConcert = TemporalUtils.parseDate(jElem.getAsString()) ;
-             } catch (Exception e) {
-            	 artefactLog.log(Level.SEVERE, "Erreur dans les dates du concert " + arteFactJson, e) ;
-             }
-        }
-       
-        // traitement du lieu
-        jElem = arteFactJson.get(JsonMusicProperties.LIEU) ;
-        if (jElem == null) {
-        	lieuConcert = null ;
-        	artefactLog.warning("Pas de lieu dans le concert " + arteFactJson);
-        } else {
-        	lieuConcert = jElem.getAsString() ;
-        }
+    public Concert(JsonObject concertJson, Logger aLog) {
+    	super(concertJson, aLog) ;
+    }
         
-        // traitement de l'url d'information
-        jElem = arteFactJson.get(JsonMusicProperties.URL_INFOS) ;
-        if (jElem == null) {
-        	urlInfos = null ;
-        } else {
-        	urlInfos = jElem.getAsString() ;
-        }
-        
-        Type listType = new TypeToken<List<String>>() {}.getType();
-        
-        // Traitement des titres
-		 jElem = arteFactJson.get(JsonMusicProperties.MORCEAUX) ;
-		 if (jElem != null) {
-			if (jElem.isJsonArray()) {				
-				JsonArray jTitres = jElem.getAsJsonArray() ;			
-				titres = new Gson().fromJson(jTitres, listType);
-			} else {
-				artefactLog.warning(JsonMusicProperties.MORCEAUX + " n'est pas un JsonArray pour le concert " + arteFactJson) ;
-			}
-		 }
-       
-		 // Traitement des images des tickets
-		 jElem = arteFactJson.get(JsonMusicProperties.TICKET_IMG) ;
-		 if (jElem == null) {
-			 ticketImages = null ;
-			 artefactLog.info("Pas de ticket pour le concert " + arteFactJson) ;
-		 } else {
-			 if (jElem.isJsonArray()) {
-				 JsonArray jTickets = jElem.getAsJsonArray() ; 
-				 ticketImages =  new Gson().fromJson(jTickets,  listType);
-			 } else {
-				 artefactLog.warning(JsonMusicProperties.TICKET_IMG + " n'est pas un JsonArray pour le concert " + arteFactJson) ;
-			 }
-		 }  
-	}
-	
-    
     public void generateHtml() {
     	
     	if (additionnalInfo()) {
@@ -167,5 +98,25 @@ public class Concert extends MusicArtefact {
 	
 	public String getFullPathHtmlFileName() {
 		return "file://" + Control.getAbsoluteConcertDir() + artefactHtml ;
+	}
+
+	public void setDateConcert(TemporalAccessor dateConcert) {
+		this.dateConcert = dateConcert;
+	}
+
+	public void setTitres(List<String> titres) {
+		this.titres = titres;
+	}
+
+	public void setTicketImages(List<String> ticketImages) {
+		this.ticketImages = ticketImages;
+	}
+
+	public void setLieuConcert(String lieuConcert) {
+		this.lieuConcert = lieuConcert;
+	}
+
+	public void setUrlInfos(String urlInfos) {
+		this.urlInfos = urlInfos;
 	}	
 }
