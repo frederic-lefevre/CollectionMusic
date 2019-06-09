@@ -38,10 +38,6 @@ public class ListeAlbum implements HtmlReportPrintable {
 		return styles ;
 	}
 	
-	/**
-	 * Add an album
-	 * @param a Album
-	 */
 	public void addAlbum(Album a) {
 		if (! albums.contains(a)) {
 			albums.add(a) ;
@@ -165,16 +161,10 @@ public class ListeAlbum implements HtmlReportPrintable {
 		}
 	}
 	
-	/**
-	 * @return liste album format
-	 */
 	public Format getFormatListeAlbum() {
 		return formatListeAlbum;
 	}
 	
-	/**
-	 * @return Nombre d'albums
-	 */
 	public int getNombreAlbums() {
 		return albums.size() ;
 	}

@@ -28,16 +28,10 @@ public class CollectionAlbumContainer {
 	// Listes des albums par rangement
 	private EnumMap<Format.RangementSupportPhysique, ListeAlbum> rangementsAlbums ;	
 	
-	private ListeConcert concerts ;	
+	private ListeConcert   concerts ;	
 	private ChronoArtistes calendrierArtistes ;
 	
-	/**
-	 * <code>statChronoEnregistrement</code> : statistics on recordings chronology
-	 */
 	private StatChrono statChronoEnregistrement ;
-	/**
-	 * <code>statChronoComposition</code> : statistics on composition chronology
-	 */
 	private StatChrono statChronoComposition ;
 	
 	private Logger albumLog ;
@@ -52,8 +46,7 @@ public class CollectionAlbumContainer {
 		return collectionAlbumContainer ;
 	}
 	
-	private CollectionAlbumContainer(Logger aLog) {
-		
+	private CollectionAlbumContainer(Logger aLog) {		
 		albumLog = aLog;
 		reset() ;
 	}
@@ -73,41 +66,17 @@ public class CollectionAlbumContainer {
 	    statChronoComposition.AddAlbum(alb.getDebutComposition(), alb.getFormatAlbum().getPoids());
 	}
 	
-	public void addConcert(Concert c) {
-		concerts.addConcert(c) ;
-	}
+	public void addConcert(Concert c) { concerts.addConcert(c) ; }
 	
-	public ListeArtiste getCollectionArtistes() {
-		return collectionArtistes;
-	}
-
-	public ListeAlbum getCollectionAlbumsMusiques() {
-		return collectionAlbumsMusiques;
-	}
-
-	public ListeAlbum getRangementAlbums(Format.RangementSupportPhysique sPhys) {
-		return rangementsAlbums.get(sPhys) ;
-	}
+	public ListeAlbum getRangementAlbums(Format.RangementSupportPhysique sPhys) { return rangementsAlbums.get(sPhys) ; }
 	
-	public ListeArtiste getConcertsArtistes() {
-		return concertsArtistes;
-	}
-
-	public ListeConcert getConcerts() {
-		return concerts;
-	}
-
-	public ChronoArtistes getCalendrierArtistes() {
-		return calendrierArtistes;
-	}
-
-	public StatChrono getStatChronoComposition() {
-		return statChronoComposition;
-	}
-
-	public StatChrono getStatChronoEnregistrement() {
-		return statChronoEnregistrement;
-	}
+	public ListeArtiste   getCollectionArtistes() 		{ return collectionArtistes		 ; }
+	public ListeAlbum 	  getCollectionAlbumsMusiques() { return collectionAlbumsMusiques; }
+	public ListeArtiste   getConcertsArtistes() 		{ return concertsArtistes		 ; }
+	public ListeConcert   getConcerts() 				{ return concerts				 ; }
+	public ChronoArtistes getCalendrierArtistes() 		{ return calendrierArtistes		 ; }
+	public StatChrono 	  getStatChronoComposition() 	{ return statChronoComposition	 ; }
+	public StatChrono 	  getStatChronoEnregistrement() { return statChronoEnregistrement; }
 	
 	public void reset() {
 		
@@ -118,13 +87,10 @@ public class CollectionAlbumContainer {
    		}
    		
 		collectionArtistes 		 = new ListeArtiste(albumLog) ;
-   		concertsArtistes 		 = new ListeArtiste(albumLog) ;
-   		
-   		concerts 				 = new ListeConcert(albumLog) ;
-   		
+   		concertsArtistes 		 = new ListeArtiste(albumLog) ;   		
+   		concerts 				 = new ListeConcert(albumLog) ; 		
    		statChronoEnregistrement = new StatChrono(albumLog) ;
-   		statChronoComposition 	 = new StatChrono(albumLog) ;
-   		
+   		statChronoComposition 	 = new StatChrono(albumLog) ;   		
    		calendrierArtistes 		 = new ChronoArtistes(albumLog) ;
 	}
 	
