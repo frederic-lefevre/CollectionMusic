@@ -174,31 +174,12 @@ public class Artiste {
     	}
     }
     
-    public Format getPoids() {
-    	return albums.getFormatListeAlbum() ;
-    }
-    
-
-    public int getNbConcert() {
-    	return concerts.getNombreConcerts() ;
-    }
-    
-
-    public int getNbAlbum() {
-    	return albums.getNombreAlbums() ;
-    }
-    
-
-    public String getDateNaissance() {
-		return TemporalUtils.formatDate(naissance) ;
-    }
-    
-
-	public String getDateMort() {
-		return TemporalUtils.formatDate(mort) ;
-	}
+    public Format getPoids() 		 { return albums.getFormatListeAlbum() 		  ; }
+    public int 	  getNbConcert() 	 { return concerts.getNombreConcerts() 		  ; }
+    public int 	  getNbAlbum() 		 { return albums.getNombreAlbums() 			  ; }
+    public String getDateNaissance() { return TemporalUtils.formatDate(naissance) ; }
+	public String getDateMort() 	 { return TemporalUtils.formatDate(mort) 	  ;	}
 	
-
 	public TemporalAccessor getNaissance() 	 { return naissance   ; }   
 	public TemporalAccessor getMort() 	   	 { return mort		  ; }
 	public String 			getNom() 	   	 { return nom		  ; }

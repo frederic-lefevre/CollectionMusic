@@ -118,7 +118,7 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 	   
 	 private void rapportsHtml(File rapportDir) {	
 	   	
-		 albumsContainer.getCollectionAlbumsMusiques().rapportAdditionnalInfo() ;
+		albumsContainer.getCollectionAlbumsMusiques().rapportAdditionnalInfo() ;
 	   
 	   	String styles[] = { RapportHtml.mainStyle, RapportHtml.formatStyle } ;
 	     	
