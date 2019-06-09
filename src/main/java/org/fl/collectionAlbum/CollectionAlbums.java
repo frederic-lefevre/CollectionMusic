@@ -39,8 +39,7 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 	 @Override 
 	 public CollectionAlbumContainer doInBackground() {
 		
-		albumsContainer = CollectionAlbumContainer.getInstance(albumLog) ;
-		albumsContainer.reset() ;
+		albumsContainer = CollectionAlbumContainer.getEmptyInstance(albumLog) ;
 		
 		albumLog.info("Lecture des données des albums");
 		buildAlbumsCollection() ;

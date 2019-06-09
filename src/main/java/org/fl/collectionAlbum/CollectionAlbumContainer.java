@@ -38,6 +38,15 @@ public class CollectionAlbumContainer {
 	
 	private static CollectionAlbumContainer collectionAlbumContainer ;
 	
+	public static CollectionAlbumContainer getEmptyInstance(Logger aLog) {
+		
+		if (collectionAlbumContainer == null) {
+			collectionAlbumContainer = new CollectionAlbumContainer(aLog) ;
+		}
+		collectionAlbumContainer.reset() ;
+		return collectionAlbumContainer ;
+	}
+	
 	public static CollectionAlbumContainer getInstance(Logger aLog) {
 		
 		if (collectionAlbumContainer == null) {
@@ -47,23 +56,22 @@ public class CollectionAlbumContainer {
 	}
 	
 	private CollectionAlbumContainer(Logger aLog) {		
-		albumLog = aLog;
-		reset() ;
+		albumLog = aLog;	
 	}
 
-	public void addAlbum(Album alb) {
+	public void addAlbum(Album album) {
 		
-		collectionAlbumsMusiques.addAlbum(alb) ;
+		collectionAlbumsMusiques.addAlbum(album) ;
 		
-		Format.RangementSupportPhysique rangement = alb.getFormatAlbum().getRangement() ;
+		Format.RangementSupportPhysique rangement = album.getFormatAlbum().getRangement() ;
 		if (rangement != null) {
-			rangementsAlbums.get(rangement).addAlbum(alb) ;
+			rangementsAlbums.get(rangement).addAlbum(album) ;
 		} else {
-			albumLog.warning("Album impossible à ranger: " + alb.getTitre()) ;
+			albumLog.warning("Album impossible à ranger: " + album.getTitre()) ;
 		}
 			
-		statChronoEnregistrement.AddAlbum(alb.getDebutEnregistrement(), alb.getFormatAlbum().getPoids());
-	    statChronoComposition.AddAlbum(alb.getDebutComposition(), alb.getFormatAlbum().getPoids());
+		statChronoEnregistrement.AddAlbum(album.getDebutEnregistrement(), album.getFormatAlbum().getPoids());
+	    statChronoComposition.AddAlbum(album.getDebutComposition(), album.getFormatAlbum().getPoids());
 	}
 	
 	public void addConcert(Concert c) { concerts.addConcert(c) ; }
@@ -78,7 +86,7 @@ public class CollectionAlbumContainer {
 	public StatChrono 	  getStatChronoComposition() 	{ return statChronoComposition	 ; }
 	public StatChrono 	  getStatChronoEnregistrement() { return statChronoEnregistrement; }
 	
-	public void reset() {
+	private void reset() {
 		
    		collectionAlbumsMusiques = new ListeAlbum(albumLog) ;
    		rangementsAlbums = new EnumMap<Format.RangementSupportPhysique, ListeAlbum>(Format.RangementSupportPhysique.class) ;
