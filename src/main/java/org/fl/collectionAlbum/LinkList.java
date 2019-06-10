@@ -10,8 +10,8 @@ public class LinkList {
 		private final static String AHREF2 = "\">" ;
 		private final static String AHREF3 = "</a><br/>\n" ;
 		
-		private String title ;
-		private String url ;
+		private final String title ;
+		private final String url ;
 		
 		public Link(String title, String url) {
 			super();
@@ -34,11 +34,6 @@ public class LinkList {
 	private LinkList subLinks ;
 	private String subListLinkOffset ;
 	
-	/**
-	 * @param otherLinks
-	 * @param offSet
-	 * 
-	 */
 	public LinkList(LinkList otherLinks, String offSet) {
 		subLinks = otherLinks ;
 		subListLinkOffset = offSet ;
@@ -62,9 +57,6 @@ public class LinkList {
 		}
 	}
 	
-	/**
-	 * @return the number of link
-	 */
 	public int getNbLink() {
 		if (subLinks != null) {
 			return subLinks.getNbLink() + linkList.size() ;
