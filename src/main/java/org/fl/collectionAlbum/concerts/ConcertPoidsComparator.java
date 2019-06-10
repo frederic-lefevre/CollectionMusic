@@ -14,8 +14,7 @@ public class ConcertPoidsComparator implements Comparator<Artiste> {
 		
 		int ordreNom = 0 ;
 		if (poids0 == poids1) {
-			AuteurComparator compAuteur = new AuteurComparator();
-			ordreNom = compAuteur.compare(arg0,arg1) ;	
+			ordreNom = (new AuteurComparator()).compare(arg0,arg1) ;	
 		} else if (poids0 < poids1) {
 			ordreNom = 1 ;
 		} else if (poids0 > poids1) {
