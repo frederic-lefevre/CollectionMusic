@@ -9,8 +9,8 @@ public class PoidsComparator  implements Comparator<Artiste> {
 	
 	public int compare(Artiste arg0, Artiste arg1) {
 		
-		double poids0 = arg0.getPoids().getPoids()  ;
-		double poids1 = arg1.getPoids().getPoids() ;
+		double poids0 = arg0.getAlbumsFormat().getPoids()  ;
+		double poids1 = arg1.getAlbumsFormat().getPoids() ;
 		
 		int ordreNom = 0 ;
 		if (poids0 == poids1) {

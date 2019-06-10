@@ -150,7 +150,7 @@ public class ListeArtiste implements HtmlReportPrintable {
 				if (isConcert(typeRapport)) {
 					rapport.write("    <td class=\"total\">").write(unArtiste.getNbConcert()).write("</td>\n") ;
 				} else {
-					unArtiste.getPoids().rowFormat(rapport, "total") ;
+					unArtiste.getAlbumsFormat().rowFormat(rapport, "total") ;
 				}
 			}
 			rapport.write("  </tr>\n") ;

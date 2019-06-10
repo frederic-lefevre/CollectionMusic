@@ -174,7 +174,7 @@ public class Artiste {
     	}
     }
     
-    public Format getPoids() 		 { return albums.getFormatListeAlbum() 		  ; }
+    public Format getAlbumsFormat()	 { return albums.getFormatListeAlbum() 		  ; }
     public int 	  getNbConcert() 	 { return concerts.getNombreConcerts() 		  ; }
     public int 	  getNbAlbum() 		 { return albums.getNombreAlbums() 			  ; }
     public String getDateNaissance() { return TemporalUtils.formatDate(naissance) ; }
@@ -240,9 +240,9 @@ public class Artiste {
 				rapport.write("<table class=\"auteurTab\">\n  <tr>\n    <td rowspan=\"2\" class=\"auteurTitre\"><span class=\"auteurTitre\">") ;
 				rapport.write(getPrenoms()).write(" ").write(getNom()) ;
 				rapport.write("</span> (").write(getDateNaissance()).write(" - ").write(getDateMort()).write(")</td>\n") ;
-				getPoids().enteteFormat(rapport, "total", 1) ;
+				getAlbumsFormat().enteteFormat(rapport, "total", 1) ;
 				rapport.write("  </tr>\n  <tr>\n") ;
-				getPoids().rowFormat(rapport, "artotal") ;
+				getAlbumsFormat().rowFormat(rapport, "artotal") ;
 				rapport.write("  </tr>\n</table>\n") ;
 				albums.rapport(rapport, ListeAlbum.rapportChronoComposition, "../../") ;
 				rapport.finRapport() ;
