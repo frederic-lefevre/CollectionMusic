@@ -83,7 +83,11 @@ public class StatChrono implements HtmlReportPrintable {
 		} else {
 			stAn = statAnnuelle ;
 		}
-		return stAn.stream().filter(sA -> sA.getAn() == an).findFirst().map( sA -> sA.getNombre()).orElse(new String("0")) ;
+		return stAn.stream()
+					.filter(sA -> sA.getAn() == an)
+					.findFirst()
+					.map( sA -> sA.getNombre())
+					.orElse(new String("0")) ;
 	}
 	
 	/**
