@@ -28,8 +28,7 @@ public class AlbumCompositionComparator  implements Comparator<Album> {
 		}
 
 		if (comp == 0) {
-		    AlbumEnregistrementComparator compEnr = new AlbumEnregistrementComparator(log) ;
-		    comp = compEnr.compare(arg0, arg1) ;
+		    comp = (new AlbumEnregistrementComparator(log)).compare(arg0, arg1) ;
 		} 
 		
 		return comp ;

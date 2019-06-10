@@ -25,8 +25,7 @@ public class AlbumEnregistrementComparator  implements Comparator<Album> {
 			TemporalAccessor d2 = arg0.getFinEnregistrement() ;
 			TemporalAccessor d3 = arg1.getFinEnregistrement() ;
 			comp = TemporalUtils.compareTemporal(d2, d3, log) ;
-		}
-		
+		}		
 		return comp ;
 	}
 }
