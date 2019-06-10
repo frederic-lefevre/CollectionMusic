@@ -49,21 +49,18 @@ public class RangementComparator  implements Comparator<Album> {
 		Artiste art0 = l0.get(0) ;
 		Artiste art1 = l1.get(0) ;
 		
-		// Compare lexicographically the 2 authors
-		AuteurComparator compAuteur = new AuteurComparator();
-		int autComp = compAuteur.compare(art0,art1) ;
+		// Compare lexicographically the 2 authors;
+		int autComp = (new AuteurComparator()).compare(art0,art1) ;
 		
 		if (autComp == 0) {
 		// same author for the 2 albums
 		    
 		    // Compare the composition dates
-		    AlbumCompositionComparator compAlbum = new AlbumCompositionComparator(log);
-		    int albComp = compAlbum.compare(arg0, arg1) ;
+		    int albComp = (new AlbumCompositionComparator(log)).compare(arg0, arg1) ;
 		    if (albComp == 0) {
 		    // same composition dates: compare the recording dates
-		        AlbumEnregistrementComparator compEnrAlbum = new AlbumEnregistrementComparator(log);
 		        // return the oldest album (recording)
-				return compEnrAlbum.compare(arg0, arg1) ;
+				return (new AlbumEnregistrementComparator(log)).compare(arg0, arg1) ;
 		    } else {
 		        // return the oldest album (composition)
 		        return albComp ;
