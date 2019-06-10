@@ -15,17 +15,17 @@ import org.fl.collectionAlbum.RapportHtml;
 public class StatChrono implements HtmlReportPrintable {
 	
 	private static String styles[] = {"main","stat"} ;
-	private List<StatAnnee> StatAnnuelle ; 
-	private List<StatAnnee> StatDecennale ;
-	private List<StatAnnee> StatSiecle ;
+	private List<StatAnnee> statAnnuelle ; 
+	private List<StatAnnee> statDecennale ;
+	private List<StatAnnee> statSiecle ;
 	private Logger 			statLogger;
 	
     public StatChrono(Logger sl) {
         super();
         statLogger = sl ;
-        StatAnnuelle  = new ArrayList<StatAnnee>(2000) ;
-        StatDecennale = new ArrayList<StatAnnee>(200) ;
-        StatSiecle    = new ArrayList<StatAnnee>(20) ;
+        statAnnuelle  = new ArrayList<StatAnnee>(2000) ;
+        statDecennale = new ArrayList<StatAnnee>(200) ;
+        statSiecle    = new ArrayList<StatAnnee>(20) ;
     }
     
 	public String[] getCssStyles() {
@@ -35,19 +35,19 @@ public class StatChrono implements HtmlReportPrintable {
 	public void AddAlbum(TemporalAccessor dateAlbum, double poidsAlbum) {
 		
 		int year = getYearFromDate(dateAlbum) ;
-		if (! isMemberOf(StatAnnuelle, year, poidsAlbum)) {
+		if (! isMemberOf(statAnnuelle, year, poidsAlbum)) {
 			StatAnnee nouvelAnnee = new StatAnnee(year, poidsAlbum) ;
-			StatAnnuelle.add(nouvelAnnee) ;
+			statAnnuelle.add(nouvelAnnee) ;
 		}
 		int decennie = (year / 10) * 10 ;
-		if (! isMemberOf(StatDecennale, decennie, poidsAlbum)) {
+		if (! isMemberOf(statDecennale, decennie, poidsAlbum)) {
 			StatAnnee nouvelDecennie = new StatAnnee(decennie, poidsAlbum) ;
-			StatDecennale.add(nouvelDecennie) ;
+			statDecennale.add(nouvelDecennie) ;
 		}
 		int siecle = (year / 100) * 100 ;
-		if (! isMemberOf(StatSiecle, siecle, poidsAlbum)) {
+		if (! isMemberOf(statSiecle, siecle, poidsAlbum)) {
 			StatAnnee nouveauSiecle = new StatAnnee(siecle, poidsAlbum) ;
-			StatSiecle.add(nouveauSiecle) ;
+			statSiecle.add(nouveauSiecle) ;
 		}
 	}
 	
@@ -77,20 +77,13 @@ public class StatChrono implements HtmlReportPrintable {
 	}
 	
 	private String getStatForYears(int an, boolean decennie) {
-		Iterator<StatAnnee> ea ;
+		List<StatAnnee> stAn ;
 		if (decennie) {
-		    ea = StatDecennale.iterator() ;
+			stAn = statDecennale ;
 		} else {
-		    ea = StatAnnuelle.iterator() ;
+			stAn = statAnnuelle ;
 		}
-		while (ea.hasNext()) {
-			StatAnnee sA = ea.next() ;
-			if (sA.getAn() == an) {
-				return sA.getNombre() ;
-			}
-		}
-		String none = new String("0") ;
-		return none ;
+		return stAn.stream().filter(sA -> sA.getAn() == an).findFirst().map( sA -> sA.getNombre()).orElse(new String("0")) ;
 	}
 	
 	/**
@@ -100,17 +93,17 @@ public class StatChrono implements HtmlReportPrintable {
 	public void rapport(RapportHtml rapport, int typeRapport, String urlOffset) {
 		
 		StatAnComparator statComp = new StatAnComparator() ;
-		Collections.sort(StatAnnuelle,statComp) ;
-		Collections.sort(StatDecennale,statComp) ;
-		Collections.sort(StatSiecle,statComp) ;
+		Collections.sort(statAnnuelle,statComp) ;
+		Collections.sort(statDecennale,statComp) ;
+		Collections.sort(statSiecle,statComp) ;
 		
 		Iterator<StatAnnee> ed ;
 		boolean plusieursSiecles = false ;
-		if (StatSiecle.size() > 2) {
+		if (statSiecle.size() > 2) {
 		    plusieursSiecles = true ;
-		    ed = StatSiecle.iterator() ; 
+		    ed = statSiecle.iterator() ; 
 		} else {
-		    ed = StatDecennale.iterator() ;
+		    ed = statDecennale.iterator() ;
 		}   
 		
 		try {
