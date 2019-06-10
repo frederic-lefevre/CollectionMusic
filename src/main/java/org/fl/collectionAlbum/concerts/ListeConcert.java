@@ -34,10 +34,6 @@ public class ListeConcert implements HtmlReportPrintable {
 		concerts.add(a) ;
 	}
 	
-	/**
-	 * @param rFile
-	 * @param urlOffset
-	 */
 	public void rapport(RapportHtml rapport, int typeRapport, String urlOffset) {
 		
 		try {
@@ -52,11 +48,6 @@ public class ListeConcert implements HtmlReportPrintable {
 	// HTML fragment
 	private final static String table1 = "<div class=\"mhc\">\n  <table>\n  <tr>\n    <td class=\"an\">Date</td>\n    <td class=\"auteur\">Artistes</td>\n    <td class=\"album\">Lieu</td>\n  </tr>\n  </table>\n</div>\n  <table>\n  <tr class=\"head\">\n    <td class=\"an\">Date</td>\n    <td class=\"auteur\">Artistes</td>\n    <td class=\"album\">Lieu</td>\n  </tr>\n" ;
 	
-	/**
-	 * @param rFile
-	 * @param listeConcerts
-	 * @param urlOffset
-	 */
 	private void rapportTable(RapportHtml rapport, List<Concert> listeConcerts, String urlOffset) {
 	
 		try {
@@ -106,9 +97,6 @@ public class ListeConcert implements HtmlReportPrintable {
 		}
 	}
 	
-	/**
-	 * @return nombre de concert
-	 */
 	public int getNombreConcerts() {
 		return concerts.size() ;
 	}
