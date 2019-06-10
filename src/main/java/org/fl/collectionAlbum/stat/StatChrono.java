@@ -34,21 +34,13 @@ public class StatChrono implements HtmlReportPrintable {
 
 	public void AddAlbum(TemporalAccessor dateAlbum, double poidsAlbum) {
 		
-		int year = getYearFromDate(dateAlbum) ;
-		if (! isMemberOf(statAnnuelle, year, poidsAlbum)) {
-			StatAnnee nouvelAnnee = new StatAnnee(year, poidsAlbum) ;
-			statAnnuelle.add(nouvelAnnee) ;
-		}
-		int decennie = (year / 10) * 10 ;
-		if (! isMemberOf(statDecennale, decennie, poidsAlbum)) {
-			StatAnnee nouvelDecennie = new StatAnnee(decennie, poidsAlbum) ;
-			statDecennale.add(nouvelDecennie) ;
-		}
-		int siecle = (year / 100) * 100 ;
-		if (! isMemberOf(statSiecle, siecle, poidsAlbum)) {
-			StatAnnee nouveauSiecle = new StatAnnee(siecle, poidsAlbum) ;
-			statSiecle.add(nouveauSiecle) ;
-		}
+		int year 	 = getYearFromDate(dateAlbum) ;
+		int decennie = (year / 10)  * 10 ;
+		int siecle 	 = (year / 100) * 100 ;
+
+		incrementStat(statAnnuelle,  year, 	   poidsAlbum) ;
+		incrementStat(statDecennale, decennie, poidsAlbum) ;
+		incrementStat(statSiecle, 	 siecle,   poidsAlbum) ;
 	}
 	
 	private int getYearFromDate(TemporalAccessor dd) {
@@ -66,14 +58,14 @@ public class StatChrono implements HtmlReportPrintable {
 		}
 	}
 
-	private boolean isMemberOf(List<StatAnnee> stat, int an, double poids) {
+	private void incrementStat(List<StatAnnee> stat, int an, double poids) {
 		for (StatAnnee sA : stat) {
 			if (sA.getAn() == an) {
 				sA.incrementNombre(poids) ;
-				return true ;
+				return ;
 			}
 		}
-		return false ;
+		stat.add(new StatAnnee(an, poids)) ;
 	}
 	
 	private String getStatForYears(int an, boolean decennie) {
