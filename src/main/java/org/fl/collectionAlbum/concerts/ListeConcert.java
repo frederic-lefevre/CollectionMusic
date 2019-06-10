@@ -93,7 +93,7 @@ public class ListeConcert implements HtmlReportPrintable {
 			}
 			rapport.write("</table>\n") ;
 		} catch (Exception e) {
-			listConcertLog.log(Level.SEVERE, "Erreur dans la cr�ation du fichier rapport", e) ;
+			listConcertLog.log(Level.SEVERE, "Erreur dans la création du fichier rapport", e) ;
 		}
 	}
 	
