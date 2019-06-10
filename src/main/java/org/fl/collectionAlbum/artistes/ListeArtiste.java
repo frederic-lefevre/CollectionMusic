@@ -17,7 +17,6 @@ import com.google.gson.JsonObject;
 
 public class ListeArtiste implements HtmlReportPrintable {
 	
-
 	public static int rapportAlpha 		  = 0 ;
 	public static int rapportPoids 		  = 1 ;
 	public static int rapportChrono 	  = 2 ;
@@ -73,11 +72,6 @@ public class ListeArtiste implements HtmlReportPrintable {
 		return artistes.stream().filter(a -> a.isSameArtiste(jArtiste)).findFirst() ;
 	}
 	
-	/**
-	 * Impression d'un rapport sur la liste
-	 * @param rFile
-	 * @param typeRapport
-	 */
 	public void rapport(RapportHtml rapport, int typeRapport, String urlOffset) {
 		
 		try {
@@ -196,32 +190,8 @@ public class ListeArtiste implements HtmlReportPrintable {
 		return artistes;
 	}
 
-	public String[] getNoms() {
-		
-		if ((artistes != null) && (! artistes.isEmpty())) {
-			String[] noms = new String[artistes.size()] ; 
-			for (int i=0; i < artistes.size(); i++) {
-				noms[i] = artistes.get(i).getNom() ;
-			}
-			return noms ;
-		} else {
-			return null;
-		}
-	}
-	
-	/**
-	 * @return nombre d'artistes
-	 */
 	public int getNombreArtistes() {
 		return (artistes.size()) ;
-	}
-	
-	/**
-	 * @param i
-	 * @return l'artiste � l'index i
-	 */
-	public Artiste get(int i) {
-		return (Artiste) artistes.get(i) ;
 	}
 	
 	public ListeArtiste getReunion(ListeArtiste la) {
@@ -242,14 +212,4 @@ public class ListeArtiste implements HtmlReportPrintable {
 		return artistesRes ;
 	}
 	
-	public ListeArtiste getSubList(String debutNom) {
-		
-		ListeArtiste artistesRes = new ListeArtiste(listeArtisteLog) ;
-		for (Artiste a : artistes) {
-			if (a.getNom().startsWith(debutNom)) {
-				artistesRes.addArtiste(a) ;
-			}
-		}
-		return artistesRes ;
-	}
 }
