@@ -17,9 +17,9 @@ public class ChronoArtistes  implements HtmlReportPrintable {
 	private static String styles[] = {"main","rapport", "calendrier"} ;
 	private ListeArtiste anniversaires[][] ;
 	private final static String monthPattern = new String("MMMM") ;
-	private DateTimeFormatter monthFormatter;
+	private final DateTimeFormatter monthFormatter;
 	private final static String dayPattern = new String("dd") ;
-	private DateTimeFormatter dayFormatter;
+	private final DateTimeFormatter dayFormatter;
 	
 	private Logger chronoLog ;
 	
@@ -41,10 +41,6 @@ public class ChronoArtistes  implements HtmlReportPrintable {
 		return styles ;
 	}
 	
-	/**
-	 * Add an artiste in stats
-	 * @param a Artiste
-	 */
 	public void add(Artiste a) {
 		TemporalAccessor naissance = a.getNaissance() ;
 		TemporalAccessor mort = a.getMort() ;
@@ -74,10 +70,6 @@ public class ChronoArtistes  implements HtmlReportPrintable {
 		}
 	}
 
-	/**
-	 * Print a stat report
-	 * @param rFile : destination file
-	 */
 	public void rapport(RapportHtml rapport, int typeRapport, String urlOffset) {
 		
 		int nbMonths = (int)ChronoField.MONTH_OF_YEAR.range().getMaximum() ;
