@@ -6,7 +6,7 @@ public class StatAnnee {
 	private double nombre ;
 
 	public StatAnnee(int aan, double anombre) {
-		an = aan ;
+		an 	   = aan ;
 		nombre = anombre ;
 	}
 
