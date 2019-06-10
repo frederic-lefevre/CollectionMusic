@@ -6,9 +6,9 @@ public class AuteurComparator implements Comparator<Artiste> {
 
 	public int compare(Artiste arg0, Artiste arg1) {
 		
-		String nom0 =  arg0.getNom() ;
+		String nom0    = arg0.getNom() ;
 		String prenom0 = arg0.getPrenoms() ;
-		String nom1 = arg1.getNom() ;
+		String nom1    = arg1.getNom() ;
 		String prenom1 = arg1.getPrenoms() ;
 		
 		int ordreNom = nom0.compareToIgnoreCase(nom1) ;
