@@ -35,10 +35,10 @@ public class RapportHtml {
 	// Initial size of the StringBuilder buffer
 	private final static int TAILLE_INITIALE = 8192 ;
 	
-	private String 		titreRapport ;
-	private LinkList 	indexes ;
-	private File 		rapportFile ;
-	private PrintWriter rFile ;
+	private final String 	  titreRapport ;
+	private final LinkList 	  indexes ;
+	private final File 		  rapportFile ;
+	private final PrintWriter rFile ;
 	
 	private StringBuilder rBuilder ;
 	
@@ -47,7 +47,7 @@ public class RapportHtml {
 	
 	private String offset;
 	
-	// Styles correspondant � des fichiers css
+	// Styles correspondant à des fichiers css
 	public final static String formatStyle  = "format" ;
 	public final static String mainStyle 	= "main" ;
 	public final static String albumStyle 	= "album" ;
@@ -67,18 +67,20 @@ public class RapportHtml {
 		indexes 	 = idxs ;
 		displayTitle = dt ;
 		
+		PrintWriter pw = null ;
 		try {
 			if (rapportFile.createNewFile()) {				
-				rFile = new PrintWriter(new BufferedWriter(new OutputStreamWriter( new FileOutputStream(rapportFile), Control.getCharset()))) ;
+				pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter( new FileOutputStream(rapportFile), Control.getCharset()))) ;
 				if (rapportLog.isLoggable(Level.FINE)) {
 					rapportLog.fine("Création du RapportHtml " + titreRapport + " Fichier: " + rapportFile.getAbsolutePath());
 				}
 			} else {
 				rapportLog.severe("Le fichier " + rapportFile.getAbsolutePath() + " existe déjà") ;
 			}
-		} catch (Exception e) {
+		} catch (Exception e) {			
 		    rapportLog.log(Level.SEVERE,"Erreur dans la création du fichier " + rapportFile.getAbsolutePath(), e) ;	
 		}
+		rFile = pw ;
 	}
 
 	public String printReport(HtmlReportPrintable hpr, int typeRapport, String urlOffset) {
