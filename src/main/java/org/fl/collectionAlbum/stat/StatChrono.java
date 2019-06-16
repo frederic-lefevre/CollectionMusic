@@ -35,12 +35,22 @@ public class StatChrono implements HtmlReportPrintable {
 	public void AddAlbum(TemporalAccessor dateAlbum, double poidsAlbum) {
 		
 		int year 	 = getYearFromDate(dateAlbum) ;
-		int decennie = (year / 10)  * 10 ;
-		int siecle 	 = (year / 100) * 100 ;
+		int decennie = getDecennie(year) ;
+		int siecle 	 = getSiecle(year) ;
 
 		incrementStat(statAnnuelle,  year, 	   poidsAlbum) ;
 		incrementStat(statDecennale, decennie, poidsAlbum) ;
 		incrementStat(statSiecle, 	 siecle,   poidsAlbum) ;
+	}
+	
+	private int getDecennie(int year) {
+		return (year / 10)  * 10 ;
+		
+	}
+	
+	private int getSiecle(int year) {
+		return (year / 100)  * 100 ;
+		
 	}
 	
 	private int getYearFromDate(TemporalAccessor dd) {
@@ -70,13 +80,16 @@ public class StatChrono implements HtmlReportPrintable {
 	
 	public String getStatForYears(int an, boolean decennie) {
 		List<StatAnnee> stAn ;
+		int an2 ;
 		if (decennie) {
 			stAn = statDecennale ;
+			an2 = getDecennie(an) ;
 		} else {
+			an2 = an ;
 			stAn = statAnnuelle ;
 		}
 		return stAn.stream()
-					.filter(sA -> sA.getAn() == an)
+					.filter(sA -> sA.getAn() == an2)
 					.findFirst()
 					.map( sA -> sA.getNombre())
 					.orElse(new String("0")) ;

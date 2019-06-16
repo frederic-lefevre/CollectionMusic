@@ -41,6 +41,7 @@ class StatChronoTest {
 		assertEquals("3.5", sc1.getStatForYears(1969, false)) ;
 		assertEquals("1",   sc1.getStatForYears(1960, false)) ;
 		assertEquals("4.5", sc1.getStatForYears(1960, true)) ;
+		assertEquals("4.5", sc1.getStatForYears(1965, true)) ;
 		assertEquals("5",   sc1.getStatForYears(1970, false)) ;
 		assertEquals("5",   sc1.getStatForYears(1970, true)) ;
 
