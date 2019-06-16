@@ -141,15 +141,14 @@ public class StatChrono implements HtmlReportPrintable {
 				rapport.write("    <td class=\"dece\"><span class=\"dece\">").write(uneSubdivision.getAn()).write("</span></td>\n") ;
 				rapport.write("    <td class=\"statotal\">").write(uneSubdivision.getNombre()).write("</td>\n") ;
 				for (int i=0; i <10; i++) {
-				    int sub = i ;
-				    if (plusieursSiecles) sub = i*10;
-
-					int an = uneSubdivision.getAn() + sub ;
+					int an = uneSubdivision.getAn()	;			
 					String count ;
 					if (plusieursSiecles) {
-						count = getStatForDecennie(uneSubdivision.getAn() + sub) ;
+						an = an + i*10 ;
+						count = getStatForDecennie(an) ;
 					} else {
-						count = getStatForYear(uneSubdivision.getAn() + sub) ;
+						an = an + i ;
+						count = getStatForYear(an) ;
 					}
 					
 					if (count.length() == 0) {
