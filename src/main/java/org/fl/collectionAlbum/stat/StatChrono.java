@@ -82,6 +82,18 @@ public class StatChrono implements HtmlReportPrintable {
 					.orElse(new String("0")) ;
 	}
 	
+	public List<StatAnnee> getStatAnnuelle() {
+		return statAnnuelle;
+	}
+
+	public List<StatAnnee> getStatDecennale() {
+		return statDecennale;
+	}
+
+	public List<StatAnnee> getStatSiecle() {
+		return statSiecle;
+	}
+
 	/**
 	 * Print the html table for the statistique
 	 * @param rFile
