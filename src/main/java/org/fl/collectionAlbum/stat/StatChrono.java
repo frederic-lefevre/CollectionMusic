@@ -78,13 +78,8 @@ public class StatChrono implements HtmlReportPrintable {
 		stat.add(new StatAnnee(an, poids)) ;
 	}
 	
-	public String getStatForYear(int an) {
-		return getStat(statAnnuelle, an) ;
-	}
-	
-	public String getStatForDecennie(int an) {
-		return getStat(statDecennale, getDecennie(an)) ;
-	}
+	public String getStatForYear    (int an) { return getStat(statAnnuelle,  an) 			  ; }
+	public String getStatForDecennie(int an) { return getStat(statDecennale, getDecennie(an)) ;	}
 	
 	private String getStat(List<StatAnnee> statAns, int an) {
 		return statAns.stream()
@@ -94,17 +89,9 @@ public class StatChrono implements HtmlReportPrintable {
 				.orElse(new String("0")) ;
 	}
 	
-	public List<StatAnnee> getStatAnnuelle() {
-		return statAnnuelle;
-	}
-
-	public List<StatAnnee> getStatDecennale() {
-		return statDecennale;
-	}
-
-	public List<StatAnnee> getStatSiecle() {
-		return statSiecle;
-	}
+	public List<StatAnnee> getStatAnnuelle()  { return statAnnuelle	 ; }
+	public List<StatAnnee> getStatDecennale() {	return statDecennale ; }
+	public List<StatAnnee> getStatSiecle()	  {	return statSiecle	 ; }
 
 	/**
 	 * Print the html table for the statistique
