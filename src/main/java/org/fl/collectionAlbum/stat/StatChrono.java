@@ -68,7 +68,7 @@ public class StatChrono implements HtmlReportPrintable {
 		stat.add(new StatAnnee(an, poids)) ;
 	}
 	
-	private String getStatForYears(int an, boolean decennie) {
+	public String getStatForYears(int an, boolean decennie) {
 		List<StatAnnee> stAn ;
 		if (decennie) {
 			stAn = statDecennale ;
