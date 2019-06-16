@@ -17,9 +17,9 @@ class StatChronoTest {
 		
 		StatChrono sc1 = new StatChrono(logger) ;
 		
-		assertEquals("0", sc1.getStatForYears(0, false)) ;
-		assertEquals("0", sc1.getStatForYears(1969, false)) ;
-		assertEquals("0", sc1.getStatForYears(1969, true)) ;	
+		assertEquals("0", sc1.getStatForYear(0)) ;
+		assertEquals("0", sc1.getStatForYear(1969)) ;
+		assertEquals("0", sc1.getStatForDecennie(1969)) ;	
 
 		assertEquals(0, sc1.getStatAnnuelle().size()) ;
 		assertEquals(0, sc1.getStatDecennale().size()) ;
@@ -38,12 +38,12 @@ class StatChronoTest {
 		sc1.AddAlbum(ta2, 1) ;
 		sc1.AddAlbum(ta3, 2) ;
 		sc1.AddAlbum(ta4, 5) ;
-		assertEquals("3.5", sc1.getStatForYears(1969, false)) ;
-		assertEquals("1",   sc1.getStatForYears(1960, false)) ;
-		assertEquals("4.5", sc1.getStatForYears(1960, true)) ;
-		assertEquals("4.5", sc1.getStatForYears(1965, true)) ;
-		assertEquals("5",   sc1.getStatForYears(1970, false)) ;
-		assertEquals("5",   sc1.getStatForYears(1970, true)) ;
+		assertEquals("3.5", sc1.getStatForYear(1969)) ;
+		assertEquals("1",   sc1.getStatForYear(1960)) ;
+		assertEquals("4.5", sc1.getStatForDecennie(1960)) ;
+		assertEquals("4.5", sc1.getStatForDecennie(1965)) ;
+		assertEquals("5",   sc1.getStatForYear(1970)) ;
+		assertEquals("5",   sc1.getStatForDecennie(1970)) ;
 
 	}
 

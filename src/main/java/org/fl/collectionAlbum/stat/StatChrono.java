@@ -78,21 +78,20 @@ public class StatChrono implements HtmlReportPrintable {
 		stat.add(new StatAnnee(an, poids)) ;
 	}
 	
-	public String getStatForYears(int an, boolean decennie) {
-		List<StatAnnee> stAn ;
-		int an2 ;
-		if (decennie) {
-			stAn = statDecennale ;
-			an2 = getDecennie(an) ;
-		} else {
-			an2 = an ;
-			stAn = statAnnuelle ;
-		}
-		return stAn.stream()
-					.filter(sA -> sA.getAn() == an2)
-					.findFirst()
-					.map( sA -> sA.getNombre())
-					.orElse(new String("0")) ;
+	public String getStatForYear(int an) {
+		return getStat(statAnnuelle, an) ;
+	}
+	
+	public String getStatForDecennie(int an) {
+		return getStat(statDecennale, getDecennie(an)) ;
+	}
+	
+	private String getStat(List<StatAnnee> statAns, int an) {
+		return statAns.stream()
+				.filter(sA -> sA.getAn() == an)
+				.findFirst()
+				.map( sA -> sA.getNombre())
+				.orElse(new String("0")) ;
 	}
 	
 	public List<StatAnnee> getStatAnnuelle() {
@@ -146,7 +145,12 @@ public class StatChrono implements HtmlReportPrintable {
 				    if (plusieursSiecles) sub = i*10;
 
 					int an = uneSubdivision.getAn() + sub ;
-					String count = getStatForYears(uneSubdivision.getAn() + sub, plusieursSiecles) ;
+					String count ;
+					if (plusieursSiecles) {
+						count = getStatForDecennie(uneSubdivision.getAn() + sub) ;
+					} else {
+						count = getStatForYear(uneSubdivision.getAn() + sub) ;
+					}
 					
 					if (count.length() == 0) {
 						cssClass = "statan0" ;
