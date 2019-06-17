@@ -23,7 +23,7 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 
 	private CollectionAlbumContainer albumsContainer ;
 	private Logger albumLog ;
-	private LinkList accueils ;
+	private HtmlLinkList accueils ;
 	private ProgressInformationPanel progressPanel;
 	
 	private int rapportIndex ;

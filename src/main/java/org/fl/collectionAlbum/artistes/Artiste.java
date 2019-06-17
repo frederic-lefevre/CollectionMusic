@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.Format;
 import org.fl.collectionAlbum.JsonMusicProperties;
-import org.fl.collectionAlbum.LinkList;
+import org.fl.collectionAlbum.HtmlLinkList;
 import org.fl.collectionAlbum.MusicArtefact;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.albums.ListeAlbum;
@@ -229,7 +229,7 @@ public class Artiste {
 		try {
 			if (! htmlFile.exists()) {
 				
-				LinkList concertLink = new LinkList(Control.getAccueils(), "../../") ;
+				HtmlLinkList concertLink = new HtmlLinkList(Control.getAccueils(), "../../") ;
 				if (concerts.getNombreConcerts() > 0) {
 					concertLink.addLink("Concerts", htmlConcertFileName) ;
 				}
@@ -257,7 +257,7 @@ public class Artiste {
 		
 		if (! htmlConcertFile.exists()) {
 								
-			LinkList albumLink = new LinkList(Control.getAccueils(), "../../") ;
+			HtmlLinkList albumLink = new HtmlLinkList(Control.getAccueils(), "../../") ;
 			if (albums.getNombreAlbums() > 0) {
 				albumLink.addLink("Albums", htmlFileName) ;
 			}

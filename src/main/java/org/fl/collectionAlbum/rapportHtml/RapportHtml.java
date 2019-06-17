@@ -12,7 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.Control;
-import org.fl.collectionAlbum.LinkList;
+import org.fl.collectionAlbum.HtmlLinkList;
 
 public class RapportHtml {
 
@@ -39,7 +39,7 @@ public class RapportHtml {
 	private final static int TAILLE_INITIALE = 8192 ;
 	
 	private final String 	  titreRapport ;
-	private final LinkList 	  indexes ;
+	private final HtmlLinkList 	  indexes ;
 	private final File 		  rapportFile ;
 	private final PrintWriter rFile ;
 	
@@ -59,7 +59,7 @@ public class RapportHtml {
 
 	private boolean displayTitle ;
 
-	public RapportHtml(String titre, boolean dt, File rDir, LinkList idxs, String o, Logger rl) {
+	public RapportHtml(String titre, boolean dt, File rDir, HtmlLinkList idxs, String o, Logger rl) {
 		
 		super();
 		rapportLog 	 = rl ;

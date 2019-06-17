@@ -23,7 +23,7 @@ public class Control {
 	private static String absoluteAlbumDir ;
 	private static String absoluteConcertDir ;
 	private static String absoluteArtisteDir ;
-	private static LinkList accueils ;
+	private static HtmlLinkList accueils ;
 	private static Charset charset ;
 
 	private final static String albumDir 		   = "albums" ;
@@ -62,7 +62,7 @@ public class Control {
 			charset = Charset.forName(props.getProperty("charset", "UTF-8")) ;
 			RapportHtml.initCharset(charset.name());
 			
-			accueils = new LinkList() ;
+			accueils = new HtmlLinkList() ;
 			accueils.addLink("Accueil Collection", homeCollectionFile) ;
 			accueils.addLink("Accueil Concert",    homeConcertFile) ;
 			
@@ -82,7 +82,7 @@ public class Control {
 	public static String getAbsoluteConcertDir() 	{return absoluteConcertDir;		}
 	public static String getAbsoluteArtisteDir() 	{return absoluteArtisteDir;		}
 	public static String getArtistedir() 			{return artisteDir;				}
-	public static LinkList getAccueils() 			{return accueils;				}
+	public static HtmlLinkList getAccueils() 			{return accueils;				}
 	public static String getHomecollectionfile() 	{return homeCollectionFile;		}
 	public static String getHomeconcertfile() 		{return homeConcertFile;		}
 	public static String getMusicfileExtension() 	{return musicFileExtension;		}

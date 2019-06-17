@@ -2,7 +2,7 @@ package org.fl.collectionAlbum;
 
 import java.util.ArrayList;
 
-public class LinkList {
+public class HtmlLinkList {
 
 	private class Link {
 		
@@ -31,16 +31,16 @@ public class LinkList {
 	}
 	
 	private ArrayList<Link> linkList ;
-	private LinkList subLinks ;
+	private HtmlLinkList subLinks ;
 	private String subListLinkOffset ;
 	
-	public LinkList(LinkList otherLinks, String offSet) {
+	public HtmlLinkList(HtmlLinkList otherLinks, String offSet) {
 		subLinks = otherLinks ;
 		subListLinkOffset = offSet ;
 		linkList = new ArrayList<Link>() ;
 	}
 	
-	public LinkList() {
+	public HtmlLinkList() {
 		linkList = new ArrayList<Link>() ;
 	}
 	
