@@ -12,6 +12,8 @@ import javax.swing.SwingWorker;
 
 import org.fl.collectionAlbum.albums.ListeAlbum;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
+import org.fl.collectionAlbum.rapportHtml.HtmlReportPrintable;
+import org.fl.collectionAlbum.rapportHtml.RapportHtml;
 import org.fl.collectionAlbumGui.ProgressInformation;
 import org.fl.collectionAlbumGui.ProgressInformationPanel;
 

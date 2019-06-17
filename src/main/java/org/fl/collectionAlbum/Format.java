@@ -4,6 +4,8 @@ import java.util.EnumMap;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import org.fl.collectionAlbum.rapportHtml.RapportHtml;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 

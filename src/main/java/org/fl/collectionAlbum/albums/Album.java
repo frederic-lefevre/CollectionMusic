@@ -8,7 +8,7 @@ import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.Format;
 import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.MusicArtefact;
-import org.fl.collectionAlbum.RapportHtml;
+import org.fl.collectionAlbum.rapportHtml.RapportHtml;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

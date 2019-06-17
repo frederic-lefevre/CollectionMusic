@@ -1,4 +1,4 @@
-package org.fl.collectionAlbum;
+package org.fl.collectionAlbum.rapportHtml;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -10,6 +10,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.fl.collectionAlbum.Control;
+import org.fl.collectionAlbum.LinkList;
 
 public class RapportHtml {
 

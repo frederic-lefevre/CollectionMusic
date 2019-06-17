@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.MusicArtefact;
-import org.fl.collectionAlbum.RapportHtml;
+import org.fl.collectionAlbum.rapportHtml.RapportHtml;
 
 import com.google.gson.JsonObject;
 

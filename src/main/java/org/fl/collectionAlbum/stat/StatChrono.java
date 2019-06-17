@@ -9,8 +9,8 @@ import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.fl.collectionAlbum.HtmlReportPrintable;
-import org.fl.collectionAlbum.RapportHtml;
+import org.fl.collectionAlbum.rapportHtml.HtmlReportPrintable;
+import org.fl.collectionAlbum.rapportHtml.RapportHtml;
 
 public class StatChrono implements HtmlReportPrintable {
 	

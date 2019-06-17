@@ -7,10 +7,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.Format;
-import org.fl.collectionAlbum.HtmlReportPrintable;
 import org.fl.collectionAlbum.RangementComparator;
-import org.fl.collectionAlbum.RapportHtml;
 import org.fl.collectionAlbum.artistes.Artiste;
+import org.fl.collectionAlbum.rapportHtml.HtmlReportPrintable;
+import org.fl.collectionAlbum.rapportHtml.RapportHtml;
 import org.fl.collectionAlbum.utils.TemporalUtils;
 
 public class ListeAlbum implements HtmlReportPrintable {
