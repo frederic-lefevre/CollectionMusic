@@ -1,10 +1,11 @@
 package org.fl.collectionAlbum.rapportHtml;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class HtmlLinkList {
 
-	private class Link {
+	private class HtmlLink {
 		
 		private final static String AHREF1 = "<a href=\"" ;
 		private final static String AHREF2 = "\">" ;
@@ -13,44 +14,40 @@ public class HtmlLinkList {
 		private final String title ;
 		private final String url ;
 		
-		public Link(String title, String url) {
-			super();
-			this.title = title;
-			this.url = url;
+		public HtmlLink(String title, String url) {
+			this.title = title ;
+			this.url   = url ;
 		}
-		
-		
-		/**
-		 * Print the hyper link
-		 * @param rFile
-		 * @param offset
-		 */
+			
+		// Print the hyper link
 		public void writeLink(StringBuilder rBuilder, String offset) {
 			rBuilder.append(AHREF1).append(offset).append(url).append(AHREF2).append(title).append(AHREF3) ;
 		}
 	}
 	
-	private ArrayList<Link> linkList ;
-	private HtmlLinkList subLinks ;
-	private String subListLinkOffset ;
+	private List<HtmlLink> 	   linkList ;
+	private final HtmlLinkList subLinks ;
+	private final String 	   subListLinkOffset ;
 	
 	public HtmlLinkList(HtmlLinkList otherLinks, String offSet) {
-		subLinks = otherLinks ;
+		subLinks 		  = otherLinks ;
 		subListLinkOffset = offSet ;
-		linkList = new ArrayList<Link>() ;
+		linkList 		  = new ArrayList<HtmlLink>() ;
 	}
 	
 	public HtmlLinkList() {
-		linkList = new ArrayList<Link>() ;
+		subLinks 		  = null ;
+		subListLinkOffset = null ;
+		linkList 		  = new ArrayList<HtmlLink>() ;
 	}
 	
 	public void addLink(String t, String l) {
-		linkList.add(new Link(t,l)) ;
+		linkList.add(new HtmlLink(t,l)) ;
 	}
 	
 	public void writeLinkList(StringBuilder rBuilder, String linkOffSet) {
-		for (int i=0; i < linkList.size(); i++) {
-			((Link)(linkList.get(i))).writeLink(rBuilder, linkOffSet) ;
+		for (HtmlLink htmlLink : linkList) {
+			htmlLink.writeLink(rBuilder, linkOffSet) ;
 		}
 		if (subLinks != null) {
 			subLinks.writeLinkList(rBuilder, linkOffSet + subListLinkOffset) ;
