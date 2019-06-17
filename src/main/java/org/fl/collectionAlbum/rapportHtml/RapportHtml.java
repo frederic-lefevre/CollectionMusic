@@ -12,7 +12,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.Control;
-import org.fl.collectionAlbum.HtmlLinkList;
 
 public class RapportHtml {
 

@@ -6,6 +6,7 @@ import java.nio.charset.Charset;
 import java.util.Properties;
 import java.util.logging.Logger;
 
+import org.fl.collectionAlbum.rapportHtml.HtmlLinkList;
 import org.fl.collectionAlbum.rapportHtml.RapportHtml;
 
 import com.ibm.lge.fl.util.RunningContext;

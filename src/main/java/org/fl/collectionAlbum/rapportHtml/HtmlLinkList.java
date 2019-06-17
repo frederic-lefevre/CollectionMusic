@@ -1,4 +1,4 @@
-package org.fl.collectionAlbum;
+package org.fl.collectionAlbum.rapportHtml;
 
 import java.util.ArrayList;
 
