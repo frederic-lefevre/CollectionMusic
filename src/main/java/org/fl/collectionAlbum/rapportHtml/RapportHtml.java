@@ -40,7 +40,7 @@ public class RapportHtml {
 	protected final String 	   titreRapport ;
 	protected final File 	   rapportFile ;
 	private final HtmlLinkList indexes ;
-	private final PrintWriter  rFile ;
+	private final PrintWriter  filePrinter ;
 	
 	private StringBuilder rBuilder ;
 	
@@ -58,13 +58,13 @@ public class RapportHtml {
 
 	private boolean displayTitle ;
 
-	public RapportHtml(String titre, boolean dt, File rDir, HtmlLinkList idxs, String o, Logger rl) {
+	public RapportHtml(String titre, boolean dt, File rFile, HtmlLinkList idxs, String o, Logger rl) {
 		
 		super();
 		rapportLog 	 = rl ;
 		titreRapport = titre ;
 		offset 		 = o + CSSOFFSET ;
-		rapportFile  = rDir ;
+		rapportFile  = rFile ;
 		rBuilder 	 = new StringBuilder(TAILLE_INITIALE) ;
 		indexes 	 = idxs ;
 		displayTitle = dt ;
@@ -82,7 +82,7 @@ public class RapportHtml {
 		} catch (Exception e) {			
 		    rapportLog.log(Level.SEVERE,"Erreur dans la création du fichier " + rapportFile.getAbsolutePath(), e) ;	
 		}
-		rFile = pw ;
+		filePrinter = pw ;
 	}
 
 	public String printReport(HtmlReportPrintable hpr, int typeRapport, String urlOffset) {
@@ -128,9 +128,9 @@ public class RapportHtml {
 	public void finRapport () {
 		try {
 			rBuilder.append(END) ;
-			rFile.write(rBuilder.toString()) ;
-			rFile.flush() ;
-			rFile.close() ;
+			filePrinter.write(rBuilder.toString()) ;
+			filePrinter.flush() ;
+			filePrinter.close() ;
 			if (rapportLog.isLoggable(Level.FINE)) {
 				rapportLog.fine("Rapport HTML écrit " + titreRapport) ;
 			}
