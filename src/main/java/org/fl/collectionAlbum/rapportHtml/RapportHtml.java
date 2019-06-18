@@ -37,10 +37,10 @@ public class RapportHtml {
 	// Initial size of the StringBuilder buffer
 	private final static int TAILLE_INITIALE = 8192 ;
 	
-	private final String 	  titreRapport ;
-	private final HtmlLinkList 	  indexes ;
-	private final File 		  rapportFile ;
-	private final PrintWriter rFile ;
+	protected final String 	   titreRapport ;
+	protected final File 	   rapportFile ;
+	private final HtmlLinkList indexes ;
+	private final PrintWriter  rFile ;
 	
 	private StringBuilder rBuilder ;
 	
@@ -54,7 +54,7 @@ public class RapportHtml {
 	public final static String mainStyle 	= "main" ;
 	public final static String albumStyle 	= "album" ;
 	
-	private Logger rapportLog;
+	protected Logger rapportLog;
 
 	private boolean displayTitle ;
 
