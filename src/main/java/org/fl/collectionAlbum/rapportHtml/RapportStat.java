@@ -19,6 +19,7 @@ public class RapportStat extends RapportHtml {
 		super(titre, dt, rDir, idxs, o, rl);
 	}
 
+	// Return a html hyper to this rapport
 	public String rapport(StatChrono statChrono, int typeRapport, String urlOffset) {
 		
 		enteteRapport(styles) ;
