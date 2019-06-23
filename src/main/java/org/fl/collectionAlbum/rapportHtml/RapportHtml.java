@@ -5,15 +5,17 @@ import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.BufferedWriter;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.Control;
 
-public class RapportHtml {
+public abstract class RapportHtml {
 
 	// Useful HTML fragment
 	private final static String ENTETE1 = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN_\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">\n" +
@@ -32,22 +34,23 @@ public class RapportHtml {
 	private final static String L_LIST4 = "</div>\n" ;
 	private final static String END		= "</body>\n</html>" ;
 	
-	private static String htmlBegin ;
+	// Initialize a default charset
+	private static String htmlBegin = ENTETE1 + StandardCharsets.UTF_8.name() + ENTETE6 ;
 	
 	// Initial size of the StringBuilder buffer
 	private final static int TAILLE_INITIALE = 8192 ;
 	
-	protected final String 	   titreRapport ;
-	protected final File 	   rapportFile ;
-	private final HtmlLinkList indexes ;
-	private final PrintWriter  filePrinter ;
+	protected final String 	     titreRapport ;
+	protected final File 	     rapportFile ;
+	private   final HtmlLinkList indexes ;
+	private   final PrintWriter  filePrinter ;
 	
-	private StringBuilder rBuilder ;
+	protected StringBuilder rBuilder ;
 	
 	// directory pour les css
 	private final static String CSSOFFSET = "../css/" ;
 	
-	private String offset;
+	protected String urlOffset;
 	
 	// Styles correspondant à des fichiers css
 	public final static String formatStyle  = "format" ;
@@ -56,18 +59,22 @@ public class RapportHtml {
 	
 	protected Logger rapportLog;
 
-	private boolean displayTitle ;
+	private   boolean displayTitle ;
+	protected boolean withAlphaBalises ;
 
-	public RapportHtml(String titre, boolean dt, File rFile, HtmlLinkList idxs, String o, Logger rl) {
+	private List<String> alphaBalises ;
+	
+	protected RapportHtml(String titre, File rFile, HtmlLinkList idxs, String o, Logger rl) {
 		
 		super();
-		rapportLog 	 = rl ;
-		titreRapport = titre ;
-		offset 		 = o + CSSOFFSET ;
-		rapportFile  = rFile ;
-		rBuilder 	 = new StringBuilder(TAILLE_INITIALE) ;
-		indexes 	 = idxs ;
-		displayTitle = dt ;
+		rapportLog 	 	 = rl ;
+		titreRapport 	 = titre ;
+		urlOffset	 	 = o ;
+		rapportFile  	 = rFile ;
+		rBuilder 	 	 = new StringBuilder(TAILLE_INITIALE) ;
+		indexes 	 	 = idxs ;
+		displayTitle 	 = false ;
+		withAlphaBalises = false ;
 		
 		PrintWriter pw = null ;
 		try {
@@ -85,76 +92,91 @@ public class RapportHtml {
 		filePrinter = pw ;
 	}
 
-	public String printReport(HtmlReportPrintable hpr, int typeRapport, String urlOffset) {
+	protected abstract void corpsRapport() ;
+	
+	public String printReport(String styleList[]) {
 		
-		enteteRapport(hpr.getCssStyles()) ;
-		hpr.rapport(this, typeRapport, urlOffset);
-		finRapport() ;
+		try {
+			enteteRapport(styleList) ;
+			corpsRapport();		
+			finRapport() ;
+		} catch (Exception e) {
+		    rapportLog.log(Level.SEVERE, "Erreur dans la création du rapport ", e) ;
+		}
 		return "  <li><a href=\"" + rapportFile.getName() + "\">" + titreRapport + "</a></li>\n" ;
 	}
 	
-	
 	private static String dateFrancePattern = "EEEE dd MMMM uuuu à HH:mm" ;
 
-	public void enteteRapport (String styleList[]) {
+	private void enteteRapport (String styleList[]) {
 			
-		try {
-			rBuilder.append(htmlBegin).append(titreRapport).append(ENTETE2) ;
-			if (styleList != null) {
-				String cssRef1 = ENTETE3 + offset ;
-				for (String style : styleList) {
-					rBuilder.append(cssRef1).append(style).append(ENTETE4) ;
-				}
+		rBuilder.append(htmlBegin).append(titreRapport).append(ENTETE2) ;
+		if (styleList != null) {
+			String cssRef1 = ENTETE3 + urlOffset + CSSOFFSET ;
+			for (String style : styleList) {
+				rBuilder.append(cssRef1).append(style).append(ENTETE4) ;
 			}
-				
-			rBuilder.append(ENTETE5) ;
-			if ((titreRapport != null) && (titreRapport.length() > 0) && displayTitle) {
-				rBuilder.append(H2_B).append(titreRapport).append(H2_E) ;
-			}
-			if ((indexes != null) && (indexes.getNbLink()> 0)) {
-				rBuilder.append(L_LIST1) ;
-				indexes.writeLinkList(rBuilder, "") ;
-				
-				DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(dateFrancePattern, Locale.FRANCE) ;
-				rBuilder.append(L_LIST2).append(dateTimeFormatter.format(LocalDateTime.now())).append(L_LIST3) ;
-				
-				rBuilder.append(L_LIST4) ;
-			}
-		} catch (Exception e) {
-		    rapportLog.log(Level.SEVERE, "Erreur dans la création du rapport ", e) ;
 		}
+
+		rBuilder.append(ENTETE5) ;
+		if ((titreRapport != null) && (titreRapport.length() > 0) && displayTitle) {
+			rBuilder.append(H2_B).append(titreRapport).append(H2_E) ;
+		}
+		if ((indexes != null) && (indexes.getNbLink()> 0)) {
+			rBuilder.append(L_LIST1) ;
+			indexes.writeLinkList(rBuilder, "") ;
+
+			DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(dateFrancePattern, Locale.FRANCE) ;
+			rBuilder.append(L_LIST2).append(dateTimeFormatter.format(LocalDateTime.now())).append(L_LIST3) ;
+
+			rBuilder.append(L_LIST4) ;
+		}		
 	}
    
-	public void finRapport () {
-		try {
-			rBuilder.append(END) ;
-			filePrinter.write(rBuilder.toString()) ;
-			filePrinter.flush() ;
-			filePrinter.close() ;
-			if (rapportLog.isLoggable(Level.FINE)) {
-				rapportLog.fine("Rapport HTML écrit " + titreRapport) ;
+	private void finRapport () {
+	
+		if (withAlphaBalises) {
+			write("<table class=\"balises\">\n") ;
+			for (String uneBalise : alphaBalises) {
+				write("  <tr><td><a href=\"#").write(uneBalise + "\">").write(uneBalise).write("</a></td></tr>\n") ;
 			}
-		} catch (Exception e) {
-		    rapportLog.log(Level.SEVERE, "Erreur dans la création du rapport ", e) ;
+			write("</table>\n") ;
+		}
+		rBuilder.append(END) ;
+		filePrinter.write(rBuilder.toString()) ;
+		filePrinter.flush() ;
+		filePrinter.close() ;
+		if (rapportLog.isLoggable(Level.FINE)) {
+			rapportLog.fine("Rapport HTML écrit " + titreRapport) ;
 		}
 	}
 	
-	public RapportHtml write(String s) {
+	protected void withTitleDisplayed() {
+		displayTitle = true ;
+	}
+	
+	public void withAlphaBalises() {
+		withAlphaBalises = true ;
+	}
+	
+	protected RapportHtml write(String s) {
 		rBuilder.append(s) ;
 		return this ;
 	}
 	
-	public RapportHtml write(int s) {
+	protected RapportHtml write(int s) {
 		rBuilder.append(s) ;
 		return this ;
 	}
 	
-	public RapportHtml write(Character s) {
-		rBuilder.append(s) ;
-		return this ;
-	}
-	
-	public static void initCharset(String cs) {
+	public static void withCharset(String cs) {
 		htmlBegin = ENTETE1 + cs + ENTETE6 ;
+	}
+	
+	protected void alphBalise(String uneBalise) {
+		if (alphaBalises.isEmpty() || (! uneBalise.equals(alphaBalises.get(alphaBalises.size()-1)))) {
+			write("<a name=\"").write(uneBalise).write("\"></a>") ;
+			alphaBalises.add(uneBalise) ;
+		}
 	}
 }

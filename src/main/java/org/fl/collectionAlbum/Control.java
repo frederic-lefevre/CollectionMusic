@@ -61,7 +61,7 @@ public class Control {
 			
 			// Get charset to read and write
 			charset = Charset.forName(props.getProperty("charset", "UTF-8")) ;
-			RapportHtml.initCharset(charset.name());
+			RapportHtml.withCharset(charset.name());
 			
 			accueils = new HtmlLinkList() ;
 			accueils.addLink("Accueil Collection", homeCollectionFile) ;
@@ -83,7 +83,7 @@ public class Control {
 	public static String getAbsoluteConcertDir() 	{return absoluteConcertDir;		}
 	public static String getAbsoluteArtisteDir() 	{return absoluteArtisteDir;		}
 	public static String getArtistedir() 			{return artisteDir;				}
-	public static HtmlLinkList getAccueils() 			{return accueils;				}
+	public static HtmlLinkList getAccueils() 		{return accueils;				}
 	public static String getHomecollectionfile() 	{return homeCollectionFile;		}
 	public static String getHomeconcertfile() 		{return homeConcertFile;		}
 	public static String getMusicfileExtension() 	{return musicFileExtension;		}

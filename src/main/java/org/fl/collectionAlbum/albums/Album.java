@@ -1,6 +1,5 @@
 package org.fl.collectionAlbum.albums;
 
-import java.io.File;
 import java.time.temporal.TemporalAccessor;
 import java.util.logging.Logger;
 
@@ -8,7 +7,6 @@ import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.Format;
 import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.MusicArtefact;
-import org.fl.collectionAlbum.rapportHtml.RapportHtml;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -16,7 +14,6 @@ import com.ibm.lge.fl.util.date.FuzzyPeriod;
 
 public class Album extends MusicArtefact {
 
-    // titre de l'album
     private String titre;
     
     private FuzzyPeriod periodeEnregistrement ;
@@ -29,25 +26,6 @@ public class Album extends MusicArtefact {
     public Album(JsonObject albumJson, Logger aLog) {
     	super(albumJson, aLog) ;
     }
-    
-	public void generateHtml() {
-
-		if (additionnalInfo()) {
-
-			File htmlFile = new File(Control.getAbsoluteAlbumDir() + artefactHtml) ;
-			if (! htmlFile.exists()) {
-				RapportHtml rapport = new RapportHtml("", false, htmlFile, null,  "../", artefactLog);
-
-				rapport.enteteRapport(new String[]{RapportHtml.albumStyle}) ;
-				if (notes != null) {
-					for (String note : notes) {
-						rapport.write("<p>").write(note).write("</p>") ;
-					}
-				}
-				rapport.finRapport() ;    			
-			}
-		}    	
-	}
     
     public boolean additionnalInfo() {   
     	return ((notes != null) && (notes.size() > 0)) ;
@@ -109,7 +87,7 @@ public class Album extends MusicArtefact {
     }
     
 	public String getFullPathHtmlFileName() {
-		return "file://" + Control.getAbsoluteAlbumDir() + artefactHtml ;
+		return "file://" + Control.getAbsoluteAlbumDir() + artefactHtmlName ;
 	}
 
 

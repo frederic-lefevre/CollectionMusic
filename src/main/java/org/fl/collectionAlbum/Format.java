@@ -4,11 +4,8 @@ import java.util.EnumMap;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import org.fl.collectionAlbum.rapportHtml.RapportHtml;
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
 
 /**
  * @author Frédéric Lefèvre
@@ -146,23 +143,23 @@ public class Format {
 	private final static String F_ROW6 = "\"><span class=\"" ;
 	private final static String F_ROW7 = "</span></td>\n" ;
 	
-	public void enteteFormat(RapportHtml rapport, String cssTotal, int rows) {
+	public void enteteFormat(StringBuilder rapport, String cssTotal, int rows) {
 		
 		if (cssTotal != null) {
-			rapport.write(F_ROW1).write(rows).write(F_ROW3).write(cssTotal).write(F_ROW2) ;
+			rapport.append(F_ROW1).append(rows).append(F_ROW3).append(cssTotal).append(F_ROW2) ;
 		}
 		for (SupportPhysique sPhys : SupportPhysique.values()) {
-			rapport.write(F_ROW1).write(rows).write(F_ROW3).write(sPhys.getCssClass()).write(F_ROW4).write(sPhys.getNom()).write(F_ROW5) ;
+			rapport.append(F_ROW1).append(rows).append(F_ROW3).append(sPhys.getCssClass()).append(F_ROW4).append(sPhys.getNom()).append(F_ROW5) ;
 		}
 	}
 	
-	public void rowFormat(RapportHtml rapport, String cssTotal) {
+	public void rowFormat(StringBuilder rapport, String cssTotal) {
 		
 		if (cssTotal != null) {
-			rapport.write(F_ROW0).write(cssTotal).write(F_ROW6).write(cssTotal).write(F_ROW4).write(displayDouble(getPoids())).write(F_ROW7) ;
+			rapport.append(F_ROW0).append(cssTotal).append(F_ROW6).append(cssTotal).append(F_ROW4).append(displayDouble(getPoids())).append(F_ROW7) ;
 		}
 		for (SupportPhysique sPhys : SupportPhysique.values()) {
-			rapport.write(F_ROW0).write(sPhys.getCssClass()).write(F_ROW4).write(displayDouble(getNb(sPhys))).write(F_ROW5) ;			 
+			rapport.append(F_ROW0).append(sPhys.getCssClass()).append(F_ROW4).append(displayDouble(getNb(sPhys))).append(F_ROW5) ;			 
 		}		
 	}
 	

@@ -6,68 +6,113 @@ import java.util.logging.Logger;
 import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.Format;
+import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.albums.ListeAlbum;
+import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 
 public class RapportCollection extends RapportHtml {
 
 	private int rapportIndex ;
 	private HtmlLinkList accueils ;
+	private CollectionAlbumContainer albumsContainer ;
+	private File rapportCollectionDir ;
 	
-	public RapportCollection(String titre, boolean dt, File rFile, HtmlLinkList idxs, String o, Logger rl) {
-		super(titre, dt, rFile, idxs, o, rl);
+	public RapportCollection(CollectionAlbumContainer ac, String titre, File rFile, HtmlLinkList idxs, String o, Logger rl) {
+		super(titre, rFile, idxs, o, rl) ;
+		withTitleDisplayed();
 		accueils 		= Control.getAccueils() ;
 		rapportIndex 	= -1 ;
+		albumsContainer = ac ;
+		rapportCollectionDir = rFile.getParentFile() ;
 	}
 
-	 public void rapportHtml(CollectionAlbumContainer albumsContainer, File rapportDir) {	
+	@Override
+	 protected void corpsRapport() {
 		   	
-		albumsContainer.getCollectionAlbumsMusiques().rapportAdditionnalInfo() ;
+		genererLesRapportsDeChaqueAlbum(albumsContainer.getCollectionAlbumsMusiques()) ;
+		genererLesRapportsAlbumsDeChaqueArtiste(albumsContainer.getCollectionArtistes()) ;
 	   
 	   	String styles[] = { RapportHtml.mainStyle, RapportHtml.formatStyle } ;
-	     	
-		String rapportFileName = new String(rapportDir.getAbsolutePath() + File.separator + Control.getHomecollectionfile()) ;
-		File rapportFile = new File(rapportFileName) ;
-		RapportHtml rapport = new RapportHtml("Collections d'albums", true, rapportFile, accueils, "", rapportLog) ;
-			
-		rapport.enteteRapport(styles) ;
-		rapport.write("<h3>Classement des auteurs, interpretes et chefs d'orchestre (artistes, groupes, ensembles)</h3>\n<ul>\n") ;
+	   	String stylesStat[] = {"main","stat"} ;
+		String stylesCalendrier[] = {"main","rapport", "calendrier"} ;
+		String stylesAlbum[] = {"main","format","rapport"} ;
+	     				
+		write("<h3>Classement des auteurs, interpretes et chefs d'orchestre (artistes, groupes, ensembles)</h3>\n<ul>\n") ;
 		
-		generationRapportHtml(rapport, rapportDir, "Classement alphabethique", 						  albumsContainer.getCollectionArtistes(), ListeArtiste.rapportAlpha,  "") ;
-		generationRapportHtml(rapport, rapportDir, "Classement par nombre d'unit&eacute;s physiques", albumsContainer.getCollectionArtistes(), ListeArtiste.rapportPoids,  "") ;
-		generationRapportHtml(rapport, rapportDir, "Classement chronologique", 						  albumsContainer.getCollectionArtistes(), ListeArtiste.rapportChrono, "") ;
-		generationRapportHtml(rapport, rapportDir, "Calendrier", 						  			  albumsContainer.getCalendrierArtistes(), 0, "") ;
+		RapportListeArtistesAlbum rapportArtistesAlbumsAlpha = new RapportListeArtistesAlbum(albumsContainer.getCollectionArtistes().sortArtistesAlpha(),  "Classement alphabethique", getNextRapportFile(), accueils, "", rapportLog) ;
+		rapportArtistesAlbumsAlpha.withAlphaBalises() ; ;
+		write(rapportArtistesAlbumsAlpha.printReport(styles)) ;
 		
-		rapport.write("</ul>\n<h3>Classement des albums</h3>\n<ul>\n") ;
-		generationRapportHtml(rapport, rapportDir, "Classement chronologique (enregistrement)", albumsContainer.getCollectionAlbumsMusiques(), ListeAlbum.rapportChronoEnregistrement,  "") ;
-		generationRapportHtml(rapport, rapportDir, "Classement chronologique (composition)", 	albumsContainer.getCollectionAlbumsMusiques(), ListeAlbum.rapportChronoComposition,  "") ;
+		RapportListeArtistesAlbum rapportArtistesAlbumsPoids = new RapportListeArtistesAlbum(albumsContainer.getCollectionArtistes().sortArtistesPoidsAlbums(),  "Classement par nombre d'unit&eacute;s physiques", getNextRapportFile(), accueils, "", rapportLog) ;
+		write(rapportArtistesAlbumsPoids.printReport(styles)) ;
 
-		rapport.write("</ul>\n<h3>Rangement des albums</h3>\n<ul>\n") ;
+		RapportListeArtistesAlbum rapportArtistesAlbumsChrono = new RapportListeArtistesAlbum(albumsContainer.getCollectionArtistes().sortArtistesChrono(),  "Classement chronologique", getNextRapportFile(), accueils, "", rapportLog) ;
+		write(rapportArtistesAlbumsChrono.printReport(styles)) ;
+
+		RapportCalendrier rapportCalendrier = new RapportCalendrier(albumsContainer.getCalendrierArtistes(), "Calendrier", getNextRapportFile(), accueils, "", rapportLog) ;
+		write(rapportCalendrier.printReport(stylesCalendrier)) ;
+		
+		write("</ul>\n<h3>Classement des albums</h3>\n<ul>\n") ;
+		RapportListeAlbums rapportAlbumsEnregistrement = new RapportListeAlbums(albumsContainer.getCollectionAlbumsMusiques().sortChronoEnregistrement(), "Classement chronologique (enregistrement)", getNextRapportFile(), accueils, "", rapportLog) ;
+		write(rapportAlbumsEnregistrement.printReport(stylesAlbum)) ;
+	
+		RapportListeAlbums rapportAlbumsComposition = new RapportListeAlbums(albumsContainer.getCollectionAlbumsMusiques().sortChronoComposition(), "Classement chronologique (composition)", getNextRapportFile(), accueils, "", rapportLog) ;
+		write(rapportAlbumsComposition.printReport(stylesAlbum)) ;
+
+		write("</ul>\n<h3>Rangement des albums</h3>\n<ul>\n") ;
 		for (Format.RangementSupportPhysique rangement : Format.RangementSupportPhysique.values()) {
-			generationRapportHtml(rapport, rapportDir, rangement.getDescription(), albumsContainer.getRangementAlbums(rangement), ListeAlbum.rapportRangement, "") ;
+			RapportListeAlbums rapportAlbumsRangement = new RapportListeAlbums(albumsContainer.getRangementAlbums(rangement), rangement.getDescription(), getNextRapportFile(), accueils, "", rapportLog) ;
+			write(rapportAlbumsRangement.printReport(stylesAlbum)) ;
 		}
 
-		rapport.write("</ul>\n<h3>Statistiques</h3>\n<ul>\n") ;
-		generationRapportHtml(rapport, rapportDir, "Statistiques par année d'enregistrement: Nombre d'unit&eacute;s physiques",  albumsContainer.getStatChronoEnregistrement(), 0, "") ;
-		generationRapportHtml(rapport, rapportDir, "Statistiques par décennie de composition: Nombre d'unit&eacute;s physiques", albumsContainer.getStatChronoComposition(), 	0, "") ;
+		write("</ul>\n<h3>Statistiques</h3>\n<ul>\n") ;
+		RapportStat rapportStat1 = new RapportStat(albumsContainer.getStatChronoEnregistrement(), "Statistiques par année d'enregistrement: Nombre d'unit&eacute;s physiques", getNextRapportFile(), accueils, "", rapportLog) ;
+		write(rapportStat1.printReport(stylesStat)) ;
 
-		rapport.write("  <li>Nombre d'albums: " + albumsContainer.getCollectionAlbumsMusiques().getNombreAlbums()) ;
-		rapport.write("</li>\n  <li>Nombre d'artistes, de groupes et d'ensemble: " + albumsContainer.getCollectionArtistes().getNombreArtistes()) ;
-		rapport.write("</li>\n  <li>Nombre d'unit&eacute;s physiques:\n<table>\n  <tr>\n") ;
-		albumsContainer.getCollectionAlbumsMusiques().getFormatListeAlbum().enteteFormat(rapport, "total", 1) ;
-		rapport.write("  </tr>\n  <tr>\n") ;
-		albumsContainer.getCollectionAlbumsMusiques().getFormatListeAlbum().rowFormat(rapport, "total") ;
-		rapport.write("  </tr>\n</table>\n</li>\n</ul>\n") ;
-		rapport.finRapport() ;			
+		RapportStat rapportStat2 = new RapportStat(albumsContainer.getStatChronoComposition(), "Statistiques par décennie de composition: Nombre d'unit&eacute;s physiques", getNextRapportFile(), accueils, "", rapportLog) ;
+		write(rapportStat2.printReport(stylesStat)) ;
+
+		write("  <li>Nombre d'albums: " + albumsContainer.getCollectionAlbumsMusiques().getNombreAlbums()) ;
+		write("</li>\n  <li>Nombre d'artistes, de groupes et d'ensemble: " + albumsContainer.getCollectionArtistes().getNombreArtistes()) ;
+		write("</li>\n  <li>Nombre d'unit&eacute;s physiques:\n<table>\n  <tr>\n") ;
+		albumsContainer.getCollectionAlbumsMusiques().getFormatListeAlbum().enteteFormat(rBuilder, "total", 1) ;
+		write("  </tr>\n  <tr>\n") ;
+		albumsContainer.getCollectionAlbumsMusiques().getFormatListeAlbum().rowFormat(rBuilder, "total") ;
+		write("  </tr>\n</table>\n</li>\n</ul>\n") ;
+		
 	}
 	
-	 private void generationRapportHtml(RapportHtml rapport, File rapportDir, String titre, HtmlReportPrintable hpr, int typeRapport, String urlOffset) {
-		 RapportHtml rapHtml = new RapportHtml(titre, true, getNextRapportFile(rapportDir), accueils,  "", rapportLog) ;
-		 rapport.write(rapHtml.printReport(hpr, typeRapport, urlOffset)) ;
+	 private File getNextRapportFile() {
+		 rapportIndex++ ;
+		 return new File(rapportCollectionDir + File.separator +  "albums" + rapportIndex + ".html") ;
 	 }
 	 
-	 private File getNextRapportFile(File rapportDir) {
-		 rapportIndex++ ;
-		 return new File(rapportDir + File.separator +  "r" + rapportIndex + ".html") ;
-	 }
+	private void genererLesRapportsDeChaqueAlbum(ListeAlbum listeAlbums) {	
+		String styles[] = {RapportHtml.albumStyle} ;
+		for (Album album : listeAlbums.getAlbums()) {
+			if (album.additionnalInfo()) {
+				File htmlFile = new File(Control.getAbsoluteAlbumDir() + album.getArtefactHtmlName()) ;
+				if (! htmlFile.exists()) {
+					RapportAlbum rapportAlbum = new RapportAlbum(album, album.getTitre(), htmlFile,  null,  "../", rapportLog) ;
+					rapportAlbum.printReport(styles) ;
+				}
+			}
+		}
+	}
+	
+	private void genererLesRapportsAlbumsDeChaqueArtiste(ListeArtiste listeArtistes) {
+		String styles[] = {"main","format","rapport", "artiste"} ;
+		for (Artiste artiste : listeArtistes.getArtistes()) {
+			if (artiste.getNbAlbum() > 0) {
+				String titre = artiste.getPrenoms() + " " + artiste.getNom() ;
+				HtmlLinkList concertLink = new HtmlLinkList(Control.getAccueils(), "../../") ;
+				if (artiste.getConcerts().getNombreConcerts() > 0) {
+					concertLink.addLink("Concerts", artiste.getHtmlConcertFileName()) ;
+				}
+				RapportAlbumsDunArtiste rapportDeSesAlbums = new RapportAlbumsDunArtiste(artiste, titre, artiste.getHtmlFile(), concertLink, "../../", rapportLog) ;
+				rapportDeSesAlbums.printReport(styles) ;
+			}
+		}
+	}
 }

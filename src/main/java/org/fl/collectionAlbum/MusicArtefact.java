@@ -18,22 +18,22 @@ public abstract class MusicArtefact {
     
     protected List<String> notes;
 
-    protected String artefactHtml ;
+    protected String artefactHtmlName ;
     
     protected Logger artefactLog ;
     
     protected JsonObject arteFactJson ;
     
     protected MusicArtefact(JsonObject afj, Logger al) {
-    	auteurs 	    = new ArrayList<Artiste>() ;
-    	interpretes     = new ArrayList<Artiste>() ;
-    	ensembles 	    = new ArrayList<Artiste>() ;
-    	chefsOrchestres = new ArrayList<Artiste>() ;
-    	notes 		    = new ArrayList<String> () ;
+    	auteurs 	     = new ArrayList<Artiste>() ;
+    	interpretes      = new ArrayList<Artiste>() ;
+    	ensembles 	     = new ArrayList<Artiste>() ;
+    	chefsOrchestres  = new ArrayList<Artiste>() ;
+    	notes 		     = new ArrayList<String> () ;
     	
-    	artefactLog 	= al ;
-    	arteFactJson    = afj ;
-    	artefactHtml    = null ; 
+    	artefactLog 	 = al ;
+    	arteFactJson     = afj ;
+    	artefactHtmlName = null ; 
     }
 
     public List<Artiste> getAuteurs() 		 { return auteurs		  ; }
@@ -51,8 +51,8 @@ public abstract class MusicArtefact {
     public JsonObject getJson() { return arteFactJson ; }
     
 	public int setHtmlName(int id) {
-		if ((artefactHtml == null) && (additionnalInfo())) {
-			artefactHtml = "i" + id + ".html";
+		if ((artefactHtmlName == null) && (additionnalInfo())) {
+			artefactHtmlName = "i" + id + ".html";
     		return id + 1 ;
         } else {
         	return id ;
@@ -60,4 +60,8 @@ public abstract class MusicArtefact {
 	}
 	
 	protected abstract boolean additionnalInfo() ;
+
+	public String getArtefactHtmlName() {
+		return artefactHtmlName;
+	}
 }

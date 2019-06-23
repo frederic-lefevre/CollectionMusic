@@ -76,11 +76,8 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 		} catch (Exception e) {
 			albumLog.log(Level.SEVERE, "Exception scanning concert directory " + dirName, e);
 		}
-
-
 	}
 	
-
     private class MusicFileVisitor extends SimpleFileVisitor<Path> {
     	
     	private PathMatcher matcher ;

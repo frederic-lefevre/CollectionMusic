@@ -15,8 +15,6 @@ import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.albums.ListeAlbum;
 import org.fl.collectionAlbum.concerts.Concert;
 import org.fl.collectionAlbum.concerts.ListeConcert;
-import org.fl.collectionAlbum.rapportHtml.HtmlLinkList;
-import org.fl.collectionAlbum.rapportHtml.RapportHtml;
 import org.fl.collectionAlbum.utils.TemporalUtils;
 
 import com.google.gson.JsonArray;
@@ -42,8 +40,6 @@ public class Artiste {
 	protected ListeAlbum 	   albums ;
 
 	protected ListeConcert concerts ;
-	
-	private static String styles[] = {"main","format","rapport", "artiste"} ;
 	
 	private Logger artisteLog;
 
@@ -184,6 +180,15 @@ public class Artiste {
 	public TemporalAccessor getMort() 	   	 { return mort		  ; }
 	public String 			getNom() 	   	 { return nom		  ; }
 	public String 			getPrenoms()   	 { return prenoms	  ; }
+	
+	public ListeAlbum getAlbums() {
+		return albums.sortChronoComposition();
+	}
+
+	public ListeConcert getConcerts() {
+		return concerts;
+	}
+
 	public List<String> 	getInstruments() { return instruments ; }
 	
 	public String getUrlHtml() {
@@ -191,10 +196,39 @@ public class Artiste {
 	}
 	
 
+	public File getHtmlFile() {
+		return htmlFile;
+	}
+
+	public String getHtmlConcertFileName() {
+		return htmlConcertFileName;
+	}
+
+	public String getHtmlFileName() {
+		return htmlFileName;
+	}
+
 	public String getConcertUrlHtml() {
 		return Control.getArtistedir() + "/" + relativePathHtml + "/" + htmlConcertFileName;
 	}
 
+	public File getHtmlConcertFile() {
+		return htmlConcertFile;
+	}
+
+    public int setHtmlNames(int id) {
+
+    	if (htmlFileName == null) {
+	        relativePathHtml = new String("a" + id/100) ;
+			htmlFileName = "a" + id + ".html" ;
+			htmlConcertFileName = "c" + id + ".html" ;
+			initHtmFiles() ;
+			return id+1 ;
+    	} else {
+    		return id;
+    	}
+    }
+    
 	private void initHtmFiles() {
 
 		String htmlDirNameComplete = Control.getAbsoluteArtisteDir() + relativePathHtml ;
@@ -209,82 +243,4 @@ public class Artiste {
 		htmlConcertFile = new File(htmlDirNameComplete + File.separator + htmlConcertFileName) ;
 	}
 	
-
-	public void generateHtml() {
-		
-		if (artisteLog.isLoggable(Level.FINE)) {
-			artisteLog.fine("Génération des rapport html pour " + nom + " " + prenoms);
-		}
-		initHtmFiles() ;
-		if (albums.getNombreAlbums() > 0) {
-			generateAlbumsHtml() ;
-		}
-		if (concerts.getNombreConcerts() > 0) {
-			generateConcertHtml() ;
-		}
-	}
-	
-	private void generateAlbumsHtml() {
-		
-		try {
-			if (! htmlFile.exists()) {
-				
-				HtmlLinkList concertLink = new HtmlLinkList(Control.getAccueils(), "../../") ;
-				if (concerts.getNombreConcerts() > 0) {
-					concertLink.addLink("Concerts", htmlConcertFileName) ;
-				}
-				RapportHtml rapport = new RapportHtml( getPrenoms() + " " + getNom(), false, htmlFile, concertLink, "../../", artisteLog);
-				
-				rapport.enteteRapport(styles) ;				
-				
-				rapport.write("<table class=\"auteurTab\">\n  <tr>\n    <td rowspan=\"2\" class=\"auteurTitre\"><span class=\"auteurTitre\">") ;
-				rapport.write(getPrenoms()).write(" ").write(getNom()) ;
-				rapport.write("</span> (").write(getDateNaissance()).write(" - ").write(getDateMort()).write(")</td>\n") ;
-				getAlbumsFormat().enteteFormat(rapport, "total", 1) ;
-				rapport.write("  </tr>\n  <tr>\n") ;
-				getAlbumsFormat().rowFormat(rapport, "artotal") ;
-				rapport.write("  </tr>\n</table>\n") ;
-				albums.rapport(rapport, ListeAlbum.rapportChronoComposition, "../../") ;
-				rapport.finRapport() ;
-		
-			}
-		} catch (Exception e) {
-			artisteLog.log(Level.SEVERE, "Exception dans la génération du html de " + nom + " " + prenoms, e);
-		}
-	} 
-	
-	private void generateConcertHtml() {
-		
-		if (! htmlConcertFile.exists()) {
-								
-			HtmlLinkList albumLink = new HtmlLinkList(Control.getAccueils(), "../../") ;
-			if (albums.getNombreAlbums() > 0) {
-				albumLink.addLink("Albums", htmlFileName) ;
-			}
-			RapportHtml rapport = new RapportHtml( getPrenoms() + " " + getNom(), false, htmlConcertFile, albumLink, "../../", artisteLog);
-			
-			rapport.enteteRapport(styles) ;	
-			
-			rapport.write("<table class=\"auteurTab\">\n  <tr>\n    <td class=\"auteurTitre\"><span class=\"auteurTitre\">") ;
-			rapport.write(getPrenoms()).write(" ").write(getNom()) ;
-			rapport.write("</span> (").write(getDateNaissance()).write(" - ").write(getDateMort()) ;
-			rapport.write(")</td>\n  </tr>\n</table>\n") ;
-			concerts.rapport(rapport,  0, "../../") ;
-			rapport.finRapport() ;
-		
-		}
-	} 
-	
-
-    public int setHtmlNames(int id) {
-
-    	if (htmlFileName == null) {
-	        relativePathHtml = new String("a" + id/100) ;
-			htmlFileName = "a" + id + ".html" ;
-			htmlConcertFileName = "c" + id + ".html" ;
-			return id+1 ;
-    	} else {
-    		return id;
-    	}
-    }
 }

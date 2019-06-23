@@ -323,7 +323,7 @@ public class CollectionAlbumContainer {
    		concerts 				 = new ListeConcert(albumLog) ; 		
    		statChronoEnregistrement = new StatChrono(albumLog) ;
    		statChronoComposition 	 = new StatChrono(albumLog) ;   		
-   		calendrierArtistes 		 = new ChronoArtistes(albumLog) ;
+   		calendrierArtistes 		 = new ChronoArtistes() ;
    		rangementsAlbums 		 = new EnumMap<Format.RangementSupportPhysique, ListeAlbum>(Format.RangementSupportPhysique.class) ;
    		for (Format.RangementSupportPhysique rangement : Format.RangementSupportPhysique.values()) {
    			rangementsAlbums.put(rangement, new ListeAlbum(albumLog)) ;
