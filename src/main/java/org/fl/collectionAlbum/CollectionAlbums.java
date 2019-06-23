@@ -118,9 +118,13 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
     
 	private void buildCalendrier() {
 		
-		ListeArtiste allArtistes =  albumsContainer.getCollectionArtistes().getReunion(albumsContainer.getConcertsArtistes())  ;
-		for (Artiste a : allArtistes.getArtistes()) {
-			albumsContainer.getCalendrierArtistes().add(a) ;
+		try {
+			ListeArtiste allArtistes =  albumsContainer.getCollectionArtistes().getReunion(albumsContainer.getConcertsArtistes())  ;
+			for (Artiste a : allArtistes.getArtistes()) {
+				albumsContainer.getCalendrierArtistes().add(a) ;
+			}
+		} catch (Exception e) {
+			albumLog.log(Level.SEVERE, "Exception in build calendrier ", e);
 		}
 	
 	}
