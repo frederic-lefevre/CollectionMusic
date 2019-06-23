@@ -38,14 +38,14 @@ public class RapportDesConcerts extends RapportHtml {
 		 write("<h3>Classement des auteurs, interpretes et chefs d'orchestre (artistes, groupes, ensembles)</h3>\n<ul>\n") ;
 		 
 		 RapportListeArtistesConcert artistesAlpha = new RapportListeArtistesConcert(albumsContainer.getConcertsArtistes().sortArtistesAlpha(), "Classement alphabethique", getNextRapportFile(), accueils, "", rapportLog) ;
-		 artistesAlpha.printReport(stylesArtistes) ;
+		 write(artistesAlpha.printReport(stylesArtistes)) ;
 
 		 RapportListeArtistesConcert artistesPoids = new RapportListeArtistesConcert(albumsContainer.getConcertsArtistes().sortArtistesPoidsConcerts(), "Classement par nombre de concerts", getNextRapportFile(), accueils, "", rapportLog) ;
-		 artistesPoids.printReport(stylesArtistes) ;
+		 write(artistesPoids.printReport(stylesArtistes)) ;
 
 		 write("</ul>\n<h3>Classement des concerts</h3>\n<ul>\n") ;
 		 RapportListeConcerts rapportDesConcerts = new RapportListeConcerts(albumsContainer.getConcerts().sortChrono(), "Classement chronologique", getNextRapportFile(), accueils, "", rapportLog) ;
-		 rapportDesConcerts.printReport(stylesConcert) ;
+		 write(rapportDesConcerts.printReport(stylesConcert)) ;
 		 
 		 write("  <li>Nombre de concerts: " + albumsContainer.getConcerts().getNombreConcerts());
 		 write("</li>\n  <li>Nombre d'artistes, de groupes et d'ensemble: " + albumsContainer.getConcertsArtistes().getNombreArtistes());
