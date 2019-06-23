@@ -33,7 +33,7 @@ public class RapportCollection extends RapportHtml {
 		genererLesRapportsDeChaqueAlbum(albumsContainer.getCollectionAlbumsMusiques()) ;
 		genererLesRapportsAlbumsDeChaqueArtiste(albumsContainer.getCollectionArtistes()) ;
 	   
-	   	String styles[] = { RapportHtml.mainStyle, RapportHtml.formatStyle } ;
+	   	String styles[] = { RapportHtml.mainStyle, RapportHtml.formatStyle, "rapport", "chrono" } ;
 	   	String stylesStat[] = {"main","stat"} ;
 		String stylesCalendrier[] = {"main","rapport", "calendrier"} ;
 		String stylesAlbum[] = {"main","format","rapport"} ;
