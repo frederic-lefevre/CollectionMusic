@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
@@ -156,6 +157,7 @@ public abstract class RapportHtml {
 	}
 	
 	public void withAlphaBalises() {
+		alphaBalises = new ArrayList<String>() ;
 		withAlphaBalises = true ;
 	}
 	
