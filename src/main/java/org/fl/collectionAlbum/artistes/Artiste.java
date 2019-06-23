@@ -157,9 +157,6 @@ public class Artiste {
 		update(birth, death) ;
     }
         
-    /**
-     * Ajouter un artefact
-     */
     public void addArteFact(MusicArtefact musicArtefact) {
     	if (musicArtefact instanceof Album) {
     		albums.addAlbum((Album)musicArtefact) ;
@@ -170,50 +167,29 @@ public class Artiste {
     	}
     }
     
-    public Format getAlbumsFormat()	 { return albums.getFormatListeAlbum() 		  ; }
-    public int 	  getNbConcert() 	 { return concerts.getNombreConcerts() 		  ; }
-    public int 	  getNbAlbum() 		 { return albums.getNombreAlbums() 			  ; }
-    public String getDateNaissance() { return TemporalUtils.formatDate(naissance) ; }
-	public String getDateMort() 	 { return TemporalUtils.formatDate(mort) 	  ;	}
-	
-	public TemporalAccessor getNaissance() 	 { return naissance   ; }   
-	public TemporalAccessor getMort() 	   	 { return mort		  ; }
-	public String 			getNom() 	   	 { return nom		  ; }
-	public String 			getPrenoms()   	 { return prenoms	  ; }
-	
-	public ListeAlbum getAlbums() {
-		return albums.sortChronoComposition();
-	}
+    public Format 			getAlbumsFormat()		 { return albums.getFormatListeAlbum() 		  ; }
+    public int 	  			getNbConcert() 	 		 { return concerts.getNombreConcerts() 		  ; }
+    public int 	  			getNbAlbum() 		 	 { return albums.getNombreAlbums() 			  ; }
+    public String 			getDateNaissance() 		 { return TemporalUtils.formatDate(naissance) ; }
+	public String 			getDateMort() 	 		 { return TemporalUtils.formatDate(mort) 	  ;	}
+	public ListeAlbum 		getAlbums() 			 { return albums.sortChronoComposition()	  ; }	
+	public TemporalAccessor getNaissance() 	 		 { return naissance   						  ; }   
+	public TemporalAccessor getMort() 	   	 		 { return mort		  						  ; }
+	public String 			getNom() 	   	 		 { return nom		  						  ; }
+	public String 			getPrenoms()   	 		 { return prenoms	  						  ; }
+	public File 			getHtmlFile() 	 		 { return htmlFile	  						  ;	}
+	public List<String> 	getInstruments() 		 { return instruments 						  ; }
+	public ListeConcert 	getConcerts() 	 		 { return concerts	  						  ;	}
+	public String 			getHtmlConcertFileName() { return htmlConcertFileName				  ; }
+	public String			getHtmlFileName() 		 { return htmlFileName						  ;	}
+	public File getHtmlConcertFile() 				 { return htmlConcertFile					  ;	}
 
-	public ListeConcert getConcerts() {
-		return concerts;
-	}
-
-	public List<String> 	getInstruments() { return instruments ; }
-	
 	public String getUrlHtml() {
 		return Control.getArtistedir() + "/" + relativePathHtml + "/" + htmlFileName;
-	}
-	
-
-	public File getHtmlFile() {
-		return htmlFile;
-	}
-
-	public String getHtmlConcertFileName() {
-		return htmlConcertFileName;
-	}
-
-	public String getHtmlFileName() {
-		return htmlFileName;
 	}
 
 	public String getConcertUrlHtml() {
 		return Control.getArtistedir() + "/" + relativePathHtml + "/" + htmlConcertFileName;
-	}
-
-	public File getHtmlConcertFile() {
-		return htmlConcertFile;
 	}
 
     public int setHtmlNames(int id) {
