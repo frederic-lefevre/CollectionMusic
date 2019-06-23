@@ -62,7 +62,7 @@ public class RapportCollection extends RapportHtml {
 
 		write("</ul>\n<h3>Rangement des albums</h3>\n<ul>\n") ;
 		for (Format.RangementSupportPhysique rangement : Format.RangementSupportPhysique.values()) {
-			RapportListeAlbums rapportAlbumsRangement = new RapportListeAlbums(albumsContainer.getRangementAlbums(rangement), rangement.getDescription(), getNextRapportFile(), accueils, "", rapportLog) ;
+			RapportListeAlbums rapportAlbumsRangement = new RapportListeAlbums(albumsContainer.getRangementAlbums(rangement).sortRangementAlbum(), rangement.getDescription(), getNextRapportFile(), accueils, "", rapportLog) ;
 			write(rapportAlbumsRangement.printReport(stylesAlbum)) ;
 		}
 
