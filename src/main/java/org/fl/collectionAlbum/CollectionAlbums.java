@@ -116,32 +116,32 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 
     }
     
-	private void buildCalendrier() {
-		
-		try {
-			ListeArtiste allArtistes =  albumsContainer.getCollectionArtistes().getReunion(albumsContainer.getConcertsArtistes())  ;
-			for (Artiste a : allArtistes.getArtistes()) {
-				albumsContainer.getCalendrierArtistes().add(a) ;
-			}
-		} catch (Exception e) {
-			albumLog.log(Level.SEVERE, "Exception in build calendrier ", e);
-		}
-	
-	}
-	
-	 @Override
-     public void done() {
-		 
-	     progressPanel.setStepInfos("Arreté");
-	     progressPanel.setProcessStatus("Collection chargée");
-	 }
-	 
-	 @Override
-	 public void process(List<ProgressInformation> lp) {
-		 
-		 ProgressInformation latestResult = lp.get(lp.size() - 1);
-		 
-	        progressPanel.setStepInfos(latestResult.getInformation());
-	        progressPanel.setProcessStatus(latestResult.getStatus());
-	 }
+    private void buildCalendrier() {
+
+    	try {
+    		ListeArtiste allArtistes =  albumsContainer.getCollectionArtistes().getReunion(albumsContainer.getConcertsArtistes())  ;
+    		for (Artiste a : allArtistes.getArtistes()) {
+    			albumsContainer.getCalendrierArtistes().add(a) ;
+    		}
+    	} catch (Exception e) {
+    		albumLog.log(Level.SEVERE, "Exception in build calendrier ", e);
+    	}
+
+    }
+
+    @Override
+    public void done() {
+
+    	progressPanel.setStepInfos("Arreté");
+    	progressPanel.setProcessStatus("Collection chargée");
+    }
+
+    @Override
+    public void process(List<ProgressInformation> lp) {
+
+    	ProgressInformation latestResult = lp.get(lp.size() - 1);
+
+    	progressPanel.setStepInfos(latestResult.getInformation());
+    	progressPanel.setProcessStatus(latestResult.getStatus());
+    }
 }
