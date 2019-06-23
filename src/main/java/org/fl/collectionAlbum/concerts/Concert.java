@@ -32,13 +32,11 @@ public class Concert extends MusicArtefact {
     	return res ;
     }
     
-	public String getLieuConcert() {
-		return lieuConcert;
-	}
-	
-	public TemporalAccessor getDateConcert() {
-		return dateConcert ;
-	}
+	public String 			getLieuConcert()  { return lieuConcert	; }	 
+	public TemporalAccessor getDateConcert()  {	return dateConcert 	; }
+	public String 			getUrlInfos() 	  {	return urlInfos		; }
+	public List<String> 	getTitres() 	  {	return titres		; }
+	public List<String> 	getTicketImages() { return ticketImages ; }	
 	
 	public String getFullPathHtmlFileName() {
 		return "file://" + Control.getAbsoluteConcertDir() + artefactHtmlName ;
@@ -48,23 +46,9 @@ public class Concert extends MusicArtefact {
 		this.dateConcert = dateConcert;
 	}
 
-	public void setTitres(List<String> lt) {
-		titres = lt;
-	}
-
-	public void setTicketImages(List<String> ti) {
-		ticketImages = ti;
-	}
-
-	public void setLieuConcert(String lc) {
-		lieuConcert = lc;
-	}
-
-	public void setUrlInfos(String ui) { urlInfos = ui ; }
-
-	public String getUrlInfos() {		return urlInfos;	}
-
-	public List<String> getTitres() {		return titres;	}
-
-	public List<String> getTicketImages() { 	return ticketImages;	}	
+	public void setTitres(List<String> lt) 		 { titres 		= lt ; }
+	public void setTicketImages(List<String> ti) { ticketImages = ti ; }
+	public void setLieuConcert(String lc) 		 { lieuConcert  = lc ; }
+	public void setUrlInfos(String ui) 			 { urlInfos 	= ui ; }
+	
 }
