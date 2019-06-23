@@ -16,8 +16,6 @@ public class ListeArtiste {
 	
 	private Logger listeArtisteLog;
 	
-	private static String styles[] = {"main","format","rapport","chrono"} ;
-	
 	private List<Artiste> artistes;
 
 	public ListeArtiste(Logger laLog) {
@@ -26,10 +24,6 @@ public class ListeArtiste {
 		artistes  		= new ArrayList<Artiste>() ;
 	}
 
-	public String[] getCssStyles() {
-		return styles ;
-	}
-	
 	public void addArtiste(Artiste a) {
 		
 		if (! artistes.contains(a)) {
