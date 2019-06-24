@@ -41,9 +41,9 @@ public abstract class RapportHtml {
 	// Initial size of the StringBuilder buffer
 	private final static int TAILLE_INITIALE = 8192 ;
 	
-	protected final String 	     titreRapport ;
+	protected 		String 	     titreRapport ;
 	protected final File 	     rapportFile ;
-	private   final HtmlLinkList indexes ;
+	private   		HtmlLinkList indexes ;
 	private   final PrintWriter  filePrinter ;
 	
 	protected StringBuilder rBuilder ;
@@ -169,14 +169,22 @@ public abstract class RapportHtml {
 		return this ;
 	}
 	
-	public static void withCharset(String cs) {
-		htmlBegin = ENTETE1 + cs + ENTETE6 ;
-	}
-	
 	protected void alphBalise(String uneBalise) {
 		if (alphaBalises.isEmpty() || (! uneBalise.equals(alphaBalises.get(alphaBalises.size()-1)))) {
 			write("<a name=\"").write(uneBalise).write("\"></a>") ;
 			alphaBalises.add(uneBalise) ;
 		}
+	}
+	
+	protected void withTitle(String title) {
+		titreRapport = title ;
+	}
+	
+	protected void withHtmlLinkList(HtmlLinkList hll) {
+		indexes = hll ;
+	}
+	
+	public static void withCharset(String cs) {
+		htmlBegin = ENTETE1 + cs + ENTETE6 ;
 	}
 }

@@ -104,13 +104,8 @@ public class RapportCollection extends RapportHtml {
 	private void genererLesRapportsAlbumsDeChaqueArtiste(ListeArtiste listeArtistes) {
 		String styles[] = {"main","format","rapport", "artiste"} ;
 		for (Artiste artiste : listeArtistes.getArtistes()) {
-			if (artiste.getNbAlbum() > 0) {
-				String titre = artiste.getPrenoms() + " " + artiste.getNom() ;
-				HtmlLinkList concertLink = new HtmlLinkList(Control.getAccueils(), "../../") ;
-				if (artiste.getConcerts().getNombreConcerts() > 0) {
-					concertLink.addLink("Concerts", artiste.getHtmlConcertFileName()) ;
-				}
-				RapportAlbumsDunArtiste rapportDeSesAlbums = new RapportAlbumsDunArtiste(artiste, titre, artiste.getHtmlFile(), concertLink, "../../", rapportLog) ;
+			if (artiste.getNbAlbum() > 0) {				
+				RapportAlbumsDunArtiste rapportDeSesAlbums = new RapportAlbumsDunArtiste(artiste, artiste.getHtmlFile(), "../../", rapportLog) ;
 				rapportDeSesAlbums.printReport(styles) ;
 			}
 		}
