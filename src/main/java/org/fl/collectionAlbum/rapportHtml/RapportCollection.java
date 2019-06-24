@@ -8,8 +8,6 @@ import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.Format;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.albums.ListeAlbum;
-import org.fl.collectionAlbum.artistes.Artiste;
-import org.fl.collectionAlbum.artistes.ListeArtiste;
 
 public class RapportCollection extends RapportHtml {
 
@@ -31,7 +29,6 @@ public class RapportCollection extends RapportHtml {
 	 protected void corpsRapport() {
 		   	
 		genererLesRapportsDeChaqueAlbum(albumsContainer.getCollectionAlbumsMusiques()) ;
-		genererLesRapportsAlbumsDeChaqueArtiste(albumsContainer.getCollectionArtistes()) ;
 	   
 	   	String styles[] = { RapportHtml.mainStyle, RapportHtml.formatStyle, "rapport", "chrono" } ;
 	   	String stylesStat[] = {"main","stat"} ;
@@ -97,16 +94,6 @@ public class RapportCollection extends RapportHtml {
 					RapportAlbum rapportAlbum = new RapportAlbum(album, album.getTitre(), htmlFile,  null,  "../", rapportLog) ;
 					rapportAlbum.printReport(styles) ;
 				}
-			}
-		}
-	}
-	
-	private void genererLesRapportsAlbumsDeChaqueArtiste(ListeArtiste listeArtistes) {
-		String styles[] = {"main","format","rapport", "artiste"} ;
-		for (Artiste artiste : listeArtistes.getArtistes()) {
-			if (artiste.getNbAlbum() > 0) {				
-				RapportAlbumsDunArtiste rapportDeSesAlbums = new RapportAlbumsDunArtiste(artiste, artiste.getHtmlFile(), "../../", rapportLog) ;
-				rapportDeSesAlbums.printReport(styles) ;
 			}
 		}
 	}

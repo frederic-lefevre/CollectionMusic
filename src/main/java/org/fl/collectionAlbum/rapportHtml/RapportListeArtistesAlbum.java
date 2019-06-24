@@ -15,6 +15,8 @@ public class RapportListeArtistesAlbum extends RapportHtml {
 	private final static String F3 = "  </tr>\n  </table>\n</div>\n<table>\n  <tr class=\"head\">\n    <td class=\"auteur\">Auteurs</td>\n" +
 									 "    <td class=\"an\">Naissance</td>\n    <td class=\"an\">Mort</td>\n" ;
 
+	String styles[] = {"main","format","rapport", "artiste"} ;
+	
 	private final ListeArtiste auteurs ;
 	
 	public RapportListeArtistesAlbum(ListeArtiste la, String titre, File rFile, HtmlLinkList idxs, String o, Logger rl) {
@@ -39,6 +41,10 @@ public class RapportListeArtistesAlbum extends RapportHtml {
 			if (withAlphaBalises) {
 				alphBalise(unArtiste.getNom().substring(0, 1)) ;
 			}
+			
+			RapportAlbumsDunArtiste rapportDeSesAlbums = new RapportAlbumsDunArtiste(unArtiste, unArtiste.getHtmlFile(), "../../", rapportLog) ;
+			rapportDeSesAlbums.printReport(styles) ;
+
 			write("<a href=\"").write(unArtiste.getUrlHtml()). write("\">") ;
 
 			write(unArtiste.getPrenoms()).write(" ").write(unArtiste.getNom()).write("</a></td>\n") ;

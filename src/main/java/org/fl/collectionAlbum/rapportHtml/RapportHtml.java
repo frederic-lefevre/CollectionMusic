@@ -95,12 +95,14 @@ public abstract class RapportHtml {
 	
 	public String printReport(String styleList[]) {
 		
-		try {
-			enteteRapport(styleList) ;
-			corpsRapport();		
-			finRapport() ;
-		} catch (Exception e) {
-		    rapportLog.log(Level.SEVERE, "Erreur dans la création du rapport ", e) ;
+		if (filePrinter != null) {
+			try {
+				enteteRapport(styleList) ;
+				corpsRapport();		
+				finRapport() ;
+			} catch (Exception e) {
+			    rapportLog.log(Level.SEVERE, "Erreur dans la création du rapport ", e) ;
+			}
 		}
 		return "  <li><a href=\"" + rapportFile.getName() + "\">" + titreRapport + "</a></li>\n" ;
 	}
