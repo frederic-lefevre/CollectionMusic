@@ -3,16 +3,18 @@ package org.fl.collectionAlbum.stat;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class StatChrono {
 	
-	private List<StatAnnee> statAnnuelle ; 
-	private List<StatAnnee> statDecennale ;
-	private List<StatAnnee> statSiecle ;
-	private Logger 			statLogger;
+	private List<StatAnnee>  statAnnuelle ; 
+	private List<StatAnnee>  statDecennale ;
+	private List<StatAnnee>  statSiecle ;
+	private StatAnComparator statComp ;
+	private Logger 			 statLogger;
 	
     public StatChrono(Logger sl) {
         super();
@@ -20,6 +22,7 @@ public class StatChrono {
         statAnnuelle  = new ArrayList<StatAnnee>(2000) ;
         statDecennale = new ArrayList<StatAnnee>(200) ;
         statSiecle    = new ArrayList<StatAnnee>(20) ;
+        statComp 	  = new StatAnComparator() ;
     }
     
     public void AddAlbum(TemporalAccessor dateAlbum, double poidsAlbum) {
@@ -79,8 +82,8 @@ public class StatChrono {
 				.orElse(new String("0")) ;
 	}
 	
-	public List<StatAnnee> getStatAnnuelle()  { return statAnnuelle	 ; }
-	public List<StatAnnee> getStatDecennale() {	return statDecennale ; }
-	public List<StatAnnee> getStatSiecle()	  {	return statSiecle	 ; }
+	public List<StatAnnee> getStatAnnuelle()  { Collections.sort(statAnnuelle, statComp) ; return statAnnuelle	 ; }
+	public List<StatAnnee> getStatDecennale() {	Collections.sort(statDecennale,statComp) ; return statDecennale  ; }
+	public List<StatAnnee> getStatSiecle()	  {	Collections.sort(statSiecle,   statComp) ; return statSiecle	 ; }
 
 }

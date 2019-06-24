@@ -1,12 +1,10 @@
 package org.fl.collectionAlbum.rapportHtml;
 
 import java.io.File;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.fl.collectionAlbum.stat.StatAnComparator;
 import org.fl.collectionAlbum.stat.StatAnnee;
 import org.fl.collectionAlbum.stat.StatChrono;
 
@@ -23,15 +21,8 @@ public class RapportStat extends RapportHtml {
 	// Return a html hyper to this rapport
 	protected void corpsRapport() {
 		
-		StatAnComparator statComp = new StatAnComparator() ;
-		
-		List<StatAnnee> statAnnuelle  = statChrono.getStatAnnuelle()  ;
 		List<StatAnnee> statDecennale = statChrono.getStatDecennale() ;
 		List<StatAnnee> statSiecle	  = statChrono.getStatSiecle() 	  ;
-		
-		Collections.sort(statAnnuelle, statComp) ;
-		Collections.sort(statDecennale,statComp) ;
-		Collections.sort(statSiecle,   statComp) ;
 		
 		Iterator<StatAnnee> ed ;
 		boolean plusieursSiecles = false ;
