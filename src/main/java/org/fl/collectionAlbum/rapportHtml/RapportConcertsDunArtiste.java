@@ -3,15 +3,22 @@ package org.fl.collectionAlbum.rapportHtml;
 import java.io.File;
 import java.util.logging.Logger;
 
+import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.artistes.Artiste;
 
 public class RapportConcertsDunArtiste extends RapportHtml {
 
 	private final Artiste artiste ;
 	
-	protected RapportConcertsDunArtiste(Artiste a, String titre, File rFile, HtmlLinkList idxs, String o, Logger rl) {
-		super(titre, rFile, idxs, o, rl);
+	protected RapportConcertsDunArtiste(Artiste a, File rFile, String o, Logger rl) {
+		super("", rFile, null, o, rl);
 		artiste = a ;
+		withTitle(artiste.getPrenoms() + " " + artiste.getNom()) ;
+		 HtmlLinkList albumLink = new HtmlLinkList(Control.getAccueils(), "../../") ;
+		 if (artiste.getConcerts().getNombreConcerts() > 0) {
+			 albumLink.addLink("Albums", artiste.getHtmlFileName()) ;						
+		 }
+		 withHtmlLinkList(albumLink) ;
 	}
 
 	@Override

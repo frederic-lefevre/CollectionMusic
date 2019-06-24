@@ -5,8 +5,6 @@ import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.Control;
-import org.fl.collectionAlbum.artistes.Artiste;
-import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.concerts.Concert;
 import org.fl.collectionAlbum.concerts.ListeConcert;
 
@@ -30,7 +28,6 @@ public class RapportDesConcerts extends RapportHtml {
 	protected void corpsRapport() {
 		
 		genererLesRapportsDeChaqueConcert(albumsContainer.getConcerts()) ;
-		genererLesRapportsConcertsDeChaqueArtiste(albumsContainer.getConcertsArtistes()) ;
 		
 		 String stylesArtistes[] = {"main","format","rapport","chrono"} ;
 		 String stylesConcert[] = {"main","format","rapport"} ;
@@ -70,21 +67,6 @@ public class RapportDesConcerts extends RapportHtml {
 	        		rapportConcert.printReport(styles) ;
 	        	}
 	    	}
-		 }
-	 }
-	 
-	 private void genererLesRapportsConcertsDeChaqueArtiste(ListeArtiste listeArtistes) {
-		 String styles[] = {"main","format","rapport", "artiste"} ;
-		 for (Artiste artiste : listeArtistes.getArtistes()) {
-			 if (artiste.getNbConcert() > 0) {
-				 String titre = artiste.getPrenoms() + " " + artiste.getNom() ;
-				 HtmlLinkList albumLink = new HtmlLinkList(Control.getAccueils(), "../../") ;
-				 if (artiste.getConcerts().getNombreConcerts() > 0) {
-					 albumLink.addLink("Albums", artiste.getHtmlFileName()) ;						
-				 }
-				 RapportConcertsDunArtiste rapportDeSesConcerts = new RapportConcertsDunArtiste(artiste, titre, artiste.getHtmlConcertFile(), albumLink, "../../", rapportLog) ;
-				 rapportDeSesConcerts.printReport(styles) ;
-			 }
 		 }
 	 }
 }

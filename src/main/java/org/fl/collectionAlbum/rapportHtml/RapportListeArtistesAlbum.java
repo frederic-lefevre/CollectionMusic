@@ -15,7 +15,7 @@ public class RapportListeArtistesAlbum extends RapportHtml {
 	private final static String F3 = "  </tr>\n  </table>\n</div>\n<table>\n  <tr class=\"head\">\n    <td class=\"auteur\">Auteurs</td>\n" +
 									 "    <td class=\"an\">Naissance</td>\n    <td class=\"an\">Mort</td>\n" ;
 
-	String styles[] = {"main","format","rapport", "artiste"} ;
+	private final static String styles[] = {"main","format","rapport", "artiste"} ;
 	
 	private final ListeArtiste auteurs ;
 	
