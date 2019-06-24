@@ -91,7 +91,7 @@ public class RapportCollection extends RapportHtml {
 			if (album.additionnalInfo()) {
 				File htmlFile = new File(Control.getAbsoluteAlbumDir() + album.getArtefactHtmlName()) ;
 				if (! htmlFile.exists()) {
-					RapportAlbum rapportAlbum = new RapportAlbum(album, htmlFile,  null,  "../", rapportLog) ;
+					RapportAlbum rapportAlbum = new RapportAlbum(album, htmlFile, "../", rapportLog) ;
 					rapportAlbum.printReport(styles) ;
 				}
 			}
