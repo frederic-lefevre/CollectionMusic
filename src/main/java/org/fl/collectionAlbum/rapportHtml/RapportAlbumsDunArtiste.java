@@ -13,12 +13,14 @@ public class RapportAlbumsDunArtiste extends RapportHtml {
 	public RapportAlbumsDunArtiste(Artiste a, File rFile, String o, Logger rl) {
 		super("", rFile, null, o, rl);
 		artiste = a ;
-		withTitle(artiste.getPrenoms() + " " + artiste.getNom()) ;
-		HtmlLinkList concertLink = new HtmlLinkList(Control.getAccueils(), "../../") ;
-		if (artiste.getConcerts().getNombreConcerts() > 0) {
-			concertLink.addLink("Concerts", artiste.getHtmlConcertFileName()) ;
+		if (! rapportExists()) {		
+			withTitle(artiste.getPrenoms() + " " + artiste.getNom()) ;
+			HtmlLinkList concertLink = new HtmlLinkList(Control.getAccueils(), "../../") ;
+			if (artiste.getConcerts().getNombreConcerts() > 0) {
+				concertLink.addLink("Concerts", artiste.getHtmlConcertFileName()) ;
+			}
+			withHtmlLinkList(concertLink) ;
 		}
-		withHtmlLinkList(concertLink) ;
 	}
 	@Override
 	protected void corpsRapport() {

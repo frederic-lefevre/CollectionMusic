@@ -12,8 +12,9 @@ public class RapportAlbum extends RapportHtml {
 	public RapportAlbum(Album a, File rFile, String o, Logger rl) {
 		super("", rFile, null, o, rl);
 		album = a ;
-		withTitle(album.getTitre());
-		
+		if (! rapportExists()) {		
+			withTitle(album.getTitre());	
+		}
 	}
 
 	@Override
