@@ -63,7 +63,7 @@ public class RapportDesConcerts extends RapportHtml {
 	    	if (concert.additionnalInfo()) {		    				
 	        	File htmlFile = new File(Control.getAbsoluteConcertDir() + concert.getArtefactHtmlName()) ;	        	
 	        	if (! htmlFile.exists()) {
-	        		RapportConcert rapportConcert = new RapportConcert(concert, "", htmlFile, null,  "../", rapportLog) ;
+	        		RapportConcert rapportConcert = new RapportConcert(concert, htmlFile, "../", rapportLog) ;
 	        		rapportConcert.printReport(styles) ;
 	        	}
 	    	}

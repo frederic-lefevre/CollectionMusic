@@ -14,8 +14,8 @@ public class RapportConcert extends RapportHtml {
 
 	private final Concert concert ;
 	
-	public RapportConcert(Concert c, String titre, File rFile, HtmlLinkList idxs, String o, Logger rl) {
-		super(titre, rFile, idxs, o, rl) ;
+	public RapportConcert(Concert c, File rFile, String o, Logger rl) {
+		super("", rFile, null, o, rl) ;
 		concert = c ;
 	}
 
