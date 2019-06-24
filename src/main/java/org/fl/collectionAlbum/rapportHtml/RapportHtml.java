@@ -84,8 +84,6 @@ public abstract class RapportHtml {
 				if (rapportLog.isLoggable(Level.FINE)) {
 					rapportLog.fine("Création du RapportHtml " + titreRapport + " Fichier: " + rapportFile.getAbsolutePath());
 				}
-			} else {
-				rapportLog.severe("Le fichier " + rapportFile.getAbsolutePath() + " existe déjà") ;
 			}
 		} catch (Exception e) {			
 		    rapportLog.log(Level.SEVERE,"Erreur dans la création du fichier " + rapportFile.getAbsolutePath(), e) ;	
