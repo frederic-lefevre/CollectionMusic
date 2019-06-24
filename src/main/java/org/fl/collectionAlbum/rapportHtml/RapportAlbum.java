@@ -9,9 +9,11 @@ public class RapportAlbum extends RapportHtml {
 
 	private final Album album ;
 	
-	public RapportAlbum(Album a, String titre, File rFile, HtmlLinkList idxs, String o, Logger rl) {
-		super(titre, rFile, idxs, o, rl);
+	public RapportAlbum(Album a, File rFile, HtmlLinkList idxs, String o, Logger rl) {
+		super("", rFile, idxs, o, rl);
 		album = a ;
+		withTitle(album.getTitre());
+		
 	}
 
 	@Override
