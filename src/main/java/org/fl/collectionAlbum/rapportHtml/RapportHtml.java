@@ -107,10 +107,6 @@ public abstract class RapportHtml {
 		return "  <li><a href=\"" + rapportFile.getName() + "\">" + titreRapport + "</a></li>\n" ;
 	}
 	
-	public boolean rapportExists() {
-		return (filePrinter != null) ; 
-	}
-	
 	private static String dateFrancePattern = "EEEE dd MMMM uuuu à HH:mm" ;
 
 	private void enteteRapport (String styleList[]) {

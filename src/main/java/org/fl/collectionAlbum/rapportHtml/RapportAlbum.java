@@ -11,10 +11,8 @@ public class RapportAlbum extends RapportHtml {
 	
 	public RapportAlbum(Album a, File rFile, String o, Logger rl) {
 		super("", rFile, null, o, rl);
-		album = a ;
-		if (! rapportExists()) {		
-			withTitle(album.getTitre());	
-		}
+		album = a ;		
+		withTitle(album.getTitre());	
 	}
 
 	@Override
