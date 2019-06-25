@@ -5,8 +5,6 @@ import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.Control;
-import org.fl.collectionAlbum.concerts.Concert;
-import org.fl.collectionAlbum.concerts.ListeConcert;
 
 public class RapportDesConcerts extends RapportHtml {
 
@@ -27,8 +25,6 @@ public class RapportDesConcerts extends RapportHtml {
 	@Override
 	protected void corpsRapport() {
 		
-		genererLesRapportsDeChaqueConcert(albumsContainer.getConcerts()) ;
-		
 		 String stylesArtistes[] = {"main","format","rapport","chrono"} ;
 		 String stylesConcert[] = {"main","format","rapport"} ;
 
@@ -48,25 +44,11 @@ public class RapportDesConcerts extends RapportHtml {
 		 write("  <li>Nombre de concerts: " + albumsContainer.getConcerts().getNombreConcerts());
 		 write("</li>\n  <li>Nombre d'artistes, de groupes et d'ensemble: " + albumsContainer.getConcertsArtistes().getNombreArtistes());
 
-		 write("</li>\n</ul>\n");
-		
+		 write("</li>\n</ul>\n");	
 	}
 
 	 private File getNextRapportFile() {
 		 rapportIndex++ ;
 		 return new File(rapportCollectionDir + File.separator +  "concerts" + rapportIndex + ".html") ;
-	 }
-
-	 private void genererLesRapportsDeChaqueConcert(ListeConcert concerts) {
-		 String styles[] = {RapportHtml.albumStyle} ;
-		 for (Concert concert : concerts.getConcerts()) {
-	    	if (concert.additionnalInfo()) {		    				
-	        	File htmlFile = new File(Control.getAbsoluteConcertDir() + concert.getArtefactHtmlName()) ;	        	
-	        	if (! htmlFile.exists()) {
-	        		RapportConcert rapportConcert = new RapportConcert(concert, htmlFile, "../", rapportLog) ;
-	        		rapportConcert.printReport(styles) ;
-	        	}
-	    	}
-		 }
 	 }
 }
