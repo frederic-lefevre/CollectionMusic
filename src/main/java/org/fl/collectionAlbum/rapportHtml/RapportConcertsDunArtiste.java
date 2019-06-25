@@ -13,14 +13,13 @@ public class RapportConcertsDunArtiste extends RapportHtml {
 	protected RapportConcertsDunArtiste(Artiste a, File rFile, String o, Logger rl) {
 		super("", rFile, null, o, rl);
 		artiste = a ;
-		if (! rapportExists()) {
-			withTitle(artiste.getPrenoms() + " " + artiste.getNom()) ;
-			 HtmlLinkList albumLink = new HtmlLinkList(Control.getAccueils(), "../../") ;
-			 if (artiste.getConcerts().getNombreConcerts() > 0) {
-				 albumLink.addLink("Albums", artiste.getHtmlFileName()) ;						
-			 }
-			 withHtmlLinkList(albumLink) ;
+		withTitle(artiste.getPrenoms() + " " + artiste.getNom()) ;
+		HtmlLinkList albumLink = new HtmlLinkList(Control.getAccueils(), "../../") ;
+		if (artiste.getConcerts().getNombreConcerts() > 0) {
+			albumLink.addLink("Albums", artiste.getHtmlFileName()) ;						
 		}
+		withHtmlLinkList(albumLink) ;
+		
 	}
 
 	@Override

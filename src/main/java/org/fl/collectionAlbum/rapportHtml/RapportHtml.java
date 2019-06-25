@@ -43,7 +43,7 @@ public abstract class RapportHtml {
 	
 	protected 		String 	     titreRapport ;
 	protected final File 	     rapportFile ;
-	private   		HtmlLinkList indexes ;
+	private  		HtmlLinkList indexes ;
 	private   final PrintWriter  filePrinter ;
 	
 	protected StringBuilder rBuilder ;
