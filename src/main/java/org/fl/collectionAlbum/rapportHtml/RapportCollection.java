@@ -14,13 +14,13 @@ public class RapportCollection extends RapportHtml {
 	private CollectionAlbumContainer albumsContainer ;
 	private File rapportCollectionDir ;
 	
-	public RapportCollection(CollectionAlbumContainer ac, String titre, File rFile, HtmlLinkList idxs, String o, Logger rl) {
-		super(titre, rFile, idxs, o, rl) ;
+	public RapportCollection(CollectionAlbumContainer ac, File rFile, String titre, HtmlLinkList idxs, String o, Logger rl) {
+		super(titre, idxs, o, rl) ;
 		withTitleDisplayed();
 		accueils 		= Control.getAccueils() ;
 		rapportIndex 	= -1 ;
 		albumsContainer = ac ;
-		rapportCollectionDir = rFile.getParentFile() ;
+		rapportCollectionDir = rFile ;
 	}
 
 	@Override
@@ -33,38 +33,38 @@ public class RapportCollection extends RapportHtml {
 	     				
 		write("<h3>Classement des auteurs, interpretes et chefs d'orchestre (artistes, groupes, ensembles)</h3>\n<ul>\n") ;
 		
-		RapportListeArtistesAlbum rapportArtistesAlbumsAlpha = new RapportListeArtistesAlbum(albumsContainer.getCollectionArtistes().sortArtistesAlpha(),  "Classement alphabethique", getNextRapportFile(), accueils, "", rapportLog) ;
+		RapportListeArtistesAlbum rapportArtistesAlbumsAlpha = new RapportListeArtistesAlbum(albumsContainer.getCollectionArtistes().sortArtistesAlpha(),  "Classement alphabethique", accueils, "", rapportLog) ;
 		rapportArtistesAlbumsAlpha.withAlphaBalises() ; ;
-		write(rapportArtistesAlbumsAlpha.printReport(styles)) ;
+		write(rapportArtistesAlbumsAlpha.printReport(getNextRapportFile(), styles)) ;
 		
-		RapportListeArtistesAlbum rapportArtistesAlbumsPoids = new RapportListeArtistesAlbum(albumsContainer.getCollectionArtistes().sortArtistesPoidsAlbums(),  "Classement par nombre d'unit&eacute;s physiques", getNextRapportFile(), accueils, "", rapportLog) ;
-		write(rapportArtistesAlbumsPoids.printReport(styles)) ;
+		RapportListeArtistesAlbum rapportArtistesAlbumsPoids = new RapportListeArtistesAlbum(albumsContainer.getCollectionArtistes().sortArtistesPoidsAlbums(),  "Classement par nombre d'unit&eacute;s physiques", accueils, "", rapportLog) ;
+		write(rapportArtistesAlbumsPoids.printReport(getNextRapportFile(), styles)) ;
 
-		RapportListeArtistesAlbum rapportArtistesAlbumsChrono = new RapportListeArtistesAlbum(albumsContainer.getCollectionArtistes().sortArtistesChrono(),  "Classement chronologique", getNextRapportFile(), accueils, "", rapportLog) ;
-		write(rapportArtistesAlbumsChrono.printReport(styles)) ;
+		RapportListeArtistesAlbum rapportArtistesAlbumsChrono = new RapportListeArtistesAlbum(albumsContainer.getCollectionArtistes().sortArtistesChrono(),  "Classement chronologique", accueils, "", rapportLog) ;
+		write(rapportArtistesAlbumsChrono.printReport(getNextRapportFile(), styles)) ;
 
-		RapportCalendrier rapportCalendrier = new RapportCalendrier(albumsContainer.getCalendrierArtistes(), "Calendrier", getNextRapportFile(), accueils, "", rapportLog) ;
-		write(rapportCalendrier.printReport(stylesCalendrier)) ;
+		RapportCalendrier rapportCalendrier = new RapportCalendrier(albumsContainer.getCalendrierArtistes(), "Calendrier", accueils, "", rapportLog) ;
+		write(rapportCalendrier.printReport(getNextRapportFile(), stylesCalendrier)) ;
 		
 		write("</ul>\n<h3>Classement des albums</h3>\n<ul>\n") ;
-		RapportListeAlbums rapportAlbumsEnregistrement = new RapportListeAlbums(albumsContainer.getCollectionAlbumsMusiques().sortChronoEnregistrement(), "Classement chronologique (enregistrement)", getNextRapportFile(), accueils, "", rapportLog) ;
-		write(rapportAlbumsEnregistrement.printReport(stylesAlbum)) ;
+		RapportListeAlbums rapportAlbumsEnregistrement = new RapportListeAlbums(albumsContainer.getCollectionAlbumsMusiques().sortChronoEnregistrement(), "Classement chronologique (enregistrement)", accueils, "", rapportLog) ;
+		write(rapportAlbumsEnregistrement.printReport(getNextRapportFile(), stylesAlbum)) ;
 	
-		RapportListeAlbums rapportAlbumsComposition = new RapportListeAlbums(albumsContainer.getCollectionAlbumsMusiques().sortChronoComposition(), "Classement chronologique (composition)", getNextRapportFile(), accueils, "", rapportLog) ;
-		write(rapportAlbumsComposition.printReport(stylesAlbum)) ;
+		RapportListeAlbums rapportAlbumsComposition = new RapportListeAlbums(albumsContainer.getCollectionAlbumsMusiques().sortChronoComposition(), "Classement chronologique (composition)", accueils, "", rapportLog) ;
+		write(rapportAlbumsComposition.printReport(getNextRapportFile(), stylesAlbum)) ;
 
 		write("</ul>\n<h3>Rangement des albums</h3>\n<ul>\n") ;
 		for (Format.RangementSupportPhysique rangement : Format.RangementSupportPhysique.values()) {
-			RapportListeAlbums rapportAlbumsRangement = new RapportListeAlbums(albumsContainer.getRangementAlbums(rangement).sortRangementAlbum(), rangement.getDescription(), getNextRapportFile(), accueils, "", rapportLog) ;
-			write(rapportAlbumsRangement.printReport(stylesAlbum)) ;
+			RapportListeAlbums rapportAlbumsRangement = new RapportListeAlbums(albumsContainer.getRangementAlbums(rangement).sortRangementAlbum(), rangement.getDescription(), accueils, "", rapportLog) ;
+			write(rapportAlbumsRangement.printReport(getNextRapportFile(), stylesAlbum)) ;
 		}
 
 		write("</ul>\n<h3>Statistiques</h3>\n<ul>\n") ;
-		RapportStat rapportStat1 = new RapportStat(albumsContainer.getStatChronoEnregistrement(), "Statistiques par année d'enregistrement: Nombre d'unit&eacute;s physiques", getNextRapportFile(), accueils, "", rapportLog) ;
-		write(rapportStat1.printReport(stylesStat)) ;
+		RapportStat rapportStat1 = new RapportStat(albumsContainer.getStatChronoEnregistrement(), "Statistiques par année d'enregistrement: Nombre d'unit&eacute;s physiques", accueils, "", rapportLog) ;
+		write(rapportStat1.printReport(getNextRapportFile(), stylesStat)) ;
 
-		RapportStat rapportStat2 = new RapportStat(albumsContainer.getStatChronoComposition(), "Statistiques par décennie de composition: Nombre d'unit&eacute;s physiques", getNextRapportFile(), accueils, "", rapportLog) ;
-		write(rapportStat2.printReport(stylesStat)) ;
+		RapportStat rapportStat2 = new RapportStat(albumsContainer.getStatChronoComposition(), "Statistiques par décennie de composition: Nombre d'unit&eacute;s physiques", accueils, "", rapportLog) ;
+		write(rapportStat2.printReport(getNextRapportFile(), stylesStat)) ;
 
 		write("  <li>Nombre d'albums: " + albumsContainer.getCollectionAlbumsMusiques().getNombreAlbums()) ;
 		write("</li>\n  <li>Nombre d'artistes, de groupes et d'ensemble: " + albumsContainer.getCollectionArtistes().getNombreArtistes()) ;

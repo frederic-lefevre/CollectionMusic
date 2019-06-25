@@ -121,8 +121,8 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 	     	
 		String rapportFileName = new String(rapportDir.getAbsolutePath() + File.separator + Control.getHomecollectionfile()) ;
 		File rapportFile = new File(rapportFileName) ;
-		RapportCollection rapportCollection = new RapportCollection(albumsContainer, "Collections d'albums", rapportFile, accueils, "", albumLog) ;
-		rapportCollection.printReport(styles) ;				
+		RapportCollection rapportCollection = new RapportCollection(albumsContainer, rapportDir, "Collections d'albums", accueils, "", albumLog) ;
+		rapportCollection.printReport(rapportFile, styles) ;				
 	}
 		 
 	private void rapportsConcertHtml(File rapportDir) {
@@ -131,8 +131,8 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 
 		 String rapportFileName = new String(rapportDir.getAbsolutePath() + File.separator + Control.getHomeconcertfile());
 		 File rapportFile = new File(rapportFileName) ;
-		 RapportDesConcerts rapportConcerts = new RapportDesConcerts(albumsContainer, "Concerts", rapportFile, accueils, "", albumLog) ;
-		 rapportConcerts.printReport(styles) ;
+		 RapportDesConcerts rapportConcerts = new RapportDesConcerts(albumsContainer, rapportDir, "Concerts",  accueils, "", albumLog) ;
+		 rapportConcerts.printReport(rapportFile, styles) ;
 	 }
 		
 	 @Override

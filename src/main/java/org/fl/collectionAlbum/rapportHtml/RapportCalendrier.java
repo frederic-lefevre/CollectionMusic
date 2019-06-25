@@ -1,6 +1,5 @@
 package org.fl.collectionAlbum.rapportHtml;
 
-import java.io.File;
 import java.time.LocalDate;
 import java.time.MonthDay;
 import java.time.format.DateTimeFormatter;
@@ -22,8 +21,8 @@ public class RapportCalendrier  extends RapportHtml {
 	
 	private final ChronoArtistes rappochronoArtistes ;
 	
-	public RapportCalendrier(ChronoArtistes rca, String titre, File rDir, HtmlLinkList idxs, String o, Logger rl) {
-		super(titre, rDir, idxs, o, rl);
+	public RapportCalendrier(ChronoArtistes rca, String titre, HtmlLinkList idxs, String o, Logger rl) {
+		super(titre, idxs, o, rl);
 		withTitleDisplayed() ;
 		monthFormatter 		= DateTimeFormatter.ofPattern(monthPattern, Locale.FRANCE) ;
 		dayFormatter   		= DateTimeFormatter.ofPattern(dayPattern,   Locale.FRANCE) ;

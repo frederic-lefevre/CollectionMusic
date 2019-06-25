@@ -13,13 +13,13 @@ public class RapportDesConcerts extends RapportHtml {
 	private CollectionAlbumContainer albumsContainer ;
 	private File rapportCollectionDir ;
 	
-	public RapportDesConcerts(CollectionAlbumContainer ac, String titre, File rFile, HtmlLinkList idxs, String o, Logger rl) {
-		super(titre, rFile, idxs, o, rl) ;
+	public RapportDesConcerts(CollectionAlbumContainer ac, File rFile, String titre, HtmlLinkList idxs, String o, Logger rl) {
+		super(titre, idxs, o, rl) ;
 		withTitleDisplayed();
 		accueils 			 = Control.getAccueils() ;
 		albumsContainer 	 = ac ;
 		rapportIndex		 = -1 ;
-		rapportCollectionDir = rFile.getParentFile() ;
+		rapportCollectionDir = rFile ;
 	}
 
 	@Override
@@ -30,16 +30,16 @@ public class RapportDesConcerts extends RapportHtml {
 
 		 write("<h3>Classement des auteurs, interpretes et chefs d'orchestre (artistes, groupes, ensembles)</h3>\n<ul>\n") ;
 		 
-		 RapportListeArtistesConcert artistesAlpha = new RapportListeArtistesConcert(albumsContainer.getConcertsArtistes().sortArtistesAlpha(), "Classement alphabethique", getNextRapportFile(), accueils, "", rapportLog) ;
+		 RapportListeArtistesConcert artistesAlpha = new RapportListeArtistesConcert(albumsContainer.getConcertsArtistes().sortArtistesAlpha(), "Classement alphabethique", accueils, "", rapportLog) ;
 		 artistesAlpha.withAlphaBalises() ;
-		 write(artistesAlpha.printReport(stylesArtistes)) ;
+		 write(artistesAlpha.printReport(getNextRapportFile(), stylesArtistes)) ;
 
-		 RapportListeArtistesConcert artistesPoids = new RapportListeArtistesConcert(albumsContainer.getConcertsArtistes().sortArtistesPoidsConcerts(), "Classement par nombre de concerts", getNextRapportFile(), accueils, "", rapportLog) ;
-		 write(artistesPoids.printReport(stylesArtistes)) ;
+		 RapportListeArtistesConcert artistesPoids = new RapportListeArtistesConcert(albumsContainer.getConcertsArtistes().sortArtistesPoidsConcerts(), "Classement par nombre de concerts", accueils, "", rapportLog) ;
+		 write(artistesPoids.printReport( getNextRapportFile(), stylesArtistes)) ;
 
 		 write("</ul>\n<h3>Classement des concerts</h3>\n<ul>\n") ;
-		 RapportListeConcerts rapportDesConcerts = new RapportListeConcerts(albumsContainer.getConcerts().sortChrono(), "Classement chronologique", getNextRapportFile(), accueils, "", rapportLog) ;
-		 write(rapportDesConcerts.printReport(stylesConcert)) ;
+		 RapportListeConcerts rapportDesConcerts = new RapportListeConcerts(albumsContainer.getConcerts().sortChrono(), "Classement chronologique", accueils, "", rapportLog) ;
+		 write(rapportDesConcerts.printReport(getNextRapportFile(), stylesConcert)) ;
 		 
 		 write("  <li>Nombre de concerts: " + albumsContainer.getConcerts().getNombreConcerts());
 		 write("</li>\n  <li>Nombre d'artistes, de groupes et d'ensemble: " + albumsContainer.getConcertsArtistes().getNombreArtistes());

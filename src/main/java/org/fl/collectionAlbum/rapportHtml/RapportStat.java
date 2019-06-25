@@ -1,6 +1,5 @@
 package org.fl.collectionAlbum.rapportHtml;
 
-import java.io.File;
 import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Logger;
@@ -12,8 +11,8 @@ public class RapportStat extends RapportHtml {
 		
 	private final StatChrono statChrono ;
 	
-	public RapportStat(StatChrono sc, String titre, File rDir, HtmlLinkList idxs, String o, Logger rl) {
-		super(titre, rDir, idxs, o, rl) ;
+	public RapportStat(StatChrono sc, String titre, HtmlLinkList idxs, String o, Logger rl) {
+		super(titre, idxs, o, rl) ;
 		withTitleDisplayed();
 		statChrono = sc ;
 	}

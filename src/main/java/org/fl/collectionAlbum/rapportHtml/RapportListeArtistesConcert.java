@@ -1,6 +1,5 @@
 package org.fl.collectionAlbum.rapportHtml;
 
-import java.io.File;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.artistes.Artiste;
@@ -19,8 +18,8 @@ public class RapportListeArtistesConcert extends RapportHtml {
 	
 	private final ListeArtiste auteurs ;
 	
-	public RapportListeArtistesConcert(ListeArtiste la, String titre, File rFile, HtmlLinkList idxs, String o, Logger rl) {
-		super(titre, rFile, idxs, o, rl);
+	public RapportListeArtistesConcert(ListeArtiste la, String titre, HtmlLinkList idxs, String o, Logger rl) {
+		super(titre, idxs, o, rl);
 		withTitleDisplayed();
 		auteurs = la ;
 	}
@@ -40,8 +39,8 @@ public class RapportListeArtistesConcert extends RapportHtml {
 				alphBalise(unArtiste.getNom().substring(0, 1)) ;
 			}
 			
-			 RapportConcertsDunArtiste rapportDeSesConcerts = new RapportConcertsDunArtiste(unArtiste, unArtiste.getHtmlConcertFile(), "../../", rapportLog) ;
-			 rapportDeSesConcerts.printReport(styles) ;
+			 RapportConcertsDunArtiste rapportDeSesConcerts = new RapportConcertsDunArtiste(unArtiste, "../../", rapportLog) ;
+			 rapportDeSesConcerts.printReport(unArtiste.getHtmlConcertFile(), styles) ;
 
 			write("<a href=\"").write(unArtiste.getConcertUrlHtml()).write("\">") ;
 

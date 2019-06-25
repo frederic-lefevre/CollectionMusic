@@ -11,8 +11,8 @@ public class RapportListeConcerts extends RapportHtml {
 
 	private ListeConcert listeConcerts ;
 	
-	public RapportListeConcerts(ListeConcert lc,  String titre, File rFile, HtmlLinkList idxs, String o, Logger rl) {
-		super(titre, rFile, idxs, o, rl) ;
+	public RapportListeConcerts(ListeConcert lc,  String titre, HtmlLinkList idxs, String o, Logger rl) {
+		super(titre, idxs, o, rl) ;
 		withTitleDisplayed();
 		listeConcerts = lc ;
 		
@@ -22,8 +22,8 @@ public class RapportListeConcerts extends RapportHtml {
 	    	if (concert.additionnalInfo()) {		    				
 	        	File htmlFile = new File(Control.getAbsoluteConcertDir() + concert.getArtefactHtmlName()) ;	        	
 	        	if (! htmlFile.exists()) {
-	        		RapportConcert rapportConcert = new RapportConcert(concert, htmlFile, "../", rapportLog) ;
-	        		rapportConcert.printReport(styles) ;
+	        		RapportConcert rapportConcert = new RapportConcert(concert,  "../", rapportLog) ;
+	        		rapportConcert.printReport(htmlFile, styles) ;
 	        	}
 	    	}
 		 }

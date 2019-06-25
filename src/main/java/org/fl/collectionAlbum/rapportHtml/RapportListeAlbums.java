@@ -13,8 +13,8 @@ public class RapportListeAlbums extends RapportHtml {
 	
 	private final ListeAlbum listeAlbums ;
 	
-	public RapportListeAlbums(ListeAlbum la, String titre, File rFile, HtmlLinkList idxs, String o, Logger rl) {
-		super(titre, rFile, idxs, o, rl);
+	public RapportListeAlbums(ListeAlbum la, String titre, HtmlLinkList idxs, String o, Logger rl) {
+		super(titre, idxs, o, rl);
 		withTitleDisplayed() ;
 		listeAlbums = la ;
 		
@@ -23,8 +23,8 @@ public class RapportListeAlbums extends RapportHtml {
 			if (album.additionnalInfo()) {
 				File htmlFile = new File(Control.getAbsoluteAlbumDir() + album.getArtefactHtmlName()) ;
 				if (! htmlFile.exists()) {
-					RapportAlbum rapportAlbum = new RapportAlbum(album, htmlFile, "../", rapportLog) ;
-					rapportAlbum.printReport(styles) ;
+					RapportAlbum rapportAlbum = new RapportAlbum(album, "../", rapportLog) ;
+					rapportAlbum.printReport( htmlFile, styles) ;
 				}
 			}
 		}

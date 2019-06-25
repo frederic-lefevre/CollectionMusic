@@ -1,6 +1,5 @@
 package org.fl.collectionAlbum.rapportHtml;
 
-import java.io.File;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.Control;
@@ -10,8 +9,8 @@ public class RapportAlbumsDunArtiste extends RapportHtml {
 
 	private final Artiste artiste ;
 	
-	public RapportAlbumsDunArtiste(Artiste a, File rFile, String o, Logger rl) {
-		super("", rFile, null, o, rl);
+	public RapportAlbumsDunArtiste(Artiste a, String o, Logger rl) {
+		super("", null, o, rl);
 		artiste = a ;
 		
 		withTitle(artiste.getPrenoms() + " " + artiste.getNom()) ;

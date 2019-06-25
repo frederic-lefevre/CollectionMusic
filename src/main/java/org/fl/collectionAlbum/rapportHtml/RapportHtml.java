@@ -42,9 +42,7 @@ public abstract class RapportHtml {
 	private final static int TAILLE_INITIALE = 8192 ;
 	
 	protected 		String 	     titreRapport ;
-	protected final File 	     rapportFile ;
 	private  		HtmlLinkList indexes ;
-	private   final PrintWriter  filePrinter ;
 	
 	protected StringBuilder rBuilder ;
 	
@@ -65,46 +63,40 @@ public abstract class RapportHtml {
 
 	private List<String> alphaBalises ;
 	
-	protected RapportHtml(String titre, File rFile, HtmlLinkList idxs, String o, Logger rl) {
+	protected RapportHtml(String titre, HtmlLinkList idxs, String o, Logger rl) {
 		
 		super();
 		rapportLog 	 	 = rl ;
 		titreRapport 	 = titre ;
 		urlOffset	 	 = o ;
-		rapportFile  	 = rFile ;
 		rBuilder 	 	 = new StringBuilder(TAILLE_INITIALE) ;
 		indexes 	 	 = idxs ;
 		displayTitle 	 = false ;
 		withAlphaBalises = false ;
-		
-		PrintWriter pw = null ;
-		try {
-			if (rapportFile.createNewFile()) {				
-				pw = new PrintWriter(new BufferedWriter(new OutputStreamWriter( new FileOutputStream(rapportFile), Control.getCharset()))) ;
-				if (rapportLog.isLoggable(Level.FINE)) {
-					rapportLog.fine("Création du RapportHtml " + titreRapport + " Fichier: " + rapportFile.getAbsolutePath());
-				}
-			}
-		} catch (Exception e) {			
-		    rapportLog.log(Level.SEVERE,"Erreur dans la création du fichier " + rapportFile.getAbsolutePath(), e) ;	
-		}
-		filePrinter = pw ;
 	}
 
 	protected abstract void corpsRapport() ;
 	
-	public String printReport(String styleList[]) {
+	public String printReport(File rapportFile, String styleList[]) {
 		
-		if (filePrinter != null) {
-			try {
+		PrintWriter filePrinter = null ;
+		try {
+			if (rapportFile.createNewFile()) {				
+				filePrinter = new PrintWriter(new BufferedWriter(new OutputStreamWriter( new FileOutputStream(rapportFile), Control.getCharset()))) ;
+				if (rapportLog.isLoggable(Level.FINE)) {
+					rapportLog.fine("Création du RapportHtml " + titreRapport + " Fichier: " + rapportFile.getAbsolutePath());
+				}
 				enteteRapport(styleList) ;
 				corpsRapport();		
-				finRapport() ;
-			} catch (Exception e) {
-			    rapportLog.log(Level.SEVERE, "Erreur dans la création du rapport ", e) ;
+				finalizeRapport(filePrinter) ;
 			}
+			return "  <li><a href=\"" + rapportFile.getName() + "\">" + titreRapport + "</a></li>\n" ;
+		} catch (Exception e) {			
+		    rapportLog.log(Level.SEVERE,"Erreur dans la création du fichier " + rapportFile.getAbsolutePath(), e) ;
+		    return null ;
 		}
-		return "  <li><a href=\"" + rapportFile.getName() + "\">" + titreRapport + "</a></li>\n" ;
+		
+		
 	}
 	
 	private static String dateFrancePattern = "EEEE dd MMMM uuuu à HH:mm" ;
@@ -134,7 +126,7 @@ public abstract class RapportHtml {
 		}		
 	}
    
-	private void finRapport () {
+	private void finalizeRapport (PrintWriter filePrinter) {
 	
 		if (withAlphaBalises) {
 			write("<table class=\"balises\">\n") ;
@@ -144,6 +136,7 @@ public abstract class RapportHtml {
 			write("</table>\n") ;
 		}
 		rBuilder.append(END) ;
+
 		filePrinter.write(rBuilder.toString()) ;
 		filePrinter.flush() ;
 		filePrinter.close() ;
