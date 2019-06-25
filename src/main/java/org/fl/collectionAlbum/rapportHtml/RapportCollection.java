@@ -6,8 +6,6 @@ import java.util.logging.Logger;
 import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.Format;
-import org.fl.collectionAlbum.albums.Album;
-import org.fl.collectionAlbum.albums.ListeAlbum;
 
 public class RapportCollection extends RapportHtml {
 
@@ -28,8 +26,6 @@ public class RapportCollection extends RapportHtml {
 	@Override
 	 protected void corpsRapport() {
 		   	
-		genererLesRapportsDeChaqueAlbum(albumsContainer.getCollectionAlbumsMusiques()) ;
-	   
 	   	String styles[] = { RapportHtml.mainStyle, RapportHtml.formatStyle, "rapport", "chrono" } ;
 	   	String stylesStat[] = {"main","stat"} ;
 		String stylesCalendrier[] = {"main","rapport", "calendrier"} ;
@@ -85,16 +81,4 @@ public class RapportCollection extends RapportHtml {
 		 return new File(rapportCollectionDir + File.separator +  "albums" + rapportIndex + ".html") ;
 	 }
 	 
-	private void genererLesRapportsDeChaqueAlbum(ListeAlbum listeAlbums) {	
-		String styles[] = {RapportHtml.albumStyle} ;
-		for (Album album : listeAlbums.getAlbums()) {
-			if (album.additionnalInfo()) {
-				File htmlFile = new File(Control.getAbsoluteAlbumDir() + album.getArtefactHtmlName()) ;
-				if (! htmlFile.exists()) {
-					RapportAlbum rapportAlbum = new RapportAlbum(album, htmlFile, "../", rapportLog) ;
-					rapportAlbum.printReport(styles) ;
-				}
-			}
-		}
-	}
 }
