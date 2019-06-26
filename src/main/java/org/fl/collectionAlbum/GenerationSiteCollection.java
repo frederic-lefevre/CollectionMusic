@@ -14,6 +14,7 @@ import org.fl.collectionAlbum.rapportHtml.HtmlLinkList;
 import org.fl.collectionAlbum.rapportHtml.RapportCollection;
 import org.fl.collectionAlbum.rapportHtml.RapportDesConcerts;
 import org.fl.collectionAlbum.rapportHtml.RapportHtml;
+import org.fl.collectionAlbum.rapportHtml.RapportStructuresAndNames;
 import org.fl.collectionAlbumGui.ProgressInformation;
 import org.fl.collectionAlbumGui.ProgressInformationPanel;
 
@@ -51,7 +52,7 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 	 private void cleanRapport() {
 
 		 try {
-			 Path rDir  = Paths.get(Control.getRapportPath());
+			 Path rDir  = RapportStructuresAndNames.getRapportPath() ;
 			 Path roDir = Paths.get(Control.getOldRapportPath());	
 			 albumLog.info("Rapport path=" + rDir);
 			 albumLog.info("Rapport od path=" + roDir);
@@ -90,12 +91,12 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 				 Files.createDirectories(rDir) ;
 			 }
 
-			 Path raDir  = Paths.get(Control.getAbsoluteAlbumDir());
+			 Path raDir  = RapportStructuresAndNames.getAbsoluteAlbumDir() ;
 			 if (! Files.exists(raDir)) {
 				 Files.createDirectories(raDir) ;
 			 }
 
-			 Path rcDir  = Paths.get(Control.getAbsoluteConcertDir());
+			 Path rcDir  = RapportStructuresAndNames.getAbsoluteConcertDir() ;
 			 if (! Files.exists(rcDir)) {
 				 Files.createDirectories(rcDir) ;
 			 }
@@ -109,29 +110,30 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 	 private void rapportCollection() {
 
 		 File rDir = new File(Control.getRapportPath());
-
+		 Path rapportDir = RapportStructuresAndNames.getRapportPath() ;
+		 
 		 albumsContainer.setHtmlIds() ;
-		 rapportsHtml(rDir) ;
-		 rapportsConcertHtml(rDir) ;
+		 rapportsHtml(rapportDir) ;
+		 rapportsConcertHtml(rapportDir) ;
 	 }
 	   
-	 private void rapportsHtml(File rapportDir) {	
+	 private void rapportsHtml(Path rapportDir) {	
 	   	
 	   	String styles[] = { RapportHtml.mainStyle, RapportHtml.formatStyle } ;
 	     	
-		String rapportFileName = new String(rapportDir.getAbsolutePath() + File.separator + Control.getHomecollectionfile()) ;
+		String rapportFileName = new String(rapportDir + File.separator + Control.getHomecollectionfile()) ;
 		File rapportFile = new File(rapportFileName) ;
-		RapportCollection rapportCollection = new RapportCollection(albumsContainer, rapportDir, "Collections d'albums", accueils, "", albumLog) ;
+		RapportCollection rapportCollection = new RapportCollection(albumsContainer, rapportDir.toFile(), "Collections d'albums", accueils, "", albumLog) ;
 		rapportCollection.printReport(rapportFile, styles) ;				
 	}
 		 
-	private void rapportsConcertHtml(File rapportDir) {
+	private void rapportsConcertHtml(Path rapportDir) {
 
 		 String styles[] = { RapportHtml.mainStyle, RapportHtml.formatStyle };
 
-		 String rapportFileName = new String(rapportDir.getAbsolutePath() + File.separator + Control.getHomeconcertfile());
+		 String rapportFileName = new String(rapportDir + File.separator + Control.getHomeconcertfile());
 		 File rapportFile = new File(rapportFileName) ;
-		 RapportDesConcerts rapportConcerts = new RapportDesConcerts(albumsContainer, rapportDir, "Concerts",  accueils, "", albumLog) ;
+		 RapportDesConcerts rapportConcerts = new RapportDesConcerts(albumsContainer, rapportDir.toFile(), "Concerts",  accueils, "", albumLog) ;
 		 rapportConcerts.printReport(rapportFile, styles) ;
 	 }
 		

@@ -7,6 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
 
 import org.fl.collectionAlbum.Control;
+import org.fl.collectionAlbum.rapportHtml.RapportStructuresAndNames;
 import org.fl.collectionAlbumGui.entry.AlbumEntryPane;
 import org.fl.collectionAlbumGui.entry.ConcertEntryPane;
 
@@ -34,6 +35,7 @@ public class CollectionAlbumGui  extends JFrame {
 		// init logger and parameters
 		Control.initControl(DEFAULT_PROP_FILE) ;
 		Logger albumLog = Control.getAlbumLog() ;
+		RapportStructuresAndNames.init() ;
    		
    		// init main window
    		setBounds(50, 50, 1500, 1000);

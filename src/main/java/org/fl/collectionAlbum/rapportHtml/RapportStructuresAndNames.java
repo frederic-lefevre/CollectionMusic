@@ -30,14 +30,31 @@ public class RapportStructuresAndNames {
 	
 	private static Logger rapportLog ;
 	
-	private static boolean init() {
+	public static boolean init() {
 		
 		rapportLog = Control.getAlbumLog() ;
 		AdvancedProperties collectionProperties = Control.getCollectionProperties() ;
 		
-		rapportPath = collectionProperties.getPathFromURI("album.rapportDirectory.name") ;
+		rapportPath 		 = collectionProperties.getPathFromURI("album.rapportDirectory.name") ;
+		concertTicketImgPath = collectionProperties.getPathFromURI("concert.ticketImgDir.name") ;
 		
 		isInitialized = true ;
 		return isInitialized ;
+	}
+
+	public static Path getRapportPath() {
+		return rapportPath;
+	}
+	
+	public static Path getAbsoluteAlbumDir() {
+		return rapportPath.resolve(albumDir) ;
+	}
+	
+	public static Path getAbsoluteConcertDir() {
+		return rapportPath.resolve(concertDir) ;
+	}
+	
+	public static Path getAbsoluteArtisteDir() {
+		return rapportPath.resolve(artisteDir) ;
 	}
 }
