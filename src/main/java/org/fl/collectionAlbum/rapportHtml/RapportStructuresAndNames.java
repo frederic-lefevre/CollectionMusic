@@ -34,6 +34,9 @@ public class RapportStructuresAndNames {
 		
 		rapportLog = Control.getAlbumLog() ;
 		AdvancedProperties collectionProperties = Control.getCollectionProperties() ;
+		
+		rapportPath = collectionProperties.getPathFromURI("album.rapportDirectory.name") ;
+		
 		isInitialized = true ;
 		return isInitialized ;
 	}
