@@ -3,12 +3,12 @@ package org.fl.collectionAlbum;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
-import java.util.Properties;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.rapportHtml.HtmlLinkList;
 import org.fl.collectionAlbum.rapportHtml.RapportHtml;
 
+import com.ibm.lge.fl.util.AdvancedProperties;
 import com.ibm.lge.fl.util.RunningContext;
 
 public class Control {
@@ -34,33 +34,35 @@ public class Control {
    	private final static String homeCollectionFile = "index.html" ;
    	private final static String homeConcertFile    = "indexConcert.html" ;
    	private final static String musicFileExtension = "json" ;
-	   	
+	  
+   	private static AdvancedProperties collectionProperties ;
+   	
 	public static void initControl(String propFile) {
 		
 		try {
 			//access to properties and logger
 			RunningContext musicRunningContext = new RunningContext("CollectionMusique", null, new URI(propFile));
 		
-			Properties props = musicRunningContext.getProps() ;
+			collectionProperties = musicRunningContext.getProps() ;
 		    albumLog = musicRunningContext.getpLog() ;
 		    albumLog.info("Properties taken from " + musicRunningContext.getPropertiesLocation()) ;
 			
 			// Get the root directory for the album collection and concert
-			acDirectoryName = props.getProperty("album.rootDir.name", "C:/FredericPersonnel/musique/Collection") ;
-			concertDirectoryName = props.getProperty("concert.rootDir.name", "C:/FredericPersonnel/musique/Concert") ;
+			acDirectoryName = collectionProperties.getProperty("album.rootDir.name", "C:/FredericPersonnel/musique/Collection") ;
+			concertDirectoryName = collectionProperties.getProperty("concert.rootDir.name", "C:/FredericPersonnel/musique/Concert") ;
 	
 			// Get the rapport directory for the album collection
-			rapportPath = props.getProperty("album.rapportDir.name", "C:/FredericPersonnel/musique/RapportCollection/rapport") ;
+			rapportPath = collectionProperties.getProperty("album.rapportDir.name", "C:/FredericPersonnel/musique/RapportCollection/rapport") ;
 			oldRapportPath 	   = rapportPath + oldSuffix ;
 			absoluteAlbumDir   = rapportPath + "/" + albumDir + "/" ;
 			absoluteConcertDir = rapportPath  + "/" + concertDir + "/" ;
 			absoluteArtisteDir = rapportPath  + "/" + artisteDir + "/" ;
 			
 			// get the concert ticket image path
-			concertTicketImgPath = props.getProperty("concert.ticketImgDir.name", "file:///C:/FredericPersonnel/photos/PhotosGravees") ;	
+			concertTicketImgPath = collectionProperties.getProperty("concert.ticketImgDir.name", "file:///C:/FredericPersonnel/photos/PhotosGravees") ;	
 			
 			// Get charset to read and write
-			charset = Charset.forName(props.getProperty("charset", "UTF-8")) ;
+			charset = Charset.forName(collectionProperties.getProperty("charset", "UTF-8")) ;
 			RapportHtml.withCharset(charset.name());
 			
 			accueils = new HtmlLinkList() ;
@@ -70,6 +72,7 @@ public class Control {
 		} catch (URISyntaxException e) {
 			System.out.println("URI syntax exception for property file: " + propFile);
 			e.printStackTrace();
+			collectionProperties = null ;
 		}
 	}
 
@@ -87,6 +90,10 @@ public class Control {
 	public static String getHomecollectionfile() 	{return homeCollectionFile;		}
 	public static String getHomeconcertfile() 		{return homeConcertFile;		}
 	public static String getMusicfileExtension() 	{return musicFileExtension;		}
+	public static AdvancedProperties getCollectionProperties() {
+		return collectionProperties;
+	}
+
 	public static Charset getCharset() 				{return charset;				}
 	
 }
