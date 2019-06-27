@@ -150,8 +150,11 @@ public class RapportStructuresAndNames {
 			if (aPath == null) {
 				aPath = genererLesRapportsDunArtiste(artiste) ;	
 			}
-
-			return rapportPath.relativize(aPath.albums) ;		
+			if (aPath.albums != null) {
+				return rapportPath.relativize(aPath.albums) ;	
+			} else {
+				return null ;
+			}
 	}
 	
 	public static Path getArtisteConcertRapportRelativePath(Artiste artiste) {
@@ -160,7 +163,11 @@ public class RapportStructuresAndNames {
 		if (aPath == null) {
 			aPath = genererLesRapportsDunArtiste(artiste) ;	
 		}
-		return rapportPath.relativize(aPath.concerts) ;		
+		if (aPath.concerts != null) {
+			return rapportPath.relativize(aPath.concerts) ;
+		} else {
+			return null ;
+		}
 	}
 	
 	private static ArtistePaths genererLesRapportsDunArtiste(Artiste artiste) {
@@ -170,20 +177,26 @@ public class RapportStructuresAndNames {
 			if (! Files.exists(subdirectoryPath)) {
 				Files.createDirectories(subdirectoryPath) ;
 			}
-			String htmlAlbum 	= "a" + idArtiste + ".html" ;
-			String htmlConcert 	= "c" + idArtiste + ".html" ;
-			idArtiste++ ;
-			Path albumPath   = subdirectoryPath.resolve(htmlAlbum) ;
-			Path concertPath = subdirectoryPath.resolve(htmlConcert) ;
+			Path albumPath   = null ;
+			Path concertPath = null ;
+			if (artiste.getNbAlbum() > 0) {
+				String htmlAlbum 	= "a" + idArtiste + ".html" ;
+				albumPath   = 	subdirectoryPath.resolve(htmlAlbum) ;
+			}
+			if (artiste.getNbConcert() > 0) {
+				String htmlConcert 	= "c" + idArtiste + ".html" ;			
+				concertPath = subdirectoryPath.resolve(htmlConcert) ;
+			}
 			
+			idArtiste++ ;
 			ArtistePaths aPath = new ArtistePaths(albumPath, concertPath) ;
 			artisteRapportPaths.put(artiste, aPath) ;	
 			
-			if (! Files.exists(aPath.albums)) {
+			if ((aPath.albums != null) && (! Files.exists(aPath.albums))) {
 				RapportAlbumsDunArtiste rapportDeSesAlbums = new RapportAlbumsDunArtiste(artiste, "../../", rapportLog) ;
 				rapportDeSesAlbums.printReport(albumPath, stylesArtiste) ;
 			}
-			if (! Files.exists(aPath.concerts)) {
+			if ((aPath.concerts != null) && (! Files.exists(aPath.concerts))) {
 				 RapportConcertsDunArtiste rapportDeSesConcerts = new RapportConcertsDunArtiste(artiste, "../../", rapportLog) ;
 				 rapportDeSesConcerts.printReport(concertPath, stylesArtiste) ;
 			}
