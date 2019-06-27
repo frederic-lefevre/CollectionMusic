@@ -77,7 +77,7 @@ public class RapportCollection extends RapportHtml {
 	
 	 private Path getNextRapportFile() {
 		 rapportIndex++ ;
-		 return rapportCollectionDir.resolve("concerts" + rapportIndex + ".html") ;
+		 return rapportCollectionDir.resolve("albums" + rapportIndex + ".html") ;
 	 }
 	 
 }

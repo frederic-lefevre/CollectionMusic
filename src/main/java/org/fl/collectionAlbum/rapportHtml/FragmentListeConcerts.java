@@ -1,5 +1,6 @@
 package org.fl.collectionAlbum.rapportHtml;
 
+import java.net.URI;
 import java.nio.file.Path;
 
 import org.fl.collectionAlbum.artistes.Artiste;
@@ -19,7 +20,7 @@ public class FragmentListeConcerts {
 			String dateConcert = TemporalUtils.formatDate(unConcert.getDateConcert()) ;
 			
 			fragment.append("  <tr>\n    <td class=\"an\">") ;
-			Path aPath = RapportStructuresAndNames.getConcertRapportPath(unConcert) ;
+			URI aPath = RapportStructuresAndNames.getConcertRapportPath(unConcert) ;
 			if (aPath != null) {
 				fragment.append("<a href=\"").append(aPath.toString()).append("\">") ;
 			}

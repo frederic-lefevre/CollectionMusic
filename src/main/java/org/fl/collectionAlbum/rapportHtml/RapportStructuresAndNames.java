@@ -4,6 +4,7 @@ import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.concerts.Concert;
 
+import java.net.URI;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -106,7 +107,7 @@ public class RapportStructuresAndNames {
 	
 	private static final String styles[] = {RapportHtml.albumStyle} ;
 	
-	public static Path getAlbumRapportPath(Album album) {
+	public static URI getAlbumRapportPath(Album album) {
 		if (album.additionnalInfo()) {
 			Path aPath = albumRapportPaths.get(album) ;
 			if (aPath == null) {
@@ -118,13 +119,13 @@ public class RapportStructuresAndNames {
 					rapportAlbum.printReport( aPath, styles) ;
 				}
 			}
-			return aPath ;
+			return aPath.toUri() ;
 		} else {
 			return null ;
 		}
 	}
 	
-	public static Path getConcertRapportPath(Concert concert) {
+	public static URI getConcertRapportPath(Concert concert) {
 		if (concert.additionnalInfo()) {
 			Path aPath = concertRapportPaths.get(concert) ;
 			if (aPath == null) {
@@ -136,7 +137,7 @@ public class RapportStructuresAndNames {
 	        		rapportConcert.printReport(aPath, styles) ;
 	        	}
 			}
-			return aPath ;
+			return aPath.toUri() ;
 		} else {
 			return null ;
 		}

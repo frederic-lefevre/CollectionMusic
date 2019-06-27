@@ -1,5 +1,6 @@
 package org.fl.collectionAlbum.rapportHtml;
 
+import java.net.URI;
 import java.nio.file.Path;
 import java.time.temporal.TemporalAccessor;
 
@@ -51,8 +52,8 @@ public class FragmentListeAlbums {
 			}
 			fragment.append("    </td>\n    <td class=\"album\">") ; 
 			
-			Path aPath = RapportStructuresAndNames.getAlbumRapportPath(unAlbum) ;
-			if (aPath != null) {
+			URI aPath = RapportStructuresAndNames.getAlbumRapportPath(unAlbum) ;
+			if (aPath != null) {				
 				fragment.append("<a href=\"").append(aPath.toString()).append("\">") ;
 			}
 			fragment.append(unAlbum.getTitre()) ;
