@@ -1,9 +1,7 @@
 package org.fl.collectionAlbum;
 
-import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -24,14 +22,12 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 
 	private CollectionAlbumContainer albumsContainer ;
 	private Logger albumLog ;
-	private HtmlLinkList accueils ;
 	private ProgressInformationPanel progressPanel;
 	
 	public GenerationSiteCollection(ProgressInformationPanel pip, Logger aLog) {
 		
 		albumLog 		= aLog;
 		progressPanel 	= pip ;
-		accueils 		= Control.getAccueils() ;
 	}
 
 	 @Override 
@@ -53,7 +49,7 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 
 		 try {
 			 Path rDir  = RapportStructuresAndNames.getRapportPath() ;
-			 Path roDir = Paths.get(Control.getOldRapportPath());	
+			 Path roDir = RapportStructuresAndNames.getOldRapportPath() ;
 			 albumLog.info("Rapport path=" + rDir);
 			 albumLog.info("Rapport od path=" + roDir);
 
@@ -109,10 +105,8 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 	
 	 private void rapportCollection() {
 
-		 File rDir = new File(Control.getRapportPath());
 		 Path rapportDir = RapportStructuresAndNames.getRapportPath() ;
 		 
-		 albumsContainer.setHtmlIds() ;
 		 rapportsHtml(rapportDir) ;
 		 rapportsConcertHtml(rapportDir) ;
 	 }
@@ -121,9 +115,9 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 	   	
 	   	String styles[] = { RapportHtml.mainStyle, RapportHtml.formatStyle } ;
 	     	
-		String rapportFileName = new String(rapportDir + File.separator + Control.getHomecollectionfile()) ;
-		File rapportFile = new File(rapportFileName) ;
-		RapportCollection rapportCollection = new RapportCollection(albumsContainer, rapportDir.toFile(), "Collections d'albums", accueils, "", albumLog) ;
+		Path rapportFile = RapportStructuresAndNames.getAbsoluteHomeCollectionFile() ;
+		HtmlLinkList accueils = RapportStructuresAndNames.getAccueils() ; 
+		RapportCollection rapportCollection = new RapportCollection(albumsContainer, rapportDir, "Collections d'albums", accueils, "", albumLog) ;
 		rapportCollection.printReport(rapportFile, styles) ;				
 	}
 		 
@@ -131,9 +125,9 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 
 		 String styles[] = { RapportHtml.mainStyle, RapportHtml.formatStyle };
 
-		 String rapportFileName = new String(rapportDir + File.separator + Control.getHomeconcertfile());
-		 File rapportFile = new File(rapportFileName) ;
-		 RapportDesConcerts rapportConcerts = new RapportDesConcerts(albumsContainer, rapportDir.toFile(), "Concerts",  accueils, "", albumLog) ;
+		 Path rapportFile = RapportStructuresAndNames.getAbsoluteHomeConcertFile() ;
+		 HtmlLinkList accueils = RapportStructuresAndNames.getAccueils() ; 
+		 RapportDesConcerts rapportConcerts = new RapportDesConcerts(albumsContainer, rapportDir, "Concerts",  accueils, "", albumLog) ;
 		 rapportConcerts.printReport(rapportFile, styles) ;
 	 }
 		

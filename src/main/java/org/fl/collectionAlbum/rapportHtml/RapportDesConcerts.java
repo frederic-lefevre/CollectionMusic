@@ -1,22 +1,21 @@
 package org.fl.collectionAlbum.rapportHtml;
 
-import java.io.File;
+import java.nio.file.Path;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
-import org.fl.collectionAlbum.Control;
 
 public class RapportDesConcerts extends RapportHtml {
 
 	private int rapportIndex ;
 	private HtmlLinkList accueils ;
 	private CollectionAlbumContainer albumsContainer ;
-	private File rapportCollectionDir ;
+	private Path rapportCollectionDir ;
 	
-	public RapportDesConcerts(CollectionAlbumContainer ac, File rFile, String titre, HtmlLinkList idxs, String o, Logger rl) {
+	public RapportDesConcerts(CollectionAlbumContainer ac, Path rFile, String titre, HtmlLinkList idxs, String o, Logger rl) {
 		super(titre, idxs, o, rl) ;
 		withTitleDisplayed();
-		accueils 			 = Control.getAccueils() ;
+		accueils 			 = RapportStructuresAndNames.getAccueils() ;
 		albumsContainer 	 = ac ;
 		rapportIndex		 = -1 ;
 		rapportCollectionDir = rFile ;
@@ -47,8 +46,8 @@ public class RapportDesConcerts extends RapportHtml {
 		 write("</li>\n</ul>\n");	
 	}
 
-	 private File getNextRapportFile() {
+	 private Path getNextRapportFile() {
 		 rapportIndex++ ;
-		 return new File(rapportCollectionDir + File.separator +  "concerts" + rapportIndex + ".html") ;
+		 return rapportCollectionDir.resolve("concerts" + rapportIndex + ".html") ;
 	 }
 }

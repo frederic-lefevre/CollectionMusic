@@ -363,29 +363,4 @@ public class CollectionAlbumContainer {
 		return artiste ;
 	}
 	
-	public void setHtmlIds() {
-		
-		int i;
-		
-		// id for artiste
-		i = 0 ;
-		for (Artiste a : collectionArtistes.getArtistes()) {
-			i = a.setHtmlNames(i) ;
-		}
-		for (Artiste a : concertsArtistes.getArtistes()) {
-			i = a.setHtmlNames(i) ;
-		}
-		
-		// id for album
-		i = 0 ;
-		for (Album a : collectionAlbumsMusiques.getAlbums()) {
-			i = a.setHtmlName(i) ;
-		}	
-		
-		// id for concert
-		i = 0 ;
-		for (Concert c : concerts.getConcerts()) {
-			i = c.setHtmlName(i) ;
-		}	
-	}
 }

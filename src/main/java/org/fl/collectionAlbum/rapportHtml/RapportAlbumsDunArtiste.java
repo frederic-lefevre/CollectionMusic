@@ -1,8 +1,8 @@
 package org.fl.collectionAlbum.rapportHtml;
 
+import java.nio.file.Path;
 import java.util.logging.Logger;
 
-import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.artistes.Artiste;
 
 public class RapportAlbumsDunArtiste extends RapportHtml {
@@ -14,9 +14,11 @@ public class RapportAlbumsDunArtiste extends RapportHtml {
 		artiste = a ;
 		
 		withTitle(artiste.getPrenoms() + " " + artiste.getNom()) ;
-		HtmlLinkList concertLink = new HtmlLinkList(Control.getAccueils(), "../../") ;
-		if (artiste.getConcerts().getNombreConcerts() > 0) {
-			concertLink.addLink("Concerts", artiste.getHtmlConcertFileName()) ;
+		HtmlLinkList concertLink = new HtmlLinkList(RapportStructuresAndNames.getAccueils(), "../../") ;
+
+		Path concertPath = RapportStructuresAndNames.getArtisteConcertRapportRelativePath(artiste) ;
+		if (concertPath != null) {
+			concertLink.addLink("Concerts", concertPath.toString()) ;	
 		}
 		withHtmlLinkList(concertLink) ;
 	}

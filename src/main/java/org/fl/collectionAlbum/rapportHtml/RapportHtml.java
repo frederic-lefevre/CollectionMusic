@@ -1,11 +1,10 @@
 package org.fl.collectionAlbum.rapportHtml;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStreamWriter;
 import java.io.BufferedWriter;
-import java.io.PrintWriter;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -13,8 +12,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import org.fl.collectionAlbum.Control;
 
 public abstract class RapportHtml {
 
@@ -40,6 +37,8 @@ public abstract class RapportHtml {
 	
 	// Initial size of the StringBuilder buffer
 	private final static int TAILLE_INITIALE = 8192 ;
+	
+	private static Charset charset ;
 	
 	protected 		String 	     titreRapport ;
 	private  		HtmlLinkList indexes ;
@@ -77,26 +76,14 @@ public abstract class RapportHtml {
 
 	protected abstract void corpsRapport() ;
 	
-	public String printReport(File rapportFile, String styleList[]) {
-		
-		PrintWriter filePrinter = null ;
-		try {
-			if (rapportFile.createNewFile()) {				
-				filePrinter = new PrintWriter(new BufferedWriter(new OutputStreamWriter( new FileOutputStream(rapportFile), Control.getCharset()))) ;
-				if (rapportLog.isLoggable(Level.FINE)) {
-					rapportLog.fine("Création du RapportHtml " + titreRapport + " Fichier: " + rapportFile.getAbsolutePath());
-				}
-				enteteRapport(styleList) ;
-				corpsRapport();		
-				finalizeRapport(filePrinter) ;
-			}
-			return "  <li><a href=\"" + rapportFile.getName() + "\">" + titreRapport + "</a></li>\n" ;
-		} catch (Exception e) {			
-		    rapportLog.log(Level.SEVERE,"Erreur dans la création du fichier " + rapportFile.getAbsolutePath(), e) ;
-		    return null ;
+	public String printReport(Path rapportFile, String styleList[]) {
+
+		if (! Files.exists(rapportFile)) {	
+			enteteRapport(styleList);
+			corpsRapport();
+			finalizeRapport(rapportFile);
 		}
-		
-		
+		return "  <li><a href=\"" + rapportFile.getFileName() + "\">" + titreRapport + "</a></li>\n";
 	}
 	
 	private static String dateFrancePattern = "EEEE dd MMMM uuuu à HH:mm" ;
@@ -126,7 +113,7 @@ public abstract class RapportHtml {
 		}		
 	}
    
-	private void finalizeRapport (PrintWriter filePrinter) {
+	private void finalizeRapport (Path rapportFile) {
 	
 		if (withAlphaBalises) {
 			write("<table class=\"balises\">\n") ;
@@ -137,11 +124,14 @@ public abstract class RapportHtml {
 		}
 		rBuilder.append(END) ;
 
-		filePrinter.write(rBuilder.toString()) ;
-		filePrinter.flush() ;
-		filePrinter.close() ;
-		if (rapportLog.isLoggable(Level.FINE)) {
-			rapportLog.fine("Rapport HTML écrit " + titreRapport) ;
+		try (BufferedWriter buff = Files.newBufferedWriter(rapportFile, RapportStructuresAndNames.getCharset())){
+								
+			buff.write(rBuilder.toString()) ;
+			if (rapportLog.isLoggable(Level.FINE)) {
+				rapportLog.fine("Création du RapportHtml " + titreRapport + " Fichier: " + rapportFile);
+			}
+		} catch (Exception e) {			
+		    rapportLog.log(Level.SEVERE,"Erreur dans la création du fichier " + rapportFile, e) ;
 		}
 	}
 	
@@ -179,7 +169,13 @@ public abstract class RapportHtml {
 		indexes = hll ;
 	}
 	
-	public static void withCharset(String cs) {
+	public static void withCharset(String cs, Logger rLog) {
+		if (Charset.isSupported(cs)) {
+			charset = Charset.forName(cs) ;
+		} else {
+			charset = Charset.defaultCharset() ;
+			rLog.severe("Unsupported charset: " + cs + ". Default JVM charset assumed: " + charset) ;				
+		}
 		htmlBegin = ENTETE1 + cs + ENTETE6 ;
 	}
 }

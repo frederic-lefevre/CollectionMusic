@@ -1,5 +1,6 @@
 package org.fl.collectionAlbum.rapportHtml;
 
+import java.nio.file.Path;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.artistes.Artiste;
@@ -14,8 +15,6 @@ public class RapportListeArtistesConcert extends RapportHtml {
 	private final static String F3 = "  </tr>\n  </table>\n</div>\n<table>\n  <tr class=\"head\">\n    <td class=\"auteur\">Auteurs</td>\n" +
 									 "    <td class=\"an\">Naissance</td>\n    <td class=\"an\">Mort</td>\n" ;
 
-	private final static String styles[] = {"main","format","rapport", "artiste"} ;
-	
 	private final ListeArtiste auteurs ;
 	
 	public RapportListeArtistesConcert(ListeArtiste la, String titre, HtmlLinkList idxs, String o, Logger rl) {
@@ -39,10 +38,10 @@ public class RapportListeArtistesConcert extends RapportHtml {
 				alphBalise(unArtiste.getNom().substring(0, 1)) ;
 			}
 			
-			 RapportConcertsDunArtiste rapportDeSesConcerts = new RapportConcertsDunArtiste(unArtiste, "../../", rapportLog) ;
-			 rapportDeSesConcerts.printReport(unArtiste.getHtmlConcertFile(), styles) ;
-
-			write("<a href=\"").write(unArtiste.getConcertUrlHtml()).write("\">") ;
+			Path concertPath = RapportStructuresAndNames.getArtisteConcertRapportRelativePath(unArtiste) ;
+			if (concertPath != null) {
+				write("<a href=\"").write(concertPath.toString()). write("\">") ;
+			}
 
 			write(unArtiste.getPrenoms()).write(" ").write(unArtiste.getNom()).write("</a></td>\n") ;
 			write("    <td class=\"an\">").write(unArtiste.getDateNaissance()).write("</td>\n") ;

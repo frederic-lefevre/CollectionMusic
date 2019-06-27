@@ -18,8 +18,6 @@ public abstract class MusicArtefact {
     
     protected List<String> notes;
 
-    protected String artefactHtmlName ;
-    
     protected Logger artefactLog ;
     
     protected JsonObject arteFactJson ;
@@ -33,7 +31,6 @@ public abstract class MusicArtefact {
     	
     	artefactLog 	 = al ;
     	arteFactJson     = afj ;
-    	artefactHtmlName = null ; 
     }
 
     public List<Artiste> getAuteurs() 		 { return auteurs		  ; }
@@ -50,18 +47,5 @@ public abstract class MusicArtefact {
     
     public JsonObject getJson() { return arteFactJson ; }
     
-	public int setHtmlName(int id) {
-		if ((artefactHtmlName == null) && (additionnalInfo())) {
-			artefactHtmlName = "i" + id + ".html";
-    		return id + 1 ;
-        } else {
-        	return id ;
-        }
-	}
-	
 	protected abstract boolean additionnalInfo() ;
-
-	public String getArtefactHtmlName() {
-		return artefactHtmlName;
-	}
 }

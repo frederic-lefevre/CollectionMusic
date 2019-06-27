@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.concerts.Concert;
 
 public class RapportConcert extends RapportHtml {
@@ -48,7 +47,7 @@ public class RapportConcert extends RapportHtml {
 		if (ticketImages != null) {
 			try {
 				for (int i=0; i < ticketImages.size(); i++) {
-					String imgUrl = Control.getConcertTicketImgPath() + ticketImages.get(i) ;
+					String imgUrl = RapportStructuresAndNames.getConcertTicketImgPath() + ticketImages.get(i) ;
 					// check that the file exists
 					if (! (new File(new URI(imgUrl))).exists()) {
 						rapportLog.warning("Le fichier ticket image suivant n'existe pas: " + imgUrl + " Date du concert: " + concert.getDateConcert().toString()) ;

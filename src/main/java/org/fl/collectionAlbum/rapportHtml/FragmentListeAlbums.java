@@ -1,5 +1,6 @@
 package org.fl.collectionAlbum.rapportHtml;
 
+import java.nio.file.Path;
 import java.time.temporal.TemporalAccessor;
 
 import org.fl.collectionAlbum.albums.Album;
@@ -45,13 +46,14 @@ public class FragmentListeAlbums {
 			
 			if (unAlbum.getAuteurs() != null) {
 				for (Artiste unArtiste : unAlbum.getAuteurs()) {
-					fragment.append("      <a href=\"").append(urlOffSet).append(unArtiste.getUrlHtml()).append("\">") ;
-					fragment.append(unArtiste.getPrenoms()).append(" ").append(unArtiste.getNom()).append("</a><br/>\n") ;
+					appendLinkAlbumArtiste(unArtiste, fragment, urlOffSet) ;
 				}
 			}
 			fragment.append("    </td>\n    <td class=\"album\">") ; 
-			if (unAlbum.additionnalInfo()) {
-				fragment.append("<a href=\"").append(unAlbum.getFullPathHtmlFileName()).append("\">") ;
+			
+			Path aPath = RapportStructuresAndNames.getAlbumRapportPath(unAlbum) ;
+			if (aPath != null) {
+				fragment.append("<a href=\"").append(aPath.toString()).append("\">") ;
 			}
 			fragment.append(unAlbum.getTitre()) ;
 			if (unAlbum.additionnalInfo()) {
@@ -73,43 +75,35 @@ public class FragmentListeAlbums {
 
 			if (unAlbum.getChefsOrchestre() != null) {
 				for (Artiste unChef : unAlbum.getChefsOrchestre()) {
-					fragment.append("      <li>Direction: <a href=\"")
-							.append(urlOffset)
-							.append(unChef.getUrlHtml())
-							.append("\">")
-							.append(unChef.getPrenoms())
-							.append(" ")
-							.append(unChef.getNom())
-							.append("</a></li>\n") ;
+					fragment.append("      <li>Direction: ") ;
+					appendLinkAlbumArtiste(unChef, fragment, urlOffset) ;
+					fragment.append("</li>\n") ;
 				}
 			}
 			
 			if (unAlbum.getInterpretes() != null) {
 				for (Artiste unInterprete : unAlbum.getInterpretes()) {
-					fragment.append("      <li>Interpr&egrave;te: <a href=\"")
-							.append(urlOffset)
-							.append(unInterprete.getUrlHtml())
-							.append("\">")
-							.append(unInterprete.getPrenoms())
-							.append(" ")
-							.append(unInterprete.getNom())
-							.append("</a></li>\n") ;
+					fragment.append("      <li>Interpr&egrave;te: ") ;
+					appendLinkAlbumArtiste(unInterprete, fragment, urlOffset) ;
+					fragment.append("</li>\n") ;
 				}
 			}	
 			
 			if (unAlbum.getEnsembles() != null) {
 				for (Artiste unGroupe : unAlbum.getEnsembles()) {
-					fragment.append("      <li>Ensemble: <a href=\"")
-							.append(urlOffset)
-							.append(unGroupe.getUrlHtml())
-							.append("\">")
-							.append(unGroupe.getPrenoms())
-							.append(" ")
-							.append(unGroupe.getNom())
-							.append("</a></li>\n") ;
+					fragment.append("      <li>Ensemble: ") ;
+					appendLinkAlbumArtiste(unGroupe, fragment, urlOffset) ;
+					fragment.append("</li>\n") ;
 				}
 			}
 			fragment.append("      </ul>") ;
+		}
+	}
+	
+	private static void appendLinkAlbumArtiste(Artiste unArtiste, StringBuilder fragment,  String urlOffset) {
+		Path albumPath = RapportStructuresAndNames.getArtisteAlbumRapportRelativePath(unArtiste) ;
+		if (albumPath != null) {
+			fragment.append("      <a href=\"").append(urlOffset).append(albumPath.toString()).append("\">").append(unArtiste.getPrenoms()).append(" ").append(unArtiste.getNom()).append("</a><br/>\n") ;
 		}
 	}
 }

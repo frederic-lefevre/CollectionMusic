@@ -5,9 +5,6 @@ import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.util.logging.Logger;
 
-import org.fl.collectionAlbum.rapportHtml.HtmlLinkList;
-import org.fl.collectionAlbum.rapportHtml.RapportHtml;
-
 import com.ibm.lge.fl.util.AdvancedProperties;
 import com.ibm.lge.fl.util.RunningContext;
 
@@ -16,23 +13,8 @@ public class Control {
 	// Logger
 	private static Logger albumLog ;
 	
-	private static String rapportPath ;
-	private static String concertTicketImgPath ;
-	private static String oldRapportPath ;
-	private static String acDirectoryName ;
-	private static String concertDirectoryName ;
-	private static String absoluteAlbumDir ;
-	private static String absoluteConcertDir ;
-	private static String absoluteArtisteDir ;
-	private static HtmlLinkList accueils ;
 	private static Charset charset ;
 
-	private final static String albumDir 		   = "albums" ;
-	private final static String concertDir 		   = "concerts" ;
-	private final static String artisteDir 		   = "artistes" ;
-	private final static String oldSuffix 		   = "_old" ;
-   	private final static String homeCollectionFile = "index.html" ;
-   	private final static String homeConcertFile    = "indexConcert.html" ;
    	private final static String musicFileExtension = "json" ;
 	  
    	private static AdvancedProperties collectionProperties ;
@@ -46,29 +28,10 @@ public class Control {
 			collectionProperties = musicRunningContext.getProps() ;
 		    albumLog = musicRunningContext.getpLog() ;
 		    albumLog.info("Properties taken from " + musicRunningContext.getPropertiesLocation()) ;
-			
-			// Get the root directory for the album collection and concert
-			acDirectoryName = collectionProperties.getProperty("album.rootDir.name", "C:/FredericPersonnel/musique/Collection") ;
-			concertDirectoryName = collectionProperties.getProperty("concert.rootDir.name", "C:/FredericPersonnel/musique/Concert") ;
-	
-			// Get the rapport directory for the album collection
-			rapportPath = collectionProperties.getProperty("album.rapportDir.name", "C:/FredericPersonnel/musique/RapportCollection/rapport") ;
-			oldRapportPath 	   = rapportPath + oldSuffix ;
-			absoluteAlbumDir   = rapportPath + "/" + albumDir + "/" ;
-			absoluteConcertDir = rapportPath  + "/" + concertDir + "/" ;
-			absoluteArtisteDir = rapportPath  + "/" + artisteDir + "/" ;
-			
-			// get the concert ticket image path
-			concertTicketImgPath = collectionProperties.getProperty("concert.ticketImgDir.name", "file:///C:/FredericPersonnel/photos/PhotosGravees") ;	
-			
-			// Get charset to read and write
-			charset = Charset.forName(collectionProperties.getProperty("charset", "UTF-8")) ;
-			RapportHtml.withCharset(charset.name());
-			
-			accueils = new HtmlLinkList() ;
-			accueils.addLink("Accueil Collection", homeCollectionFile) ;
-			accueils.addLink("Accueil Concert",    homeConcertFile) ;
-			
+				
+			// Get charset to read music files
+			charset = Charset.forName(collectionProperties.getProperty("rapport.charset", "UTF-8")) ;
+						
 		} catch (URISyntaxException e) {
 			System.out.println("URI syntax exception for property file: " + propFile);
 			e.printStackTrace();
@@ -77,23 +40,12 @@ public class Control {
 	}
 
 	public static Logger getAlbumLog() 				{return albumLog;				}
-	public static String getRapportPath() 			{return rapportPath;			}
-	public static String getConcertTicketImgPath() 	{return concertTicketImgPath;	}
-	public static String getOldRapportPath() 		{return oldRapportPath;			}
-	public static String getAcDirectoryName() 		{return acDirectoryName;		}
-	public static String getConcertDirectoryName() 	{return concertDirectoryName;	}
-	public static String getAbsoluteAlbumDir() 		{return absoluteAlbumDir;		}
-	public static String getAbsoluteConcertDir() 	{return absoluteConcertDir;		}
-	public static String getAbsoluteArtisteDir() 	{return absoluteArtisteDir;		}
-	public static String getArtistedir() 			{return artisteDir;				}
-	public static HtmlLinkList getAccueils() 		{return accueils;				}
-	public static String getHomecollectionfile() 	{return homeCollectionFile;		}
-	public static String getHomeconcertfile() 		{return homeConcertFile;		}
 	public static String getMusicfileExtension() 	{return musicFileExtension;		}
 	public static AdvancedProperties getCollectionProperties() {
 		return collectionProperties;
 	}
 
-	public static Charset getCharset() 				{return charset;				}
-	
+	public static Charset getCharset() {
+		return charset;
+	}		
 }

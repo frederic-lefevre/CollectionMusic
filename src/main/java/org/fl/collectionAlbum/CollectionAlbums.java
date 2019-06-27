@@ -5,7 +5,6 @@ import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.PathMatcher;
-import java.nio.file.Paths;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
@@ -16,6 +15,7 @@ import javax.swing.SwingWorker;
 
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
+import org.fl.collectionAlbum.rapportHtml.RapportStructuresAndNames;
 import org.fl.collectionAlbumGui.ProgressInformation;
 import org.fl.collectionAlbumGui.ProgressInformationPanel;
 
@@ -51,30 +51,28 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 	
 	private void buildAlbumsCollection() {
   	
-		String dirName = Control.getAcDirectoryName() ;
+		Path albumsPath = RapportStructuresAndNames.getCollectionDirectoryName() ;
 		try {
-			Path albumsPath = Paths.get(dirName) ;
 			MusicFileVisitor albumsVisitor = new MusicFileVisitor(Control.getMusicfileExtension(), ALBUM) ;
 			
 			Files.walkFileTree(albumsPath, albumsVisitor) ;
 				
 		} catch (Exception e) {
-			albumLog.log(Level.SEVERE, "Exception scanning album directory " + Control.getAcDirectoryName(), e);
+			albumLog.log(Level.SEVERE, "Exception scanning album directory " + albumsPath, e);
 		}
 		
 	}
   
 	private void buildConcerts() {
 
-		String dirName = Control.getConcertDirectoryName() ;
+		Path concertsPath = RapportStructuresAndNames.getConcertDirectoryName() ;
 		try {
-			Path concertsPath = Paths.get(dirName) ;
 			MusicFileVisitor concertsVisitor = new MusicFileVisitor(Control.getMusicfileExtension(), CONCERT) ;
 			
 			Files.walkFileTree(concertsPath, concertsVisitor) ;
 				
 		} catch (Exception e) {
-			albumLog.log(Level.SEVERE, "Exception scanning concert directory " + dirName, e);
+			albumLog.log(Level.SEVERE, "Exception scanning concert directory " + concertsPath, e);
 		}
 	}
 	

@@ -3,7 +3,6 @@ package org.fl.collectionAlbum.albums;
 import java.time.temporal.TemporalAccessor;
 import java.util.logging.Logger;
 
-import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.Format;
 import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.MusicArtefact;
@@ -55,7 +54,6 @@ public class Album extends MusicArtefact {
     	}
     }
 
-
     public TemporalAccessor getDebutComposition() {
     	if ((periodeComposition != null)  && periodeComposition.isValid()) {
     		return periodeComposition.getDebut() ;
@@ -85,11 +83,6 @@ public class Album extends MusicArtefact {
     	}
         return formatAlbum;
     }
-    
-	public String getFullPathHtmlFileName() {
-		return "file://" + Control.getAbsoluteAlbumDir() + artefactHtmlName ;
-	}
-
 
 	public boolean isSpecifiedCompositionDate() {
 		return specifiedCompositionDate;

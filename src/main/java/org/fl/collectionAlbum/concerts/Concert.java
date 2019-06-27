@@ -4,7 +4,6 @@ import java.time.temporal.TemporalAccessor;
 import java.util.List;
 import java.util.logging.Logger;
 
-import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.MusicArtefact;
 
 import com.google.gson.JsonObject;
@@ -24,9 +23,9 @@ public class Concert extends MusicArtefact {
     public boolean additionnalInfo() {
     
     	boolean res = false ;
-    	if ((notes != null) && (notes.size() > 0)) {
+    	if ((ticketImages != null) && (ticketImages.size() > 0)) {
     		res = true ;
-    	} else if ((ticketImages != null) && (ticketImages.size() >0)){
+    	} else if ((notes != null) && (notes.size() > 0)){
     		res = true ;
     	}
     	return res ;
@@ -38,10 +37,6 @@ public class Concert extends MusicArtefact {
 	public List<String> 	getTitres() 	  {	return titres		; }
 	public List<String> 	getTicketImages() { return ticketImages ; }	
 	
-	public String getFullPathHtmlFileName() {
-		return "file://" + Control.getAbsoluteConcertDir() + artefactHtmlName ;
-	}
-
 	public void setDateConcert(TemporalAccessor dateConcert) {
 		this.dateConcert = dateConcert;
 	}
