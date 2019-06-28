@@ -1,6 +1,6 @@
 package org.fl.collectionAlbum.rapportHtml;
 
-import java.nio.file.Path;
+import java.net.URI;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.artistes.Artiste;
@@ -16,9 +16,9 @@ public class RapportAlbumsDunArtiste extends RapportHtml {
 		withTitle(artiste.getPrenoms() + " " + artiste.getNom()) ;
 		HtmlLinkList concertLink = new HtmlLinkList(RapportStructuresAndNames.getAccueils(), "../../") ;
 
-		Path concertPath = RapportStructuresAndNames.getArtisteConcertRapportRelativePath(artiste) ;
-		if (concertPath != null) {
-			concertLink.addLink("Concerts", concertPath.toString()) ;	
+		URI concertUri = RapportStructuresAndNames.getArtisteConcertRapportRelativePath(artiste) ;
+		if (concertUri != null) {
+			concertLink.addLink("Concerts", concertUri.toString()) ;	
 		}
 		withHtmlLinkList(concertLink) ;
 	}

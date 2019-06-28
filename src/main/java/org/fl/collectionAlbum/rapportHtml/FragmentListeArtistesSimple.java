@@ -1,6 +1,6 @@
 package org.fl.collectionAlbum.rapportHtml;
 
-import java.nio.file.Path;
+import java.net.URI;
 import java.util.List;
 
 import org.fl.collectionAlbum.artistes.Artiste;
@@ -14,13 +14,13 @@ public class FragmentListeArtistesSimple {
 			fragment.append("  <tr>\n    <td class=\"auteur\">") ;
 			fragment.append("<a href=\"") ;
 
-			Path albumPath = RapportStructuresAndNames.getArtisteAlbumRapportRelativePath(unArtiste) ;
-			if (albumPath != null) {
-				fragment.append(albumPath.toString()) ;
+			URI albumUri = RapportStructuresAndNames.getArtisteAlbumRapportRelativePath(unArtiste) ;
+			if (albumUri != null) {
+				fragment.append(albumUri.toString()) ;
 			} else {
-				Path concertPath = RapportStructuresAndNames.getArtisteConcertRapportRelativePath(unArtiste) ;
-				if (concertPath != null) {
-					fragment.append(concertPath.toString()) ;
+				URI concertUri = RapportStructuresAndNames.getArtisteConcertRapportRelativePath(unArtiste) ;
+				if (concertUri != null) {
+					fragment.append(concertUri.toString()) ;
 				}
 			}
 

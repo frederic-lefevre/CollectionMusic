@@ -1,6 +1,6 @@
 package org.fl.collectionAlbum.rapportHtml;
 
-import java.nio.file.Path;
+import java.net.URI;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.artistes.Artiste;
@@ -38,9 +38,9 @@ public class RapportListeArtistesConcert extends RapportHtml {
 				alphBalise(unArtiste.getNom().substring(0, 1)) ;
 			}
 			
-			Path concertPath = RapportStructuresAndNames.getArtisteConcertRapportRelativePath(unArtiste) ;
-			if (concertPath != null) {
-				write("<a href=\"").write(concertPath.toString()). write("\">") ;
+			URI concertUri = RapportStructuresAndNames.getArtisteConcertRapportRelativePath(unArtiste) ;
+			if (concertUri != null) {
+				write("<a href=\"").write(concertUri.toString()). write("\">") ;
 			}
 
 			write(unArtiste.getPrenoms()).write(" ").write(unArtiste.getNom()).write("</a></td>\n") ;

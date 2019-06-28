@@ -145,27 +145,27 @@ public class RapportStructuresAndNames {
 
 	private final static String stylesArtiste[] = {"main","format","rapport", "artiste"} ;
 
-	public static Path getArtisteAlbumRapportRelativePath(Artiste artiste) {
+	public static URI getArtisteAlbumRapportRelativePath(Artiste artiste) {
 
-			ArtistePaths aPath = artisteRapportPaths.get(artiste) ;
-			if (aPath == null) {
-				aPath = genererLesRapportsDunArtiste(artiste) ;	
-			}
-			if (aPath.albums != null) {
-				return rapportPath.relativize(aPath.albums) ;	
-			} else {
-				return null ;
-			}
+		ArtistePaths aPath = artisteRapportPaths.get(artiste) ;
+		if (aPath == null) {
+			aPath = genererLesRapportsDunArtiste(artiste) ;	
+		}
+		if (aPath.albums != null) {
+			return rapportPath.toUri().relativize(aPath.albums.toUri()) ;	
+		} else {
+			return null ;
+		}
 	}
-	
-	public static Path getArtisteConcertRapportRelativePath(Artiste artiste) {
+
+	public static URI getArtisteConcertRapportRelativePath(Artiste artiste) {
 
 		ArtistePaths aPath = artisteRapportPaths.get(artiste) ;
 		if (aPath == null) {
 			aPath = genererLesRapportsDunArtiste(artiste) ;	
 		}
 		if (aPath.concerts != null) {
-			return rapportPath.relativize(aPath.concerts) ;
+			return rapportPath.toUri().relativize(aPath.concerts.toUri()) ;
 		} else {
 			return null ;
 		}

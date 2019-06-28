@@ -1,7 +1,6 @@
 package org.fl.collectionAlbum.rapportHtml;
 
 import java.net.URI;
-import java.nio.file.Path;
 
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.concerts.Concert;
@@ -66,9 +65,9 @@ public class FragmentListeConcerts {
 	}
 
 	private static void appendLinkConcertArtiste(Artiste unArtiste, StringBuilder fragment,  String urlOffset) {
-		Path concertPath = RapportStructuresAndNames.getArtisteConcertRapportRelativePath(unArtiste) ;
-		if (concertPath != null) {
-			fragment.append("      <a href=\"").append(urlOffset).append(concertPath.toString()).append("\">").append(unArtiste.getPrenoms()).append(" ").append(unArtiste.getNom()).append("</a><br/>\n") ;
+		URI concertUri = RapportStructuresAndNames.getArtisteConcertRapportRelativePath(unArtiste) ;
+		if (concertUri != null) {
+			fragment.append("      <a href=\"").append(urlOffset).append(concertUri.toString()).append("\">").append(unArtiste.getPrenoms()).append(" ").append(unArtiste.getNom()).append("</a><br/>\n") ;
 
 		}
 	}

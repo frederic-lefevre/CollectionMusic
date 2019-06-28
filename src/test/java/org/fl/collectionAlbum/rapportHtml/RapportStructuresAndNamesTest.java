@@ -2,7 +2,7 @@ package org.fl.collectionAlbum.rapportHtml;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.nio.file.Path;
+import java.net.URI;
 import java.util.logging.Logger;
 
 import com.google.gson.JsonObject;
@@ -43,7 +43,7 @@ class RapportStructuresAndNamesTest {
 		
 		Artiste artiste= new Artiste(jArt, logger) ;
 		
-		Path pAlbum = RapportStructuresAndNames.getArtisteAlbumRapportRelativePath(artiste) ;
+		URI pAlbum = RapportStructuresAndNames.getArtisteAlbumRapportRelativePath(artiste) ;
 		assertNull(pAlbum) ;
 
 	}

@@ -2,7 +2,7 @@ package org.fl.collectionAlbum;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.nio.file.Path;
+import java.net.URI;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.albums.Album;
@@ -72,8 +72,7 @@ class CollectionAlbumContainerTest {
 		assertEquals("Evans", artiste.getNom()) ;
 		assertEquals("Bill", artiste.getPrenoms()) ;
 		
-		Path pAlbum = RapportStructuresAndNames.getArtisteAlbumRapportRelativePath(artiste) ;
-		assertEquals("artistes\\a0\\a1.html", pAlbum.toString()) ;
-	//	assertEquals("artistes/a0/a1.html", pAlbum.toUri().toString()) ;
+		URI pAlbum = RapportStructuresAndNames.getArtisteAlbumRapportRelativePath(artiste) ;
+		assertEquals("artistes/a0/a1.html", pAlbum.toString()) ;
 	}
 }

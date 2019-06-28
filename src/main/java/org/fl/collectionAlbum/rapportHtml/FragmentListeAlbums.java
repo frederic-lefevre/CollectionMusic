@@ -1,7 +1,6 @@
 package org.fl.collectionAlbum.rapportHtml;
 
 import java.net.URI;
-import java.nio.file.Path;
 import java.time.temporal.TemporalAccessor;
 
 import org.fl.collectionAlbum.albums.Album;
@@ -102,9 +101,9 @@ public class FragmentListeAlbums {
 	}
 	
 	private static void appendLinkAlbumArtiste(Artiste unArtiste, StringBuilder fragment,  String urlOffset) {
-		Path albumPath = RapportStructuresAndNames.getArtisteAlbumRapportRelativePath(unArtiste) ;
-		if (albumPath != null) {
-			fragment.append("      <a href=\"").append(urlOffset).append(albumPath.toString()).append("\">").append(unArtiste.getPrenoms()).append(" ").append(unArtiste.getNom()).append("</a><br/>\n") ;
+		URI albumUri = RapportStructuresAndNames.getArtisteAlbumRapportRelativePath(unArtiste) ;
+		if (albumUri != null) {
+			fragment.append("      <a href=\"").append(urlOffset).append(albumUri.toString()).append("\">").append(unArtiste.getPrenoms()).append(" ").append(unArtiste.getNom()).append("</a><br/>\n") ;
 		}
 	}
 }
