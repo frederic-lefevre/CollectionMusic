@@ -19,6 +19,9 @@ import org.fl.collectionAlbum.rapportHtml.RapportStructuresAndNames;
 import org.fl.collectionAlbumGui.ProgressInformation;
 import org.fl.collectionAlbumGui.ProgressInformationPanel;
 
+import com.google.gson.JsonObject;
+import com.ibm.lge.fl.util.json.JsonUtils;
+
 public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,ProgressInformation>{
 	
 	private static int ALBUM = 0 ;
@@ -96,10 +99,11 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
     		Path name = file.getFileName() ;
     		if (Files.isRegularFile(file)) {
 	    		if (matcher.matches(name)) {
+	    			JsonObject arteFactJson = JsonUtils.getJsonObjectFromPath(file, Control.getCharset(), albumLog) ;
 	    			if (musicFileType == ALBUM) {
-	    				albumsContainer.addAlbum(file) ;
+	    				albumsContainer.addAlbum(arteFactJson) ;
 	    			} else if (musicFileType == CONCERT) {
-	    				albumsContainer.addConcert(file) ;
+	    				albumsContainer.addConcert(arteFactJson) ;
 	    			}
 	    		}
     		}

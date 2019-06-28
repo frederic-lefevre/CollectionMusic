@@ -1,7 +1,6 @@
 package org.fl.collectionAlbum;
 
 import java.lang.reflect.Type;
-import java.nio.file.Path;
 import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -26,7 +25,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.ibm.lge.fl.util.date.FuzzyPeriod;
-import com.ibm.lge.fl.util.json.JsonUtils;
 
 public class CollectionAlbumContainer {
 
@@ -72,9 +70,7 @@ public class CollectionAlbumContainer {
 		albumLog = aLog;	
 	}
 
-	public void addAlbum(Path srcFile) {
-		
-		JsonObject arteFactJson = JsonUtils.getJsonObjectFromPath(srcFile, Control.getCharset(), albumLog) ;
+	public void addAlbum(JsonObject arteFactJson) {
 		
 		Album album = new Album(arteFactJson, albumLog) ;
 		setAlbumTitre(album) ;
@@ -97,10 +93,8 @@ public class CollectionAlbumContainer {
 	    statChronoComposition.AddAlbum(album.getDebutComposition(), album.getFormatAlbum().getPoids());
 	}
 	
-	public void addConcert(Path srcFile) { 
+	public void addConcert(JsonObject arteFactJson) { 
 		
-		JsonObject arteFactJson = JsonUtils.getJsonObjectFromPath(srcFile, Control.getCharset(), albumLog) ;
-
 		Concert concert = new Concert(arteFactJson, albumLog) ;
 		
 		processNewMusicArtfact(concert, concertsArtistes) ;
