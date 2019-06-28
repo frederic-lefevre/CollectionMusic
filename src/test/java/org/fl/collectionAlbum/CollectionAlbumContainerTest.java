@@ -2,8 +2,11 @@ package org.fl.collectionAlbum;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.nio.file.Path;
 import java.util.logging.Logger;
 
+import org.fl.collectionAlbum.albums.Album;
+import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.rapportHtml.RapportStructuresAndNames;
 import org.junit.jupiter.api.Test;
 
@@ -55,6 +58,22 @@ class CollectionAlbumContainerTest {
 		
 		albumsContainer.addAlbum(jAlbum);
 		
+		assertEquals(1, albumsContainer.getCollectionAlbumsMusiques().getNombreAlbums()) ;
 		assertEquals(1, albumsContainer.getCollectionArtistes().getNombreArtistes()) ;
+		assertEquals(0, albumsContainer.getConcerts().getNombreConcerts()) ;
+		assertEquals(0, albumsContainer.getConcertsArtistes().getNombreArtistes()) ;
+		
+		Album album = albumsContainer.getCollectionAlbumsMusiques().getAlbums().get(0) ;
+		
+		assertEquals("Portrait in jazz", album.getTitre()) ;
+		
+		Artiste artiste = albumsContainer.getCollectionArtistes().getArtistes().get(0) ;
+		
+		assertEquals("Evans", artiste.getNom()) ;
+		assertEquals("Bill", artiste.getPrenoms()) ;
+		
+		Path pAlbum = RapportStructuresAndNames.getArtisteAlbumRapportRelativePath(artiste) ;
+		assertEquals("artistes\\a0\\a1.html", pAlbum.toString()) ;
+	//	assertEquals("artistes/a0/a1.html", pAlbum.toUri().toString()) ;
 	}
 }

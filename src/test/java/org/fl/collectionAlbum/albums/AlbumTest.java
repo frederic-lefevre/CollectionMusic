@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.logging.Logger;
 
-import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.junit.jupiter.api.Test;
 
 import com.google.gson.JsonObject;

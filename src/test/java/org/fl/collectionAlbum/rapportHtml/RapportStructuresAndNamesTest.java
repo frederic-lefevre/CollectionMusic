@@ -45,11 +45,6 @@ class RapportStructuresAndNamesTest {
 		
 		Path pAlbum = RapportStructuresAndNames.getArtisteAlbumRapportRelativePath(artiste) ;
 		assertNull(pAlbum) ;
-//		assertEquals("artistes\\a0\\a0.html", pAlbum.toString()) ;
-//		
-//		assertEquals("artistes/a0/a0.html", pAlbum.toUri().toString()) ;
-		
-//		Path pConcert = RapportStructuresAndNames.getArtisteConcertRapportRelativePath(artiste) ;
-//		assertEquals("artistes\\a0\\c0.html", pConcert.toString()) ;
+
 	}
 }
