@@ -39,8 +39,6 @@ class AlbumTest {
 	@Test
 	void testAlbum1() {
 		
-		CollectionAlbumContainer albumsContainer = CollectionAlbumContainer.getEmptyInstance(logger) ;
-
 		JsonObject jAlbum = new JsonParser().parse(albumStr1).getAsJsonObject();
 		
 		Album album = new Album(jAlbum, logger) ;
