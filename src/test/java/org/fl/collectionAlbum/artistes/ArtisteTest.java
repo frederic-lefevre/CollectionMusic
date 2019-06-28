@@ -24,6 +24,16 @@ class ArtisteTest {
 		Artiste artiste= new Artiste(jArt, logger) ;
 		assertEquals("Evans", artiste.getNom()) ;
 		assertEquals("Bill", artiste.getPrenoms()) ;
+		
+		assertEquals(0, artiste.getNbAlbum());
+		assertEquals(0, artiste.getNbConcert());
+		
+		assertNull(artiste.getInstruments()) ;
+		
+		assertEquals(0, artiste.getAlbums().getNombreAlbums()) ;
+		assertEquals(0, artiste.getConcerts().getNombreConcerts()) ;
+		
+		assertEquals(0, artiste.getAlbumsFormat().getPoids()) ;
 	}
 
 }
