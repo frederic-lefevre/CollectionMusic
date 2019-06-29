@@ -84,7 +84,7 @@ public class CollectionAlbumContainer {
 		
 		Concert concert = new Concert(arteFactJson, allArtistes, albumLog) ;
 		
-		concert.addMusicArtfactArtistesToList(collectionArtistes);
+		concert.addMusicArtfactArtistesToList(concertsArtistes);
 		
 		concerts.addConcert(concert) ; 	
 	}
