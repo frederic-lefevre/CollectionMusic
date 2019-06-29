@@ -9,15 +9,15 @@ public class RapportConcertsDunArtiste extends RapportHtml {
 
 	private final Artiste artiste ;
 	
-	protected RapportConcertsDunArtiste(Artiste a, String o, Logger rl) {
-		super("", null, o, rl);
+	protected RapportConcertsDunArtiste(Artiste a, String offset, Logger rl) {
+		super("", null, offset, rl);
 		artiste = a ;
 		withTitle(artiste.getPrenoms() + " " + artiste.getNom()) ;
-		HtmlLinkList albumLink = new HtmlLinkList(RapportStructuresAndNames.getAccueils(), "../../") ;
+		HtmlLinkList albumLink = new HtmlLinkList(RapportStructuresAndNames.getAccueils(), offset) ;
 		
 		URI albumUri = RapportStructuresAndNames.getArtisteAlbumRapportRelativePath(artiste) ;
 		if (albumUri != null) {
-			albumLink.addLink("Concerts", albumUri.toString()) ;	
+			albumLink.addLink("Concerts", offset + albumUri.toString()) ;	
 		}
 		withHtmlLinkList(albumLink) ;
 		
