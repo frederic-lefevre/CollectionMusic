@@ -39,10 +39,12 @@ class AlbumTest {
 	void testAlbum1() {
 		
 		JsonObject jAlbum = new JsonParser().parse(albumStr1).getAsJsonObject();
-		
+
 		Album album = new Album(jAlbum, logger) ;
 		
-		assertNull(album.getTitre()) ;
+		assertEquals("Portrait in jazz", album.getTitre()) ;
+		
+//		assertEquals(1, album.getAuteurs().get(0).getNbAlbum()) ;
 
 	}
 }

@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 import org.fl.collectionAlbum.Format;
 import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.MusicArtefact;
+import org.fl.collectionAlbum.jsonParsers.AlbumParser;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -24,6 +25,9 @@ public class Album extends MusicArtefact {
     
     public Album(JsonObject albumJson, Logger aLog) {
     	super(albumJson, aLog) ;
+    	titre = AlbumParser.getAlbumTitre(albumJson, aLog) ;
+    	setPeriodeEnregistrementEtComposition(AlbumParser.processPeriodEnregistrement(albumJson, aLog), 
+    										  AlbumParser.processPeriodComposition(   albumJson, aLog));
     }
     
     public boolean additionnalInfo() {   
@@ -34,10 +38,6 @@ public class Album extends MusicArtefact {
         return titre;
     }
 
-    public void setTitre(String t) {
-    	titre = t ;
-    }
-    
 	public TemporalAccessor getDebutEnregistrement() {
     	if ((periodeEnregistrement != null) && periodeEnregistrement.isValid()) {
     		return periodeEnregistrement.getDebut() ;
