@@ -1,29 +1,19 @@
 package org.fl.collectionAlbum;
 
-import java.lang.reflect.Type;
-import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
-import java.util.Optional;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.albums.ListeAlbum;
 import org.fl.collectionAlbum.artistes.Artiste;
-import org.fl.collectionAlbum.artistes.Groupe;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.concerts.Concert;
 import org.fl.collectionAlbum.concerts.ListeConcert;
 import org.fl.collectionAlbum.stat.StatChrono;
-import org.fl.collectionAlbum.utils.TemporalUtils;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 
 public class CollectionAlbumContainer {
 
@@ -31,6 +21,8 @@ public class CollectionAlbumContainer {
 	private ListeArtiste collectionArtistes;
 	// Liste d'artistes pour les concerts
 	private ListeArtiste concertsArtistes ;
+	
+	private List<ListeArtiste> allArtistes ;
 	
 	// Liste de tous les albums
 	private ListeAlbum collectionAlbumsMusiques;
@@ -71,9 +63,9 @@ public class CollectionAlbumContainer {
 
 	public void addAlbum(JsonObject arteFactJson) {
 		
-		Album album = new Album(arteFactJson, albumLog) ;
-
-		processNewMusicArtfact(album, collectionArtistes) ;
+		Album album = new Album(arteFactJson, allArtistes, albumLog) ;
+		
+		album.addMusicArtfactArtistesToList(collectionArtistes);
 		
 		collectionAlbumsMusiques.addAlbum(album) ;
 				
@@ -90,167 +82,13 @@ public class CollectionAlbumContainer {
 	
 	public void addConcert(JsonObject arteFactJson) { 
 		
-		Concert concert = new Concert(arteFactJson, albumLog) ;
+		Concert concert = new Concert(arteFactJson, allArtistes, albumLog) ;
 		
-		processNewMusicArtfact(concert, concertsArtistes) ;
-		processConcert(concert) ;
+		concert.addMusicArtfactArtistesToList(collectionArtistes);
 		
-		concerts.addConcert(concert) ; 
-		
+		concerts.addConcert(concert) ; 	
 	}
 	
-	private void processNewMusicArtfact(MusicArtefact musicArtefact, ListeArtiste artistes) {
-		
-	    // Traitement des artistes auteurs,  interpretes, chefs d'orchestre,  ensembles, des auteurs groupes
-        List<Artiste> auteurs 		  = processListeArtistes(Artiste.class, musicArtefact, JsonMusicProperties.AUTEUR	) ;
-        List<Artiste> interpretes 	  = processListeArtistes(Artiste.class, musicArtefact, JsonMusicProperties.INTERPRETE) ; 
-        List<Artiste> chefsOrchestres = processListeArtistes(Artiste.class, musicArtefact, JsonMusicProperties.CHEF		) ;
-        List<Artiste> ensembles 	  = processListeArtistes(Groupe.class,  musicArtefact, JsonMusicProperties.ENSEMBLE	) ;
-        List<Artiste> groupes		  = processListeArtistes(Groupe.class,  musicArtefact, JsonMusicProperties.GROUPE	) ;
-        List<String> notes			  = processNotes(musicArtefact) ;
-         
-        artistes.addAllArtistes(auteurs) ;
-        artistes.addAllArtistes(interpretes) ;
-        artistes.addAllArtistes(chefsOrchestres) ;
-        artistes.addAllArtistes(ensembles) ;
-        artistes.addAllArtistes(groupes) ;
-        
-        musicArtefact.addAuteurs(auteurs) ;
-        musicArtefact.addInterpretes(interpretes) ;
-        musicArtefact.addChefsOrchestres(chefsOrchestres) ;
-        musicArtefact.addEnsembles(ensembles);
-        musicArtefact.addAuteurs(groupes);
-        musicArtefact.addNotes(notes);     
-	}
-	
-
-	
-	private List<Artiste> processListeArtistes(Class<? extends Artiste> cls, MusicArtefact musicArteFact, String artistesJprop) {
-		
-		List<Artiste> artistes = new ArrayList<Artiste>() ;
-		JsonObject arteFactJson = musicArteFact.getJson() ;
-		JsonElement jElem = arteFactJson.get(artistesJprop) ;
-		if (jElem != null) {
-			if (jElem.isJsonArray()) {
-				JsonArray jArtistes = jElem.getAsJsonArray() ;
-				
-				for (JsonElement jArtiste : jArtistes) {
-
-					try {
-						artistes.add(processArtiste(cls, musicArteFact, jArtiste.getAsJsonObject())) ;
-					} catch (IllegalStateException e) {
-						albumLog.log(Level.WARNING, "un artiste n'est pas un objet json pour l'arteFact " + arteFactJson, e) ;
-					}
-				}
-			} else {
-				albumLog.warning(artistesJprop + " n'est pas un tableau json pour l'arteFact " + arteFactJson) ;
-			}
-		}
-		return artistes ;
-	}
-	
-	private Artiste processArtiste(Class<? extends Artiste> cls, MusicArtefact musicArteFact, JsonObject jArtiste) {
-		
-		Artiste unArtiste ;
-		if (cls == Groupe.class) {
-			unArtiste = (Groupe)createGetOrUpdateArtiste(cls, jArtiste) ;
-		} else {
-			unArtiste = createGetOrUpdateArtiste(cls, jArtiste) ;
-		}
-		unArtiste.addArteFact(musicArteFact) ;
-		return unArtiste ;
-	}
-	
-	private List<String> processNotes(MusicArtefact musicArteFact) {
-
-		List<String> notes = new ArrayList<String>() ;
-		JsonObject arteFactJson = musicArteFact.getJson() ;
-        JsonElement jElem = arteFactJson.get(JsonMusicProperties.NOTES) ;
-		if (jElem != null) {
-			if (jElem.isJsonArray()) {
-				notes = new ArrayList<String>() ;
-				JsonArray jNotes = jElem.getAsJsonArray() ; 
-				for (JsonElement jNote : jNotes) {
-					notes.add(jNote.getAsString()) ;
-				}
-				if (albumLog.isLoggable(Level.FINEST)) {
-					albumLog.finest("Nombre de note: " + notes.size()) ;
-				}
-			} else {
-				albumLog.warning(JsonMusicProperties.NOTES + " n'est pas un JsonArray pour l'artefact " + arteFactJson) ;
-			}
-		}
-		return notes ;
-	}
-	
-	private void processConcert(Concert concert) {
-
-		JsonObject arteFactJson = concert.getJson() ;
-		JsonElement jElem ;
-
-		// Traitement de la date
-		TemporalAccessor dateConcert = null ;
-		jElem = arteFactJson.get(JsonMusicProperties.DATE) ;
-		if (jElem == null) {
-			albumLog.warning("Pas de date dans le concert " + arteFactJson);
-		} else {
-			try {
-				dateConcert = TemporalUtils.parseDate(jElem.getAsString()) ;
-			} catch (Exception e) {
-				albumLog.log(Level.SEVERE, "Erreur dans les dates du concert " + arteFactJson, e) ;
-			}
-		}
-		concert.setDateConcert(dateConcert) ;
-
-		// traitement du lieu
-		String lieuConcert = null ;
-		jElem = arteFactJson.get(JsonMusicProperties.LIEU) ;
-		if (jElem == null) {
-			albumLog.warning("Pas de lieu dans le concert " + arteFactJson);
-		} else {
-			lieuConcert = jElem.getAsString() ;
-		}
-		concert.setLieuConcert(lieuConcert) ;
-
-		// traitement de l'url d'information
-		String urlInfos = null ;
-		jElem = arteFactJson.get(JsonMusicProperties.URL_INFOS) ;
-		if (jElem != null) {
-			urlInfos = jElem.getAsString() ;
-		}
-		concert.setUrlInfos(urlInfos) ;
-
-		Type listType = new TypeToken<List<String>>() {}.getType();
-
-		// Traitement des titres
-		List<String> titres = null;
-		jElem = arteFactJson.get(JsonMusicProperties.MORCEAUX) ;
-		if (jElem != null) {
-			if (jElem.isJsonArray()) {				
-				JsonArray jTitres = jElem.getAsJsonArray() ;			
-				titres = new Gson().fromJson(jTitres, listType);
-			} else {
-				albumLog.warning(JsonMusicProperties.MORCEAUX + " n'est pas un JsonArray pour le concert " + arteFactJson) ;
-			}
-		}
-		concert.setTitres(titres) ;
-
-		// Traitement des images des tickets
-		List<String> ticketImages = null ;
-		jElem = arteFactJson.get(JsonMusicProperties.TICKET_IMG) ;
-		if (jElem == null) {
-			albumLog.info("Pas de ticket pour le concert " + arteFactJson) ;
-		} else {
-			if (jElem.isJsonArray()) {
-				JsonArray jTickets = jElem.getAsJsonArray() ; 
-				ticketImages =  new Gson().fromJson(jTickets,  listType);
-			} else {
-				albumLog.warning(JsonMusicProperties.TICKET_IMG + " n'est pas un JsonArray pour le concert " + arteFactJson) ;
-			}
-		}  
-		concert.setTicketImages(ticketImages) ;
-	}
-
 	public ListeAlbum getRangementAlbums(Format.RangementSupportPhysique sPhys) { return rangementsAlbums.get(sPhys) ; }
 	
 	public ListeArtiste   getCollectionArtistes() 		{ return collectionArtistes		 ; }
@@ -270,10 +108,13 @@ public class CollectionAlbumContainer {
    		statChronoEnregistrement = new StatChrono(albumLog) ;
    		statChronoComposition 	 = new StatChrono(albumLog) ;   		
    		calendrierArtistes 		 = new ChronoArtistes() ;
+   		allArtistes				 = new ArrayList<ListeArtiste>() ;
    		rangementsAlbums 		 = new EnumMap<Format.RangementSupportPhysique, ListeAlbum>(Format.RangementSupportPhysique.class) ;
    		for (Format.RangementSupportPhysique rangement : Format.RangementSupportPhysique.values()) {
    			rangementsAlbums.put(rangement, new ListeAlbum(albumLog)) ;
    		}
+   		allArtistes.add(collectionArtistes) ;
+   		allArtistes.add(concertsArtistes) ;
 	}
 	
 	public Artiste getArtisteKnown(String nom, String prenom) {
@@ -284,29 +125,6 @@ public class CollectionAlbumContainer {
 		}
 		return a ;
 		
-	}
-
-	// Get an artiste, if it exists, return the existing one eventually updated
-	// if it does not exists, create it
-	public Artiste createGetOrUpdateArtiste(Class<? extends Artiste> cls, JsonObject jArtiste) {
-		
-		Artiste artiste;
-		Optional<Artiste> eventualArtiste = collectionArtistes.getArtisteKnown(jArtiste) ;
-		if (! eventualArtiste.isPresent()) {
-			eventualArtiste = concertsArtistes.getArtisteKnown(jArtiste) ;
-		} 
-		
-		if (! eventualArtiste.isPresent()) {
-			if (cls == Groupe.class) {
-				artiste = new Groupe(jArtiste, albumLog) ;
-			} else {
-				artiste = new Artiste(jArtiste, albumLog) ;
-			}
-		} else {
-			artiste = eventualArtiste.get() ;
-			artiste.update(jArtiste);
-		}
-		return artiste ;
 	}
 	
 }

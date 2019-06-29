@@ -2,8 +2,12 @@ package org.fl.collectionAlbum.albums;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
+import org.fl.collectionAlbum.artistes.Artiste;
+import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.junit.jupiter.api.Test;
 
 import com.google.gson.JsonObject;
@@ -16,7 +20,11 @@ class AlbumTest {
 	@Test
 	void testEmptyAlbum() {
 		
-		Album album = new Album(new JsonObject(), logger) ;
+		ListeArtiste la = new ListeArtiste(logger) ;
+		List<ListeArtiste> lla = new ArrayList<ListeArtiste>() ;
+		lla.add(la) ;
+		
+		Album album = new Album(new JsonObject(), lla, logger) ;
 		
 		assertNotNull(album) ;
 	}
@@ -40,11 +48,25 @@ class AlbumTest {
 		
 		JsonObject jAlbum = new JsonParser().parse(albumStr1).getAsJsonObject();
 
-		Album album = new Album(jAlbum, logger) ;
+		ListeArtiste la = new ListeArtiste(logger) ;
+		List<ListeArtiste> lla = new ArrayList<ListeArtiste>() ;
+		lla.add(la) ;
+
+		Album album = new Album(jAlbum, lla, logger) ;
 		
 		assertEquals("Portrait in jazz", album.getTitre()) ;
 		
-//		assertEquals(1, album.getAuteurs().get(0).getNbAlbum()) ;
+		Artiste bill = album.getAuteurs().get(0) ;
+		assertNotNull(bill) ;
+		assertEquals("Bill", bill.getPrenoms()) ;
+		assertEquals("Evans", bill.getNom()) ;
+		
+		assertEquals(0, bill.getNbAlbum()) ;
+		
+		album.addMusicArtfactArtistesToList(la);
+		assertEquals(1, bill.getNbAlbum()) ;
+		
+		assertEquals(album, bill.getAlbums().getAlbums().get(0)) ;
 
 	}
 }

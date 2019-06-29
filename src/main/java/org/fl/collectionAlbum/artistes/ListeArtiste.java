@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.fl.collectionAlbum.MusicArtefact;
 import org.fl.collectionAlbum.PoidsComparator;
 import org.fl.collectionAlbum.concerts.ConcertPoidsComparator;
 
@@ -34,8 +35,14 @@ public class ListeArtiste {
 		}
 	}
 	
-	public void addAllArtistes(List<Artiste> artistes) {
-		artistes.stream().forEach(a -> addArtiste(a));
+	public void addAllArtistes(List<Artiste> artistes, MusicArtefact musicArtefact) {
+		artistes.stream().forEach(a -> addArtiste(a, musicArtefact)  );
+	}
+	
+	private void addArtiste(Artiste a,  MusicArtefact musicArtefact) {
+		
+		a.addArteFact(musicArtefact) ;
+		addArtiste(a) ;
 	}
 	
 	public Artiste getArtisteKnown(String nom, String prenom) {

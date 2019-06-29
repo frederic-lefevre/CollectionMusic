@@ -1,11 +1,13 @@
 package org.fl.collectionAlbum.albums;
 
 import java.time.temporal.TemporalAccessor;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.Format;
 import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.MusicArtefact;
+import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.jsonParsers.AlbumParser;
 
 import com.google.gson.JsonElement;
@@ -23,8 +25,8 @@ public class Album extends MusicArtefact {
     
     private boolean specifiedCompositionDate ;
     
-    public Album(JsonObject albumJson, Logger aLog) {
-    	super(albumJson, aLog) ;
+    public Album(JsonObject albumJson, List<ListeArtiste> knownArtistes, Logger aLog) {
+    	super(albumJson, knownArtistes, aLog) ;
     	titre = AlbumParser.getAlbumTitre(albumJson, aLog) ;
     	setPeriodeEnregistrementEtComposition(AlbumParser.processPeriodEnregistrement(albumJson, aLog), 
     										  AlbumParser.processPeriodComposition(   albumJson, aLog));

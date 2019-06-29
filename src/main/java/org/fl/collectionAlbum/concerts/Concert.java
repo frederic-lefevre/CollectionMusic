@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.MusicArtefact;
+import org.fl.collectionAlbum.artistes.ListeArtiste;
+import org.fl.collectionAlbum.jsonParsers.ConcertParser;
 
 import com.google.gson.JsonObject;
 
@@ -16,8 +18,14 @@ public class Concert extends MusicArtefact {
     private List<String> 	 titres;    
     private List<String> 	 ticketImages;
     
-    public Concert(JsonObject concertJson, Logger aLog) {
-    	super(concertJson, aLog) ;
+    public Concert(JsonObject concertJson, List<ListeArtiste> knownArtistes, Logger aLog) {
+    	super(concertJson, knownArtistes, aLog) ;
+    	
+    	dateConcert = ConcertParser.getConcertDate(concertJson, aLog) ;
+    	lieuConcert = ConcertParser.getConcertLieu(concertJson, aLog) ;
+    	urlInfos	= ConcertParser.getConcertUrlInfos(concertJson, aLog) ;
+    	titres		= ConcertParser.getConcertMorceaux(concertJson, aLog) ;
+    	ticketImages = ConcertParser.getConcertTickets(concertJson, aLog) ;
     }
     
     public boolean additionnalInfo() {
