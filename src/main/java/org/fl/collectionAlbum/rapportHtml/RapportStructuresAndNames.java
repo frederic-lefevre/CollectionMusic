@@ -3,6 +3,7 @@ package org.fl.collectionAlbum.rapportHtml;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.concerts.Concert;
+import org.fl.collectionAlbum.concerts.LieuConcert;
 
 import java.io.File;
 import java.net.URI;
@@ -22,6 +23,7 @@ public class RapportStructuresAndNames {
 	private final static String albumDir 		   = "albums" ;
 	private final static String concertDir 		   = "concerts" ;
 	private final static String artisteDir 		   = "artistes" ;
+	private final static String lieuDir 		   = "lieux" ;
    	private final static String homeCollectionFile = "index.html" ;
    	private final static String homeConcertFile    = "indexConcert.html" ;
 
@@ -34,9 +36,10 @@ public class RapportStructuresAndNames {
 	private static String 		concertTicketImgUri ;
 	private static Charset 		charset ;
 
-	private static HashMap<Album,   Path> 		  albumRapportPaths ;
-	private static HashMap<Concert, Path> 		  concertRapportPaths ;
-	private static HashMap<Artiste, ArtistePaths> artisteRapportPaths ;
+	private static HashMap<Album,   	Path> 		  albumRapportPaths ;
+	private static HashMap<Concert, 	Path> 		  concertRapportPaths ;
+	private static HashMap<Artiste, 	ArtistePaths> artisteRapportPaths ;
+	private static HashMap<LieuConcert, Path> 		  lieuRapportPaths ;
 	
 	private static class ArtistePaths {
 		protected Path albums ;
@@ -46,9 +49,11 @@ public class RapportStructuresAndNames {
 			concerts = c ;
 		}
 	}
+	
 	private static int idAlbum   = 0 ;
 	private static int idConcert = 0 ;
 	private static int idArtiste = 0 ;
+	private static int idLieu 	 = 0 ;
 	
 	private static boolean isInitialized = false ;
 	
@@ -83,6 +88,7 @@ public class RapportStructuresAndNames {
 		albumRapportPaths   = new HashMap<>() ;
 		concertRapportPaths = new HashMap<>() ;
 		artisteRapportPaths = new HashMap<>() ;
+		lieuRapportPaths	= new HashMap<>() ;
 		
 		isInitialized = true ;
 		return isInitialized ;
@@ -99,7 +105,8 @@ public class RapportStructuresAndNames {
 	public static Charset getCharset() 					  { return charset;									}
 	public static Path 	  getAbsoluteAlbumDir() 		  {	return rapportPath.resolve(albumDir) ;			}	
 	public static Path 	  getAbsoluteConcertDir() 		  {	return rapportPath.resolve(concertDir) ;		}	
-	public static Path 	  getAbsoluteArtisteDir() 		  {	return rapportPath.resolve(artisteDir) ;		}	
+	public static Path 	  getAbsoluteArtisteDir() 		  {	return rapportPath.resolve(artisteDir) ;		}
+	public static Path 	  getAbsoluteLieuDir() 		  	  {	return rapportPath.resolve(lieuDir) ;			}
 	public static Path 	  getAbsoluteHomeCollectionFile() { return rapportPath.resolve(homeCollectionFile) ;}	
 	public static Path 	  getAbsoluteHomeConcertFile() 	  {	return rapportPath.resolve(homeConcertFile) ;	}
 	public static Path 	  getCollectionDirectoryName() 	  {	return collectionDirectoryName;					}
@@ -156,6 +163,25 @@ public class RapportStructuresAndNames {
 		}
 	}
 
+	public static URI getLieuRapportRelativePath(LieuConcert lieuConcert) {
+		
+		Path relativePath = lieuRapportPaths.get(lieuConcert) ;
+		Path absolutePath ;
+		if (relativePath == null) {
+			absolutePath = RapportStructuresAndNames.getAbsoluteLieuDir().resolve("i" + idLieu + ".html") ;
+			idLieu++ ;
+			relativePath = RapportStructuresAndNames.getRapportPath().relativize(absolutePath) ;
+			 lieuRapportPaths.put(lieuConcert, relativePath) ;
+			 if (! Files.exists(absolutePath)) {
+				RapportConcertDunLieu concertDeCeLieu = new RapportConcertDunLieu(lieuConcert,  "../", rapportLog) ;
+				concertDeCeLieu.printReport(absolutePath, stylesArtiste) ;
+			 }
+		}  else {
+			absolutePath = RapportStructuresAndNames.getRapportPath().resolve(relativePath) ;
+		}
+		return RapportStructuresAndNames.getRapportPath().toUri().relativize(absolutePath.toUri()) ;
+	}
+	
 	private final static String stylesArtiste[] = {"main","format","rapport", "artiste"} ;
 
 	public static URI getArtisteAlbumRapportRelativePath(Artiste artiste) {

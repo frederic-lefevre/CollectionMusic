@@ -23,4 +23,8 @@ public class LieuConcert {
 	public void addConcert(Concert concert) {
 		concerts.addConcert(concert) ;
 	}
+
+	public ListeConcert getConcerts() {
+		return concerts;
+	}
 }

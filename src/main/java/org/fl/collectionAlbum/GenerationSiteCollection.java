@@ -97,6 +97,11 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 				 Files.createDirectories(rcDir) ;
 			 }
 			 
+			 Path rlDir  = RapportStructuresAndNames.getAbsoluteLieuDir() ;
+			 if (! Files.exists(rlDir)) {
+				 Files.createDirectories(rlDir) ;
+			 }
+			 
 			 albumLog.fine("Ancien rapport effacé");
 		 } catch (Exception e) {
 			 albumLog.log(Level.SEVERE, "exception dans getPath des directories rapports : ", e);

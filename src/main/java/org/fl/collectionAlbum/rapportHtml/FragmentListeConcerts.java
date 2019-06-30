@@ -21,12 +21,11 @@ public class FragmentListeConcerts {
 			fragment.append("  <tr>\n    <td class=\"an\">") ;
 			URI aPath = RapportStructuresAndNames.getConcertRapportRelativePath(unConcert) ;
 			if (aPath != null) {
-				fragment.append("<a href=\"").append(urlOffset).append(aPath.toString()).append("\">") ;
+				fragment.append("<a href=\"").append(urlOffset).append(aPath.toString()).append("\">").append(dateConcert).append("</a>") ;
+			} else {
+				fragment.append(dateConcert) ;
 			}
-			fragment.append(dateConcert) ;
-			if (unConcert.additionnalInfo()) {
-				fragment.append("</a>") ;
-			}
+			
 			fragment.append("</td>\n    <td class=\"auteur\">\n") ;
 			
 			if (unConcert.getAuteurs() != null) {

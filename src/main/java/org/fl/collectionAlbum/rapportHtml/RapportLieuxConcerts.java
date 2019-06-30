@@ -1,5 +1,6 @@
 package org.fl.collectionAlbum.rapportHtml;
 
+import java.net.URI;
 import java.util.Collection;
 import java.util.logging.Logger;
 
@@ -17,8 +18,8 @@ public class RapportLieuxConcerts  extends RapportHtml {
 
 	private LieuxDesConcerts lieuxDesConcerts ;
 	
-	protected RapportLieuxConcerts(LieuxDesConcerts ldc, String titre, HtmlLinkList idxs, String o, Logger rl) {
-		super(titre, idxs, o, rl);
+	protected RapportLieuxConcerts(LieuxDesConcerts ldc, String titre, HtmlLinkList idxs, String offset, Logger rl) {
+		super(titre, idxs, offset, rl);
 		withTitleDisplayed() ;
 		lieuxDesConcerts = ldc ;
 	}
@@ -30,8 +31,15 @@ public class RapportLieuxConcerts  extends RapportHtml {
 		
 		Collection<LieuConcert> lieux = lieuxDesConcerts.getLieuxConcerts() ;
 		for (LieuConcert unLieu : lieux) {
+			write("  <tr>\n    <td class=\"album\">") ;
 			
-			write("  <tr>\n    <td class=\"album\">").write(unLieu.getLieu()).write("    </td>\n") ;
+			URI aPath = RapportStructuresAndNames.getLieuRapportRelativePath(unLieu) ;
+			if (aPath != null) {
+				write("<a href=\"").write(urlOffset).write(aPath.toString()).write("\">").write(unLieu.getLieu()).write("</a>") ;
+			} else {
+				write(unLieu.getLieu()) ;
+			}
+			write("    </td>\n") ;
 			write("    <td class=\"total\">").write(unLieu.getNombreConcert()).write("</td>\n  </tr>\n") ;
 		}
 		write("</table>\n") ;
