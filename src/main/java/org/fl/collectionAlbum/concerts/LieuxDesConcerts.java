@@ -10,12 +10,13 @@ public class LieuxDesConcerts {
 		lieuxConcerts = new HashMap<String, LieuConcert>() ;
 	}
 	
-	public LieuConcert getLieu(String lieu) {
+	public LieuConcert addLieuDunConcert(String lieu) {
 		LieuConcert lieuConcert = lieuxConcerts.get(lieu) ;
 		if (lieuConcert == null) {
 			lieuConcert = new LieuConcert(lieu) ;
 			lieuxConcerts.put(lieu, lieuConcert) ;
 		}
+		lieuConcert.incrementNombreConcert() ;
 		return lieuConcert ;
 	}
 }
