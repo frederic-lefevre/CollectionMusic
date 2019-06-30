@@ -21,7 +21,7 @@ public class FragmentListeConcerts {
 			fragment.append("  <tr>\n    <td class=\"an\">") ;
 			URI aPath = RapportStructuresAndNames.getConcertRapportRelativePath(unConcert) ;
 			if (aPath != null) {
-				fragment.append("<a href=\"").append(aPath.toString()).append("\">") ;
+				fragment.append("<a href=\"").append(urlOffset).append(aPath.toString()).append("\">") ;
 			}
 			fragment.append(dateConcert) ;
 			if (unConcert.additionnalInfo()) {
