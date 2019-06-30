@@ -24,7 +24,8 @@ class ConcertTest {
 		List<ListeArtiste> lla = new ArrayList<ListeArtiste>() ;
 		lla.add(la) ;
 		
-		Concert concert = new Concert(new JsonObject(), lla, logger) ;
+		LieuxDesConcerts lieuxDesConcerts = new LieuxDesConcerts() ;
+		Concert concert = new Concert(new JsonObject(), lla, lieuxDesConcerts, logger) ;
 		
 		assertNotNull(concert);
 	}
@@ -50,8 +51,9 @@ class ConcertTest {
 		ListeArtiste la = new ListeArtiste(logger) ;
 		List<ListeArtiste> lla = new ArrayList<ListeArtiste>() ;
 		lla.add(la) ;
+		LieuxDesConcerts lieuxDesConcerts = new LieuxDesConcerts() ;
 		
-		Concert concert = new Concert(jConcert, lla, logger) ;
+		Concert concert = new Concert(jConcert, lla, lieuxDesConcerts, logger) ;
 		
 		assertEquals("Juan-les-Pins, Alpes-Maritimes", concert.getLieuConcert().getLieu()) ;
 		assertEquals(1, concert.getTicketImages().size()) ;

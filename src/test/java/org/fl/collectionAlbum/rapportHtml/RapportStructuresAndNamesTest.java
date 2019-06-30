@@ -15,6 +15,7 @@ import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.concerts.Concert;
+import org.fl.collectionAlbum.concerts.LieuxDesConcerts;
 import org.junit.jupiter.api.Test;
 
 class RapportStructuresAndNamesTest {
@@ -141,7 +142,8 @@ class RapportStructuresAndNamesTest {
 		List<ListeArtiste> lla = new ArrayList<ListeArtiste>() ;
 		lla.add(la) ;
 		
-		Concert concert = new Concert(jConcert, lla, logger) ;
+		LieuxDesConcerts lieuxDesConcerts = new LieuxDesConcerts() ;
+		Concert concert = new Concert(jConcert, lla, lieuxDesConcerts, logger) ;
 		concert.addMusicArtfactArtistesToList(la);
 		List<Artiste> lDeeDee = concert.getAuteurs() ;
 		Artiste deeDee = lDeeDee.get(0) ;

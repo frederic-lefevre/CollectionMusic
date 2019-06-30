@@ -18,13 +18,13 @@ public class Concert extends MusicArtefact {
     private List<String> 	 titres;    
     private List<String> 	 ticketImages;
     
-    public Concert(JsonObject concertJson, List<ListeArtiste> knownArtistes, Logger aLog) {
+    public Concert(JsonObject concertJson, List<ListeArtiste> knownArtistes, LieuxDesConcerts lieuxDesConcerts, Logger aLog) {
     	super(concertJson, knownArtistes, aLog) ;
     	
-    	dateConcert = ConcertParser.getConcertDate(concertJson, aLog) ;
-    	lieuConcert = new LieuConcert(ConcertParser.getConcertLieu(concertJson, aLog)) ;
-    	urlInfos	= ConcertParser.getConcertUrlInfos(concertJson, aLog) ;
-    	titres		= ConcertParser.getConcertMorceaux(concertJson, aLog) ;
+    	dateConcert  = ConcertParser.getConcertDate(concertJson, aLog) ;
+    	lieuConcert  = lieuxDesConcerts.getLieu(ConcertParser.getConcertLieu(concertJson, aLog)) ;
+    	urlInfos	 = ConcertParser.getConcertUrlInfos(concertJson, aLog) ;
+    	titres		 = ConcertParser.getConcertMorceaux(concertJson, aLog) ;
     	ticketImages = ConcertParser.getConcertTickets(concertJson, aLog) ;
     }
     

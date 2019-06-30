@@ -10,6 +10,7 @@ import org.fl.collectionAlbum.albums.ListeAlbum;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.concerts.Concert;
+import org.fl.collectionAlbum.concerts.LieuxDesConcerts;
 import org.fl.collectionAlbum.concerts.ListeConcert;
 import org.fl.collectionAlbum.stat.StatChrono;
 
@@ -35,6 +36,8 @@ public class CollectionAlbumContainer {
 	
 	private StatChrono statChronoEnregistrement ;
 	private StatChrono statChronoComposition ;
+	
+	private LieuxDesConcerts lieuxDesConcerts ;
 	
 	private Logger albumLog ;
 	
@@ -82,7 +85,7 @@ public class CollectionAlbumContainer {
 	
 	public void addConcert(JsonObject arteFactJson) { 
 		
-		Concert concert = new Concert(arteFactJson, allArtistes, albumLog) ;
+		Concert concert = new Concert(arteFactJson, allArtistes, lieuxDesConcerts, albumLog) ;
 		
 		concert.addMusicArtfactArtistesToList(concertsArtistes);
 		
@@ -108,6 +111,7 @@ public class CollectionAlbumContainer {
    		statChronoEnregistrement = new StatChrono(albumLog) ;
    		statChronoComposition 	 = new StatChrono(albumLog) ;   		
    		calendrierArtistes 		 = new ChronoArtistes() ;
+   		lieuxDesConcerts		 = new LieuxDesConcerts() ;
    		allArtistes				 = new ArrayList<ListeArtiste>() ;
    		rangementsAlbums 		 = new EnumMap<Format.RangementSupportPhysique, ListeAlbum>(Format.RangementSupportPhysique.class) ;
    		for (Format.RangementSupportPhysique rangement : Format.RangementSupportPhysique.values()) {
