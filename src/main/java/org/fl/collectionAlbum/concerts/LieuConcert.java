@@ -1,13 +1,15 @@
 package org.fl.collectionAlbum.concerts;
 
+import java.util.logging.Logger;
+
 public class LieuConcert {
 
 	private final String lieu ;
-	private int nombreConcert ;
+	private ListeConcert concerts ;
 
-	public LieuConcert(String l) {
+	public LieuConcert(String l, Logger log) {
 		lieu 		  = l ;
-		nombreConcert = 0 ;
+		concerts  	 = new ListeConcert(log) ;
 	}
 
 	public String getLieu() {
@@ -15,10 +17,10 @@ public class LieuConcert {
 	}
 	
 	public int getNombreConcert() {
-		return nombreConcert;
+		return concerts.getNombreConcerts();
 	}
 
-	public void incrementNombreConcert() {
-		nombreConcert++ ;
+	public void addConcert(Concert concert) {
+		concerts.addConcert(concert) ;
 	}
 }

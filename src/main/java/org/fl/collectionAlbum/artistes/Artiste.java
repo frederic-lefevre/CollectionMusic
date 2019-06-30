@@ -29,7 +29,7 @@ public class Artiste {
 	protected TemporalAccessor mort ;
 	protected List<String> 	   instruments;
 	protected ListeAlbum 	   albums ;
-	protected ListeConcert 	concerts ;
+	protected ListeConcert 	   concerts ;
 	
 	private Logger artisteLog;
 

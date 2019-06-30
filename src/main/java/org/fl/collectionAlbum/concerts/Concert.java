@@ -22,7 +22,7 @@ public class Concert extends MusicArtefact {
     	super(concertJson, knownArtistes, aLog) ;
     	
     	dateConcert  = ConcertParser.getConcertDate(concertJson, aLog) ;
-    	lieuConcert  = lieuxDesConcerts.addLieuDunConcert(ConcertParser.getConcertLieu(concertJson, aLog)) ;
+    	lieuConcert  = lieuxDesConcerts.addLieuDunConcert(ConcertParser.getConcertLieu(concertJson, aLog), aLog) ;
     	urlInfos	 = ConcertParser.getConcertUrlInfos(concertJson, aLog) ;
     	titres		 = ConcertParser.getConcertMorceaux(concertJson, aLog) ;
     	ticketImages = ConcertParser.getConcertTickets(concertJson, aLog) ;

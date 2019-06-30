@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class LieuxDesConcerts {
 
@@ -13,13 +14,12 @@ public class LieuxDesConcerts {
 		lieuxConcerts = new HashMap<String, LieuConcert>() ;
 	}
 	
-	public LieuConcert addLieuDunConcert(String lieu) {
+	public LieuConcert addLieuDunConcert(String lieu, Logger log) {
 		LieuConcert lieuConcert = lieuxConcerts.get(lieu) ;
 		if (lieuConcert == null) {
-			lieuConcert = new LieuConcert(lieu) ;
+			lieuConcert = new LieuConcert(lieu, log) ;
 			lieuxConcerts.put(lieu, lieuConcert) ;
 		}
-		lieuConcert.incrementNombreConcert() ;
 		return lieuConcert ;
 	}
 	

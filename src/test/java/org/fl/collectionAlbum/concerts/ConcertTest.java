@@ -57,9 +57,13 @@ class ConcertTest {
 		
 		LieuConcert juan = concert.getLieuConcert() ;
 		assertEquals("Juan-les-Pins, Alpes-Maritimes", juan.getLieu()) ;
-		assertEquals(1, juan.getNombreConcert()) ;
+		
+		assertEquals(0, juan.getNombreConcert()) ;
 		assertEquals(1, concert.getTicketImages().size()) ;
 		assertEquals("/Annees1990/1990/07_Juillet/RayCharles01.jpg", concert.getTicketImages().get(0)) ;
+		
+		juan.addConcert(concert);
+		assertEquals(1, juan.getNombreConcert()) ;
 		
 		List<Artiste> lDeeDee = concert.getAuteurs() ;
 		
