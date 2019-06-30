@@ -40,6 +40,9 @@ public class RapportDesConcerts extends RapportHtml {
 		 RapportListeConcerts rapportDesConcerts = new RapportListeConcerts(albumsContainer.getConcerts().sortChrono(), "Classement chronologique", accueils, "", rapportLog) ;
 		 write(rapportDesConcerts.printReport(getNextRapportFile(), stylesConcert)) ;
 		 
+		 RapportLieuxConcerts lieuxConcert = new RapportLieuxConcerts("Classement par lieu", accueils, "", rapportLog) ;
+		 write(lieuxConcert.printReport(getNextRapportFile(), stylesConcert)) ;
+		 
 		 write("  <li>Nombre de concerts: " + albumsContainer.getConcerts().getNombreConcerts());
 		 write("</li>\n  <li>Nombre d'artistes, de groupes et d'ensemble: " + albumsContainer.getConcertsArtistes().getNombreArtistes());
 
