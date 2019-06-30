@@ -4,6 +4,7 @@ import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.concerts.Concert;
 
+import java.io.File;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -30,7 +31,7 @@ public class RapportStructuresAndNames {
 	private static Path 		rapportPath ;
 	private static Path 		oldRapportPath ;
 	private static HtmlLinkList accueils ;
-	private static String 		concertTicketImgPath ;
+	private static String 		concertTicketImgUri ;
 	private static Charset 		charset ;
 
 	private static HashMap<Album,   Path> 		  albumRapportPaths ;
@@ -73,7 +74,7 @@ public class RapportStructuresAndNames {
 		accueils.addLink("Accueil Concert",    homeConcertFile) ;
 
 		// get the concert ticket image path
-		concertTicketImgPath = collectionProperties.getProperty("concert.ticketImgDir.name") ;	
+		concertTicketImgUri = collectionProperties.getProperty("concert.ticketImgDir.name") ;	
 
 		// Get charset to write rapport
 		charset = Charset.forName(collectionProperties.getProperty("rapport.charset", "UTF-8")) ;
@@ -96,7 +97,6 @@ public class RapportStructuresAndNames {
 	}
 
 	public static Charset getCharset() 					  { return charset;									}
-	public static String  getConcertTicketImgPath() 	  { return concertTicketImgPath;					}	
 	public static Path 	  getAbsoluteAlbumDir() 		  {	return rapportPath.resolve(albumDir) ;			}	
 	public static Path 	  getAbsoluteConcertDir() 		  {	return rapportPath.resolve(concertDir) ;		}	
 	public static Path 	  getAbsoluteArtisteDir() 		  {	return rapportPath.resolve(artisteDir) ;		}	
@@ -107,6 +107,8 @@ public class RapportStructuresAndNames {
 	public static Path getConcertDirectoryName() {		return concertDirectoryName;	}
 
 	public static HtmlLinkList getAccueils() {		return accueils;	}
+	
+	private static String  getConcertTicketImgUri() 	  { return concertTicketImgUri;						}	
 	
 	private static final String styles[] = {RapportHtml.albumStyle} ;
 	
@@ -219,4 +221,17 @@ public class RapportStructuresAndNames {
 		}
 	}
 	
+	public static URI getTicketImageAbsoluteUri(String relativeToPhotoDirUriStr) {
+		try {
+			URI absoluteUri = new URI(getConcertTicketImgUri() + relativeToPhotoDirUriStr) ;
+			// check that the file exists
+			if (! (new File(absoluteUri)).exists()) {
+				rapportLog.warning("Le fichier ticket image suivant n'existe pas: " + absoluteUri.toString()) ;
+			}
+			return absoluteUri ;
+		} catch (Exception e) {
+			rapportLog.log(Level.SEVERE, "Wrong URI string for ticket image: " + relativeToPhotoDirUriStr, e);
+			return null ;
+		}
+	}
 }

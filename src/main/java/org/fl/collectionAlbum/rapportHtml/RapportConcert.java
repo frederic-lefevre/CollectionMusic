@@ -1,10 +1,7 @@
 package org.fl.collectionAlbum.rapportHtml;
 
-import java.io.File;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.concerts.Concert;
@@ -45,19 +42,12 @@ public class RapportConcert extends RapportHtml {
 		
 		List<String> ticketImages = concert.getTicketImages() ;
 		if (ticketImages != null) {
-			try {
-				for (int i=0; i < ticketImages.size(); i++) {
-					String imgUrl = RapportStructuresAndNames.getConcertTicketImgPath() + ticketImages.get(i) ;
-					// check that the file exists
-					if (! (new File(new URI(imgUrl))).exists()) {
-						rapportLog.warning("Le fichier ticket image suivant n'existe pas: " + imgUrl + " Date du concert: " + concert.getDateConcert().toString()) ;
-					}
-					write("<a href=\"").write(imgUrl ).write("\">") ;
-					write("<img class=\"ticket\" src=\"").write(imgUrl).write("\"/></a>") ;
-				}
-			} catch (URISyntaxException e) {
-				rapportLog.log(Level.SEVERE, "Exception en traitant les images de concert", e) ;
-			}
+			
+			for (int i=0; i < ticketImages.size(); i++) {
+				URI imgUri = RapportStructuresAndNames.getTicketImageAbsoluteUri(ticketImages.get(i)) ;
+				write("<a href=\"").write(imgUri.toString() ).write("\">\n") ;
+				write("    <img class=\"ticket\" src=\"").write(imgUri.toString()).write("\"/>\n</a>") ;
+			}			
 		}			
 	}
 }    	
