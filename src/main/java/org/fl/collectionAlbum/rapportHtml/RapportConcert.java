@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.concerts.Concert;
+import org.fl.collectionAlbum.utils.TemporalUtils;
 
 public class RapportConcert extends RapportHtml {
 
@@ -13,6 +14,7 @@ public class RapportConcert extends RapportHtml {
 	public RapportConcert(Concert c, String o, Logger rl) {
 		super("", null, o, rl) ;
 		concert = c ;
+		withTitle(TemporalUtils.formatDate(concert.getDateConcert()) + " " + concert.getLieuConcert()) ;
 	}
 
 	@Override
