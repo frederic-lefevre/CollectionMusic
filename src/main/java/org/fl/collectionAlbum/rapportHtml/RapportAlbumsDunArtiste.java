@@ -7,13 +7,15 @@ import org.fl.collectionAlbum.artistes.Artiste;
 
 public class RapportAlbumsDunArtiste extends RapportHtml {
 
+	private static final String ALBUMS = " - Albums" ;
+	
 	private final Artiste artiste ;
 	
 	public RapportAlbumsDunArtiste(Artiste a, String offset, Logger rl) {
 		super("", null, offset, rl);
 		artiste = a ;
 		
-		withTitle(artiste.getPrenoms() + " " + artiste.getNom()) ;
+		withTitle(artiste.getPrenoms() + " " + artiste.getNom() + ALBUMS) ;
 		HtmlLinkList concertLink = new HtmlLinkList(RapportStructuresAndNames.getAccueils(), offset) ;
 
 		URI concertUri = RapportStructuresAndNames.getArtisteConcertRapportRelativePath(artiste) ;
