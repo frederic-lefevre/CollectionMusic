@@ -55,6 +55,9 @@ public class RapportStructuresAndNames {
 	
 	public static boolean init() {
 		
+		idAlbum	  = 0 ;
+		idConcert = 0 ;
+		idArtiste = 0 ;
 		rapportLog = Control.getAlbumLog() ;
 		AdvancedProperties collectionProperties = Control.getCollectionProperties() ;
 		
@@ -129,19 +132,23 @@ public class RapportStructuresAndNames {
 		}
 	}
 	
-	public static URI getConcertRapportPath(Concert concert) {
+	public static URI getConcertRapportRelativePath(Concert concert) {
 		if (concert.additionnalInfo()) {
-			Path aPath = concertRapportPaths.get(concert) ;
-			if (aPath == null) {
-				aPath = RapportStructuresAndNames.getAbsoluteConcertDir().resolve("i" + idConcert + ".html") ;
+			Path relativePath = concertRapportPaths.get(concert) ;
+			Path absolutePath ;
+			if (relativePath == null) {
+				absolutePath = RapportStructuresAndNames.getAbsoluteConcertDir().resolve("i" + idConcert + ".html") ;
 				idConcert++ ;
-				concertRapportPaths.put(concert, aPath) ;     	
-	        	if (! Files.exists(aPath)) {
+				relativePath = RapportStructuresAndNames.getRapportPath().relativize(absolutePath) ;
+				concertRapportPaths.put(concert, relativePath) ;     	
+	        	if (! Files.exists(absolutePath)) {
 	        		RapportConcert rapportConcert = new RapportConcert(concert,  "../", rapportLog) ;
-	        		rapportConcert.printReport(aPath, styles) ;
+	        		rapportConcert.printReport(absolutePath, styles) ;
 	        	}
+			}  else {
+				absolutePath = RapportStructuresAndNames.getRapportPath().resolve(relativePath) ;
 			}
-			return aPath.toUri() ;
+			return RapportStructuresAndNames.getRapportPath().toUri().relativize(absolutePath.toUri()) ;
 		} else {
 			return null ;
 		}

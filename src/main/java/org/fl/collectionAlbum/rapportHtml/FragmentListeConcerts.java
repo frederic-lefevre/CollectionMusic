@@ -19,7 +19,7 @@ public class FragmentListeConcerts {
 			String dateConcert = TemporalUtils.formatDate(unConcert.getDateConcert()) ;
 			
 			fragment.append("  <tr>\n    <td class=\"an\">") ;
-			URI aPath = RapportStructuresAndNames.getConcertRapportPath(unConcert) ;
+			URI aPath = RapportStructuresAndNames.getConcertRapportRelativePath(unConcert) ;
 			if (aPath != null) {
 				fragment.append("<a href=\"").append(aPath.toString()).append("\">") ;
 			}

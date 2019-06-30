@@ -43,7 +43,7 @@ class ConcertTest {
 			   " ]  } " ;
 
 	@Test
-	void testAlbum1() {
+	void testConcert1() {
 		
 		JsonObject jConcert = new JsonParser().parse(concertStr1).getAsJsonObject();
 

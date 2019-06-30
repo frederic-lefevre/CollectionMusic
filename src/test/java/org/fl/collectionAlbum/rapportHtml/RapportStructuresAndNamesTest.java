@@ -14,6 +14,7 @@ import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
+import org.fl.collectionAlbum.concerts.Concert;
 import org.junit.jupiter.api.Test;
 
 class RapportStructuresAndNamesTest {
@@ -99,7 +100,7 @@ class RapportStructuresAndNamesTest {
 		album.addMusicArtfactArtistesToList(la);
 		
 		URI pAlbum = RapportStructuresAndNames.getArtisteAlbumRapportRelativePath(bill) ;
-		assertEquals("artistes/a0/a1.html", pAlbum.toString()) ;
+		assertEquals("artistes/a0/a0.html", pAlbum.toString()) ;
 
 		URI pInfoAlbum = RapportStructuresAndNames.getAlbumRapportRelativePath(album) ;
 		assertNull(pInfoAlbum) ;
@@ -110,9 +111,45 @@ class RapportStructuresAndNamesTest {
 		Artiste fake = album2.getAuteurs().get(0) ;
 		
 		URI pAlbum2 = RapportStructuresAndNames.getArtisteAlbumRapportRelativePath(fake) ;
-		assertEquals("artistes/a0/a2.html", pAlbum2.toString()) ;
+		assertEquals("artistes/a0/a1.html", pAlbum2.toString()) ;
 		
 		URI pInfoAlbum2 = RapportStructuresAndNames.getAlbumRapportRelativePath(album2) ;
 		assertEquals("albums/i0.html", pInfoAlbum2.toString()) ;
+	}
+	
+	private static final String concertStr1 = "{ " +
+			  "\"auteurCompositeurs\": [ "			+
+			                        " { "			+
+			        " \"nom\": \"Bridgewater\","	+
+			       "  \"prenom\": \"Dee Dee\","		+
+			        " \"naissance\": \"1950-05-27\""+
+			        "  }  ], "					+
+			   "\"date\": \"1990-07-19\","			+
+			   "\"lieu\": \"Juan-les-Pins, Alpes-Maritimes\"," +
+			   "\"imageTicket\": ["					+
+			       "\"/Annees1990/1990/07_Juillet/RayCharles01.jpg\"" +
+			   " ]  } " ;
+	@Test
+	void test4() {
+		
+		Control.initControl("file:///C:/FredericPersonnel/musique/RapportCollection/albumCollection.properties" );
+		RapportStructuresAndNames.init() ;
+		
+		JsonObject jConcert = new JsonParser().parse(concertStr1).getAsJsonObject();
+		
+		ListeArtiste la = new ListeArtiste(logger) ;
+		List<ListeArtiste> lla = new ArrayList<ListeArtiste>() ;
+		lla.add(la) ;
+		
+		Concert concert = new Concert(jConcert, lla, logger) ;
+		concert.addMusicArtfactArtistesToList(la);
+		List<Artiste> lDeeDee = concert.getAuteurs() ;
+		Artiste deeDee = lDeeDee.get(0) ;
+		
+		URI uriDeedee = RapportStructuresAndNames.getArtisteConcertRapportRelativePath(deeDee) ;
+		assertEquals("artistes/a0/c0.html", uriDeedee.toString()) ;
+		
+		URI uriConcert = RapportStructuresAndNames.getConcertRapportRelativePath(concert) ;
+		assertEquals("concerts/i0.html", uriConcert.toString()) ;
 	}
 }
