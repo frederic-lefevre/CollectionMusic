@@ -1,5 +1,6 @@
 package org.fl.collectionAlbum.concerts;
 
+import java.util.Collection;
 import java.util.HashMap;
 
 public class LieuxDesConcerts {
@@ -18,5 +19,9 @@ public class LieuxDesConcerts {
 		}
 		lieuConcert.incrementNombreConcert() ;
 		return lieuConcert ;
+	}
+	
+	public Collection<LieuConcert> getLieuxConcerts() {
+		return lieuxConcerts.values() ;
 	}
 }

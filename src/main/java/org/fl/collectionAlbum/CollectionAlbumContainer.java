@@ -94,14 +94,15 @@ public class CollectionAlbumContainer {
 	
 	public ListeAlbum getRangementAlbums(Format.RangementSupportPhysique sPhys) { return rangementsAlbums.get(sPhys) ; }
 	
-	public ListeArtiste   getCollectionArtistes() 		{ return collectionArtistes		 ; }
-	public ListeAlbum 	  getCollectionAlbumsMusiques() { return collectionAlbumsMusiques; }
-	public ListeArtiste   getConcertsArtistes() 		{ return concertsArtistes		 ; }
-	public ListeConcert   getConcerts() 				{ return concerts				 ; }
-	public ChronoArtistes getCalendrierArtistes() 		{ return calendrierArtistes		 ; }
-	public StatChrono 	  getStatChronoComposition() 	{ return statChronoComposition	 ; }
-	public StatChrono 	  getStatChronoEnregistrement() { return statChronoEnregistrement; }
-	
+	public ListeArtiste     getCollectionArtistes() 	  { return collectionArtistes		; }
+	public ListeAlbum 	  	getCollectionAlbumsMusiques() { return collectionAlbumsMusiques ; }
+	public ListeArtiste   	getConcertsArtistes() 		  { return concertsArtistes		 	; }
+	public ListeConcert   	getConcerts() 				  { return concerts				 	; }
+	public ChronoArtistes 	getCalendrierArtistes() 	  { return calendrierArtistes		; }
+	public StatChrono 	  	getStatChronoComposition() 	  { return statChronoComposition	; }
+	public StatChrono 	  	getStatChronoEnregistrement() { return statChronoEnregistrement ; }
+	public LieuxDesConcerts getLieuxDesConcerts() 		  { return lieuxDesConcerts			; }
+
 	private void reset() {
 		
    		collectionAlbumsMusiques = new ListeAlbum(albumLog) ;
