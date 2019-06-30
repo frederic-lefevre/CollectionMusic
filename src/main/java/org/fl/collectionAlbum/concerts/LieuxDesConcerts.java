@@ -1,7 +1,9 @@
 package org.fl.collectionAlbum.concerts;
 
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 public class LieuxDesConcerts {
 
@@ -21,7 +23,10 @@ public class LieuxDesConcerts {
 		return lieuConcert ;
 	}
 	
-	public Collection<LieuConcert> getLieuxConcerts() {
-		return lieuxConcerts.values() ;
+	public List<LieuConcert> getLieuxConcerts() {
+		LieuxPoidsComparator lieuxComparator = new LieuxPoidsComparator() ;
+		List<LieuConcert> lieux = new ArrayList<LieuConcert>(lieuxConcerts.values()) ;
+		Collections.sort(lieux, lieuxComparator) ;
+		return  lieux ;
 	}
 }
