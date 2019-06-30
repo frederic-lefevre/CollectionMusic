@@ -51,7 +51,7 @@ public class FragmentListeAlbums {
 			}
 			fragment.append("    </td>\n    <td class=\"album\">") ; 
 			
-			URI aPath = RapportStructuresAndNames.getAlbumRapportPath(unAlbum) ;
+			URI aPath = RapportStructuresAndNames.getAlbumRapportRelativePath(unAlbum) ;
 			if (aPath != null) {				
 				fragment.append("<a href=\"").append(aPath.toString()).append("\">") ;
 			}

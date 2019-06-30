@@ -27,11 +27,11 @@ public class RapportStructuresAndNames {
 	private static Path collectionDirectoryName ;
 	private static Path concertDirectoryName ;
 
-	private static Path rapportPath ;
-	private static Path oldRapportPath ;
+	private static Path 		rapportPath ;
+	private static Path 		oldRapportPath ;
 	private static HtmlLinkList accueils ;
-	private static String concertTicketImgPath ;
-	private static Charset charset ;
+	private static String 		concertTicketImgPath ;
+	private static Charset 		charset ;
 
 	private static HashMap<Album,   Path> 		  albumRapportPaths ;
 	private static HashMap<Concert, Path> 		  concertRapportPaths ;
@@ -92,14 +92,14 @@ public class RapportStructuresAndNames {
 		return oldRapportPath;
 	}
 
-	public static Charset getCharset() 				{return charset;				}
-	public static String  getConcertTicketImgPath() 	{return concertTicketImgPath;	}	
-	public static Path 	  getAbsoluteAlbumDir() {		return rapportPath.resolve(albumDir) ;	}	
-	public static Path getAbsoluteConcertDir() {		return rapportPath.resolve(concertDir) ;	}	
-	public static Path getAbsoluteArtisteDir() {		return rapportPath.resolve(artisteDir) ;	}	
-	public static Path getAbsoluteHomeCollectionFile() {		return rapportPath.resolve(homeCollectionFile) ;	}	
-	public static Path getAbsoluteHomeConcertFile() {		return rapportPath.resolve(homeConcertFile) ;	}
-	public static Path getCollectionDirectoryName() {		return collectionDirectoryName;	}
+	public static Charset getCharset() 					  { return charset;									}
+	public static String  getConcertTicketImgPath() 	  { return concertTicketImgPath;					}	
+	public static Path 	  getAbsoluteAlbumDir() 		  {	return rapportPath.resolve(albumDir) ;			}	
+	public static Path 	  getAbsoluteConcertDir() 		  {	return rapportPath.resolve(concertDir) ;		}	
+	public static Path 	  getAbsoluteArtisteDir() 		  {	return rapportPath.resolve(artisteDir) ;		}	
+	public static Path 	  getAbsoluteHomeCollectionFile() { return rapportPath.resolve(homeCollectionFile) ;}	
+	public static Path 	  getAbsoluteHomeConcertFile() 	  {	return rapportPath.resolve(homeConcertFile) ;	}
+	public static Path 	  getCollectionDirectoryName() 	  {	return collectionDirectoryName;					}
 
 	public static Path getConcertDirectoryName() {		return concertDirectoryName;	}
 
@@ -107,19 +107,23 @@ public class RapportStructuresAndNames {
 	
 	private static final String styles[] = {RapportHtml.albumStyle} ;
 	
-	public static URI getAlbumRapportPath(Album album) {
+	public static URI getAlbumRapportRelativePath(Album album) {
 		if (album.additionnalInfo()) {
-			Path aPath = albumRapportPaths.get(album) ;
-			if (aPath == null) {
-				aPath = RapportStructuresAndNames.getAbsoluteAlbumDir().resolve("i" + idAlbum + ".html") ;
+			Path relativePath = albumRapportPaths.get(album) ;
+			Path absolutePath ;
+			if (relativePath == null) {	
+				absolutePath = RapportStructuresAndNames.getAbsoluteAlbumDir().resolve("i" + idAlbum + ".html") ;
 				idAlbum++ ;
-				albumRapportPaths.put(album, aPath) ;				
-				if (! Files.exists(aPath)) {
+				relativePath = RapportStructuresAndNames.getRapportPath().relativize(absolutePath) ;
+				albumRapportPaths.put(album, relativePath) ;				
+				if (! Files.exists(absolutePath)) {
 					RapportAlbum rapportAlbum = new RapportAlbum(album, "../", rapportLog) ;
-					rapportAlbum.printReport( aPath, styles) ;
+					rapportAlbum.printReport( absolutePath, styles) ;
 				}
+			} else {
+				absolutePath = RapportStructuresAndNames.getRapportPath().resolve(relativePath) ;
 			}
-			return aPath.toUri() ;
+			return RapportStructuresAndNames.getRapportPath().toUri().relativize(absolutePath.toUri()) ;
 		} else {
 			return null ;
 		}
