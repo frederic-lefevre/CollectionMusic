@@ -13,7 +13,7 @@ import com.google.gson.JsonObject;
 public class Concert extends MusicArtefact {
 
     private TemporalAccessor dateConcert ;   
-    private String 			 lieuConcert;    
+    private LieuConcert		 lieuConcert;    
     private String 			 urlInfos;   
     private List<String> 	 titres;    
     private List<String> 	 ticketImages;
@@ -22,7 +22,7 @@ public class Concert extends MusicArtefact {
     	super(concertJson, knownArtistes, aLog) ;
     	
     	dateConcert = ConcertParser.getConcertDate(concertJson, aLog) ;
-    	lieuConcert = ConcertParser.getConcertLieu(concertJson, aLog) ;
+    	lieuConcert = new LieuConcert(ConcertParser.getConcertLieu(concertJson, aLog)) ;
     	urlInfos	= ConcertParser.getConcertUrlInfos(concertJson, aLog) ;
     	titres		= ConcertParser.getConcertMorceaux(concertJson, aLog) ;
     	ticketImages = ConcertParser.getConcertTickets(concertJson, aLog) ;
@@ -39,19 +39,10 @@ public class Concert extends MusicArtefact {
     	return res ;
     }
     
-	public String 			getLieuConcert()  { return lieuConcert	; }	 
+	public LieuConcert 		getLieuConcert()  { return lieuConcert	; }	 
 	public TemporalAccessor getDateConcert()  {	return dateConcert 	; }
 	public String 			getUrlInfos() 	  {	return urlInfos		; }
 	public List<String> 	getTitres() 	  {	return titres		; }
 	public List<String> 	getTicketImages() { return ticketImages ; }	
-	
-	public void setDateConcert(TemporalAccessor dateConcert) {
-		this.dateConcert = dateConcert;
-	}
-
-	public void setTitres(List<String> lt) 		 { titres 		= lt ; }
-	public void setTicketImages(List<String> ti) { ticketImages = ti ; }
-	public void setLieuConcert(String lc) 		 { lieuConcert  = lc ; }
-	public void setUrlInfos(String ui) 			 { urlInfos 	= ui ; }
 	
 }

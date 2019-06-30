@@ -14,7 +14,7 @@ public class RapportConcert extends RapportHtml {
 	public RapportConcert(Concert c, String o, Logger rl) {
 		super("", null, o, rl) ;
 		concert = c ;
-		withTitle(TemporalUtils.formatDate(concert.getDateConcert()) + " " + concert.getLieuConcert()) ;
+		withTitle(TemporalUtils.formatDate(concert.getDateConcert()) + " " + concert.getLieuConcert().getLieu()) ;
 	}
 
 	@Override

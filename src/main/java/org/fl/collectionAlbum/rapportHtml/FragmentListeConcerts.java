@@ -34,7 +34,7 @@ public class FragmentListeConcerts {
 					appendLinkConcertArtiste(unArtiste, fragment, urlOffset) ;
 				}
 			}
-			fragment.append("    </td>\n    <td class=\"album\">").append(unConcert.getLieuConcert()).append("\n") ;
+			fragment.append("    </td>\n    <td class=\"album\">").append(unConcert.getLieuConcert().getLieu()).append("\n") ;
 			
 			if (unConcert.getChefsOrchestre() != null) {
 				for (Artiste unChef : unConcert.getChefsOrchestre()) {
