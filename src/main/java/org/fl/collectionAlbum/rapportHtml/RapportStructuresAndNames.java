@@ -164,28 +164,26 @@ public class RapportStructuresAndNames {
 	}
 
 	public static URI getLieuRapportRelativePath(LieuConcert lieuConcert) {
-		
+
 		Path relativePath = lieuRapportPaths.get(lieuConcert) ;
 		Path absolutePath ;
 		if (relativePath == null) {
 			absolutePath = RapportStructuresAndNames.getAbsoluteLieuDir().resolve("i" + idLieu + ".html") ;
 			idLieu++ ;
 			relativePath = RapportStructuresAndNames.getRapportPath().relativize(absolutePath) ;
-			 lieuRapportPaths.put(lieuConcert, relativePath) ;
-			 if (! Files.exists(absolutePath)) {
-				 String offSet = "../" ;
-				 HtmlLinkList acc = new HtmlLinkList(accueils, offSet) ;
-				 RapportListeConcerts concertDeCeLieu = new RapportListeConcerts(lieuConcert.getConcerts().sortChrono(), lieuConcert.getLieu(), acc, offSet, rapportLog) ;
-				 
-//				RapportConcertDunLieu concertDeCeLieu = new RapportConcertDunLieu(lieuConcert,  "../", rapportLog) ;
+			lieuRapportPaths.put(lieuConcert, relativePath) ;
+			if (! Files.exists(absolutePath)) {
+				String offSet = "../" ;
+				HtmlLinkList acc = new HtmlLinkList(accueils, offSet) ;
+				RapportListeConcerts concertDeCeLieu = new RapportListeConcerts(lieuConcert.getConcerts().sortChrono(), lieuConcert.getLieu(), acc, offSet, rapportLog) ;
 				concertDeCeLieu.printReport(absolutePath, stylesArtiste) ;
-			 }
+			}
 		}  else {
 			absolutePath = RapportStructuresAndNames.getRapportPath().resolve(relativePath) ;
 		}
 		return RapportStructuresAndNames.getRapportPath().toUri().relativize(absolutePath.toUri()) ;
 	}
-	
+
 	private final static String stylesArtiste[] = {"main","format","rapport", "artiste"} ;
 
 	public static URI getArtisteAlbumRapportRelativePath(Artiste artiste) {
