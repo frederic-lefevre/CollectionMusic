@@ -173,7 +173,9 @@ public class RapportStructuresAndNames {
 			relativePath = RapportStructuresAndNames.getRapportPath().relativize(absolutePath) ;
 			 lieuRapportPaths.put(lieuConcert, relativePath) ;
 			 if (! Files.exists(absolutePath)) {
-				RapportConcertDunLieu concertDeCeLieu = new RapportConcertDunLieu(lieuConcert,  "../", rapportLog) ;
+				 RapportListeConcerts concertDeCeLieu = new RapportListeConcerts(lieuConcert.getConcerts().sortChrono(), lieuConcert.getLieu(), accueils, "../", rapportLog) ;
+				 
+//				RapportConcertDunLieu concertDeCeLieu = new RapportConcertDunLieu(lieuConcert,  "../", rapportLog) ;
 				concertDeCeLieu.printReport(absolutePath, stylesArtiste) ;
 			 }
 		}  else {
