@@ -17,9 +17,9 @@ public class RapportAlbumsDunArtiste extends RapportHtml {
 		
 		withTitle(artiste.getPrenoms() + " " + artiste.getNom() + ALBUMS) ;
 		HtmlLinkList concertLink = new HtmlLinkList(RapportStructuresAndNames.getAccueils(), offset) ;
-
-		URI concertUri = RapportStructuresAndNames.getArtisteConcertRapportRelativePath(artiste) ;
-		if (concertUri != null) {
+	
+		if (artiste.getNbConcert() > 0) {
+			URI concertUri = RapportStructuresAndNames.getArtisteConcertRapportRelativePath(artiste) ;
 			concertLink.addLink("Concerts", offset + concertUri.toString()) ;	
 		}
 		withHtmlLinkList(concertLink) ;
