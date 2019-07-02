@@ -8,6 +8,7 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingWorker;
 
+import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.rapportHtml.HtmlLinkList;
 import org.fl.collectionAlbum.rapportHtml.RapportCollection;
 import org.fl.collectionAlbum.rapportHtml.RapportDesConcerts;
@@ -87,20 +88,11 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 				 Files.createDirectories(rDir) ;
 			 }
 
-			 Path raDir  = RapportStructuresAndNames.getAbsoluteAlbumDir() ;
-			 if (! Files.exists(raDir)) {
-				 Files.createDirectories(raDir) ;
-			 }
-
-			 Path rcDir  = RapportStructuresAndNames.getAbsoluteConcertDir() ;
-			 if (! Files.exists(rcDir)) {
-				 Files.createDirectories(rcDir) ;
-			 }
-			 
-			 Path rlDir  = RapportStructuresAndNames.getAbsoluteLieuDir() ;
-			 if (! Files.exists(rlDir)) {
-				 Files.createDirectories(rlDir) ;
-			 }
+			Files.createDirectories(RapportStructuresAndNames.getAbsoluteAlbumDir()) ;
+			Files.createDirectories(RapportStructuresAndNames.getAbsoluteConcertDir()) ;
+			Files.createDirectories(RapportStructuresAndNames.getAbsoluteArtisteAlbumDir()) ;
+			Files.createDirectories(RapportStructuresAndNames.getAbsoluteArtisteConcertDir()) ;
+			Files.createDirectories(RapportStructuresAndNames.getAbsoluteLieuDir()) ;
 			 
 			 albumLog.fine("Ancien rapport effacé");
 		 } catch (Exception e) {
@@ -112,6 +104,11 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 
 		 Path rapportDir = RapportStructuresAndNames.getRapportPath() ;
 		 
+		 ListeArtiste reunionArtistes = albumsContainer.getCollectionArtistes().getReunion(albumsContainer.getConcertsArtistes());
+		 RapportStructuresAndNames.createRapports(reunionArtistes,
+				 albumsContainer.getCollectionAlbumsMusiques(), 
+				 albumsContainer.getConcerts(), 
+				 albumsContainer.getLieuxDesConcerts());
 		 rapportsHtml(rapportDir) ;
 		 rapportsConcertHtml(rapportDir) ;
 	 }
