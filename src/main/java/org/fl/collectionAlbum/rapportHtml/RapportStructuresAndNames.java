@@ -97,7 +97,7 @@ public class RapportStructuresAndNames {
 				Path albumAbsolutePath   = rapportPath.resolve(artisteAlbumUri.getPath()) ;
 				if (! Files.exists(albumAbsolutePath)) {
 					RapportAlbumsDunArtiste rapportDeSesAlbums = new RapportAlbumsDunArtiste(artiste, "../../", rapportLog) ;
-					rapportDeSesAlbums.printReport(albumAbsolutePath, stylesArtiste) ;
+					rapportDeSesAlbums.printReport(albumAbsolutePath, CssStyles.stylesTableauDunArtiste) ;
 				}
 			}
 			
@@ -106,7 +106,7 @@ public class RapportStructuresAndNames {
 				Path concertAbsolutePath = rapportPath.resolve(artisteConcertUri.getPath()) ;
 				if (! Files.exists(concertAbsolutePath)) {
 					 RapportConcertsDunArtiste rapportDeSesConcerts = new RapportConcertsDunArtiste(artiste, "../../", rapportLog) ;
-					 rapportDeSesConcerts.printReport(concertAbsolutePath, stylesArtiste) ;
+					 rapportDeSesConcerts.printReport(concertAbsolutePath, CssStyles.stylesTableauDunArtiste) ;
 				}
 			}
 		}
@@ -116,7 +116,7 @@ public class RapportStructuresAndNames {
 			Path absolutePath = rapportPath.resolve(albumUri.getPath()) ;
 			if (! Files.exists(absolutePath)) {
 				RapportAlbum rapportAlbum = new RapportAlbum(album, "../", rapportLog) ;
-				rapportAlbum.printReport( absolutePath, styles) ;
+				rapportAlbum.printReport( absolutePath, CssStyles.main) ;
 			}
 		}
 		for (Concert concert : listeConcert.getConcerts()) {
@@ -124,7 +124,7 @@ public class RapportStructuresAndNames {
 			Path absolutePath = rapportPath.resolve(concertUri.getPath()) ;
 			if (! Files.exists(absolutePath)) {
         		RapportConcert rapportConcert = new RapportConcert(concert,  "../", rapportLog) ;
-        		rapportConcert.printReport(absolutePath, styles) ;
+        		rapportConcert.printReport(absolutePath, CssStyles.ticket) ;
         	}
 		}
 		for (LieuConcert lieuConcert : lieuxDesConcerts.getLieuxConcerts()) {
@@ -134,7 +134,7 @@ public class RapportStructuresAndNames {
 				String offSet = "../" ;
 				HtmlLinkList acc = new HtmlLinkList(accueils, offSet) ;
 				RapportListeConcerts concertDeCeLieu = new RapportListeConcerts(lieuConcert.getConcerts().sortChrono(), lieuConcert.getLieu(), acc, offSet, rapportLog) ;
-				concertDeCeLieu.printReport(absolutePath, stylesArtiste) ;
+				concertDeCeLieu.printReport(absolutePath, CssStyles.stylesTableauMusicArtefact) ;
 			}
 		}
 	}
@@ -156,8 +156,6 @@ public class RapportStructuresAndNames {
 	
 	private static String  getConcertTicketImgUri() 	  { return concertTicketImgUri;						}	
 	
-	private static final String styles[] = {RapportHtml.albumStyle, RapportHtml.mainStyle} ;
-	
 	public static URI getAlbumRapportRelativePath(Album album) {
 		if (album.additionnalInfo()) {
 			return albumRapportPaths.getUri(album) ;
@@ -177,8 +175,6 @@ public class RapportStructuresAndNames {
 	public static URI getLieuRapportRelativePath(LieuConcert lieuConcert) {
 		return lieuRapportPaths.getUri(lieuConcert) ;
 	}
-
-	private final static String stylesArtiste[] = {"main","format","rapport", "artiste"} ;
 
 	public static URI getArtisteAlbumRapportRelativePath(Artiste artiste) {
 		return artisteAlbumRapportPaths.getUri(artiste) ;

@@ -50,11 +50,6 @@ public abstract class RapportHtml {
 	
 	protected String urlOffset;
 	
-	// Styles correspondant à des fichiers css
-	public final static String formatStyle  = "format" ;
-	public final static String mainStyle 	= "main" ;
-	public final static String albumStyle 	= "album" ;
-	
 	protected Logger rapportLog;
 
 	private   boolean displayTitle ;

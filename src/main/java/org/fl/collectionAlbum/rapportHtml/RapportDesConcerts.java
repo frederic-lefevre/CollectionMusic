@@ -24,25 +24,21 @@ public class RapportDesConcerts extends RapportHtml {
 	@Override
 	protected void corpsRapport() {
 		
-		 String stylesArtistes[] = {"main","format","rapport","chrono"} ;
-		 String stylesConcert[] = {"main","format","rapport"} ;
-		 String stylesConcert2[] = {"main","rapport"} ;
-
 		 write("<h3>Classement des auteurs, interpretes et chefs d'orchestre (artistes, groupes, ensembles)</h3>\n<ul>\n") ;
 		 
 		 RapportListeArtistesConcert artistesAlpha = new RapportListeArtistesConcert(albumsContainer.getConcertsArtistes().sortArtistesAlpha(), "Classement alphabethique", accueils, "", rapportLog) ;
 		 artistesAlpha.withAlphaBalises() ;
-		 write(artistesAlpha.printReport(getNextRapportFile(), stylesArtistes)) ;
+		 write(artistesAlpha.printReport(getNextRapportFile(), CssStyles.stylesTableauArtistes)) ;
 
 		 RapportListeArtistesConcert artistesPoids = new RapportListeArtistesConcert(albumsContainer.getConcertsArtistes().sortArtistesPoidsConcerts(), "Classement par nombre de concerts", accueils, "", rapportLog) ;
-		 write(artistesPoids.printReport( getNextRapportFile(), stylesArtistes)) ;
+		 write(artistesPoids.printReport( getNextRapportFile(), CssStyles.stylesTableauArtistes)) ;
 
 		 write("</ul>\n<h3>Classement des concerts</h3>\n<ul>\n") ;
 		 RapportListeConcerts rapportDesConcerts = new RapportListeConcerts(albumsContainer.getConcerts().sortChrono(), "Classement chronologique", accueils, "", rapportLog) ;
-		 write(rapportDesConcerts.printReport(getNextRapportFile(), stylesConcert2)) ;
+		 write(rapportDesConcerts.printReport(getNextRapportFile(), CssStyles.stylesTableauMusicArtefact)) ;
 		 
 		 RapportLieuxConcerts lieuxConcert = new RapportLieuxConcerts(albumsContainer.getLieuxDesConcerts(), "Classement par lieu", accueils, "", rapportLog) ;
-		 write(lieuxConcert.printReport(getNextRapportFile(), stylesConcert)) ;
+		 write(lieuxConcert.printReport(getNextRapportFile(), CssStyles.stylesTableauMusicArtefact)) ;
 		 
 		 write("  <li>Nombre de concerts: " + albumsContainer.getConcerts().getNombreConcerts());
 		 write("</li>\n  <li>Nombre d'artistes, de groupes et d'ensemble: " + albumsContainer.getConcertsArtistes().getNombreArtistes());

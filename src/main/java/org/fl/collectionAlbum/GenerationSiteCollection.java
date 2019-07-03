@@ -12,8 +12,8 @@ import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.rapportHtml.HtmlLinkList;
 import org.fl.collectionAlbum.rapportHtml.RapportCollection;
 import org.fl.collectionAlbum.rapportHtml.RapportDesConcerts;
-import org.fl.collectionAlbum.rapportHtml.RapportHtml;
 import org.fl.collectionAlbum.rapportHtml.RapportStructuresAndNames;
+import org.fl.collectionAlbum.rapportHtml.CssStyles;
 import org.fl.collectionAlbumGui.ProgressInformation;
 import org.fl.collectionAlbumGui.ProgressInformationPanel;
 
@@ -115,22 +115,18 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 	   
 	 private void rapportsHtml(Path rapportDir) {	
 	   	
-	   	String styles[] = { RapportHtml.mainStyle, RapportHtml.formatStyle } ;
-	     	
 		Path rapportFile = RapportStructuresAndNames.getAbsoluteHomeCollectionFile() ;
 		HtmlLinkList accueils = RapportStructuresAndNames.getAccueils() ; 
 		RapportCollection rapportCollection = new RapportCollection(albumsContainer, rapportDir, "Collections d'albums", accueils, "", albumLog) ;
-		rapportCollection.printReport(rapportFile, styles) ;				
+		rapportCollection.printReport(rapportFile, CssStyles.mainFormat) ;				
 	}
 		 
 	private void rapportsConcertHtml(Path rapportDir) {
 
-		 String styles[] = { RapportHtml.mainStyle };
-
 		 Path rapportFile = RapportStructuresAndNames.getAbsoluteHomeConcertFile() ;
 		 HtmlLinkList accueils = RapportStructuresAndNames.getAccueils() ; 
 		 RapportDesConcerts rapportConcerts = new RapportDesConcerts(albumsContainer, rapportDir, "Concerts",  accueils, "", albumLog) ;
-		 rapportConcerts.printReport(rapportFile, styles) ;
+		 rapportConcerts.printReport(rapportFile, CssStyles.main) ;
 	 }
 		
 	 @Override
