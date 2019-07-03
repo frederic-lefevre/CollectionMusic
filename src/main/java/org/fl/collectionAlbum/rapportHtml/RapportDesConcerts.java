@@ -26,6 +26,7 @@ public class RapportDesConcerts extends RapportHtml {
 		
 		 String stylesArtistes[] = {"main","format","rapport","chrono"} ;
 		 String stylesConcert[] = {"main","format","rapport"} ;
+		 String stylesConcert2[] = {"main","rapport"} ;
 
 		 write("<h3>Classement des auteurs, interpretes et chefs d'orchestre (artistes, groupes, ensembles)</h3>\n<ul>\n") ;
 		 
@@ -38,7 +39,7 @@ public class RapportDesConcerts extends RapportHtml {
 
 		 write("</ul>\n<h3>Classement des concerts</h3>\n<ul>\n") ;
 		 RapportListeConcerts rapportDesConcerts = new RapportListeConcerts(albumsContainer.getConcerts().sortChrono(), "Classement chronologique", accueils, "", rapportLog) ;
-		 write(rapportDesConcerts.printReport(getNextRapportFile(), stylesConcert)) ;
+		 write(rapportDesConcerts.printReport(getNextRapportFile(), stylesConcert2)) ;
 		 
 		 RapportLieuxConcerts lieuxConcert = new RapportLieuxConcerts(albumsContainer.getLieuxDesConcerts(), "Classement par lieu", accueils, "", rapportLog) ;
 		 write(lieuxConcert.printReport(getNextRapportFile(), stylesConcert)) ;

@@ -4,7 +4,7 @@ final class CssStyles {
 
 	// -----
 	// Dans RapportHtml
-	// Styles pour les formats CD, 33T ...etc
+	// Styles pour les formats CD, 33T ...etc, y compris les totaux
 	public final static String FORMAT  = "format" ;
 	
 	// Pour le body, couleurs, fonts et les liens généraux (accueils)
