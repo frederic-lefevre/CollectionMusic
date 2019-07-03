@@ -18,8 +18,8 @@ public class RapportLieuxConcerts  extends RapportHtml {
 
 	private LieuxDesConcerts lieuxDesConcerts ;
 	
-	protected RapportLieuxConcerts(LieuxDesConcerts ldc, String titre, HtmlLinkList idxs, String offset, Logger rl) {
-		super(titre, idxs, offset, rl);
+	protected RapportLieuxConcerts(LieuxDesConcerts ldc, String titre, HtmlLinkList idxs, Logger rl) {
+		super(titre, idxs, rl);
 		withTitleDisplayed() ;
 		lieuxDesConcerts = ldc ;
 	}
@@ -35,7 +35,7 @@ public class RapportLieuxConcerts  extends RapportHtml {
 			
 			URI aPath = RapportStructuresAndNames.getLieuRapportRelativePath(unLieu) ;
 			if (aPath != null) {
-				write("<a href=\"").write(urlOffset).write(aPath.toString()).write("\">").write(unLieu.getLieu()).write("</a>") ;
+				write("<a href=\"").write(aPath.toString()).write("\">").write(unLieu.getLieu()).write("</a>") ;
 			} else {
 				write(unLieu.getLieu()) ;
 			}

@@ -11,8 +11,8 @@ public class RapportConcert extends RapportHtml {
 
 	private final Concert concert ;
 	
-	public RapportConcert(Concert c, String o, Logger rl) {
-		super("", null, o, rl) ;
+	public RapportConcert(Concert c, Logger rl) {
+		super("", null, rl) ;
 		concert = c ;
 		withTitle(TemporalUtils.formatDate(concert.getDateConcert()) + " " + concert.getLieuConcert().getLieu()) ;
 	}

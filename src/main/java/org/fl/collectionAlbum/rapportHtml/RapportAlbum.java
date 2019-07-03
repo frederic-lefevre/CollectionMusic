@@ -8,8 +8,8 @@ public class RapportAlbum extends RapportHtml {
 
 	private final Album album ;
 	
-	public RapportAlbum(Album a, String o, Logger rl) {
-		super("", null, o, rl);
+	public RapportAlbum(Album a, Logger rl) {
+		super("", null, rl);
 		album = a ;		
 		withTitle(album.getTitre());	
 	}

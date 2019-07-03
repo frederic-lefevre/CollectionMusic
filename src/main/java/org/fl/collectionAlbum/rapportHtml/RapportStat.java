@@ -11,8 +11,8 @@ public class RapportStat extends RapportHtml {
 		
 	private final StatChrono statChrono ;
 	
-	public RapportStat(StatChrono sc, String titre, HtmlLinkList idxs, String o, Logger rl) {
-		super(titre, idxs, o, rl) ;
+	public RapportStat(StatChrono sc, String titre, HtmlLinkList idxs, Logger rl) {
+		super(titre, idxs, rl) ;
 		withTitleDisplayed();
 		statChrono = sc ;
 	}

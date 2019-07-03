@@ -12,7 +12,8 @@ public class RapportConcertsDunArtiste extends RapportHtml {
 	private final Artiste artiste ;
 	
 	protected RapportConcertsDunArtiste(Artiste a, String offset, Logger rl) {
-		super("", null, offset, rl);
+		super("", null, rl);
+		withOffset(offset) ;
 		artiste = a ;
 		withTitle(artiste.getPrenoms() + " " + artiste.getNom() + CONCERTS) ;
 		HtmlLinkList albumLink = new HtmlLinkList(RapportStructuresAndNames.getAccueils(), offset) ;

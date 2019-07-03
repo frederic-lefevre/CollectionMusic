@@ -117,7 +117,7 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 	   	
 		Path rapportFile = RapportStructuresAndNames.getAbsoluteHomeCollectionFile() ;
 		HtmlLinkList accueils = RapportStructuresAndNames.getAccueils() ; 
-		RapportCollection rapportCollection = new RapportCollection(albumsContainer, rapportDir, "Collections d'albums", accueils, "", albumLog) ;
+		RapportCollection rapportCollection = new RapportCollection(albumsContainer, rapportDir, "Collections d'albums", accueils, albumLog) ;
 		rapportCollection.printReport(rapportFile, CssStyles.mainFormat) ;				
 	}
 		 
@@ -125,7 +125,7 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 
 		 Path rapportFile = RapportStructuresAndNames.getAbsoluteHomeConcertFile() ;
 		 HtmlLinkList accueils = RapportStructuresAndNames.getAccueils() ; 
-		 RapportDesConcerts rapportConcerts = new RapportDesConcerts(albumsContainer, rapportDir, "Concerts",  accueils, "", albumLog) ;
+		 RapportDesConcerts rapportConcerts = new RapportDesConcerts(albumsContainer, rapportDir, "Concerts",  accueils, albumLog) ;
 		 rapportConcerts.printReport(rapportFile, CssStyles.main) ;
 	 }
 		

@@ -12,7 +12,8 @@ public class RapportAlbumsDunArtiste extends RapportHtml {
 	private final Artiste artiste ;
 	
 	public RapportAlbumsDunArtiste(Artiste a, String offset, Logger rl) {
-		super("", null, offset, rl);
+		super("", null, rl);
+		withOffset(offset) ;
 		artiste = a ;
 		
 		withTitle(artiste.getPrenoms() + " " + artiste.getNom() + ALBUMS) ;
