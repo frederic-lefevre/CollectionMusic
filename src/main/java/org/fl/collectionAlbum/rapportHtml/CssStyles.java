@@ -4,11 +4,11 @@ final class CssStyles {
 
 	// -----
 	// Dans RapportHtml
-	// Styles correspondant à des fichiers css
-	public final static String formatStyle  = "format" ;
+	// Styles pour les formats CD, 33T ...etc
+	public final static String FORMAT  = "format" ;
 	
 	// Pour le body, couleurs, fonts et les liens généraux (accueils)
-	public final static String mainStyle 	= "main" ;
+	public final static String MAIN 	= "main" ;
 	
 	// Pour les tickets de concerts
 	public final static String albumStyle 	= "album" ;

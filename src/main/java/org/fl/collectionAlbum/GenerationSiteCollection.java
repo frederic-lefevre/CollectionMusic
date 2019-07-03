@@ -125,7 +125,7 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 		 
 	private void rapportsConcertHtml(Path rapportDir) {
 
-		 String styles[] = { RapportHtml.mainStyle, RapportHtml.formatStyle };
+		 String styles[] = { RapportHtml.mainStyle };
 
 		 Path rapportFile = RapportStructuresAndNames.getAbsoluteHomeConcertFile() ;
 		 HtmlLinkList accueils = RapportStructuresAndNames.getAccueils() ; 
