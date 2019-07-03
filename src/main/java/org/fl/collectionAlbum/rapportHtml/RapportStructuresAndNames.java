@@ -156,7 +156,7 @@ public class RapportStructuresAndNames {
 	
 	private static String  getConcertTicketImgUri() 	  { return concertTicketImgUri;						}	
 	
-	private static final String styles[] = {RapportHtml.albumStyle} ;
+	private static final String styles[] = {RapportHtml.albumStyle, RapportHtml.mainStyle} ;
 	
 	public static URI getAlbumRapportRelativePath(Album album) {
 		if (album.additionnalInfo()) {
