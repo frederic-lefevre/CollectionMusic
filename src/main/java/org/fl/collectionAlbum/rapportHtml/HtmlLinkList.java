@@ -26,18 +26,15 @@ public class HtmlLinkList {
 	}
 	
 	private List<HtmlLink> 	   linkList ;
-	private final HtmlLinkList subLinks ;
-	private String 	   		   subListLinkOffset ;
+	private String 	   		   linkOffset ;
 	
 	public HtmlLinkList(HtmlLinkList otherLinks) {
-		subLinks 		  = otherLinks ;
-		subListLinkOffset = "" ;
-		linkList 		  = new ArrayList<HtmlLink>() ;
+		linkOffset = "" ;	
+		linkList   = new ArrayList<HtmlLink>(otherLinks.linkList) ;
 	}
 	
 	public HtmlLinkList() {
-		subLinks 		  = null ;
-		subListLinkOffset = "" ;
+		linkOffset = "" ;
 		linkList 		  = new ArrayList<HtmlLink>() ;
 	}
 	
@@ -46,23 +43,16 @@ public class HtmlLinkList {
 	}
 	
 	public void setOffset(String offSet) {
-		subListLinkOffset = offSet ;
+		linkOffset = offSet ;
 	}
 	
-	public void writeLinkList(StringBuilder rBuilder, String linkOffSet) {
+	public void writeLinkList(StringBuilder rBuilder) {
 		for (HtmlLink htmlLink : linkList) {
-			htmlLink.writeLink(rBuilder, linkOffSet) ;
-		}
-		if (subLinks != null) {
-			subLinks.writeLinkList(rBuilder, linkOffSet + subListLinkOffset) ;
+			htmlLink.writeLink(rBuilder, linkOffset) ;
 		}
 	}
 	
 	public int getNbLink() {
-		if (subLinks != null) {
-			return subLinks.getNbLink() + linkList.size() ;
-		} else {
-			return linkList.size() ;
-		}
+		return linkList.size() ;
 	}
 }

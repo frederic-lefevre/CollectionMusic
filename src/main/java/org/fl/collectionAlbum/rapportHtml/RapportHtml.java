@@ -99,7 +99,7 @@ public abstract class RapportHtml {
 		}
 		if ((indexes != null) && (indexes.getNbLink()> 0)) {
 			rBuilder.append(L_LIST1) ;
-			indexes.writeLinkList(rBuilder, "") ;
+			indexes.writeLinkList(rBuilder) ;
 
 			DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(dateFrancePattern, Locale.FRANCE) ;
 			rBuilder.append(L_LIST2).append(dateTimeFormatter.format(LocalDateTime.now())).append(L_LIST3) ;
