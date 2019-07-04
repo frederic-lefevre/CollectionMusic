@@ -96,7 +96,7 @@ public class RapportStructuresAndNames {
 				URI artisteAlbumUri   = artisteAlbumRapportPaths.getUri(artiste) ;
 				Path albumAbsolutePath   = rapportPath.resolve(artisteAlbumUri.getPath()) ;
 				if (! Files.exists(albumAbsolutePath)) {
-					RapportAlbumsDunArtiste rapportDeSesAlbums = new RapportAlbumsDunArtiste(artiste, "../../", rapportLog) ;
+					RapportAlbumsDunArtiste rapportDeSesAlbums = new RapportAlbumsDunArtiste(artiste, getOffset(rapportPath, albumAbsolutePath) , rapportLog) ;
 					rapportDeSesAlbums.printReport(albumAbsolutePath, CssStyles.stylesTableauDunArtiste) ;
 				}
 			}
@@ -105,40 +105,58 @@ public class RapportStructuresAndNames {
 				URI artisteConcertUri = artisteConcertRapportPaths.getUri(artiste) ;
 				Path concertAbsolutePath = rapportPath.resolve(artisteConcertUri.getPath()) ;
 				if (! Files.exists(concertAbsolutePath)) {
-					 RapportConcertsDunArtiste rapportDeSesConcerts = new RapportConcertsDunArtiste(artiste, "../../", rapportLog) ;
+					 RapportConcertsDunArtiste rapportDeSesConcerts = new RapportConcertsDunArtiste(artiste, getOffset(rapportPath, concertAbsolutePath), rapportLog) ;
 					 rapportDeSesConcerts.printReport(concertAbsolutePath, CssStyles.stylesTableauDunArtiste) ;
 				}
 			}
 		}
 		
 		for (Album album : listeAlbum.getAlbums()) {
-			URI albumUri = albumRapportPaths.getUri(album) ;
-			Path absolutePath = rapportPath.resolve(albumUri.getPath()) ;
-			if (! Files.exists(absolutePath)) {
-				RapportAlbum rapportAlbum = new RapportAlbum(album, rapportLog) ;
-				rapportAlbum.withOffset("../") ;
-				rapportAlbum.printReport( absolutePath, CssStyles.main) ;
+			if (album.additionnalInfo()) {
+				URI albumUri = albumRapportPaths.getUri(album) ;
+				Path absolutePath = rapportPath.resolve(albumUri.getPath()) ;
+				if (! Files.exists(absolutePath)) {
+					RapportAlbum rapportAlbum = new RapportAlbum(album, rapportLog) ;
+					String diffPath = getOffset(rapportPath, absolutePath) ;
+					rapportLog.warning("rapportPath=" + rapportPath.toString() + "\nabsolutePath=" + absolutePath + "\ndiffPath=" + diffPath);
+					rapportAlbum.withOffset(diffPath) ;
+					rapportAlbum.printReport( absolutePath, CssStyles.main) ;
+				}
 			}
 		}
 		for (Concert concert : listeConcert.getConcerts()) {
-			URI concertUri = concertRapportPaths.getUri(concert) ;
-			Path absolutePath = rapportPath.resolve(concertUri.getPath()) ;
-			if (! Files.exists(absolutePath)) {
-        		RapportConcert rapportConcert = new RapportConcert(concert, rapportLog) ;
-        		rapportConcert.withOffset("../") ;
-        		rapportConcert.printReport(absolutePath, CssStyles.ticket) ;
-        	}
+			if (concert.additionnalInfo()) {
+				URI concertUri = concertRapportPaths.getUri(concert) ;
+				Path absolutePath = rapportPath.resolve(concertUri.getPath()) ;
+				if (! Files.exists(absolutePath)) {
+	        		RapportConcert rapportConcert = new RapportConcert(concert, rapportLog) ;
+	        		rapportConcert.withOffset(getOffset(rapportPath, absolutePath)) ;
+	        		rapportConcert.printReport(absolutePath, CssStyles.ticket) ;
+	        	}
+			}
 		}
 		for (LieuConcert lieuConcert : lieuxDesConcerts.getLieuxConcerts()) {
 			URI lieuUri = lieuRapportPaths.getUri(lieuConcert) ;
 			Path absolutePath = rapportPath.resolve(lieuUri.getPath()) ;
 			if (! Files.exists(absolutePath)) {
-				String offSet = "../" ;
+				String offSet = getOffset(rapportPath, absolutePath) ;
 				HtmlLinkList acc = new HtmlLinkList(accueils, offSet) ;
 				RapportListeConcerts concertDeCeLieu = new RapportListeConcerts(lieuConcert.getConcerts().sortChrono(), lieuConcert.getLieu(), acc, rapportLog) ;
 				concertDeCeLieu.withOffset(offSet);
 				concertDeCeLieu.printReport(absolutePath, CssStyles.stylesTableauMusicArtefact) ;
 			}
+		}
+	}
+	
+	private static final String OFFSET_ELEMENT = "../" ;
+	
+	private static String getOffset(Path rootPath,	Path targetPath) {
+		
+		int diffPath = targetPath.getNameCount() - rootPath.getNameCount() ;	
+		if (diffPath == 0) {
+			return "" ;
+		} else {
+			return getOffset(rootPath, targetPath.getParent()) + OFFSET_ELEMENT ;
 		}
 	}
 	

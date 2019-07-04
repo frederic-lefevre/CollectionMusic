@@ -51,14 +51,15 @@ public class FragmentListeAlbums {
 			}
 			fragment.append("    </td>\n    <td class=\"album\">") ; 
 			
-			URI aPath = RapportStructuresAndNames.getAlbumRapportRelativePath(unAlbum) ;
-			if (aPath != null) {				
-				fragment.append("<a href=\"").append(urlOffSet).append(aPath.toString()).append("\">") ;
-			}
-			fragment.append(unAlbum.getTitre()) ;
 			if (unAlbum.additionnalInfo()) {
+				URI aPath = RapportStructuresAndNames.getAlbumRapportRelativePath(unAlbum) ;			
+				fragment.append("<a href=\"").append(urlOffSet).append(aPath.toString()).append("\">") ;
+				fragment.append(unAlbum.getTitre()) ;			
 				fragment.append("</a>\n") ;
+			} else {
+				fragment.append(unAlbum.getTitre()) ;
 			}
+			
 			printIntervenant(unAlbum, fragment, urlOffSet) ;
 			fragment.append("    </td>\n") ;
 			unAlbum.getFormatAlbum().rowFormat(fragment, null) ;
