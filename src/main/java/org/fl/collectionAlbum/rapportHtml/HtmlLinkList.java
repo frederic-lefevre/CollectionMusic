@@ -27,22 +27,26 @@ public class HtmlLinkList {
 	
 	private List<HtmlLink> 	   linkList ;
 	private final HtmlLinkList subLinks ;
-	private final String 	   subListLinkOffset ;
+	private String 	   		   subListLinkOffset ;
 	
-	public HtmlLinkList(HtmlLinkList otherLinks, String offSet) {
+	public HtmlLinkList(HtmlLinkList otherLinks) {
 		subLinks 		  = otherLinks ;
-		subListLinkOffset = offSet ;
+		subListLinkOffset = "" ;
 		linkList 		  = new ArrayList<HtmlLink>() ;
 	}
 	
 	public HtmlLinkList() {
 		subLinks 		  = null ;
-		subListLinkOffset = null ;
+		subListLinkOffset = "" ;
 		linkList 		  = new ArrayList<HtmlLink>() ;
 	}
 	
 	public void addLink(String t, String l) {
 		linkList.add(new HtmlLink(t,l)) ;
+	}
+	
+	public void setOffset(String offSet) {
+		subListLinkOffset = offSet ;
 	}
 	
 	public void writeLinkList(StringBuilder rBuilder, String linkOffSet) {

@@ -8,8 +8,9 @@ public class RapportListeConcerts extends RapportHtml {
 
 	private ListeConcert listeConcerts ;
 	
-	public RapportListeConcerts(ListeConcert lc,  String titre, HtmlLinkList idxs, Logger rl) {
-		super(titre, idxs, rl) ;
+	public RapportListeConcerts(ListeConcert lc,  String titre, Logger rl) {
+		super(titre, rl) ;
+		withHtmlLinkList(RapportStructuresAndNames.getAccueils());
 		withTitleDisplayed();
 		listeConcerts = lc ;
 	}

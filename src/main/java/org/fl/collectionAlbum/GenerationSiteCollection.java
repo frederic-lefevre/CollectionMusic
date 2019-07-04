@@ -9,7 +9,6 @@ import java.util.logging.Logger;
 import javax.swing.SwingWorker;
 
 import org.fl.collectionAlbum.artistes.ListeArtiste;
-import org.fl.collectionAlbum.rapportHtml.HtmlLinkList;
 import org.fl.collectionAlbum.rapportHtml.RapportCollection;
 import org.fl.collectionAlbum.rapportHtml.RapportDesConcerts;
 import org.fl.collectionAlbum.rapportHtml.RapportStructuresAndNames;
@@ -116,16 +115,14 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 	 private void rapportsHtml(Path rapportDir) {	
 	   	
 		Path rapportFile = RapportStructuresAndNames.getAbsoluteHomeCollectionFile() ;
-		HtmlLinkList accueils = RapportStructuresAndNames.getAccueils() ; 
-		RapportCollection rapportCollection = new RapportCollection(albumsContainer, rapportDir, "Collections d'albums", accueils, albumLog) ;
+		RapportCollection rapportCollection = new RapportCollection(albumsContainer, rapportDir, "Collections d'albums", albumLog) ;
 		rapportCollection.printReport(rapportFile, CssStyles.mainFormat) ;				
 	}
 		 
 	private void rapportsConcertHtml(Path rapportDir) {
 
 		 Path rapportFile = RapportStructuresAndNames.getAbsoluteHomeConcertFile() ;
-		 HtmlLinkList accueils = RapportStructuresAndNames.getAccueils() ; 
-		 RapportDesConcerts rapportConcerts = new RapportDesConcerts(albumsContainer, rapportDir, "Concerts",  accueils, albumLog) ;
+		 RapportDesConcerts rapportConcerts = new RapportDesConcerts(albumsContainer, rapportDir, "Concerts", albumLog) ;
 		 rapportConcerts.printReport(rapportFile, CssStyles.main) ;
 	 }
 		

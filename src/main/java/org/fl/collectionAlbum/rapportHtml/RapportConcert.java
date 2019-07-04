@@ -12,7 +12,7 @@ public class RapportConcert extends RapportHtml {
 	private final Concert concert ;
 	
 	public RapportConcert(Concert c, Logger rl) {
-		super("", null, rl) ;
+		super("", rl) ;
 		concert = c ;
 		withTitle(TemporalUtils.formatDate(concert.getDateConcert()) + " " + concert.getLieuConcert().getLieu()) ;
 	}

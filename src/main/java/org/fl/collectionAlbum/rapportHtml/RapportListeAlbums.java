@@ -8,9 +8,10 @@ public class RapportListeAlbums extends RapportHtml {
 
 	private final ListeAlbum listeAlbums ;
 	
-	public RapportListeAlbums(ListeAlbum la, String titre, HtmlLinkList idxs, Logger rl) {
-		super(titre, idxs, rl);
+	public RapportListeAlbums(ListeAlbum la, String titre, Logger rl) {
+		super(titre, rl);
 		withTitleDisplayed() ;
+		withHtmlLinkList(RapportStructuresAndNames.getAccueils());
 		listeAlbums = la ;
 	}
 

@@ -21,8 +21,9 @@ public class RapportCalendrier  extends RapportHtml {
 	
 	private final ChronoArtistes rappochronoArtistes ;
 	
-	public RapportCalendrier(ChronoArtistes rca, String titre, HtmlLinkList idxs, Logger rl) {
-		super(titre, idxs, rl);
+	public RapportCalendrier(ChronoArtistes rca, String titre, Logger rl) {
+		super(titre, rl);
+		withHtmlLinkList(RapportStructuresAndNames.getAccueils());
 		withTitleDisplayed() ;
 		monthFormatter 		= DateTimeFormatter.ofPattern(monthPattern, Locale.FRANCE) ;
 		dayFormatter   		= DateTimeFormatter.ofPattern(dayPattern,   Locale.FRANCE) ;

@@ -17,8 +17,9 @@ public class RapportListeArtistesConcert extends RapportHtml {
 
 	private final ListeArtiste auteurs ;
 	
-	public RapportListeArtistesConcert(ListeArtiste la, String titre, HtmlLinkList idxs, Logger rl) {
-		super(titre, idxs, rl);
+	public RapportListeArtistesConcert(ListeArtiste la, String titre, Logger rl) {
+		super(titre, rl);
+		withHtmlLinkList(RapportStructuresAndNames.getAccueils());
 		withTitleDisplayed();
 		auteurs = la ;
 	}

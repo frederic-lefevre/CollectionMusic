@@ -138,8 +138,7 @@ public class RapportStructuresAndNames {
 			Path absolutePath = rapportPath.resolve(lieuUri.getPath()) ;
 			if (! Files.exists(absolutePath)) {
 				String offSet = getOffset(rapportPath, absolutePath.getParent()) ;
-				HtmlLinkList acc = new HtmlLinkList(accueils, offSet) ;
-				RapportListeConcerts concertDeCeLieu = new RapportListeConcerts(lieuConcert.getConcerts().sortChrono(), lieuConcert.getLieu(), acc, rapportLog) ;
+				RapportListeConcerts concertDeCeLieu = new RapportListeConcerts(lieuConcert.getConcerts().sortChrono(), lieuConcert.getLieu(), rapportLog) ;
 				concertDeCeLieu.withOffset(offSet);
 				concertDeCeLieu.printReport(absolutePath, CssStyles.stylesTableauMusicArtefact) ;
 			}

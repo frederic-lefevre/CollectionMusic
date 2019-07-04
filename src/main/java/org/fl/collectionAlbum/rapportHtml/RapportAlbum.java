@@ -9,7 +9,7 @@ public class RapportAlbum extends RapportHtml {
 	private final Album album ;
 	
 	public RapportAlbum(Album a, Logger rl) {
-		super("", null, rl);
+		super("", rl);
 		album = a ;		
 		withTitle(album.getTitre());	
 	}

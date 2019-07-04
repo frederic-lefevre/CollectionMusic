@@ -57,14 +57,14 @@ public abstract class RapportHtml {
 
 	private List<String> alphaBalises ;
 	
-	protected RapportHtml(String titre, HtmlLinkList idxs, Logger rl) {
+	protected RapportHtml(String titre, Logger rl) {
 		
 		super();
 		rapportLog 	 	 = rl ;
 		titreRapport 	 = titre ;
 		urlOffset	 	 = "" ;
 		rBuilder 	 	 = new StringBuilder(TAILLE_INITIALE) ;
-		indexes 	 	 = idxs ;
+		indexes 	 	 = null ;
 		displayTitle 	 = false ;
 		withAlphaBalises = false ;
 	}
@@ -161,11 +161,15 @@ public abstract class RapportHtml {
 	}
 	
 	protected void withHtmlLinkList(HtmlLinkList hll) {
-		indexes = hll ;
+		indexes = new HtmlLinkList(hll) ;
+		indexes.setOffset(urlOffset) ;
 	}
 	
 	protected void withOffset(String o) {
 		urlOffset = o ;
+		if (indexes != null) {
+			indexes.setOffset(urlOffset) ;
+		}
 	}
 	
 	public static void withCharset(String cs, Logger rLog) {

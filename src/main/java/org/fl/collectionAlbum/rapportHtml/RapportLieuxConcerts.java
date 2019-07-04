@@ -18,9 +18,10 @@ public class RapportLieuxConcerts  extends RapportHtml {
 
 	private LieuxDesConcerts lieuxDesConcerts ;
 	
-	protected RapportLieuxConcerts(LieuxDesConcerts ldc, String titre, HtmlLinkList idxs, Logger rl) {
-		super(titre, idxs, rl);
+	protected RapportLieuxConcerts(LieuxDesConcerts ldc, String titre, Logger rl) {
+		super(titre, rl);
 		withTitleDisplayed() ;
+		withHtmlLinkList(RapportStructuresAndNames.getAccueils());
 		lieuxDesConcerts = ldc ;
 	}
 
