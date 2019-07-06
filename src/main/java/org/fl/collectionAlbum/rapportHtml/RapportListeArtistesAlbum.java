@@ -37,8 +37,8 @@ public class RapportListeArtistesAlbum extends RapportHtml {
 
 		for (Artiste unArtiste : auteurs.getArtistes()) {
 			write("  <tr>\n    <td class=\"auteur\">") ;
-			if (withAlphaBalises) {
-				alphBalise(unArtiste.getNom().substring(0, 1)) ;
+			if (alphaBalises != null) {
+				alphaBalises.addCheckBalise(rBuilder, unArtiste.getNom()) ;
 			}
 			
 			URI albumUri = RapportStructuresAndNames.getArtisteAlbumRapportRelativePath(unArtiste) ;

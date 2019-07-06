@@ -7,8 +7,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -53,9 +51,8 @@ public abstract class RapportHtml {
 	protected Logger rapportLog;
 
 	private   boolean displayTitle ;
-	protected boolean withAlphaBalises ;
 
-	private List<String> alphaBalises ;
+	protected AlphaBalises alphaBalises ;
 	
 	protected RapportHtml(String titre, Logger rl) {
 		
@@ -66,7 +63,7 @@ public abstract class RapportHtml {
 		rBuilder 	 	 = new StringBuilder(TAILLE_INITIALE) ;
 		indexes 	 	 = null ;
 		displayTitle 	 = false ;
-		withAlphaBalises = false ;
+		alphaBalises 	 = null ;
 	}
 
 	protected abstract void corpsRapport() ;
@@ -110,12 +107,8 @@ public abstract class RapportHtml {
    
 	private void finalizeRapport (Path rapportFile) {
 	
-		if (withAlphaBalises) {
-			write("<table class=\"balises\">\n") ;
-			for (String uneBalise : alphaBalises) {
-				write("  <tr><td><a href=\"#").write(uneBalise + "\">").write(uneBalise).write("</a></td></tr>\n") ;
-			}
-			write("</table>\n") ;
+		if (alphaBalises != null) {
+			alphaBalises.writeBalises(rBuilder);
 		}
 		rBuilder.append(END) ;
 
@@ -135,8 +128,7 @@ public abstract class RapportHtml {
 	}
 	
 	public void withAlphaBalises() {
-		alphaBalises = new ArrayList<String>() ;
-		withAlphaBalises = true ;
+		alphaBalises = new AlphaBalises() ;
 	}
 	
 	protected RapportHtml write(String s) {
@@ -147,13 +139,6 @@ public abstract class RapportHtml {
 	protected RapportHtml write(int s) {
 		rBuilder.append(s) ;
 		return this ;
-	}
-	
-	protected void alphBalise(String uneBalise) {
-		if (alphaBalises.isEmpty() || (! uneBalise.equals(alphaBalises.get(alphaBalises.size()-1)))) {
-			write("<a name=\"").write(uneBalise).write("\"></a>") ;
-			alphaBalises.add(uneBalise) ;
-		}
 	}
 	
 	protected void withTitle(String title) {

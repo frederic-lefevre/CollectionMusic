@@ -3,7 +3,7 @@ package org.fl.collectionAlbum.rapportHtml;
 public class AlphaBalises extends Balises<String> {
 
 	public AlphaBalises() {
-		// TODO Auto-generated constructor stub
+		super() ;
 	}
 
 	@Override
