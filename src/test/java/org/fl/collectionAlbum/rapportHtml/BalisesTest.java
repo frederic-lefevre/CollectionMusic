@@ -13,17 +13,17 @@ class BalisesTest {
 		
 		StringBuilder fragment = new StringBuilder() ;
 		
-		alphaBalises.addCheckBalise(fragment, "Animals") ;
+		alphaBalises.addCheckBaliseString(fragment, "Animals") ;
 		
 		int fLength1 = fragment.length() ;
 		assertNotEquals(0 , fragment.length()) ;
 		
-		alphaBalises.addCheckBalise(fragment, "AC/DC") ;
+		alphaBalises.addCheckBaliseString(fragment, "AC/DC") ;
 		int fLength2 = fragment.length() ;
 		
 		assertEquals(fLength1, fLength2) ;
 		
-		alphaBalises.addCheckBalise(fragment, "Beck") ;
+		alphaBalises.addCheckBaliseString(fragment, "Beck") ;
 		int fLength3 = fragment.length() ;
 		
 		assertNotEquals(fLength3, fLength2) ;

@@ -19,16 +19,14 @@ public class Balises {
 		fragment.append("</table>\n") ;
 	}
 	
-	protected void addCheckBalise(StringBuilder fragment, String s) {
-		addCheckBaliseWord(fragment, s.substring(0, 1)) ;
+	protected void addCheckBaliseString(StringBuilder fragment, String s) {
+		addCheckBalise(fragment, s.substring(0, 1)) ;
 	}
 	
-	private void addCheckBaliseWord(StringBuilder fragment, String uneBalise) {
+	private void addCheckBalise(StringBuilder fragment, String uneBalise) {
 		if (balises.isEmpty() || (! uneBalise.equals(balises.get(balises.size()-1)))) {
 			fragment.append("<a name=\"").append(uneBalise).append("\"></a>") ;
 			balises.add(uneBalise) ;
 		}
-	}
-	
-
+	}	
 }
