@@ -35,8 +35,8 @@ public class RapportListeArtistesConcert extends RapportHtml {
 
 		for (Artiste unArtiste : auteurs.getArtistes()) {
 			write("  <tr>\n    <td class=\"auteur\">") ;
-			if (alphaBalises != null) {
-				alphaBalises.addCheckBalise(rBuilder, unArtiste.getNom()) ;
+			if (balises != null) {
+				balises.addCheckBalise(rBuilder, unArtiste.getNom()) ;
 			}
 			
 			URI concertUri = RapportStructuresAndNames.getArtisteConcertRapportRelativePath(unArtiste) ;

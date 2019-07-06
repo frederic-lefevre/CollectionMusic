@@ -4,12 +4,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-class AlphaBaliseTest {
+class BalisesTest {
 
 	@Test
 	void test() {
 		
-		AlphaBalises alphaBalises = new AlphaBalises() ;
+		Balises alphaBalises = new Balises() ;
 		
 		StringBuilder fragment = new StringBuilder() ;
 		

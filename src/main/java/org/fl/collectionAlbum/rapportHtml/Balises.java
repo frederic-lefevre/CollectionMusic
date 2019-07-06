@@ -3,7 +3,7 @@ package org.fl.collectionAlbum.rapportHtml;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Balises<T> {
+public class Balises {
 
 	private List<String> balises ;
 	
@@ -11,7 +11,7 @@ public abstract class Balises<T> {
 		balises = new ArrayList<>() ;
 	}
 	
-	protected void writeBalises(StringBuilder fragment) {
+	public void writeBalises(StringBuilder fragment) {
 		fragment.append("<table class=\"balises\">\n") ;
 		for (String uneBalise : balises) {
 			fragment.append("  <tr><td><a href=\"#").append(uneBalise + "\">").append(uneBalise).append("</a></td></tr>\n") ;
@@ -19,13 +19,16 @@ public abstract class Balises<T> {
 		fragment.append("</table>\n") ;
 	}
 	
-	protected void addCheckBalise(StringBuilder fragment, T t) {
-		String uneBalise = extractBalise(t) ;
+	protected void addCheckBalise(StringBuilder fragment, String s) {
+		addCheckBaliseWord(fragment, s.substring(0, 1)) ;
+	}
+	
+	private void addCheckBaliseWord(StringBuilder fragment, String uneBalise) {
 		if (balises.isEmpty() || (! uneBalise.equals(balises.get(balises.size()-1)))) {
 			fragment.append("<a name=\"").append(uneBalise).append("\"></a>") ;
 			balises.add(uneBalise) ;
 		}
 	}
 	
-	protected abstract String extractBalise(T t) ;
+
 }

@@ -52,7 +52,7 @@ public abstract class RapportHtml {
 
 	private   boolean displayTitle ;
 
-	protected AlphaBalises alphaBalises ;
+	protected Balises balises ;
 	
 	protected RapportHtml(String titre, Logger rl) {
 		
@@ -63,7 +63,7 @@ public abstract class RapportHtml {
 		rBuilder 	 	 = new StringBuilder(TAILLE_INITIALE) ;
 		indexes 	 	 = null ;
 		displayTitle 	 = false ;
-		alphaBalises 	 = null ;
+		balises		 	 = null ;
 	}
 
 	protected abstract void corpsRapport() ;
@@ -107,8 +107,8 @@ public abstract class RapportHtml {
    
 	private void finalizeRapport (Path rapportFile) {
 	
-		if (alphaBalises != null) {
-			alphaBalises.writeBalises(rBuilder);
+		if (balises != null) {
+			balises.writeBalises(rBuilder);
 		}
 		rBuilder.append(END) ;
 
@@ -127,8 +127,8 @@ public abstract class RapportHtml {
 		displayTitle = true ;
 	}
 	
-	public void withAlphaBalises() {
-		alphaBalises = new AlphaBalises() ;
+	public void withBalises(Balises b) {
+		balises =b ;
 	}
 	
 	protected RapportHtml write(String s) {
