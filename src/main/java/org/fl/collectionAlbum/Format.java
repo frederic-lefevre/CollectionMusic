@@ -156,14 +156,14 @@ public class Format {
 	public void rowFormat(StringBuilder rapport, String cssTotal) {
 		
 		if (cssTotal != null) {
-			rapport.append(F_ROW0).append(cssTotal).append(F_ROW6).append(cssTotal).append(F_ROW4).append(displayDouble(getPoids())).append(F_ROW7) ;
+			rapport.append(F_ROW0).append(cssTotal).append(F_ROW6).append(cssTotal).append(F_ROW4).append(displayPoids(getPoids())).append(F_ROW7) ;
 		}
 		for (SupportPhysique sPhys : SupportPhysique.values()) {
-			rapport.append(F_ROW0).append(sPhys.getCssClass()).append(F_ROW4).append(displayDouble(getNb(sPhys))).append(F_ROW5) ;			 
+			rapport.append(F_ROW0).append(sPhys.getCssClass()).append(F_ROW4).append(displayPoids(getNb(sPhys))).append(F_ROW5) ;			 
 		}		
 	}
 	
-	private String displayDouble(double d) {
+	private String displayPoids(double d) {
 		if (d == 0) {
 			return "" ;
 		} else {
@@ -175,5 +175,9 @@ public class Format {
 				return Double.toString(d) ;
 			}
 		}
+	}
+	
+	public String displayPoidsTotal() {
+		return displayPoids(getPoids()) ;
 	}
 }

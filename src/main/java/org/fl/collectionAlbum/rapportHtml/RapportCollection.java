@@ -27,10 +27,11 @@ public class RapportCollection extends RapportHtml {
 		write("<h3>Classement des auteurs, interpretes et chefs d'orchestre (artistes, groupes, ensembles)</h3>\n<ul>\n") ;
 		
 		RapportListeArtistesAlbum rapportArtistesAlbumsAlpha = new RapportListeArtistesAlbum(albumsContainer.getCollectionArtistes().sortArtistesAlpha(),  "Classement alphabethique", rapportLog) ;
-		rapportArtistesAlbumsAlpha.withBalises(new Balises()) ;
+		rapportArtistesAlbumsAlpha.withBalises(new Balises(Balises.BalisesType.ALPHA)) ;
 		write(rapportArtistesAlbumsAlpha.printReport(getNextRapportFile(), CssStyles.stylesTableauArtistes)) ;
 		
 		RapportListeArtistesAlbum rapportArtistesAlbumsPoids = new RapportListeArtistesAlbum(albumsContainer.getCollectionArtistes().sortArtistesPoidsAlbums(),  "Classement par nombre d'unit&eacute;s physiques", rapportLog) ;
+		rapportArtistesAlbumsPoids.withBalises(new Balises(Balises.BalisesType.POIDS)) ;
 		write(rapportArtistesAlbumsPoids.printReport(getNextRapportFile(),  CssStyles.stylesTableauArtistes)) ;
 
 		RapportListeArtistesAlbum rapportArtistesAlbumsChrono = new RapportListeArtistesAlbum(albumsContainer.getCollectionArtistes().sortArtistesChrono(),  "Classement chronologique", rapportLog) ;

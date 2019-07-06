@@ -9,7 +9,7 @@ class BalisesTest {
 	@Test
 	void test() {
 		
-		Balises alphaBalises = new Balises() ;
+		Balises alphaBalises = new Balises(Balises.BalisesType.ALPHA) ;
 		
 		StringBuilder fragment = new StringBuilder() ;
 		

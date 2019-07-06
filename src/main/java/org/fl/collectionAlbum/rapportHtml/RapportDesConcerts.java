@@ -26,7 +26,7 @@ public class RapportDesConcerts extends RapportHtml {
 		 write("<h3>Classement des auteurs, interpretes et chefs d'orchestre (artistes, groupes, ensembles)</h3>\n<ul>\n") ;
 		 
 		 RapportListeArtistesConcert artistesAlpha = new RapportListeArtistesConcert(albumsContainer.getConcertsArtistes().sortArtistesAlpha(), "Classement alphabethique", rapportLog) ;
-		 artistesAlpha.withBalises(new Balises()) ;
+		 artistesAlpha.withBalises(new Balises(Balises.BalisesType.ALPHA)) ;
 		 write(artistesAlpha.printReport(getNextRapportFile(), CssStyles.stylesTableauArtistes)) ;
 
 		 RapportListeArtistesConcert artistesPoids = new RapportListeArtistesConcert(albumsContainer.getConcertsArtistes().sortArtistesPoidsConcerts(), "Classement par nombre de concerts", rapportLog) ;
