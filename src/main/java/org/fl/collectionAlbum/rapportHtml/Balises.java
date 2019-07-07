@@ -35,19 +35,19 @@ public class Balises {
 		addCheckBalise(fragment, s.substring(0, 1)) ;
 	}
 	
-	protected void addCheckBalisePoids(StringBuilder fragment, Format f) {
-		if (nbSinceLastChange > MINIMUN_NB_BEFORE_CHANGE) {
-			addCheckBalise(fragment, f.displayPoidsTotal()) ;
-		} else {
-			nbSinceLastChange++ ;
-		}
+	protected void addCheckBalisePoids(StringBuilder fragment, Format f) {	
+			addCheckBalise(fragment, f.displayPoidsTotal()) ;		
 	}
 	
 	private void addCheckBalise(StringBuilder fragment, String uneBalise) {
-		if (balises.isEmpty() || (! uneBalise.equals(balises.get(balises.size()-1)))) {
-			fragment.append("<a name=\"").append(uneBalise).append("\"></a>") ;
-			balises.add(uneBalise) ;
-			nbSinceLastChange = 0 ;
+		if (balises.isEmpty() || 
+		   ( (! uneBalise.equals(balises.get(balises.size()-1))) && 
+			 (nbSinceLastChange > MINIMUN_NB_BEFORE_CHANGE))) {
+				fragment.append("<a name=\"").append(uneBalise).append("\"></a>") ;
+				balises.add(uneBalise) ;
+				nbSinceLastChange = 0 ;
+		} else {
+			nbSinceLastChange++ ;
 		}
 	}
 
