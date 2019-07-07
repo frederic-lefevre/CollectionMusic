@@ -9,7 +9,7 @@ import org.fl.collectionAlbum.utils.TemporalUtils;
 
 public class Balises {
 
-	public enum BalisesType { POIDS, ALPHA, TEMPORAL } ;
+	public enum BalisesType { POIDS, ALPHA, TEMPORAL, TEMPORAL_COMPOSITION } ;
 	
 	private List<String> balises ;
 	

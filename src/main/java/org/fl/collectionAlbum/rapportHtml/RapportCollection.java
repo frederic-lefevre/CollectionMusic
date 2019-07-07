@@ -47,7 +47,8 @@ public class RapportCollection extends RapportHtml {
 		write(rapportAlbumsEnregistrement.printReport(getNextRapportFile(), CssStyles.stylesTableauAvecBalise)) ;
 	
 		RapportListeAlbums rapportAlbumsComposition = new RapportListeAlbums(albumsContainer.getCollectionAlbumsMusiques().sortChronoComposition(), "Classement chronologique (composition)", rapportLog) ;
-		write(rapportAlbumsComposition.printReport(getNextRapportFile(), CssStyles.stylesTableauMusicArtefact)) ;
+		rapportAlbumsComposition.withBalises(new Balises(Balises.BalisesType.TEMPORAL_COMPOSITION)) ;
+		write(rapportAlbumsComposition.printReport(getNextRapportFile(), CssStyles.stylesTableauAvecBalise)) ;
 
 		write("</ul>\n<h3>Rangement des albums</h3>\n<ul>\n") ;
 		for (Format.RangementSupportPhysique rangement : Format.RangementSupportPhysique.values()) {

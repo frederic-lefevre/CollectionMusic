@@ -45,7 +45,7 @@ public class RapportListeArtistesAlbum extends RapportHtml {
 				} else if (balises.getBalisesType() == Balises.BalisesType.TEMPORAL) {
 					balises.addCheckBaliseTemporal(rBuilder, unArtiste.getNaissance()) ;
 				} else {
-					rapportLog.severe("Unknown BalisesType: " + balises.getBalisesType());
+					rapportLog.severe("Inappropriate BalisesType: " + balises.getBalisesType());
 				}
 			}
 			

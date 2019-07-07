@@ -33,8 +33,12 @@ public class FragmentListeAlbums {
 			boolean displayDateEnregistrement =  unAlbum.hasSpecificCompositionDates() ;
 			
 			fragment.append("    <td class=\"an\">") ;
-			if ((balises != null) && (balises.getBalisesType() == Balises.BalisesType.TEMPORAL)) {
-				balises.addCheckBaliseTemporal(fragment, debutEnr) ;
+			if (balises != null) {
+				if (balises.getBalisesType() == Balises.BalisesType.TEMPORAL) {
+					balises.addCheckBaliseTemporal(fragment, debutEnr) ;
+				} else if (balises.getBalisesType() == Balises.BalisesType.TEMPORAL_COMPOSITION) {
+					balises.addCheckBaliseTemporal(fragment, debutComp) ;
+				}
 			}
 			fragment.append(TemporalUtils.formatDate(debutComp)) ;
 			if (displayDateEnregistrement) {
