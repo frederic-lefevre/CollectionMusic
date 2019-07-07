@@ -30,7 +30,7 @@ public class FragmentListeAlbums {
 			TemporalAccessor debutEnr  = unAlbum.getDebutEnregistrement() ;
 			TemporalAccessor finEnr    = unAlbum.getFinEnregistrement() ;
 			
-			boolean displayDateEnregistrement =  unAlbum.isSpecifiedCompositionDate() ;
+			boolean displayDateEnregistrement =  unAlbum.hasSpecificCompositionDates() ;
 			
 			fragment.append("    <td class=\"an\">") ;
 			if ((balises != null) && (balises.getBalisesType() == Balises.BalisesType.TEMPORAL)) {

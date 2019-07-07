@@ -23,7 +23,7 @@ public class Album extends MusicArtefact {
     
     private Format formatAlbum;
     
-    private boolean specifiedCompositionDate ;
+    private boolean specificCompositionDates ;
     
     public Album(JsonObject albumJson, List<ListeArtiste> knownArtistes, Logger aLog) {
     	super(albumJson, knownArtistes, aLog) ;
@@ -86,8 +86,8 @@ public class Album extends MusicArtefact {
         return formatAlbum;
     }
 
-	public boolean isSpecifiedCompositionDate() {
-		return specifiedCompositionDate;
+	public boolean hasSpecificCompositionDates() {
+		return specificCompositionDates;
 	}
 
 	public void setPeriodeEnregistrementEtComposition(FuzzyPeriod pe, FuzzyPeriod pc) {
@@ -97,10 +97,10 @@ public class Album extends MusicArtefact {
         }
 
 		periodeComposition = pc;
-		specifiedCompositionDate = true ;
+		specificCompositionDates = true ;
         if ((periodeComposition == null) && (periodeEnregistrement != null) && (periodeEnregistrement.isValid())) {   
         	periodeComposition = periodeEnregistrement ;
-        	specifiedCompositionDate = false ;
+        	specificCompositionDates = false ;
         } 
 	}
 	
