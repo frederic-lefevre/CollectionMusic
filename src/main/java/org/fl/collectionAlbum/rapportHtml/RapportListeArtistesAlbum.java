@@ -40,8 +40,12 @@ public class RapportListeArtistesAlbum extends RapportHtml {
 			if (balises != null) {
 				if (balises.getBalisesType() == Balises.BalisesType.ALPHA) {
 					balises.addCheckBaliseString(rBuilder, unArtiste.getNom()) ;
-				} else {
+				} else if (balises.getBalisesType() == Balises.BalisesType.POIDS) {
 					balises.addCheckBalisePoids(rBuilder, unArtiste.getAlbums().getFormatListeAlbum()) ;
+				} else if (balises.getBalisesType() == Balises.BalisesType.TEMPORAL) {
+					balises.addCheckBaliseTemporal(rBuilder, unArtiste.getNaissance()) ;
+				} else {
+					rapportLog.severe("Unknown BalisesType: " + balises.getBalisesType());
 				}
 			}
 			

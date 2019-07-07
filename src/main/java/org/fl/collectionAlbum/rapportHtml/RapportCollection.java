@@ -35,6 +35,7 @@ public class RapportCollection extends RapportHtml {
 		write(rapportArtistesAlbumsPoids.printReport(getNextRapportFile(),  CssStyles.stylesTableauArtistes)) ;
 
 		RapportListeArtistesAlbum rapportArtistesAlbumsChrono = new RapportListeArtistesAlbum(albumsContainer.getCollectionArtistes().sortArtistesChrono(),  "Classement chronologique", rapportLog) ;
+		rapportArtistesAlbumsChrono.withBalises(new Balises(Balises.BalisesType.TEMPORAL)) ;
 		write(rapportArtistesAlbumsChrono.printReport(getNextRapportFile(),  CssStyles.stylesTableauArtistes)) ;
 
 		RapportCalendrier rapportCalendrier = new RapportCalendrier(albumsContainer.getCalendrierArtistes(), "Calendrier", rapportLog) ;
