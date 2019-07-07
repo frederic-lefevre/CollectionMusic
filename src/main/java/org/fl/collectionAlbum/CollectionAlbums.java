@@ -24,9 +24,6 @@ import com.ibm.lge.fl.util.json.JsonUtils;
 
 public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,ProgressInformation>{
 	
-	private static int ALBUM = 0 ;
-	private static int CONCERT = 1 ;
-
 	private CollectionAlbumContainer albumsContainer ;
 	private Logger albumLog ;
 	private ProgressInformationPanel progressPanel;
@@ -56,7 +53,7 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
   	
 		Path albumsPath = RapportStructuresAndNames.getCollectionDirectoryName() ;
 		try {
-			MusicFileVisitor albumsVisitor = new MusicFileVisitor(Control.getMusicfileExtension(), ALBUM) ;
+			MusicFileVisitor albumsVisitor = new AlbumFileVisitor(Control.getMusicfileExtension()) ;
 			
 			Files.walkFileTree(albumsPath, albumsVisitor) ;
 				
@@ -70,7 +67,7 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 
 		Path concertsPath = RapportStructuresAndNames.getConcertDirectoryName() ;
 		try {
-			MusicFileVisitor concertsVisitor = new MusicFileVisitor(Control.getMusicfileExtension(), CONCERT) ;
+			MusicFileVisitor concertsVisitor = new ConcertFileVisitor(Control.getMusicfileExtension()) ;
 			
 			Files.walkFileTree(concertsPath, concertsVisitor) ;
 				
@@ -79,17 +76,11 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 		}
 	}
 	
-    private class MusicFileVisitor extends SimpleFileVisitor<Path> {
+    private abstract class MusicFileVisitor extends SimpleFileVisitor<Path> {
     	
     	private PathMatcher matcher ;
-    	private int			musicFileType;
     	
-    	protected MusicFileVisitor(String fileExtension, int mft) {
-    		
-    		musicFileType = mft ;
-    		if ((musicFileType != ALBUM) && (musicFileType != CONCERT)) {
-    			albumLog.severe("unkown music file type: " + musicFileType);
-    		}
+    	protected MusicFileVisitor(String fileExtension) {
     		matcher = FileSystems.getDefault().getPathMatcher("glob:*." + fileExtension);
     	}
     	
@@ -100,11 +91,7 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
     		if (Files.isRegularFile(file)) {
 	    		if (matcher.matches(name)) {
 	    			JsonObject arteFactJson = JsonUtils.getJsonObjectFromPath(file, Control.getCharset(), albumLog) ;
-	    			if (musicFileType == ALBUM) {
-	    				albumsContainer.addAlbum(arteFactJson) ;
-	    			} else if (musicFileType == CONCERT) {
-	    				albumsContainer.addConcert(arteFactJson) ;
-	    			}
+	    			addMusicArtefact(arteFactJson) ;
 	    		}
     		}
     		return FileVisitResult.CONTINUE;
@@ -116,6 +103,25 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
     		 return FileVisitResult.CONTINUE;
     	}
 
+    	public abstract void addMusicArtefact(JsonObject artefactJson) ;
+    }
+    
+    private class AlbumFileVisitor extends MusicFileVisitor {
+		protected AlbumFileVisitor(String fileExtension) {	super(fileExtension); }
+
+		@Override
+		public void addMusicArtefact(JsonObject artefactJson) {
+			albumsContainer.addAlbum(artefactJson) ;			
+		}    	
+    }
+    
+    private class ConcertFileVisitor extends MusicFileVisitor {
+		protected ConcertFileVisitor(String fileExtension) {	super(fileExtension); }
+
+		@Override
+		public void addMusicArtefact(JsonObject artefactJson) {
+			albumsContainer.addConcert(artefactJson) ;			
+		}    	
     }
     
     private void buildCalendrier() {
