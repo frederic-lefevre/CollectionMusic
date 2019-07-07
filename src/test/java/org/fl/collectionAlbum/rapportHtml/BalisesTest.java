@@ -98,6 +98,20 @@ class BalisesTest {
 		temporalBalises.addCheckBaliseTemporal(fragment, tempAcc1);
 		
 		int fLength1 = fragment.length() ;
-		assertNotEquals(0 , fragment.length()) ;
+		assertNotEquals(0 , fLength1) ;
+		
+		TemporalAccessor tempAcc2 = getTemporal("1966-02-15") ;
+		
+		temporalBalises.addCheckBaliseTemporal(fragment, tempAcc2);
+		
+		int fLength2 = fragment.length() ;
+		assertEquals(fLength1 , fLength2) ;
+		
+		TemporalAccessor tempAcc3 = getTemporal("1967-02-15") ;
+		
+		temporalBalises.addCheckBaliseTemporal(fragment, tempAcc3);
+		
+		int fLength3 = fragment.length() ;
+		assertNotEquals(fLength2 , fLength3) ;
 	}
 }
