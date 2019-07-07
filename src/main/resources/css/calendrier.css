@@ -1,0 +1,84 @@
+div.calendrier {display: block ;
+                position: fixed;
+                left : 0px ;
+                top: 100px ;
+                border : 1px;
+                padding: 1px;
+                margin: 1px;
+                border-spacing: 1px;
+                background: white;
+                width: auto;
+ }
+
+div.noBirthday { color: gray ;
+                background: #DDCC00;
+                text-align: center ;
+                padding: 0px;
+                margin: 0px;
+                border-spacing: 0px;
+                width: 30px;
+                height: 20px;
+ }
+
+div.birthday:hover { color: red ;
+                      background: white;
+                      cursor: pointer;
+                height: 20px;
+ }
+
+div.mois { background: #FFCC00;
+                padding: 0px;
+                margin: 0px;
+                border-spacing: 0px;
+                border: 5px;
+                width: 130px;
+ }
+
+div.birthday { text-align: center ;
+               color: black;
+                padding: 0px;
+                margin: 0px;
+                font-weight : bold ;
+                border-spacing: 0px;
+                width: 30px;
+ }
+
+div.titremois { text-align: center ;
+              background: silver;
+                padding: 2px;
+                margin: 2px;
+                border-spacing: 0px;
+                border-bottom: 3px solid black ;
+                font-weight : bold ;
+                width: 130px;
+ }
+
+
+div.titremois:hover { color: red ;
+                      background: white;
+                      cursor: pointer;
+ }
+
+
+div.listea { display: none ; }
+
+div.jour { display: none ; }
+
+div.birthday:hover div.listea { display : block ;
+                      position : relative ;
+                      left: 30px;
+                      top: -20px;
+                      width: 500px;
+ }
+
+div.titremois:hover div.jour { display : block ;
+                      position : fixed ;
+                left : 134px ;
+                top: 3px ;
+                border : 1px;
+                padding: 1px;
+                margin: 1px;
+                border-spacing: 1px;
+                background: #FFCC00;
+                width: 30px;
+ }

@@ -1,0 +1,144 @@
+td.total { vertical-align : top ;
+             width : 40px;
+             padding : 2px ;
+             margin : 2px ;
+             border : 1px solid black;
+             background: #C0C0C0;
+             text-align: center ;
+             border-spacing: 1px;
+			 font-size: smaller;
+			 font-weight: bold;
+ }
+
+td.xnbcd { vertical-align : top ;
+           background : #D0D0F0 ;
+             width : 25px;
+             padding : 2px ;
+             margin : 2px ;
+             border : 1px solid black;
+             text-align: center ;
+             border-spacing: 1px;
+			 font-size: smaller;
+			 font-weight: bold;
+ }
+
+td.xnbdvd { vertical-align : top ;
+           background : #D0D0F0 ;
+             width : 25px;
+             padding : 2px ;
+             margin : 2px ;
+             border : 1px solid black;
+             text-align: center ;
+             border-spacing: 1px;
+			 font-size: smaller;
+			 font-weight: bold;
+ }
+
+td.xnbblueray { vertical-align : top ;
+           background : #E0E0F0 ;
+             width : 25px;
+             padding : 2px ;
+             margin : 2px ;
+             border : 1px solid black;
+             text-align: center ;
+             border-spacing: 1px;
+			 height: 10px;
+			 font-size: smaller;
+			 font-weight: bold;
+ }
+ 
+td.xnbminicd { vertical-align : top ;
+           background : #E0E0F0 ;
+             width : 25px;
+             padding : 2px ;
+             margin : 2px ;
+             border : 1px solid black;
+             text-align: center ;
+             border-spacing: 1px;
+			 font-size: smaller;
+			 font-weight: bold;
+ }
+
+td.xnbminidvd { vertical-align : top ;
+           background : #B0B0F0 ;
+             width : 25px;
+             padding : 2px ;
+             margin : 2px ;
+             border : 1px solid black;
+             text-align: center ;
+             border-spacing: 1px;
+			 font-size: smaller;
+			 font-weight: bold;
+ }
+
+td.xnb33T { vertical-align : top ;
+           background : #F0D0D0 ;
+             width : 25px;
+             padding : 2px ;
+             margin : 2px ;
+             border : 1px solid black;
+             text-align: center ;
+             border-spacing: 1px;
+			 font-size: smaller;
+			 font-weight: bold;
+ }
+
+td.xnbmini33T { vertical-align : top ;
+           background : #F0E0E0 ;
+             width : 25px;
+             padding : 2px ;
+             margin : 2px ;
+             border : 1px solid black;
+             text-align: center ;
+             border-spacing: 1px;
+			 font-size: smaller;
+			 font-weight: bold;
+ }
+
+td.xnb45T { vertical-align : top ;
+           background : #F0C0C0 ;
+             width : 25px;
+             padding : 2px ;
+             margin : 2px ;
+             border : 1px solid black;
+             text-align: center ;
+             border-spacing: 1px;
+			 font-size: smaller;
+			 font-weight: bold;
+ }
+
+td.xnbmaxi45T { vertical-align : top ;
+           background : #F0B0B0 ;
+             width : 25px;
+             padding : 2px ;
+             margin : 2px ;
+             border : 1px solid black;
+             text-align: center ;
+             border-spacing: 1px;
+			 font-size: smaller;
+			 font-weight: bold;
+ }
+
+td.xnbk7 { vertical-align : top ;
+           background : #D0F0D0 ;
+             width : 25px;
+             padding : 2px ;
+             margin : 2px ;
+             border : 1px solid black;
+             text-align: center ;
+             border-spacing: 1px;
+			 font-size: smaller;
+			 font-weight: bold;
+ }
+
+td.xnbvhs { vertical-align : top ;
+           background : #F0D0F0 ;
+             width : 25px;
+             padding : 2px ;
+             margin : 2px ;
+             border : 1px solid black;
+             text-align: center ;
+             border-spacing: 1px;
+			 font-size: smaller;
+			 font-weight: bold;
+ }

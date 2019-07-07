@@ -1,0 +1,87 @@
+td.auteur { vertical-align : top ;
+             width : 200px;
+             padding : 5px ;
+             margin : 5px ;
+             border : 1px solid black;
+             background: white;
+             text-align: left ;
+             border-spacing: 1px;
+ }
+
+td.an { vertical-align : top ;
+        background: white;
+             width : 150px;
+             padding : 5px ;
+             margin : 5px ;
+             border : 1px solid black;
+             text-align: right ;
+             border-spacing: 1px;
+ }
+
+td.an2 { vertical-align : top ;
+        background: white;
+             width : 300px;
+             padding : 5px ;
+             margin : 5px ;
+             border : 1px solid black;
+             text-align: right ;
+             border-spacing: 1px;
+ }
+
+td.album { vertical-align : top ;
+             width : 300px;
+             padding : 5px ;
+             margin : 5px ;
+             border : 1px solid black;
+             background: white;
+             text-align: left ;
+             border-spacing: 1px;
+ }
+
+table { vertical-align : top ;
+        table-layout: fixed;
+        border : 0px solid black;
+        border-spacing: 2px;
+        padding: 0px;
+        margin: 0px;
+        background: orange;
+        white-space: normal;
+        width: auto;
+ }
+
+div.mhc {
+        display: table-row;
+        overflow: hidden;
+        height: 3em;
+        position: fixed;
+        top: auto;
+        left: auto;
+        background: transparent;
+        border-right: 0px solid black;
+        border-left: 0px solid black;
+        border-top: 0px solid black;
+        padding: 0px;
+        margin: 0px;
+        border-spacing: 2px;
+        filter:alpha(opacity=80);
+        opacity: 0.8 ;
+        -moz-opacity: 0.8;
+        font-weight: bold;
+}
+
+div.mhc:hover {
+        filter:alpha(opacity=20);
+        opacity: 0.2 ;
+        -moz-opacity: 0.2;
+ }
+tr.head {
+        font-weight: bold;
+}
+
+ul.interv {
+             padding : 0px ;
+             margin : 0px ;
+             border : 0px;
+             list-style-type: disc;
+             list-style-position: inside;
+}

@@ -1,0 +1,37 @@
+body { color: black ;
+       background: #FFFFE0 ;
+       font-family: "Times New Roman", "Times", serif ;
+       width: auto;
+       overflow-y:auto;
+       height: 100%;
+ }
+
+A:link { color: darkblue ;
+         text-decoration : underline ;
+         font-style: normal }
+A:visited { color: green ;
+            text-decoration : underline ;
+            font-style: normal }
+A:hover { color: red ;
+          background : yellow ;
+          text-decoration : none ;
+          font-style: normal }
+A:active { color: red ;
+           text-decoration : underline ;
+           font-style: normal }
+
+div.home { display: block; 
+           right: 10px ;
+           top: 10px ;
+           position:fixed ;
+           font-weight: bold ;
+           font-size: x-large ;
+}
+
+span.dategen { font-size: small ;
+				color: white ;
+				background-color : black ;
+				border: 1px solid red ;
+}
+
+
