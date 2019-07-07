@@ -20,7 +20,7 @@ public class Balises {
 	protected Balises(BalisesType bt) {
 		balises 		  = new ArrayList<>() ;
 		balisesType 	  = bt ;
-		nbSinceLastChange = 0 ;
+		nbSinceLastChange = MINIMUN_NB_BEFORE_CHANGE + 1 ;
 	}
 	
 	public void writeBalises(StringBuilder fragment) {
@@ -40,12 +40,15 @@ public class Balises {
 	}
 	
 	private void addCheckBalise(StringBuilder fragment, String uneBalise) {
-		if (balises.isEmpty() || 
-		   ( (! uneBalise.equals(balises.get(balises.size()-1))) && 
-			 (nbSinceLastChange > MINIMUN_NB_BEFORE_CHANGE))) {
-				fragment.append("<a name=\"").append(uneBalise).append("\"></a>") ;
+		
+		if ( (balises.isEmpty()) || (! uneBalise.equals(balises.get(balises.size()-1)))) {				
+			fragment.append("<a name=\"").append(uneBalise).append("\"></a>") ;
+			if (nbSinceLastChange > MINIMUN_NB_BEFORE_CHANGE) {
 				balises.add(uneBalise) ;
 				nbSinceLastChange = 0 ;
+			} else {
+				nbSinceLastChange++ ;
+			}
 		} else {
 			nbSinceLastChange++ ;
 		}
