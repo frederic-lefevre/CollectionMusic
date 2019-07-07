@@ -45,7 +45,7 @@ public class Balises {
 	}
 	
 	public void addCheckBaliseTemporal(StringBuilder fragment, TemporalAccessor tempsAccessor) {
-		addCheckBalise(fragment, TemporalUtils.formatDate(tempsAccessor)) ;	
+		addCheckBalise(fragment, TemporalUtils.formatYear(tempsAccessor)) ;	
 	}	
 	
 	private void addCheckBalise(StringBuilder fragment, String uneBalise) {
