@@ -33,7 +33,7 @@ public class FragmentListeConcerts {
 					appendLinkConcertArtiste(unArtiste, fragment, urlOffset) ;
 				}
 			}
-			printIntervenant(unConcert, fragment, urlOffset) ;
+			FragmentIntervenants.printIntervenant(unConcert, fragment, urlOffset) ;
 			
 			fragment.append("    </td>\n    <td class=\"album\">").append(unConcert.getLieuConcert().getLieu()).append("\n") ;
 			
@@ -48,39 +48,5 @@ public class FragmentListeConcerts {
 			fragment.append("      <a href=\"").append(urlOffset).append(concertUri.toString()).append("\">").append(unArtiste.getPrenoms()).append(" ").append(unArtiste.getNom()).append("</a><br/>\n") ;
 
 		}
-	}
-	
-	private static void printIntervenant(Concert unConcert,  StringBuilder fragment, String urlOffset) {	
-
-		if ((unConcert.getChefsOrchestre() != null) || (unConcert.getInterpretes() != null) || (unConcert.getEnsembles() != null)) {
-		
-			fragment.append("      <ul class=\"interv\">") ;
-			
-			if (unConcert.getChefsOrchestre() != null) {
-				for (Artiste unChef : unConcert.getChefsOrchestre()) {
-					fragment.append("      <li>Direction: ") ;
-					appendLinkConcertArtiste(unChef, fragment, urlOffset) ;
-					fragment.append("</li>\n") ;
-				}
-			}
-			
-			if (unConcert.getInterpretes() != null) {
-				for (Artiste unInterprete : unConcert.getInterpretes()) {
-					fragment.append("      <li>Interpr&egrave;te: ") ;
-					appendLinkConcertArtiste(unInterprete, fragment, urlOffset) ;
-					fragment.append("</li>\n") ;
-				}
-			}
-			
-			if (unConcert.getEnsembles() != null) {
-				for (Artiste unGroupe : unConcert.getEnsembles()) {
-					fragment.append("      <li>Ensemble: ") ;
-					appendLinkConcertArtiste(unGroupe, fragment, urlOffset) ;
-					fragment.append("</li>\n") ;
-				}
-			}
-			fragment.append("      </ul>") ;
-		}
-		
 	}
 }

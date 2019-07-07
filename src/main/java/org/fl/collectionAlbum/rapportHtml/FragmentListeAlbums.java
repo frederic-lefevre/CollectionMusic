@@ -68,45 +68,12 @@ public class FragmentListeAlbums {
 				fragment.append(unAlbum.getTitre()) ;
 			}
 			
-			printIntervenant(unAlbum, fragment, urlOffSet) ;
+			FragmentIntervenants.printIntervenant(unAlbum, fragment, urlOffSet) ;
 			fragment.append("    </td>\n") ;
 			unAlbum.getFormatAlbum().rowFormat(fragment, null) ;
 			fragment.append("  </tr>\n") ;
 		}
 		fragment.append("</table>\n") ;
-	}
-
-	private static void printIntervenant(Album unAlbum, StringBuilder fragment, String urlOffset) {	
-
-		if ((unAlbum.getChefsOrchestre() != null) || (unAlbum.getInterpretes() != null) || (unAlbum.getEnsembles() != null)) {
-		
-			fragment.append("      <ul class=\"interv\">") ;
-
-			if (unAlbum.getChefsOrchestre() != null) {
-				for (Artiste unChef : unAlbum.getChefsOrchestre()) {
-					fragment.append("      <li>Direction: ") ;
-					appendLinkAlbumArtiste(unChef, fragment, urlOffset) ;
-					fragment.append("</li>\n") ;
-				}
-			}
-			
-			if (unAlbum.getInterpretes() != null) {
-				for (Artiste unInterprete : unAlbum.getInterpretes()) {
-					fragment.append("      <li>Interpr&egrave;te: ") ;
-					appendLinkAlbumArtiste(unInterprete, fragment, urlOffset) ;
-					fragment.append("</li>\n") ;
-				}
-			}	
-			
-			if (unAlbum.getEnsembles() != null) {
-				for (Artiste unGroupe : unAlbum.getEnsembles()) {
-					fragment.append("      <li>Ensemble: ") ;
-					appendLinkAlbumArtiste(unGroupe, fragment, urlOffset) ;
-					fragment.append("</li>\n") ;
-				}
-			}
-			fragment.append("      </ul>") ;
-		}
 	}
 	
 	private static void appendLinkAlbumArtiste(Artiste unArtiste, StringBuilder fragment,  String urlOffset) {
