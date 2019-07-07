@@ -6,7 +6,7 @@ import org.fl.collectionAlbum.concerts.ListeConcert;
 
 public class RapportListeConcerts extends RapportHtml {
 
-	private ListeConcert listeConcerts ;
+	private final ListeConcert listeConcerts ;
 	
 	public RapportListeConcerts(ListeConcert lc,  String titre, Logger rl) {
 		super(titre, rl) ;

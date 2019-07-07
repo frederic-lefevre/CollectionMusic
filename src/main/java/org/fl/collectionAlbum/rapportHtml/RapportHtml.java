@@ -48,7 +48,7 @@ public abstract class RapportHtml {
 	
 	protected String urlOffset;
 	
-	protected Logger rapportLog;
+	protected final Logger rapportLog;
 
 	private   boolean displayTitle ;
 

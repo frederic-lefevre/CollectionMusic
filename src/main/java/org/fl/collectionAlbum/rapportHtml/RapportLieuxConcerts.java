@@ -16,7 +16,7 @@ public class RapportLieuxConcerts  extends RapportHtml {
 	private final static String F5 = "  </tr>\n" ;
 	private final static String table1 = F1 + F2 + F3 + F4 + F2 + F3 + F5 ;
 
-	private LieuxDesConcerts lieuxDesConcerts ;
+	private final LieuxDesConcerts lieuxDesConcerts ;
 	
 	protected RapportLieuxConcerts(LieuxDesConcerts ldc, String titre, Logger rl) {
 		super(titre, rl);

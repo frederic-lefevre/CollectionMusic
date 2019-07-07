@@ -13,7 +13,7 @@ public class Balises {
 	
 	private List<String> balises ;
 	
-	private BalisesType balisesType ;
+	private final BalisesType balisesType ;
 	
 	private static final int MINIMUN_NB_BEFORE_ADD = 20 ;
 	

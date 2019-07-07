@@ -9,8 +9,8 @@ import org.fl.collectionAlbum.Format;
 public class RapportCollection extends RapportHtml {
 
 	private int rapportIndex ;
-	private CollectionAlbumContainer albumsContainer ;
-	private Path rapportCollectionDir ;
+	private final CollectionAlbumContainer albumsContainer ;
+	private final Path rapportCollectionDir ;
 	
 	public RapportCollection(CollectionAlbumContainer ac, Path rFile, String titre, Logger rl) {
 		super(titre, rl) ;

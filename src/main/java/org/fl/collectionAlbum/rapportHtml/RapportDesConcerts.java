@@ -8,8 +8,8 @@ import org.fl.collectionAlbum.CollectionAlbumContainer;
 public class RapportDesConcerts extends RapportHtml {
 
 	private int rapportIndex ;
-	private CollectionAlbumContainer albumsContainer ;
-	private Path rapportCollectionDir ;
+	private final CollectionAlbumContainer albumsContainer ;
+	private final Path rapportCollectionDir ;
 	
 	public RapportDesConcerts(CollectionAlbumContainer ac, Path rFile, String titre, Logger rl) {
 		super(titre, rl) ;

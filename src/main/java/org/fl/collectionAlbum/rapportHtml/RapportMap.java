@@ -9,9 +9,9 @@ public class RapportMap<K> extends HashMap<K, Path> {
 	private static final long serialVersionUID = 1L;
 	
 	private int  id ;
-	private Path absoluteRootPath ;
-	private Path absoluteLocationPath ;	
-	private URI  absoluteRootUri ;
+	private final Path absoluteRootPath ;
+	private final Path absoluteLocationPath ;	
+	private final URI  absoluteRootUri ;
 	
 	public RapportMap(Path ar, Path al) {
 		super();
