@@ -36,6 +36,6 @@ public class RapportAlbumsDunArtiste extends RapportHtml {
 		write("  </tr>\n  <tr>\n") ;
 		artiste.getAlbumsFormat().rowFormat(rBuilder, "artotal") ;
 		write("  </tr>\n</table>\n") ;
-		FragmentListeAlbums.buildTable(artiste.getAlbums(), rBuilder, "../../");		
+		FragmentListeAlbums.buildTable(artiste.getAlbums(), rBuilder, "../../", balises);		
 	}
 }

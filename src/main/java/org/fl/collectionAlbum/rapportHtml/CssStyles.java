@@ -15,7 +15,7 @@ public final class CssStyles {
 	public final static String mainFormat[] 				= { MAIN, FORMAT } ;
 	public final static String stylesTableauMusicArtefact[] = { MAIN, FORMAT, TABLE} ;
 	public final static String stylesTableauDunArtiste[] 	= { MAIN, FORMAT, TABLE, ARTISTE} ;
-	public final static String stylesTableauArtistes[] 		= { MAIN, FORMAT, TABLE, BALISES} ;
+	public final static String stylesTableauAvecBalise[]	= { MAIN, FORMAT, TABLE, BALISES} ;
 	public final static String stylesStat[] 				= { MAIN, STAT } ;
 	public final static String ticket[] 					= { MAIN, TICKET } ;
 	public final static String stylesCalendrier[] 			= { MAIN, TABLE, CAL} ;

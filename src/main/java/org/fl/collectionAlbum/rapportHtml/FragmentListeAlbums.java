@@ -15,7 +15,7 @@ public class FragmentListeAlbums {
 	private final static String TABLE2 = "  </tr>\n  <tr>\n    <td class=\"an\">Début</td>\n    <td class=\"an\">Fin</td>\n  </tr>\n\n  </table>\n</div>\n<table>\n <tr class=\"head\">\n    <td colspan=\"2\" class=\"an2\">Dates de composition /<br/>Dates d'enregistrement</td>\n    <td rowspan=\"2\" class=\"auteur\">Auteurs</td>\n    <td rowspan=\"2\" class=\"album\">Titres</td>\n" ;
 	private final static String TABLE3 = "  </tr>\n  <tr class=\"head\">\n    <td class=\"an\">Début</td>\n    <td class=\"an\">Fin</td>\n  </tr>\n" ;
 
-	public static void buildTable(ListeAlbum listeAlbums, StringBuilder fragment, String urlOffSet) {
+	public static void buildTable(ListeAlbum listeAlbums, StringBuilder fragment, String urlOffSet, Balises balises) {
 		
 		fragment.append(TABLE1) ;
 		listeAlbums.getFormatListeAlbum().enteteFormat(fragment, null, 2) ;
@@ -32,7 +32,11 @@ public class FragmentListeAlbums {
 			
 			boolean displayDateEnregistrement =  unAlbum.isSpecifiedCompositionDate() ;
 			
-			fragment.append("    <td class=\"an\">").append(TemporalUtils.formatDate(debutComp)) ;
+			fragment.append("    <td class=\"an\">") ;
+			if ((balises != null) && (balises.getBalisesType() == Balises.BalisesType.TEMPORAL)) {
+				balises.addCheckBaliseTemporal(fragment, debutEnr) ;
+			}
+			fragment.append(TemporalUtils.formatDate(debutComp)) ;
 			if (displayDateEnregistrement) {
 				fragment.append("<br/>").append( TemporalUtils.formatDate(debutEnr)) ;
 			}

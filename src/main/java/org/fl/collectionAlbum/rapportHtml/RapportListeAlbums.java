@@ -18,7 +18,7 @@ public class RapportListeAlbums extends RapportHtml {
 	@Override
 	protected void corpsRapport() {
 	
-		FragmentListeAlbums.buildTable(listeAlbums, rBuilder, urlOffset) ;
+		FragmentListeAlbums.buildTable(listeAlbums, rBuilder, urlOffset, balises) ;
 	}	
 
 }

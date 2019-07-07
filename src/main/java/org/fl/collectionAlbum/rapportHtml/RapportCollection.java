@@ -28,22 +28,23 @@ public class RapportCollection extends RapportHtml {
 		
 		RapportListeArtistesAlbum rapportArtistesAlbumsAlpha = new RapportListeArtistesAlbum(albumsContainer.getCollectionArtistes().sortArtistesAlpha(),  "Classement alphabethique", rapportLog) ;
 		rapportArtistesAlbumsAlpha.withBalises(new Balises(Balises.BalisesType.ALPHA)) ;
-		write(rapportArtistesAlbumsAlpha.printReport(getNextRapportFile(), CssStyles.stylesTableauArtistes)) ;
+		write(rapportArtistesAlbumsAlpha.printReport(getNextRapportFile(), CssStyles.stylesTableauAvecBalise)) ;
 		
 		RapportListeArtistesAlbum rapportArtistesAlbumsPoids = new RapportListeArtistesAlbum(albumsContainer.getCollectionArtistes().sortArtistesPoidsAlbums(),  "Classement par nombre d'unit&eacute;s physiques", rapportLog) ;
 		rapportArtistesAlbumsPoids.withBalises(new Balises(Balises.BalisesType.POIDS)) ;
-		write(rapportArtistesAlbumsPoids.printReport(getNextRapportFile(),  CssStyles.stylesTableauArtistes)) ;
+		write(rapportArtistesAlbumsPoids.printReport(getNextRapportFile(),  CssStyles.stylesTableauAvecBalise)) ;
 
 		RapportListeArtistesAlbum rapportArtistesAlbumsChrono = new RapportListeArtistesAlbum(albumsContainer.getCollectionArtistes().sortArtistesChrono(),  "Classement chronologique", rapportLog) ;
 		rapportArtistesAlbumsChrono.withBalises(new Balises(Balises.BalisesType.TEMPORAL)) ;
-		write(rapportArtistesAlbumsChrono.printReport(getNextRapportFile(),  CssStyles.stylesTableauArtistes)) ;
+		write(rapportArtistesAlbumsChrono.printReport(getNextRapportFile(),  CssStyles.stylesTableauAvecBalise)) ;
 
 		RapportCalendrier rapportCalendrier = new RapportCalendrier(albumsContainer.getCalendrierArtistes(), "Calendrier", rapportLog) ;
 		write(rapportCalendrier.printReport(getNextRapportFile(), CssStyles.stylesCalendrier)) ;
 		
 		write("</ul>\n<h3>Classement des albums</h3>\n<ul>\n") ;
 		RapportListeAlbums rapportAlbumsEnregistrement = new RapportListeAlbums(albumsContainer.getCollectionAlbumsMusiques().sortChronoEnregistrement(), "Classement chronologique (enregistrement)", rapportLog) ;
-		write(rapportAlbumsEnregistrement.printReport(getNextRapportFile(), CssStyles.stylesTableauMusicArtefact)) ;
+		rapportAlbumsEnregistrement.withBalises(new Balises(Balises.BalisesType.TEMPORAL)) ;
+		write(rapportAlbumsEnregistrement.printReport(getNextRapportFile(), CssStyles.stylesTableauAvecBalise)) ;
 	
 		RapportListeAlbums rapportAlbumsComposition = new RapportListeAlbums(albumsContainer.getCollectionAlbumsMusiques().sortChronoComposition(), "Classement chronologique (composition)", rapportLog) ;
 		write(rapportAlbumsComposition.printReport(getNextRapportFile(), CssStyles.stylesTableauMusicArtefact)) ;
