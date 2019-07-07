@@ -13,14 +13,17 @@ public class Balises {
 	
 	private BalisesType balisesType ;
 	
-	private static final int MINIMUN_NB_BEFORE_CHANGE = 20 ;
+	private static final int MINIMUN_NB_BEFORE_ADD = 20 ;
 	
-	private int nbSinceLastChange ;
+	private int nbSinceLastAdd ;
+	
+	private String lastBaliseWritten ;
 	
 	protected Balises(BalisesType bt) {
 		balises 		  = new ArrayList<>() ;
 		balisesType 	  = bt ;
-		nbSinceLastChange = MINIMUN_NB_BEFORE_CHANGE + 1 ;
+		nbSinceLastAdd 	  = MINIMUN_NB_BEFORE_ADD + 1 ;
+		lastBaliseWritten = null ;
 	}
 	
 	public void writeBalises(StringBuilder fragment) {
@@ -41,17 +44,17 @@ public class Balises {
 	
 	private void addCheckBalise(StringBuilder fragment, String uneBalise) {
 		
-		if ( (balises.isEmpty()) || (! uneBalise.equals(balises.get(balises.size()-1)))) {				
+		if ( (balises.isEmpty()) || (! uneBalise.equals(lastBaliseWritten))) {				
 			fragment.append("<a name=\"").append(uneBalise).append("\"></a>") ;
-			if (nbSinceLastChange > MINIMUN_NB_BEFORE_CHANGE) {
-				balises.add(uneBalise) ;
-				nbSinceLastChange = 0 ;
-			} else {
-				nbSinceLastChange++ ;
-			}
-		} else {
-			nbSinceLastChange++ ;
+			lastBaliseWritten = uneBalise ;
 		}
+		nbSinceLastAdd++ ;
+		if ((nbSinceLastAdd > MINIMUN_NB_BEFORE_ADD) && 
+			( (balises.isEmpty()) ||	
+			  (! uneBalise.equals(balises.get(balises.size() - 1))))) {
+			balises.add(uneBalise) ;
+			nbSinceLastAdd = 0 ;
+		} 		
 	}
 
 	public BalisesType getBalisesType() {
