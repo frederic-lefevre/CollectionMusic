@@ -4,6 +4,7 @@ import java.net.URI;
 
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.concerts.Concert;
+import org.fl.collectionAlbum.concerts.LieuConcert;
 import org.fl.collectionAlbum.concerts.ListeConcert;
 import org.fl.collectionAlbum.utils.TemporalUtils;
 
@@ -35,9 +36,17 @@ public class FragmentListeConcerts {
 			}
 			FragmentIntervenants.printIntervenant(unConcert, fragment, urlOffset) ;
 			
-			fragment.append("    </td>\n    <td class=\"album\">").append(unConcert.getLieuConcert().getLieu()).append("\n") ;
+			fragment.append("    </td>\n    <td class=\"album\">") ;
 			
-			fragment.append("    </td>\n  </tr>\n") ;
+			LieuConcert lieuConcert = unConcert.getLieuConcert() ;
+			URI lieuPath = RapportStructuresAndNames.getLieuRapportRelativePath(lieuConcert) ;			
+			if (lieuPath != null) {
+				fragment.append("<a href=\"").append(urlOffset).append(lieuPath.toString()).append("\">").append(lieuConcert.getLieu()).append("</a>") ;
+			} else {
+				fragment.append(lieuConcert.getLieu()) ;
+			}
+			
+			fragment.append("\n    </td>\n  </tr>\n") ;
 		}
 		fragment.append("</table>\n") ;
 	}
