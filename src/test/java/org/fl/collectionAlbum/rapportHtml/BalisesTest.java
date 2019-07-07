@@ -2,6 +2,13 @@ package org.fl.collectionAlbum.rapportHtml;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.LocalDate;
+import java.time.Year;
+import java.time.YearMonth;
+import java.time.format.DateTimeFormatter;
+import java.time.format.ResolverStyle;
+import java.time.temporal.TemporalAccessor;
+import java.util.Locale;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.Format;
@@ -44,12 +51,12 @@ class BalisesTest {
 		JsonObject jf1 = new JsonParser().parse(formatStr1).getAsJsonObject();
 		Format format1 = new Format(jf1, logger) ;
 		
-		Balises alphaBalises = new Balises(Balises.BalisesType.POIDS) ;
+		Balises formatBalises = new Balises(Balises.BalisesType.POIDS) ;
 		
 
 		StringBuilder fragment = new StringBuilder() ;
 		
-		alphaBalises.addCheckBalisePoids(fragment, format1);
+		formatBalises.addCheckBalisePoids(fragment, format1);
 		
 		int fLength1 = fragment.length() ;
 		assertNotEquals(0 , fragment.length()) ;
@@ -58,7 +65,7 @@ class BalisesTest {
 		JsonObject jf2 = new JsonParser().parse(formatStr2).getAsJsonObject();
 		Format format2 = new Format(jf2, logger) ;
 		
-		alphaBalises.addCheckBalisePoids(fragment, format2);
+		formatBalises.addCheckBalisePoids(fragment, format2);
 		
 		int fLength2 = fragment.length() ;
 		assertEquals(fLength1, fLength2) ;
@@ -67,9 +74,30 @@ class BalisesTest {
 		JsonObject jf3 = new JsonParser().parse(formatStr3).getAsJsonObject();
 		Format format3 = new Format(jf3, logger) ;
 		
-		alphaBalises.addCheckBalisePoids(fragment, format3);
+		formatBalises.addCheckBalisePoids(fragment, format3);
 		
 		int fLength3 = fragment.length() ;
 		assertNotEquals(fLength2, fLength3) ;
+	}
+	
+	private final static String datePatternParse  = "uuuu[-MM[-dd]]" ;
+   	private final static DateTimeFormatter dateTimeParser    = DateTimeFormatter.ofPattern(datePatternParse,  Locale.FRANCE).withResolverStyle(ResolverStyle.STRICT) ;
+
+   	private static TemporalAccessor getTemporal(String date) {
+   		return dateTimeParser.parseBest(date, LocalDate::from, YearMonth::from, Year::from) ;
+   	}
+	@Test
+	void testTemporalAccessor() {
+		
+		Balises temporalBalises = new Balises(Balises.BalisesType.TEMPORAL) ;
+		
+		StringBuilder fragment = new StringBuilder() ;
+		
+		TemporalAccessor tempAcc1 = getTemporal("1966-02-15") ;
+		
+		temporalBalises.addCheckBaliseTemporal(fragment, tempAcc1);
+		
+		int fLength1 = fragment.length() ;
+		assertNotEquals(0 , fragment.length()) ;
 	}
 }

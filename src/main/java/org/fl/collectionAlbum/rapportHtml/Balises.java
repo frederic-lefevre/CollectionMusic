@@ -1,13 +1,15 @@
 package org.fl.collectionAlbum.rapportHtml;
 
+import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.fl.collectionAlbum.Format;
+import org.fl.collectionAlbum.utils.TemporalUtils;
 
 public class Balises {
 
-	public enum BalisesType { POIDS, ALPHA } ;
+	public enum BalisesType { POIDS, ALPHA, TEMPORAL } ;
 	
 	private List<String> balises ;
 	
@@ -42,6 +44,10 @@ public class Balises {
 			addCheckBalise(fragment, f.displayPoidsTotal()) ;		
 	}
 	
+	public void addCheckBaliseTemporal(StringBuilder fragment, TemporalAccessor tempsAccessor) {
+		addCheckBalise(fragment, TemporalUtils.formatDate(tempsAccessor)) ;	
+	}	
+	
 	private void addCheckBalise(StringBuilder fragment, String uneBalise) {
 		
 		if ( (balises.isEmpty()) || (! uneBalise.equals(lastBaliseWritten))) {				
@@ -59,5 +65,6 @@ public class Balises {
 
 	public BalisesType getBalisesType() {
 		return balisesType;
-	}	
+	}
+
 }
