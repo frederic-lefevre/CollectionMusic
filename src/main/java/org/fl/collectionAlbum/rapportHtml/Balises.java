@@ -29,11 +29,11 @@ public class Balises {
 	}
 	
 	public void writeBalises(StringBuilder fragment) {
-		fragment.append("<table class=\"balises\">\n") ;
+		fragment.append("<table class=\"balises\">\n  <tbody class=\"balises\">\n") ;
 		for (String uneBalise : balises) {
-			fragment.append("  <tr><td><a href=\"#").append(uneBalise + "\">").append(uneBalise).append("</a></td></tr>\n") ;
+			fragment.append("  <tr><td class=\"balises\"><a href=\"#").append(uneBalise + "\">").append(uneBalise).append("</a></td></tr>\n") ;
 		}
-		fragment.append("</table>\n") ;
+		fragment.append("  </tbody>\n</table>\n") ;
 	}
 	
 	protected void addCheckBaliseString(StringBuilder fragment, String s) {
