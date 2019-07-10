@@ -34,6 +34,7 @@
 		<timestamp>${maven.build.timestamp}</timestamp>
 		<maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss z</maven.build.timestamp.format>
 		<project.deploy.target>C:\FredericPersonnel\musique\RapportCollection</project.deploy.target>
+		<installExe.skip>true</installExe.skip>
 	</properties>
 
 	<build>
@@ -92,6 +93,9 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>3.1.0</version>
+				<configuration>
+				 	<skip>${installExe.skip}</skip>
+				</configuration>
 				<executions>
 					<execution>
 						<id>copy-css</id>
