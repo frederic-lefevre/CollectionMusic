@@ -33,6 +33,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<timestamp>${maven.build.timestamp}</timestamp>
 		<maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss z</maven.build.timestamp.format>
+		<project.deploy.target>C:\FredericPersonnel\musique\RapportCollection</project.deploy.target>
 	</properties>
 
 	<build>
@@ -92,23 +93,23 @@
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>3.1.0</version>
 				<executions>
-                <execution>
-                    <id>copy-css</id>
-                    <phase>install</phase>
-                    <goals>
-                        <goal>copy-resources</goal>
-                    </goals>
+					<execution>
+						<id>copy-css</id>
+						<phase>install</phase>
+						<goals>
+							<goal>copy-resources</goal>
+						</goals>
 
-                    <configuration>
-                        <outputDirectory>${basedir}/target/css</outputDirectory>
-                        <resources>
-                            <resource>
-                                <directory>src/main/resources/css</directory>
-                            </resource>
-                        </resources>
-                    </configuration>
-                </execution>
-           </executions>
+						<configuration>
+							<outputDirectory>${project.deploy.target}/css</outputDirectory>
+							<resources>
+								<resource>
+									<directory>src/main/resources/css</directory>
+								</resource>
+							</resources>
+						</configuration>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
