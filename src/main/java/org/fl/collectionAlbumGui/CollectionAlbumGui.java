@@ -11,6 +11,8 @@ import org.fl.collectionAlbum.rapportHtml.RapportStructuresAndNames;
 import org.fl.collectionAlbumGui.entry.AlbumEntryPane;
 import org.fl.collectionAlbumGui.entry.ConcertEntryPane;
 
+import com.ibm.lge.fl.util.swing.ApplicationInfoPane;
+
 public class CollectionAlbumGui  extends JFrame {
 
 	private static final long serialVersionUID = 8726429353709418534L;
@@ -30,6 +32,9 @@ public class CollectionAlbumGui  extends JFrame {
 		});
 	}
 	
+	private JTabbedPane			collectionTabs ;	
+	private ApplicationInfoPane appInfoPane ;
+	
 	public CollectionAlbumGui() {
 		
 		// init logger and parameters
@@ -46,13 +51,15 @@ public class CollectionAlbumGui  extends JFrame {
 		GenerationPane gPane   = new GenerationPane(albumLog) ;
 		AlbumEntryPane aPane   = new AlbumEntryPane() ;
 		ConcertEntryPane cPane = new ConcertEntryPane() ;
+		appInfoPane		 	   = new ApplicationInfoPane(Control.getMusicRunningContext()) ;
 		
-		JTabbedPane operationTab = new JTabbedPane() ;
-		operationTab.addTab("Génération",     gPane.getGenPane()) ;
-		operationTab.addTab("Entrée album",   aPane.getaEntryPane()) ;
-		operationTab.addTab("Entrée concert", cPane.getcEntryPane()) ;
+		collectionTabs = new JTabbedPane() ;
+		collectionTabs.addTab("Génération",     gPane.getGenPane()) ;
+		collectionTabs.addTab("Entrée album",   aPane.getaEntryPane()) ;
+		collectionTabs.addTab("Entrée concert", cPane.getcEntryPane()) ;
+		collectionTabs.addTab("Informations",   appInfoPane) ;
 		
-		getContentPane().add(operationTab) ;
+		getContentPane().add(collectionTabs) ;
 		pack() ;		
 	}
 

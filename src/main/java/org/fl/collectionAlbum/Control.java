@@ -10,20 +10,18 @@ import com.ibm.lge.fl.util.RunningContext;
 
 public class Control {
 
-	// Logger
-	private static Logger albumLog ;
+	private final static String musicFileExtension = "json" ;
 	
-	private static Charset charset ;
-
-   	private final static String musicFileExtension = "json" ;
-	  
+	private static Logger 		  	  albumLog ;	
+	private static Charset 		  	  charset ;
+	private static RunningContext 	  musicRunningContext ;	  
    	private static AdvancedProperties collectionProperties ;
    	
 	public static void initControl(String propFile) {
 		
 		try {
 			//access to properties and logger
-			RunningContext musicRunningContext = new RunningContext("CollectionMusique", null, new URI(propFile));
+			musicRunningContext = new RunningContext("CollectionMusique", null, new URI(propFile));
 		
 			collectionProperties = musicRunningContext.getProps() ;
 		    albumLog = musicRunningContext.getpLog() ;
@@ -39,13 +37,9 @@ public class Control {
 		}
 	}
 
-	public static Logger getAlbumLog() 				{return albumLog;				}
-	public static String getMusicfileExtension() 	{return musicFileExtension;		}
-	public static AdvancedProperties getCollectionProperties() {
-		return collectionProperties;
-	}
-
-	public static Charset getCharset() {
-		return charset;
-	}		
+	public static Logger 			 getAlbumLog() 			   { return albumLog			; }
+	public static String 			 getMusicfileExtension()   { return musicFileExtension  ; }
+	public static AdvancedProperties getCollectionProperties() { return collectionProperties; }
+	public static Charset 			 getCharset() 			   { return charset				; }
+	public static RunningContext 	 getMusicRunningContext()  { return musicRunningContext ; }		
 }
