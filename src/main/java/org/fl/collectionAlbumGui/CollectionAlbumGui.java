@@ -5,6 +5,8 @@ import java.util.logging.Logger;
 
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.rapportHtml.RapportStructuresAndNames;
@@ -59,8 +61,22 @@ public class CollectionAlbumGui  extends JFrame {
 		collectionTabs.addTab("Entrée concert", cPane.getcEntryPane()) ;
 		collectionTabs.addTab("Informations",   appInfoPane) ;
 		
+		collectionTabs.addChangeListener(new CollectionTabChangeListener());
+		
+		collectionTabs.setSelectedIndex(0) ;
 		getContentPane().add(collectionTabs) ;
+		
 		pack() ;		
 	}
 
+	private class CollectionTabChangeListener implements ChangeListener {
+
+		@Override
+		public void stateChanged(ChangeEvent arg0) {
+			
+			if (collectionTabs.getSelectedComponent().equals(appInfoPane)) {
+				appInfoPane.setInfos();
+			}			
+		}
+	}
 }
