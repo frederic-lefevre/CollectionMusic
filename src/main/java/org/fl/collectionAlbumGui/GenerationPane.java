@@ -8,8 +8,6 @@ import javax.swing.JPanel;
 public class GenerationPane {
 
 	private JPanel 		 genPane ;
-	private StartControl startButton ;
-	private StartControl genButton ;
 	
 	private final static String rText  = "Lecture des fichiers albums et concerts" ;
 	private final static String gText  = "Génération du nouveau site collection" ;
@@ -22,10 +20,10 @@ public class GenerationPane {
 		genPane = new JPanel() ;
 		genPane.setLayout(new BoxLayout(genPane, BoxLayout.Y_AXIS));
 		
-		startButton = new StartControl(rText, iText, sText) ;
+		StartControl startButton = new StartControl(rText, iText, sText) ;
 		genPane.add(startButton.getProcCtrl()) ;
 				
-		genButton = new StartControl(gText, iText, s1Text) ;
+		StartControl genButton = new StartControl(gText, iText, s1Text) ;
 		genButton.deactivate() ;
 		genPane.add(genButton.getProcCtrl()) ;
 		
