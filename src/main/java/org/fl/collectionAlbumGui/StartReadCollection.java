@@ -9,25 +9,23 @@ import org.fl.collectionAlbum.CollectionAlbums;
 
 public class StartReadCollection implements ActionListener {
 
-	private Logger albumLog ;
+	private Logger 					 albumLog ;
 	private ProgressInformationPanel pip;
-	private CollectionProcessWaiter collectionProcWaiter;
-	private StartControl  startCtrl;
-	private StartControl[]  startCtrlTab;
+	private CollectionProcessWaiter  collectionProcWaiter;
+	private StartControl  			 startCtrl;
+	private StartControl[]  		 startCtrlTab;
 	
 	public StartReadCollection(ProgressInformationPanel progInfoPanel, StartControl stCtrl, StartControl[] stList, Logger aLog) {
 
-		albumLog = aLog;
-		pip = progInfoPanel ;
-		startCtrl = stCtrl ;
+		albumLog 	 = aLog;
+		pip 		 = progInfoPanel ;
+		startCtrl 	 = stCtrl ;
 		startCtrlTab = stList ;
 	}
-
 	
 	public void setCollectionProcWaiter(CollectionProcessWaiter collectionProcWaiter) {
 		this.collectionProcWaiter = collectionProcWaiter;
 	}
-
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
@@ -41,5 +39,4 @@ public class StartReadCollection implements ActionListener {
 		ca.addPropertyChangeListener(collectionProcWaiter);
 		ca.execute() ;
 	}
-
 }
