@@ -3,8 +3,10 @@ package org.fl.collectionAlbumGui;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import com.ibm.lge.fl.util.swing.TextAreaLogHandler;
@@ -41,11 +43,14 @@ public class GenerationPane {
 		sg.setCollectionProcWaiter(new CollectionProcessWaiter(stCtrl)) ;
 		genButton.getStartButton().addActionListener(sg) ;
 		
-		JTextArea logArea = new JTextArea(80, 30) ;
+		JTextArea logArea = new JTextArea(40, 120) ;
+		logArea.setEditable(false);
+		logArea.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+		JScrollPane scrollPane1 = new JScrollPane(logArea) ;
 		TextAreaLogHandler lHandler = new TextAreaLogHandler(logArea) ;
 		lHandler.setLevel(Level.INFO);
 		albumLog.addHandler(lHandler);
-		genPane.add(logArea) ;
+		genPane.add(scrollPane1) ;
 	} 
 
 	public JPanel getGenPane() { return genPane;	}
