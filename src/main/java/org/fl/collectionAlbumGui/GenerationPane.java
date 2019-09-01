@@ -48,7 +48,7 @@ public class GenerationPane {
 		logArea.setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
 		JScrollPane scrollPane1 = new JScrollPane(logArea) ;
 		TextAreaLogHandler lHandler = new TextAreaLogHandler(logArea) ;
-		lHandler.setLevel(Level.INFO);
+		lHandler.setLevel(albumLog.getLevel());
 		albumLog.addHandler(lHandler);
 		genPane.add(scrollPane1) ;
 	} 
