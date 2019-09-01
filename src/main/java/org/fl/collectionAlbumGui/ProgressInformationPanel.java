@@ -16,10 +16,10 @@ import javax.swing.JPanel;
 
 public class ProgressInformationPanel {
 
-
 	private JPanel procInfos ;
 	private JLabel lblStep;
-	private JLabel lblStepInfo;
+	private JLabel lblStepPrefixInformation;
+	private JLabel lblStepInformation;
 	private JLabel lblStatusTitle;
 	private JLabel lblStatus;
 	private static String dateFrancePattern = " EEEE dd MMMM yyyy à HH:mm:ss" ;
@@ -55,14 +55,18 @@ public class ProgressInformationPanel {
 		JPanel infoStep = new JPanel() ;
 		infoStep.setLayout(new FlowLayout(FlowLayout.LEFT)) ;
 		lblStep = new JLabel("Progression: ");
-		lblStepInfo = new JLabel("");
+		lblStepPrefixInformation = new JLabel("");
+		lblStepInformation = new JLabel("");
 		lblStep.setAlignmentX(Component.LEFT_ALIGNMENT) ;
 		lblStep.setFont(font) ;
-		lblStepInfo.setFont(font) ;
-		lblStepInfo.setBackground(Color.WHITE) ;
+		lblStepInformation.setFont(font) ;
+		lblStepInformation.setBackground(Color.WHITE) ;
+		lblStepPrefixInformation.setFont(font) ;
+		lblStepPrefixInformation.setBackground(Color.WHITE) ;
 		lblStep.setBackground(Color.WHITE) ;
-		infoStep.add(lblStep) ;
-		infoStep.add(lblStepInfo) ;
+		infoStep.add(lblStep) ;		
+		infoStep.add(lblStepPrefixInformation) ;
+		infoStep.add(lblStepInformation) ;
 		infoStep.setAlignmentX(Component.LEFT_ALIGNMENT) ;
 		infoStep.setBackground(Color.WHITE) ;
 		procInfos.add(infoStep) ;
@@ -72,8 +76,12 @@ public class ProgressInformationPanel {
 		return procInfos;
 	}
 	
-	public void setStepInfos(String info) {
-		 lblStepInfo.setText(info);
+	public void setStepInformation(String info) {
+		lblStepInformation.setText(info);
+	}
+	
+	public void setStepPrefixInformation(String prefixInfo) {
+		lblStepPrefixInformation.setText(prefixInfo);
 	}
 	
 	public void setProcessStatus(String st) {

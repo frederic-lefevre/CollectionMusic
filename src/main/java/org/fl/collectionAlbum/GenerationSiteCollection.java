@@ -21,9 +21,18 @@ import com.ibm.lge.fl.util.file.FilesUtils;
 public class GenerationSiteCollection  extends SwingWorker<String,ProgressInformation> {
 
 	private CollectionAlbumContainer albumsContainer ;
-	private Logger albumLog ;
-	private ProgressInformationPanel progressPanel;
+	private final Logger albumLog ;
+	private final ProgressInformationPanel progressPanel;
 	
+	// Information prefix
+	private final static String ARRET 			= "Arreté" ;
+	private final static String FIN_GENERATION	= "Nouveau site généré" ;
+	private final static String CLEANUP 		= "Nettoyage de l'ancien site" ;
+	private final static String ECRITURE 		= "Ecriture du nouveau site" ;
+	
+	// Status
+	private final static String GENERATION 	    = "En cours de génération" ;
+
 	public GenerationSiteCollection(ProgressInformationPanel pip, Logger aLog) {
 		
 		albumLog 		= aLog;
@@ -34,13 +43,16 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 	 public String doInBackground() {
   		
   		albumsContainer = CollectionAlbumContainer.getInstance(albumLog) ;
+  		progressPanel.setProcessStatus(GENERATION) ;
   		
-		albumLog.info("Nettoyage de l'ancien site");
-		publish(new ProgressInformation("En cours de génération", "Nettoyage de l'ancien site")) ;
+		albumLog.info("Nettoyage de l'ancien site") ;
+		progressPanel.setStepPrefixInformation(CLEANUP) ;
 		cleanRapport() ;
+		
 		albumLog.info("Ecriture du nouveau site") ;
-		publish(new ProgressInformation("En cours de génération", "Ecriture du nouveau site")) ;
+		progressPanel.setStepPrefixInformation(ECRITURE) ;
 		rapportCollection() ;
+		
 		albumLog.info("Fin de la génération");
 		return "" ;	
   	}
@@ -126,19 +138,18 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 		 rapportConcerts.printReport(rapportFile, CssStyles.main) ;
 	 }
 		
-	 @Override
-     public void done() {
+	@Override
+	public void done() {
 
-	        progressPanel.setStepInfos("Arreté");
-	        progressPanel.setProcessStatus("Nouveau site généré");
-	 }
-	 
-	 @Override
-	 public void process(List<ProgressInformation> lp) {
-		 
-		 ProgressInformation latestResult = lp.get(lp.size() - 1);
-		 
-	        progressPanel.setStepInfos(latestResult.getInformation());
-	        progressPanel.setProcessStatus(latestResult.getStatus());
-	 }
+		progressPanel.setStepInformation("");
+    	progressPanel.setStepPrefixInformation(ARRET);
+    	progressPanel.setProcessStatus(FIN_GENERATION);
+	}
+
+	@Override
+	public void process(List<ProgressInformation> lp) {
+
+		ProgressInformation latestResult = lp.get(lp.size() - 1);
+		progressPanel.setStepInformation(latestResult.getInformation());
+	}
 }

@@ -39,7 +39,8 @@ public class StartControl {
 		
 		pip = new ProgressInformationPanel() ;
 		pip.setProcessStatus(sText) ;
-		pip.setStepInfos(iText) ;
+		pip.setStepPrefixInformation(iText);
+		pip.setStepInformation("");
 			
 		procCtrl.add(pip.getProcInfos()) ;
 		

@@ -25,8 +25,18 @@ import com.ibm.lge.fl.util.json.JsonUtils;
 public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,ProgressInformation>{
 	
 	private CollectionAlbumContainer albumsContainer ;
-	private Logger albumLog ;
-	private ProgressInformationPanel progressPanel;
+	private final Logger albumLog ;
+	private final ProgressInformationPanel progressPanel;
+	
+	// Information prefix
+	private final static String ARRET 			= "Arreté" ;
+	private final static String EN_EXAMEN		= "Dossier examiné: " ;
+	
+	// Status
+	private final static String LECTURE_ALBUM 	= "Lecture des albums" ;
+	private final static String LECTURE_CONCERT = "Lecture des  concerts" ;
+	private final static String CALENDARS 		= "Construction des calendriers" ;
+	private final static String FIN_LECTURE		= "Collection chargée" ;
 	
 	public CollectionAlbums(ProgressInformationPanel pip, Logger aLog) {
 		
@@ -34,17 +44,26 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 		progressPanel = pip ;
 	}
    	
-	 @Override 
-	 public CollectionAlbumContainer doInBackground() {
-		
+	@Override 
+	public CollectionAlbumContainer doInBackground() {
+
+		progressPanel.setStepInformation("");
+
 		albumsContainer = CollectionAlbumContainer.getEmptyInstance(albumLog) ;
-		
-		albumLog.info("Lecture des données des albums");
+		progressPanel.setStepPrefixInformation(EN_EXAMEN);
+
+		albumLog.info("Lecture des données des albums") ;		
+		progressPanel.setProcessStatus(LECTURE_ALBUM) ;
 		buildAlbumsCollection() ;
+		
 		albumLog.info("Lecture des données des concerts");
+		progressPanel.setProcessStatus(LECTURE_CONCERT);
 		buildConcerts() ;	
+		
 		albumLog.info("Construction du calendrier") ;
+		progressPanel.setProcessStatus(CALENDARS);
 		buildCalendrier() ;
+		
 		return albumsContainer;
 	}
    	
@@ -99,7 +118,7 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
     	
     	@Override
 		public FileVisitResult preVisitDirectory(Path file, BasicFileAttributes attr) {
-    		 publish(new ProgressInformation("En cours de lecture", "Dossier examiné: " + file.getFileName())) ;
+    		 publish(new ProgressInformation(file.getFileName().toString())) ;
     		 return FileVisitResult.CONTINUE;
     	}
 
@@ -134,22 +153,20 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
     	} catch (Exception e) {
     		albumLog.log(Level.SEVERE, "Exception in build calendrier ", e);
     	}
-
     }
 
     @Override
     public void done() {
 
-    	progressPanel.setStepInfos("Arreté");
-    	progressPanel.setProcessStatus("Collection chargée");
+    	progressPanel.setStepInformation("");
+    	progressPanel.setStepPrefixInformation(ARRET);
+    	progressPanel.setProcessStatus(FIN_LECTURE);
     }
 
     @Override
     public void process(List<ProgressInformation> lp) {
 
     	ProgressInformation latestResult = lp.get(lp.size() - 1);
-
-    	progressPanel.setStepInfos(latestResult.getInformation());
-    	progressPanel.setProcessStatus(latestResult.getStatus());
+    	progressPanel.setStepInformation(latestResult.getInformation());
     }
 }
