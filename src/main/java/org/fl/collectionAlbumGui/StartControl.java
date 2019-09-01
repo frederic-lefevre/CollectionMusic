@@ -27,13 +27,13 @@ public class StartControl {
 		procCtrl = new JPanel() ;
 		procCtrl.setLayout(new BoxLayout(procCtrl, BoxLayout.X_AXIS));
 		procCtrl.setBorder(BorderFactory.createMatteBorder(10,10,10,10,Color.BLACK)) ;
+		procCtrl.setPreferredSize(new Dimension(400,120)) ;
 		
 		pStart = new JButton(buttonText) ;
 		
 		Font font = new Font("Verdana", Font.BOLD, 14);
 		pStart.setFont(font) ;
-		pStart.setBackground(Color.GREEN) ;
-		pStart.setPreferredSize(new Dimension(400,100)) ;
+		pStart.setBackground(Color.GREEN) ;		
 		
 		procCtrl.add(pStart) ;
 		
@@ -42,22 +42,12 @@ public class StartControl {
 		pip.setStepPrefixInformation(iText);
 		pip.setStepInformation("");
 			
-		procCtrl.add(pip.getProcInfos()) ;
-		
+		procCtrl.add(pip.getProcInfos()) ;		
 	}
 
-	public JPanel getProcCtrl() {
-		return procCtrl;
-	}
-
-	public JButton getStartButton() {
-		return pStart;
-	}
-	
-	public ProgressInformationPanel getPip() {
-		return pip;
-	}
-
+	public JPanel 					getProcCtrl() 	 { return procCtrl ; }
+	public JButton 					getStartButton() { return pStart   ; }	
+	public ProgressInformationPanel getPip() 		 { return pip 	   ; }
 
 	public boolean isTriggered() {
 		return triggered;

@@ -1,6 +1,5 @@
 package org.fl.collectionAlbumGui;
 
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
@@ -51,6 +50,7 @@ public class GenerationPane {
 		lHandler.setLevel(albumLog.getLevel());
 		albumLog.addHandler(lHandler);
 		genPane.add(scrollPane1) ;
+		
 	} 
 
 	public JPanel getGenPane() { return genPane;	}
