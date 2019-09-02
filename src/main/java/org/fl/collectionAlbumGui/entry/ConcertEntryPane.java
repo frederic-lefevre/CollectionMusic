@@ -2,20 +2,16 @@ package org.fl.collectionAlbumGui.entry;
 
 import javax.swing.JPanel;
 
-public class ConcertEntryPane {
+public class ConcertEntryPane extends JPanel {
 
-	private JPanel cEntryPane ;
+	private static final long serialVersionUID = 1L;
 	
-public ConcertEntryPane() {
+	public ConcertEntryPane() {
 		
-		cEntryPane = new JPanel() ;
+		super() ;
 		
 		ArtisteEntryPanel aep = new ArtisteEntryPanel() ;
-		cEntryPane.add(aep.getaEntryPane()) ;
-	}
-
-	public JPanel getcEntryPane() {
-		return cEntryPane;
+		add(aep.getaEntryPane()) ;
 	}
 
 }

@@ -58,9 +58,9 @@ public class CollectionAlbumGui  extends JFrame {
 		LogsDisplayPane lPane  = new LogsDisplayPane(albumLog) ;
 		
 		collectionTabs = new JTabbedPane() ;
-		collectionTabs.addTab("Génération",     gPane.getGenPane()) ;
-		collectionTabs.addTab("Entrée album",   aPane.getaEntryPane()) ;
-		collectionTabs.addTab("Entrée concert", cPane.getcEntryPane()) ;
+		collectionTabs.addTab("Génération",     gPane) ;
+		collectionTabs.addTab("Entrée album",   aPane) ;
+		collectionTabs.addTab("Entrée concert", cPane) ;
 		collectionTabs.addTab("Informations",   appInfoPane) ;
 		collectionTabs.addTab("Logs display",   lPane) ;
 		

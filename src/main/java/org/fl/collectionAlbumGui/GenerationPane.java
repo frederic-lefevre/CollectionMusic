@@ -5,10 +5,10 @@ import java.util.logging.Logger;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
-public class GenerationPane {
+public class GenerationPane extends JPanel {
 
-	private JPanel 		 genPane ;
-	
+	private static final long serialVersionUID = 1L;
+
 	private final static String rText  = "Lecture des fichiers albums et concerts" ;
 	private final static String gText  = "Génération du nouveau site collection" ;
 	private final static String iText  = "Arrêt";
@@ -17,15 +17,15 @@ public class GenerationPane {
 	
 	public GenerationPane(Logger albumLog) {
 			
-		genPane = new JPanel() ;
-		genPane.setLayout(new BoxLayout(genPane, BoxLayout.Y_AXIS));
+		super() ;
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
 		StartControl startButton = new StartControl(rText, iText, sText) ;
-		genPane.add(startButton.getProcCtrl()) ;
+		add(startButton.getProcCtrl()) ;
 				
 		StartControl genButton = new StartControl(gText, iText, s1Text) ;
 		genButton.deactivate() ;
-		genPane.add(genButton.getProcCtrl()) ;
+		add(genButton.getProcCtrl()) ;
 		
 		StartControl[] stCtrl = new StartControl[]{startButton, genButton} ;
 		
@@ -36,8 +36,6 @@ public class GenerationPane {
 		StartGenerationSite sg = new StartGenerationSite(genButton.getPip(), genButton, stCtrl, albumLog) ;
 		sg.setCollectionProcWaiter(new CollectionProcessWaiter(stCtrl)) ;
 		genButton.getStartButton().addActionListener(sg) ;
-
 	} 
 
-	public JPanel getGenPane() { return genPane;	}
 }
