@@ -14,6 +14,7 @@ import org.fl.collectionAlbumGui.entry.AlbumEntryPane;
 import org.fl.collectionAlbumGui.entry.ConcertEntryPane;
 
 import com.ibm.lge.fl.util.swing.ApplicationInfoPane;
+import com.ibm.lge.fl.util.swing.LogsDisplayPane;
 
 public class CollectionAlbumGui  extends JFrame {
 
@@ -54,12 +55,14 @@ public class CollectionAlbumGui  extends JFrame {
 		AlbumEntryPane aPane   = new AlbumEntryPane() ;
 		ConcertEntryPane cPane = new ConcertEntryPane() ;
 		appInfoPane		 	   = new ApplicationInfoPane(Control.getMusicRunningContext()) ;
+		LogsDisplayPane lPane  = new LogsDisplayPane(albumLog) ;
 		
 		collectionTabs = new JTabbedPane() ;
 		collectionTabs.addTab("Génération",     gPane.getGenPane()) ;
 		collectionTabs.addTab("Entrée album",   aPane.getaEntryPane()) ;
 		collectionTabs.addTab("Entrée concert", cPane.getcEntryPane()) ;
 		collectionTabs.addTab("Informations",   appInfoPane) ;
+		collectionTabs.addTab("Logs display",   lPane) ;
 		
 		collectionTabs.addChangeListener(new CollectionTabChangeListener());
 		
