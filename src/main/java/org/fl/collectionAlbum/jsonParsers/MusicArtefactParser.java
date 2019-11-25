@@ -34,11 +34,11 @@ public class MusicArtefactParser {
 		knownArtistes = ka ;
 		mLog 		  = l ;
 		
-		auteurs 	= processListeArtistes(Artiste.class, arteFactJson, JsonMusicProperties.AUTEUR) ;
-		interpretes = processListeArtistes(Artiste.class, arteFactJson, JsonMusicProperties.INTERPRETE) ;
-		chefs		= processListeArtistes(Artiste.class, arteFactJson, JsonMusicProperties.CHEF) ;
-		ensembles	= processListeArtistes(Groupe.class, arteFactJson, JsonMusicProperties.ENSEMBLE) ;
-		groupes		= processListeArtistes(Groupe.class, arteFactJson, JsonMusicProperties.GROUPE) ;
+		auteurs 	= processListeArtistes(Artiste.class, JsonMusicProperties.AUTEUR) ;
+		interpretes = processListeArtistes(Artiste.class, JsonMusicProperties.INTERPRETE) ;
+		chefs		= processListeArtistes(Artiste.class, JsonMusicProperties.CHEF) ;
+		ensembles	= processListeArtistes(Groupe.class,  JsonMusicProperties.ENSEMBLE) ;
+		groupes		= processListeArtistes(Groupe.class,  JsonMusicProperties.GROUPE) ;
 	}
 
 	public List<Artiste> getListeAuteurs() 	   { return auteurs ;	  }	
@@ -47,7 +47,7 @@ public class MusicArtefactParser {
 	public List<Artiste> getListeEnsembles()   { return ensembles ;	  }	
 	public List<Artiste> getListeGroupes() 	   { return groupes ;     }
 	
-	private List<Artiste> processListeArtistes(Class<? extends Artiste> cls, JsonObject arteFactJson, String artistesJprop) {
+	private List<Artiste> processListeArtistes(Class<? extends Artiste> cls, String artistesJprop) {
 		
 		List<Artiste> artistes = new ArrayList<Artiste>() ;
 		JsonElement jElem = arteFactJson.get(artistesJprop) ;
@@ -58,7 +58,7 @@ public class MusicArtefactParser {
 				for (JsonElement jArtiste : jArtistes) {
 
 					try {
-						artistes.add(processArtiste(cls, jArtiste.getAsJsonObject(), knownArtistes, mLog)) ;
+						artistes.add(processArtiste(cls, jArtiste.getAsJsonObject())) ;
 					} catch (IllegalStateException e) {
 						mLog.log(Level.WARNING, "un artiste n'est pas un objet json pour l'arteFact " + arteFactJson, e) ;
 					}
@@ -70,20 +70,20 @@ public class MusicArtefactParser {
 		return artistes ;
 	}
 	
-	private Artiste processArtiste(Class<? extends Artiste> cls, JsonObject jArtiste, List<ListeArtiste> knownArtistes, Logger mLog) {
+	private Artiste processArtiste(Class<? extends Artiste> cls, JsonObject jArtiste) {
 		
 		Artiste unArtiste ;
 		if (cls == Groupe.class) {
-			unArtiste = (Groupe)createGetOrUpdateArtiste(cls, jArtiste, knownArtistes, mLog) ;
+			unArtiste = (Groupe)createGetOrUpdateArtiste(cls, jArtiste) ;
 		} else {
-			unArtiste = createGetOrUpdateArtiste(cls, jArtiste, knownArtistes, mLog) ;
+			unArtiste = createGetOrUpdateArtiste(cls, jArtiste) ;
 		}
 		return unArtiste ;
 	}
 	
 	// Get an artiste, if it exists, return the existing one eventually updated
 	// if it does not exists, create it
-	private Artiste createGetOrUpdateArtiste(Class<? extends Artiste> cls, JsonObject jArtiste, List<ListeArtiste> knownArtistes, Logger mLog) {
+	private Artiste createGetOrUpdateArtiste(Class<? extends Artiste> cls, JsonObject jArtiste) {
 		
 		Artiste artiste;
 		Optional<Artiste> eventualArtiste =	knownArtistes.stream()
