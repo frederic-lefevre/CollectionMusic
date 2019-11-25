@@ -21,35 +21,41 @@ public class MusicArtefactParser {
 	private JsonObject arteFactJson ;
 	private Logger mLog ;
 	
-	private List<Artiste> auteurs ;
-	private List<Artiste> interpretes ;
-	private List<Artiste> chefs ;
-	private List<Artiste> ensembles ;
-	private List<Artiste> groupes ;
+	private ListeArtiste auteurs ;
+	private ListeArtiste interpretes ;
+	private ListeArtiste chefs ;
+	private ListeArtiste ensembles ;
+	private ListeArtiste groupes ;
 	
-	public MusicArtefactParser(JsonObject j, List<ListeArtiste> ka, Logger l) {
+	public MusicArtefactParser(JsonObject j, List<ListeArtiste> currentKnownArtistes, Logger l) {
 		super();
 		
 		arteFactJson  = j ;
-		knownArtistes = ka ;
 		mLog 		  = l ;
+		knownArtistes = new ArrayList<ListeArtiste>() ;
+		currentKnownArtistes.stream().forEach(la -> knownArtistes.add(la));
 		
 		auteurs 	= processListeArtistes(Artiste.class, JsonMusicProperties.AUTEUR) ;
+		knownArtistes.add(auteurs) ;
 		interpretes = processListeArtistes(Artiste.class, JsonMusicProperties.INTERPRETE) ;
+		knownArtistes.add(interpretes) ;
 		chefs		= processListeArtistes(Artiste.class, JsonMusicProperties.CHEF) ;
+		knownArtistes.add(chefs) ;
 		ensembles	= processListeArtistes(Groupe.class,  JsonMusicProperties.ENSEMBLE) ;
+		knownArtistes.add(ensembles) ;
 		groupes		= processListeArtistes(Groupe.class,  JsonMusicProperties.GROUPE) ;
+		knownArtistes.add(groupes) ;
 	}
 
-	public List<Artiste> getListeAuteurs() 	   { return auteurs ;	  }	
-	public List<Artiste> getListeInterpretes() { return interpretes ; }	
-	public List<Artiste> getListeChefs() 	   { return chefs ;		  }	
-	public List<Artiste> getListeEnsembles()   { return ensembles ;	  }	
-	public List<Artiste> getListeGroupes() 	   { return groupes ;     }
+	public List<Artiste> getListeAuteurs() 	   { return auteurs.getArtistes() ;	  }	
+	public List<Artiste> getListeInterpretes() { return interpretes.getArtistes() ; }	
+	public List<Artiste> getListeChefs() 	   { return chefs.getArtistes() ;		  }	
+	public List<Artiste> getListeEnsembles()   { return ensembles.getArtistes() ;	  }	
+	public List<Artiste> getListeGroupes() 	   { return groupes.getArtistes() ;     }
 	
-	private List<Artiste> processListeArtistes(Class<? extends Artiste> cls, String artistesJprop) {
+	private ListeArtiste processListeArtistes(Class<? extends Artiste> cls, String artistesJprop) {
 		
-		List<Artiste> artistes = new ArrayList<Artiste>() ;
+		ListeArtiste artistes = new ListeArtiste(mLog) ;
 		JsonElement jElem = arteFactJson.get(artistesJprop) ;
 		if (jElem != null) {
 			if (jElem.isJsonArray()) {
@@ -58,7 +64,7 @@ public class MusicArtefactParser {
 				for (JsonElement jArtiste : jArtistes) {
 
 					try {
-						artistes.add(processArtiste(cls, jArtiste.getAsJsonObject())) ;
+						artistes.addArtiste(processArtiste(cls, jArtiste.getAsJsonObject())) ;
 					} catch (IllegalStateException e) {
 						mLog.log(Level.WARNING, "un artiste n'est pas un objet json pour l'arteFact " + arteFactJson, e) ;
 					}
