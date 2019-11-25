@@ -27,14 +27,16 @@ public abstract class MusicArtefact {
     	artefactLog 	 = al ;
     	arteFactJson     = afj ;
     	
-    	auteurs 	     = MusicArtefactParser.getListeAuteurs(	   arteFactJson, knownArtistes, artefactLog) ;
-    	interpretes      = MusicArtefactParser.getListeInterpretes(arteFactJson, knownArtistes, artefactLog) ;
-    	ensembles 	     = MusicArtefactParser.getListeEnsembles(  arteFactJson, knownArtistes, artefactLog) ;
-    	chefsOrchestres  = MusicArtefactParser.getListeChefs(	   arteFactJson, knownArtistes, artefactLog) ;
+    	MusicArtefactParser musicParser = new MusicArtefactParser(arteFactJson, knownArtistes, artefactLog) ;
     	
-    	auteurs.addAll(    MusicArtefactParser.getListeGroupes(	   arteFactJson, knownArtistes, artefactLog)) ;
+    	auteurs 	     = musicParser.getListeAuteurs() ;
+    	interpretes      = musicParser.getListeInterpretes() ;
+    	ensembles 	     = musicParser.getListeEnsembles() ;
+    	chefsOrchestres  = musicParser.getListeChefs() ;
     	
-    	notes 		     = MusicArtefactParser.getNotes(arteFactJson, artefactLog) ;    	  	
+    	auteurs.addAll(    musicParser.getListeGroupes()) ;
+    	
+    	notes 		     = musicParser.getNotes() ;    	  	
     }
     
 	public void addMusicArtfactArtistesToList(ListeArtiste artistes) {

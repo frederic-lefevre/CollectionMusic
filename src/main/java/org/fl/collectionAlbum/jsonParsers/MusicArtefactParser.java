@@ -17,27 +17,39 @@ import com.google.gson.JsonObject;
 
 public class MusicArtefactParser {
 	
-	public static List<Artiste> getListeAuteurs(JsonObject arteFactJson, List<ListeArtiste> knownArtistes, Logger mLog) {
-		return processListeArtistes(Artiste.class, arteFactJson, JsonMusicProperties.AUTEUR, knownArtistes, mLog) ;
+	private List<ListeArtiste> knownArtistes ;
+	private JsonObject arteFactJson ;
+	private Logger mLog ;
+	
+	public MusicArtefactParser(JsonObject j, List<ListeArtiste> ka, Logger l) {
+		super();
+		
+		arteFactJson  = j ;
+		knownArtistes = ka ;
+		mLog 		  = l ;
+	}
+
+	public List<Artiste> getListeAuteurs() {
+		return processListeArtistes(Artiste.class, arteFactJson, JsonMusicProperties.AUTEUR) ;
 	}
 	
-	public static List<Artiste> getListeInterpretes(JsonObject arteFactJson, List<ListeArtiste> knownArtistes, Logger mLog) {
-		return processListeArtistes(Artiste.class, arteFactJson, JsonMusicProperties.INTERPRETE, knownArtistes, mLog) ;
+	public List<Artiste> getListeInterpretes() {
+		return processListeArtistes(Artiste.class, arteFactJson, JsonMusicProperties.INTERPRETE) ;
 	}
 	
-	public static List<Artiste> getListeChefs(JsonObject arteFactJson, List<ListeArtiste> knownArtistes, Logger mLog) {
-		return processListeArtistes(Artiste.class, arteFactJson, JsonMusicProperties.CHEF, knownArtistes, mLog) ;
+	public List<Artiste> getListeChefs() {
+		return processListeArtistes(Artiste.class, arteFactJson, JsonMusicProperties.CHEF) ;
 	}
 	
-	public static List<Artiste> getListeEnsembles(JsonObject arteFactJson, List<ListeArtiste> knownArtistes, Logger mLog) {
-		return processListeArtistes(Groupe.class, arteFactJson, JsonMusicProperties.ENSEMBLE, knownArtistes, mLog) ;
+	public List<Artiste> getListeEnsembles() {
+		return processListeArtistes(Groupe.class, arteFactJson, JsonMusicProperties.ENSEMBLE) ;
 	}
 	
-	public static List<Artiste> getListeGroupes(JsonObject arteFactJson, List<ListeArtiste> knownArtistes, Logger mLog) {
-		return processListeArtistes(Groupe.class, arteFactJson, JsonMusicProperties.GROUPE, knownArtistes, mLog) ;
+	public List<Artiste> getListeGroupes() {
+		return processListeArtistes(Groupe.class, arteFactJson, JsonMusicProperties.GROUPE) ;
 	}
 	
-	private static List<Artiste> processListeArtistes(Class<? extends Artiste> cls, JsonObject arteFactJson, String artistesJprop, List<ListeArtiste> knownArtistes, Logger mLog) {
+	private List<Artiste> processListeArtistes(Class<? extends Artiste> cls, JsonObject arteFactJson, String artistesJprop) {
 		
 		List<Artiste> artistes = new ArrayList<Artiste>() ;
 		JsonElement jElem = arteFactJson.get(artistesJprop) ;
@@ -60,7 +72,7 @@ public class MusicArtefactParser {
 		return artistes ;
 	}
 	
-	private static Artiste processArtiste(Class<? extends Artiste> cls, JsonObject jArtiste, List<ListeArtiste> knownArtistes, Logger mLog) {
+	private Artiste processArtiste(Class<? extends Artiste> cls, JsonObject jArtiste, List<ListeArtiste> knownArtistes, Logger mLog) {
 		
 		Artiste unArtiste ;
 		if (cls == Groupe.class) {
@@ -73,7 +85,7 @@ public class MusicArtefactParser {
 	
 	// Get an artiste, if it exists, return the existing one eventually updated
 	// if it does not exists, create it
-	private static Artiste createGetOrUpdateArtiste(Class<? extends Artiste> cls, JsonObject jArtiste, List<ListeArtiste> knownArtistes, Logger mLog) {
+	private Artiste createGetOrUpdateArtiste(Class<? extends Artiste> cls, JsonObject jArtiste, List<ListeArtiste> knownArtistes, Logger mLog) {
 		
 		Artiste artiste;
 		Optional<Artiste> eventualArtiste =	knownArtistes.stream()
@@ -95,7 +107,7 @@ public class MusicArtefactParser {
 		return artiste ;
 	}
 	
-	public static List<String> getNotes(JsonObject arteFactJson, Logger mLog) {
+	public List<String> getNotes() {
 
 		List<String> notes = new ArrayList<String>() ;
         JsonElement jElem = arteFactJson.get(JsonMusicProperties.NOTES) ;
