@@ -21,33 +21,31 @@ public class MusicArtefactParser {
 	private JsonObject arteFactJson ;
 	private Logger mLog ;
 	
+	private List<Artiste> auteurs ;
+	private List<Artiste> interpretes ;
+	private List<Artiste> chefs ;
+	private List<Artiste> ensembles ;
+	private List<Artiste> groupes ;
+	
 	public MusicArtefactParser(JsonObject j, List<ListeArtiste> ka, Logger l) {
 		super();
 		
 		arteFactJson  = j ;
 		knownArtistes = ka ;
 		mLog 		  = l ;
+		
+		auteurs 	= processListeArtistes(Artiste.class, arteFactJson, JsonMusicProperties.AUTEUR) ;
+		interpretes = processListeArtistes(Artiste.class, arteFactJson, JsonMusicProperties.INTERPRETE) ;
+		chefs		= processListeArtistes(Artiste.class, arteFactJson, JsonMusicProperties.CHEF) ;
+		ensembles	= processListeArtistes(Groupe.class, arteFactJson, JsonMusicProperties.ENSEMBLE) ;
+		groupes		= processListeArtistes(Groupe.class, arteFactJson, JsonMusicProperties.GROUPE) ;
 	}
 
-	public List<Artiste> getListeAuteurs() {
-		return processListeArtistes(Artiste.class, arteFactJson, JsonMusicProperties.AUTEUR) ;
-	}
-	
-	public List<Artiste> getListeInterpretes() {
-		return processListeArtistes(Artiste.class, arteFactJson, JsonMusicProperties.INTERPRETE) ;
-	}
-	
-	public List<Artiste> getListeChefs() {
-		return processListeArtistes(Artiste.class, arteFactJson, JsonMusicProperties.CHEF) ;
-	}
-	
-	public List<Artiste> getListeEnsembles() {
-		return processListeArtistes(Groupe.class, arteFactJson, JsonMusicProperties.ENSEMBLE) ;
-	}
-	
-	public List<Artiste> getListeGroupes() {
-		return processListeArtistes(Groupe.class, arteFactJson, JsonMusicProperties.GROUPE) ;
-	}
+	public List<Artiste> getListeAuteurs() 	   { return auteurs ;	  }	
+	public List<Artiste> getListeInterpretes() { return interpretes ; }	
+	public List<Artiste> getListeChefs() 	   { return chefs ;		  }	
+	public List<Artiste> getListeEnsembles()   { return ensembles ;	  }	
+	public List<Artiste> getListeGroupes() 	   { return groupes ;     }
 	
 	private List<Artiste> processListeArtistes(Class<? extends Artiste> cls, JsonObject arteFactJson, String artistesJprop) {
 		
