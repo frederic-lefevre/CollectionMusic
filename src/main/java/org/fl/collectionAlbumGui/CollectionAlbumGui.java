@@ -4,17 +4,13 @@ import java.awt.EventQueue;
 import java.util.logging.Logger;
 
 import javax.swing.JFrame;
-import javax.swing.JTabbedPane;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.rapportHtml.RapportStructuresAndNames;
 import org.fl.collectionAlbumGui.entry.AlbumEntryPane;
 import org.fl.collectionAlbumGui.entry.ConcertEntryPane;
 
-import com.ibm.lge.fl.util.swing.ApplicationInfoPane;
-import com.ibm.lge.fl.util.swing.LogsDisplayPane;
+import com.ibm.lge.fl.util.swing.ApplicationTabbedPane;
 
 public class CollectionAlbumGui  extends JFrame {
 
@@ -34,10 +30,7 @@ public class CollectionAlbumGui  extends JFrame {
 			}
 		});
 	}
-	
-	private JTabbedPane			collectionTabs ;	
-	private ApplicationInfoPane appInfoPane ;
-	
+		
 	public CollectionAlbumGui() {
 		
 		// init logger and parameters
@@ -50,21 +43,16 @@ public class CollectionAlbumGui  extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Collection d'album") ;
 		
+		ApplicationTabbedPane collectionTabs = new ApplicationTabbedPane(Control.getMusicRunningContext()) ;
+		
 		// init panel de lecture et génération de site
 		GenerationPane gPane   = new GenerationPane(albumLog) ;
 		AlbumEntryPane aPane   = new AlbumEntryPane() ;
 		ConcertEntryPane cPane = new ConcertEntryPane() ;
-		appInfoPane		 	   = new ApplicationInfoPane(Control.getMusicRunningContext()) ;
-		LogsDisplayPane lPane  = new LogsDisplayPane(albumLog) ;
 		
-		collectionTabs = new JTabbedPane() ;
-		collectionTabs.addTab("Génération",     gPane) ;
-		collectionTabs.addTab("Entrée album",   aPane) ;
-		collectionTabs.addTab("Entrée concert", cPane) ;
-		collectionTabs.addTab("Informations",   appInfoPane) ;
-		collectionTabs.addTab("Logs display",   lPane) ;
-		
-		collectionTabs.addChangeListener(new CollectionTabChangeListener());
+		collectionTabs.add(gPane, "Génération", 0) ;
+		collectionTabs.add(aPane, "Entrée album", 1) ;
+		collectionTabs.add(cPane, "Entrée concert", 2) ;
 		
 		collectionTabs.setSelectedIndex(0) ;
 		getContentPane().add(collectionTabs) ;
@@ -72,14 +60,4 @@ public class CollectionAlbumGui  extends JFrame {
 		pack() ;		
 	}
 
-	private class CollectionTabChangeListener implements ChangeListener {
-
-		@Override
-		public void stateChanged(ChangeEvent arg0) {
-			
-			if (collectionTabs.getSelectedComponent().equals(appInfoPane)) {
-				appInfoPane.setInfos();
-			}			
-		}
-	}
 }
