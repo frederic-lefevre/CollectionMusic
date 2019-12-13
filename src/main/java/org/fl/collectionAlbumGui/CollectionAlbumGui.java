@@ -57,7 +57,6 @@ public class CollectionAlbumGui  extends JFrame {
 		collectionTabs.setSelectedIndex(0) ;
 		getContentPane().add(collectionTabs) ;
 		
-		pack() ;		
 	}
 
 }
