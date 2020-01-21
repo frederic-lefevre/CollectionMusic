@@ -77,7 +77,7 @@ public class Format {
 			for (SupportPhysique sPhys : SupportPhysique.values()) {
 				JsonElement elemFormat = formatJson.get(sPhys.getJsonPropertyName()) ;
 				if (elemFormat != null) {
-					tableFormat.put(sPhys, new Double(elemFormat.getAsDouble())) ;
+					tableFormat.put(sPhys, Double.valueOf(elemFormat.getAsDouble())) ;
 				}
 			}
 		}
@@ -130,7 +130,7 @@ public class Format {
 	 */
 	public void incrementFormat(Format addFormat) {
 		for (SupportPhysique sPhys : SupportPhysique.values()) {
-			tableFormat.put(sPhys, new Double(this.getNb(sPhys) + addFormat.getNb(sPhys))) ;
+			tableFormat.put(sPhys, Double.valueOf(this.getNb(sPhys) + addFormat.getNb(sPhys))) ;
 		}
 	}
 	
