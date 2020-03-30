@@ -54,7 +54,7 @@ class CollectionAlbumContainerTest {
 
 		CollectionAlbumContainer albumsContainer = CollectionAlbumContainer.getEmptyInstance(logger) ;
 
-		JsonObject jAlbum = new JsonParser().parse(albumStr1).getAsJsonObject();
+		JsonObject jAlbum = JsonParser.parseString(albumStr1).getAsJsonObject();
 		
 		albumsContainer.addAlbum(jAlbum);
 		

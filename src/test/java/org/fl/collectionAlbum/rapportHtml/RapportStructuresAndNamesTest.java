@@ -89,7 +89,7 @@ class RapportStructuresAndNamesTest {
 		Control.initControl("file:///C:/FredericPersonnel/musique/RapportCollection/albumCollection.properties" );
 		RapportStructuresAndNames.init() ;
 
-		JsonObject jAlbum = new JsonParser().parse(albumStr1).getAsJsonObject();
+		JsonObject jAlbum = JsonParser.parseString(albumStr1).getAsJsonObject();
 
 		ListeArtiste la = new ListeArtiste(logger) ;
 		List<ListeArtiste> lla = new ArrayList<ListeArtiste>() ;
@@ -105,7 +105,7 @@ class RapportStructuresAndNamesTest {
 		URI pInfoAlbum = RapportStructuresAndNames.getAlbumRapportRelativePath(album) ;
 		assertNull(pInfoAlbum) ;
 		
-		JsonObject jAlbum2 = new JsonParser().parse(albumStr2).getAsJsonObject();
+		JsonObject jAlbum2 = JsonParser.parseString(albumStr2).getAsJsonObject();
 		Album album2 = new Album(jAlbum2, lla, logger) ;
 		album2.addMusicArtfactArtistesToList(la);
 		Artiste fake = album2.getAuteurs().get(0) ;
@@ -135,7 +135,7 @@ class RapportStructuresAndNamesTest {
 		Control.initControl("file:///C:/FredericPersonnel/musique/RapportCollection/albumCollection.properties" );
 		RapportStructuresAndNames.init() ;
 		
-		JsonObject jConcert = new JsonParser().parse(concertStr1).getAsJsonObject();
+		JsonObject jConcert = JsonParser.parseString(concertStr1).getAsJsonObject();
 		
 		ListeArtiste la = new ListeArtiste(logger) ;
 		List<ListeArtiste> lla = new ArrayList<ListeArtiste>() ;

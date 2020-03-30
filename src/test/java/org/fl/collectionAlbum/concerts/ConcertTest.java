@@ -46,7 +46,7 @@ class ConcertTest {
 	@Test
 	void testConcert1() {
 		
-		JsonObject jConcert = new JsonParser().parse(concertStr1).getAsJsonObject();
+		JsonObject jConcert = JsonParser.parseString(concertStr1).getAsJsonObject();
 
 		ListeArtiste la = new ListeArtiste(logger) ;
 		List<ListeArtiste> lla = new ArrayList<ListeArtiste>() ;

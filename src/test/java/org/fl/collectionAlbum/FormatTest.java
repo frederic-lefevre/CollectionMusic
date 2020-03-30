@@ -17,7 +17,7 @@ class FormatTest {
 	void test1() {
 		
 		String formatStr1 = "{}" ;
-		JsonObject jf1 = new JsonParser().parse(formatStr1).getAsJsonObject();
+		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
 		Format format1 = new Format(jf1, logger) ;
 		
 		assertEquals(0, format1.getPoids()) ;
@@ -28,7 +28,7 @@ class FormatTest {
 	void test2() {
 		
 		String formatStr1 = "{\"cd\": 3 }" ;
-		JsonObject jf1 = new JsonParser().parse(formatStr1).getAsJsonObject();
+		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
 		Format format1 = new Format(jf1, logger) ;
 		
 		assertEquals(3, format1.getPoids()) ;
@@ -39,7 +39,7 @@ class FormatTest {
 	void test3() {
 		
 		String formatStr1 = "{\"cd\": 2 , \"45t\" : 1 }" ;
-		JsonObject jf1 = new JsonParser().parse(formatStr1).getAsJsonObject();
+		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
 		Format format1 = new Format(jf1, logger) ;
 		
 		assertEquals(2.5, format1.getPoids()) ;
@@ -50,11 +50,11 @@ class FormatTest {
 	void test4() {
 		
 		String formatStr1 = "{\"33t\": 2 , \"45t\" : 1 }" ;
-		JsonObject jf1 = new JsonParser().parse(formatStr1).getAsJsonObject();
+		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
 		Format format1 = new Format(jf1, logger) ;
 		
 		String formatStr2 = "{\"cd\": 2 , \"45t\" : 1 }" ;
-		JsonObject jf2 = new JsonParser().parse(formatStr2).getAsJsonObject();
+		JsonObject jf2 = JsonParser.parseString(formatStr2).getAsJsonObject();
 		Format format2 = new Format(jf2, logger) ;
 		
 		Format format3 = new Format(null, logger) ;

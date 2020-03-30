@@ -48,7 +48,7 @@ class BalisesTest {
 	void testFormat() {
 		
 		String formatStr1 = "{\"cd\": 3 }" ;
-		JsonObject jf1 = new JsonParser().parse(formatStr1).getAsJsonObject();
+		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
 		Format format1 = new Format(jf1, logger) ;
 		
 		Balises formatBalises = new Balises(Balises.BalisesType.POIDS) ;
@@ -62,7 +62,7 @@ class BalisesTest {
 		assertNotEquals(0 , fragment.length()) ;
 		
 		String formatStr2 = "{\"33t\": 3 }" ;
-		JsonObject jf2 = new JsonParser().parse(formatStr2).getAsJsonObject();
+		JsonObject jf2 = JsonParser.parseString(formatStr2).getAsJsonObject();
 		Format format2 = new Format(jf2, logger) ;
 		
 		formatBalises.addCheckBalisePoids(fragment, format2);
@@ -71,7 +71,7 @@ class BalisesTest {
 		assertEquals(fLength1, fLength2) ;
 		
 		String formatStr3 = "{\"33t\": 4 }" ;
-		JsonObject jf3 = new JsonParser().parse(formatStr3).getAsJsonObject();
+		JsonObject jf3 = JsonParser.parseString(formatStr3).getAsJsonObject();
 		Format format3 = new Format(jf3, logger) ;
 		
 		formatBalises.addCheckBalisePoids(fragment, format3);

@@ -46,7 +46,7 @@ class AlbumTest {
 	@Test
 	void testAlbum1() {
 		
-		JsonObject jAlbum = new JsonParser().parse(albumStr1).getAsJsonObject();
+		JsonObject jAlbum = JsonParser.parseString(albumStr1).getAsJsonObject();
 
 		ListeArtiste la = new ListeArtiste(logger) ;
 		List<ListeArtiste> lla = new ArrayList<ListeArtiste>() ;

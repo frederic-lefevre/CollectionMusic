@@ -20,7 +20,6 @@ import org.fl.collectionAlbumGui.ProgressInformation;
 import org.fl.collectionAlbumGui.ProgressInformationPanel;
 
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import com.ibm.lge.fl.util.json.JsonUtils;
 
 public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,ProgressInformation>{
@@ -73,7 +72,7 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
   	
 		Path albumsPath = RapportStructuresAndNames.getCollectionDirectoryName() ;
 		try {
-			MusicFileVisitor albumsVisitor = new AlbumFileVisitor(Control.getMusicfileExtension(), new JsonParser()) ;
+			MusicFileVisitor albumsVisitor = new AlbumFileVisitor(Control.getMusicfileExtension()) ;
 			
 			Files.walkFileTree(albumsPath, albumsVisitor) ;
 				
@@ -87,7 +86,7 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 
 		Path concertsPath = RapportStructuresAndNames.getConcertDirectoryName() ;
 		try {
-			MusicFileVisitor concertsVisitor = new ConcertFileVisitor(Control.getMusicfileExtension(), new JsonParser()) ;
+			MusicFileVisitor concertsVisitor = new ConcertFileVisitor(Control.getMusicfileExtension()) ;
 			
 			Files.walkFileTree(concertsPath, concertsVisitor) ;
 				
@@ -99,11 +98,9 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
     private abstract class MusicFileVisitor extends SimpleFileVisitor<Path> {
     	
     	private PathMatcher matcher ;
-    	private JsonParser jsonParser ;
     	
-    	protected MusicFileVisitor(String fileExtension, JsonParser jParser) {
+    	protected MusicFileVisitor(String fileExtension) {
     		matcher = FileSystems.getDefault().getPathMatcher("glob:*." + fileExtension) ;
-    		jsonParser = jParser ;
     	}
     	
     	@Override
@@ -112,7 +109,7 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
     		Path name = file.getFileName() ;
     		if (Files.isRegularFile(file)) {
 	    		if (matcher.matches(name)) {
-	    			JsonObject arteFactJson = JsonUtils.getJsonObjectFromPath(jsonParser, file, Control.getCharset(), albumLog) ;
+	    			JsonObject arteFactJson = JsonUtils.getJsonObjectFromPath(file, Control.getCharset(), albumLog) ;
 	    			addMusicArtefact(arteFactJson) ;
 	    		}
     		}
@@ -129,7 +126,7 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
     }
     
     private class AlbumFileVisitor extends MusicFileVisitor {
-		protected AlbumFileVisitor(String fileExtension, JsonParser jParser) {	super(fileExtension, jParser); }
+		protected AlbumFileVisitor(String fileExtension) {	super(fileExtension); }
 
 		@Override
 		public void addMusicArtefact(JsonObject artefactJson) {
@@ -138,7 +135,7 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
     }
     
     private class ConcertFileVisitor extends MusicFileVisitor {
-		protected ConcertFileVisitor(String fileExtension, JsonParser jParser) {	super(fileExtension, jParser); }
+		protected ConcertFileVisitor(String fileExtension) {	super(fileExtension); }
 
 		@Override
 		public void addMusicArtefact(JsonObject artefactJson) {
