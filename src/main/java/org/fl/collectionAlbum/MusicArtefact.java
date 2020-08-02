@@ -53,11 +53,6 @@ public abstract class MusicArtefact {
     public List<Artiste> getChefsOrchestre() { return chefsOrchestres ; }        
     public List<String>  getNotes() 		 { return notes			  ; }
     
-    public void addAuteurs(		   List<Artiste> artistes) { auteurs.		 addAll(artistes) ; }
-    public void addInterpretes(	   List<Artiste> artistes) { interpretes.	 addAll(artistes) ; }
-    public void addEnsembles(	   List<Artiste> artistes) { ensembles.      addAll(artistes) ; }
-    public void addChefsOrchestres(List<Artiste> artistes) { chefsOrchestres.addAll(artistes) ; }
-    
     public JsonObject getJson() { return arteFactJson ; }
     
 	public boolean additionnalInfo() {
