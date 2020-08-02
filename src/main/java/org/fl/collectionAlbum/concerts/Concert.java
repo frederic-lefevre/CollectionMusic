@@ -13,8 +13,7 @@ import com.google.gson.JsonObject;
 public class Concert extends MusicArtefact {
 
     private TemporalAccessor dateConcert ;   
-    private LieuConcert		 lieuConcert;    
-    private String 			 urlInfos;   
+    private LieuConcert		 lieuConcert;     
     private List<String> 	 titres;    
     private List<String> 	 ticketImages;
     
@@ -23,7 +22,6 @@ public class Concert extends MusicArtefact {
     	
     	dateConcert  = ConcertParser.getConcertDate(concertJson, aLog) ;
     	lieuConcert  = lieuxDesConcerts.addLieuDunConcert(ConcertParser.getConcertLieu(concertJson, aLog), aLog) ;
-    	urlInfos	 = ConcertParser.getConcertUrlInfos(concertJson, aLog) ;
     	titres		 = ConcertParser.getConcertMorceaux(concertJson, aLog) ;
     	ticketImages = ConcertParser.getConcertTickets(concertJson, aLog) ;
     }
@@ -42,7 +40,6 @@ public class Concert extends MusicArtefact {
     
 	public LieuConcert 		getLieuConcert()  { return lieuConcert	; }	 
 	public TemporalAccessor getDateConcert()  {	return dateConcert 	; }
-	public String 			getUrlInfos() 	  {	return urlInfos		; }
 	public List<String> 	getTitres() 	  {	return titres		; }
 	public List<String> 	getTicketImages() { return ticketImages ; }	
 	

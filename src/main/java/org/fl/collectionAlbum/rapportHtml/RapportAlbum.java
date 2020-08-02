@@ -4,23 +4,18 @@ import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.albums.Album;
 
-public class RapportAlbum extends RapportHtml {
+public class RapportAlbum extends RapportMusicArtefact {
 
 	private final Album album ;
 	
 	public RapportAlbum(Album a, Logger rl) {
-		super("", rl);
+		super(a, rl);
 		album = a ;		
 		withTitle(album.getTitre());	
 	}
 
 	@Override
 	protected void corpsRapport() {
-
-		if (album.getNotes() != null) {
-			for (String note : album.getNotes()) {
-				write("<p>").write(note).write("</p>") ;
-			}
-		}	
+		super.corpsRapport();
 	}
 }

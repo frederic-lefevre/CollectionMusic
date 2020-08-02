@@ -7,12 +7,12 @@ import java.util.logging.Logger;
 import org.fl.collectionAlbum.concerts.Concert;
 import org.fl.collectionAlbum.utils.TemporalUtils;
 
-public class RapportConcert extends RapportHtml {
+public class RapportConcert extends RapportMusicArtefact {
 
 	private final Concert concert ;
 	
 	public RapportConcert(Concert c, Logger rl) {
-		super("", rl) ;
+		super(c, rl) ;
 		concert = c ;
 		withTitle(TemporalUtils.formatDate(concert.getDateConcert()) + " " + concert.getLieuConcert().getLieu()) ;
 	}
@@ -20,12 +20,7 @@ public class RapportConcert extends RapportHtml {
 	@Override
 	protected void corpsRapport() {
 		
-		List<String> notes = concert.getNotes() ;
-		if (notes != null) {
-			for (String note : notes) {
-				write("<p>").write(note).write("</p>") ;
-			}
-		}
+		super.corpsRapport();
 		
 		List<String> titres = concert.getTitres() ;
 		if ((titres != null) && (titres.size() >0)) {
@@ -35,11 +30,6 @@ public class RapportConcert extends RapportHtml {
 				write("<li>").write(titre).write("</li>") ;
 			}
 			write("</ol>") ;
-		}
-		
-		String urlInfos = concert.getUrlInfos() ;
-		if (urlInfos != null) {
-			write("<h3><a href=\"").write(urlInfos).write("\">Informations</a></h3>") ;
 		}
 		
 		List<String> ticketImages = concert.getTicketImages() ;

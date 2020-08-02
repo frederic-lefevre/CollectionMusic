@@ -45,16 +45,6 @@ public class ConcertParser {
 		return lieuConcert ;
 	}
 	
-	public static String getConcertUrlInfos(JsonObject arteFactJson, Logger cLog) {
-		
-		String urlInfos = null ;
-		JsonElement jElem = arteFactJson.get(JsonMusicProperties.URL_INFOS) ;
-		if (jElem != null) {
-			urlInfos = jElem.getAsString() ;
-		}
-		return urlInfos ;
-	}
-	
 	public static List<String> getConcertMorceaux(JsonObject arteFactJson, Logger cLog) {
 		
 		Type listType = new TypeToken<List<String>>() {}.getType();	

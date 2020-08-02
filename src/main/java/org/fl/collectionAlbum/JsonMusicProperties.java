@@ -35,7 +35,6 @@ public class JsonMusicProperties {
 	public final static String DATE			  = "date" ;
 	public final static String LIEU			  = "lieu" ;
 	public final static String INSTRUMENTS	  = "instruments" ;
-	public final static String URL_INFOS	  = "urlInfos" ;
 	public final static String TICKET_IMG	  = "imageTicket" ;
 	public final static String MORCEAUX		  = "morceaux" ;
 
