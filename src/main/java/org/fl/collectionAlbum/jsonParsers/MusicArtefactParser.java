@@ -112,23 +112,31 @@ public class MusicArtefactParser {
 	}
 	
 	public List<String> getNotes() {
+		return getArrayAttribute(JsonMusicProperties.NOTES);
+	}
 
-		List<String> notes = new ArrayList<String>() ;
-        JsonElement jElem = arteFactJson.get(JsonMusicProperties.NOTES) ;
+	public List<String> getUrlLinks() {		
+		return getArrayAttribute(JsonMusicProperties.LIENS);
+	}
+	
+	private List<String> getArrayAttribute(String jsonMusicProperty) {
+
+		List<String> result = new ArrayList<String>() ;
+        JsonElement jElem = arteFactJson.get(jsonMusicProperty) ;
 		if (jElem != null) {
 			if (jElem.isJsonArray()) {
-				notes = new ArrayList<String>() ;
-				JsonArray jNotes = jElem.getAsJsonArray() ; 
-				for (JsonElement jNote : jNotes) {
-					notes.add(jNote.getAsString()) ;
+				result = new ArrayList<String>() ;
+				JsonArray jArray = jElem.getAsJsonArray() ; 
+				for (JsonElement e : jArray) {
+					result.add(e.getAsString()) ;
 				}
 				if (mLog.isLoggable(Level.FINEST)) {
-					mLog.finest("Nombre de note: " + notes.size()) ;
+					mLog.finest("Nombre de " + jsonMusicProperty + " " + result.size()) ;
 				}
 			} else {
-				mLog.warning(JsonMusicProperties.NOTES + " n'est pas un JsonArray pour l'artefact " + arteFactJson) ;
+				mLog.warning(jsonMusicProperty + " n'est pas un JsonArray pour l'artefact " + arteFactJson) ;
 			}
 		}
-		return notes ;
+		return result ;
 	}
 }

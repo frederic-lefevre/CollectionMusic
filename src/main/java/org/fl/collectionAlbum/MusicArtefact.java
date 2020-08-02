@@ -18,6 +18,7 @@ public abstract class MusicArtefact {
     private final List<Artiste> chefsOrchestres ;
     
     private final List<String> notes;
+    private final List<String> urlLinks;
 
     protected final Logger artefactLog ;
     
@@ -37,6 +38,7 @@ public abstract class MusicArtefact {
     	auteurs.addAll(    musicParser.getListeGroupes()) ;
     	
     	notes 		     = musicParser.getNotes() ;    	  	
+    	urlLinks		 = musicParser.getUrlLinks();
     }
     
 	public void addMusicArtfactArtistesToList(ListeArtiste artistes) {
@@ -52,6 +54,7 @@ public abstract class MusicArtefact {
     public List<Artiste> getEnsembles() 	 { return ensembles		  ; }
     public List<Artiste> getChefsOrchestre() { return chefsOrchestres ; }        
     public List<String>  getNotes() 		 { return notes			  ; }
+    public List<String>  getUrlLinks() 		 { return urlLinks		  ; }
     
     public JsonObject getJson() { return arteFactJson ; }
     

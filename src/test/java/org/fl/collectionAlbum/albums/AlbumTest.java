@@ -40,7 +40,8 @@ class AlbumTest {
 			"      \"mort\": \"1980-09-15\"  "      +
 			"    }   "                              +
 			"  ],    "								+
-			"  \"enregistrement\": [ \"1959-12-28\",  \"1959-12-28\"  ]  " +
+			"  \"enregistrement\": [ \"1959-12-28\",  \"1959-12-28\" ],  " +
+			"  \"liensUrl\":  [ \"http://somwhere\" ] " +
 			" } " ;
 			  
 	@Test
@@ -55,6 +56,10 @@ class AlbumTest {
 		Album album = new Album(jAlbum, lla, logger) ;
 		
 		assertEquals("Portrait in jazz", album.getTitre()) ;
+		List<String> liens = album.getUrlLinks();
+		assertNotNull(liens);
+		assertEquals(1, liens.size());
+		assertEquals("http://somwhere", liens.get(0));
 		
 		Artiste bill = album.getAuteurs().get(0) ;
 		assertNotNull(bill) ;
