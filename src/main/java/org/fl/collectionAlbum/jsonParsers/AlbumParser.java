@@ -3,6 +3,7 @@ package org.fl.collectionAlbum.jsonParsers;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.fl.collectionAlbum.Format;
 import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.utils.TemporalUtils;
 
@@ -29,8 +30,25 @@ public class AlbumParser {
 		return titre ;
 	}
 	
+	public static Format getFormatAlbum(JsonObject jAlbum, Logger albumLog) {
+
+        Format formatAlbum;
+		JsonElement jElem = jAlbum.get(JsonMusicProperties.FORMAT) ;
+        if (jElem == null) {
+        	albumLog.warning("Format d'album null pour l'album " + jAlbum) ;
+            formatAlbum = new Format(null, albumLog) ;
+        } else {
+        	formatAlbum = new Format(jElem.getAsJsonObject(), albumLog) ;
+        }
+        return formatAlbum;
+    }
+	
 	public static FuzzyPeriod processPeriodEnregistrement(JsonObject albumJson, Logger albumLog) {
-		return processPeriod(albumJson, JsonMusicProperties.ENREGISTREMENT, albumLog) ;
+		FuzzyPeriod periodeEnregistrement = processPeriod(albumJson, JsonMusicProperties.ENREGISTREMENT, albumLog) ;
+		if (periodeEnregistrement == null) {
+			albumLog.warning(" Pas de dates d'enregistrement pour l'album " + albumJson);
+        }
+		return periodeEnregistrement ;
 	}
 	
 	public static FuzzyPeriod processPeriodComposition(JsonObject albumJson, Logger albumLog) {

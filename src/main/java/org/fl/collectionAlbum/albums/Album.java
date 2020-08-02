@@ -5,31 +5,38 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.Format;
-import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.MusicArtefact;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.jsonParsers.AlbumParser;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.ibm.lge.fl.util.date.FuzzyPeriod;
 
 public class Album extends MusicArtefact {
 
-    private String titre;
+    private final String titre;
     
-    private FuzzyPeriod periodeEnregistrement ;
+    private final FuzzyPeriod periodeEnregistrement ;
     private FuzzyPeriod periodeComposition ;
     
-    private Format formatAlbum;
+    private final Format formatAlbum;
     
-    private boolean specificCompositionDates ;
+    private final boolean specificCompositionDates ;
     
     public Album(JsonObject albumJson, List<ListeArtiste> knownArtistes, Logger aLog) {
     	super(albumJson, knownArtistes, aLog) ;
-    	titre = AlbumParser.getAlbumTitre(albumJson, aLog) ;
-    	setPeriodeEnregistrementEtComposition(AlbumParser.processPeriodEnregistrement(albumJson, aLog), 
-    										  AlbumParser.processPeriodComposition(   albumJson, aLog));
+    	
+    	titre 				  = AlbumParser.getAlbumTitre(albumJson, aLog) ;
+    	formatAlbum 		  = AlbumParser.getFormatAlbum(albumJson, aLog) ;    	
+    	periodeEnregistrement = AlbumParser.processPeriodEnregistrement(albumJson, aLog);        
+		periodeComposition 	  = AlbumParser.processPeriodComposition(   albumJson, aLog);
+		
+        if ((periodeComposition == null) && (periodeEnregistrement != null) && (periodeEnregistrement.isValid())) {   
+        	periodeComposition = periodeEnregistrement ;
+        	specificCompositionDates = false ;
+        } else {
+        	specificCompositionDates = true ;
+        }
     }
     
     public String getTitre() {
@@ -69,35 +76,11 @@ public class Album extends MusicArtefact {
     }
 
     public Format getFormatAlbum() {
-    	if (formatAlbum == null) {
-            // traitement du format
-    		JsonElement jElem = arteFactJson.get(JsonMusicProperties.FORMAT) ;
-            if (jElem == null) {
-            	artefactLog.warning("Format d'album null pour l'album " + arteFactJson) ;
-                formatAlbum = new Format(null, artefactLog) ;
-            } else {
-            	formatAlbum = new Format(jElem.getAsJsonObject(), artefactLog) ;
-            }
-    	}
         return formatAlbum;
     }
 
 	public boolean hasSpecificCompositionDates() {
 		return specificCompositionDates;
-	}
-
-	public void setPeriodeEnregistrementEtComposition(FuzzyPeriod pe, FuzzyPeriod pc) {
-		periodeEnregistrement = pe;
-        if (periodeEnregistrement == null) {
-        	artefactLog.warning(" Pas de dates d'enregistrement pour l'album " + arteFactJson);
-        }
-
-		periodeComposition = pc;
-		specificCompositionDates = true ;
-        if ((periodeComposition == null) && (periodeEnregistrement != null) && (periodeEnregistrement.isValid())) {   
-        	periodeComposition = periodeEnregistrement ;
-        	specificCompositionDates = false ;
-        } 
 	}
 	
 }

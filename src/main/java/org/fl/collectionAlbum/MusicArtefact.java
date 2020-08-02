@@ -17,7 +17,7 @@ public abstract class MusicArtefact {
     private final List<Artiste> ensembles	;
     private final List<Artiste> chefsOrchestres ;
     
-    protected final List<String> notes;
+    private final List<String> notes;
 
     protected final Logger artefactLog ;
     
