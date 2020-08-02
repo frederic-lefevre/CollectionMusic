@@ -60,5 +60,7 @@ public abstract class MusicArtefact {
     
     public JsonObject getJson() { return arteFactJson ; }
     
-	protected abstract boolean additionnalInfo() ;
+	public boolean additionnalInfo() {
+		return ((notes != null) && (notes.size() > 0)) ;
+	}
 }

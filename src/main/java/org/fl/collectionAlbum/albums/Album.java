@@ -32,10 +32,6 @@ public class Album extends MusicArtefact {
     										  AlbumParser.processPeriodComposition(   albumJson, aLog));
     }
     
-    public boolean additionnalInfo() {   
-    	return ((notes != null) && (notes.size() > 0)) ;
-    }
-
     public String getTitre() {
         return titre;
     }

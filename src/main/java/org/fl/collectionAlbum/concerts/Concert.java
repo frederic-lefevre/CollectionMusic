@@ -28,13 +28,14 @@ public class Concert extends MusicArtefact {
     	ticketImages = ConcertParser.getConcertTickets(concertJson, aLog) ;
     }
     
+    @Override
     public boolean additionnalInfo() {
     
     	boolean res = false ;
     	if ((ticketImages != null) && (ticketImages.size() > 0)) {
     		res = true ;
     	} else if ((notes != null) && (notes.size() > 0)){
-    		res = true ;
+    		res = super.additionnalInfo() ;
     	}
     	return res ;
     }
