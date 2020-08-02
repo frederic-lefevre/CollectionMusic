@@ -34,7 +34,7 @@ public class Concert extends MusicArtefact {
     	boolean res = false ;
     	if ((ticketImages != null) && (ticketImages.size() > 0)) {
     		res = true ;
-    	} else if ((notes != null) && (notes.size() > 0)){
+    	} else {
     		res = super.additionnalInfo() ;
     	}
     	return res ;
