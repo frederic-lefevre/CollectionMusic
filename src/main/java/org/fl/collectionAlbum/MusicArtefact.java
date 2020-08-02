@@ -12,16 +12,16 @@ import com.google.gson.JsonObject;
 public abstract class MusicArtefact {
 
     // liste des auteurs (artiste ou groupe)
-    private List<Artiste> auteurs ;
-    private List<Artiste> interpretes ;  
-    private List<Artiste> ensembles	;
-    private List<Artiste> chefsOrchestres ;
+    private final List<Artiste> auteurs ;
+    private final List<Artiste> interpretes ;  
+    private final List<Artiste> ensembles	;
+    private final List<Artiste> chefsOrchestres ;
     
-    protected List<String> notes;
+    protected final List<String> notes;
 
-    protected Logger artefactLog ;
+    protected final Logger artefactLog ;
     
-    protected JsonObject arteFactJson ;
+    protected final JsonObject arteFactJson ;
     
     protected MusicArtefact(JsonObject afj, List<ListeArtiste> knownArtistes, Logger al) {
     	artefactLog 	 = al ;
