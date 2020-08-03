@@ -1,5 +1,6 @@
 package org.fl.collectionAlbum.rapportHtml;
 
+import java.net.URI;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -27,7 +28,8 @@ public class RapportMusicArtefact extends RapportHtml {
 		if (urlInfos != null) {
 			write("<ul>\n");
 			for (String url : urlInfos) {
-				write("  <li><h3><a href=\"").write(url).write("\">").write(url).write("</a></h3></li>\n") ;
+				URI infosUri = RapportStructuresAndNames.getArtefactInfosAbsoluteUri(url) ;
+				write("  <li><h3><a href=\"").write(infosUri.toString()).write("\">").write(url).write("</a></h3></li>\n") ;
 			}
 			write("</ul>\n");
 		}		

@@ -9,11 +9,11 @@ import org.fl.collectionAlbum.concerts.LieuConcert;
 import org.fl.collectionAlbum.concerts.LieuxDesConcerts;
 import org.fl.collectionAlbum.concerts.ListeConcert;
 
-import java.io.File;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,6 +38,8 @@ public class RapportStructuresAndNames {
 	private static Path 		oldRapportPath ;
 	private static HtmlLinkList accueils ;
 	private static String 		concertTicketImgUri ;
+	private static String 		musicartefactInfosUri ;
+
 	private static Charset 		charset ;
 
 	private static RapportMap<Album> 		albumRapportPaths ;
@@ -68,6 +70,9 @@ public class RapportStructuresAndNames {
 		// get the concert ticket image path
 		concertTicketImgUri = collectionProperties.getProperty("concert.ticketImgDir.name") ;	
 
+		// get the path of additionnal information for concerts and albums
+		musicartefactInfosUri = collectionProperties.getProperty("musicArtefact.information.rootDir.name") ;
+		
 		// Get charset to write rapport
 		charset = Charset.forName(collectionProperties.getProperty("rapport.charset", "UTF-8")) ;
 		RapportHtml.withCharset(charset.name(), rapportLog);
@@ -169,10 +174,11 @@ public class RapportStructuresAndNames {
 	public static Path 	  getAbsoluteHomeConcertFile() 	  {	return rapportPath.resolve(homeConcertFile) ;	}
 	public static Path 	  getCollectionDirectoryName() 	  {	return collectionDirectoryName;					}
 	public static Path 	  getConcertDirectoryName() 	  {	return concertDirectoryName;					}
-
-	public static HtmlLinkList getAccueils() {		return accueils;	}
 	
-	private static String  getConcertTicketImgUri() 	  { return concertTicketImgUri;						}	
+	private static String  getMusicartefactInfosUri() 	  { return musicartefactInfosUri;					}	
+	private static String  getConcertTicketImgUri() 	  { return concertTicketImgUri;						}
+	
+	public static HtmlLinkList getAccueils() {		return accueils;	}	
 	
 	public static URI getAlbumRapportRelativePath(Album album) {
 		if (album.additionnalInfo()) {
@@ -203,15 +209,23 @@ public class RapportStructuresAndNames {
 	}
 	
 	public static URI getTicketImageAbsoluteUri(String relativeToPhotoDirUriStr) {
+		return getUri(getConcertTicketImgUri(), relativeToPhotoDirUriStr) ;
+	}
+	
+	public static URI getArtefactInfosAbsoluteUri(String relativeToInfosDirUriStr) {
+		return getUri(getMusicartefactInfosUri(), relativeToInfosDirUriStr) ;
+	}
+	
+	private static URI getUri(String rootPath, String relativeDirUriStr) {
 		try {
-			URI absoluteUri = new URI(getConcertTicketImgUri() + relativeToPhotoDirUriStr) ;
+			URI absoluteUri = new URI(rootPath + relativeDirUriStr) ;
 			// check that the file exists
-			if (! (new File(absoluteUri)).exists()) {
-				rapportLog.warning("Le fichier ticket image suivant n'existe pas: " + absoluteUri.toString()) ;
+			if (! (Files.exists(Paths.get(absoluteUri)))) {
+				rapportLog.warning("Le fichier suivant n'existe pas: " + absoluteUri.toString()) ;
 			}
 			return absoluteUri ;
 		} catch (Exception e) {
-			rapportLog.log(Level.SEVERE, "Wrong URI string for ticket image: " + relativeToPhotoDirUriStr, e);
+			rapportLog.log(Level.SEVERE, "Wrong URI string for file: " + relativeDirUriStr, e);
 			return null ;
 		}
 	}

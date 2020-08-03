@@ -35,8 +35,8 @@ public class RapportConcert extends RapportMusicArtefact {
 		List<String> ticketImages = concert.getTicketImages() ;
 		if (ticketImages != null) {
 			
-			for (int i=0; i < ticketImages.size(); i++) {
-				URI imgUri = RapportStructuresAndNames.getTicketImageAbsoluteUri(ticketImages.get(i)) ;
+			for (String ticketImage : ticketImages) {
+				URI imgUri = RapportStructuresAndNames.getTicketImageAbsoluteUri(ticketImage) ;
 				write("<a href=\"").write(imgUri.toString() ).write("\">\n") ;
 				write("    <img class=\"ticket\" src=\"").write(imgUri.toString()).write("\"/>\n</a>") ;
 			}			
