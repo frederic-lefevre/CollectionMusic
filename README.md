@@ -2,5 +2,5 @@
 
 collectionAlbum, an education project
 
-To install :
+To install (install css files):
 mvn install -D installExe.skip=false
