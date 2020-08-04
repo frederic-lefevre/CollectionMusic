@@ -64,7 +64,7 @@ public class MusicArtefactParser {
 				for (JsonElement jArtiste : jArtistes) {
 
 					try {
-						artistes.addArtiste(processArtiste(cls, jArtiste.getAsJsonObject())) ;
+						artistes.addArtiste(createGetOrUpdateArtiste(cls, jArtiste.getAsJsonObject())) ;
 					} catch (IllegalStateException e) {
 						mLog.log(Level.WARNING, "un artiste n'est pas un objet json pour l'arteFact " + arteFactJson, e) ;
 					}
@@ -74,17 +74,6 @@ public class MusicArtefactParser {
 			}
 		}
 		return artistes ;
-	}
-	
-	private Artiste processArtiste(Class<? extends Artiste> cls, JsonObject jArtiste) {
-		
-		Artiste unArtiste ;
-		if (cls == Groupe.class) {
-			unArtiste = (Groupe)createGetOrUpdateArtiste(cls, jArtiste) ;
-		} else {
-			unArtiste = createGetOrUpdateArtiste(cls, jArtiste) ;
-		}
-		return unArtiste ;
 	}
 	
 	// Get an artiste, if it exists, return the existing one eventually updated
