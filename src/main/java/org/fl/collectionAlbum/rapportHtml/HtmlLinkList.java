@@ -30,12 +30,12 @@ public class HtmlLinkList {
 	
 	public HtmlLinkList(HtmlLinkList otherLinks) {
 		linkOffset = "" ;	
-		linkList   = new ArrayList<HtmlLink>(otherLinks.linkList) ;
+		linkList   = new ArrayList<>(otherLinks.linkList) ;
 	}
 	
 	public HtmlLinkList() {
 		linkOffset = "" ;
-		linkList 		  = new ArrayList<HtmlLink>() ;
+		linkList 		  = new ArrayList<>() ;
 	}
 	
 	public void addLink(String t, String l) {

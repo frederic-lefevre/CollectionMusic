@@ -10,7 +10,7 @@ import org.fl.collectionAlbum.RangementComparator;
 
 public class ListeAlbum {
 	
-	private ArrayList<Album> albums ;
+	private List<Album> albums ;
 	
 	private Format formatListeAlbum ;
 	

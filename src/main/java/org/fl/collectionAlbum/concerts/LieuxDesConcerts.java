@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 public class LieuxDesConcerts {
 
-	private static HashMap<String, LieuConcert> lieuxConcerts ;
+	private static Map<String, LieuConcert> lieuxConcerts ;
 	
 	public LieuxDesConcerts() {
 		lieuxConcerts = new HashMap<String, LieuConcert>() ;
