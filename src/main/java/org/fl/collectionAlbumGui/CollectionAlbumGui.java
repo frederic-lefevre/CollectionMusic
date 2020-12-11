@@ -16,7 +16,7 @@ public class CollectionAlbumGui  extends JFrame {
 
 	private static final long serialVersionUID = 8726429353709418534L;
 
-	private static final String DEFAULT_PROP_FILE = "file:///C:/FredericPersonnel/musique/RapportCollection/albumCollection.properties" ;
+	private static final String DEFAULT_PROP_FILE = "file:///C:/FredericPersonnel/Loisirs/musique/RapportCollection/albumCollection.properties" ;
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
