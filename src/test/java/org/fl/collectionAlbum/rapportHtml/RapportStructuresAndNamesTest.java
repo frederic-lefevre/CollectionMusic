@@ -16,6 +16,7 @@ import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.concerts.Concert;
 import org.fl.collectionAlbum.concerts.LieuxDesConcerts;
+import org.fl.collectionAlbumGui.CollectionAlbumGui;
 import org.junit.jupiter.api.Test;
 
 class RapportStructuresAndNamesTest {
@@ -25,20 +26,20 @@ class RapportStructuresAndNamesTest {
 	@Test
 	void test() {
 		
-		Control.initControl("file:///C:/FredericPersonnel/musique/RapportCollection/albumCollection.properties" );
+		Control.initControl(CollectionAlbumGui.DEFAULT_PROP_FILE);
 		RapportStructuresAndNames.init() ;
-		assertEquals("C:\\FredericPersonnel\\musique\\RapportCollection\\rapport", RapportStructuresAndNames.getRapportPath().toString()) ;
-		assertEquals("C:\\FredericPersonnel\\musique\\RapportCollection\\rapport_old", RapportStructuresAndNames.getOldRapportPath().toString()) ;
-		assertEquals("C:\\FredericPersonnel\\musique\\RapportCollection\\rapport\\albums", RapportStructuresAndNames.getAbsoluteAlbumDir().toString()) ;
-		assertEquals("C:\\FredericPersonnel\\musique\\RapportCollection\\rapport\\concerts", RapportStructuresAndNames.getAbsoluteConcertDir().toString()) ;
-		assertEquals("C:\\FredericPersonnel\\musique\\RapportCollection\\rapport\\index.html", RapportStructuresAndNames.getAbsoluteHomeCollectionFile().toString()) ;
-		assertEquals("C:\\FredericPersonnel\\musique\\RapportCollection\\rapport\\indexConcert.html", RapportStructuresAndNames.getAbsoluteHomeConcertFile().toString()) ;
+		assertEquals(CollectionAlbumGui.MUSIQUE_DIRECTORY_URI + "RapportCollection/rapport/", RapportStructuresAndNames.getRapportPath().toUri().toString()) ;
+		assertEquals(CollectionAlbumGui.MUSIQUE_DIRECTORY_URI + "RapportCollection/rapport_old/", RapportStructuresAndNames.getOldRapportPath().toUri().toString()) ;
+		assertEquals(CollectionAlbumGui.MUSIQUE_DIRECTORY_URI + "RapportCollection/rapport/albums/", RapportStructuresAndNames.getAbsoluteAlbumDir().toUri().toString()) ;
+		assertEquals(CollectionAlbumGui.MUSIQUE_DIRECTORY_URI + "RapportCollection/rapport/concerts/", RapportStructuresAndNames.getAbsoluteConcertDir().toUri().toString()) ;
+		assertEquals(CollectionAlbumGui.MUSIQUE_DIRECTORY_URI + "RapportCollection/rapport/index.html", RapportStructuresAndNames.getAbsoluteHomeCollectionFile().toUri().toString()) ;
+		assertEquals(CollectionAlbumGui.MUSIQUE_DIRECTORY_URI + "RapportCollection/rapport/indexConcert.html", RapportStructuresAndNames.getAbsoluteHomeConcertFile().toUri().toString()) ;
 	}
 
 	@Test
 	void test2() {
 		
-		Control.initControl("file:///C:/FredericPersonnel/musique/RapportCollection/albumCollection.properties" );
+		Control.initControl(CollectionAlbumGui.DEFAULT_PROP_FILE);
 		RapportStructuresAndNames.init() ;
 	
 		JsonObject jArt = new JsonObject() ;
@@ -86,7 +87,7 @@ class RapportStructuresAndNamesTest {
 	@Test
 	void test3() {
 		
-		Control.initControl("file:///C:/FredericPersonnel/musique/RapportCollection/albumCollection.properties" );
+		Control.initControl(CollectionAlbumGui.DEFAULT_PROP_FILE);
 		RapportStructuresAndNames.init() ;
 
 		JsonObject jAlbum = JsonParser.parseString(albumStr1).getAsJsonObject();
@@ -132,7 +133,7 @@ class RapportStructuresAndNamesTest {
 	@Test
 	void test4() {
 		
-		Control.initControl("file:///C:/FredericPersonnel/musique/RapportCollection/albumCollection.properties" );
+		Control.initControl(CollectionAlbumGui.DEFAULT_PROP_FILE);
 		RapportStructuresAndNames.init() ;
 		
 		JsonObject jConcert = JsonParser.parseString(concertStr1).getAsJsonObject();

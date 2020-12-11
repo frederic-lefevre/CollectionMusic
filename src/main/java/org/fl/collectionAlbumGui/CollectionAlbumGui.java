@@ -14,9 +14,11 @@ import com.ibm.lge.fl.util.swing.ApplicationTabbedPane;
 
 public class CollectionAlbumGui  extends JFrame {
 
+	public static final String MUSIQUE_DIRECTORY_URI = "file:///C:/FredericPersonnel/Loisirs/musique/" ;
+	
 	private static final long serialVersionUID = 8726429353709418534L;
 
-	private static final String DEFAULT_PROP_FILE = "file:///C:/FredericPersonnel/Loisirs/musique/RapportCollection/albumCollection.properties" ;
+	public static final String DEFAULT_PROP_FILE = MUSIQUE_DIRECTORY_URI + "RapportCollection/albumCollection.properties" ;
 	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
