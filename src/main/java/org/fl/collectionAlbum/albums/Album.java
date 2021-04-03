@@ -31,11 +31,9 @@ public class Album extends MusicArtefact {
     	periodeEnregistrement = AlbumParser.processPeriodEnregistrement(albumJson, aLog);        
 		periodeComposition 	  = AlbumParser.processPeriodComposition(   albumJson, aLog);
 		
-        if ((periodeComposition == null) && (periodeEnregistrement != null) && (periodeEnregistrement.isValid())) {   
+		specificCompositionDates = (periodeComposition != null);
+        if (!specificCompositionDates) {   
         	periodeComposition = periodeEnregistrement ;
-        	specificCompositionDates = false ;
-        } else {
-        	specificCompositionDates = true ;
         }
     }
     
