@@ -24,9 +24,7 @@ public class AlbumParser {
         } else {
         	titre = jElem.getAsString() ;
         }
-		if (albumLog.isLoggable(Level.FINEST)) {
-			albumLog.finest("Titre: " + titre);
-		}
+		albumLog.finest(() -> "Titre: " + titre);
 		return titre ;
 	}
 	

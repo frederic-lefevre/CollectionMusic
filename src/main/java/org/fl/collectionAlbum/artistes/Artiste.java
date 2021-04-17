@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import java.util.List;
 import java.time.temporal.TemporalAccessor;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.Format;
@@ -106,9 +105,7 @@ public class Artiste {
         	artisteLog.severe("Erreur dans les dates de " + aPrenoms + " " + aNom);
         }
 
-		if (artisteLog.isLoggable(Level.FINEST)) {
-			artisteLog.finest("Nouvel artiste: " + nom + " " + prenoms + " (" + getDateNaissance() + " - " + getDateMort() + ")") ;
-		}
+		artisteLog.finest(() -> "Nouvel artiste: " + nom + " " + prenoms + " (" + getDateNaissance() + " - " + getDateMort() + ")") ;
 	}
     
     public void update(String n, String m) {

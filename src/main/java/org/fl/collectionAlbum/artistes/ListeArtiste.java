@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Collections;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.MusicArtefact;
@@ -30,9 +29,7 @@ public class ListeArtiste {
 		if (! artistes.contains(a)) {
 			artistes.add(a) ;
 		}
-		if (listeArtisteLog.isLoggable(Level.FINEST)) {
-			listeArtisteLog.finest("  Nom: " + a.getNom() + "  Prenoms: " + a.getPrenoms()) ;
-		}
+		listeArtisteLog.finest(() -> "  Nom: " + a.getNom() + "  Prenoms: " + a.getPrenoms()) ;
 	}
 	
 	public void addAllArtistes(List<Artiste> artistes, MusicArtefact musicArtefact) {

@@ -110,22 +110,20 @@ public class MusicArtefactParser {
 	
 	private List<String> getArrayAttribute(String jsonMusicProperty) {
 
-		List<String> result = new ArrayList<String>() ;
         JsonElement jElem = arteFactJson.get(jsonMusicProperty) ;
 		if (jElem != null) {
 			if (jElem.isJsonArray()) {
-				result = new ArrayList<String>() ;
+				List<String> result = new ArrayList<String>() ;
 				JsonArray jArray = jElem.getAsJsonArray() ; 
 				for (JsonElement e : jArray) {
 					result.add(e.getAsString()) ;
 				}
-				if (mLog.isLoggable(Level.FINEST)) {
-					mLog.finest("Nombre de " + jsonMusicProperty + " " + result.size()) ;
-				}
+				mLog.finest(() -> "Nombre de " + jsonMusicProperty + " " + result.size()) ;
+				return result ;
 			} else {
 				mLog.warning(jsonMusicProperty + " n'est pas un JsonArray pour l'artefact " + arteFactJson) ;
 			}
 		}
-		return result ;
+		return new ArrayList<String>() ;
 	}
 }

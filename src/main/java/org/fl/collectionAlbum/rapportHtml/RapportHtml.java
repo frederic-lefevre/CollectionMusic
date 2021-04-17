@@ -115,9 +115,8 @@ public abstract class RapportHtml {
 		try (BufferedWriter buff = Files.newBufferedWriter(rapportFile, RapportStructuresAndNames.getCharset())){
 								
 			buff.write(rBuilder.toString()) ;
-			if (rapportLog.isLoggable(Level.FINE)) {
-				rapportLog.fine("Création du RapportHtml " + titreRapport + " Fichier: " + rapportFile);
-			}
+			rapportLog.fine(() -> "Création du RapportHtml " + titreRapport + " Fichier: " + rapportFile);
+
 		} catch (Exception e) {			
 		    rapportLog.log(Level.SEVERE,"Erreur dans la création du fichier " + rapportFile, e) ;
 		}
