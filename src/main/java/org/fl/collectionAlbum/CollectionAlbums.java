@@ -18,9 +18,9 @@ import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.rapportHtml.RapportStructuresAndNames;
 import org.fl.collectionAlbumGui.ProgressInformation;
 import org.fl.collectionAlbumGui.ProgressInformationPanel;
+import org.fl.util.json.JsonUtils;
 
 import com.google.gson.JsonObject;
-import com.ibm.lge.fl.util.json.JsonUtils;
 
 public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,ProgressInformation>{
 	

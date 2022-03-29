@@ -9,8 +9,7 @@ import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.rapportHtml.RapportStructuresAndNames;
 import org.fl.collectionAlbumGui.entry.AlbumEntryPane;
 import org.fl.collectionAlbumGui.entry.ConcertEntryPane;
-
-import com.ibm.lge.fl.util.swing.ApplicationTabbedPane;
+import org.fl.util.swing.ApplicationTabbedPane;
 
 public class CollectionAlbumGui  extends JFrame {
 

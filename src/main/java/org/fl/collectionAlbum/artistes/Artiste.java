@@ -14,11 +14,11 @@ import org.fl.collectionAlbum.albums.ListeAlbum;
 import org.fl.collectionAlbum.concerts.Concert;
 import org.fl.collectionAlbum.concerts.ListeConcert;
 import org.fl.collectionAlbum.utils.TemporalUtils;
+import org.fl.util.json.JsonUtils;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.ibm.lge.fl.util.json.JsonUtils;
 
 public class Artiste {
 	

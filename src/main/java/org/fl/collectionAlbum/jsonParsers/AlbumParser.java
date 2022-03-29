@@ -6,11 +6,11 @@ import java.util.logging.Logger;
 import org.fl.collectionAlbum.Format;
 import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.utils.TemporalUtils;
+import org.fl.util.date.FuzzyPeriod;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.ibm.lge.fl.util.date.FuzzyPeriod;
 
 public class AlbumParser {
 

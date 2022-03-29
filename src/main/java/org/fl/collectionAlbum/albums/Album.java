@@ -8,9 +8,9 @@ import org.fl.collectionAlbum.Format;
 import org.fl.collectionAlbum.MusicArtefact;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.jsonParsers.AlbumParser;
+import org.fl.util.date.FuzzyPeriod;
 
 import com.google.gson.JsonObject;
-import com.ibm.lge.fl.util.date.FuzzyPeriod;
 
 public class Album extends MusicArtefact {
 

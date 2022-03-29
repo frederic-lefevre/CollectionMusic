@@ -15,8 +15,7 @@ import org.fl.collectionAlbum.rapportHtml.RapportStructuresAndNames;
 import org.fl.collectionAlbum.rapportHtml.CssStyles;
 import org.fl.collectionAlbumGui.ProgressInformation;
 import org.fl.collectionAlbumGui.ProgressInformationPanel;
-
-import com.ibm.lge.fl.util.file.FilesUtils;
+import org.fl.util.file.FilesUtils;
 
 public class GenerationSiteCollection  extends SwingWorker<String,ProgressInformation> {
 

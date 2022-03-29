@@ -8,6 +8,7 @@ import org.fl.collectionAlbum.concerts.Concert;
 import org.fl.collectionAlbum.concerts.LieuConcert;
 import org.fl.collectionAlbum.concerts.LieuxDesConcerts;
 import org.fl.collectionAlbum.concerts.ListeConcert;
+import org.fl.util.AdvancedProperties;
 
 import java.net.URI;
 import java.nio.charset.Charset;
@@ -18,8 +19,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.Control;
-
-import com.ibm.lge.fl.util.AdvancedProperties;
 
 public class RapportStructuresAndNames {
 

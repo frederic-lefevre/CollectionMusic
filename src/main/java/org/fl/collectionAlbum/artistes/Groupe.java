@@ -3,10 +3,10 @@ package org.fl.collectionAlbum.artistes;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.JsonMusicProperties;
+import org.fl.util.json.JsonUtils;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.ibm.lge.fl.util.json.JsonUtils;
 
 public class Groupe extends Artiste {
 	

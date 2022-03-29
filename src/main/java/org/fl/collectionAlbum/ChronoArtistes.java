@@ -4,8 +4,7 @@ import java.time.temporal.TemporalAccessor;
 import java.util.List;
 
 import org.fl.collectionAlbum.artistes.Artiste;
-
-import com.ibm.lge.fl.util.date.AnniversaryCalendar;
+import org.fl.util.date.AnniversaryCalendar;
 
 public class ChronoArtistes {
 
