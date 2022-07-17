@@ -30,18 +30,18 @@ class ConcertTest {
 		assertNotNull(concert);
 	}
 	
-	private static final String concertStr1 = "{ " +
-			  "\"auteurCompositeurs\": [ "			+
-			                        " { "			+
-			        " \"nom\": \"Bridgewater\","	+
-			       "  \"prenom\": \"Dee Dee\","		+
-			        " \"naissance\": \"1950-05-27\""+
-			        "  }  ], "					+
-			   "\"date\": \"1990-07-19\","			+
-			   "\"lieu\": \"Juan-les-Pins, Alpes-Maritimes\"," +
-			   "\"imageTicket\": ["					+
-			       "\"/Annees1990/1990/07_Juillet/RayCharles01.jpg\"" +
-			   " ]  } " ;
+	private static final String concertStr1 = """
+			{ 
+			  "auteurCompositeurs": [{ 
+			     "nom": "Bridgewater",
+			     "prenom": "Dee Dee",
+			     "naissance": "1950-05-27"
+			   }],
+			   "date": "1990-07-01",
+			   "lieu": "Juan-les-Pins, Alpes-Maritimes",
+			   "imageTicket": ["/Annees1990/1990/07_Juillet/RayCharles01.jpg"] 
+			 } 
+		""" ;
 
 	@Test
 	void testConcert1() {
