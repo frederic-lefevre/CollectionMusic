@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.Format;
+import org.fl.collectionAlbum.Format.RangementSupportPhysique;
 import org.fl.collectionAlbum.MusicArtefact;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.jsonParsers.AlbumParser;
@@ -20,6 +21,7 @@ public class Album extends MusicArtefact {
     private FuzzyPeriod periodeComposition ;
     
     private final Format formatAlbum;
+    private RangementSupportPhysique rangement;
     
     private final boolean specificCompositionDates ;
     
@@ -30,7 +32,12 @@ public class Album extends MusicArtefact {
     	formatAlbum 		  = AlbumParser.getFormatAlbum(albumJson, aLog) ;    	
     	periodeEnregistrement = AlbumParser.processPeriodEnregistrement(albumJson, aLog);        
 		periodeComposition 	  = AlbumParser.processPeriodComposition(   albumJson, aLog);
+		rangement			  = AlbumParser.getRangementAlbum(albumJson, aLog);
 		
+		if (rangement == null) {
+			// pas de rangement spécifique
+			rangement = formatAlbum.getRangement();
+		}
 		specificCompositionDates = (periodeComposition != null);
         if (!specificCompositionDates) {   
         	periodeComposition = periodeEnregistrement ;

@@ -5,6 +5,7 @@ public class JsonMusicProperties {
 	public final static String JSON_EXTENSION = "json" ;
 	public final static String TITRE 		  = "titre" ;
 	public final static String FORMAT 		  = "format" ;
+	public final static String RANGEMENT 	  = "rangement" ;
 	public final static String CD 		 	  = "cd" ;
 	public final static String MINI_CD 		  = "minicd" ;
 	public final static String MINI_DVD 	  = "minidvd" ;

@@ -3,6 +3,7 @@ package org.fl.collectionAlbum;
 import java.util.EnumMap;
 import java.util.Set;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -52,18 +53,32 @@ public class Format {
 	
 	// Définition des rangements des supports physiques
 	public enum RangementSupportPhysique {
-		RangementCD("Ordre de rangement des albums au format CD"), 
-		RangementVinyl("Ordre de rangement des albums au format vinyls"), 
-		RangementK7("Ordre de rangement des albums au format K7"), 
-		RangementVHS("Ordre de rangement des albums au format DVD, VHS et Blue Ray") ;
+		RangementCD("Ordre de rangement des albums au format CD", "cd"),
+		RangementCDBox("Ordre de rangement des albums au format CD box", "cd box"),
+		RangementVinyl("Ordre de rangement des albums au format vinyl 33 tours", "33T"), 
+		RangementK7("Ordre de rangement des albums au format K7", "K7"), 
+		RangementVHS("Ordre de rangement des albums au format DVD, VHS et Blue Ray", "DVD") ;
 		
 		private final String description ;
-		private RangementSupportPhysique(String n) {
+		private final String jsonPropertyName ;
+		private RangementSupportPhysique(String n, String j) {
 			description = n ;
+			jsonPropertyName = j ;
 		}
 		public String getDescription() {
 			return description ;
 		}
+		public String getJsonPropertyName() {
+			return jsonPropertyName;
+		}
+		
+		public static RangementSupportPhysique getRangement(String rangement) {
+			return Stream.of(RangementSupportPhysique.values())
+					.filter(r -> r.getJsonPropertyName().equals(rangement))
+					.findFirst()
+					.orElse(null);
+		}
+		
 	}
 	
 	// Supports physiques de l'album et leur nombre correspondant

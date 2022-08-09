@@ -4,6 +4,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.Format;
+import org.fl.collectionAlbum.Format.RangementSupportPhysique;
 import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.utils.TemporalUtils;
 import org.fl.util.date.FuzzyPeriod;
@@ -40,6 +41,22 @@ public class AlbumParser {
         }
         return formatAlbum;
     }
+	
+	public static RangementSupportPhysique getRangementAlbum(JsonObject jAlbum, Logger albumLog) {
+		
+		RangementSupportPhysique rangementAlbum;
+		JsonElement jElem = jAlbum.get(JsonMusicProperties.RANGEMENT) ;
+		if (jElem != null) {
+			String jsonProp = jElem.getAsString();
+			rangementAlbum = RangementSupportPhysique.getRangement(jsonProp);
+			if (rangementAlbum == null) {
+				albumLog.warning("Rangement d'album " + jsonProp + "inconnu pour l'album " + jAlbum) ;
+			}
+		} else {
+			rangementAlbum = null;
+		}
+		return rangementAlbum;
+	}
 	
 	public static FuzzyPeriod processPeriodEnregistrement(JsonObject albumJson, Logger albumLog) {
 		FuzzyPeriod periodeEnregistrement = processPeriod(albumJson, JsonMusicProperties.ENREGISTREMENT, albumLog) ;
