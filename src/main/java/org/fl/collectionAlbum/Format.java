@@ -52,10 +52,10 @@ public class Format {
 	
 	// Définition des rangements des supports physiques
 	public enum RangementSupportPhysique {
-		RangementCD("Ordre de rangement des CD"), 
-		RangementVinyl("Ordre de rangement des vinyls"), 
-		RangementK7("Ordre de rangement des K7"), 
-		RangementVHS("Ordre de rangement des DVD, VHS et Blue Ray") ;
+		RangementCD("Ordre de rangement des albums au format CD"), 
+		RangementVinyl("Ordre de rangement des albums au format vinyls"), 
+		RangementK7("Ordre de rangement des albums au format K7"), 
+		RangementVHS("Ordre de rangement des albums au format DVD, VHS et Blue Ray") ;
 		
 		private final String description ;
 		private RangementSupportPhysique(String n) {
