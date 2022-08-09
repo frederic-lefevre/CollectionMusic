@@ -72,7 +72,7 @@ public class CollectionAlbumContainer {
 		
 		collectionAlbumsMusiques.addAlbum(album) ;
 				
-		Format.RangementSupportPhysique rangement = album.getFormatAlbum().getRangement() ;
+		Format.RangementSupportPhysique rangement = album.getRangement() ;
 		if (rangement != null) {
 			rangementsAlbums.get(rangement).addAlbum(album) ;
 		} else {

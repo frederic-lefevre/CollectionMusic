@@ -84,6 +84,11 @@ public class Album extends MusicArtefact {
         return formatAlbum;
     }
 
+
+    public RangementSupportPhysique getRangement() {
+        return rangement;
+    }
+    
 	public boolean hasSpecificCompositionDates() {
 		return specificCompositionDates;
 	}
