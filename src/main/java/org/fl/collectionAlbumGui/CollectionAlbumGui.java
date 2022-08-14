@@ -7,8 +7,6 @@ import javax.swing.JFrame;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.rapportHtml.RapportStructuresAndNames;
-import org.fl.collectionAlbumGui.entry.AlbumEntryPane;
-import org.fl.collectionAlbumGui.entry.ConcertEntryPane;
 import org.fl.util.swing.ApplicationTabbedPane;
 
 public class CollectionAlbumGui  extends JFrame {
@@ -48,12 +46,8 @@ public class CollectionAlbumGui  extends JFrame {
 		
 		// init panel de lecture et génération de site
 		GenerationPane gPane   = new GenerationPane(albumLog) ;
-		AlbumEntryPane aPane   = new AlbumEntryPane() ;
-		ConcertEntryPane cPane = new ConcertEntryPane() ;
 		
 		collectionTabs.add(gPane, "Génération", 0) ;
-		collectionTabs.add(aPane, "Entrée album", 1) ;
-		collectionTabs.add(cPane, "Entrée concert", 2) ;
 		
 		collectionTabs.setSelectedIndex(0) ;
 		getContentPane().add(collectionTabs) ;
