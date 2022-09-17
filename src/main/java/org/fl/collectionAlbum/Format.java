@@ -82,7 +82,7 @@ public class Format {
 	}
 	
 	// Supports physiques de l'album et leur nombre correspondant
-	private EnumMap<SupportPhysique, Double> tableFormat ;
+	private final EnumMap<SupportPhysique, Double> tableFormat ;
 	
 	// Create a format
 	public Format(JsonObject formatJson, Logger fl) {
