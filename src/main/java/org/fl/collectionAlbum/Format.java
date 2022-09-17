@@ -1,6 +1,7 @@
 package org.fl.collectionAlbum;
 
 import java.util.EnumMap;
+import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
@@ -84,6 +85,8 @@ public class Format {
 	// Supports physiques de l'album et leur nombre correspondant
 	private final EnumMap<SupportPhysique, Double> tableFormat ;
 	
+	private final AudioFile audioFile;
+	
 	// Create a format
 	public Format(JsonObject formatJson, Logger fl) {
 		
@@ -95,6 +98,11 @@ public class Format {
 					tableFormat.put(sPhys, Double.valueOf(elemFormat.getAsDouble())) ;
 				}
 			}
+			audioFile = Optional.ofNullable(formatJson.getAsJsonObject(JsonMusicProperties.AUDIO_FILE))
+					.map(jsonObject -> new AudioFile(jsonObject, fl))
+					.orElse(null);
+		} else {
+			audioFile = null;
 		}
 	}
 
@@ -137,6 +145,14 @@ public class Format {
 			res = res + sPhys.getPoidsSupport()*getNb(sPhys) ;
 		}
 		return res ;
+	}
+	
+	public AudioFile getAudioFile() {
+		return audioFile;
+	}
+
+	public boolean hasAudioFile() {
+		return audioFile != null;
 	}
 	
 	/**

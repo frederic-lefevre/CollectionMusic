@@ -38,5 +38,10 @@ public class JsonMusicProperties {
 	public final static String INSTRUMENTS	  = "instruments" ;
 	public final static String TICKET_IMG	  = "imageTicket" ;
 	public final static String MORCEAUX		  = "morceaux" ;
+	public final static String AUDIO_FILE	  = "audioFile" ;
+	public final static String TYPE		  	  = "type" ;
+	public final static String SOURCE		  = "source" ;
+	public final static String BIT_DEPTH	  = "bitDepth" ;
+	public final static String SAMPLING_RATE  = "samplingRate" ;
 
 }
