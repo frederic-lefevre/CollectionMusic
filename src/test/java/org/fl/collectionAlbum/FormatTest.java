@@ -1,6 +1,6 @@
 package org.fl.collectionAlbum;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.logging.Logger;
 
@@ -19,8 +19,8 @@ class FormatTest {
 		String formatStr1 = "{}" ;
 		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
 		Format format1 = new Format(jf1, logger) ;
-		
-		assertEquals(0, format1.getPoids()) ;
+
+		assertThat(format1.getPoids()).isZero();
 
 	}
 
@@ -30,8 +30,8 @@ class FormatTest {
 		String formatStr1 = "{\"cd\": 3 }" ;
 		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
 		Format format1 = new Format(jf1, logger) ;
-		
-		assertEquals(3, format1.getPoids()) ;
+
+		assertThat(format1.getPoids()).isEqualTo(3);
 
 	}
 	
@@ -42,8 +42,7 @@ class FormatTest {
 		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
 		Format format1 = new Format(jf1, logger) ;
 		
-		assertEquals(2.5, format1.getPoids()) ;
-
+		assertThat(format1.getPoids()).isEqualTo(2.5);
 	}
 	
 	@Test
@@ -58,12 +57,12 @@ class FormatTest {
 		Format format2 = new Format(jf2, logger) ;
 		
 		Format format3 = new Format(null, logger) ;
-		assertEquals(0, format3.getPoids()) ;
+		assertThat(format3.getPoids()).isZero();
 		
 		format3.incrementFormat(format1);
-		assertEquals(format1.getPoids(), format3.getPoids()) ;
+		assertThat(format1.getPoids()).isEqualTo(format3.getPoids());
 		
 		format3.incrementFormat(format2);
-		assertEquals(format1.getPoids() + format2.getPoids(), format3.getPoids()) ;
+		assertThat(format3.getPoids()).isEqualTo(format1.getPoids() + format2.getPoids());
 	}
 }
