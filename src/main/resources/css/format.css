@@ -189,7 +189,7 @@ td.audiook { vertical-align : top ;
  td:hover span.audiodetail { display: block;
                       position: fixed;
                       bottom: 20px;
-                      right: 0px;
+                      right: 200px;
                       padding: 5px;
                       margin: 10px;
                       color: #A0A0FF;
