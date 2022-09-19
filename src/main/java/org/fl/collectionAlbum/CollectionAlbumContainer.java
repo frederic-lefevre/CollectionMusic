@@ -31,6 +31,9 @@ public class CollectionAlbumContainer {
 	// Listes des albums par rangement
 	private EnumMap<Format.RangementSupportPhysique, ListeAlbum> rangementsAlbums ;	
 	
+	private ListeAlbum albumWithAudioFile;
+	private ListeAlbum albumWithoutAudioFile;
+	
 	private ListeConcert   concerts ;	
 	private ChronoArtistes calendrierArtistes ;
 	
@@ -79,6 +82,12 @@ public class CollectionAlbumContainer {
 			albumLog.warning("Album impossible à ranger: " + album.getTitre()) ;
 		}
 			
+		if (album.hasAudioFiles()) {
+			albumWithAudioFile.addAlbum(album);
+		} else {
+			albumWithoutAudioFile.addAlbum(album);
+		}
+		
 		statChronoEnregistrement.AddAlbum(album.getDebutEnregistrement(), album.getFormatAlbum().getPoids());
 	    statChronoComposition.AddAlbum(album.getDebutComposition(), album.getFormatAlbum().getPoids());
 	}
@@ -115,6 +124,8 @@ public class CollectionAlbumContainer {
    		calendrierArtistes 		 = new ChronoArtistes() ;
    		lieuxDesConcerts		 = new LieuxDesConcerts() ;
    		allArtistes				 = new ArrayList<ListeArtiste>() ;
+   		albumWithAudioFile		 = new ListeAlbum(albumLog) ;
+   		albumWithoutAudioFile	 = new ListeAlbum(albumLog) ;
    		rangementsAlbums 		 = new EnumMap<Format.RangementSupportPhysique, ListeAlbum>(Format.RangementSupportPhysique.class) ;
    		for (Format.RangementSupportPhysique rangement : Format.RangementSupportPhysique.values()) {
    			rangementsAlbums.put(rangement, new ListeAlbum(albumLog)) ;
