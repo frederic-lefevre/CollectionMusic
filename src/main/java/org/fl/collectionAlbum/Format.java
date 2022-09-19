@@ -204,10 +204,13 @@ public class Format {
 	private final static String F_ROW5 = "</td>\n" ;
 	private final static String F_ROW6 = "\"><span class=\"" ;
 	private final static String F_ROW7 = "</span></td>\n" ;
+	private final static String F_ROW8 = "<span class=\"" ;
 	
 	private final static String AUDIO_FILE_HEAD_CLASS = "audiofe";
 	private final static String AUDIO_FILE_TITLE = "Audio file";
-	private final static String AUDIO_FILE_CLASS = "audiof";
+	private final static String AUDIO_FILE_OK_CLASS = "audiook";
+	private final static String AUDIO_FILE_KO_CLASS = "audioko";
+	private final static String AUDIO_FILE_DETAIL_CLASS = "audiodetail";
 	
 	public void enteteFormat(StringBuilder rapport, String cssTotal, int rows) {
 		
@@ -228,13 +231,13 @@ public class Format {
 		for (SupportPhysique sPhys : SupportPhysique.values()) {
 			rapport.append(F_ROW0).append(sPhys.getCssClass()).append(F_ROW4).append(displayPoids(getNb(sPhys))).append(F_ROW5) ;			 
 		}
-		String audioFileText;
+
 		if (hasAudioFiles()) {
-			audioFileText = "oui";
+			rapport.append(F_ROW0).append(AUDIO_FILE_OK_CLASS).append(F_ROW4).append("oui")
+				.append(F_ROW8).append(AUDIO_FILE_DETAIL_CLASS).append(F_ROW4).append(displayAudioFilesDetail()).append(F_ROW7) ;
 		} else {
-			audioFileText = "";
+			rapport.append(F_ROW0).append(AUDIO_FILE_KO_CLASS).append(F_ROW4).append(F_ROW5) ;
 		}
-		rapport.append(F_ROW0).append(AUDIO_FILE_CLASS).append(F_ROW4).append(audioFileText).append(F_ROW5) ;
 	}
 	
 	private String displayPoids(double d) {
@@ -253,5 +256,26 @@ public class Format {
 	
 	public String displayPoidsTotal() {
 		return displayPoids(getPoids()) ;
+	}
+	
+	private String displayAudioFilesDetail() {
+		if (hasAudioFiles()) {
+			StringBuilder audioFilesDetails = new StringBuilder();
+			audioFiles.forEach(af -> appendAudioFilesDetail(af, audioFilesDetails));
+			return audioFilesDetails.toString();
+		} else {
+			return "";
+		}
+	}
+	
+	private void appendAudioFilesDetail(AudioFile audioFile, StringBuilder audioFilesDetails) {
+		audioFilesDetails.append(audioFile.getBitDepth()).append(" bits<br/>");
+		audioFilesDetails.append(audioFile.getSamplingRate()).append(" KHz<br/>");
+		audioFilesDetails.append(audioFile.getType()).append("<br/>");
+		audioFilesDetails.append(audioFile.getSource());
+		String note = audioFile.getNote();
+		if ((note != null) && (!note.isEmpty())) {
+			audioFilesDetails.append("<br/>").append(audioFile.getNote());
+		}
 	}
 }

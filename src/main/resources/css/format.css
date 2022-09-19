@@ -155,7 +155,7 @@ td.xnbvhs { vertical-align : top ;
 			 font-weight: bold;
  }
  
-td.audiof { vertical-align : top ;
+td.audiook { vertical-align : top ;
            background : #D0D0F0 ;
              width : 25px;
              padding : 2px ;
@@ -166,3 +166,37 @@ td.audiof { vertical-align : top ;
 			 font-size: smaller;
 			 font-weight: bold;
  }
+ 
+ td.audioko { vertical-align : top ;
+           background : #D0D0F0 ;
+             width : 25px;
+             padding : 2px ;
+             margin : 2px ;
+             border : 1px solid black;
+             text-align: center ;
+             border-spacing: 1px;
+			 font-size: smaller;
+			 font-weight: bold;
+ }
+ 
+ tr.audiook:hover {
+           background : #F0F0FF;
+           color: black;
+ }
+ 
+ span.audiodetail { display: none;}
+ 
+ td:hover span.audiodetail { display: block;
+                      position: fixed;
+                      bottom: 20px;
+                      right: 0px;
+                      padding: 5px;
+                      margin: 10px;
+                      color: #A0A0FF;
+                      font-family: "Verdana", sans-serif ;
+                      font-style: italic;
+                      font-size : 200% ;
+                      font-stretch : ultra-expanded ;
+                      font-weight : bold ;
+                      text-align: center;
+}
