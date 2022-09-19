@@ -205,6 +205,10 @@ public class Format {
 	private final static String F_ROW6 = "\"><span class=\"" ;
 	private final static String F_ROW7 = "</span></td>\n" ;
 	
+	private final static String AUDIO_FILE_HEAD_CLASS = "audiofe";
+	private final static String AUDIO_FILE_TITLE = "Audio file";
+	private final static String AUDIO_FILE_CLASS = "audiof";
+	
 	public void enteteFormat(StringBuilder rapport, String cssTotal, int rows) {
 		
 		if (cssTotal != null) {
@@ -213,6 +217,7 @@ public class Format {
 		for (SupportPhysique sPhys : SupportPhysique.values()) {
 			rapport.append(F_ROW1).append(rows).append(F_ROW3).append(sPhys.getCssClass()).append(F_ROW4).append(sPhys.getNom()).append(F_ROW5) ;
 		}
+		rapport.append(F_ROW1).append(rows).append(F_ROW3).append(AUDIO_FILE_HEAD_CLASS).append(F_ROW4).append(AUDIO_FILE_TITLE).append(F_ROW5) ;
 	}
 	
 	public void rowFormat(StringBuilder rapport, String cssTotal) {
@@ -222,7 +227,14 @@ public class Format {
 		}
 		for (SupportPhysique sPhys : SupportPhysique.values()) {
 			rapport.append(F_ROW0).append(sPhys.getCssClass()).append(F_ROW4).append(displayPoids(getNb(sPhys))).append(F_ROW5) ;			 
-		}		
+		}
+		String audioFileText;
+		if (hasAudioFiles()) {
+			audioFileText = "oui";
+		} else {
+			audioFileText = "";
+		}
+		rapport.append(F_ROW0).append(AUDIO_FILE_CLASS).append(F_ROW4).append(audioFileText).append(F_ROW5) ;
 	}
 	
 	private String displayPoids(double d) {

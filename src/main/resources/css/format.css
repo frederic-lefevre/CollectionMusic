@@ -142,3 +142,27 @@ td.xnbvhs { vertical-align : top ;
 			 font-size: smaller;
 			 font-weight: bold;
  }
+ 
+ td.audiofe { vertical-align : top ;
+           background : #D0D0F0 ;
+             width : 25px;
+             padding : 2px ;
+             margin : 2px ;
+             border : 1px solid black;
+             text-align: center ;
+             border-spacing: 1px;
+			 font-size: smaller;
+			 font-weight: bold;
+ }
+ 
+td.audiof { vertical-align : top ;
+           background : #D0D0F0 ;
+             width : 25px;
+             padding : 2px ;
+             margin : 2px ;
+             border : 1px solid black;
+             text-align: center ;
+             border-spacing: 1px;
+			 font-size: smaller;
+			 font-weight: bold;
+ }

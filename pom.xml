@@ -39,7 +39,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<timestamp>${maven.build.timestamp}</timestamp>
 		<maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss z</maven.build.timestamp.format>
-		<project.deploy.target>C:\FredericPersonnel\musique\RapportCollection</project.deploy.target>
+		<project.deploy.target>C:\FredericPersonnel\Loisirs\musique\RapportCollection</project.deploy.target>
 		<installExe.skip>true</installExe.skip>
 	</properties>
 
