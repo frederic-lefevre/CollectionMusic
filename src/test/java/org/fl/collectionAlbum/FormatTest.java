@@ -67,7 +67,7 @@ class FormatTest {
 		Format format1 = new Format(jf1, logger) ;
 		
 		assertThat(format1.getPoids()).isEqualTo(2.5);
-		assertThat(format1.getAudioFile()).isNull();
+		assertThat(format1.getAudioFiles()).isNull();
 	}
 	
 	@Test
@@ -89,6 +89,9 @@ class FormatTest {
 		
 		format3.incrementFormat(format2);
 		assertThat(format3.getPoids()).isEqualTo(format1.getPoids() + format2.getPoids());
+		
+		assertThat(format3.hasAudioFiles()).isFalse();
+		assertThat(format3.getAudioFiles()).isNull();
 	}
 	
 	@Test
@@ -97,11 +100,11 @@ class FormatTest {
 		String formatStr1 = """
 				{"cd": 2 , 
 				"45t" : 1,
-				"audioFile" : {
+				"audioFiles" : [{
 				    "bitDepth": 32 , 
 				    "samplingRate" : 192, 
 				    "source" : "MOFI Fidelity Sound Lab", 
-				    "type" : "WAV" }
+				    "type" : "WAV" }]
 				}
 				""";
 		
@@ -110,11 +113,58 @@ class FormatTest {
 		
 		assertThat(format1.getPoids()).isEqualTo(2.5);
 		
-		AudioFile audio = format1.getAudioFile();
-		assertThat(audio).isNotNull();
-		assertThat(audio.getBitDepth()).isEqualTo(32);
-		assertThat(audio.getSamplingRate()).isEqualTo(192);
-		assertThat(audio.getType()).isEqualTo("WAV");
-		assertThat(audio.getSource()).isEqualTo("MOFI Fidelity Sound Lab");
+
+		assertThat(format1.getAudioFiles()).singleElement()
+			.satisfies(audio -> {
+				assertThat(audio).isNotNull();
+				assertThat(audio.getBitDepth()).isEqualTo(32);
+				assertThat(audio.getSamplingRate()).isEqualTo(192);
+				assertThat(audio.getType()).isEqualTo("WAV");
+				assertThat(audio.getSource()).isEqualTo("MOFI Fidelity Sound Lab");
+			});
+		
+	}
+	
+	@Test
+	void test6() {
+		
+		String formatStr1 = """
+				{"cd": 2 , 
+				"45t" : 1,
+				"audioFiles" : [{
+				    "bitDepth": 32 , 
+				    "samplingRate" : 192, 
+				    "source" : "MOFI Fidelity Sound Lab", 
+				    "type" : "WAV" },
+				    {
+				    "bitDepth": 24 , 
+				    "samplingRate" : 88, 
+				    "source" : "CD", 
+				    "type" : "FLAC" }]
+				}
+				""";
+		
+		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
+		Format format1 = new Format(jf1, logger) ;
+		
+		assertThat(format1.getPoids()).isEqualTo(2.5);
+		
+
+		assertThat(format1.getAudioFiles()).hasSize(2)
+			.anySatisfy(audio -> {
+				assertThat(audio).isNotNull();
+				assertThat(audio.getBitDepth()).isEqualTo(32);
+				assertThat(audio.getSamplingRate()).isEqualTo(192);
+				assertThat(audio.getType()).isEqualTo("WAV");
+				assertThat(audio.getSource()).isEqualTo("MOFI Fidelity Sound Lab");
+			})
+			.anySatisfy(audio -> {
+				assertThat(audio).isNotNull();
+				assertThat(audio.getBitDepth()).isEqualTo(24);
+				assertThat(audio.getSamplingRate()).isEqualTo(88);
+				assertThat(audio.getType()).isEqualTo("FLAC");
+				assertThat(audio.getSource()).isEqualTo("CD");
+			});
+		
 	}
 }
