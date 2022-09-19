@@ -135,7 +135,8 @@ class FormatTest {
 				    "bitDepth": 32 , 
 				    "samplingRate" : 192, 
 				    "source" : "MOFI Fidelity Sound Lab", 
-				    "type" : "WAV" },
+				    "type" : "WAV",
+				    "note" : "Mix Bob Smith" },
 				    {
 				    "bitDepth": 24 , 
 				    "samplingRate" : 88, 
@@ -157,6 +158,7 @@ class FormatTest {
 				assertThat(audio.getSamplingRate()).isEqualTo(192);
 				assertThat(audio.getType()).isEqualTo("WAV");
 				assertThat(audio.getSource()).isEqualTo("MOFI Fidelity Sound Lab");
+				assertThat(audio.getNote()).isEqualTo("Mix Bob Smith");
 			})
 			.anySatisfy(audio -> {
 				assertThat(audio).isNotNull();
@@ -164,6 +166,7 @@ class FormatTest {
 				assertThat(audio.getSamplingRate()).isEqualTo(88);
 				assertThat(audio.getType()).isEqualTo("FLAC");
 				assertThat(audio.getSource()).isEqualTo("CD");
+				assertThat(audio.getNote()).isNull();
 			});
 		
 	}

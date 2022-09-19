@@ -36,6 +36,7 @@ public class AudioFile {
 	private final String source;
 	private final int bitDepth;
 	private final double samplingRate;
+	private final String note;
 	
 	private static final String DEFAULT_TYPE = "FLAC";
 	private static final String DEFAULT_SOURCE = "CD";
@@ -57,12 +58,16 @@ public class AudioFile {
 			samplingRate = Optional.ofNullable(audioFileJson.get(JsonMusicProperties.SAMPLING_RATE))
 					.map(JsonElement::getAsDouble)
 					.orElse(DEFAULT_SAMPLING_RATE);
+			note = Optional.ofNullable(audioFileJson.get(JsonMusicProperties.NOTE))
+					.map(JsonElement::getAsString)
+					.orElse(null);
 		} else {
 			fl.severe("Constructor AudioFile null parameter");
 			type = null;
 			source = null;
 			bitDepth = 0;
 			samplingRate = 0;
+			note = null;
 		}
 	}
 
@@ -80,5 +85,9 @@ public class AudioFile {
 
 	public double getSamplingRate() {
 		return samplingRate;
+	}
+	
+	public String getNote() {
+		return note;
 	}
 }

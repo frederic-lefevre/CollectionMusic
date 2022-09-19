@@ -77,6 +77,7 @@ class AudioFileTest {
 		assertThat(audio.getSamplingRate()).isEqualTo(96);
 		assertThat(audio.getType()).isEqualTo("FLAC");
 		assertThat(audio.getSource()).isEqualTo("SACD");
+		assertThat(audio.getNote()).isNull();
 	}
 	
 	@Test
@@ -86,7 +87,8 @@ class AudioFileTest {
 				{"bitDepth": 32 , 
 				 "samplingRate" : 192, 
 				 "source" : "MOFI Fidelity Sound Lab", 
-				 "type" : "WAV" }
+				 "type" : "WAV",
+				 "note" : "Remaster Ocean view" }
 				""" ;
 		JsonObject jf1 = JsonParser.parseString(audioFileStr1).getAsJsonObject();
 		
@@ -95,5 +97,6 @@ class AudioFileTest {
 		assertThat(audio.getSamplingRate()).isEqualTo(192);
 		assertThat(audio.getType()).isEqualTo("WAV");
 		assertThat(audio.getSource()).isEqualTo("MOFI Fidelity Sound Lab");
+		assertThat(audio.getNote()).isEqualTo("Remaster Ocean view");
 	}
 }
