@@ -38,7 +38,7 @@ public class FragmentListeAlbums {
 					balises.addCheckBaliseTemporal(fragment, debutEnr) ;
 				} else if (balises.getBalisesType() == Balises.BalisesType.TEMPORAL_COMPOSITION) {
 					balises.addCheckBaliseTemporal(fragment, debutComp) ;
-				}
+				} 
 			}
 			fragment.append(TemporalUtils.formatDate(debutComp)) ;
 			if (displayDateEnregistrement) {

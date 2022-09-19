@@ -56,6 +56,13 @@ public class RapportCollection extends RapportHtml {
 			write(rapportAlbumsRangement.printReport(getNextRapportFile(), CssStyles.stylesTableauMusicArtefact)) ;
 		}
 
+		write("</ul>\n<h3>Albums avec et sans fichier audio</h3>\n<ul>\n") ;
+		RapportListeAlbums rapportAlbumsWithAudioFile = new RapportListeAlbums(albumsContainer.getAlbumsWithAudioFile().sortRangementAlbum(), "Albums avec fichiers audio", rapportLog) ;
+		write(rapportAlbumsWithAudioFile.printReport(getNextRapportFile(), CssStyles.stylesTableauAvecBalise)) ;
+		
+		RapportListeAlbums rapportAlbumsWithoutAudioFile = new RapportListeAlbums(albumsContainer.getAlbumsWithoutAudioFile().sortRangementAlbum(), "Albums sans fichiers audio", rapportLog) ;
+		write(rapportAlbumsWithoutAudioFile.printReport(getNextRapportFile(), CssStyles.stylesTableauAvecBalise)) ;
+		
 		write("</ul>\n<h3>Statistiques</h3>\n<ul>\n") ;
 		RapportStat rapportStat1 = new RapportStat(albumsContainer.getStatChronoEnregistrement(), "Statistiques par année d'enregistrement: Nombre d'unit&eacute;s physiques", rapportLog) ;
 		write(rapportStat1.printReport(getNextRapportFile(), CssStyles.stylesStat)) ;
@@ -64,7 +71,9 @@ public class RapportCollection extends RapportHtml {
 		write(rapportStat2.printReport(getNextRapportFile(), CssStyles.stylesStat)) ;
 
 		write("  <li>Nombre d'albums: " + albumsContainer.getCollectionAlbumsMusiques().getNombreAlbums()) ;
-		write("</li>\n  <li>Nombre d'artistes, de groupes et d'ensemble: " + albumsContainer.getCollectionArtistes().getNombreArtistes()) ;
+		write("\n  <ul>\n    <li>avec fichiers audio: " + albumsContainer.getAlbumsWithAudioFile().getNombreAlbums()) ;
+		write("</li>\n    <li>sans fichiers audio: " + albumsContainer.getAlbumsWithoutAudioFile().getNombreAlbums()) ;
+		write("</li>\n  </ul>\n  </li>\n  <li>Nombre d'artistes, de groupes et d'ensemble: " + albumsContainer.getCollectionArtistes().getNombreArtistes()) ;
 		write("</li>\n  <li>Nombre d'unit&eacute;s physiques:\n<table>\n  <tr>\n") ;
 		albumsContainer.getCollectionAlbumsMusiques().getFormatListeAlbum().enteteFormat(rBuilder, "total", 1) ;
 		write("  </tr>\n  <tr>\n") ;

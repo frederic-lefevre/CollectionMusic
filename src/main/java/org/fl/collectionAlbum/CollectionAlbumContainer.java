@@ -112,6 +112,8 @@ public class CollectionAlbumContainer {
 	public StatChrono 	  	getStatChronoComposition() 	  { return statChronoComposition	; }
 	public StatChrono 	  	getStatChronoEnregistrement() { return statChronoEnregistrement ; }
 	public LieuxDesConcerts getLieuxDesConcerts() 		  { return lieuxDesConcerts			; }
+	public ListeAlbum 	  	getAlbumsWithAudioFile() 	  { return albumWithAudioFile 		; }
+	public ListeAlbum 	  	getAlbumsWithoutAudioFile()   { return albumWithoutAudioFile 	; }
 
 	private void reset() {
 		

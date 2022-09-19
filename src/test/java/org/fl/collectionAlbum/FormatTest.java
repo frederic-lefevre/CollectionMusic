@@ -132,6 +132,37 @@ class FormatTest {
 				{"cd": 2 , 
 				"45t" : 1,
 				"audioFiles" : [{
+				    "bitDepth": 16 , 
+				    "samplingRate" : 44.1, 
+				    "source" : "MOFI Fidelity Sound Lab", 
+				    "type" : "FLAC" }]
+				}
+				""";
+		
+		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
+		Format format1 = new Format(jf1, logger) ;
+		
+		assertThat(format1.getPoids()).isEqualTo(2.5);
+		
+
+		assertThat(format1.getAudioFiles()).singleElement()
+			.satisfies(audio -> {
+				assertThat(audio).isNotNull();
+				assertThat(audio.getBitDepth()).isEqualTo(16);
+				assertThat(audio.getSamplingRate()).isEqualTo(44.1);
+				assertThat(audio.getType()).isEqualTo("FLAC");
+				assertThat(audio.getSource()).isEqualTo("MOFI Fidelity Sound Lab");
+			});
+		
+	}
+	
+	@Test
+	void test7() {
+		
+		String formatStr1 = """
+				{"cd": 2 , 
+				"45t" : 1,
+				"audioFiles" : [{
 				    "bitDepth": 32 , 
 				    "samplingRate" : 192, 
 				    "source" : "MOFI Fidelity Sound Lab", 

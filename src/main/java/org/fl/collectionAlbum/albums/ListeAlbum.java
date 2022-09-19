@@ -60,6 +60,4 @@ public class ListeAlbum {
 		return albums;
 	}
 
-
-
 }
