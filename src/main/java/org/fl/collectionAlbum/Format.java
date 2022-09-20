@@ -212,7 +212,7 @@ public class Format {
 	private final static String AUDIO_FILE_KO_CLASS = "audioko";
 	private final static String AUDIO_FILE_DETAIL_CLASS = "audiodetail";
 	
-	public void enteteFormat(StringBuilder rapport, String cssTotal, int rows) {
+	public void enteteFormat(StringBuilder rapport, String cssTotal, int rows, boolean putAudioFile) {
 		
 		if (cssTotal != null) {
 			rapport.append(F_ROW1).append(rows).append(F_ROW3).append(cssTotal).append(F_ROW2) ;
@@ -220,10 +220,13 @@ public class Format {
 		for (SupportPhysique sPhys : SupportPhysique.values()) {
 			rapport.append(F_ROW1).append(rows).append(F_ROW3).append(sPhys.getCssClass()).append(F_ROW4).append(sPhys.getNom()).append(F_ROW5) ;
 		}
-		rapport.append(F_ROW1).append(rows).append(F_ROW3).append(AUDIO_FILE_HEAD_CLASS).append(F_ROW4).append(AUDIO_FILE_TITLE).append(F_ROW5) ;
+		
+		if (putAudioFile) {
+			rapport.append(F_ROW1).append(rows).append(F_ROW3).append(AUDIO_FILE_HEAD_CLASS).append(F_ROW4).append(AUDIO_FILE_TITLE).append(F_ROW5) ;
+		}
 	}
 	
-	public void rowFormat(StringBuilder rapport, String cssTotal) {
+	public void rowFormat(StringBuilder rapport, String cssTotal, boolean putAudioFile) {
 		
 		if (cssTotal != null) {
 			rapport.append(F_ROW0).append(cssTotal).append(F_ROW6).append(cssTotal).append(F_ROW4).append(displayPoids(getPoids())).append(F_ROW7) ;
@@ -232,11 +235,13 @@ public class Format {
 			rapport.append(F_ROW0).append(sPhys.getCssClass()).append(F_ROW4).append(displayPoids(getNb(sPhys))).append(F_ROW5) ;			 
 		}
 
-		if (hasAudioFiles()) {
-			rapport.append(F_ROW0).append(AUDIO_FILE_OK_CLASS).append(F_ROW4).append("oui")
-				.append(F_ROW8).append(AUDIO_FILE_DETAIL_CLASS).append(F_ROW4).append(displayAudioFilesDetail()).append(F_ROW7) ;
-		} else {
-			rapport.append(F_ROW0).append(AUDIO_FILE_KO_CLASS).append(F_ROW4).append(F_ROW5) ;
+		if (putAudioFile) {
+			if (hasAudioFiles()) {
+				rapport.append(F_ROW0).append(AUDIO_FILE_OK_CLASS).append(F_ROW4).append("oui")
+					.append(F_ROW8).append(AUDIO_FILE_DETAIL_CLASS).append(F_ROW4).append(displayAudioFilesDetail()).append(F_ROW7) ;
+			} else {
+				rapport.append(F_ROW0).append(AUDIO_FILE_KO_CLASS).append(F_ROW4).append(F_ROW5) ;
+			}
 		}
 	}
 	

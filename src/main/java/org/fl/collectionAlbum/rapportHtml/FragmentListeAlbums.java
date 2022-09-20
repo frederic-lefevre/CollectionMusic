@@ -15,12 +15,14 @@ public class FragmentListeAlbums {
 	private final static String TABLE2 = "  </tr>\n  <tr>\n    <td class=\"an\">Début</td>\n    <td class=\"an\">Fin</td>\n  </tr>\n\n  </table>\n</div>\n<table>\n <tr class=\"head\">\n    <td colspan=\"2\" class=\"an2\">Dates de composition /<br/>Dates d'enregistrement</td>\n    <td rowspan=\"2\" class=\"auteur\">Auteurs</td>\n    <td rowspan=\"2\" class=\"album\">Titres</td>\n" ;
 	private final static String TABLE3 = "  </tr>\n  <tr class=\"head\">\n    <td class=\"an\">Début</td>\n    <td class=\"an\">Fin</td>\n  </tr>\n" ;
 
+	private static final boolean APPEND_AUDIO_FILE = true;
+	
 	public static void buildTable(ListeAlbum listeAlbums, StringBuilder fragment, String urlOffSet, Balises balises) {
 		
 		fragment.append(TABLE1) ;
-		listeAlbums.getFormatListeAlbum().enteteFormat(fragment, null, 2) ;
+		listeAlbums.getFormatListeAlbum().enteteFormat(fragment, null, 2, APPEND_AUDIO_FILE) ;
 		fragment.append(TABLE2) ;
-        listeAlbums.getFormatListeAlbum().enteteFormat(fragment, null, 2) ;
+        listeAlbums.getFormatListeAlbum().enteteFormat(fragment, null, 2, APPEND_AUDIO_FILE) ;
         fragment.append(TABLE3) ;
 		for (Album unAlbum : listeAlbums.getAlbums()) {
 			
@@ -70,7 +72,7 @@ public class FragmentListeAlbums {
 			
 			FragmentIntervenants.printIntervenant(unAlbum, fragment, urlOffSet) ;
 			fragment.append("    </td>\n") ;
-			unAlbum.getFormatAlbum().rowFormat(fragment, null) ;
+			unAlbum.getFormatAlbum().rowFormat(fragment, null, APPEND_AUDIO_FILE) ;
 			fragment.append("  </tr>\n") ;
 		}
 		fragment.append("</table>\n") ;

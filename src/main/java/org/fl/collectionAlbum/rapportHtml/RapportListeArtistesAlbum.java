@@ -15,6 +15,8 @@ public class RapportListeArtistesAlbum extends RapportHtml {
 	private final static String F3 = "  </tr>\n  </table>\n</div>\n<table>\n  <tr class=\"head\">\n    <td class=\"auteur\">Auteurs</td>\n" +
 									 "    <td class=\"an\">Naissance</td>\n    <td class=\"an\">Mort</td>\n" ;
 
+	private static final boolean DONT_APPEND_AUDIO_FILE = false;
+	
 	private final ListeArtiste auteurs ;
 	
 	public RapportListeArtistesAlbum(ListeArtiste la, String titre, Logger rl) {
@@ -30,9 +32,9 @@ public class RapportListeArtistesAlbum extends RapportHtml {
 		Format entete = new Format(null, rapportLog) ;
 
 		write(F1) ;
-		entete.enteteFormat(rBuilder, "total", 1) ;
+		entete.enteteFormat(rBuilder, "total", 1, DONT_APPEND_AUDIO_FILE) ;
 		write(F3) ;
-		entete.enteteFormat(rBuilder, "total", 1) ;
+		entete.enteteFormat(rBuilder, "total", 1, DONT_APPEND_AUDIO_FILE) ;
 		write("  </tr>\n") ;
 
 		for (Artiste unArtiste : auteurs.getArtistes()) {
@@ -58,7 +60,7 @@ public class RapportListeArtistesAlbum extends RapportHtml {
 			write("    <td class=\"an\">").write(unArtiste.getDateNaissance()).write("</td>\n") ;
 			write("    <td class=\"an\">").write(unArtiste.getDateMort()).write("</td>\n") ;
 
-			unArtiste.getAlbumsFormat().rowFormat(rBuilder, "total") ;
+			unArtiste.getAlbumsFormat().rowFormat(rBuilder, "total", DONT_APPEND_AUDIO_FILE) ;
 
 			write("  </tr>\n") ;
 		}

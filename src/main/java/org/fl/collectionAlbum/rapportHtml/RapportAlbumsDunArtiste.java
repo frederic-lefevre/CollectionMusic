@@ -11,6 +11,8 @@ public class RapportAlbumsDunArtiste extends RapportHtml {
 	
 	private final Artiste artiste ;
 	
+	private static final boolean DONT_APPEND_AUDIO_FILE = false;
+	
 	public RapportAlbumsDunArtiste(Artiste a, String offset, Logger rl) {
 		super("", rl);
 		withOffset(offset) ;
@@ -32,9 +34,9 @@ public class RapportAlbumsDunArtiste extends RapportHtml {
 		write("<table class=\"auteurTab\">\n  <tr>\n    <td rowspan=\"2\" class=\"auteurTitre\"><span class=\"auteurTitre\">") ;
 		write(artiste.getPrenoms()).write(" ").write(artiste.getNom()) ;
 		write("</span> (").write(artiste.getDateNaissance()).write(" - ").write(artiste.getDateMort()).write(")</td>\n") ;
-		artiste.getAlbumsFormat().enteteFormat(rBuilder, "total", 1) ;
+		artiste.getAlbumsFormat().enteteFormat(rBuilder, "total", 1, DONT_APPEND_AUDIO_FILE) ;
 		write("  </tr>\n  <tr>\n") ;
-		artiste.getAlbumsFormat().rowFormat(rBuilder, "artotal") ;
+		artiste.getAlbumsFormat().rowFormat(rBuilder, "artotal", DONT_APPEND_AUDIO_FILE) ;
 		write("  </tr>\n</table>\n") ;
 		FragmentListeAlbums.buildTable(artiste.getAlbums(), rBuilder, "../../", balises);		
 	}
