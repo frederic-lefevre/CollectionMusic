@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import com.google.gson.JsonElement;
@@ -265,15 +266,14 @@ public class Format {
 	
 	private String displayAudioFilesDetail() {
 		if (hasAudioFiles()) {
-			StringBuilder audioFilesDetails = new StringBuilder();
-			audioFiles.forEach(af -> appendAudioFilesDetail(af, audioFilesDetails));
-			return audioFilesDetails.toString();
+			return audioFiles.stream().map(af -> appendAudioFilesDetail(af)).collect(Collectors.joining("<br/>---<br/>"));
 		} else {
 			return "";
 		}
 	}
 	
-	private void appendAudioFilesDetail(AudioFile audioFile, StringBuilder audioFilesDetails) {
+	private String appendAudioFilesDetail(AudioFile audioFile) {
+		StringBuilder audioFilesDetails = new StringBuilder();
 		audioFilesDetails.append(audioFile.getBitDepth()).append(" bits<br/>");
 		audioFilesDetails.append(audioFile.getSamplingRate()).append(" KHz<br/>");
 		audioFilesDetails.append(audioFile.getType()).append("<br/>");
@@ -282,5 +282,6 @@ public class Format {
 		if ((note != null) && (!note.isEmpty())) {
 			audioFilesDetails.append("<br/>").append(audioFile.getNote());
 		}
+		return audioFilesDetails.toString();
 	}
 }
