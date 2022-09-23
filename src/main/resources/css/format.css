@@ -179,7 +179,7 @@ td.audiook { vertical-align : top ;
 			 font-weight: bold;
  }
  
- tr.audiook:hover {
+ td.audiook:hover {
            background : #F0F0FF;
            color: black;
  }
@@ -192,7 +192,7 @@ td.audiook { vertical-align : top ;
                       right: 200px;
                       padding: 5px;
                       margin: 10px;
-                      color: #A0A0FF;
+                      color: #00000F;
                       font-family: "Verdana", sans-serif ;
                       font-style: italic;
                       font-size : 200% ;
