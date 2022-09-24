@@ -207,10 +207,9 @@ public class Format {
 	private final static String F_ROW7 = "</span></td>\n" ;
 	private final static String F_ROW8 = "<span class=\"" ;
 	
-	private final static String AUDIO_FILE_HEAD_CLASS = "audiofe";
+	private final static String AUDIO_FILE_CLASS = "audiofe";
 	private final static String AUDIO_FILE_TITLE = "Audio file";
 	private final static String AUDIO_FILE_OK_CLASS = "audiook";
-	private final static String AUDIO_FILE_KO_CLASS = "audioko";
 	private final static String AUDIO_FILE_DETAIL_CLASS = "audiodetail";
 	
 	public void enteteFormat(StringBuilder rapport, String cssTotal, int rows, boolean putAudioFile) {
@@ -223,7 +222,7 @@ public class Format {
 		}
 		
 		if (putAudioFile) {
-			rapport.append(F_ROW1).append(rows).append(F_ROW3).append(AUDIO_FILE_HEAD_CLASS).append(F_ROW4).append(AUDIO_FILE_TITLE).append(F_ROW5) ;
+			rapport.append(F_ROW1).append(rows).append(F_ROW3).append(AUDIO_FILE_CLASS).append(F_ROW4).append(AUDIO_FILE_TITLE).append(F_ROW5) ;
 		}
 	}
 	
@@ -238,10 +237,10 @@ public class Format {
 
 		if (putAudioFile) {
 			if (hasAudioFiles()) {
-				rapport.append(F_ROW0).append(AUDIO_FILE_OK_CLASS).append(F_ROW4).append("oui")
+				rapport.append(F_ROW0).append(AUDIO_FILE_OK_CLASS).append(F_ROW4).append(displayAudioFilesSummary())
 					.append(F_ROW8).append(AUDIO_FILE_DETAIL_CLASS).append(F_ROW4).append(displayAudioFilesDetail()).append(F_ROW7) ;
 			} else {
-				rapport.append(F_ROW0).append(AUDIO_FILE_KO_CLASS).append(F_ROW4).append(F_ROW5) ;
+				rapport.append(F_ROW0).append(AUDIO_FILE_CLASS).append(F_ROW4).append(F_ROW5) ;
 			}
 		}
 	}
@@ -266,13 +265,20 @@ public class Format {
 	
 	private String displayAudioFilesDetail() {
 		if (hasAudioFiles()) {
-			return audioFiles.stream().map(af -> appendAudioFilesDetail(af)).collect(Collectors.joining("<br/>---<br/>"));
+			return audioFiles.stream().map(af -> displayAudioFileDetail(af)).collect(Collectors.joining("<br/>---<br/>"));
 		} else {
 			return "";
 		}
 	}
 	
-	private String appendAudioFilesDetail(AudioFile audioFile) {
+	private String displayAudioFilesSummary() {
+		if (hasAudioFiles()) {
+			return audioFiles.stream().map(af -> displayAudioFileSummary(af)).collect(Collectors.joining("<br/>"));
+		} else {
+			return "";
+		}
+	}
+	private String displayAudioFileDetail(AudioFile audioFile) {
 		StringBuilder audioFilesDetails = new StringBuilder();
 		audioFilesDetails.append(audioFile.getBitDepth()).append(" bits<br/>");
 		audioFilesDetails.append(audioFile.getSamplingRate()).append(" KHz<br/>");
@@ -283,5 +289,12 @@ public class Format {
 			audioFilesDetails.append("<br/>").append(audioFile.getNote());
 		}
 		return audioFilesDetails.toString();
+	}
+	
+	private String displayAudioFileSummary(AudioFile audioFile) {
+		StringBuilder audioFilesSummary = new StringBuilder();
+		audioFilesSummary.append(audioFile.getBitDepth()).append("-");
+		audioFilesSummary.append(Double.valueOf(audioFile.getSamplingRate()).intValue());
+		return audioFilesSummary.toString();
 	}
 }

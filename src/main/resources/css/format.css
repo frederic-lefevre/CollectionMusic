@@ -145,7 +145,7 @@ td.xnbvhs { vertical-align : top ;
  
  td.audiofe { vertical-align : top ;
            background : #D0D0F0 ;
-             width : 25px;
+             width : 45px;
              padding : 2px ;
              margin : 2px ;
              border : 1px solid black;
@@ -157,19 +157,7 @@ td.xnbvhs { vertical-align : top ;
  
 td.audiook { vertical-align : top ;
            background : #D0D0F0 ;
-             width : 25px;
-             padding : 2px ;
-             margin : 2px ;
-             border : 1px solid black;
-             text-align: center ;
-             border-spacing: 1px;
-			 font-size: smaller;
-			 font-weight: bold;
- }
- 
- td.audioko { vertical-align : top ;
-           background : #D0D0F0 ;
-             width : 25px;
+             width : 45px;
              padding : 2px ;
              margin : 2px ;
              border : 1px solid black;
