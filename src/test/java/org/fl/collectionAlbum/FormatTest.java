@@ -26,6 +26,7 @@ package org.fl.collectionAlbum;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.junit.jupiter.api.Test;
@@ -200,5 +201,12 @@ class FormatTest {
 				assertThat(audio.getNote()).isNull();
 			});
 		
+		List<String> csvParts = format1.printCsvParts();
+		
+		assertThat(csvParts).isNotEmpty().hasSize(2)
+			.satisfiesExactly(
+					csvAudio -> assertThat(csvAudio).isEqualTo("32 bits;192.0 KHz;WAV;MOFI Fidelity Sound Lab;Mix Bob Smith"),
+					csvAudio -> assertThat(csvAudio).isEqualTo("24 bits;88.0 KHz;FLAC;CD"));
+
 	}
 }

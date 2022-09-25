@@ -25,6 +25,7 @@ SOFTWARE.
 package org.fl.collectionAlbum;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Optional;
@@ -265,7 +266,7 @@ public class Format {
 	
 	private String displayAudioFilesDetail() {
 		if (hasAudioFiles()) {
-			return audioFiles.stream().map(af -> displayAudioFileDetail(af)).collect(Collectors.joining("<br/>---<br/>"));
+			return audioFiles.stream().map(af -> displayAudioFileDetail(af, "<br/>")).collect(Collectors.joining("<br/>---<br/>"));
 		} else {
 			return "";
 		}
@@ -278,15 +279,15 @@ public class Format {
 			return "";
 		}
 	}
-	private String displayAudioFileDetail(AudioFile audioFile) {
+	private String displayAudioFileDetail(AudioFile audioFile, String separator) {
 		StringBuilder audioFilesDetails = new StringBuilder();
-		audioFilesDetails.append(audioFile.getBitDepth()).append(" bits<br/>");
-		audioFilesDetails.append(audioFile.getSamplingRate()).append(" KHz<br/>");
-		audioFilesDetails.append(audioFile.getType()).append("<br/>");
+		audioFilesDetails.append(audioFile.getBitDepth()).append(" bits").append(separator);
+		audioFilesDetails.append(audioFile.getSamplingRate()).append(" KHz").append(separator);
+		audioFilesDetails.append(audioFile.getType()).append(separator);
 		audioFilesDetails.append(audioFile.getSource());
 		String note = audioFile.getNote();
 		if ((note != null) && (!note.isEmpty())) {
-			audioFilesDetails.append("<br/>").append(audioFile.getNote());
+			audioFilesDetails.append(separator).append(audioFile.getNote());
 		}
 		return audioFilesDetails.toString();
 	}
@@ -297,4 +298,13 @@ public class Format {
 		audioFilesSummary.append(Double.valueOf(audioFile.getSamplingRate()).intValue());
 		return audioFilesSummary.toString();
 	}
+	
+	public List<String> printCsvParts() {
+		if (hasAudioFiles()) {
+			return audioFiles.stream().map(af -> displayAudioFileDetail(af, ";")).collect(Collectors.toList());
+		} else {
+			return Collections.emptyList();
+		}
+	}
+	
 }
