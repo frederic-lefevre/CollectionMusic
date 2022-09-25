@@ -29,6 +29,9 @@ public class RapportStructuresAndNames {
 	private final static String lieuDir 		   = "lieux" ;
    	private final static String homeCollectionFile = "index.html" ;
    	private final static String homeConcertFile    = "indexConcert.html" ;
+   	private final static String homeCsvDir		   = "rapportCsv";
+   	private final static String csvAudioFiles      = homeCsvDir + "/audioFiles.csv";
+   	
 
 	private static Path collectionDirectoryName ;
 	private static Path concertDirectoryName ;
@@ -173,6 +176,7 @@ public class RapportStructuresAndNames {
 	public static Path 	  getAbsoluteHomeConcertFile() 	  {	return rapportPath.resolve(homeConcertFile) ;	}
 	public static Path 	  getCollectionDirectoryName() 	  {	return collectionDirectoryName;					}
 	public static Path 	  getConcertDirectoryName() 	  {	return concertDirectoryName;					}
+	public static Path 	  getAbsoluteCsvAudioFiles() 	  {	return rapportPath.resolve(csvAudioFiles);		}
 	
 	private static String  getMusicartefactInfosUri() 	  { return musicartefactInfosUri;					}	
 	private static String  getConcertTicketImgUri() 	  { return concertTicketImgUri;						}

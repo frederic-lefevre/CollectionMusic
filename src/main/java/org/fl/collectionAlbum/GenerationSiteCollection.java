@@ -9,6 +9,7 @@ import java.util.logging.Logger;
 import javax.swing.SwingWorker;
 
 import org.fl.collectionAlbum.artistes.ListeArtiste;
+import org.fl.collectionAlbum.rapportCsv.RapportCsv;
 import org.fl.collectionAlbum.rapportHtml.RapportCollection;
 import org.fl.collectionAlbum.rapportHtml.RapportDesConcerts;
 import org.fl.collectionAlbum.rapportHtml.RapportStructuresAndNames;
@@ -121,6 +122,8 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 				 albumsContainer.getLieuxDesConcerts());
 		 rapportsHtml(rapportDir) ;
 		 rapportsConcertHtml(rapportDir) ;
+		 
+		 RapportCsv.writeCsvFile(albumsContainer.getAlbumsWithAudioFile(), RapportStructuresAndNames.getAbsoluteCsvAudioFiles(), albumLog);
 	 }
 	   
 	 private void rapportsHtml(Path rapportDir) {	

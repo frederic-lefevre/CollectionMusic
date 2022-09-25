@@ -299,7 +299,7 @@ public class Format {
 		return audioFilesSummary.toString();
 	}
 	
-	public List<String> printCsvParts() {
+	public List<String> printAudioFilesCsvParts() {
 		if (hasAudioFiles()) {
 			return audioFiles.stream().map(af -> displayAudioFileDetail(af, ";")).collect(Collectors.toList());
 		} else {

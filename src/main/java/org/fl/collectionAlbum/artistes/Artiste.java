@@ -165,5 +165,13 @@ public class Artiste {
 	public String 			getPrenoms()   	 		 { return prenoms	  						  ; }
 	public List<String> 	getInstruments() 		 { return instruments 						  ; }
 	public ListeConcert 	getConcerts() 	 		 { return concerts	  						  ;	}
+	
+	public String getNomComplet() {
+		if ((getPrenoms() == null) || (getPrenoms().isEmpty())) {
+			return getNom();
+		} else {
+			return getPrenoms() + " " + getNom();
+		}
+	}
 
 }
