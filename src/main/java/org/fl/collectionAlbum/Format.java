@@ -266,7 +266,7 @@ public class Format {
 	
 	private String displayAudioFilesDetail() {
 		if (hasAudioFiles()) {
-			return audioFiles.stream().map(af -> displayAudioFileDetail(af, "<br/>")).collect(Collectors.joining("<br/>---<br/>"));
+			return audioFiles.stream().map(af -> af.displayAudioFileDetail("<br/>")).collect(Collectors.joining("<br/>---<br/>"));
 		} else {
 			return "";
 		}
@@ -274,34 +274,15 @@ public class Format {
 	
 	private String displayAudioFilesSummary() {
 		if (hasAudioFiles()) {
-			return audioFiles.stream().map(af -> displayAudioFileSummary(af)).collect(Collectors.joining("<br/>"));
+			return audioFiles.stream().map(af -> af.displayAudioFileSummary()).collect(Collectors.joining("<br/>"));
 		} else {
 			return "";
 		}
 	}
-	private String displayAudioFileDetail(AudioFile audioFile, String separator) {
-		StringBuilder audioFilesDetails = new StringBuilder();
-		audioFilesDetails.append(audioFile.getBitDepth()).append(" bits").append(separator);
-		audioFilesDetails.append(audioFile.getSamplingRate()).append(" KHz").append(separator);
-		audioFilesDetails.append(audioFile.getType()).append(separator);
-		audioFilesDetails.append(audioFile.getSource());
-		String note = audioFile.getNote();
-		if ((note != null) && (!note.isEmpty())) {
-			audioFilesDetails.append(separator).append(audioFile.getNote());
-		}
-		return audioFilesDetails.toString();
-	}
-	
-	private String displayAudioFileSummary(AudioFile audioFile) {
-		StringBuilder audioFilesSummary = new StringBuilder();
-		audioFilesSummary.append(audioFile.getBitDepth()).append("-");
-		audioFilesSummary.append(Double.valueOf(audioFile.getSamplingRate()).intValue());
-		return audioFilesSummary.toString();
-	}
 	
 	public List<String> printAudioFilesCsvParts() {
 		if (hasAudioFiles()) {
-			return audioFiles.stream().map(af -> displayAudioFileDetail(af, ";")).collect(Collectors.toList());
+			return audioFiles.stream().map(af -> af.displayAudioFileDetail(";")).collect(Collectors.toList());
 		} else {
 			return Collections.emptyList();
 		}

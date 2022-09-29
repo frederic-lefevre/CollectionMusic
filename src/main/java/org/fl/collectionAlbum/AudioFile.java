@@ -90,4 +90,24 @@ public class AudioFile {
 	public String getNote() {
 		return note;
 	}
+	
+	public String displayAudioFileDetail(String separator) {
+		StringBuilder audioFilesDetails = new StringBuilder();
+		audioFilesDetails.append(getBitDepth()).append(" bits").append(separator);
+		audioFilesDetails.append(getSamplingRate()).append(" KHz").append(separator);
+		audioFilesDetails.append(getType()).append(separator);
+		audioFilesDetails.append(getSource());
+		String note = getNote();
+		if ((note != null) && (!note.isEmpty())) {
+			audioFilesDetails.append(separator).append(getNote());
+		}
+		return audioFilesDetails.toString();
+	}
+
+	public String displayAudioFileSummary() {
+		StringBuilder audioFilesSummary = new StringBuilder();
+		audioFilesSummary.append(getBitDepth()).append("-");
+		audioFilesSummary.append(Double.valueOf(getSamplingRate()).intValue());
+		return audioFilesSummary.toString();
+	}
 }
