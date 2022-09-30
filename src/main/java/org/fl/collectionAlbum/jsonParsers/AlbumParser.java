@@ -38,6 +38,9 @@ public class AlbumParser {
             formatAlbum = new Format(null, albumLog) ;
         } else {
         	formatAlbum = new Format(jElem.getAsJsonObject(), albumLog) ;
+        	if (formatAlbum.hasError()) {
+        		albumLog.warning("Format d'album en erreur pour l'album " + jAlbum) ;
+        	}
         }
         return formatAlbum;
     }

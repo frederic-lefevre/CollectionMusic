@@ -28,6 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.logging.Logger;
 
+import org.fl.collectionAlbum.jsonParsers.AudioFileParser;
 import org.junit.jupiter.api.Test;
 
 import com.google.gson.JsonObject;
@@ -38,32 +39,24 @@ class AudioFileTest {
 	private final static Logger logger = Logger.getLogger(AudioFileTest.class.getName());
 	
 	@Test
-	void shouldHaveDefaultValues() {
+	void shouldHaveAllValues() {
 		
 		String audioFileStr1 = "{}" ;
 		JsonObject jf1 = JsonParser.parseString(audioFileStr1).getAsJsonObject();
 		
-		LosslessAudioFile audio = new LosslessAudioFile(jf1, logger);
-		assertThat(audio.getBitDepth()).isEqualTo(16);
-		assertThat(audio.getSamplingRate()).isEqualTo(44.1);
-		assertThat(audio.getType()).isEqualTo("FLAC");
-		assertThat(audio.getSource()).isEqualTo("CD");
+		AbstractAudioFile audio = AudioFileParser.parseAudioFile(jf1, logger);
+		assertThat(audio).isNull();
 	}
 	
 	@Test
 	void shouldAcceptNullWithError() {
 		
-		LosslessAudioFile audio = new LosslessAudioFile(null, logger);
-		
-		assertThat(audio.getBitDepth()).isZero();
-		assertThat(audio.getSamplingRate()).isZero();
-		assertThat(audio.getType()).isNull();
-		assertThat(audio.getSource()).isNull();
-		
+		AbstractAudioFile audio = AudioFileParser.parseAudioFile(null, logger);
+		assertThat(audio).isNull();
 	}
 	
 	@Test
-	void shouldDeserializeToAudioFile() {
+	void shouldNotDeserializeToAudioFile() {
 		
 		String audioFileStr1 = """
 			{"bitDepth": 24 , 
@@ -72,12 +65,9 @@ class AudioFileTest {
 				""" ;
 		JsonObject jf1 = JsonParser.parseString(audioFileStr1).getAsJsonObject();
 		
-		LosslessAudioFile audio = new LosslessAudioFile(jf1, logger);
-		assertThat(audio.getBitDepth()).isEqualTo(24);
-		assertThat(audio.getSamplingRate()).isEqualTo(96);
-		assertThat(audio.getType()).isEqualTo("FLAC");
-		assertThat(audio.getSource()).isEqualTo("SACD");
-		assertThat(audio.getNote()).isNull();
+		AbstractAudioFile audio = AudioFileParser.parseAudioFile(jf1, logger);
+		assertThat(audio).isNull();
+
 	}
 	
 	@Test
@@ -87,16 +77,20 @@ class AudioFileTest {
 				{"bitDepth": 32 , 
 				 "samplingRate" : 192, 
 				 "source" : "MOFI Fidelity Sound Lab", 
-				 "type" : "WAV",
+				 "type" : "FLAC",
 				 "note" : "Remaster Ocean view" }
 				""" ;
 		JsonObject jf1 = JsonParser.parseString(audioFileStr1).getAsJsonObject();
 		
-		LosslessAudioFile audio = new LosslessAudioFile(jf1, logger);
-		assertThat(audio.getBitDepth()).isEqualTo(32);
-		assertThat(audio.getSamplingRate()).isEqualTo(192);
-		assertThat(audio.getType()).isEqualTo("WAV");
-		assertThat(audio.getSource()).isEqualTo("MOFI Fidelity Sound Lab");
-		assertThat(audio.getNote()).isEqualTo("Remaster Ocean view");
+		AbstractAudioFile audio = AudioFileParser.parseAudioFile(jf1, logger);
+		assertThat(audio).isInstanceOf(LosslessAudioFile.class);
+
+		LosslessAudioFile losslessAudio = (LosslessAudioFile)audio;
+		
+		assertThat(losslessAudio.getBitDepth()).isEqualTo(32);
+		assertThat(losslessAudio.getSamplingRate()).isEqualTo(192);
+		assertThat(losslessAudio.getType().name()).isEqualTo("FLAC");
+		assertThat(losslessAudio.getSource()).isEqualTo("MOFI Fidelity Sound Lab");
+		assertThat(losslessAudio.getNote()).isEqualTo("Remaster Ocean view");
 	}
 }

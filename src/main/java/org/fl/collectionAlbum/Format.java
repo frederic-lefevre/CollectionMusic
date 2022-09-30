@@ -34,6 +34,8 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.fl.collectionAlbum.jsonParsers.AudioFileParser;
+
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -113,13 +115,16 @@ public class Format {
 	// Supports physiques de l'album et leur nombre correspondant
 	private final EnumMap<SupportPhysique, Double> tableFormat ;
 	
-	private final List<LosslessAudioFile> audioFiles;
+	private final List<AbstractAudioFile> audioFiles;
+	
+	private boolean hasError;
 	
 	// Create a format
 	public Format(JsonObject formatJson, Logger fl) {
 		
 		tableFormat = new EnumMap<SupportPhysique, Double>(SupportPhysique.class) ;
 		if (formatJson != null) {
+			hasError = false;
 			for (SupportPhysique sPhys : SupportPhysique.values()) {
 				JsonElement elemFormat = formatJson.get(sPhys.getJsonPropertyName()) ;
 				if (elemFormat != null) {
@@ -129,12 +134,20 @@ public class Format {
 
 			audioFiles = Optional.ofNullable(formatJson.getAsJsonArray(JsonMusicProperties.AUDIO_FILE))
 					.map(ja -> {
-						List<LosslessAudioFile> audioFileList = new ArrayList<>();
-						ja.forEach(jsonAudioFile -> audioFileList.add(new LosslessAudioFile(jsonAudioFile.getAsJsonObject(), fl)));
+						List<AbstractAudioFile> audioFileList = new ArrayList<>();
+						ja.forEach(jsonAudioFile -> {
+							AbstractAudioFile audioFile = AudioFileParser.parseAudioFile(jsonAudioFile.getAsJsonObject(), fl);
+							if (audioFile != null) {
+								audioFileList.add(audioFile);
+							} else {
+								hasError = true ;
+							}
+						});
 						return audioFileList;
 					})
 					.orElse(null);
 		} else {
+			hasError = true;
 			audioFiles = null;
 		}
 	}
@@ -180,12 +193,16 @@ public class Format {
 		return res ;
 	}
 	
-	public List<LosslessAudioFile> getAudioFiles() {
+	public List<AbstractAudioFile> getAudioFiles() {
 		return audioFiles;
 	}
 
 	public boolean hasAudioFiles() {
 		return (audioFiles != null) && (!audioFiles.isEmpty());
+	}
+	
+	public boolean hasError() {
+		return hasError;
 	}
 	
 	/**

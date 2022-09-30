@@ -105,7 +105,7 @@ class FormatTest {
 				    "bitDepth": 32 , 
 				    "samplingRate" : 192, 
 				    "source" : "MOFI Fidelity Sound Lab", 
-				    "type" : "WAV" }]
+				    "type" : "FLAC" }]
 				}
 				""";
 		
@@ -117,11 +117,13 @@ class FormatTest {
 
 		assertThat(format1.getAudioFiles()).singleElement()
 			.satisfies(audio -> {
-				assertThat(audio).isNotNull();
-				assertThat(audio.getBitDepth()).isEqualTo(32);
-				assertThat(audio.getSamplingRate()).isEqualTo(192);
-				assertThat(audio.getType()).isEqualTo("WAV");
-				assertThat(audio.getSource()).isEqualTo("MOFI Fidelity Sound Lab");
+				assertThat(audio).isNotNull().isInstanceOf(LosslessAudioFile.class);
+				
+				LosslessAudioFile lossLessAudio = (LosslessAudioFile)audio;
+				assertThat(lossLessAudio.getBitDepth()).isEqualTo(32);
+				assertThat(lossLessAudio.getSamplingRate()).isEqualTo(192);
+				assertThat(lossLessAudio.getType().name()).isEqualTo("FLAC");
+				assertThat(lossLessAudio.getSource()).isEqualTo("MOFI Fidelity Sound Lab");
 			});
 		
 	}
@@ -148,11 +150,13 @@ class FormatTest {
 
 		assertThat(format1.getAudioFiles()).singleElement()
 			.satisfies(audio -> {
-				assertThat(audio).isNotNull();
-				assertThat(audio.getBitDepth()).isEqualTo(16);
-				assertThat(audio.getSamplingRate()).isEqualTo(44.1);
-				assertThat(audio.getType()).isEqualTo("FLAC");
-				assertThat(audio.getSource()).isEqualTo("MOFI Fidelity Sound Lab");
+				assertThat(audio).isNotNull().isInstanceOf(LosslessAudioFile.class);
+				
+				LosslessAudioFile lossLessAudio = (LosslessAudioFile)audio;
+				assertThat(lossLessAudio.getBitDepth()).isEqualTo(16);
+				assertThat(lossLessAudio.getSamplingRate()).isEqualTo(44.1);
+				assertThat(lossLessAudio.getType().name()).isEqualTo("FLAC");
+				assertThat(lossLessAudio.getSource()).isEqualTo("MOFI Fidelity Sound Lab");
 			});
 		
 	}
@@ -164,10 +168,10 @@ class FormatTest {
 				{"cd": 2 , 
 				"45t" : 1,
 				"audioFiles" : [{
-				    "bitDepth": 32 , 
-				    "samplingRate" : 192, 
+				    "bitRate": 320 , 
+				    "samplingRate" : 44.1, 
 				    "source" : "MOFI Fidelity Sound Lab", 
-				    "type" : "WAV",
+				    "type" : "MP3",
 				    "note" : "Mix Bob Smith" },
 				    {
 				    "bitDepth": 24 , 
@@ -185,27 +189,31 @@ class FormatTest {
 
 		assertThat(format1.getAudioFiles()).hasSize(2)
 			.anySatisfy(audio -> {
-				assertThat(audio).isNotNull();
-				assertThat(audio.getBitDepth()).isEqualTo(32);
-				assertThat(audio.getSamplingRate()).isEqualTo(192);
-				assertThat(audio.getType()).isEqualTo("WAV");
-				assertThat(audio.getSource()).isEqualTo("MOFI Fidelity Sound Lab");
-				assertThat(audio.getNote()).isEqualTo("Mix Bob Smith");
+				assertThat(audio).isNotNull().isInstanceOf(LossyAudioFile.class);
+				
+				LossyAudioFile lossyAudio = (LossyAudioFile)audio;
+				assertThat(lossyAudio.getBitRate()).isEqualTo(320);
+				assertThat(lossyAudio.getSamplingRate()).isEqualTo(44.1);
+				assertThat(lossyAudio.getType().name()).isEqualTo("MP3");
+				assertThat(lossyAudio.getSource()).isEqualTo("MOFI Fidelity Sound Lab");
+				assertThat(lossyAudio.getNote()).isEqualTo("Mix Bob Smith");
 			})
 			.anySatisfy(audio -> {
-				assertThat(audio).isNotNull();
-				assertThat(audio.getBitDepth()).isEqualTo(24);
-				assertThat(audio.getSamplingRate()).isEqualTo(88);
-				assertThat(audio.getType()).isEqualTo("FLAC");
-				assertThat(audio.getSource()).isEqualTo("CD");
-				assertThat(audio.getNote()).isNull();
+				assertThat(audio).isNotNull().isInstanceOf(LosslessAudioFile.class);
+				
+				LosslessAudioFile lossLessAudio = (LosslessAudioFile)audio;
+				assertThat(lossLessAudio.getBitDepth()).isEqualTo(24);
+				assertThat(lossLessAudio.getSamplingRate()).isEqualTo(88);
+				assertThat(lossLessAudio.getType().name()).isEqualTo("FLAC");
+				assertThat(lossLessAudio.getSource()).isEqualTo("CD");
+				assertThat(lossLessAudio.getNote()).isNull();
 			});
 		
 		List<String> csvParts = format1.printAudioFilesCsvParts();
 		
 		assertThat(csvParts).isNotEmpty().hasSize(2)
 			.satisfiesExactly(
-					csvAudio -> assertThat(csvAudio).isEqualTo("32 bits;192.0 KHz;WAV;MOFI Fidelity Sound Lab;Mix Bob Smith"),
+					csvAudio -> assertThat(csvAudio).isEqualTo("320.0 kbit/s;44.1 KHz;MP3;MOFI Fidelity Sound Lab;Mix Bob Smith"),
 					csvAudio -> assertThat(csvAudio).isEqualTo("24 bits;88.0 KHz;FLAC;CD"));
 
 	}

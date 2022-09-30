@@ -43,6 +43,7 @@ public class JsonMusicProperties {
 	public final static String TYPE		  	  = "type" ;
 	public final static String SOURCE		  = "source" ;
 	public final static String BIT_DEPTH	  = "bitDepth" ;
+	public final static String BIT_RATE		  = "bitRate" ;
 	public final static String SAMPLING_RATE  = "samplingRate" ;
 
 }
