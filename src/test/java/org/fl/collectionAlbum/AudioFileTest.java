@@ -43,7 +43,7 @@ class AudioFileTest {
 		String audioFileStr1 = "{}" ;
 		JsonObject jf1 = JsonParser.parseString(audioFileStr1).getAsJsonObject();
 		
-		AudioFile audio = new AudioFile(jf1, logger);
+		LosslessAudioFile audio = new LosslessAudioFile(jf1, logger);
 		assertThat(audio.getBitDepth()).isEqualTo(16);
 		assertThat(audio.getSamplingRate()).isEqualTo(44.1);
 		assertThat(audio.getType()).isEqualTo("FLAC");
@@ -53,7 +53,7 @@ class AudioFileTest {
 	@Test
 	void shouldAcceptNullWithError() {
 		
-		AudioFile audio = new AudioFile(null, logger);
+		LosslessAudioFile audio = new LosslessAudioFile(null, logger);
 		
 		assertThat(audio.getBitDepth()).isZero();
 		assertThat(audio.getSamplingRate()).isZero();
@@ -72,7 +72,7 @@ class AudioFileTest {
 				""" ;
 		JsonObject jf1 = JsonParser.parseString(audioFileStr1).getAsJsonObject();
 		
-		AudioFile audio = new AudioFile(jf1, logger);
+		LosslessAudioFile audio = new LosslessAudioFile(jf1, logger);
 		assertThat(audio.getBitDepth()).isEqualTo(24);
 		assertThat(audio.getSamplingRate()).isEqualTo(96);
 		assertThat(audio.getType()).isEqualTo("FLAC");
@@ -92,7 +92,7 @@ class AudioFileTest {
 				""" ;
 		JsonObject jf1 = JsonParser.parseString(audioFileStr1).getAsJsonObject();
 		
-		AudioFile audio = new AudioFile(jf1, logger);
+		LosslessAudioFile audio = new LosslessAudioFile(jf1, logger);
 		assertThat(audio.getBitDepth()).isEqualTo(32);
 		assertThat(audio.getSamplingRate()).isEqualTo(192);
 		assertThat(audio.getType()).isEqualTo("WAV");

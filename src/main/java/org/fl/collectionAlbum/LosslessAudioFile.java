@@ -30,7 +30,7 @@ import java.util.logging.Logger;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-public class AudioFile {
+public class LosslessAudioFile {
 
 	private final String type;
 	private final String source;
@@ -43,7 +43,7 @@ public class AudioFile {
 	private static final int DEFAULT_BIT_DEPTH = 16;
 	private static final double DEFAULT_SAMPLING_RATE = 44.1;
 	
-	public AudioFile(JsonObject audioFileJson, Logger fl) {
+	public LosslessAudioFile(JsonObject audioFileJson, Logger fl) {
 		
 		if (audioFileJson != null) {
 			type = Optional.ofNullable(audioFileJson.get(JsonMusicProperties.TYPE))

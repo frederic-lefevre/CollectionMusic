@@ -113,7 +113,7 @@ public class Format {
 	// Supports physiques de l'album et leur nombre correspondant
 	private final EnumMap<SupportPhysique, Double> tableFormat ;
 	
-	private final List<AudioFile> audioFiles;
+	private final List<LosslessAudioFile> audioFiles;
 	
 	// Create a format
 	public Format(JsonObject formatJson, Logger fl) {
@@ -129,8 +129,8 @@ public class Format {
 
 			audioFiles = Optional.ofNullable(formatJson.getAsJsonArray(JsonMusicProperties.AUDIO_FILE))
 					.map(ja -> {
-						List<AudioFile> audioFileList = new ArrayList<>();
-						ja.forEach(jsonAudioFile -> audioFileList.add(new AudioFile(jsonAudioFile.getAsJsonObject(), fl)));
+						List<LosslessAudioFile> audioFileList = new ArrayList<>();
+						ja.forEach(jsonAudioFile -> audioFileList.add(new LosslessAudioFile(jsonAudioFile.getAsJsonObject(), fl)));
 						return audioFileList;
 					})
 					.orElse(null);
@@ -180,7 +180,7 @@ public class Format {
 		return res ;
 	}
 	
-	public List<AudioFile> getAudioFiles() {
+	public List<LosslessAudioFile> getAudioFiles() {
 		return audioFiles;
 	}
 
