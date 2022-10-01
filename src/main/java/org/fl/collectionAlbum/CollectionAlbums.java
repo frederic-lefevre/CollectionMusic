@@ -107,11 +107,16 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 		public FileVisitResult visitFile(Path file, BasicFileAttributes attr) {
     		
     		Path name = file.getFileName() ;
-    		if (Files.isRegularFile(file)) {
-	    		if (matcher.matches(name)) {
-	    			JsonObject arteFactJson = JsonUtils.getJsonObjectFromPath(file, Control.getCharset(), albumLog) ;
+    		if ((Files.isRegularFile(file)) &&
+	    		(matcher.matches(name))) {
+    			
+	    		JsonObject arteFactJson = JsonUtils.getJsonObjectFromPath(file, Control.getCharset(), albumLog) ;
+	    		if (arteFactJson != null) {
 	    			addMusicArtefact(arteFactJson) ;
+	    		} else {
+	    			albumLog.warning("Impossible de lire le fichier json " + file);
 	    		}
+
     		}
     		return FileVisitResult.CONTINUE;
     	}
