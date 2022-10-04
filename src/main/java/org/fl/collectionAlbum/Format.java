@@ -225,6 +225,10 @@ public class Format {
 		return (audioFiles != null) && (!audioFiles.isEmpty());
 	}
 	
+	public boolean hasVideoFiles() {
+		return (videoFiles != null) && (!videoFiles.isEmpty());
+	}
+	
 	public boolean hasError() {
 		return hasError;
 	}

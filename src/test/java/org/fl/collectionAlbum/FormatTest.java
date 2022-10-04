@@ -57,6 +57,8 @@ class FormatTest {
 		Format format1 = new Format(jf1, logger) ;
 
 		assertThat(format1.getPoids()).isEqualTo(3);
+		assertThat(format1.hasAudioFiles()).isFalse();
+		assertThat(format1.hasVideoFiles()).isFalse();
 
 	}
 	
@@ -69,6 +71,9 @@ class FormatTest {
 		
 		assertThat(format1.getPoids()).isEqualTo(2.5);
 		assertThat(format1.getAudioFiles()).isNull();
+		assertThat(format1.getVideoFiles()).isNull();
+		assertThat(format1.hasAudioFiles()).isFalse();
+		assertThat(format1.hasVideoFiles()).isFalse();
 	}
 	
 	@Test
@@ -93,6 +98,8 @@ class FormatTest {
 		
 		assertThat(format3.hasAudioFiles()).isFalse();
 		assertThat(format3.getAudioFiles()).isNull();
+		assertThat(format1.hasVideoFiles()).isFalse();
+		assertThat(format1.getVideoFiles()).isNull();
 	}
 	
 	@Test
@@ -113,8 +120,10 @@ class FormatTest {
 		Format format1 = new Format(jf1, logger) ;
 		
 		assertThat(format1.getPoids()).isEqualTo(2.5);
+		assertThat(format1.hasAudioFiles()).isTrue();
+		assertThat(format1.hasVideoFiles()).isFalse();
+		assertThat(format1.getVideoFiles()).isNull();
 		
-
 		assertThat(format1.getAudioFiles()).singleElement()
 			.satisfies(audio -> {
 				assertThat(audio).isNotNull().isInstanceOf(LosslessAudioFile.class);
@@ -146,7 +155,9 @@ class FormatTest {
 		Format format1 = new Format(jf1, logger) ;
 		
 		assertThat(format1.getPoids()).isEqualTo(2.5);
-		
+		assertThat(format1.hasAudioFiles()).isTrue();
+		assertThat(format1.hasVideoFiles()).isFalse();
+		assertThat(format1.getVideoFiles()).isNull();
 
 		assertThat(format1.getAudioFiles()).singleElement()
 			.satisfies(audio -> {
@@ -185,7 +196,9 @@ class FormatTest {
 		Format format1 = new Format(jf1, logger) ;
 		
 		assertThat(format1.getPoids()).isEqualTo(2.5);
-		
+		assertThat(format1.hasAudioFiles()).isTrue();
+		assertThat(format1.hasVideoFiles()).isFalse();
+		assertThat(format1.getVideoFiles()).isNull();
 
 		assertThat(format1.getAudioFiles()).hasSize(2)
 			.anySatisfy(audio -> {
@@ -242,7 +255,8 @@ class FormatTest {
 		Format format1 = new Format(jf1, logger) ;
 		
 		assertThat(format1.getPoids()).isEqualTo(2.5);
-		
+		assertThat(format1.hasAudioFiles()).isTrue();
+		assertThat(format1.hasVideoFiles()).isTrue();
 
 		assertThat(format1.getAudioFiles()).singleElement()
 			.satisfies(audio -> {
@@ -289,6 +303,9 @@ class FormatTest {
 		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
 		Format format1 = new Format(jf1, logger) ;
 
+		assertThat(format1.hasAudioFiles()).isFalse();
+		assertThat(format1.hasVideoFiles()).isTrue();
+		
 		assertThat(format1.getVideoFiles()).hasSize(2)
 			.anySatisfy(videoFile -> {
 				assertThat(videoFile.getHeight()).isEqualTo(1024);
