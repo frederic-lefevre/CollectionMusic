@@ -254,7 +254,7 @@ public class Format {
 	private final static String F_ROW8 = "<span class=\"" ;
 	
 	private final static String AUDIO_FILE_CLASS = "audiofe";
-	private final static String AUDIO_FILE_TITLE = "Audio file";
+	private final static String AUDIO_FILE_TITLE = "Media file";
 	private final static String AUDIO_FILE_OK_CLASS = "audiook";
 	private final static String AUDIO_FILE_DETAIL_CLASS = "audiodetail";
 	
@@ -272,7 +272,7 @@ public class Format {
 		}
 	}
 	
-	public void rowFormat(StringBuilder rapport, String cssTotal, boolean putAudioFile) {
+	public void rowFormat(StringBuilder rapport, String cssTotal, boolean putMediaFile) {
 		
 		if (cssTotal != null) {
 			rapport.append(F_ROW0).append(cssTotal).append(F_ROW6).append(cssTotal).append(F_ROW4).append(displayPoids(getPoids())).append(F_ROW7) ;
@@ -281,7 +281,7 @@ public class Format {
 			rapport.append(F_ROW0).append(sPhys.getCssClass()).append(F_ROW4).append(displayPoids(getNb(sPhys))).append(F_ROW5) ;			 
 		}
 
-		if (putAudioFile) {
+		if (putMediaFile) {
 			if (hasAudioFiles()) {
 				rapport.append(F_ROW0).append(AUDIO_FILE_OK_CLASS).append(F_ROW4).append(displayAudioFilesSummary())
 					.append(F_ROW8).append(AUDIO_FILE_DETAIL_CLASS).append(F_ROW4).append(displayAudioFilesDetail()).append(F_ROW7) ;
