@@ -20,7 +20,6 @@ public abstract class AbstractMediaFile {
 		return source;
 	}
 	
-
 	protected String getNote() {
 		return note;
 	}

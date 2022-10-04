@@ -26,13 +26,6 @@ public class AudioFileParser {
 						fl.severe("Json AudioFile null type parameter: " + audioFileJson);
 						return null;
 					});
-
-			String source = Optional.ofNullable(audioFileJson.get(JsonMusicProperties.SOURCE))
-					.map(JsonElement::getAsString)
-					.orElseGet(() -> {
-						fl.severe("Json AudioFile null source parameter" + audioFileJson);
-						return null;
-					});
 			
 			Double samplingRate = Optional.ofNullable(audioFileJson.get(JsonMusicProperties.SAMPLING_RATE))
 					.map(JsonElement::getAsDouble)
@@ -41,9 +34,8 @@ public class AudioFileParser {
 						return null;
 					});
 			
-			String note = Optional.ofNullable(audioFileJson.get(JsonMusicProperties.NOTE))
-					.map(JsonElement::getAsString)
-					.orElse(null);
+			String source = AbstractMediaFieldParser.parseSource(audioFileJson, fl);
+			String note = AbstractMediaFieldParser.parseNote(audioFileJson);
 			
 			if ((type == null) || (source == null) || (samplingRate == null)) {
 				

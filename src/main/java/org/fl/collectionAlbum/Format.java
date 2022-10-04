@@ -35,6 +35,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.fl.collectionAlbum.jsonParsers.AudioFileParser;
+import org.fl.collectionAlbum.jsonParsers.VideoFileParser;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -117,6 +118,8 @@ public class Format {
 	
 	private final List<AbstractAudioFile> audioFiles;
 	
+	private final List<VideoFile> videoFiles;
+	
 	private boolean hasError;
 	
 	// Create a format
@@ -146,9 +149,26 @@ public class Format {
 						return audioFileList;
 					})
 					.orElse(null);
+			
+			videoFiles = Optional.ofNullable(formatJson.getAsJsonArray(JsonMusicProperties.VIDEO_FILE))
+					.map(jv -> {
+						List<VideoFile> videoFileList = new ArrayList<>();
+						jv.forEach(jsonVideoFile -> {
+							VideoFile videoFile = VideoFileParser.parseVideoFile(jsonVideoFile.getAsJsonObject(), fl);
+							if (videoFile != null) {
+								videoFileList.add(videoFile);
+							} else {
+								hasError = true ;
+							}
+						});
+						return videoFileList;
+					})
+					.orElse(null);
+			
 		} else {
 			hasError = true;
 			audioFiles = null;
+			videoFiles = null;
 		}
 	}
 
@@ -197,6 +217,10 @@ public class Format {
 		return audioFiles;
 	}
 
+	public List<VideoFile> getVideoFiles() {
+		return videoFiles;
+	}
+	
 	public boolean hasAudioFiles() {
 		return (audioFiles != null) && (!audioFiles.isEmpty());
 	}
