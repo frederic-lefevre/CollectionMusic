@@ -19,10 +19,6 @@ public abstract class AbstractAudioFile extends AbstractMediaFile {
 		return samplingRate;
 	}
 	
-	public abstract String displayAudioFileDetail(String separator);
-	
-	public abstract String displayAudioFileSummary();
-	
 	protected void appendCommonAudioFileDetail(StringBuilder audioFilesDetails, String separator) {
 		audioFilesDetails.append(getSamplingRate()).append(" KHz").append(separator);
 		audioFilesDetails.append(getType()).append(separator);

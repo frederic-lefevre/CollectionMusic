@@ -11,7 +11,11 @@ public abstract class AbstractMediaFile {
 		this.note = note;
 	}
 	
-
+	
+	public abstract String displayMediaFileDetail(String separator);
+	
+	public abstract String displayMediaFileSummary();
+	
 	protected String getSource() {
 		return source;
 	}

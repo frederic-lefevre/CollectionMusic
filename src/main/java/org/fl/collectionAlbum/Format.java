@@ -283,7 +283,7 @@ public class Format {
 	
 	private String displayAudioFilesDetail() {
 		if (hasAudioFiles()) {
-			return audioFiles.stream().map(af -> af.displayAudioFileDetail("<br/>")).collect(Collectors.joining("<br/>---<br/>"));
+			return audioFiles.stream().map(af -> af.displayMediaFileDetail("<br/>")).collect(Collectors.joining("<br/>---<br/>"));
 		} else {
 			return "";
 		}
@@ -291,7 +291,7 @@ public class Format {
 	
 	private String displayAudioFilesSummary() {
 		if (hasAudioFiles()) {
-			return audioFiles.stream().map(af -> af.displayAudioFileSummary()).collect(Collectors.joining("<br/>"));
+			return audioFiles.stream().map(af -> af.displayMediaFileSummary()).collect(Collectors.joining("<br/>"));
 		} else {
 			return "";
 		}
@@ -299,7 +299,7 @@ public class Format {
 	
 	public List<String> printAudioFilesCsvParts() {
 		if (hasAudioFiles()) {
-			return audioFiles.stream().map(af -> af.displayAudioFileDetail(";")).collect(Collectors.toList());
+			return audioFiles.stream().map(af -> af.displayMediaFileDetail(";")).collect(Collectors.toList());
 		} else {
 			return Collections.emptyList();
 		}

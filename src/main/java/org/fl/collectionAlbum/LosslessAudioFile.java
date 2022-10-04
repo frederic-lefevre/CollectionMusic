@@ -40,7 +40,7 @@ public class LosslessAudioFile extends AbstractAudioFile {
 	}
 	
 	@Override
-	public String displayAudioFileDetail(String separator) {
+	public String displayMediaFileDetail(String separator) {
 		StringBuilder audioFilesDetails = new StringBuilder();
 		audioFilesDetails.append(getBitDepth()).append(" bits").append(separator);
 		appendCommonAudioFileDetail(audioFilesDetails, separator);
@@ -48,7 +48,7 @@ public class LosslessAudioFile extends AbstractAudioFile {
 	}
 
 	@Override
-	public String displayAudioFileSummary() {
+	public String displayMediaFileSummary() {
 		StringBuilder audioFilesSummary = new StringBuilder();
 		audioFilesSummary.append(getBitDepth()).append("-");
 		audioFilesSummary.append(Double.valueOf(getSamplingRate()).intValue());

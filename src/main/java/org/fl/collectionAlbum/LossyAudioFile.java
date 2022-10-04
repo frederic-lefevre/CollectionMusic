@@ -15,7 +15,7 @@ public class LossyAudioFile extends AbstractAudioFile {
 	}
 	
 	@Override
-	public String displayAudioFileSummary() {
+	public String displayMediaFileSummary() {
 		StringBuilder audioFilesSummary = new StringBuilder();
 		audioFilesSummary.append(getType().name()).append(" ");
 		audioFilesSummary.append(Double.valueOf(getBitRate()).intValue());
@@ -23,7 +23,7 @@ public class LossyAudioFile extends AbstractAudioFile {
 	}
 	
 	@Override
-	public String displayAudioFileDetail(String separator) {
+	public String displayMediaFileDetail(String separator) {
 		StringBuilder audioFilesDetails = new StringBuilder();
 		audioFilesDetails.append(getBitRate()).append(" kbit/s").append(separator);
 		appendCommonAudioFileDetail(audioFilesDetails, separator);
