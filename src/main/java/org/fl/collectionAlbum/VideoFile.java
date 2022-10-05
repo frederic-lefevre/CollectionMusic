@@ -36,7 +36,7 @@ public class VideoFile extends AbstractMediaFile {
 
 	@Override
 	public String displayMediaFileSummary() {
-		return getWidth() + "p";	
+		return getHeight() + "p";	
 	}
 
 }
