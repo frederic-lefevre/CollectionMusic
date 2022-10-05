@@ -152,7 +152,7 @@ public class Format {
 						});
 						return audioFileList;
 					})
-					.orElse(null);
+					.orElse(new ArrayList<>());
 			
 			videoFiles = Optional.ofNullable(formatJson.getAsJsonArray(JsonMusicProperties.VIDEO_FILE))
 					.map(jv -> {
@@ -167,7 +167,7 @@ public class Format {
 						});
 						return videoFileList;
 					})
-					.orElse(null);
+					.orElse(new ArrayList<>());
 			
 		} else {
 			hasError = true;
@@ -337,18 +337,19 @@ public class Format {
 	}
 	
 	private String displayAudioFilesDetail() {
-		StringBuilder mediaFilesInfo = new StringBuilder("");
-		mediaFilesInfo.append(displayMediaFileInformation(audioFiles, (af) -> af.displayMediaFileDetail("<br/>"), "<br/>---<br/>"));
-		mediaFilesInfo.append(displayMediaFileInformation(videoFiles, (af) -> af.displayMediaFileDetail("<br/>"), "<br/>---<br/>"));
-		return mediaFilesInfo.toString();
+		return displayMediaFileInformation(allMediaFiles(), (af) -> af.displayMediaFileDetail("<br/>"), "<br/>---<br/>");
 	}
 	
 	private String displayMediaFilesSummary() {
+		return displayMediaFileInformation(allMediaFiles(), (af) -> af.displayMediaFileSummary(), "<br/>");
 		
-		StringBuilder mediaFilesInfo = new StringBuilder("");
-		mediaFilesInfo.append(displayMediaFileInformation(audioFiles, (af) -> af.displayMediaFileSummary(), "<br/>"));
-		mediaFilesInfo.append(displayMediaFileInformation(videoFiles, (vf) -> vf.displayMediaFileSummary(), "<br/>"));
-		return mediaFilesInfo.toString();
+	}
+	
+	private List<AbstractMediaFile> allMediaFiles() {
+		List<AbstractMediaFile> allMediaFiles = new ArrayList<>();
+		allMediaFiles.addAll(audioFiles);
+		allMediaFiles.addAll(videoFiles);	
+		return allMediaFiles;
 	}
 	
 	public List<String> printAudioFilesCsvParts() {
