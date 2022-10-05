@@ -61,9 +61,13 @@ public class RapportCsv {
 		} else {
 			allAuteurs = auteurs;
 		}
-		String auteursAlbum = allAuteurs + ";" + album.getTitre() + ";";
+		String auteursAlbum = doubleQuoteEnclose(allAuteurs) + ";" + doubleQuoteEnclose(album.getTitre()) + ";";
 		
 		return album.getFormatAlbum().printAudioFilesCsvParts().stream()
 				.map(audioCsv -> auteursAlbum + audioCsv).toList();
+	}
+	
+	private static String doubleQuoteEnclose(String s) {
+		return "\"" + s + "\"";
 	}
 }
