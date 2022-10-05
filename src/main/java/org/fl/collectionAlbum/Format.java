@@ -337,7 +337,10 @@ public class Format {
 	}
 	
 	private String displayAudioFilesDetail() {
-		return displayMediaFileInformation(audioFiles, (af) -> af.displayMediaFileDetail("<br/>"), "<br/>---<br/>");
+		StringBuilder mediaFilesInfo = new StringBuilder("");
+		mediaFilesInfo.append(displayMediaFileInformation(audioFiles, (af) -> af.displayMediaFileDetail("<br/>"), "<br/>---<br/>"));
+		mediaFilesInfo.append(displayMediaFileInformation(videoFiles, (af) -> af.displayMediaFileDetail("<br/>"), "<br/>---<br/>"));
+		return mediaFilesInfo.toString();
 	}
 	
 	private String displayMediaFilesSummary() {
