@@ -30,6 +30,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -113,6 +114,8 @@ public class Format {
 		
 	}
 	
+	private final Logger logger;
+	
 	// Supports physiques de l'album et leur nombre correspondant
 	private final EnumMap<SupportPhysique, Double> tableFormat ;
 	
@@ -125,6 +128,7 @@ public class Format {
 	// Create a format
 	public Format(JsonObject formatJson, Logger fl) {
 		
+		logger = fl;
 		tableFormat = new EnumMap<SupportPhysique, Double>(SupportPhysique.class) ;
 		if (formatJson != null) {
 			hasError = false;
@@ -139,7 +143,7 @@ public class Format {
 					.map(ja -> {
 						List<AbstractAudioFile> audioFileList = new ArrayList<>();
 						ja.forEach(jsonAudioFile -> {
-							AbstractAudioFile audioFile = AudioFileParser.parseAudioFile(jsonAudioFile.getAsJsonObject(), fl);
+							AbstractAudioFile audioFile = AudioFileParser.parseAudioFile(jsonAudioFile.getAsJsonObject(), logger);
 							if (audioFile != null) {
 								audioFileList.add(audioFile);
 							} else {
@@ -154,7 +158,7 @@ public class Format {
 					.map(jv -> {
 						List<VideoFile> videoFileList = new ArrayList<>();
 						jv.forEach(jsonVideoFile -> {
-							VideoFile videoFile = VideoFileParser.parseVideoFile(jsonVideoFile.getAsJsonObject(), fl);
+							VideoFile videoFile = VideoFileParser.parseVideoFile(jsonVideoFile.getAsJsonObject(), logger);
 							if (videoFile != null) {
 								videoFileList.add(videoFile);
 							} else {
@@ -222,11 +226,15 @@ public class Format {
 	}
 	
 	public boolean hasAudioFiles() {
-		return (audioFiles != null) && (!audioFiles.isEmpty());
+		return hasMediaFile(audioFiles);
 	}
 	
 	public boolean hasVideoFiles() {
-		return (videoFiles != null) && (!videoFiles.isEmpty());
+		return hasMediaFile(videoFiles);
+	}
+	
+	private <T extends AbstractMediaFile> boolean hasMediaFile(List<T> mediaFiles) {
+		return (mediaFiles != null) && (!mediaFiles.isEmpty());
 	}
 	
 	public boolean hasError() {
@@ -282,8 +290,8 @@ public class Format {
 		}
 
 		if (putMediaFile) {
-			if (hasAudioFiles()) {
-				rapport.append(F_ROW0).append(AUDIO_FILE_OK_CLASS).append(F_ROW4).append(displayAudioFilesSummary())
+			if (hasAudioFiles() || hasVideoFiles()) {
+				rapport.append(F_ROW0).append(AUDIO_FILE_OK_CLASS).append(F_ROW4).append(displayMediaFilesSummary())
 					.append(F_ROW8).append(AUDIO_FILE_DETAIL_CLASS).append(F_ROW4).append(displayAudioFilesDetail()).append(F_ROW7) ;
 			} else {
 				rapport.append(F_ROW0).append(AUDIO_FILE_CLASS).append(F_ROW4).append(F_ROW5) ;
@@ -309,20 +317,31 @@ public class Format {
 		return displayPoids(getPoids()) ;
 	}
 	
-	private String displayAudioFilesDetail() {
-		if (hasAudioFiles()) {
-			return audioFiles.stream().map(af -> af.displayMediaFileDetail("<br/>")).collect(Collectors.joining("<br/>---<br/>"));
+	private <T extends AbstractMediaFile> String displayMediaFileInformation(
+			List<T> mediaFiles,
+			Function<T, String> getMediaInfos,
+			String infoSeparator) {
+		
+		if (hasMediaFile(mediaFiles)) {
+
+			return mediaFiles.stream()
+					.map(mediaFile -> getMediaInfos.apply(mediaFile))
+					.collect(Collectors.joining(infoSeparator));
 		} else {
 			return "";
 		}
 	}
 	
-	private String displayAudioFilesSummary() {
-		if (hasAudioFiles()) {
-			return audioFiles.stream().map(af -> af.displayMediaFileSummary()).collect(Collectors.joining("<br/>"));
-		} else {
-			return "";
-		}
+	private String displayAudioFilesDetail() {
+		return displayMediaFileInformation(audioFiles, (af) -> af.displayMediaFileDetail("<br/>"), "<br/>---<br/>");
+	}
+	
+	private String displayMediaFilesSummary() {
+		
+		StringBuilder mediaFilesInfo = new StringBuilder("");
+		mediaFilesInfo.append(displayMediaFileInformation(audioFiles, (af) -> af.displayMediaFileSummary(), "<br/>"));
+		mediaFilesInfo.append(displayMediaFileInformation(videoFiles, (vf) -> vf.displayMediaFileSummary(), "<br/>"));
+		return mediaFilesInfo.toString();
 	}
 	
 	public List<String> printAudioFilesCsvParts() {
