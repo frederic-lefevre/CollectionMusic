@@ -70,8 +70,8 @@ class FormatTest {
 		Format format1 = new Format(jf1, logger) ;
 		
 		assertThat(format1.getPoids()).isEqualTo(2.5);
-		assertThat(format1.getAudioFiles()).isNull();
-		assertThat(format1.getVideoFiles()).isNull();
+		assertThat(format1.getAudioFiles()).isEmpty();
+		assertThat(format1.getVideoFiles()).isEmpty();
 		assertThat(format1.hasAudioFiles()).isFalse();
 		assertThat(format1.hasVideoFiles()).isFalse();
 	}
@@ -96,10 +96,11 @@ class FormatTest {
 		format3.incrementFormat(format2);
 		assertThat(format3.getPoids()).isEqualTo(format1.getPoids() + format2.getPoids());
 		
+		assertThat(format3.hasError()).isTrue();
 		assertThat(format3.hasAudioFiles()).isFalse();
 		assertThat(format3.getAudioFiles()).isNull();
-		assertThat(format1.hasVideoFiles()).isFalse();
-		assertThat(format1.getVideoFiles()).isNull();
+		assertThat(format3.hasVideoFiles()).isFalse();
+		assertThat(format3.getVideoFiles()).isNull();
 	}
 	
 	@Test
@@ -122,7 +123,7 @@ class FormatTest {
 		assertThat(format1.getPoids()).isEqualTo(2.5);
 		assertThat(format1.hasAudioFiles()).isTrue();
 		assertThat(format1.hasVideoFiles()).isFalse();
-		assertThat(format1.getVideoFiles()).isNull();
+		assertThat(format1.getVideoFiles()).isEmpty();
 		
 		assertThat(format1.getAudioFiles()).singleElement()
 			.satisfies(audio -> {
@@ -157,7 +158,7 @@ class FormatTest {
 		assertThat(format1.getPoids()).isEqualTo(2.5);
 		assertThat(format1.hasAudioFiles()).isTrue();
 		assertThat(format1.hasVideoFiles()).isFalse();
-		assertThat(format1.getVideoFiles()).isNull();
+		assertThat(format1.getVideoFiles()).isEmpty();
 
 		assertThat(format1.getAudioFiles()).singleElement()
 			.satisfies(audio -> {
@@ -198,7 +199,7 @@ class FormatTest {
 		assertThat(format1.getPoids()).isEqualTo(2.5);
 		assertThat(format1.hasAudioFiles()).isTrue();
 		assertThat(format1.hasVideoFiles()).isFalse();
-		assertThat(format1.getVideoFiles()).isNull();
+		assertThat(format1.getVideoFiles()).isEmpty();
 
 		assertThat(format1.getAudioFiles()).hasSize(2)
 			.anySatisfy(audio -> {
