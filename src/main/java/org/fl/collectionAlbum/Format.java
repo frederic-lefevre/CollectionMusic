@@ -233,6 +233,10 @@ public class Format {
 		return hasMediaFile(videoFiles);
 	}
 	
+	public boolean hasMediaFiles() {
+		return hasAudioFiles() || hasVideoFiles();
+	}
+	
 	private <T extends AbstractMediaFile> boolean hasMediaFile(List<T> mediaFiles) {
 		return (mediaFiles != null) && (!mediaFiles.isEmpty());
 	}

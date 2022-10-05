@@ -58,11 +58,11 @@ public class RapportCollection extends RapportHtml {
 			write(rapportAlbumsRangement.printReport(getNextRapportFile(), CssStyles.stylesTableauMusicArtefact)) ;
 		}
 
-		write("</ul>\n<h3>Albums avec et sans fichier audio</h3>\n<ul>\n") ;
-		RapportListeAlbums rapportAlbumsWithAudioFile = new RapportListeAlbums(albumsContainer.getAlbumsWithAudioFile().sortRangementAlbum(), "Albums avec fichiers audio", rapportLog) ;
+		write("</ul>\n<h3>Albums avec et sans fichier audio ou video</h3>\n<ul>\n") ;
+		RapportListeAlbums rapportAlbumsWithAudioFile = new RapportListeAlbums(albumsContainer.getAlbumsWithMediaFile().sortRangementAlbum(), "Albums avec fichiers audio ou video", rapportLog) ;
 		write(rapportAlbumsWithAudioFile.printReport(getNextRapportFile(), CssStyles.stylesTableauAvecBalise)) ;
 		
-		RapportListeAlbums rapportAlbumsWithoutAudioFile = new RapportListeAlbums(albumsContainer.getAlbumsWithoutAudioFile().sortRangementAlbum(), "Albums sans fichiers audio", rapportLog) ;
+		RapportListeAlbums rapportAlbumsWithoutAudioFile = new RapportListeAlbums(albumsContainer.getAlbumsWithoutMediaFile().sortRangementAlbum(), "Albums sans fichiers audio ou video", rapportLog) ;
 		write(rapportAlbumsWithoutAudioFile.printReport(getNextRapportFile(), CssStyles.stylesTableauAvecBalise)) ;
 		
 		write("</ul>\n<h3>Statistiques</h3>\n<ul>\n") ;
@@ -73,8 +73,8 @@ public class RapportCollection extends RapportHtml {
 		write(rapportStat2.printReport(getNextRapportFile(), CssStyles.stylesStat)) ;
 
 		write("  <li>Nombre d'albums: " + albumsContainer.getCollectionAlbumsMusiques().getNombreAlbums()) ;
-		write("\n  <ul>\n    <li>avec fichiers audio: " + albumsContainer.getAlbumsWithAudioFile().getNombreAlbums()) ;
-		write("</li>\n    <li>sans fichiers audio: " + albumsContainer.getAlbumsWithoutAudioFile().getNombreAlbums()) ;
+		write("\n  <ul>\n    <li>avec fichiers audio ou video: " + albumsContainer.getAlbumsWithMediaFile().getNombreAlbums()) ;
+		write("</li>\n    <li>sans fichiers audio ou video: " + albumsContainer.getAlbumsWithoutMediaFile().getNombreAlbums()) ;
 		write("</li>\n  </ul>\n  </li>\n  <li>Nombre d'artistes, de groupes et d'ensemble: " + albumsContainer.getCollectionArtistes().getNombreArtistes()) ;
 		write("</li>\n  <li>Nombre d'unit&eacute;s physiques:\n<table>\n  <tr>\n") ;
 		albumsContainer.getCollectionAlbumsMusiques().getFormatListeAlbum().enteteFormat(rBuilder, "total", 1, DONT_APPEND_AUDIO_FILE) ;
