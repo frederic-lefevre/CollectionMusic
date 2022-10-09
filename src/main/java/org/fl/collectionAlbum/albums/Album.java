@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.Format;
+import org.fl.collectionAlbum.Format.ContentNature;
 import org.fl.collectionAlbum.Format.RangementSupportPhysique;
 import org.fl.collectionAlbum.MusicArtefact;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
@@ -112,12 +113,24 @@ public class Album extends MusicArtefact {
     	return formatAlbum.hasMediaFiles();
     }
     
+    public boolean hasAudioFiles() {
+    	return formatAlbum.hasAudioFiles();
+    }
+    
     public RangementSupportPhysique getRangement() {
         return rangement;
     }
     
 	public boolean hasSpecificCompositionDates() {
 		return specificCompositionDates;
+	}
+	
+	public boolean missesAudioFile() {
+		return (hasContentNature(ContentNature.AUDIO) && (!hasAudioFiles()));
+	}
+	
+	public boolean hasContentNature(Format.ContentNature contentNature) {
+		return formatAlbum.hasContentNature(contentNature);
 	}
 	
 }

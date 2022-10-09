@@ -31,8 +31,8 @@ public class CollectionAlbumContainer {
 	// Listes des albums par rangement
 	private EnumMap<Format.RangementSupportPhysique, ListeAlbum> rangementsAlbums ;	
 	
-	private ListeAlbum albumWithMediaFile;
-	private ListeAlbum albumWithoutMediaFile;
+	private ListeAlbum albumWithAudioFile;
+	private ListeAlbum albumMissingAudioFile;
 	
 	private ListeConcert   concerts ;	
 	private ChronoArtistes calendrierArtistes ;
@@ -82,10 +82,10 @@ public class CollectionAlbumContainer {
 			albumLog.warning("Album impossible à ranger: " + album.getTitre()) ;
 		}
 			
-		if (album.hasMediaFiles()) {
-			albumWithMediaFile.addAlbum(album);
-		} else {
-			albumWithoutMediaFile.addAlbum(album);
+		if (album.missesAudioFile()) {
+			albumMissingAudioFile.addAlbum(album);
+		} else if (album.hasAudioFiles()){
+			albumWithAudioFile.addAlbum(album);
 		}
 		
 		statChronoEnregistrement.AddAlbum(album.getDebutEnregistrement(), album.getFormatAlbum().getPoids());
@@ -112,8 +112,8 @@ public class CollectionAlbumContainer {
 	public StatChrono 	  	getStatChronoComposition() 	  { return statChronoComposition	; }
 	public StatChrono 	  	getStatChronoEnregistrement() { return statChronoEnregistrement ; }
 	public LieuxDesConcerts getLieuxDesConcerts() 		  { return lieuxDesConcerts			; }
-	public ListeAlbum 	  	getAlbumsWithMediaFile() 	  { return albumWithMediaFile 		; }
-	public ListeAlbum 	  	getAlbumsWithoutMediaFile()   { return albumWithoutMediaFile 	; }
+	public ListeAlbum 	  	getAlbumsWithAudioFile() 	  { return albumWithAudioFile 		; }
+	public ListeAlbum 	  	getAlbumsMissingAudioFile()   { return albumMissingAudioFile 	; }
 
 	private void reset() {
 		
@@ -126,8 +126,8 @@ public class CollectionAlbumContainer {
    		calendrierArtistes 		 = new ChronoArtistes() ;
    		lieuxDesConcerts		 = new LieuxDesConcerts() ;
    		allArtistes				 = new ArrayList<ListeArtiste>() ;
-   		albumWithMediaFile		 = new ListeAlbum(albumLog) ;
-   		albumWithoutMediaFile	 = new ListeAlbum(albumLog) ;
+   		albumWithAudioFile		 = new ListeAlbum(albumLog) ;
+   		albumMissingAudioFile	 = new ListeAlbum(albumLog) ;
    		rangementsAlbums 		 = new EnumMap<Format.RangementSupportPhysique, ListeAlbum>(Format.RangementSupportPhysique.class) ;
    		for (Format.RangementSupportPhysique rangement : Format.RangementSupportPhysique.values()) {
    			rangementsAlbums.put(rangement, new ListeAlbum(albumLog)) ;
