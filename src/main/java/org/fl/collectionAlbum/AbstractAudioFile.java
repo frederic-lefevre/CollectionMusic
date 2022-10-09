@@ -24,4 +24,7 @@ public abstract class AbstractAudioFile extends AbstractMediaFile {
 		audioFilesDetails.append(getType()).append(separator);
 		appendCommonMediaFileDetail(audioFilesDetails, separator);
 	}
+	
+	public abstract boolean isHighRes();
+	public abstract boolean isLossLess();
 }

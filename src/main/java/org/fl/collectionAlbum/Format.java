@@ -244,6 +244,16 @@ public class Format {
 		return hasAudioFiles() || hasVideoFiles();
 	}
 	
+	public boolean hasOnlyLossLessAudio() {
+		return audioFiles.stream()
+				.allMatch(audioFile -> audioFile.isLossLess());
+	}
+	
+	public boolean hasHighResAudio() {
+		return audioFiles.stream()
+				.anyMatch(audioFile -> audioFile.isHighRes());
+	}
+	
 	private <T extends AbstractMediaFile> boolean hasMediaFile(List<T> mediaFiles) {
 		return (mediaFiles != null) && (!mediaFiles.isEmpty());
 	}

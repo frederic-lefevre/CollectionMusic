@@ -28,6 +28,9 @@ public class LosslessAudioFile extends AbstractAudioFile {
 
 	private final int bitDepth;
 	
+	private static final int HIGH_RES_BIT_DEPTH_THRESHOLD = 16;
+	private static final double HIGH_RES_SAMPLING_RATE_THRESHOLD = 48;
+	
 	public LosslessAudioFile(AudioFileType type, String source, int bitDepth, double samplingRate, String note) {
 		
 		super(type, source, samplingRate, note);
@@ -37,6 +40,16 @@ public class LosslessAudioFile extends AbstractAudioFile {
 
 	public int getBitDepth() {
 		return bitDepth;
+	}
+	
+	@Override
+	public boolean isHighRes() {
+		return (bitDepth > HIGH_RES_BIT_DEPTH_THRESHOLD) || (getSamplingRate() > HIGH_RES_SAMPLING_RATE_THRESHOLD);
+	}
+	
+	@Override
+	public boolean isLossLess() {
+		return true;
 	}
 	
 	@Override

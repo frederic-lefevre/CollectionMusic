@@ -137,6 +137,14 @@ public class Album extends MusicArtefact {
 		return (hasContentNature(ContentNature.VIDEO) && (!hasVideoFiles()));
 	}
 	
+	public boolean hasOnlyLossLessAudio() {
+		return formatAlbum.hasOnlyLossLessAudio();
+	}
+	
+	public boolean hasHighResAudio() {
+		return formatAlbum.hasHighResAudio();
+	}
+	
 	public boolean hasContentNature(Format.ContentNature contentNature) {
 		return formatAlbum.hasContentNature(contentNature);
 	}

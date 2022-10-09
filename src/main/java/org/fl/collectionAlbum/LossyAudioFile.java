@@ -15,6 +15,16 @@ public class LossyAudioFile extends AbstractAudioFile {
 	}
 	
 	@Override
+	public boolean isHighRes() {
+		return false;
+	}
+	
+	@Override
+	public boolean isLossLess() {
+		return false;
+	}
+	
+	@Override
 	public String displayMediaFileSummary() {
 		StringBuilder audioFilesSummary = new StringBuilder();
 		audioFilesSummary.append(getType().name()).append(" ");

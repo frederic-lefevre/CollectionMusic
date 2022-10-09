@@ -71,6 +71,12 @@ public class RapportCollection extends RapportHtml {
 		RapportListeAlbums rapportAlbumsWithoutVideoFile = new RapportListeAlbums(albumsContainer.getAlbumsMissingVideoFile().sortRangementAlbum(), "Albums manquant de fichier video", rapportLog) ;
 		write(rapportAlbumsWithoutVideoFile.printReport(getNextRapportFile(), CssStyles.stylesTableauAvecBalise)) ;
 
+		RapportListeAlbums rapportAlbumsWithHighResAudioFile = new RapportListeAlbums(albumsContainer.getAlbumsWithHighResAudio().sortRangementAlbum(), "Albums avec fichier audio haute résolution", rapportLog) ;
+		write(rapportAlbumsWithHighResAudioFile.printReport(getNextRapportFile(), CssStyles.stylesTableauAvecBalise)) ;
+		
+		RapportListeAlbums rapportAlbumsWithLowResAudioFile = new RapportListeAlbums(albumsContainer.getAlbumsWithLowResAudio().sortRangementAlbum(), "Albums avec fichier audio avec perte (basse qualité)", rapportLog) ;
+		write(rapportAlbumsWithLowResAudioFile.printReport(getNextRapportFile(), CssStyles.stylesTableauAvecBalise)) ;
+		
 		write("</ul>\n<h3>Statistiques</h3>\n<ul>\n") ;
 		RapportStat rapportStat1 = new RapportStat(albumsContainer.getStatChronoEnregistrement(), "Statistiques par année d'enregistrement: Nombre d'unit&eacute;s physiques", rapportLog) ;
 		write(rapportStat1.printReport(getNextRapportFile(), CssStyles.stylesStat)) ;
@@ -81,6 +87,8 @@ public class RapportCollection extends RapportHtml {
 		write("  <li>Nombre d'albums: " + albumsContainer.getCollectionAlbumsMusiques().getNombreAlbums()) ;
 		write("\n  <ul>\n    <li>avec fichiers audio: " + albumsContainer.getAlbumsWithAudioFile().getNombreAlbums()) ;
 		write("</li>\n    <li>manquant de  fichiers audio: " + albumsContainer.getAlbumsMissingAudioFile().getNombreAlbums()) ;
+		write("</li>\n    <li>haute résolution audio: " + albumsContainer.getAlbumsWithHighResAudio().getNombreAlbums()) ;
+		write("</li>\n    <li>basse résolution audio (avec perte): " + albumsContainer.getAlbumsWithLowResAudio().getNombreAlbums()) ;
 		write("</li>\n    <li>avec  fichiers video: " + albumsContainer.getAlbumsWithVideoFile().getNombreAlbums()) ;
 		write("</li>\n    <li>manquant de  fichiers video: " + albumsContainer.getAlbumsMissingVideoFile().getNombreAlbums()) ;
 		write("</li>\n  </ul>\n  </li>\n  <li>Nombre d'artistes, de groupes et d'ensemble: " + albumsContainer.getCollectionArtistes().getNombreArtistes()) ;
