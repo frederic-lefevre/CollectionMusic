@@ -117,6 +117,10 @@ public class Album extends MusicArtefact {
     	return formatAlbum.hasAudioFiles();
     }
     
+    public boolean hasVideoFiles() {
+    	return formatAlbum.hasVideoFiles();
+    }
+    
     public RangementSupportPhysique getRangement() {
         return rangement;
     }
@@ -127,6 +131,10 @@ public class Album extends MusicArtefact {
 	
 	public boolean missesAudioFile() {
 		return (hasContentNature(ContentNature.AUDIO) && (!hasAudioFiles()));
+	}
+	
+	public boolean missesVideoFile() {
+		return (hasContentNature(ContentNature.VIDEO) && (!hasVideoFiles()));
 	}
 	
 	public boolean hasContentNature(Format.ContentNature contentNature) {

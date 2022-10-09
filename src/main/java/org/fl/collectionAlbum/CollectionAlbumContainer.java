@@ -33,6 +33,8 @@ public class CollectionAlbumContainer {
 	
 	private ListeAlbum albumWithAudioFile;
 	private ListeAlbum albumMissingAudioFile;
+	private ListeAlbum albumWithVideoFile;
+	private ListeAlbum albumMissingVideoFile;
 	
 	private ListeConcert   concerts ;	
 	private ChronoArtistes calendrierArtistes ;
@@ -88,6 +90,12 @@ public class CollectionAlbumContainer {
 			albumWithAudioFile.addAlbum(album);
 		}
 		
+		if (album.missesVideoFile()) {
+			albumMissingVideoFile.addAlbum(album);
+		} else if (album.hasVideoFiles()){
+			albumWithVideoFile.addAlbum(album);
+		}
+		
 		statChronoEnregistrement.AddAlbum(album.getDebutEnregistrement(), album.getFormatAlbum().getPoids());
 	    statChronoComposition.AddAlbum(album.getDebutComposition(), album.getFormatAlbum().getPoids());
 	}
@@ -114,6 +122,8 @@ public class CollectionAlbumContainer {
 	public LieuxDesConcerts getLieuxDesConcerts() 		  { return lieuxDesConcerts			; }
 	public ListeAlbum 	  	getAlbumsWithAudioFile() 	  { return albumWithAudioFile 		; }
 	public ListeAlbum 	  	getAlbumsMissingAudioFile()   { return albumMissingAudioFile 	; }
+	public ListeAlbum 	  	getAlbumsWithVideoFile() 	  { return albumWithVideoFile 		; }
+	public ListeAlbum 	  	getAlbumsMissingVideoFile()   { return albumMissingVideoFile 	; }
 
 	private void reset() {
 		
@@ -128,6 +138,8 @@ public class CollectionAlbumContainer {
    		allArtistes				 = new ArrayList<ListeArtiste>() ;
    		albumWithAudioFile		 = new ListeAlbum(albumLog) ;
    		albumMissingAudioFile	 = new ListeAlbum(albumLog) ;
+   		albumWithVideoFile		 = new ListeAlbum(albumLog) ;
+   		albumMissingVideoFile	 = new ListeAlbum(albumLog) ;
    		rangementsAlbums 		 = new EnumMap<Format.RangementSupportPhysique, ListeAlbum>(Format.RangementSupportPhysique.class) ;
    		for (Format.RangementSupportPhysique rangement : Format.RangementSupportPhysique.values()) {
    			rangementsAlbums.put(rangement, new ListeAlbum(albumLog)) ;
