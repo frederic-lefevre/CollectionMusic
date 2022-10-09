@@ -25,9 +25,11 @@ SOFTWARE.
 package org.fl.collectionAlbum;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
@@ -52,36 +54,41 @@ import com.google.gson.JsonObject;
  */
 public class Format {
 
+	public enum ContentNature { AUDIO, VIDEO }
+	
 	// Définition des différents physiques
 	private enum SupportPhysique {
-		CD(		 "CD",  	 "xnbcd",  	   JsonMusicProperties.CD, 		 1) ,
-		K7(		 "K7",  	 "xnbk7", 	   JsonMusicProperties.K7, 		 1) ,
-		Vinyl33T("33T", 	 "xnb33T", 	   JsonMusicProperties._33T, 	 1) ,
-		Vinyl45T("45T", 	 "xnb45T", 	   JsonMusicProperties._45T,  	 0.5) ,
-		MiniCD(	 "Mini CD",  "xnbminicd",  JsonMusicProperties.MINI_CD,  0.5) ,
-		MiniDVD( "Mini DVD", "xnbminidvd", JsonMusicProperties.MINI_DVD, 0.5) ,
-		Mini33T( "Mini 33T", "xnbmini33T", JsonMusicProperties.MINI_33T, 0.5) ,
-		Maxi45T( "Maxi 45T", "xnbmaxi45T", JsonMusicProperties.MAXI_45T, 0.5) ,
-		VHS(	 "VHS",		 "xnbvhs",	   JsonMusicProperties.VHS, 	 1) ,
-		DVD(	 "DVD",		 "xnbdvd", 	   JsonMusicProperties.DVD, 	 1) ,
-		BlueRay( "Blue Ray", "xnbblueray", JsonMusicProperties.BLUERAY,  1) ;
+		CD(		 "CD",  	 "xnbcd",  	   JsonMusicProperties.CD, 		 1,	  ContentNature.AUDIO),
+		K7(		 "K7",  	 "xnbk7", 	   JsonMusicProperties.K7, 		 1,	  ContentNature.AUDIO),
+		Vinyl33T("33T", 	 "xnb33T", 	   JsonMusicProperties._33T, 	 1,	  ContentNature.AUDIO) ,
+		Vinyl45T("45T", 	 "xnb45T", 	   JsonMusicProperties._45T,  	 0.5, ContentNature.AUDIO) ,
+		MiniCD(	 "Mini CD",  "xnbminicd",  JsonMusicProperties.MINI_CD,  0.5, ContentNature.AUDIO) ,
+		MiniDVD( "Mini DVD", "xnbminidvd", JsonMusicProperties.MINI_DVD, 0.5, ContentNature.VIDEO) ,
+		Mini33T( "Mini 33T", "xnbmini33T", JsonMusicProperties.MINI_33T, 0.5, ContentNature.AUDIO) ,
+		Maxi45T( "Maxi 45T", "xnbmaxi45T", JsonMusicProperties.MAXI_45T, 0.5, ContentNature.AUDIO) ,
+		VHS(	 "VHS",		 "xnbvhs",	   JsonMusicProperties.VHS, 	 1,   ContentNature.VIDEO) ,
+		DVD(	 "DVD",		 "xnbdvd", 	   JsonMusicProperties.DVD, 	 1,   ContentNature.VIDEO) ,
+		BlueRay( "Blue Ray", "xnbblueray", JsonMusicProperties.BLUERAY,  1,   ContentNature.VIDEO) ;
 		
 		private final String nom ;
-		private final String cssClass ; 
+		private final String cssClass ;
 		private final String jsonPropertyName ;
 		private final double poidsSupport ;
+		private final ContentNature contentNature;
 		
-		private SupportPhysique(String n, String cssCl, String jp, double ps) {
+		private SupportPhysique(String n, String cssCl, String jp, double ps, ContentNature cn) {
 			nom 	 	 	 = n ;
 			cssClass 	 	 = cssCl ;
 			jsonPropertyName = jp ;
 			poidsSupport 	 = ps ;
+			contentNature	 = cn;
 		}
 		
 		private String getJsonPropertyName() {	return jsonPropertyName ;}
 		private String getCssClass() 		 {	return cssClass 		;}		
 		private String getNom() 			 {	return nom 				;}	
 		private double getPoidsSupport() 	 {	return poidsSupport 	;}
+		private ContentNature getContentNature() { return contentNature; }
 	}
 	
 	// Définition des rangements des supports physiques
@@ -239,6 +246,14 @@ public class Format {
 	
 	private <T extends AbstractMediaFile> boolean hasMediaFile(List<T> mediaFiles) {
 		return (mediaFiles != null) && (!mediaFiles.isEmpty());
+	}
+	
+	public boolean hasContentNature(ContentNature cn) {
+		return Arrays.asList(SupportPhysique.values()).stream()
+				.filter(s -> s.getContentNature().equals(cn))
+				.map(s -> tableFormat.get(s))
+				.filter(Objects::nonNull)
+				.anyMatch(p -> p > 0);
 	}
 	
 	public boolean hasError() {
