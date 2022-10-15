@@ -7,10 +7,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import org.fl.collectionAlbum.AbstractAudioFile;
 import org.fl.collectionAlbum.LosslessAudioFile;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.albums.ListeAlbum;
@@ -19,7 +21,7 @@ public class RapportCsv {
 
 	private static final String CSV_SEPARATOR = ";";
 	
-	public static void writeCsvFile(ListeAlbum listeAlbum, Path filePath, Logger logger) {
+	public static void writeCsvAudioFile(ListeAlbum listeAlbum, Predicate<AbstractAudioFile> audioFileFilter, Path filePath, Logger logger) {
 		
 		Path csvDir = filePath.getParent();
 		if (!Files.exists(csvDir)) {
@@ -43,7 +45,7 @@ public class RapportCsv {
 			outputStream.write("\n");
 			
 			listeAlbum.getAlbums().stream()
-				.flatMap(album ->  csvForOneAlbum(album).stream())
+				.flatMap(album ->  csvForOneAlbum(album, audioFileFilter).stream())
 				.distinct()
 				.forEach(line -> {
 					try {
@@ -63,7 +65,7 @@ public class RapportCsv {
 		return "Auteurs" + CSV_SEPARATOR + "Titres" + CSV_SEPARATOR + LosslessAudioFile.getAudioFilePropertyTitles(CSV_SEPARATOR);
 	}
 	
-	private static List<String> csvForOneAlbum(Album album) {
+	private static List<String> csvForOneAlbum(Album album, Predicate<AbstractAudioFile> audioFileFilter) {
 		
 		String auteurs = album.getAuteurs().stream().map(auteur -> auteur.getNomComplet()).collect(Collectors.joining(" "));
 		String chefsOrchestre = album.getChefsOrchestre().stream().map(co -> co.getNomComplet()).collect(Collectors.joining(" "));
@@ -76,7 +78,7 @@ public class RapportCsv {
 		}
 		String auteursAlbum = doubleQuoteEnclose(allAuteurs) + CSV_SEPARATOR + doubleQuoteEnclose(album.getTitre()) + CSV_SEPARATOR;
 		
-		return album.getFormatAlbum().printAudioFilesCsvParts(CSV_SEPARATOR).stream()
+		return album.getFormatAlbum().printAudioFilesCsvParts(CSV_SEPARATOR, audioFileFilter).stream()
 				.map(audioCsv -> auteursAlbum + audioCsv).toList();
 	}
 	

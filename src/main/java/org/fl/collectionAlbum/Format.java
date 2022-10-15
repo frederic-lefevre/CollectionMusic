@@ -33,6 +33,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -387,9 +388,9 @@ public class Format {
 		return allMediaFiles;
 	}
 	
-	public List<String> printAudioFilesCsvParts(String csvSeparator) {
+	public List<String> printAudioFilesCsvParts(String csvSeparator, Predicate<AbstractAudioFile> audioFileFilter) {
 		if (hasAudioFiles()) {
-			return audioFiles.stream().map(af -> af.displayMediaFileDetail(csvSeparator)).collect(Collectors.toList());
+			return audioFiles.stream().filter(audioFileFilter).map(af -> af.displayMediaFileDetail(csvSeparator)).collect(Collectors.toList());
 		} else {
 			return Collections.emptyList();
 		}

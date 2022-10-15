@@ -123,8 +123,8 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 		 rapportsHtml(rapportDir) ;
 		 rapportsConcertHtml(rapportDir) ;
 		 
-		 RapportCsv.writeCsvFile(albumsContainer.getAlbumsWithAudioFile(), RapportStructuresAndNames.getAbsoluteCsvAudioFiles(), albumLog);
-		 RapportCsv.writeCsvFile(albumsContainer.getAlbumsWithHighResAudio(), RapportStructuresAndNames.getAbsoluteCsvHdAudioFiles(), albumLog);
+		 RapportCsv.writeCsvAudioFile(albumsContainer.getAlbumsWithAudioFile(), (audioFile) -> true, RapportStructuresAndNames.getAbsoluteCsvAudioFiles(), albumLog);
+		 RapportCsv.writeCsvAudioFile(albumsContainer.getAlbumsWithHighResAudio(), (audioFile) -> audioFile.isHighRes(), RapportStructuresAndNames.getAbsoluteCsvHdAudioFiles(), albumLog);
 	 }
 	   
 	 private void rapportsHtml(Path rapportDir) {	
