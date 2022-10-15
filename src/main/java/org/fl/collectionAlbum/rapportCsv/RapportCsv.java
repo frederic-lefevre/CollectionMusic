@@ -81,6 +81,6 @@ public class RapportCsv {
 	}
 	
 	private static String doubleQuoteEnclose(String s) {
-		return "\"" + s + "\"";
+		return "\"" + s.replace("\"", "\"\"") + "\"";
 	}
 }
