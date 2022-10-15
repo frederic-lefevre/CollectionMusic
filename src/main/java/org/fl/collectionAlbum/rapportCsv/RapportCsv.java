@@ -44,6 +44,7 @@ public class RapportCsv {
 			
 			listeAlbum.getAlbums().stream()
 				.flatMap(album ->  csvForOneAlbum(album).stream())
+				.distinct()
 				.forEach(line -> {
 					try {
 						outputStream.write(line);
