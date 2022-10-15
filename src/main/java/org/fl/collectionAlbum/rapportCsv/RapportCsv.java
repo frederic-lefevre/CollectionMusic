@@ -11,11 +11,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import org.fl.collectionAlbum.LosslessAudioFile;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.albums.ListeAlbum;
 
 public class RapportCsv {
 
+	private static final String CSV_SEPARATOR = ";";
+	
 	public static void writeCsvFile(ListeAlbum listeAlbum, Path filePath, Logger logger) {
 		
 		Path csvDir = filePath.getParent();
@@ -35,11 +38,16 @@ public class RapportCsv {
 				.orElse("filePath is null");
 		
 		try (BufferedWriter outputStream = Files.newBufferedWriter(filePath, StandardCharsets.UTF_8)) {
+			
+			outputStream.write(getLosslessAudioFileEntete(CSV_SEPARATOR));
+			outputStream.write("\n");
+			
 			listeAlbum.getAlbums().stream()
 				.flatMap(album ->  csvForOneAlbum(album).stream())
 				.forEach(line -> {
 					try {
-						outputStream.write(line + "\n");
+						outputStream.write(line);
+						outputStream.write("\n");
 					} catch (IOException e) {
 
 						logger.log(Level.SEVERE, "IOException writing csv file " + filePathString + " line " + line, e);
@@ -48,6 +56,10 @@ public class RapportCsv {
 		} catch (IOException e) {
 			logger.log(Level.SEVERE, "IOException opening csv file " + filePathString, e);
 		}
+	}
+	
+	private static String getLosslessAudioFileEntete(String csvSeparator) {
+		return "Auteurs" + CSV_SEPARATOR + "Titres" + CSV_SEPARATOR + LosslessAudioFile.getAudioFilePropertyTitles(CSV_SEPARATOR);
 	}
 	
 	private static List<String> csvForOneAlbum(Album album) {
@@ -61,9 +73,9 @@ public class RapportCsv {
 		} else {
 			allAuteurs = auteurs;
 		}
-		String auteursAlbum = doubleQuoteEnclose(allAuteurs) + ";" + doubleQuoteEnclose(album.getTitre()) + ";";
+		String auteursAlbum = doubleQuoteEnclose(allAuteurs) + CSV_SEPARATOR + doubleQuoteEnclose(album.getTitre()) + CSV_SEPARATOR;
 		
-		return album.getFormatAlbum().printAudioFilesCsvParts().stream()
+		return album.getFormatAlbum().printAudioFilesCsvParts(CSV_SEPARATOR).stream()
 				.map(audioCsv -> auteursAlbum + audioCsv).toList();
 	}
 	

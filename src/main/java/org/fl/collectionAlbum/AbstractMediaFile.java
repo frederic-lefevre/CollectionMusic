@@ -5,6 +5,9 @@ public abstract class AbstractMediaFile {
 	private final String source;
 	private final String note;
 	
+	private static final String SOURCE_TITLE = "Source";
+	private static final String NOTE_TITLE = "Note";
+	
 	protected AbstractMediaFile(String source, String note) {
 		super();
 		this.source = source;
@@ -30,5 +33,9 @@ public abstract class AbstractMediaFile {
 		if ((note != null) && (!note.isEmpty())) {
 			mediaFilesDetails.append(separator).append(getNote());
 		}
+	}
+	
+	protected static String getMediaFilePropertyTitles(String separator) {
+		return SOURCE_TITLE + separator + NOTE_TITLE;
 	}
 }

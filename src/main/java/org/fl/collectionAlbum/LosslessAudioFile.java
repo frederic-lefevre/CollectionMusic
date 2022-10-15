@@ -28,6 +28,8 @@ public class LosslessAudioFile extends AbstractAudioFile {
 
 	private final int bitDepth;
 	
+	private static final String BIT_DEPTH_TITLE = "Bit depth";
+	
 	private static final int HIGH_RES_BIT_DEPTH_THRESHOLD = 16;
 	private static final double HIGH_RES_SAMPLING_RATE_THRESHOLD = 48;
 	
@@ -68,4 +70,7 @@ public class LosslessAudioFile extends AbstractAudioFile {
 		return audioFilesSummary.toString();
 	}
 
+	public static String getAudioFilePropertyTitles(String separator) {
+		return BIT_DEPTH_TITLE + separator + AbstractAudioFile.getAudioFilePropertyTitles(separator);
+	}
 }

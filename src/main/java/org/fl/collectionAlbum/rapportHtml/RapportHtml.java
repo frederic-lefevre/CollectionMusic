@@ -50,7 +50,7 @@ public abstract class RapportHtml {
 	
 	protected final Logger rapportLog;
 
-	private   boolean displayTitle ;
+	private boolean displayTitle ;
 
 	protected Balises balises ;
 	

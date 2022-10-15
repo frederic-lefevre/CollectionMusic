@@ -309,6 +309,16 @@ public class Format {
 		}
 	}
 	
+	public String csvEnteteAudioFormat(String csvSeparator) {
+		
+		StringBuilder csvRapport = new StringBuilder();
+		for (SupportPhysique sPhys : SupportPhysique.values()) {
+			csvRapport.append(sPhys.getNom()).append(csvSeparator);
+		}
+		csvRapport.append(LosslessAudioFile.getAudioFilePropertyTitles(csvSeparator)).append(csvSeparator);
+		return csvRapport.toString();
+	}
+	
 	public void rowFormat(StringBuilder rapport, String cssTotal, boolean putMediaFile) {
 		
 		if (cssTotal != null) {
@@ -377,9 +387,9 @@ public class Format {
 		return allMediaFiles;
 	}
 	
-	public List<String> printAudioFilesCsvParts() {
+	public List<String> printAudioFilesCsvParts(String csvSeparator) {
 		if (hasAudioFiles()) {
-			return audioFiles.stream().map(af -> af.displayMediaFileDetail(";")).collect(Collectors.toList());
+			return audioFiles.stream().map(af -> af.displayMediaFileDetail(csvSeparator)).collect(Collectors.toList());
 		} else {
 			return Collections.emptyList();
 		}

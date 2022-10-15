@@ -223,7 +223,7 @@ class FormatTest {
 				assertThat(lossLessAudio.getNote()).isNull();
 			});
 		
-		List<String> csvParts = format1.printAudioFilesCsvParts();
+		List<String> csvParts = format1.printAudioFilesCsvParts(";");
 		
 		assertThat(csvParts).isNotEmpty().hasSize(2)
 			.satisfiesExactly(
