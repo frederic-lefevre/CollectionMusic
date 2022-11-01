@@ -31,7 +31,6 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
@@ -57,38 +56,62 @@ public class Format {
 
 	public enum ContentNature { AUDIO, VIDEO }
 	
-	// Définition des différents physiques
+	// Définition des différents supports physiques
 	private enum SupportPhysique {
-		CD(		 "CD",  	 "xnbcd",  	   JsonMusicProperties.CD, 		 1,	  ContentNature.AUDIO),
-		K7(		 "K7",  	 "xnbk7", 	   JsonMusicProperties.K7, 		 1,	  ContentNature.AUDIO),
-		Vinyl33T("33T", 	 "xnb33T", 	   JsonMusicProperties._33T, 	 1,	  ContentNature.AUDIO) ,
-		Vinyl45T("45T", 	 "xnb45T", 	   JsonMusicProperties._45T,  	 0.5, ContentNature.AUDIO) ,
-		MiniCD(	 "Mini CD",  "xnbminicd",  JsonMusicProperties.MINI_CD,  0.5, ContentNature.AUDIO) ,
-		MiniDVD( "Mini DVD", "xnbminidvd", JsonMusicProperties.MINI_DVD, 0.5, ContentNature.VIDEO) ,
-		Mini33T( "Mini 33T", "xnbmini33T", JsonMusicProperties.MINI_33T, 0.5, ContentNature.AUDIO) ,
-		Maxi45T( "Maxi 45T", "xnbmaxi45T", JsonMusicProperties.MAXI_45T, 0.5, ContentNature.AUDIO) ,
-		VHS(	 "VHS",		 "xnbvhs",	   JsonMusicProperties.VHS, 	 1,   ContentNature.VIDEO) ,
-		DVD(	 "DVD",		 "xnbdvd", 	   JsonMusicProperties.DVD, 	 1,   ContentNature.VIDEO) ,
-		BlueRay( "Blue Ray", "xnbblueray", JsonMusicProperties.BLUERAY,  1,   ContentNature.VIDEO) ;
+		CD(		 "CD",  	 "xnbcd", 		 1),
+		K7(		 "K7",  	 "xnbk7", 		 1),
+		Vinyl33T("33T", 	 "xnb33T", 	 	 1) ,
+		Vinyl45T("45T", 	 "xnb45T",     0.5) ,
+		MiniCD(	 "Mini CD",  "xnbminicd",  0.5) ,
+		MiniDVD( "Mini DVD", "xnbminidvd", 0.5) ,
+		Mini33T( "Mini 33T", "xnbmini33T", 0.5) ,
+		Maxi45T( "Maxi 45T", "xnbmaxi45T", 0.5) ,
+		VHS(	 "VHS",		 "xnbvhs", 	 	 1) ,
+		DVD(	 "DVD",		 "xnbdvd", 	 	 1) ,
+		BlueRay( "Blue Ray", "xnbblueray",   1) ;
 		
 		private final String nom ;
 		private final String cssClass ;
-		private final String jsonPropertyName ;
 		private final double poidsSupport ;
-		private final ContentNature contentNature;
 		
-		private SupportPhysique(String n, String cssCl, String jp, double ps, ContentNature cn) {
+		private SupportPhysique(String n, String cssCl, double ps) {
 			nom 	 	 	 = n ;
 			cssClass 	 	 = cssCl ;
-			jsonPropertyName = jp ;
 			poidsSupport 	 = ps ;
-			contentNature	 = cn;
 		}
 		
-		private String getJsonPropertyName() {	return jsonPropertyName ;}
 		private String getCssClass() 		 {	return cssClass 		;}		
 		private String getNom() 			 {	return nom 				;}	
 		private double getPoidsSupport() 	 {	return poidsSupport 	;}
+	}
+	
+	// Définition des différents support
+	private enum Support {
+		CD(		 SupportPhysique.CD,  	   JsonMusicProperties.CD,	  ContentNature.AUDIO),
+		K7(		 SupportPhysique.K7, 	   JsonMusicProperties.K7,	  ContentNature.AUDIO),
+		Vinyl33T(SupportPhysique.Vinyl33T, 	   JsonMusicProperties._33T,	  ContentNature.AUDIO) ,
+		Vinyl45T(SupportPhysique.Vinyl45T, 	   JsonMusicProperties._45T, ContentNature.AUDIO) ,
+		MiniCD(	 SupportPhysique.MiniCD,  JsonMusicProperties.MINI_CD, ContentNature.AUDIO) ,
+		MiniDVD( SupportPhysique.MiniDVD, JsonMusicProperties.MINI_DVD, ContentNature.VIDEO) ,
+		Mini33T( SupportPhysique.Mini33T, JsonMusicProperties.MINI_33T, ContentNature.AUDIO) ,
+		Maxi45T( SupportPhysique.Maxi45T, JsonMusicProperties.MAXI_45T, ContentNature.AUDIO) ,
+		VHS(	 SupportPhysique.VHS,	   JsonMusicProperties.VHS,   ContentNature.VIDEO) ,
+		DVD(	 SupportPhysique.DVD, 	   JsonMusicProperties.DVD,   ContentNature.VIDEO) ,
+		BlueRay( SupportPhysique.BlueRay, JsonMusicProperties.BLUERAY,   ContentNature.VIDEO),
+		BlueRayAudio( SupportPhysique.BlueRay, JsonMusicProperties.BLUERAY_AUDIO,   ContentNature.AUDIO) ;
+		
+		private final SupportPhysique supportPhysique ;
+		private final String jsonPropertyName ;
+		private final ContentNature contentNature;
+		
+		private Support(SupportPhysique sp, String jp, ContentNature cn) {
+			supportPhysique  = sp ;
+			jsonPropertyName = jp ;
+			contentNature	 = cn;
+		}
+		
+		private SupportPhysique getSupportPhysique() { return supportPhysique; }
+		private String getJsonPropertyName() {	return jsonPropertyName ;}
 		private ContentNature getContentNature() { return contentNature; }
 	}
 	
@@ -124,8 +147,8 @@ public class Format {
 	
 	private final Logger logger;
 	
-	// Supports physiques de l'album et leur nombre correspondant
-	private final EnumMap<SupportPhysique, Double> tableFormat ;
+	// Supports de l'album et leur nombre correspondant
+	private final EnumMap<Support, Double> tableFormat ;
 	
 	private final List<AbstractAudioFile> audioFiles;
 	
@@ -137,13 +160,13 @@ public class Format {
 	public Format(JsonObject formatJson, Logger fl) {
 		
 		logger = fl;
-		tableFormat = new EnumMap<SupportPhysique, Double>(SupportPhysique.class) ;
+		tableFormat = new EnumMap<Support, Double>(Support.class) ;
 		if (formatJson != null) {
 			hasError = false;
-			for (SupportPhysique sPhys : SupportPhysique.values()) {
-				JsonElement elemFormat = formatJson.get(sPhys.getJsonPropertyName()) ;
+			for (Support support : Support.values()) {
+				JsonElement elemFormat = formatJson.get(support.getJsonPropertyName()) ;
 				if (elemFormat != null) {
-					tableFormat.put(sPhys, Double.valueOf(elemFormat.getAsDouble())) ;
+					tableFormat.put(support, Double.valueOf(elemFormat.getAsDouble())) ;
 				}
 			}
 
@@ -190,24 +213,31 @@ public class Format {
      */
     public RangementSupportPhysique getRangement() {
     	RangementSupportPhysique typeRangement = null ;
-		if ((getNb(SupportPhysique.Vinyl33T) > 0) || (getNb(SupportPhysique.Vinyl45T) > 0) || (getNb(SupportPhysique.Mini33T) > 0) || (getNb(SupportPhysique.Maxi45T) > 0)) {
+		if ((supportPhysiquePresent(SupportPhysique.Vinyl33T)) || 
+			(supportPhysiquePresent(SupportPhysique.Vinyl45T)) || 
+			(supportPhysiquePresent(SupportPhysique.Mini33T) ) || 
+			(supportPhysiquePresent(SupportPhysique.Maxi45T) )) {
 		// à ranger dans la collection Vinyl
 			typeRangement = RangementSupportPhysique.RangementVinyl ;
-		} else if ((getNb(SupportPhysique.CD) > 0) || (getNb(SupportPhysique.MiniCD) > 0) ||(getNb(SupportPhysique.MiniDVD) > 0) ) {
+		} else if ((supportPhysiquePresent(SupportPhysique.CD)) || 
+					(supportPhysiquePresent(SupportPhysique.MiniCD)) ||
+					(supportPhysiquePresent(SupportPhysique.MiniDVD)) ) {
 		// à ranger dans la collection CD
 			typeRangement = RangementSupportPhysique.RangementCD ;
-		} else if (getNb(SupportPhysique.K7) > 0) {
+		} else if (supportPhysiquePresent(SupportPhysique.K7)) {
 		// à ranger dans la collection K7
 			typeRangement = RangementSupportPhysique.RangementK7 ;
-		} else if ((getNb(SupportPhysique.VHS) > 0) || (getNb(SupportPhysique.DVD) > 0) || (getNb(SupportPhysique.BlueRay) > 0)) {
+		} else if ((supportPhysiquePresent(SupportPhysique.VHS)) || 
+					(supportPhysiquePresent(SupportPhysique.DVD)) || 
+					(supportPhysiquePresent(SupportPhysique.BlueRay))) {
 		// à ranger dans la collection VHS
 			typeRangement = RangementSupportPhysique.RangementVHS ;
 		}
 		return typeRangement ;
 	}
 
-	private double getNb(SupportPhysique phys) {
-		Double nb = tableFormat.get(phys) ;
+	private double getNb(Support support) {
+		Double nb = tableFormat.get(support) ;
 		if (nb == null) {
 			return 0 ;
 		} else {
@@ -215,14 +245,27 @@ public class Format {
 		}
 	}
 	
+	private double getNbSupportPhysique(SupportPhysique supportPhysique) {
+		return tableFormat.entrySet().stream()
+				.filter(entry -> entry.getKey().getSupportPhysique().equals(supportPhysique))
+				.mapToDouble(entry -> entry.getValue())			
+				.sum();
+	}
+	
+	private boolean supportPhysiquePresent(SupportPhysique supportPhysique) {
+		return tableFormat.keySet().stream()
+			.map(Support::getSupportPhysique)
+			.filter(sp -> sp.equals(supportPhysique))
+			.findFirst()
+			.isPresent();
+	}
+	
 	// Get the poids of the format
 	public double getPoids() {
-		double res = 0 ;
-		Set<SupportPhysique> supportPhysiques = tableFormat.keySet() ;
-		for (SupportPhysique sPhys : supportPhysiques) {
-			res = res + sPhys.getPoidsSupport()*getNb(sPhys) ;
-		}
-		return res ;
+
+		return tableFormat.keySet().stream()
+			.mapToDouble(support -> support.getSupportPhysique().getPoidsSupport()*getNb(support))
+			.sum();
 	}
 	
 	public List<AbstractAudioFile> getAudioFiles() {
@@ -260,7 +303,7 @@ public class Format {
 	}
 	
 	public boolean hasContentNature(ContentNature cn) {
-		return Arrays.asList(SupportPhysique.values()).stream()
+		return Arrays.asList(Support.values()).stream()
 				.filter(s -> s.getContentNature().equals(cn))
 				.map(s -> tableFormat.get(s))
 				.filter(Objects::nonNull)
@@ -276,8 +319,8 @@ public class Format {
 	 * @param addFormat
 	 */
 	public void incrementFormat(Format addFormat) {
-		for (SupportPhysique sPhys : SupportPhysique.values()) {
-			tableFormat.put(sPhys, Double.valueOf(this.getNb(sPhys) + addFormat.getNb(sPhys))) ;
+		for (Support support : Support.values()) {
+			tableFormat.put(support, Double.valueOf(this.getNb(support) + addFormat.getNb(support))) ;
 		}
 	}
 	
@@ -326,7 +369,7 @@ public class Format {
 			rapport.append(F_ROW0).append(cssTotal).append(F_ROW6).append(cssTotal).append(F_ROW4).append(displayPoids(getPoids())).append(F_ROW7) ;
 		}
 		for (SupportPhysique sPhys : SupportPhysique.values()) {
-			rapport.append(F_ROW0).append(sPhys.getCssClass()).append(F_ROW4).append(displayPoids(getNb(sPhys))).append(F_ROW5) ;			 
+			rapport.append(F_ROW0).append(sPhys.getCssClass()).append(F_ROW4).append(displayPoids(getNbSupportPhysique(sPhys))).append(F_ROW5) ;			 
 		}
 
 		if (putMediaFile) {
