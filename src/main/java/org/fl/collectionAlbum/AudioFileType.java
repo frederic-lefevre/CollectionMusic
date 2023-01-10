@@ -22,6 +22,13 @@ public enum AudioFileType {
         public boolean isLossLess() {
 			return false;
 		}
+	},
+	M4A {
+		
+		@Override
+        public boolean isLossLess() {
+			return false;
+		}
 	};
 	
 	public boolean isLossLess() {
