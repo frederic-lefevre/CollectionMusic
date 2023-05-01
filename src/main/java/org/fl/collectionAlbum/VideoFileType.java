@@ -4,5 +4,6 @@ public enum VideoFileType {
 
 	MKV,
 	MP4,
-	M4V;
+	M4V,
+	VOB;
 }
