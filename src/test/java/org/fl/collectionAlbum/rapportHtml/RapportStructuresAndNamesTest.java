@@ -1,6 +1,31 @@
+/*
+ * MIT License
+
+Copyright (c) 2017, 2023 Frederic Lefevre
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+
 package org.fl.collectionAlbum.rapportHtml;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -27,13 +52,13 @@ class RapportStructuresAndNamesTest {
 	void test() {
 		
 		Control.initControl(CollectionAlbumGui.DEFAULT_PROP_FILE);
-		RapportStructuresAndNames.init() ;
-		assertEquals(CollectionAlbumGui.MUSIQUE_DIRECTORY_URI + "RapportCollection/rapport/", RapportStructuresAndNames.getRapportPath().toUri().toString()) ;
-		assertEquals(CollectionAlbumGui.MUSIQUE_DIRECTORY_URI + "RapportCollection/rapport_old/", RapportStructuresAndNames.getOldRapportPath().toUri().toString()) ;
-		assertEquals(CollectionAlbumGui.MUSIQUE_DIRECTORY_URI + "RapportCollection/rapport/albums/", RapportStructuresAndNames.getAbsoluteAlbumDir().toUri().toString()) ;
-		assertEquals(CollectionAlbumGui.MUSIQUE_DIRECTORY_URI + "RapportCollection/rapport/concerts/", RapportStructuresAndNames.getAbsoluteConcertDir().toUri().toString()) ;
-		assertEquals(CollectionAlbumGui.MUSIQUE_DIRECTORY_URI + "RapportCollection/rapport/index.html", RapportStructuresAndNames.getAbsoluteHomeCollectionFile().toUri().toString()) ;
-		assertEquals(CollectionAlbumGui.MUSIQUE_DIRECTORY_URI + "RapportCollection/rapport/indexConcert.html", RapportStructuresAndNames.getAbsoluteHomeConcertFile().toUri().toString()) ;
+		RapportStructuresAndNames.init();
+		assertThat(RapportStructuresAndNames.getRapportPath().toUri()).hasToString(CollectionAlbumGui.MUSIQUE_DIRECTORY_URI + "RapportCollection/rapport/");
+		assertThat(RapportStructuresAndNames.getOldRapportPath().toUri()).hasToString(CollectionAlbumGui.MUSIQUE_DIRECTORY_URI + "RapportCollection/rapport_old/");
+		assertThat(RapportStructuresAndNames.getAbsoluteAlbumDir().toUri()).hasToString(CollectionAlbumGui.MUSIQUE_DIRECTORY_URI + "RapportCollection/rapport/albums/");
+		assertThat(RapportStructuresAndNames.getAbsoluteConcertDir().toUri()).hasToString(CollectionAlbumGui.MUSIQUE_DIRECTORY_URI + "RapportCollection/rapport/concerts/");
+		assertThat(RapportStructuresAndNames.getAbsoluteHomeCollectionFile().toUri()).hasToString(CollectionAlbumGui.MUSIQUE_DIRECTORY_URI + "RapportCollection/rapport/index.html");
+		assertThat(RapportStructuresAndNames.getAbsoluteHomeConcertFile().toUri()).hasToString(CollectionAlbumGui.MUSIQUE_DIRECTORY_URI + "RapportCollection/rapport/indexConcert.html");
 	}
 
 	@Test
@@ -50,9 +75,8 @@ class RapportStructuresAndNamesTest {
 		
 		Artiste artiste= new Artiste(jArt, logger) ;
 		
-		URI pAlbum = RapportStructuresAndNames.getArtisteAlbumRapportRelativePath(artiste) ;
-		assertEquals("artistes/albums/i0.html", pAlbum.toString()) ;
-
+		URI pAlbum = RapportStructuresAndNames.getArtisteAlbumRapportRelativeUri(artiste);
+		assertThat(pAlbum.toString()).isEqualTo("artistes/albums/i0.html");
 	}
 	
 	private static final String albumStr1 = "{ " +
@@ -82,40 +106,40 @@ class RapportStructuresAndNamesTest {
 			"  ],    "								+
 			"  \"enregistrement\": [ \"1959-12-28\",  \"1959-12-28\"  ],  " +
 			" \"notes\": [ \"Version mono\" ] "					 +
-			" } " ;
+			" } ";
 
 	@Test
 	void test3() {
 		
 		Control.initControl(CollectionAlbumGui.DEFAULT_PROP_FILE);
-		RapportStructuresAndNames.init() ;
+		RapportStructuresAndNames.init();
 
 		JsonObject jAlbum = JsonParser.parseString(albumStr1).getAsJsonObject();
 
-		ListeArtiste la = new ListeArtiste(logger) ;
-		List<ListeArtiste> lla = new ArrayList<ListeArtiste>() ;
-		lla.add(la) ;
+		ListeArtiste la = new ListeArtiste(logger);
+		List<ListeArtiste> lla = new ArrayList<ListeArtiste>();
+		lla.add(la);
 
-		Album album = new Album(jAlbum, lla, logger) ;
-		Artiste bill = album.getAuteurs().get(0) ;
+		Album album = new Album(jAlbum, lla, logger);
+		Artiste bill = album.getAuteurs().get(0);
 		album.addMusicArtfactArtistesToList(la);
 		
-		URI pAlbum = RapportStructuresAndNames.getArtisteAlbumRapportRelativePath(bill) ;
-		assertEquals("artistes/albums/i0.html", pAlbum.toString()) ;
+		URI pAlbum = RapportStructuresAndNames.getArtisteAlbumRapportRelativeUri(bill);
+		assertThat(pAlbum).hasToString("artistes/albums/i0.html");
 
-		URI pInfoAlbum = RapportStructuresAndNames.getAlbumRapportRelativePath(album) ;
-		assertNull(pInfoAlbum) ;
+		URI pInfoAlbum = RapportStructuresAndNames.getAlbumRapportRelativeUri(album);
+		assertThat(pInfoAlbum).isNull();
 		
 		JsonObject jAlbum2 = JsonParser.parseString(albumStr2).getAsJsonObject();
-		Album album2 = new Album(jAlbum2, lla, logger) ;
+		Album album2 = new Album(jAlbum2, lla, logger);
 		album2.addMusicArtfactArtistesToList(la);
-		Artiste fake = album2.getAuteurs().get(0) ;
+		Artiste fake = album2.getAuteurs().get(0);
 		
-		URI pAlbum2 = RapportStructuresAndNames.getArtisteAlbumRapportRelativePath(fake) ;
-		assertEquals("artistes/albums/i1.html", pAlbum2.toString()) ;
-		
-		URI pInfoAlbum2 = RapportStructuresAndNames.getAlbumRapportRelativePath(album2) ;
-		assertEquals("albums/i0.html", pInfoAlbum2.toString()) ;
+		URI pAlbum2 = RapportStructuresAndNames.getArtisteAlbumRapportRelativeUri(fake);
+		assertThat(pAlbum2).hasToString("artistes/albums/i1.html");
+
+		URI pInfoAlbum2 = RapportStructuresAndNames.getAlbumRapportRelativeUri(album2);
+		assertThat(pInfoAlbum2).hasToString("albums/i0.html");
 	}
 	
 	private static final String concertStr1 = "{ " +
@@ -129,32 +153,32 @@ class RapportStructuresAndNamesTest {
 			   "\"lieu\": \"Juan-les-Pins, Alpes-Maritimes\"," +
 			   "\"imageTicket\": ["					+
 			       "\"/Annees1990/1990/07_Juillet/RayCharles01.jpg\"" +
-			   " ]  } " ;
+			   " ]  } ";
 	@Test
 	void test4() {
 		
 		Control.initControl(CollectionAlbumGui.DEFAULT_PROP_FILE);
-		RapportStructuresAndNames.init() ;
+		RapportStructuresAndNames.init();
 		
 		JsonObject jConcert = JsonParser.parseString(concertStr1).getAsJsonObject();
 		
-		ListeArtiste la = new ListeArtiste(logger) ;
-		List<ListeArtiste> lla = new ArrayList<ListeArtiste>() ;
+		ListeArtiste la = new ListeArtiste(logger);
+		List<ListeArtiste> lla = new ArrayList<ListeArtiste>();
 		lla.add(la) ;
 		
-		LieuxDesConcerts lieuxDesConcerts = new LieuxDesConcerts() ;
-		Concert concert = new Concert(jConcert, lla, lieuxDesConcerts, logger) ;
+		LieuxDesConcerts lieuxDesConcerts = new LieuxDesConcerts();
+		Concert concert = new Concert(jConcert, lla, lieuxDesConcerts, logger);
 		concert.addMusicArtfactArtistesToList(la);
-		List<Artiste> lDeeDee = concert.getAuteurs() ;
-		Artiste deeDee = lDeeDee.get(0) ;
+		List<Artiste> lDeeDee = concert.getAuteurs();
+		Artiste deeDee = lDeeDee.get(0);
 		
-		URI uriDeedee = RapportStructuresAndNames.getArtisteConcertRapportRelativePath(deeDee) ;
-		assertEquals("artistes/concerts/i0.html", uriDeedee.toString()) ;
+		URI uriDeedee = RapportStructuresAndNames.getArtisteConcertRapportRelativeUri(deeDee);
+		assertThat(uriDeedee).hasToString("artistes/concerts/i0.html");
 		
-		URI uriConcert = RapportStructuresAndNames.getConcertRapportRelativePath(concert) ;
-		assertEquals("concerts/i0.html", uriConcert.toString()) ;
+		URI uriConcert = RapportStructuresAndNames.getConcertRapportRelativeUri(concert);
+		assertThat(uriConcert).hasToString("concerts/i0.html");
 		
-		URI uriTicket = RapportStructuresAndNames.getTicketImageAbsoluteUri(concert.getTicketImages().get(0)) ;
-		assertEquals(Control.getCollectionProperties().getProperty("concert.ticketImgDir.name") + "/Annees1990/1990/07_Juillet/RayCharles01.jpg", uriTicket.toString()) ;
+		URI uriTicket = RapportStructuresAndNames.getTicketImageAbsoluteUri(concert.getTicketImages().get(0));
+		assertThat(uriTicket).hasToString(Control.getCollectionProperties().getProperty("concert.ticketImgDir.name") + "/Annees1990/1990/07_Juillet/RayCharles01.jpg");
 	}
 }

@@ -1,3 +1,28 @@
+/*
+ * MIT License
+
+Copyright (c) 2017, 2023 Frederic Lefevre
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+
 package org.fl.collectionAlbum.rapportHtml;
 
 import java.io.BufferedWriter;
@@ -36,7 +61,7 @@ public abstract class RapportHtml {
 	// Initial size of the StringBuilder buffer
 	private final static int TAILLE_INITIALE = 8192 ;
 	
-	private static Charset charset ;
+	private static Charset charset;
 	
 	protected 		String 	     titreRapport ;
 	private  		HtmlLinkList indexes ;
@@ -112,7 +137,7 @@ public abstract class RapportHtml {
 		}
 		rBuilder.append(END) ;
 
-		try (BufferedWriter buff = Files.newBufferedWriter(rapportFile, RapportStructuresAndNames.getCharset())){
+		try (BufferedWriter buff = Files.newBufferedWriter(rapportFile, charset)){
 								
 			buff.write(rBuilder.toString()) ;
 			rapportLog.fine(() -> "Création du RapportHtml " + titreRapport + " Fichier: " + rapportFile);
@@ -149,20 +174,15 @@ public abstract class RapportHtml {
 		indexes.setOffset(urlOffset) ;
 	}
 	
-	protected void withOffset(String o) {
+	public void withOffset(String o) {
 		urlOffset = o ;
 		if (indexes != null) {
 			indexes.setOffset(urlOffset) ;
 		}
 	}
 	
-	public static void withCharset(String cs, Logger rLog) {
-		if (Charset.isSupported(cs)) {
-			charset = Charset.forName(cs) ;
-		} else {
-			charset = Charset.defaultCharset() ;
-			rLog.severe("Unsupported charset: " + cs + ". Default JVM charset assumed: " + charset) ;				
-		}
-		htmlBegin = ENTETE1 + cs + ENTETE6 ;
+	public static void withCharset(Charset cs) {
+		charset = cs;
+		htmlBegin = ENTETE1 + cs.name() + ENTETE6 ;
 	}
 }
