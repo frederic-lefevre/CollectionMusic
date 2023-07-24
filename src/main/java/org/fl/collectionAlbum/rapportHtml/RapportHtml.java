@@ -61,7 +61,7 @@ public abstract class RapportHtml {
 	// Initial size of the StringBuilder buffer
 	private final static int TAILLE_INITIALE = 8192 ;
 	
-	private static Charset charset ;
+	private static Charset charset;
 	
 	protected 		String 	     titreRapport ;
 	private  		HtmlLinkList indexes ;
@@ -137,7 +137,7 @@ public abstract class RapportHtml {
 		}
 		rBuilder.append(END) ;
 
-		try (BufferedWriter buff = Files.newBufferedWriter(rapportFile, RapportStructuresAndNames.getCharset())){
+		try (BufferedWriter buff = Files.newBufferedWriter(rapportFile, charset)){
 								
 			buff.write(rBuilder.toString()) ;
 			rapportLog.fine(() -> "Création du RapportHtml " + titreRapport + " Fichier: " + rapportFile);
@@ -181,13 +181,8 @@ public abstract class RapportHtml {
 		}
 	}
 	
-	public static void withCharset(String cs, Logger rLog) {
-		if (Charset.isSupported(cs)) {
-			charset = Charset.forName(cs) ;
-		} else {
-			charset = Charset.defaultCharset() ;
-			rLog.severe("Unsupported charset: " + cs + ". Default JVM charset assumed: " + charset) ;				
-		}
-		htmlBegin = ENTETE1 + cs + ENTETE6 ;
+	public static void withCharset(Charset cs) {
+		charset = cs;
+		htmlBegin = ENTETE1 + cs.name() + ENTETE6 ;
 	}
 }

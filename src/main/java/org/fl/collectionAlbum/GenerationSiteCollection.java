@@ -46,6 +46,7 @@ import org.fl.collectionAlbum.rapportHtml.RapportCollection;
 import org.fl.collectionAlbum.rapportHtml.RapportConcert;
 import org.fl.collectionAlbum.rapportHtml.RapportConcertsDunArtiste;
 import org.fl.collectionAlbum.rapportHtml.RapportDesConcerts;
+import org.fl.collectionAlbum.rapportHtml.RapportHtml;
 import org.fl.collectionAlbum.rapportHtml.RapportListeConcerts;
 import org.fl.collectionAlbum.rapportHtml.RapportStructuresAndNames;
 import org.fl.collectionAlbum.rapportHtml.CssStyles;
@@ -82,6 +83,7 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
   		collectionAlbumContainer = CollectionAlbumContainer.getInstance(albumLog) ;
   		progressPanel.setProcessStatus(GENERATION) ;
   		
+  		RapportHtml.withCharset(Control.getCharset());
   		RapportStructuresAndNames.init();
   		
 		albumLog.info("Nettoyage de l'ancien site") ;

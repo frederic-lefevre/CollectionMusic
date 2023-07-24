@@ -55,9 +55,15 @@ public class Control {
 		    albumLog = musicRunningContext.getpLog();
 		    albumLog.info("Properties taken from " + musicRunningContext.getPropertiesLocation());
 				
-			// Get CharSet to read music files
-			charset = Charset.forName(collectionProperties.getProperty("rapport.charset", "UTF-8"));
-						
+			// Get CharSet to read music files and write rapport
+		    String cs = collectionProperties.getProperty("rapport.charset", "UTF-8");
+			if (Charset.isSupported(cs)) {
+				charset = Charset.forName(cs) ;
+			} else {
+				charset = Charset.defaultCharset() ;
+				albumLog.severe("Unsupported charset: " + cs + ". Default JVM charset assumed: " + charset) ;				
+			}
+		
 			// Get the root directory for the album collection and concert
 			collectionDirectoryName = collectionProperties.getPathFromURI("album.rootDir.name");
 			concertDirectoryName 	= collectionProperties.getPathFromURI("concert.rootDir.name");

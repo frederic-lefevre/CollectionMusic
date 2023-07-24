@@ -32,7 +32,6 @@ import org.fl.collectionAlbum.concerts.LieuConcert;
 import org.fl.util.AdvancedProperties;
 
 import java.net.URI;
-import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -60,8 +59,6 @@ public class RapportStructuresAndNames {
 	private static String 		concertTicketImgUri ;
 	private static String 		musicartefactInfosUri ;
 
-	private static Charset 		charset ;
-
 	private static RapportMap<Album> 		albumRapportPaths ;
 	private static RapportMap<Artiste> 		artisteAlbumRapportPaths ;
 	private static RapportMap<Artiste> 		artisteConcertRapportPaths ;
@@ -87,19 +84,14 @@ public class RapportStructuresAndNames {
 
 		// get the path of additional information for concerts and albums
 		musicartefactInfosUri = collectionProperties.getProperty("musicArtefact.information.rootDir.name") ;
-		
-		// Get charset to write rapport
-		charset = Charset.forName(collectionProperties.getProperty("rapport.charset", "UTF-8")) ;
-		RapportHtml.withCharset(charset.name(), rapportLog);
-			
+
 		albumRapportPaths   	   = new RapportMap<>(rapportPath, getAbsoluteAlbumDir()) ;
 		artisteAlbumRapportPaths   = new RapportMap<>(rapportPath, getAbsoluteArtisteAlbumDir()) ;
 		artisteConcertRapportPaths = new RapportMap<>(rapportPath, getAbsoluteArtisteConcertDir()) ;
 		concertRapportPaths 	   = new RapportMap<>(rapportPath, getAbsoluteConcertDir()) ;
 		lieuRapportPaths		   = new RapportMap<>(rapportPath, getAbsoluteLieuDir()) ;
 	}
-	
-	public static Charset getCharset() 					  { return charset;									}
+
 	public static Path 	  getRapportPath() 				  {	return rapportPath;								}
 	public static Path 	  getOldRapportPath() 			  {	return oldRapportPath;							}
 	public static Path 	  getAbsoluteAlbumDir() 		  {	return rapportPath.resolve(albumDir) ;			}	
