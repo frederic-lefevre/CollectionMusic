@@ -75,7 +75,7 @@ class RapportStructuresAndNamesTest {
 		
 		Artiste artiste= new Artiste(jArt, logger) ;
 		
-		URI pAlbum = RapportStructuresAndNames.getArtisteAlbumRapportRelativePath(artiste) ;
+		URI pAlbum = RapportStructuresAndNames.getArtisteAlbumRapportRelativeUri(artiste) ;
 		assertEquals("artistes/albums/i0.html", pAlbum.toString()) ;
 
 	}
@@ -125,10 +125,10 @@ class RapportStructuresAndNamesTest {
 		Artiste bill = album.getAuteurs().get(0) ;
 		album.addMusicArtfactArtistesToList(la);
 		
-		URI pAlbum = RapportStructuresAndNames.getArtisteAlbumRapportRelativePath(bill) ;
+		URI pAlbum = RapportStructuresAndNames.getArtisteAlbumRapportRelativeUri(bill) ;
 		assertEquals("artistes/albums/i0.html", pAlbum.toString()) ;
 
-		URI pInfoAlbum = RapportStructuresAndNames.getAlbumRapportRelativePath(album) ;
+		URI pInfoAlbum = RapportStructuresAndNames.getAlbumRapportRelativeUri(album) ;
 		assertNull(pInfoAlbum) ;
 		
 		JsonObject jAlbum2 = JsonParser.parseString(albumStr2).getAsJsonObject();
@@ -136,10 +136,10 @@ class RapportStructuresAndNamesTest {
 		album2.addMusicArtfactArtistesToList(la);
 		Artiste fake = album2.getAuteurs().get(0) ;
 		
-		URI pAlbum2 = RapportStructuresAndNames.getArtisteAlbumRapportRelativePath(fake) ;
+		URI pAlbum2 = RapportStructuresAndNames.getArtisteAlbumRapportRelativeUri(fake) ;
 		assertEquals("artistes/albums/i1.html", pAlbum2.toString()) ;
 		
-		URI pInfoAlbum2 = RapportStructuresAndNames.getAlbumRapportRelativePath(album2) ;
+		URI pInfoAlbum2 = RapportStructuresAndNames.getAlbumRapportRelativeUri(album2) ;
 		assertEquals("albums/i0.html", pInfoAlbum2.toString()) ;
 	}
 	
@@ -173,10 +173,10 @@ class RapportStructuresAndNamesTest {
 		List<Artiste> lDeeDee = concert.getAuteurs() ;
 		Artiste deeDee = lDeeDee.get(0) ;
 		
-		URI uriDeedee = RapportStructuresAndNames.getArtisteConcertRapportRelativePath(deeDee) ;
+		URI uriDeedee = RapportStructuresAndNames.getArtisteConcertRapportRelativeUri(deeDee) ;
 		assertEquals("artistes/concerts/i0.html", uriDeedee.toString()) ;
 		
-		URI uriConcert = RapportStructuresAndNames.getConcertRapportRelativePath(concert) ;
+		URI uriConcert = RapportStructuresAndNames.getConcertRapportRelativeUri(concert) ;
 		assertEquals("concerts/i0.html", uriConcert.toString()) ;
 		
 		URI uriTicket = RapportStructuresAndNames.getTicketImageAbsoluteUri(concert.getTicketImages().get(0)) ;

@@ -117,7 +117,7 @@ public class RapportStructuresAndNames {
 	
 	public static HtmlLinkList getAccueils() {		return accueils;	}	
 	
-	public static URI getAlbumRapportRelativePath(Album album) {
+	public static URI getAlbumRapportRelativeUri(Album album) {
 		if (album.additionnalInfo()) {
 			return albumRapportPaths.getUri(album) ;
 		} else {
@@ -127,13 +127,13 @@ public class RapportStructuresAndNames {
 	
 	public static Path getAlbumRapportAbsolutePath(Album album) {
 		if (album.additionnalInfo()) {
-			return rapportPath.resolve(getAlbumRapportRelativePath(album).getPath());
+			return rapportPath.resolve(getAlbumRapportRelativeUri(album).getPath());
 		} else {
 			return null ;
 		}
 	}
 	
-	public static URI getConcertRapportRelativePath(Concert concert) {
+	public static URI getConcertRapportRelativeUri(Concert concert) {
 		if (concert.additionnalInfo()) {
 			return concertRapportPaths.getUri(concert) ;
 		} else {
@@ -143,34 +143,34 @@ public class RapportStructuresAndNames {
 
 	public static Path getConcertRapportAbsolutePath(Concert concert) {
 		if (concert.additionnalInfo()) {
-			return rapportPath.resolve(getConcertRapportRelativePath(concert).getPath());
+			return rapportPath.resolve(getConcertRapportRelativeUri(concert).getPath());
 		} else {
 			return null ;
 		}
 	}
 	
-	public static URI getLieuRapportRelativePath(LieuConcert lieuConcert) {
+	public static URI getLieuRapportRelativeUri(LieuConcert lieuConcert) {
 		return lieuRapportPaths.getUri(lieuConcert) ;
 	}
 
 	public static Path getLieuRapportAbsolutePath(LieuConcert lieuConcert) {
-		return rapportPath.resolve(getLieuRapportRelativePath(lieuConcert).getPath());
+		return rapportPath.resolve(getLieuRapportRelativeUri(lieuConcert).getPath());
 	}
 	
-	public static URI getArtisteAlbumRapportRelativePath(Artiste artiste) {
+	public static URI getArtisteAlbumRapportRelativeUri(Artiste artiste) {
 		return artisteAlbumRapportPaths.getUri(artiste) ;
 	}
 
 	public static Path getArtisteAlbumRapportAbsolutePath(Artiste artiste) {
-		return rapportPath.resolve(getArtisteAlbumRapportRelativePath(artiste).getPath()) ;
+		return rapportPath.resolve(getArtisteAlbumRapportRelativeUri(artiste).getPath()) ;
 	}
 	
-	public static URI getArtisteConcertRapportRelativePath(Artiste artiste) {
+	public static URI getArtisteConcertRapportRelativeUri(Artiste artiste) {
 		return artisteConcertRapportPaths.getUri(artiste) ;
 	}
 	
 	public static Path getArtisteConcertRapportAbsolutePath(Artiste artiste) {
-		return rapportPath.resolve(getArtisteConcertRapportRelativePath(artiste).getPath()) ;
+		return rapportPath.resolve(getArtisteConcertRapportRelativeUri(artiste).getPath()) ;
 	}
 	
 	public static URI getTicketImageAbsoluteUri(String relativeToPhotoDirUriStr) {

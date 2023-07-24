@@ -39,7 +39,7 @@ public class RapportListeArtistesConcert extends RapportHtml {
 				balises.addCheckBaliseString(rBuilder, unArtiste.getNom()) ;
 			}
 			
-			URI concertUri = RapportStructuresAndNames.getArtisteConcertRapportRelativePath(unArtiste) ;
+			URI concertUri = RapportStructuresAndNames.getArtisteConcertRapportRelativeUri(unArtiste) ;
 			if (concertUri != null) {
 				write("<a href=\"").write(concertUri.toString()). write("\">") ;
 			}

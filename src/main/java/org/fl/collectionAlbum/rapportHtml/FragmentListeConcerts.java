@@ -20,7 +20,7 @@ public class FragmentListeConcerts {
 			String dateConcert = TemporalUtils.formatDate(unConcert.getDateConcert()) ;
 			
 			fragment.append("  <tr>\n    <td class=\"an\">") ;
-			URI aPath = RapportStructuresAndNames.getConcertRapportRelativePath(unConcert) ;
+			URI aPath = RapportStructuresAndNames.getConcertRapportRelativeUri(unConcert) ;
 			if (aPath != null) {
 				fragment.append("<a href=\"").append(urlOffset).append(aPath.toString()).append("\">").append(dateConcert).append("</a>") ;
 			} else {
@@ -39,7 +39,7 @@ public class FragmentListeConcerts {
 			fragment.append("    </td>\n    <td class=\"album\">") ;
 			
 			LieuConcert lieuConcert = unConcert.getLieuConcert() ;
-			URI lieuPath = RapportStructuresAndNames.getLieuRapportRelativePath(lieuConcert) ;			
+			URI lieuPath = RapportStructuresAndNames.getLieuRapportRelativeUri(lieuConcert) ;			
 			if (lieuPath != null) {
 				fragment.append("<a href=\"").append(urlOffset).append(lieuPath.toString()).append("\">").append(lieuConcert.getLieu()).append("</a>") ;
 			} else {
@@ -52,7 +52,7 @@ public class FragmentListeConcerts {
 	}
 
 	private static void appendLinkConcertArtiste(Artiste unArtiste, StringBuilder fragment,  String urlOffset) {
-		URI concertUri = RapportStructuresAndNames.getArtisteConcertRapportRelativePath(unArtiste) ;
+		URI concertUri = RapportStructuresAndNames.getArtisteConcertRapportRelativeUri(unArtiste) ;
 		if (concertUri != null) {
 			fragment.append("      <a href=\"").append(urlOffset).append(concertUri.toString()).append("\">").append(unArtiste.getPrenoms()).append(" ").append(unArtiste.getNom()).append("</a><br/>\n") ;
 

@@ -56,9 +56,9 @@ public class FragmentIntervenants {
 	private static void appendLinkAlbumArtiste(Artiste unArtiste, Class<? extends MusicArtefact> artefactsClass, StringBuilder fragment,  String urlOffset) {
 		URI artefactsUri = null ;
 		if (artefactsClass.equals(Album.class)) {
-			artefactsUri = RapportStructuresAndNames.getArtisteAlbumRapportRelativePath(unArtiste) ;
+			artefactsUri = RapportStructuresAndNames.getArtisteAlbumRapportRelativeUri(unArtiste) ;
 		} else if (artefactsClass.equals(Concert.class)) {
-			artefactsUri = RapportStructuresAndNames.getArtisteConcertRapportRelativePath(unArtiste) ;
+			artefactsUri = RapportStructuresAndNames.getArtisteConcertRapportRelativeUri(unArtiste) ;
 		}
 		if (artefactsUri != null) {
 			fragment.append("      <a href=\"").append(urlOffset).append(artefactsUri.toString()).append("\">").append(unArtiste.getPrenoms()).append(" ").append(unArtiste.getNom()).append("</a><br/>\n") ;

@@ -62,7 +62,7 @@ public class FragmentListeAlbums {
 			fragment.append("    </td>\n    <td class=\"album\">") ; 
 			
 			if (unAlbum.additionnalInfo()) {
-				URI aPath = RapportStructuresAndNames.getAlbumRapportRelativePath(unAlbum) ;			
+				URI aPath = RapportStructuresAndNames.getAlbumRapportRelativeUri(unAlbum) ;			
 				fragment.append("<a href=\"").append(urlOffSet).append(aPath.toString()).append("\">") ;
 				fragment.append(unAlbum.getTitre()) ;			
 				fragment.append("</a>\n") ;
@@ -79,7 +79,7 @@ public class FragmentListeAlbums {
 	}
 	
 	private static void appendLinkAlbumArtiste(Artiste unArtiste, StringBuilder fragment,  String urlOffset) {
-		URI albumUri = RapportStructuresAndNames.getArtisteAlbumRapportRelativePath(unArtiste) ;
+		URI albumUri = RapportStructuresAndNames.getArtisteAlbumRapportRelativeUri(unArtiste) ;
 		if (albumUri != null) {
 			fragment.append("      <a href=\"").append(urlOffset).append(albumUri.toString()).append("\">").append(unArtiste.getPrenoms()).append(" ").append(unArtiste.getNom()).append("</a><br/>\n") ;
 		}

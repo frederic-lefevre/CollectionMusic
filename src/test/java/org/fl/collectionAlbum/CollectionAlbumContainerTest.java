@@ -73,7 +73,7 @@ class CollectionAlbumContainerTest {
 		assertEquals("Evans", artiste.getNom()) ;
 		assertEquals("Bill", artiste.getPrenoms()) ;
 		
-		URI pAlbum = RapportStructuresAndNames.getArtisteAlbumRapportRelativePath(artiste) ;
+		URI pAlbum = RapportStructuresAndNames.getArtisteAlbumRapportRelativeUri(artiste) ;
 		assertEquals("artistes/albums/i0.html", pAlbum.toString()) ;
 	}
 }

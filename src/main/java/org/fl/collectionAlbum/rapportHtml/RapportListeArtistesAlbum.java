@@ -51,7 +51,7 @@ public class RapportListeArtistesAlbum extends RapportHtml {
 				}
 			}
 			
-			URI albumUri = RapportStructuresAndNames.getArtisteAlbumRapportRelativePath(unArtiste) ;
+			URI albumUri = RapportStructuresAndNames.getArtisteAlbumRapportRelativeUri(unArtiste) ;
 			if (albumUri != null) {
 				write("<a href=\"").write(albumUri.toString()). write("\">") ;
 			}

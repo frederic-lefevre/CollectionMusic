@@ -22,7 +22,7 @@ public class RapportAlbumsDunArtiste extends RapportHtml {
 		HtmlLinkList concertLink = new HtmlLinkList(RapportStructuresAndNames.getAccueils()) ;
 	
 		if (artiste.getNbConcert() > 0) {
-			URI concertUri = RapportStructuresAndNames.getArtisteConcertRapportRelativePath(artiste) ;
+			URI concertUri = RapportStructuresAndNames.getArtisteConcertRapportRelativeUri(artiste) ;
 			concertLink.addLink("Concerts", concertUri.toString()) ;	
 		}
 		withHtmlLinkList(concertLink) ;

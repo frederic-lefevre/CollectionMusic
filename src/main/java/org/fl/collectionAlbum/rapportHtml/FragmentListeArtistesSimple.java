@@ -14,11 +14,11 @@ public class FragmentListeArtistesSimple {
 			fragment.append("  <tr>\n    <td class=\"auteur\">") ;
 			fragment.append("<a href=\"") ;
 
-			URI albumUri = RapportStructuresAndNames.getArtisteAlbumRapportRelativePath(unArtiste) ;
+			URI albumUri = RapportStructuresAndNames.getArtisteAlbumRapportRelativeUri(unArtiste) ;
 			if (albumUri != null) {
 				fragment.append(albumUri.toString()) ;
 			} else {
-				URI concertUri = RapportStructuresAndNames.getArtisteConcertRapportRelativePath(unArtiste) ;
+				URI concertUri = RapportStructuresAndNames.getArtisteConcertRapportRelativeUri(unArtiste) ;
 				if (concertUri != null) {
 					fragment.append(concertUri.toString()) ;
 				}

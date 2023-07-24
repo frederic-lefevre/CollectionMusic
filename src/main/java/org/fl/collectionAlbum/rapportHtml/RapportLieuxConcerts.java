@@ -34,7 +34,7 @@ public class RapportLieuxConcerts  extends RapportHtml {
 		for (LieuConcert unLieu : lieux) {
 			write("  <tr>\n    <td class=\"album\">") ;
 			
-			URI aPath = RapportStructuresAndNames.getLieuRapportRelativePath(unLieu) ;
+			URI aPath = RapportStructuresAndNames.getLieuRapportRelativeUri(unLieu) ;
 			if (aPath != null) {
 				write("<a href=\"").write(aPath.toString()).write("\">").write(unLieu.getLieu()).write("</a>") ;
 			} else {
