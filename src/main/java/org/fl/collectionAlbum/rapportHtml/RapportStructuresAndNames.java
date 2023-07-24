@@ -26,13 +26,9 @@ SOFTWARE.
 package org.fl.collectionAlbum.rapportHtml;
 
 import org.fl.collectionAlbum.albums.Album;
-import org.fl.collectionAlbum.albums.ListeAlbum;
 import org.fl.collectionAlbum.artistes.Artiste;
-import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.concerts.Concert;
 import org.fl.collectionAlbum.concerts.LieuConcert;
-import org.fl.collectionAlbum.concerts.LieuxDesConcerts;
-import org.fl.collectionAlbum.concerts.ListeConcert;
 import org.fl.util.AdvancedProperties;
 
 import java.net.URI;
@@ -102,77 +98,6 @@ public class RapportStructuresAndNames {
 		concertRapportPaths 	   = new RapportMap<>(rapportPath, getAbsoluteConcertDir()) ;
 		lieuRapportPaths		   = new RapportMap<>(rapportPath, getAbsoluteLieuDir()) ;
 	}
-
-	public static void createRapports(ListeArtiste 	listeArtiste, 
-							   ListeAlbum 		listeAlbum, 
-							   ListeConcert 	listeConcert, 
-							   LieuxDesConcerts lieuxDesConcerts) {
-
-		for (Artiste artiste : listeArtiste.getArtistes()) {	
-			if (artiste.getNbAlbum() > 0) {
-				URI artisteAlbumUri   = artisteAlbumRapportPaths.getUri(artiste) ;
-				Path albumAbsolutePath   = rapportPath.resolve(artisteAlbumUri.getPath()) ;
-				if (! Files.exists(albumAbsolutePath)) {
-					RapportAlbumsDunArtiste rapportDeSesAlbums = new RapportAlbumsDunArtiste(artiste, getOffset(rapportPath, albumAbsolutePath.getParent()) , rapportLog) ;
-					rapportDeSesAlbums.printReport(albumAbsolutePath, CssStyles.stylesTableauDunArtiste) ;
-				}
-			}
-			
-			if (artiste.getNbConcert() > 0) {
-				URI artisteConcertUri = artisteConcertRapportPaths.getUri(artiste) ;
-				Path concertAbsolutePath = rapportPath.resolve(artisteConcertUri.getPath()) ;
-				if (! Files.exists(concertAbsolutePath)) {
-					 RapportConcertsDunArtiste rapportDeSesConcerts = new RapportConcertsDunArtiste(artiste, getOffset(rapportPath, concertAbsolutePath.getParent()), rapportLog) ;
-					 rapportDeSesConcerts.printReport(concertAbsolutePath, CssStyles.stylesTableauDunArtiste) ;
-				}
-			}
-		}
-		
-		for (Album album : listeAlbum.getAlbums()) {
-			if (album.additionnalInfo()) {
-				URI albumUri = albumRapportPaths.getUri(album) ;
-				Path absolutePath = rapportPath.resolve(albumUri.getPath()) ;
-				if (! Files.exists(absolutePath)) {
-					RapportAlbum rapportAlbum = new RapportAlbum(album, rapportLog) ;
-					rapportAlbum.withOffset( getOffset(rapportPath, absolutePath.getParent())) ;
-					rapportAlbum.printReport( absolutePath, CssStyles.main) ;
-				}
-			}
-		}
-		for (Concert concert : listeConcert.getConcerts()) {
-			if (concert.additionnalInfo()) {
-				URI concertUri = concertRapportPaths.getUri(concert) ;
-				Path absolutePath = rapportPath.resolve(concertUri.getPath()) ;
-				if (! Files.exists(absolutePath)) {
-	        		RapportConcert rapportConcert = new RapportConcert(concert, rapportLog) ;
-	        		rapportConcert.withOffset(getOffset(rapportPath, absolutePath.getParent())) ;
-	        		rapportConcert.printReport(absolutePath, CssStyles.ticket) ;
-	        	}
-			}
-		}
-		for (LieuConcert lieuConcert : lieuxDesConcerts.getLieuxConcerts()) {
-			URI lieuUri = lieuRapportPaths.getUri(lieuConcert) ;
-			Path absolutePath = rapportPath.resolve(lieuUri.getPath()) ;
-			if (! Files.exists(absolutePath)) {
-				String offSet = getOffset(rapportPath, absolutePath.getParent()) ;
-				RapportListeConcerts concertDeCeLieu = new RapportListeConcerts(lieuConcert.getConcerts().sortChrono(), lieuConcert.getLieu(), rapportLog) ;
-				concertDeCeLieu.withOffset(offSet);
-				concertDeCeLieu.printReport(absolutePath, CssStyles.stylesTableauMusicArtefact) ;
-			}
-		}
-	}
-	
-	private static final String OFFSET_ELEMENT = "../" ;
-	
-	private static String getOffset(Path rootPath, Path targetPath) {
-		
-		int diffPath = targetPath.getNameCount() - rootPath.getNameCount() ;	
-		if (diffPath <= 0) {
-			return "" ;
-		} else {
-			return getOffset(rootPath, targetPath.getParent()) + OFFSET_ELEMENT ;
-		}
-	}
 	
 	public static Charset getCharset() 					  { return charset;									}
 	public static Path 	  getRapportPath() 				  {	return rapportPath;								}
@@ -200,6 +125,14 @@ public class RapportStructuresAndNames {
 		}
 	}
 	
+	public static Path getAlbumRapportAbsolutePath(Album album) {
+		if (album.additionnalInfo()) {
+			return rapportPath.resolve(getAlbumRapportRelativePath(album).getPath());
+		} else {
+			return null ;
+		}
+	}
+	
 	public static URI getConcertRapportRelativePath(Concert concert) {
 		if (concert.additionnalInfo()) {
 			return concertRapportPaths.getUri(concert) ;
@@ -208,16 +141,36 @@ public class RapportStructuresAndNames {
 		}
 	}
 
+	public static Path getConcertRapportAbsolutePath(Concert concert) {
+		if (concert.additionnalInfo()) {
+			return rapportPath.resolve(getConcertRapportRelativePath(concert).getPath());
+		} else {
+			return null ;
+		}
+	}
+	
 	public static URI getLieuRapportRelativePath(LieuConcert lieuConcert) {
 		return lieuRapportPaths.getUri(lieuConcert) ;
 	}
 
+	public static Path getLieuRapportAbsolutePath(LieuConcert lieuConcert) {
+		return rapportPath.resolve(getLieuRapportRelativePath(lieuConcert).getPath());
+	}
+	
 	public static URI getArtisteAlbumRapportRelativePath(Artiste artiste) {
 		return artisteAlbumRapportPaths.getUri(artiste) ;
 	}
 
+	public static Path getArtisteAlbumRapportAbsolutePath(Artiste artiste) {
+		return rapportPath.resolve(getArtisteAlbumRapportRelativePath(artiste).getPath()) ;
+	}
+	
 	public static URI getArtisteConcertRapportRelativePath(Artiste artiste) {
 		return artisteConcertRapportPaths.getUri(artiste) ;
+	}
+	
+	public static Path getArtisteConcertRapportAbsolutePath(Artiste artiste) {
+		return rapportPath.resolve(getArtisteConcertRapportRelativePath(artiste).getPath()) ;
 	}
 	
 	public static URI getTicketImageAbsoluteUri(String relativeToPhotoDirUriStr) {

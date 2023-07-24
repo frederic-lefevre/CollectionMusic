@@ -33,19 +33,31 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingWorker;
 
+import org.fl.collectionAlbum.albums.Album;
+import org.fl.collectionAlbum.albums.ListeAlbum;
+import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
+import org.fl.collectionAlbum.concerts.Concert;
+import org.fl.collectionAlbum.concerts.LieuConcert;
+import org.fl.collectionAlbum.concerts.LieuxDesConcerts;
+import org.fl.collectionAlbum.concerts.ListeConcert;
 import org.fl.collectionAlbum.rapportCsv.RapportCsv;
 import org.fl.collectionAlbum.rapportHtml.RapportCollection;
+import org.fl.collectionAlbum.rapportHtml.RapportConcert;
+import org.fl.collectionAlbum.rapportHtml.RapportConcertsDunArtiste;
 import org.fl.collectionAlbum.rapportHtml.RapportDesConcerts;
+import org.fl.collectionAlbum.rapportHtml.RapportListeConcerts;
 import org.fl.collectionAlbum.rapportHtml.RapportStructuresAndNames;
 import org.fl.collectionAlbum.rapportHtml.CssStyles;
+import org.fl.collectionAlbum.rapportHtml.RapportAlbum;
+import org.fl.collectionAlbum.rapportHtml.RapportAlbumsDunArtiste;
 import org.fl.collectionAlbumGui.ProgressInformation;
 import org.fl.collectionAlbumGui.ProgressInformationPanel;
 import org.fl.util.file.FilesUtils;
 
 public class GenerationSiteCollection  extends SwingWorker<String,ProgressInformation> {
 
-	private CollectionAlbumContainer albumsContainer ;
+	private CollectionAlbumContainer collectionAlbumContainer ;
 	private final Logger albumLog ;
 	private final ProgressInformationPanel progressPanel;
 	
@@ -67,7 +79,7 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 	 @Override 
 	 public String doInBackground() {
   		
-  		albumsContainer = CollectionAlbumContainer.getInstance(albumLog) ;
+  		collectionAlbumContainer = CollectionAlbumContainer.getInstance(albumLog) ;
   		progressPanel.setProcessStatus(GENERATION) ;
   		
   		RapportStructuresAndNames.init();
@@ -142,29 +154,101 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 
 		 Path rapportDir = RapportStructuresAndNames.getRapportPath() ;
 		 
-		 ListeArtiste reunionArtistes = albumsContainer.getCollectionArtistes().getReunion(albumsContainer.getConcertsArtistes());
-		 RapportStructuresAndNames.createRapports(reunionArtistes,
-				 albumsContainer.getCollectionAlbumsMusiques(), 
-				 albumsContainer.getConcerts(), 
-				 albumsContainer.getLieuxDesConcerts());
+		 ListeArtiste reunionArtistes = collectionAlbumContainer.getCollectionArtistes().getReunion(collectionAlbumContainer.getConcertsArtistes());
+		 createRapports(reunionArtistes,
+				 collectionAlbumContainer.getCollectionAlbumsMusiques(), 
+				 collectionAlbumContainer.getConcerts(), 
+				 collectionAlbumContainer.getLieuxDesConcerts());
+		 
+		 
 		 rapportsHtml(rapportDir) ;
 		 rapportsConcertHtml(rapportDir) ;
 		 
-		 RapportCsv.writeCsvAudioFile(albumsContainer.getAlbumsWithAudioFile(), (audioFile) -> true, RapportStructuresAndNames.getAbsoluteCsvAudioFiles(), albumLog);
-		 RapportCsv.writeCsvAudioFile(albumsContainer.getAlbumsWithHighResAudio(), (audioFile) -> audioFile.isHighRes(), RapportStructuresAndNames.getAbsoluteCsvHdAudioFiles(), albumLog);
+		 RapportCsv.writeCsvAudioFile(collectionAlbumContainer.getAlbumsWithAudioFile(), (audioFile) -> true, RapportStructuresAndNames.getAbsoluteCsvAudioFiles(), albumLog);
+		 RapportCsv.writeCsvAudioFile(collectionAlbumContainer.getAlbumsWithHighResAudio(), (audioFile) -> audioFile.isHighRes(), RapportStructuresAndNames.getAbsoluteCsvHdAudioFiles(), albumLog);
 	 }
 	   
+	 public void createRapports(ListeArtiste listeArtiste, 
+			 ListeAlbum listeAlbum, 
+			 ListeConcert listeConcert, 
+			 LieuxDesConcerts lieuxDesConcerts) {
+
+		 Path rapportPath = RapportStructuresAndNames.getRapportPath();
+		 
+		 for (Artiste artiste : listeArtiste.getArtistes()) {	
+			 if (artiste.getNbAlbum() > 0) {
+				 Path albumAbsolutePath   = RapportStructuresAndNames.getArtisteAlbumRapportAbsolutePath(artiste);
+				 if (! Files.exists(albumAbsolutePath)) {
+					 RapportAlbumsDunArtiste rapportDeSesAlbums = new RapportAlbumsDunArtiste(artiste, getOffset(rapportPath, albumAbsolutePath.getParent()) , albumLog) ;
+					 rapportDeSesAlbums.printReport(albumAbsolutePath, CssStyles.stylesTableauDunArtiste) ;
+				 }
+			 }
+
+			 if (artiste.getNbConcert() > 0) {
+				 Path concertAbsolutePath = RapportStructuresAndNames.getArtisteConcertRapportAbsolutePath(artiste);
+				 if (! Files.exists(concertAbsolutePath)) {
+					 RapportConcertsDunArtiste rapportDeSesConcerts = new RapportConcertsDunArtiste(artiste, getOffset(rapportPath, concertAbsolutePath.getParent()), albumLog) ;
+					 rapportDeSesConcerts.printReport(concertAbsolutePath, CssStyles.stylesTableauDunArtiste) ;
+				 }
+			 }
+		 }
+
+		 for (Album album : listeAlbum.getAlbums()) {
+			 if (album.additionnalInfo()) {
+				 Path absolutePath = RapportStructuresAndNames.getAlbumRapportAbsolutePath(album);
+				 if (! Files.exists(absolutePath)) {
+					 RapportAlbum rapportAlbum = new RapportAlbum(album, albumLog) ;
+					 rapportAlbum.withOffset( getOffset(rapportPath, absolutePath.getParent())) ;
+					 rapportAlbum.printReport( absolutePath, CssStyles.main) ;
+				 }
+			 }
+		 }
+		 
+		 for (Concert concert : listeConcert.getConcerts()) {
+			 if (concert.additionnalInfo()) {
+				 Path absolutePath = RapportStructuresAndNames.getConcertRapportAbsolutePath(concert);
+				 if (! Files.exists(absolutePath)) {
+					 RapportConcert rapportConcert = new RapportConcert(concert, albumLog) ;
+					 rapportConcert.withOffset(getOffset(rapportPath, absolutePath.getParent())) ;
+					 rapportConcert.printReport(absolutePath, CssStyles.ticket) ;
+				 }
+			 }
+		 }
+		 
+		 for (LieuConcert lieuConcert : lieuxDesConcerts.getLieuxConcerts()) {
+			 Path absolutePath = RapportStructuresAndNames.getLieuRapportAbsolutePath(lieuConcert);
+			 if (! Files.exists(absolutePath)) {
+				 String offSet = getOffset(rapportPath, absolutePath.getParent()) ;
+				 RapportListeConcerts concertDeCeLieu = new RapportListeConcerts(lieuConcert.getConcerts().sortChrono(), lieuConcert.getLieu(), albumLog) ;
+				 concertDeCeLieu.withOffset(offSet);
+				 concertDeCeLieu.printReport(absolutePath, CssStyles.stylesTableauMusicArtefact) ;
+			 }
+		 }
+	 }
+	 
+	 private static final String OFFSET_ELEMENT = "../" ;
+
+	 private static String getOffset(Path rootPath, Path targetPath) {
+
+		 int diffPath = targetPath.getNameCount() - rootPath.getNameCount() ;	
+		 if (diffPath <= 0) {
+			 return "" ;
+		 } else {
+			 return getOffset(rootPath, targetPath.getParent()) + OFFSET_ELEMENT ;
+		 }
+	 }
+
 	 private void rapportsHtml(Path rapportDir) {	
 	   	
 		Path rapportFile = RapportStructuresAndNames.getAbsoluteHomeCollectionFile() ;
-		RapportCollection rapportCollection = new RapportCollection(albumsContainer, rapportDir, "Collections d'albums", albumLog) ;
+		RapportCollection rapportCollection = new RapportCollection(collectionAlbumContainer, rapportDir, "Collections d'albums", albumLog) ;
 		rapportCollection.printReport(rapportFile, CssStyles.mainFormat) ;				
 	}
 		 
 	private void rapportsConcertHtml(Path rapportDir) {
 
 		 Path rapportFile = RapportStructuresAndNames.getAbsoluteHomeConcertFile() ;
-		 RapportDesConcerts rapportConcerts = new RapportDesConcerts(albumsContainer, rapportDir, "Concerts", albumLog) ;
+		 RapportDesConcerts rapportConcerts = new RapportDesConcerts(collectionAlbumContainer, rapportDir, "Concerts", albumLog) ;
 		 rapportConcerts.printReport(rapportFile, CssStyles.main) ;
 	 }
 		

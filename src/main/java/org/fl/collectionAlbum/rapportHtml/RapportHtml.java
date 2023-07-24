@@ -174,7 +174,7 @@ public abstract class RapportHtml {
 		indexes.setOffset(urlOffset) ;
 	}
 	
-	protected void withOffset(String o) {
+	public void withOffset(String o) {
 		urlOffset = o ;
 		if (indexes != null) {
 			indexes.setOffset(urlOffset) ;

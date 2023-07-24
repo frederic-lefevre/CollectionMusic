@@ -11,7 +11,7 @@ public class RapportConcertsDunArtiste extends RapportHtml {
 	
 	private final Artiste artiste ;
 	
-	protected RapportConcertsDunArtiste(Artiste a, String offset, Logger rl) {
+	public RapportConcertsDunArtiste(Artiste a, String offset, Logger rl) {
 		super("", rl);
 		withOffset(offset) ;
 		artiste = a ;
