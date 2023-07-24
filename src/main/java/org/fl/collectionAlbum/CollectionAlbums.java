@@ -15,7 +15,6 @@ import javax.swing.SwingWorker;
 
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
-import org.fl.collectionAlbum.rapportHtml.RapportStructuresAndNames;
 import org.fl.collectionAlbumGui.ProgressInformation;
 import org.fl.collectionAlbumGui.ProgressInformationPanel;
 import org.fl.util.json.JsonUtils;
@@ -70,7 +69,7 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 	
 	private void buildAlbumsCollection() {
   	
-		Path albumsPath = RapportStructuresAndNames.getCollectionDirectoryName() ;
+		Path albumsPath = Control.getCollectionDirectoryName() ;
 		try {
 			MusicFileVisitor albumsVisitor = new AlbumFileVisitor(Control.getMusicfileExtension()) ;
 			
@@ -84,7 +83,7 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
   
 	private void buildConcerts() {
 
-		Path concertsPath = RapportStructuresAndNames.getConcertDirectoryName() ;
+		Path concertsPath = Control.getConcertDirectoryName() ;
 		try {
 			MusicFileVisitor concertsVisitor = new ConcertFileVisitor(Control.getMusicfileExtension()) ;
 			

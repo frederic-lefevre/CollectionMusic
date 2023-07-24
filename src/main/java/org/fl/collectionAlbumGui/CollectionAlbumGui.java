@@ -30,7 +30,6 @@ import java.util.logging.Logger;
 import javax.swing.JFrame;
 
 import org.fl.collectionAlbum.Control;
-import org.fl.collectionAlbum.rapportHtml.RapportStructuresAndNames;
 import org.fl.util.swing.ApplicationTabbedPane;
 
 public class CollectionAlbumGui  extends JFrame {
@@ -59,7 +58,6 @@ public class CollectionAlbumGui  extends JFrame {
 		// init logger and parameters
 		Control.initControl(DEFAULT_PROP_FILE) ;
 		Logger albumLog = Control.getAlbumLog() ;
-		RapportStructuresAndNames.init() ;
    		
    		// init main window
    		setBounds(50, 50, 1500, 1000);

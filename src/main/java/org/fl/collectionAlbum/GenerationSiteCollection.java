@@ -45,6 +45,8 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
   		albumsContainer = CollectionAlbumContainer.getInstance(albumLog) ;
   		progressPanel.setProcessStatus(GENERATION) ;
   		
+  		RapportStructuresAndNames.init();
+  		
 		albumLog.info("Nettoyage de l'ancien site") ;
 		progressPanel.setStepPrefixInformation(CLEANUP) ;
 		cleanRapport() ;

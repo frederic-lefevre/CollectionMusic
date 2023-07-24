@@ -32,10 +32,6 @@ public class RapportStructuresAndNames {
    	private final static String homeCsvDir		   = "rapportCsv";
    	private final static String csvAudioFiles      = homeCsvDir + "/audioFiles.csv";
    	private final static String csvHdAudioFiles    = homeCsvDir + "/highResAudioFiles.csv";
-   	
-
-	private static Path collectionDirectoryName ;
-	private static Path concertDirectoryName ;
 
 	private static Path 		rapportPath ;
 	private static Path 		oldRapportPath ;
@@ -51,20 +47,15 @@ public class RapportStructuresAndNames {
 	private static RapportMap<Concert>  	concertRapportPaths ;
 	private static RapportMap<LieuConcert> 	lieuRapportPaths ;
 	
-	private static boolean isInitialized = false ;	
 	private static Logger rapportLog ;
 	
-	public static boolean init() {
+	public static void init() {
 		
 		rapportLog = Control.getAlbumLog() ;
 		AdvancedProperties collectionProperties = Control.getCollectionProperties() ;
 		
 		rapportPath 		 = collectionProperties.getPathFromURI("album.rapportDirectory.name") ;
 		oldRapportPath		 = collectionProperties.getPathFromURI("album.oldRapportDirectory.name") ;
-		
-		// Get the root directory for the album collection and concert
-		collectionDirectoryName = collectionProperties.getPathFromURI("album.rootDir.name") ;
-		concertDirectoryName 	= collectionProperties.getPathFromURI("concert.rootDir.name") ;
 
 		accueils = new HtmlLinkList() ;
 		accueils.addLink("Accueil Collection", homeCollectionFile) ;
@@ -73,7 +64,7 @@ public class RapportStructuresAndNames {
 		// get the concert ticket image path
 		concertTicketImgUri = collectionProperties.getProperty("concert.ticketImgDir.name") ;	
 
-		// get the path of additionnal information for concerts and albums
+		// get the path of additional information for concerts and albums
 		musicartefactInfosUri = collectionProperties.getProperty("musicArtefact.information.rootDir.name") ;
 		
 		// Get charset to write rapport
@@ -85,20 +76,13 @@ public class RapportStructuresAndNames {
 		artisteConcertRapportPaths = new RapportMap<>(rapportPath, getAbsoluteArtisteConcertDir()) ;
 		concertRapportPaths 	   = new RapportMap<>(rapportPath, getAbsoluteConcertDir()) ;
 		lieuRapportPaths		   = new RapportMap<>(rapportPath, getAbsoluteLieuDir()) ;
-		
-		isInitialized = true ;
-		return isInitialized ;
 	}
 
 	public static void createRapports(ListeArtiste 	listeArtiste, 
 							   ListeAlbum 		listeAlbum, 
 							   ListeConcert 	listeConcert, 
 							   LieuxDesConcerts lieuxDesConcerts) {
-		
-		if (! isInitialized) {
-			init() ;
-		}
-		
+
 		for (Artiste artiste : listeArtiste.getArtistes()) {	
 			if (artiste.getNbAlbum() > 0) {
 				URI artisteAlbumUri   = artisteAlbumRapportPaths.getUri(artiste) ;
@@ -175,8 +159,6 @@ public class RapportStructuresAndNames {
 	public static Path 	  getAbsoluteLieuDir() 		  	  {	return rapportPath.resolve(lieuDir) ;			}
 	public static Path 	  getAbsoluteHomeCollectionFile() { return rapportPath.resolve(homeCollectionFile) ;}	
 	public static Path 	  getAbsoluteHomeConcertFile() 	  {	return rapportPath.resolve(homeConcertFile) ;	}
-	public static Path 	  getCollectionDirectoryName() 	  {	return collectionDirectoryName;					}
-	public static Path 	  getConcertDirectoryName() 	  {	return concertDirectoryName;					}
 	public static Path 	  getAbsoluteCsvAudioFiles() 	  {	return rapportPath.resolve(csvAudioFiles);		}
 	public static Path 	  getAbsoluteCsvHdAudioFiles() 	  {	return rapportPath.resolve(csvHdAudioFiles);	}
 	
