@@ -1,3 +1,27 @@
+/*
+ * MIT License
+
+Copyright (c) 2017, 2023 Frederic Lefevre
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
 package org.fl.collectionAlbum.rapportCsv;
 
 import java.io.BufferedWriter;
@@ -13,15 +37,18 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import org.fl.collectionAlbum.AbstractAudioFile;
+import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.LosslessAudioFile;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.albums.ListeAlbum;
 
 public class RapportCsv {
 
+	private final static Logger rapportLog = Control.getAlbumLog();
+	
 	private static final String CSV_SEPARATOR = ";";
 	
-	public static void writeCsvAudioFile(ListeAlbum listeAlbum, Predicate<AbstractAudioFile> audioFileFilter, Path filePath, Logger logger) {
+	public static void writeCsvAudioFile(ListeAlbum listeAlbum, Predicate<AbstractAudioFile> audioFileFilter, Path filePath) {
 		
 		Path csvDir = filePath.getParent();
 		if (!Files.exists(csvDir)) {
@@ -31,7 +58,7 @@ public class RapportCsv {
 				String csvDirString = Optional.ofNullable(csvDir)
 						.map(fp -> fp.toString())
 						.orElse("csvDir is null");
-				logger.log(Level.SEVERE, "IOException creating csv dir " + csvDirString, e);
+				rapportLog.log(Level.SEVERE, "IOException creating csv dir " + csvDirString, e);
 			}
 		}
 		
@@ -53,11 +80,11 @@ public class RapportCsv {
 						outputStream.write("\n");
 					} catch (IOException e) {
 
-						logger.log(Level.SEVERE, "IOException writing csv file " + filePathString + " line " + line, e);
+						rapportLog.log(Level.SEVERE, "IOException writing csv file " + filePathString + " line " + line, e);
 					}
 				});
 		} catch (IOException e) {
-			logger.log(Level.SEVERE, "IOException opening csv file " + filePathString, e);
+			rapportLog.log(Level.SEVERE, "IOException opening csv file " + filePathString, e);
 		}
 	}
 	

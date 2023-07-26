@@ -1,3 +1,27 @@
+/*
+ * MIT License
+
+Copyright (c) 2017, 2023 Frederic Lefevre
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
 package org.fl.collectionAlbum.jsonParsers;
 
 import java.lang.reflect.Type;
@@ -6,6 +30,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.utils.TemporalUtils;
 
@@ -17,35 +42,37 @@ import com.google.gson.reflect.TypeToken;
 
 public class ConcertParser {
 
-	public static TemporalAccessor getConcertDate(JsonObject arteFactJson, Logger cLog) {
+	private final static Logger albumLog = Control.getAlbumLog();
+	
+	public static TemporalAccessor getConcertDate(JsonObject arteFactJson) {
 
 		TemporalAccessor dateConcert = null ;
 		JsonElement jElem = arteFactJson.get(JsonMusicProperties.DATE) ;
 		if (jElem == null) {
-			cLog.warning("Pas de date dans le concert " + arteFactJson);
+			albumLog.warning("Pas de date dans le concert " + arteFactJson);
 		} else {
 			try {
 				dateConcert = TemporalUtils.parseDate(jElem.getAsString()) ;
 			} catch (Exception e) {
-				cLog.log(Level.SEVERE, "Erreur dans les dates du concert " + arteFactJson, e) ;
+				albumLog.log(Level.SEVERE, "Erreur dans les dates du concert " + arteFactJson, e) ;
 			}
 		}
 		return dateConcert ;
 	}
 	
-	public static String getConcertLieu(JsonObject arteFactJson, Logger cLog) {
+	public static String getConcertLieu(JsonObject arteFactJson) {
 		
 		String lieuConcert = null ;
 		JsonElement jElem = arteFactJson.get(JsonMusicProperties.LIEU) ;
 		if (jElem == null) {
-			cLog.warning("Pas de lieu dans le concert " + arteFactJson);
+			albumLog.warning("Pas de lieu dans le concert " + arteFactJson);
 		} else {
 			lieuConcert = jElem.getAsString() ;
 		}
 		return lieuConcert ;
 	}
 	
-	public static List<String> getConcertMorceaux(JsonObject arteFactJson, Logger cLog) {
+	public static List<String> getConcertMorceaux(JsonObject arteFactJson) {
 		
 		Type listType = new TypeToken<List<String>>() {}.getType();	
 		List<String> titres = null;
@@ -55,25 +82,25 @@ public class ConcertParser {
 				JsonArray jTitres = jElem.getAsJsonArray() ;			
 				titres = new Gson().fromJson(jTitres, listType);
 			} else {
-				cLog.warning(JsonMusicProperties.MORCEAUX + " n'est pas un JsonArray pour le concert " + arteFactJson) ;
+				albumLog.warning(JsonMusicProperties.MORCEAUX + " n'est pas un JsonArray pour le concert " + arteFactJson) ;
 			}
 		}
 		return titres ;
 	}
 	
-	public static List<String> getConcertTickets(JsonObject arteFactJson, Logger cLog) {
+	public static List<String> getConcertTickets(JsonObject arteFactJson) {
 		
 		Type listType = new TypeToken<List<String>>() {}.getType();
 		List<String> ticketImages = null ;
 		JsonElement jElem = arteFactJson.get(JsonMusicProperties.TICKET_IMG) ;
 		if (jElem == null) {
-			cLog.info("Pas de ticket pour le concert " + arteFactJson) ;
+			albumLog.info("Pas de ticket pour le concert " + arteFactJson) ;
 		} else {
 			if (jElem.isJsonArray()) {
 				JsonArray jTickets = jElem.getAsJsonArray() ; 
 				ticketImages =  new Gson().fromJson(jTickets,  listType);
 			} else {
-				cLog.warning(JsonMusicProperties.TICKET_IMG + " n'est pas un JsonArray pour le concert " + arteFactJson) ;
+				albumLog.warning(JsonMusicProperties.TICKET_IMG + " n'est pas un JsonArray pour le concert " + arteFactJson) ;
 			}
 		}  
 		return ticketImages ;

@@ -53,11 +53,11 @@ public class Album extends MusicArtefact {
     public Album(JsonObject albumJson, List<ListeArtiste> knownArtistes, Logger aLog) {
     	super(albumJson, knownArtistes, aLog) ;
     	
-    	titre 				  = AlbumParser.getAlbumTitre(albumJson, aLog) ;
-    	formatAlbum 		  = AlbumParser.getFormatAlbum(albumJson, aLog) ;    	
-    	periodeEnregistrement = AlbumParser.processPeriodEnregistrement(albumJson, aLog);        
-		periodeComposition 	  = AlbumParser.processPeriodComposition(   albumJson, aLog);
-		rangement			  = AlbumParser.getRangementAlbum(albumJson, aLog);
+    	titre 				  = AlbumParser.getAlbumTitre(albumJson);
+    	formatAlbum 		  = AlbumParser.getFormatAlbum(albumJson);    	
+    	periodeEnregistrement = AlbumParser.processPeriodEnregistrement(albumJson);        
+		periodeComposition 	  = AlbumParser.processPeriodComposition(albumJson);
+		rangement			  = AlbumParser.getRangementAlbum(albumJson);
 		
 		if (rangement == null) {
 			// pas de rangement spécifique

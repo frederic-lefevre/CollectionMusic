@@ -1,3 +1,27 @@
+/*
+ * MIT License
+
+Copyright (c) 2017, 2023 Frederic Lefevre
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
 package org.fl.collectionAlbum.jsonParsers;
 
 import java.util.ArrayList;
@@ -6,6 +30,7 @@ import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.Groupe;
@@ -17,9 +42,10 @@ import com.google.gson.JsonObject;
 
 public class MusicArtefactParser {
 	
+	private final static Logger albumLog = Control.getAlbumLog();
+	
 	private List<ListeArtiste> knownArtistes ;
 	private JsonObject arteFactJson ;
-	private Logger mLog ;
 	
 	private ListeArtiste auteurs ;
 	private ListeArtiste interpretes ;
@@ -27,11 +53,10 @@ public class MusicArtefactParser {
 	private ListeArtiste ensembles ;
 	private ListeArtiste groupes ;
 	
-	public MusicArtefactParser(JsonObject j, List<ListeArtiste> currentKnownArtistes, Logger l) {
+	public MusicArtefactParser(JsonObject j, List<ListeArtiste> currentKnownArtistes) {
 		super();
 		
 		arteFactJson  = j ;
-		mLog 		  = l ;
 		knownArtistes = new ArrayList<ListeArtiste>() ;
 		currentKnownArtistes.stream().forEach(la -> knownArtistes.add(la));
 		
@@ -55,7 +80,7 @@ public class MusicArtefactParser {
 	
 	private ListeArtiste processListeArtistes(Class<? extends Artiste> cls, String artistesJprop) {
 		
-		ListeArtiste artistes = new ListeArtiste(mLog) ;
+		ListeArtiste artistes = new ListeArtiste(albumLog) ;
 		JsonElement jElem = arteFactJson.get(artistesJprop) ;
 		if (jElem != null) {
 			if (jElem.isJsonArray()) {
@@ -66,11 +91,11 @@ public class MusicArtefactParser {
 					try {
 						artistes.addArtiste(createGetOrUpdateArtiste(cls, jArtiste.getAsJsonObject())) ;
 					} catch (IllegalStateException e) {
-						mLog.log(Level.WARNING, "un artiste n'est pas un objet json pour l'arteFact " + arteFactJson, e) ;
+						albumLog.log(Level.WARNING, "un artiste n'est pas un objet json pour l'arteFact " + arteFactJson, e) ;
 					}
 				}
 			} else {
-				mLog.warning(artistesJprop + " n'est pas un tableau json pour l'arteFact " + arteFactJson) ;
+				albumLog.warning(artistesJprop + " n'est pas un tableau json pour l'arteFact " + arteFactJson) ;
 			}
 		}
 		return artistes ;
@@ -89,9 +114,9 @@ public class MusicArtefactParser {
 		
 		if (! eventualArtiste.isPresent()) {
 			if (cls == Groupe.class) {
-				artiste = new Groupe(jArtiste, mLog) ;
+				artiste = new Groupe(jArtiste, albumLog) ;
 			} else {
-				artiste = new Artiste(jArtiste, mLog) ;
+				artiste = new Artiste(jArtiste, albumLog) ;
 			}
 		} else {
 			artiste = eventualArtiste.get() ;
@@ -118,10 +143,10 @@ public class MusicArtefactParser {
 				for (JsonElement e : jArray) {
 					result.add(e.getAsString()) ;
 				}
-				mLog.finest(() -> "Nombre de " + jsonMusicProperty + " " + result.size()) ;
+				albumLog.finest(() -> "Nombre de " + jsonMusicProperty + " " + result.size()) ;
 				return result ;
 			} else {
-				mLog.warning(jsonMusicProperty + " n'est pas un JsonArray pour l'artefact " + arteFactJson) ;
+				albumLog.warning(jsonMusicProperty + " n'est pas un JsonArray pour l'artefact " + arteFactJson) ;
 			}
 		}
 		return new ArrayList<String>() ;

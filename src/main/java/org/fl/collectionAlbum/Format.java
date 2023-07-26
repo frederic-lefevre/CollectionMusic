@@ -189,7 +189,7 @@ public class Format {
 					.map(jv -> {
 						List<VideoFile> videoFileList = new ArrayList<>();
 						jv.forEach(jsonVideoFile -> {
-							VideoFile videoFile = VideoFileParser.parseVideoFile(jsonVideoFile.getAsJsonObject(), logger);
+							VideoFile videoFile = VideoFileParser.parseVideoFile(jsonVideoFile.getAsJsonObject());
 							if (videoFile != null) {
 								videoFileList.add(videoFile);
 							} else {
