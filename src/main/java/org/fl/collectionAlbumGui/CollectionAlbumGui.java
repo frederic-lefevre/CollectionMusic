@@ -52,8 +52,7 @@ public class CollectionAlbumGui  extends JFrame {
 	public CollectionAlbumGui() {
 		
 		// init logger and parameters
-		Control.initControl() ;
-		Logger albumLog = Control.getAlbumLog() ;
+		Control.initControl();
    		
    		// init main window
    		setBounds(50, 50, 1500, 1000);
@@ -63,7 +62,7 @@ public class CollectionAlbumGui  extends JFrame {
 		ApplicationTabbedPane collectionTabs = new ApplicationTabbedPane(Control.getMusicRunningContext()) ;
 		
 		// init panel de lecture et génération de site
-		GenerationPane gPane   = new GenerationPane(albumLog) ;
+		GenerationPane gPane   = new GenerationPane() ;
 		
 		collectionTabs.add(gPane, "Génération", 0) ;
 		

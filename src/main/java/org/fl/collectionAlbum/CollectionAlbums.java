@@ -22,7 +22,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-
 package org.fl.collectionAlbum;
 
 import java.nio.file.FileSystems;
@@ -48,8 +47,9 @@ import com.google.gson.JsonObject;
 
 public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,ProgressInformation>{
 	
+	private final static Logger albumLog = Control.getAlbumLog();
+	
 	private CollectionAlbumContainer albumsContainer ;
-	private final Logger albumLog ;
 	private final ProgressInformationPanel progressPanel;
 	
 	// Information prefix
@@ -62,9 +62,8 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 	private final static String CALENDARS 		= "Construction des calendriers" ;
 	private final static String FIN_LECTURE		= "Collection chargée" ;
 	
-	public CollectionAlbums(ProgressInformationPanel pip, Logger aLog) {
-		
-		albumLog = aLog;
+	public CollectionAlbums(ProgressInformationPanel pip) {
+
 		progressPanel = pip ;
 	}
    	

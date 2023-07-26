@@ -58,8 +58,9 @@ import org.fl.util.file.FilesUtils;
 
 public class GenerationSiteCollection  extends SwingWorker<String,ProgressInformation> {
 
+	private final static Logger albumLog = Control.getAlbumLog();
+	
 	private CollectionAlbumContainer collectionAlbumContainer ;
-	private final Logger albumLog ;
 	private final ProgressInformationPanel progressPanel;
 	
 	// Information prefix
@@ -71,9 +72,7 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 	// Status
 	private final static String GENERATION 	    = "En cours de génération" ;
 
-	public GenerationSiteCollection(ProgressInformationPanel pip, Logger aLog) {
-		
-		albumLog 		= aLog;
+	public GenerationSiteCollection(ProgressInformationPanel pip) {
 		progressPanel 	= pip ;
 	}
 
