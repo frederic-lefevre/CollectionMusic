@@ -165,7 +165,7 @@ public class CollectionAlbumContainer {
    		collectionAlbumsMusiques = new ListeAlbum(albumLog) ;
 		collectionArtistes 		 = new ListeArtiste(albumLog) ;
    		concertsArtistes 		 = new ListeArtiste(albumLog) ;   		
-   		concerts 				 = new ListeConcert(albumLog) ; 		
+   		concerts 				 = new ListeConcert(); 		
    		statChronoEnregistrement = new StatChrono(albumLog) ;
    		statChronoComposition 	 = new StatChrono(albumLog) ;   		
    		calendrierArtistes 		 = new ChronoArtistes() ;
