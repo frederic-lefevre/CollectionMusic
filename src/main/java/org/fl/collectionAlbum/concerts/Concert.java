@@ -26,7 +26,6 @@ package org.fl.collectionAlbum.concerts;
 
 import java.time.temporal.TemporalAccessor;
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.MusicArtefact;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
@@ -36,18 +35,18 @@ import com.google.gson.JsonObject;
 
 public class Concert extends MusicArtefact {
 
-    private TemporalAccessor dateConcert ;   
-    private LieuConcert		 lieuConcert;     
-    private List<String> 	 titres;    
-    private List<String> 	 ticketImages;
+    private TemporalAccessor dateConcert;   
+    private LieuConcert	lieuConcert;     
+    private List<String> titres;    
+    private List<String> ticketImages;
     
-    public Concert(JsonObject concertJson, List<ListeArtiste> knownArtistes, LieuxDesConcerts lieuxDesConcerts, Logger aLog) {
-    	super(concertJson, knownArtistes, aLog) ;
+    public Concert(JsonObject concertJson, List<ListeArtiste> knownArtistes, LieuxDesConcerts lieuxDesConcerts) {
+    	super(concertJson, knownArtistes) ;
     	
-    	dateConcert  = ConcertParser.getConcertDate(concertJson) ;
-    	lieuConcert  = lieuxDesConcerts.addLieuDunConcert(ConcertParser.getConcertLieu(concertJson)) ;
-    	titres		 = ConcertParser.getConcertMorceaux(concertJson) ;
-    	ticketImages = ConcertParser.getConcertTickets(concertJson) ;
+    	dateConcert  = ConcertParser.getConcertDate(concertJson);
+    	lieuConcert  = lieuxDesConcerts.addLieuDunConcert(ConcertParser.getConcertLieu(concertJson));
+    	titres		 = ConcertParser.getConcertMorceaux(concertJson);
+    	ticketImages = ConcertParser.getConcertTickets(concertJson);
     }
     
     @Override

@@ -28,7 +28,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
@@ -39,8 +38,6 @@ import com.google.gson.JsonParser;
 
 class AlbumTest {
 
-	private static Logger logger = Logger.getLogger(AlbumTest.class.getName()) ;
-
 	@Test
 	void testEmptyAlbum() {
 		
@@ -48,7 +45,7 @@ class AlbumTest {
 		List<ListeArtiste> lla = new ArrayList<ListeArtiste>() ;
 		lla.add(la) ;
 		
-		Album album = new Album(new JsonObject(), lla, logger) ;
+		Album album = new Album(new JsonObject(), lla) ;
 		
 		assertNotNull(album) ;
 	}
@@ -79,7 +76,7 @@ class AlbumTest {
 		List<ListeArtiste> lla = new ArrayList<ListeArtiste>() ;
 		lla.add(la) ;
 
-		Album album = new Album(jAlbum, lla, logger) ;
+		Album album = new Album(jAlbum, lla) ;
 		
 		assertEquals("Portrait in jazz", album.getTitre()) ;
 		List<String> liens = album.getUrlLinks();

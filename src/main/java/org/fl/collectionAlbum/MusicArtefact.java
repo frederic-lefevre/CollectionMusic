@@ -25,7 +25,6 @@ SOFTWARE.
 package org.fl.collectionAlbum;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
@@ -43,13 +42,10 @@ public abstract class MusicArtefact {
     
     private final List<String> notes;
     private final List<String> urlLinks;
-
-    protected final Logger artefactLog ;
     
     protected final JsonObject arteFactJson ;
     
-    protected MusicArtefact(JsonObject afj, List<ListeArtiste> knownArtistes, Logger al) {
-    	artefactLog 	 = al ;
+    protected MusicArtefact(JsonObject afj, List<ListeArtiste> knownArtistes) {
     	arteFactJson     = afj ;
     	
     	MusicArtefactParser musicParser = new MusicArtefactParser(arteFactJson, knownArtistes) ;

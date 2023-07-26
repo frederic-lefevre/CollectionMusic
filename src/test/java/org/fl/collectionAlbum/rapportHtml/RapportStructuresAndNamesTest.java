@@ -120,7 +120,7 @@ class RapportStructuresAndNamesTest {
 		List<ListeArtiste> lla = new ArrayList<ListeArtiste>();
 		lla.add(la);
 
-		Album album = new Album(jAlbum, lla, logger);
+		Album album = new Album(jAlbum, lla);
 		Artiste bill = album.getAuteurs().get(0);
 		album.addMusicArtfactArtistesToList(la);
 		
@@ -131,7 +131,7 @@ class RapportStructuresAndNamesTest {
 		assertThat(pInfoAlbum).isNull();
 		
 		JsonObject jAlbum2 = JsonParser.parseString(albumStr2).getAsJsonObject();
-		Album album2 = new Album(jAlbum2, lla, logger);
+		Album album2 = new Album(jAlbum2, lla);
 		album2.addMusicArtfactArtistesToList(la);
 		Artiste fake = album2.getAuteurs().get(0);
 		
@@ -167,7 +167,7 @@ class RapportStructuresAndNamesTest {
 		lla.add(la) ;
 		
 		LieuxDesConcerts lieuxDesConcerts = new LieuxDesConcerts();
-		Concert concert = new Concert(jConcert, lla, lieuxDesConcerts, logger);
+		Concert concert = new Concert(jConcert, lla, lieuxDesConcerts);
 		concert.addMusicArtfactArtistesToList(la);
 		List<Artiste> lDeeDee = concert.getAuteurs();
 		Artiste deeDee = lDeeDee.get(0);

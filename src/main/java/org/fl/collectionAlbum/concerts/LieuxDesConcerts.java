@@ -51,6 +51,6 @@ public class LieuxDesConcerts {
 		LieuxPoidsComparator lieuxComparator = new LieuxPoidsComparator() ;
 		List<LieuConcert> lieux = new ArrayList<LieuConcert>(lieuxConcerts.values()) ;
 		Collections.sort(lieux, lieuxComparator) ;
-		return  lieux ;
+		return lieux ;
 	}
 }

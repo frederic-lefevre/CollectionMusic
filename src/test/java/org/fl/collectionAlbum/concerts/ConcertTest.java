@@ -28,7 +28,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
@@ -38,8 +37,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 class ConcertTest {
-
-	private static Logger logger = Logger.getLogger(ConcertTest.class.getName()) ;
 	
 	@Test
 	void test() {
@@ -49,7 +46,7 @@ class ConcertTest {
 		lla.add(la) ;
 		
 		LieuxDesConcerts lieuxDesConcerts = new LieuxDesConcerts() ;
-		Concert concert = new Concert(new JsonObject(), lla, lieuxDesConcerts, logger) ;
+		Concert concert = new Concert(new JsonObject(), lla, lieuxDesConcerts) ;
 		
 		assertNotNull(concert);
 	}
@@ -77,7 +74,7 @@ class ConcertTest {
 		lla.add(la) ;
 		LieuxDesConcerts lieuxDesConcerts = new LieuxDesConcerts() ;
 		
-		Concert concert = new Concert(jConcert, lla, lieuxDesConcerts, logger) ;
+		Concert concert = new Concert(jConcert, lla, lieuxDesConcerts) ;
 		
 		LieuConcert juan = concert.getLieuConcert() ;
 		assertEquals("Juan-les-Pins, Alpes-Maritimes", juan.getLieu()) ;

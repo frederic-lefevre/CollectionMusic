@@ -97,7 +97,7 @@ public class CollectionAlbumContainer {
 
 	public void addAlbum(JsonObject arteFactJson) {
 		
-		Album album = new Album(arteFactJson, allArtistes, albumLog) ;
+		Album album = new Album(arteFactJson, allArtistes) ;
 		
 		album.addMusicArtfactArtistesToList(collectionArtistes);
 		
@@ -135,7 +135,7 @@ public class CollectionAlbumContainer {
 	
 	public void addConcert(JsonObject arteFactJson) { 
 		
-		Concert concert = new Concert(arteFactJson, allArtistes, lieuxDesConcerts, albumLog) ;
+		Concert concert = new Concert(arteFactJson, allArtistes, lieuxDesConcerts) ;
 		
 		concert.getLieuConcert().addConcert(concert) ;
 		concert.addMusicArtfactArtistesToList(concertsArtistes);
