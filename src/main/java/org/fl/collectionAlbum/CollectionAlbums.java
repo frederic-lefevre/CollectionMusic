@@ -72,7 +72,7 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 
 		progressPanel.setStepInformation("");
 
-		albumsContainer = CollectionAlbumContainer.getEmptyInstance(albumLog) ;
+		albumsContainer = CollectionAlbumContainer.getEmptyInstance() ;
 		progressPanel.setStepPrefixInformation(EN_EXAMEN);
 
 		albumLog.info("Lecture des données des albums") ;		

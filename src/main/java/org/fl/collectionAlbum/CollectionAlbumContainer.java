@@ -70,29 +70,28 @@ public class CollectionAlbumContainer {
 	
 	private LieuxDesConcerts lieuxDesConcerts ;
 	
-	private Logger albumLog ;
+	private final static Logger albumLog = Control.getAlbumLog();
 	
 	private static CollectionAlbumContainer collectionAlbumContainer ;
 	
-	public static CollectionAlbumContainer getEmptyInstance(Logger aLog) {
+	public static CollectionAlbumContainer getEmptyInstance() {
 		
 		if (collectionAlbumContainer == null) {
-			collectionAlbumContainer = new CollectionAlbumContainer(aLog) ;
+			collectionAlbumContainer = new CollectionAlbumContainer() ;
 		}
 		collectionAlbumContainer.reset() ;
 		return collectionAlbumContainer ;
 	}
 	
-	public static CollectionAlbumContainer getInstance(Logger aLog) {
+	public static CollectionAlbumContainer getInstance() {
 		
 		if (collectionAlbumContainer == null) {
-			collectionAlbumContainer = new CollectionAlbumContainer(aLog) ;
+			collectionAlbumContainer = new CollectionAlbumContainer() ;
 		}
 		return collectionAlbumContainer ;
 	}
 	
-	private CollectionAlbumContainer(Logger aLog) {		
-		albumLog = aLog;	
+	private CollectionAlbumContainer() {		
 	}
 
 	public void addAlbum(JsonObject arteFactJson) {

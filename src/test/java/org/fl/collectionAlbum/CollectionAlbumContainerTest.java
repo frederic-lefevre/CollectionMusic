@@ -27,7 +27,6 @@ package org.fl.collectionAlbum;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.URI;
-import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.Artiste;
@@ -38,13 +37,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 class CollectionAlbumContainerTest {
-
-	private static final Logger logger = Logger.getLogger(CollectionAlbumContainerTest.class.getName()) ;
 	
 	@Test
 	void testEmptyContainer() {
 		
-		CollectionAlbumContainer albumsContainer = CollectionAlbumContainer.getEmptyInstance(logger) ;
+		CollectionAlbumContainer albumsContainer = CollectionAlbumContainer.getEmptyInstance() ;
 		
 		assertEquals(0, albumsContainer.getCollectionAlbumsMusiques().getNombreAlbums()) ;
 		assertEquals(0, albumsContainer.getConcerts().getNombreConcerts()) ;
@@ -76,7 +73,7 @@ class CollectionAlbumContainerTest {
 		Control.initControl();
 		RapportStructuresAndNames.init() ;
 
-		CollectionAlbumContainer albumsContainer = CollectionAlbumContainer.getEmptyInstance(logger) ;
+		CollectionAlbumContainer albumsContainer = CollectionAlbumContainer.getEmptyInstance() ;
 
 		JsonObject jAlbum = JsonParser.parseString(albumStr1).getAsJsonObject();
 		

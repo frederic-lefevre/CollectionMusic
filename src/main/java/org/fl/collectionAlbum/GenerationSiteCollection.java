@@ -79,7 +79,7 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 	 @Override 
 	 public String doInBackground() {
   		
-  		collectionAlbumContainer = CollectionAlbumContainer.getInstance(albumLog) ;
+  		collectionAlbumContainer = CollectionAlbumContainer.getInstance() ;
   		progressPanel.setProcessStatus(GENERATION) ;
   		
   		RapportHtml.withCharset(Control.getCharset());
