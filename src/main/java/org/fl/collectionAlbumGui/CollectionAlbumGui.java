@@ -25,7 +25,6 @@ SOFTWARE.
 package org.fl.collectionAlbumGui;
 
 import java.awt.EventQueue;
-import java.util.logging.Logger;
 
 import javax.swing.JFrame;
 
