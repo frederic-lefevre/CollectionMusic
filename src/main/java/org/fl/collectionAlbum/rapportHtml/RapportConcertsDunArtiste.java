@@ -25,7 +25,6 @@ SOFTWARE.
 package org.fl.collectionAlbum.rapportHtml;
 
 import java.net.URI;
-import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.artistes.Artiste;
 
@@ -35,8 +34,8 @@ public class RapportConcertsDunArtiste extends RapportHtml {
 	
 	private final Artiste artiste ;
 	
-	public RapportConcertsDunArtiste(Artiste a, String offset, Logger rl) {
-		super("", rl);
+	public RapportConcertsDunArtiste(Artiste a, String offset) {
+		super("");
 		withOffset(offset) ;
 		artiste = a ;
 		withTitle(artiste.getPrenoms() + " " + artiste.getNom() + CONCERTS) ;

@@ -26,7 +26,6 @@ package org.fl.collectionAlbum.rapportHtml;
 
 import java.net.URI;
 import java.util.Collection;
-import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.concerts.LieuConcert;
 import org.fl.collectionAlbum.concerts.LieuxDesConcerts;
@@ -42,8 +41,8 @@ public class RapportLieuxConcerts  extends RapportHtml {
 
 	private final LieuxDesConcerts lieuxDesConcerts ;
 	
-	protected RapportLieuxConcerts(LieuxDesConcerts ldc, String titre, Logger rl) {
-		super(titre, rl);
+	protected RapportLieuxConcerts(LieuxDesConcerts ldc, String titre) {
+		super(titre);
 		withTitleDisplayed() ;
 		withHtmlLinkList(RapportStructuresAndNames.getAccueils());
 		lieuxDesConcerts = ldc ;

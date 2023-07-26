@@ -30,7 +30,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
 import java.util.List;
 import java.util.Locale;
-import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.ChronoArtistes;
 import org.fl.collectionAlbum.artistes.Artiste;
@@ -45,8 +44,8 @@ public class RapportCalendrier  extends RapportHtml {
 	
 	private final ChronoArtistes rappochronoArtistes ;
 	
-	public RapportCalendrier(ChronoArtistes rca, String titre, Logger rl) {
-		super(titre, rl);
+	public RapportCalendrier(ChronoArtistes rca, String titre) {
+		super(titre);
 		withHtmlLinkList(RapportStructuresAndNames.getAccueils());
 		withTitleDisplayed() ;
 		monthFormatter 		= DateTimeFormatter.ofPattern(monthPattern, Locale.FRANCE) ;

@@ -25,7 +25,6 @@ SOFTWARE.
 package org.fl.collectionAlbum.rapportHtml;
 
 import java.net.URI;
-import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.Format;
 import org.fl.collectionAlbum.artistes.Artiste;
@@ -43,8 +42,8 @@ public class RapportListeArtistesAlbum extends RapportHtml {
 	
 	private final ListeArtiste auteurs ;
 	
-	public RapportListeArtistesAlbum(ListeArtiste la, String titre, Logger rl) {
-		super(titre, rl);
+	public RapportListeArtistesAlbum(ListeArtiste la, String titre) {
+		super(titre);
 		withHtmlLinkList(RapportStructuresAndNames.getAccueils());
 		auteurs = la ;
 		withTitleDisplayed();
