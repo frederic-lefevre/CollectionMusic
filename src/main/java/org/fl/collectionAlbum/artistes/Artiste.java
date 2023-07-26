@@ -106,7 +106,7 @@ public class Artiste {
     
     protected void setArtiste(String aNom, String aPrenoms, String n, String m) {
 		
-    	albums  	 = new ListeAlbum(albumLog) ;
+    	albums = new ListeAlbum();
     	concerts = new ListeConcert();
 		if (aNom == null) {
 			albumLog.warning("Nom d'artiste null") ;

@@ -1,9 +1,32 @@
+/*
+ * MIT License
+
+Copyright (c) 2017, 2023 Frederic Lefevre
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
 package org.fl.collectionAlbum.albums;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.Format;
 import org.fl.collectionAlbum.RangementComparator;
@@ -14,11 +37,8 @@ public class ListeAlbum {
 	
 	private Format formatListeAlbum ;
 	
-	private Logger listeAlbumLog;
-	
-	public ListeAlbum(Logger al) {
+	public ListeAlbum() {
 		
-		listeAlbumLog = al ;
 		formatListeAlbum = new Format(null) ;
 		albums  = new ArrayList<Album>() ;
 	}
@@ -31,19 +51,19 @@ public class ListeAlbum {
 	}
 	
 	public ListeAlbum sortChronoEnregistrement() {
-		AlbumEnregistrementComparator compAlbum = new AlbumEnregistrementComparator(listeAlbumLog);
+		AlbumEnregistrementComparator compAlbum = new AlbumEnregistrementComparator();
 		Collections.sort(albums, compAlbum) ;
 		return this ;
 	}
 	
 	public ListeAlbum sortChronoComposition() {
-		AlbumCompositionComparator compAlbum = new AlbumCompositionComparator(listeAlbumLog);
+		AlbumCompositionComparator compAlbum = new AlbumCompositionComparator();
 		Collections.sort(albums, compAlbum) ;
 		return this ;
 	}
 	
 	public ListeAlbum sortRangementAlbum() {
-		RangementComparator compAlbum = new RangementComparator(listeAlbumLog);
+		RangementComparator compAlbum = new RangementComparator();
 		Collections.sort(albums, compAlbum) ;
 		return this ;
 	}

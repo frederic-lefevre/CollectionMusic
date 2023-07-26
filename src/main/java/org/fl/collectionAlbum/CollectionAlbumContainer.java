@@ -162,24 +162,24 @@ public class CollectionAlbumContainer {
 
 	private void reset() {
 		
-   		collectionAlbumsMusiques = new ListeAlbum(albumLog) ;
+   		collectionAlbumsMusiques = new ListeAlbum() ;
 		collectionArtistes 		 = new ListeArtiste() ;
    		concertsArtistes 		 = new ListeArtiste() ;   		
    		concerts 				 = new ListeConcert(); 		
-   		statChronoEnregistrement = new StatChrono(albumLog) ;
-   		statChronoComposition 	 = new StatChrono(albumLog) ;   		
+   		statChronoEnregistrement = new StatChrono() ;
+   		statChronoComposition 	 = new StatChrono() ;   		
    		calendrierArtistes 		 = new ChronoArtistes() ;
    		lieuxDesConcerts		 = new LieuxDesConcerts() ;
    		allArtistes				 = new ArrayList<ListeArtiste>() ;
-   		albumWithAudioFile		 = new ListeAlbum(albumLog) ;
-   		albumMissingAudioFile	 = new ListeAlbum(albumLog) ;
-   		albumWithVideoFile		 = new ListeAlbum(albumLog) ;
-   		albumMissingVideoFile	 = new ListeAlbum(albumLog) ;
-   		albumWithHighResAudio	 = new ListeAlbum(albumLog) ;
-   		albumWithLowResAudio	 = new ListeAlbum(albumLog) ;
+   		albumWithAudioFile		 = new ListeAlbum() ;
+   		albumMissingAudioFile	 = new ListeAlbum() ;
+   		albumWithVideoFile		 = new ListeAlbum() ;
+   		albumMissingVideoFile	 = new ListeAlbum() ;
+   		albumWithHighResAudio	 = new ListeAlbum() ;
+   		albumWithLowResAudio	 = new ListeAlbum() ;
    		rangementsAlbums 		 = new EnumMap<Format.RangementSupportPhysique, ListeAlbum>(Format.RangementSupportPhysique.class) ;
    		for (Format.RangementSupportPhysique rangement : Format.RangementSupportPhysique.values()) {
-   			rangementsAlbums.put(rangement, new ListeAlbum(albumLog)) ;
+   			rangementsAlbums.put(rangement, new ListeAlbum()) ;
    		}
    		allArtistes.add(collectionArtistes) ;
    		allArtistes.add(concertsArtistes) ;

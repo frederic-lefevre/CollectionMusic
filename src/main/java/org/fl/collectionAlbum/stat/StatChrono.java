@@ -32,17 +32,19 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.fl.collectionAlbum.Control;
+
 public class StatChrono {
+	
+	private final static Logger statLogger = Control.getAlbumLog();
 	
 	private List<StatAnnee>  statAnnuelle ; 
 	private List<StatAnnee>  statDecennale ;
 	private List<StatAnnee>  statSiecle ;
 	private StatAnComparator statComp ;
-	private Logger 			 statLogger;
 	
-    public StatChrono(Logger sl) {
+    public StatChrono() {
         super();
-        statLogger = sl ;
         statAnnuelle  = new ArrayList<StatAnnee>(2000) ;
         statDecennale = new ArrayList<StatAnnee>(200) ;
         statSiecle    = new ArrayList<StatAnnee>(20) ;
