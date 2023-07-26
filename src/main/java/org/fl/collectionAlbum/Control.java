@@ -47,6 +47,7 @@ public class Control {
    	private static AdvancedProperties collectionProperties;
 	private static Path collectionDirectoryName;
 	private static Path concertDirectoryName;
+	private static boolean initialized = false;
    	
 	public static void initControl() {
 		
@@ -76,9 +77,13 @@ public class Control {
 			e.printStackTrace();
 			collectionProperties = null;
 		}
+		initialized = true;
 	}
 
-	public static Logger getAlbumLog() { 
+	public static Logger getAlbumLog() {
+		if (!initialized) {
+			initControl();
+		}
 		return albumLog; 
 	}
 	
@@ -87,22 +92,37 @@ public class Control {
 	}
 	
 	public static AdvancedProperties getCollectionProperties() { 
+		if (!initialized) {
+			initControl();
+		}
 		return collectionProperties; 
 	}
 	
-	public static Charset getCharset() { 
+	public static Charset getCharset() {
+		if (!initialized) {
+			initControl();
+		}
 		return charset; 
 	}
 	
-	public static RunningContext getMusicRunningContext() { 
+	public static RunningContext getMusicRunningContext() {
+		if (!initialized) {
+			initControl();
+		}
 		return musicRunningContext; 
 	}
 	
 	public static Path getCollectionDirectoryName() {
+		if (!initialized) {
+			initControl();
+		}
 		return collectionDirectoryName;	
 	}
 	
-	public static Path getConcertDirectoryName() {	
+	public static Path getConcertDirectoryName() {
+		if (!initialized) {
+			initControl();
+		}
 		return concertDirectoryName;
 	}
 }
