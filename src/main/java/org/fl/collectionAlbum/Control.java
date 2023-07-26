@@ -36,6 +36,9 @@ import org.fl.util.RunningContext;
 
 public class Control {
 
+	private static final String MUSIQUE_DIRECTORY_URI = "file:///C:/FredericPersonnel/Loisirs/musique/";
+	private static final String DEFAULT_PROP_FILE = MUSIQUE_DIRECTORY_URI + "RapportCollection/albumCollection.properties";
+	
 	private final static String musicFileExtension = "json";
 	
 	private static Logger albumLog;	
@@ -45,11 +48,11 @@ public class Control {
 	private static Path collectionDirectoryName;
 	private static Path concertDirectoryName;
    	
-	public static void initControl(String propFile) {
+	public static void initControl() {
 		
 		try {
 			// access to properties and logger
-			musicRunningContext = new RunningContext("CollectionMusique", null, new URI(propFile));
+			musicRunningContext = new RunningContext("CollectionMusique", null, new URI(DEFAULT_PROP_FILE));
 		
 			collectionProperties = musicRunningContext.getProps();
 		    albumLog = musicRunningContext.getpLog();
@@ -69,7 +72,7 @@ public class Control {
 			concertDirectoryName 	= collectionProperties.getPathFromURI("concert.rootDir.name");
 			
 		} catch (URISyntaxException e) {
-			System.out.println("URI syntax exception for property file: " + propFile);
+			System.out.println("URI syntax exception for property file: " + DEFAULT_PROP_FILE);
 			e.printStackTrace();
 			collectionProperties = null;
 		}

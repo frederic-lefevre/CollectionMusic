@@ -32,7 +32,6 @@ import java.util.logging.Logger;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.rapportHtml.RapportStructuresAndNames;
-import org.fl.collectionAlbumGui.CollectionAlbumGui;
 import org.junit.jupiter.api.Test;
 
 import com.google.gson.JsonObject;
@@ -74,7 +73,7 @@ class CollectionAlbumContainerTest {
 	@Test
 	void testAlbumContainer() {
 		
-		Control.initControl(CollectionAlbumGui.DEFAULT_PROP_FILE);
+		Control.initControl();
 		RapportStructuresAndNames.init() ;
 
 		CollectionAlbumContainer albumsContainer = CollectionAlbumContainer.getEmptyInstance(logger) ;
