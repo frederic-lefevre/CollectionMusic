@@ -30,7 +30,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -46,7 +45,6 @@ import org.junit.jupiter.api.Test;
 class RapportStructuresAndNamesTest {
 
 	private static final String MUSIQUE_DIRECTORY_URI = "file:///C:/FredericPersonnel/Loisirs/musique/";
-	private static Logger logger = Logger.getLogger(RapportStructuresAndNamesTest.class.getName()) ;
 	
 	@Test
 	void test() {
@@ -73,7 +71,7 @@ class RapportStructuresAndNamesTest {
 		jArt.addProperty("naissance", "1929-08-16") ;
 		jArt.addProperty("mort",  "1980-09-15") ;
 		
-		Artiste artiste= new Artiste(jArt, logger) ;
+		Artiste artiste= new Artiste(jArt);
 		
 		URI pAlbum = RapportStructuresAndNames.getArtisteAlbumRapportRelativeUri(artiste);
 		assertThat(pAlbum.toString()).isEqualTo("artistes/albums/i0.html");

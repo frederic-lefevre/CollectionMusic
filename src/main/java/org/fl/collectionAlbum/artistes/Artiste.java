@@ -30,6 +30,7 @@ import java.util.List;
 import java.time.temporal.TemporalAccessor;
 import java.util.logging.Logger;
 
+import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.Format;
 import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.MusicArtefact;
@@ -54,12 +55,11 @@ public class Artiste {
 	protected ListeAlbum 	   albums ;
 	protected ListeConcert 	   concerts ;
 	
-	private Logger artisteLog;
+	private final static Logger albumLog = Control.getAlbumLog();
 
-	public Artiste(JsonObject jArtiste, Logger al) {
+	public Artiste(JsonObject jArtiste) {
 		
 		super();
-    	artisteLog = al ;
     	
 		JsonElement jNom    	= jArtiste.get(JsonMusicProperties.NOM) ;
 		JsonElement jPrenom 	= jArtiste.get(JsonMusicProperties.PRENOM) ;
@@ -82,7 +82,7 @@ public class Artiste {
 					instruments.add(jInstrument.getAsString()) ;
 				}
 			} else {
-				artisteLog.warning(JsonMusicProperties.INSTRUMENTS + " n'est pas un JsonArray pour l'artiste " + jArtiste) ;
+				albumLog.warning(JsonMusicProperties.INSTRUMENTS + " n'est pas un JsonArray pour l'artiste " + jArtiste) ;
 			}
 		}	
 		
@@ -99,23 +99,22 @@ public class Artiste {
 		return (nom.equals(lastName) && prenoms.equals(firstName)) ;
 	}
 	
-    public Artiste(Logger al) {
+    public Artiste() {
 		super();
-    	artisteLog = al ;
 		setArtiste("", "", null, null) ;
     }
     
     protected void setArtiste(String aNom, String aPrenoms, String n, String m) {
 		
-    	albums  	 = new ListeAlbum(artisteLog) ;
+    	albums  	 = new ListeAlbum(albumLog) ;
     	concerts = new ListeConcert();
 		if (aNom == null) {
-			artisteLog.warning("Nom d'artiste null") ;
+			albumLog.warning("Nom d'artiste null") ;
 			aNom = "" ;
 		}
 		
 		if (aPrenoms == null) {
-			artisteLog.info("Prénoms d'artiste null pour le nom " + aNom) ;
+			albumLog.info("Prénoms d'artiste null pour le nom " + aNom) ;
 			aPrenoms = "" ;
 		}
 
@@ -126,32 +125,32 @@ public class Artiste {
             naissance = TemporalUtils.parseDate(n) ;
             mort 	  = TemporalUtils.parseDate(m) ;
         } catch (Exception e) {
-        	artisteLog.severe("Erreur dans les dates de " + aPrenoms + " " + aNom);
+        	albumLog.severe("Erreur dans les dates de " + aPrenoms + " " + aNom);
         }
 
-		artisteLog.finest(() -> "Nouvel artiste: " + nom + " " + prenoms + " (" + getDateNaissance() + " - " + getDateMort() + ")") ;
+		albumLog.finest(() -> "Nouvel artiste: " + nom + " " + prenoms + " (" + getDateNaissance() + " - " + getDateMort() + ")") ;
 	}
     
     public void update(String n, String m) {
     	if ((n != null) && (! n.isEmpty())) {
     		if (naissance != null) {
-    			artisteLog.warning("Date de naissance définie 2 fois pour " + prenoms + " " + nom) ;
+    			albumLog.warning("Date de naissance définie 2 fois pour " + prenoms + " " + nom) ;
     		} else {
     			try {
     	            naissance = TemporalUtils.parseDate(n) ;
     	        } catch (Exception e) {
-    	        	artisteLog.severe("Erreur dans les dates de " + prenoms + " " + nom);
+    	        	albumLog.severe("Erreur dans les dates de " + prenoms + " " + nom);
     	        }
     		}
     	}
     	if ((m != null) && (! m.isEmpty())) {
     		if (mort != null) {
-    			artisteLog.warning("Date de décés définie 2 fois pour " + prenoms + " " + nom) ;
+    			albumLog.warning("Date de décés définie 2 fois pour " + prenoms + " " + nom) ;
     		} else {
     			try {
     	            mort = TemporalUtils.parseDate(m) ;
     	        } catch (Exception e) {
-    	        	artisteLog.severe("Erreur dans les dates de " + prenoms + " " + nom);
+    	        	albumLog.severe("Erreur dans les dates de " + prenoms + " " + nom);
     	        }
     		}
     	}
@@ -173,7 +172,7 @@ public class Artiste {
     	} else if (musicArtefact instanceof Concert) {
     		concerts.addConcert((Concert)musicArtefact) ;
     	} else {
-    		artisteLog.severe("MusicArteFact n'est ni un Album, ni un concert: " + musicArtefact.getClass().getName());
+    		albumLog.severe("MusicArteFact n'est ni un Album, ni un concert: " + musicArtefact.getClass().getName());
     	}
     }
     

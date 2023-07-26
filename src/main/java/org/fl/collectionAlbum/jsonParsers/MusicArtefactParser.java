@@ -114,9 +114,9 @@ public class MusicArtefactParser {
 		
 		if (! eventualArtiste.isPresent()) {
 			if (cls == Groupe.class) {
-				artiste = new Groupe(jArtiste, albumLog) ;
+				artiste = new Groupe(jArtiste) ;
 			} else {
-				artiste = new Artiste(jArtiste, albumLog) ;
+				artiste = new Artiste(jArtiste) ;
 			}
 		} else {
 			artiste = eventualArtiste.get() ;

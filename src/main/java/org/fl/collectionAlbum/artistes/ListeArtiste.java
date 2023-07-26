@@ -53,7 +53,7 @@ public class ListeArtiste {
 		if (! artistes.contains(a)) {
 			artistes.add(a) ;
 		}
-		albumLog.finest(() -> "  Nom: " + a.getNom() + "  Prenoms: " + a.getPrenoms()) ;
+		albumLog.finest(() -> "  Nom: " + a.getNom() + "  Prenoms: " + a.getPrenoms());
 	}
 	
 	public void addAllArtistes(List<Artiste> artistes, MusicArtefact musicArtefact) {
@@ -100,7 +100,7 @@ public class ListeArtiste {
 	}
 	
 	public ListeArtiste sortArtistesChrono() {
-		AuteurDateComparator compChrono = new AuteurDateComparator(albumLog);
+		AuteurDateComparator compChrono = new AuteurDateComparator();
 		Collections.sort(artistes, compChrono) ;
 		return this;
 	}
