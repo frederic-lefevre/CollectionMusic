@@ -26,7 +26,6 @@ package org.fl.collectionAlbum.rapportHtml;
 
 import java.net.URI;
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.concerts.Concert;
 import org.fl.collectionAlbum.utils.TemporalUtils;
@@ -35,8 +34,8 @@ public class RapportConcert extends RapportMusicArtefact {
 
 	private final Concert concert ;
 	
-	public RapportConcert(Concert c, Logger rl) {
-		super(c, rl) ;
+	public RapportConcert(Concert c) {
+		super(c) ;
 		concert = c ;
 		withTitle(TemporalUtils.formatDate(concert.getDateConcert()) + " " + concert.getLieuConcert().getLieu()) ;
 	}

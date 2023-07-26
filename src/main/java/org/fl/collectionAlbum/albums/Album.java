@@ -26,7 +26,6 @@ package org.fl.collectionAlbum.albums;
 
 import java.time.temporal.TemporalAccessor;
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.Format;
 import org.fl.collectionAlbum.Format.ContentNature;
@@ -50,14 +49,14 @@ public class Album extends MusicArtefact {
     
     private final boolean specificCompositionDates ;
     
-    public Album(JsonObject albumJson, List<ListeArtiste> knownArtistes, Logger aLog) {
-    	super(albumJson, knownArtistes, aLog) ;
+    public Album(JsonObject albumJson, List<ListeArtiste> knownArtistes) {
+    	super(albumJson, knownArtistes);
     	
-    	titre 				  = AlbumParser.getAlbumTitre(albumJson, aLog) ;
-    	formatAlbum 		  = AlbumParser.getFormatAlbum(albumJson, aLog) ;    	
-    	periodeEnregistrement = AlbumParser.processPeriodEnregistrement(albumJson, aLog);        
-		periodeComposition 	  = AlbumParser.processPeriodComposition(   albumJson, aLog);
-		rangement			  = AlbumParser.getRangementAlbum(albumJson, aLog);
+    	titre 				  = AlbumParser.getAlbumTitre(albumJson);
+    	formatAlbum 		  = AlbumParser.getFormatAlbum(albumJson);    	
+    	periodeEnregistrement = AlbumParser.processPeriodEnregistrement(albumJson);        
+		periodeComposition 	  = AlbumParser.processPeriodComposition(albumJson);
+		rangement			  = AlbumParser.getRangementAlbum(albumJson);
 		
 		if (rangement == null) {
 			// pas de rangement spécifique

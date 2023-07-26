@@ -3,19 +3,16 @@ package org.fl.collectionAlbum.stat;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.temporal.TemporalAccessor;
-import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.utils.TemporalUtils;
 import org.junit.jupiter.api.Test;
 
 class StatChronoTest {
-
-	private final static Logger logger = Logger.getLogger(StatChronoTest.class.getName()) ;
 			
 	@Test
 	void test() {
 		
-		StatChrono sc1 = new StatChrono(logger) ;
+		StatChrono sc1 = new StatChrono() ;
 		
 		assertEquals("0", sc1.getStatForYear(0)) ;
 		assertEquals("0", sc1.getStatForYear(1969)) ;

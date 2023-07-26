@@ -36,8 +36,12 @@ import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.fl.collectionAlbum.Control;
+
 public abstract class RapportHtml {
 
+	protected final static Logger rapportLog = Control.getAlbumLog();
+	
 	// Useful HTML fragment
 	private final static String ENTETE1 = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN_\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">\n" +
 										  "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">\n<head>\n" +
@@ -72,17 +76,14 @@ public abstract class RapportHtml {
 	private final static String CSSOFFSET = "../css/" ;
 	
 	protected String urlOffset;
-	
-	protected final Logger rapportLog;
 
 	private boolean displayTitle ;
 
 	protected Balises balises ;
 	
-	protected RapportHtml(String titre, Logger rl) {
+	protected RapportHtml(String titre) {
 		
 		super();
-		rapportLog 	 	 = rl ;
 		titreRapport 	 = titre ;
 		urlOffset	 	 = "" ;
 		rBuilder 	 	 = new StringBuilder(TAILLE_INITIALE) ;

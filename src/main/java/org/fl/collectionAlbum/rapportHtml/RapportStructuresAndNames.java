@@ -42,6 +42,8 @@ import org.fl.collectionAlbum.Control;
 
 public class RapportStructuresAndNames {
 
+	private final static Logger rapportLog = Control.getAlbumLog();
+	
 	private final static String albumDir 		   = "albums" ;
 	private final static String concertDir 		   = "concerts" ;
 	private final static String artisteAlbumsDir   = "artistes/albums" ;
@@ -65,11 +67,8 @@ public class RapportStructuresAndNames {
 	private static RapportMap<Concert>  	concertRapportPaths ;
 	private static RapportMap<LieuConcert> 	lieuRapportPaths ;
 	
-	private static Logger rapportLog ;
-	
 	public static void init() {
-		
-		rapportLog = Control.getAlbumLog() ;
+
 		AdvancedProperties collectionProperties = Control.getCollectionProperties() ;
 		
 		rapportPath 		 = collectionProperties.getPathFromURI("album.rapportDirectory.name") ;

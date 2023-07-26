@@ -26,8 +26,6 @@ package org.fl.collectionAlbum;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.logging.Logger;
-
 import org.fl.collectionAlbum.jsonParsers.AudioFileParser;
 import org.junit.jupiter.api.Test;
 
@@ -35,8 +33,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 class AudioFileTest {
-
-	private final static Logger logger = Logger.getLogger(AudioFileTest.class.getName());
 	
 	@Test
 	void shouldHaveAllValues() {
@@ -44,14 +40,14 @@ class AudioFileTest {
 		String audioFileStr1 = "{}" ;
 		JsonObject jf1 = JsonParser.parseString(audioFileStr1).getAsJsonObject();
 		
-		AbstractAudioFile audio = AudioFileParser.parseAudioFile(jf1, logger);
+		AbstractAudioFile audio = AudioFileParser.parseAudioFile(jf1);
 		assertThat(audio).isNull();
 	}
 	
 	@Test
 	void shouldAcceptNullWithError() {
 		
-		AbstractAudioFile audio = AudioFileParser.parseAudioFile(null, logger);
+		AbstractAudioFile audio = AudioFileParser.parseAudioFile(null);
 		assertThat(audio).isNull();
 	}
 	
@@ -65,7 +61,7 @@ class AudioFileTest {
 				""" ;
 		JsonObject jf1 = JsonParser.parseString(audioFileStr1).getAsJsonObject();
 		
-		AbstractAudioFile audio = AudioFileParser.parseAudioFile(jf1, logger);
+		AbstractAudioFile audio = AudioFileParser.parseAudioFile(jf1);
 		assertThat(audio).isNull();
 
 	}
@@ -82,7 +78,7 @@ class AudioFileTest {
 				""" ;
 		JsonObject jf1 = JsonParser.parseString(audioFileStr1).getAsJsonObject();
 		
-		AbstractAudioFile audio = AudioFileParser.parseAudioFile(jf1, logger);
+		AbstractAudioFile audio = AudioFileParser.parseAudioFile(jf1);
 		assertThat(audio).isInstanceOf(LosslessAudioFile.class);
 
 		LosslessAudioFile losslessAudio = (LosslessAudioFile)audio;

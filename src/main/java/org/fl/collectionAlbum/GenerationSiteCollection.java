@@ -58,8 +58,9 @@ import org.fl.util.file.FilesUtils;
 
 public class GenerationSiteCollection  extends SwingWorker<String,ProgressInformation> {
 
+	private final static Logger albumLog = Control.getAlbumLog();
+	
 	private CollectionAlbumContainer collectionAlbumContainer ;
-	private final Logger albumLog ;
 	private final ProgressInformationPanel progressPanel;
 	
 	// Information prefix
@@ -71,16 +72,14 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 	// Status
 	private final static String GENERATION 	    = "En cours de génération" ;
 
-	public GenerationSiteCollection(ProgressInformationPanel pip, Logger aLog) {
-		
-		albumLog 		= aLog;
+	public GenerationSiteCollection(ProgressInformationPanel pip) {
 		progressPanel 	= pip ;
 	}
 
 	 @Override 
 	 public String doInBackground() {
   		
-  		collectionAlbumContainer = CollectionAlbumContainer.getInstance(albumLog) ;
+  		collectionAlbumContainer = CollectionAlbumContainer.getInstance() ;
   		progressPanel.setProcessStatus(GENERATION) ;
   		
   		RapportHtml.withCharset(Control.getCharset());
@@ -166,8 +165,8 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 		 rapportsHtml(rapportDir) ;
 		 rapportsConcertHtml(rapportDir) ;
 		 
-		 RapportCsv.writeCsvAudioFile(collectionAlbumContainer.getAlbumsWithAudioFile(), (audioFile) -> true, RapportStructuresAndNames.getAbsoluteCsvAudioFiles(), albumLog);
-		 RapportCsv.writeCsvAudioFile(collectionAlbumContainer.getAlbumsWithHighResAudio(), (audioFile) -> audioFile.isHighRes(), RapportStructuresAndNames.getAbsoluteCsvHdAudioFiles(), albumLog);
+		 RapportCsv.writeCsvAudioFile(collectionAlbumContainer.getAlbumsWithAudioFile(), (audioFile) -> true, RapportStructuresAndNames.getAbsoluteCsvAudioFiles());
+		 RapportCsv.writeCsvAudioFile(collectionAlbumContainer.getAlbumsWithHighResAudio(), (audioFile) -> audioFile.isHighRes(), RapportStructuresAndNames.getAbsoluteCsvHdAudioFiles());
 	 }
 	   
 	 public void createRapports(ListeArtiste listeArtiste, 
@@ -181,7 +180,7 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 			 if (artiste.getNbAlbum() > 0) {
 				 Path albumAbsolutePath   = RapportStructuresAndNames.getArtisteAlbumRapportAbsolutePath(artiste);
 				 if (! Files.exists(albumAbsolutePath)) {
-					 RapportAlbumsDunArtiste rapportDeSesAlbums = new RapportAlbumsDunArtiste(artiste, getOffset(rapportPath, albumAbsolutePath.getParent()) , albumLog) ;
+					 RapportAlbumsDunArtiste rapportDeSesAlbums = new RapportAlbumsDunArtiste(artiste, getOffset(rapportPath, albumAbsolutePath.getParent())) ;
 					 rapportDeSesAlbums.printReport(albumAbsolutePath, CssStyles.stylesTableauDunArtiste) ;
 				 }
 			 }
@@ -189,7 +188,7 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 			 if (artiste.getNbConcert() > 0) {
 				 Path concertAbsolutePath = RapportStructuresAndNames.getArtisteConcertRapportAbsolutePath(artiste);
 				 if (! Files.exists(concertAbsolutePath)) {
-					 RapportConcertsDunArtiste rapportDeSesConcerts = new RapportConcertsDunArtiste(artiste, getOffset(rapportPath, concertAbsolutePath.getParent()), albumLog) ;
+					 RapportConcertsDunArtiste rapportDeSesConcerts = new RapportConcertsDunArtiste(artiste, getOffset(rapportPath, concertAbsolutePath.getParent())) ;
 					 rapportDeSesConcerts.printReport(concertAbsolutePath, CssStyles.stylesTableauDunArtiste) ;
 				 }
 			 }
@@ -199,7 +198,7 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 			 if (album.additionnalInfo()) {
 				 Path absolutePath = RapportStructuresAndNames.getAlbumRapportAbsolutePath(album);
 				 if (! Files.exists(absolutePath)) {
-					 RapportAlbum rapportAlbum = new RapportAlbum(album, albumLog) ;
+					 RapportAlbum rapportAlbum = new RapportAlbum(album) ;
 					 rapportAlbum.withOffset( getOffset(rapportPath, absolutePath.getParent())) ;
 					 rapportAlbum.printReport( absolutePath, CssStyles.main) ;
 				 }
@@ -210,7 +209,7 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 			 if (concert.additionnalInfo()) {
 				 Path absolutePath = RapportStructuresAndNames.getConcertRapportAbsolutePath(concert);
 				 if (! Files.exists(absolutePath)) {
-					 RapportConcert rapportConcert = new RapportConcert(concert, albumLog) ;
+					 RapportConcert rapportConcert = new RapportConcert(concert) ;
 					 rapportConcert.withOffset(getOffset(rapportPath, absolutePath.getParent())) ;
 					 rapportConcert.printReport(absolutePath, CssStyles.ticket) ;
 				 }
@@ -221,7 +220,7 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 			 Path absolutePath = RapportStructuresAndNames.getLieuRapportAbsolutePath(lieuConcert);
 			 if (! Files.exists(absolutePath)) {
 				 String offSet = getOffset(rapportPath, absolutePath.getParent()) ;
-				 RapportListeConcerts concertDeCeLieu = new RapportListeConcerts(lieuConcert.getConcerts().sortChrono(), lieuConcert.getLieu(), albumLog) ;
+				 RapportListeConcerts concertDeCeLieu = new RapportListeConcerts(lieuConcert.getConcerts().sortChrono(), lieuConcert.getLieu()) ;
 				 concertDeCeLieu.withOffset(offSet);
 				 concertDeCeLieu.printReport(absolutePath, CssStyles.stylesTableauMusicArtefact) ;
 			 }
@@ -243,14 +242,14 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 	 private void rapportsHtml(Path rapportDir) {	
 	   	
 		Path rapportFile = RapportStructuresAndNames.getAbsoluteHomeCollectionFile() ;
-		RapportCollection rapportCollection = new RapportCollection(collectionAlbumContainer, rapportDir, "Collections d'albums", albumLog) ;
+		RapportCollection rapportCollection = new RapportCollection(collectionAlbumContainer, rapportDir, "Collections d'albums") ;
 		rapportCollection.printReport(rapportFile, CssStyles.mainFormat) ;				
 	}
 		 
 	private void rapportsConcertHtml(Path rapportDir) {
 
 		 Path rapportFile = RapportStructuresAndNames.getAbsoluteHomeConcertFile() ;
-		 RapportDesConcerts rapportConcerts = new RapportDesConcerts(collectionAlbumContainer, rapportDir, "Concerts", albumLog) ;
+		 RapportDesConcerts rapportConcerts = new RapportDesConcerts(collectionAlbumContainer, rapportDir, "Concerts");
 		 rapportConcerts.printReport(rapportFile, CssStyles.main) ;
 	 }
 		

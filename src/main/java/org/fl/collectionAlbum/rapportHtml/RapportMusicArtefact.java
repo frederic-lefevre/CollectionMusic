@@ -26,7 +26,6 @@ package org.fl.collectionAlbum.rapportHtml;
 
 import java.net.URI;
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.MusicArtefact;
 
@@ -34,8 +33,8 @@ public class RapportMusicArtefact extends RapportHtml {
 
 	private final MusicArtefact musicArtefact;
 	
-	public RapportMusicArtefact(MusicArtefact m, Logger rl) {
-		super("", rl);
+	public RapportMusicArtefact(MusicArtefact m) {
+		super("");
 		musicArtefact = m;
 	}
 

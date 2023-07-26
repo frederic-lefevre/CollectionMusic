@@ -1,3 +1,27 @@
+/*
+ * MIT License
+
+Copyright (c) 2017, 2023 Frederic Lefevre
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
 package org.fl.collectionAlbum.rapportHtml;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -9,7 +33,6 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.ResolverStyle;
 import java.time.temporal.TemporalAccessor;
 import java.util.Locale;
-import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.Format;
 import org.junit.jupiter.api.Test;
@@ -18,8 +41,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 class BalisesTest {
-
-	private final static Logger logger = Logger.getLogger(BalisesTest.class.getName()) ;
 	
 	@Test
 	void testAlpha() {
@@ -49,7 +70,7 @@ class BalisesTest {
 		
 		String formatStr1 = "{\"cd\": 3 }" ;
 		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
-		Format format1 = new Format(jf1, logger) ;
+		Format format1 = new Format(jf1) ;
 		
 		Balises formatBalises = new Balises(Balises.BalisesType.POIDS) ;
 		
@@ -63,7 +84,7 @@ class BalisesTest {
 		
 		String formatStr2 = "{\"33t\": 3 }" ;
 		JsonObject jf2 = JsonParser.parseString(formatStr2).getAsJsonObject();
-		Format format2 = new Format(jf2, logger) ;
+		Format format2 = new Format(jf2) ;
 		
 		formatBalises.addCheckBalisePoids(fragment, format2);
 		
@@ -72,7 +93,7 @@ class BalisesTest {
 		
 		String formatStr3 = "{\"33t\": 4 }" ;
 		JsonObject jf3 = JsonParser.parseString(formatStr3).getAsJsonObject();
-		Format format3 = new Format(jf3, logger) ;
+		Format format3 = new Format(jf3) ;
 		
 		formatBalises.addCheckBalisePoids(fragment, format3);
 		

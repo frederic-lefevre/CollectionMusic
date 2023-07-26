@@ -27,7 +27,6 @@ package org.fl.collectionAlbum;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 import org.junit.jupiter.api.Test;
 
@@ -35,15 +34,13 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 class FormatTest {
-
-	private final static Logger logger = Logger.getLogger(FormatTest.class.getName());
 	
 	@Test
 	void test1() {
 		
 		String formatStr1 = "{}" ;
 		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
-		Format format1 = new Format(jf1, logger) ;
+		Format format1 = new Format(jf1) ;
 
 		assertThat(format1.getPoids()).isZero();
 
@@ -54,7 +51,7 @@ class FormatTest {
 		
 		String formatStr1 = "{\"cd\": 3 }" ;
 		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
-		Format format1 = new Format(jf1, logger) ;
+		Format format1 = new Format(jf1) ;
 
 		assertThat(format1.getPoids()).isEqualTo(3);
 		assertThat(format1.hasAudioFiles()).isFalse();
@@ -67,7 +64,7 @@ class FormatTest {
 		
 		String formatStr1 = "{\"cd\": 2 , \"45t\" : 1 }" ;
 		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
-		Format format1 = new Format(jf1, logger) ;
+		Format format1 = new Format(jf1) ;
 		
 		assertThat(format1.getPoids()).isEqualTo(2.5);
 		assertThat(format1.getAudioFiles()).isEmpty();
@@ -81,13 +78,13 @@ class FormatTest {
 		
 		String formatStr1 = "{\"33t\": 2 , \"45t\" : 1 }" ;
 		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
-		Format format1 = new Format(jf1, logger) ;
+		Format format1 = new Format(jf1) ;
 		
 		String formatStr2 = "{\"cd\": 2 , \"45t\" : 1 }" ;
 		JsonObject jf2 = JsonParser.parseString(formatStr2).getAsJsonObject();
-		Format format2 = new Format(jf2, logger) ;
+		Format format2 = new Format(jf2) ;
 		
-		Format format3 = new Format(null, logger) ;
+		Format format3 = new Format(null) ;
 		assertThat(format3.getPoids()).isZero();
 		
 		format3.incrementFormat(format1);
@@ -118,7 +115,7 @@ class FormatTest {
 				""";
 		
 		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
-		Format format1 = new Format(jf1, logger) ;
+		Format format1 = new Format(jf1) ;
 		
 		assertThat(format1.getPoids()).isEqualTo(2.5);
 		assertThat(format1.hasAudioFiles()).isTrue();
@@ -153,7 +150,7 @@ class FormatTest {
 				""";
 		
 		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
-		Format format1 = new Format(jf1, logger) ;
+		Format format1 = new Format(jf1) ;
 		
 		assertThat(format1.getPoids()).isEqualTo(2.5);
 		assertThat(format1.hasAudioFiles()).isTrue();
@@ -194,7 +191,7 @@ class FormatTest {
 				""";
 		
 		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
-		Format format1 = new Format(jf1, logger) ;
+		Format format1 = new Format(jf1) ;
 		
 		assertThat(format1.getPoids()).isEqualTo(2.5);
 		assertThat(format1.hasAudioFiles()).isTrue();
@@ -253,7 +250,7 @@ class FormatTest {
 				""";
 		
 		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
-		Format format1 = new Format(jf1, logger) ;
+		Format format1 = new Format(jf1) ;
 		
 		assertThat(format1.getPoids()).isEqualTo(2.5);
 		assertThat(format1.hasAudioFiles()).isTrue();
@@ -302,7 +299,7 @@ class FormatTest {
 				""";
 		
 		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
-		Format format1 = new Format(jf1, logger) ;
+		Format format1 = new Format(jf1) ;
 
 		assertThat(format1.hasAudioFiles()).isFalse();
 		assertThat(format1.hasVideoFiles()).isTrue();

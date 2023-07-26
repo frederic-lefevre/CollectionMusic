@@ -25,7 +25,6 @@ SOFTWARE.
 package org.fl.collectionAlbumGui;
 
 import java.awt.EventQueue;
-import java.util.logging.Logger;
 
 import javax.swing.JFrame;
 
@@ -33,13 +32,9 @@ import org.fl.collectionAlbum.Control;
 import org.fl.util.swing.ApplicationTabbedPane;
 
 public class CollectionAlbumGui  extends JFrame {
-
-	public static final String MUSIQUE_DIRECTORY_URI = "file:///C:/FredericPersonnel/Loisirs/musique/" ;
 	
 	private static final long serialVersionUID = 8726429353709418534L;
 
-	public static final String DEFAULT_PROP_FILE = MUSIQUE_DIRECTORY_URI + "RapportCollection/albumCollection.properties" ;
-	
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
@@ -56,8 +51,7 @@ public class CollectionAlbumGui  extends JFrame {
 	public CollectionAlbumGui() {
 		
 		// init logger and parameters
-		Control.initControl(DEFAULT_PROP_FILE) ;
-		Logger albumLog = Control.getAlbumLog() ;
+		Control.initControl();
    		
    		// init main window
    		setBounds(50, 50, 1500, 1000);
@@ -67,7 +61,7 @@ public class CollectionAlbumGui  extends JFrame {
 		ApplicationTabbedPane collectionTabs = new ApplicationTabbedPane(Control.getMusicRunningContext()) ;
 		
 		// init panel de lecture et génération de site
-		GenerationPane gPane   = new GenerationPane(albumLog) ;
+		GenerationPane gPane   = new GenerationPane() ;
 		
 		collectionTabs.add(gPane, "Génération", 0) ;
 		

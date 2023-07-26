@@ -1,3 +1,27 @@
+/*
+ * MIT License
+
+Copyright (c) 2017, 2023 Frederic Lefevre
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
 package org.fl.collectionAlbum;
 
 import java.util.ArrayList;
@@ -46,34 +70,33 @@ public class CollectionAlbumContainer {
 	
 	private LieuxDesConcerts lieuxDesConcerts ;
 	
-	private Logger albumLog ;
+	private final static Logger albumLog = Control.getAlbumLog();
 	
 	private static CollectionAlbumContainer collectionAlbumContainer ;
 	
-	public static CollectionAlbumContainer getEmptyInstance(Logger aLog) {
+	public static CollectionAlbumContainer getEmptyInstance() {
 		
 		if (collectionAlbumContainer == null) {
-			collectionAlbumContainer = new CollectionAlbumContainer(aLog) ;
+			collectionAlbumContainer = new CollectionAlbumContainer() ;
 		}
 		collectionAlbumContainer.reset() ;
 		return collectionAlbumContainer ;
 	}
 	
-	public static CollectionAlbumContainer getInstance(Logger aLog) {
+	public static CollectionAlbumContainer getInstance() {
 		
 		if (collectionAlbumContainer == null) {
-			collectionAlbumContainer = new CollectionAlbumContainer(aLog) ;
+			collectionAlbumContainer = new CollectionAlbumContainer() ;
 		}
 		return collectionAlbumContainer ;
 	}
 	
-	private CollectionAlbumContainer(Logger aLog) {		
-		albumLog = aLog;	
+	private CollectionAlbumContainer() {		
 	}
 
 	public void addAlbum(JsonObject arteFactJson) {
 		
-		Album album = new Album(arteFactJson, allArtistes, albumLog) ;
+		Album album = new Album(arteFactJson, allArtistes) ;
 		
 		album.addMusicArtfactArtistesToList(collectionArtistes);
 		
@@ -111,7 +134,7 @@ public class CollectionAlbumContainer {
 	
 	public void addConcert(JsonObject arteFactJson) { 
 		
-		Concert concert = new Concert(arteFactJson, allArtistes, lieuxDesConcerts, albumLog) ;
+		Concert concert = new Concert(arteFactJson, allArtistes, lieuxDesConcerts) ;
 		
 		concert.getLieuConcert().addConcert(concert) ;
 		concert.addMusicArtfactArtistesToList(concertsArtistes);
@@ -138,24 +161,24 @@ public class CollectionAlbumContainer {
 
 	private void reset() {
 		
-   		collectionAlbumsMusiques = new ListeAlbum(albumLog) ;
-		collectionArtistes 		 = new ListeArtiste(albumLog) ;
-   		concertsArtistes 		 = new ListeArtiste(albumLog) ;   		
-   		concerts 				 = new ListeConcert(albumLog) ; 		
-   		statChronoEnregistrement = new StatChrono(albumLog) ;
-   		statChronoComposition 	 = new StatChrono(albumLog) ;   		
+   		collectionAlbumsMusiques = new ListeAlbum() ;
+		collectionArtistes 		 = new ListeArtiste() ;
+   		concertsArtistes 		 = new ListeArtiste() ;   		
+   		concerts 				 = new ListeConcert(); 		
+   		statChronoEnregistrement = new StatChrono() ;
+   		statChronoComposition 	 = new StatChrono() ;   		
    		calendrierArtistes 		 = new ChronoArtistes() ;
    		lieuxDesConcerts		 = new LieuxDesConcerts() ;
    		allArtistes				 = new ArrayList<ListeArtiste>() ;
-   		albumWithAudioFile		 = new ListeAlbum(albumLog) ;
-   		albumMissingAudioFile	 = new ListeAlbum(albumLog) ;
-   		albumWithVideoFile		 = new ListeAlbum(albumLog) ;
-   		albumMissingVideoFile	 = new ListeAlbum(albumLog) ;
-   		albumWithHighResAudio	 = new ListeAlbum(albumLog) ;
-   		albumWithLowResAudio	 = new ListeAlbum(albumLog) ;
+   		albumWithAudioFile		 = new ListeAlbum() ;
+   		albumMissingAudioFile	 = new ListeAlbum() ;
+   		albumWithVideoFile		 = new ListeAlbum() ;
+   		albumMissingVideoFile	 = new ListeAlbum() ;
+   		albumWithHighResAudio	 = new ListeAlbum() ;
+   		albumWithLowResAudio	 = new ListeAlbum() ;
    		rangementsAlbums 		 = new EnumMap<Format.RangementSupportPhysique, ListeAlbum>(Format.RangementSupportPhysique.class) ;
    		for (Format.RangementSupportPhysique rangement : Format.RangementSupportPhysique.values()) {
-   			rangementsAlbums.put(rangement, new ListeAlbum(albumLog)) ;
+   			rangementsAlbums.put(rangement, new ListeAlbum()) ;
    		}
    		allArtistes.add(collectionArtistes) ;
    		allArtistes.add(concertsArtistes) ;

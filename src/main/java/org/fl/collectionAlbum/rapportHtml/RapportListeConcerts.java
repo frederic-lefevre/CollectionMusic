@@ -24,16 +24,14 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.rapportHtml;
 
-import java.util.logging.Logger;
-
 import org.fl.collectionAlbum.concerts.ListeConcert;
 
 public class RapportListeConcerts extends RapportHtml {
 
 	private final ListeConcert listeConcerts ;
 	
-	public RapportListeConcerts(ListeConcert lc,  String titre, Logger rl) {
-		super(titre, rl) ;
+	public RapportListeConcerts(ListeConcert lc,  String titre) {
+		super(titre) ;
 		withHtmlLinkList(RapportStructuresAndNames.getAccueils());
 		withTitleDisplayed();
 		listeConcerts = lc ;

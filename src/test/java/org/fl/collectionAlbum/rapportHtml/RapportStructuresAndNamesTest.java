@@ -30,7 +30,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -41,30 +40,29 @@ import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.concerts.Concert;
 import org.fl.collectionAlbum.concerts.LieuxDesConcerts;
-import org.fl.collectionAlbumGui.CollectionAlbumGui;
 import org.junit.jupiter.api.Test;
 
 class RapportStructuresAndNamesTest {
 
-	private static Logger logger = Logger.getLogger(RapportStructuresAndNamesTest.class.getName()) ;
+	private static final String MUSIQUE_DIRECTORY_URI = "file:///C:/FredericPersonnel/Loisirs/musique/";
 	
 	@Test
 	void test() {
 		
-		Control.initControl(CollectionAlbumGui.DEFAULT_PROP_FILE);
+		Control.initControl();
 		RapportStructuresAndNames.init();
-		assertThat(RapportStructuresAndNames.getRapportPath().toUri()).hasToString(CollectionAlbumGui.MUSIQUE_DIRECTORY_URI + "RapportCollection/rapport/");
-		assertThat(RapportStructuresAndNames.getOldRapportPath().toUri()).hasToString(CollectionAlbumGui.MUSIQUE_DIRECTORY_URI + "RapportCollection/rapport_old/");
-		assertThat(RapportStructuresAndNames.getAbsoluteAlbumDir().toUri()).hasToString(CollectionAlbumGui.MUSIQUE_DIRECTORY_URI + "RapportCollection/rapport/albums/");
-		assertThat(RapportStructuresAndNames.getAbsoluteConcertDir().toUri()).hasToString(CollectionAlbumGui.MUSIQUE_DIRECTORY_URI + "RapportCollection/rapport/concerts/");
-		assertThat(RapportStructuresAndNames.getAbsoluteHomeCollectionFile().toUri()).hasToString(CollectionAlbumGui.MUSIQUE_DIRECTORY_URI + "RapportCollection/rapport/index.html");
-		assertThat(RapportStructuresAndNames.getAbsoluteHomeConcertFile().toUri()).hasToString(CollectionAlbumGui.MUSIQUE_DIRECTORY_URI + "RapportCollection/rapport/indexConcert.html");
+		assertThat(RapportStructuresAndNames.getRapportPath().toUri()).hasToString(MUSIQUE_DIRECTORY_URI + "RapportCollection/rapport/");
+		assertThat(RapportStructuresAndNames.getOldRapportPath().toUri()).hasToString(MUSIQUE_DIRECTORY_URI + "RapportCollection/rapport_old/");
+		assertThat(RapportStructuresAndNames.getAbsoluteAlbumDir().toUri()).hasToString(MUSIQUE_DIRECTORY_URI + "RapportCollection/rapport/albums/");
+		assertThat(RapportStructuresAndNames.getAbsoluteConcertDir().toUri()).hasToString(MUSIQUE_DIRECTORY_URI + "RapportCollection/rapport/concerts/");
+		assertThat(RapportStructuresAndNames.getAbsoluteHomeCollectionFile().toUri()).hasToString(MUSIQUE_DIRECTORY_URI + "RapportCollection/rapport/index.html");
+		assertThat(RapportStructuresAndNames.getAbsoluteHomeConcertFile().toUri()).hasToString(MUSIQUE_DIRECTORY_URI + "RapportCollection/rapport/indexConcert.html");
 	}
 
 	@Test
 	void test2() {
 		
-		Control.initControl(CollectionAlbumGui.DEFAULT_PROP_FILE);
+		Control.initControl();
 		RapportStructuresAndNames.init() ;
 	
 		JsonObject jArt = new JsonObject() ;
@@ -73,7 +71,7 @@ class RapportStructuresAndNamesTest {
 		jArt.addProperty("naissance", "1929-08-16") ;
 		jArt.addProperty("mort",  "1980-09-15") ;
 		
-		Artiste artiste= new Artiste(jArt, logger) ;
+		Artiste artiste= new Artiste(jArt);
 		
 		URI pAlbum = RapportStructuresAndNames.getArtisteAlbumRapportRelativeUri(artiste);
 		assertThat(pAlbum.toString()).isEqualTo("artistes/albums/i0.html");
@@ -111,16 +109,16 @@ class RapportStructuresAndNamesTest {
 	@Test
 	void test3() {
 		
-		Control.initControl(CollectionAlbumGui.DEFAULT_PROP_FILE);
+		Control.initControl();
 		RapportStructuresAndNames.init();
 
 		JsonObject jAlbum = JsonParser.parseString(albumStr1).getAsJsonObject();
 
-		ListeArtiste la = new ListeArtiste(logger);
+		ListeArtiste la = new ListeArtiste();
 		List<ListeArtiste> lla = new ArrayList<ListeArtiste>();
 		lla.add(la);
 
-		Album album = new Album(jAlbum, lla, logger);
+		Album album = new Album(jAlbum, lla);
 		Artiste bill = album.getAuteurs().get(0);
 		album.addMusicArtfactArtistesToList(la);
 		
@@ -131,7 +129,7 @@ class RapportStructuresAndNamesTest {
 		assertThat(pInfoAlbum).isNull();
 		
 		JsonObject jAlbum2 = JsonParser.parseString(albumStr2).getAsJsonObject();
-		Album album2 = new Album(jAlbum2, lla, logger);
+		Album album2 = new Album(jAlbum2, lla);
 		album2.addMusicArtfactArtistesToList(la);
 		Artiste fake = album2.getAuteurs().get(0);
 		
@@ -157,17 +155,17 @@ class RapportStructuresAndNamesTest {
 	@Test
 	void test4() {
 		
-		Control.initControl(CollectionAlbumGui.DEFAULT_PROP_FILE);
+		Control.initControl();
 		RapportStructuresAndNames.init();
 		
 		JsonObject jConcert = JsonParser.parseString(concertStr1).getAsJsonObject();
 		
-		ListeArtiste la = new ListeArtiste(logger);
+		ListeArtiste la = new ListeArtiste();
 		List<ListeArtiste> lla = new ArrayList<ListeArtiste>();
 		lla.add(la) ;
 		
 		LieuxDesConcerts lieuxDesConcerts = new LieuxDesConcerts();
-		Concert concert = new Concert(jConcert, lla, lieuxDesConcerts, logger);
+		Concert concert = new Concert(jConcert, lla, lieuxDesConcerts);
 		concert.addMusicArtfactArtistesToList(la);
 		List<Artiste> lDeeDee = concert.getAuteurs();
 		Artiste deeDee = lDeeDee.get(0);

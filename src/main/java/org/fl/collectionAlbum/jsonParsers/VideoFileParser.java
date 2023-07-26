@@ -1,9 +1,34 @@
+/*
+ * MIT License
+
+Copyright (c) 2017, 2023 Frederic Lefevre
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
 package org.fl.collectionAlbum.jsonParsers;
 
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.logging.Logger;
 
+import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.VideoFile;
 import org.fl.collectionAlbum.VideoFileType;
@@ -13,7 +38,9 @@ import com.google.gson.JsonObject;
 
 public class VideoFileParser {
 
-	public static VideoFile parseVideoFile(JsonObject videoFileJson, Logger fl) {
+	private final static Logger rapportLog = Control.getAlbumLog();
+	
+	public static VideoFile parseVideoFile(JsonObject videoFileJson) {
 		
 		if (videoFileJson != null) {
 		
@@ -21,24 +48,24 @@ public class VideoFileParser {
 					.map(JsonElement::getAsString)
 					.map(s -> findType(s))
 					.orElseGet(() -> {
-						fl.severe("Json VideoFile null type parameter: " + videoFileJson);
+						rapportLog.severe("Json VideoFile null type parameter: " + videoFileJson);
 						return null;
 					});
 			
-			String source = AbstractMediaFieldParser.parseSource(videoFileJson, fl);
+			String source = AbstractMediaFieldParser.parseSource(videoFileJson);
 			String note = AbstractMediaFieldParser.parseNote(videoFileJson);
 			
 			Integer width = Optional.ofNullable(videoFileJson.get(JsonMusicProperties.VIDEO_WIDTH))
 					.map(JsonElement::getAsInt)
 					.orElseGet(() -> {
-						fl.severe("Json VideoFile null width parameter" + videoFileJson);
+						rapportLog.severe("Json VideoFile null width parameter" + videoFileJson);
 						return null;
 					});
 			
 			Integer height = Optional.ofNullable(videoFileJson.get(JsonMusicProperties.VIDEO_HEIGHT))
 					.map(JsonElement::getAsInt)
 					.orElseGet(() -> {
-						fl.severe("Json VideoFile null height parameter" + videoFileJson);
+						rapportLog.severe("Json VideoFile null height parameter" + videoFileJson);
 						return null;
 					});
 			
@@ -48,7 +75,7 @@ public class VideoFileParser {
 				return new VideoFile(type, source, width, height, note);
 			}
 		} else {
-			fl.severe("Json VideoFile null parameter");
+			rapportLog.severe("Json VideoFile null parameter");
 			return null;
 		}
 	}
