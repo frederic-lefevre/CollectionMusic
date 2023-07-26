@@ -30,6 +30,7 @@ import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.AbstractAudioFile;
 import org.fl.collectionAlbum.AudioFileType;
+import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.LosslessAudioFile;
 import org.fl.collectionAlbum.LossyAudioFile;
@@ -39,7 +40,9 @@ import com.google.gson.JsonObject;
 
 public class AudioFileParser {
 
-	public static AbstractAudioFile parseAudioFile(JsonObject audioFileJson, Logger fl) {
+	private final static Logger albumLog = Control.getAlbumLog();
+	
+	public static AbstractAudioFile parseAudioFile(JsonObject audioFileJson) {
 		
 		if (audioFileJson != null) {
 			
@@ -47,14 +50,14 @@ public class AudioFileParser {
 					.map(JsonElement::getAsString)
 					.map(s -> findType(s))
 					.orElseGet(() -> {
-						fl.severe("Json AudioFile null type parameter: " + audioFileJson);
+						albumLog.severe("Json AudioFile null type parameter: " + audioFileJson);
 						return null;
 					});
 			
 			Double samplingRate = Optional.ofNullable(audioFileJson.get(JsonMusicProperties.SAMPLING_RATE))
 					.map(JsonElement::getAsDouble)
 					.orElseGet(() -> {
-						fl.severe("Json AudioFile null samplingRate parameter" + audioFileJson);
+						albumLog.severe("Json AudioFile null samplingRate parameter" + audioFileJson);
 						return null;
 					});
 			
@@ -70,7 +73,7 @@ public class AudioFileParser {
 				Integer bitDepth = Optional.ofNullable(audioFileJson.get(JsonMusicProperties.BIT_DEPTH))
 						.map(JsonElement::getAsInt)
 						.orElseGet(() -> {
-							fl.severe("Json AudioFile null bitDepth parameter" + audioFileJson);
+							albumLog.severe("Json AudioFile null bitDepth parameter" + audioFileJson);
 							return null;
 						});
 				
@@ -85,7 +88,7 @@ public class AudioFileParser {
 				Double bitRate = Optional.ofNullable(audioFileJson.get(JsonMusicProperties.BIT_RATE))
 						.map(JsonElement::getAsDouble)
 						.orElseGet(() -> {
-							fl.severe("Json AudioFile null bitRate parameter" + audioFileJson);
+							albumLog.severe("Json AudioFile null bitRate parameter" + audioFileJson);
 							return null;
 						});
 				
@@ -96,7 +99,7 @@ public class AudioFileParser {
 				}
 			}
 		} else {
-			fl.severe("Json AudioFile null parameter");
+			albumLog.severe("Json AudioFile null parameter");
 			return null;
 		}
 	}

@@ -163,8 +163,8 @@ public class CollectionAlbumContainer {
 	private void reset() {
 		
    		collectionAlbumsMusiques = new ListeAlbum(albumLog) ;
-		collectionArtistes 		 = new ListeArtiste(albumLog) ;
-   		concertsArtistes 		 = new ListeArtiste(albumLog) ;   		
+		collectionArtistes 		 = new ListeArtiste() ;
+   		concertsArtistes 		 = new ListeArtiste() ;   		
    		concerts 				 = new ListeConcert(); 		
    		statChronoEnregistrement = new StatChrono(albumLog) ;
    		statChronoComposition 	 = new StatChrono(albumLog) ;   		

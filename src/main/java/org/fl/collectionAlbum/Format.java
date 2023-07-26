@@ -33,7 +33,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -145,8 +144,6 @@ public class Format {
 		
 	}
 	
-	private final Logger logger;
-	
 	// Supports de l'album et leur nombre correspondant
 	private final EnumMap<Support, Double> tableFormat ;
 	
@@ -157,9 +154,8 @@ public class Format {
 	private boolean hasError;
 	
 	// Create a format
-	public Format(JsonObject formatJson, Logger fl) {
+	public Format(JsonObject formatJson) {
 		
-		logger = fl;
 		tableFormat = new EnumMap<Support, Double>(Support.class) ;
 		if (formatJson != null) {
 			hasError = false;
@@ -174,7 +170,7 @@ public class Format {
 					.map(ja -> {
 						List<AbstractAudioFile> audioFileList = new ArrayList<>();
 						ja.forEach(jsonAudioFile -> {
-							AbstractAudioFile audioFile = AudioFileParser.parseAudioFile(jsonAudioFile.getAsJsonObject(), logger);
+							AbstractAudioFile audioFile = AudioFileParser.parseAudioFile(jsonAudioFile.getAsJsonObject());
 							if (audioFile != null) {
 								audioFileList.add(audioFile);
 							} else {

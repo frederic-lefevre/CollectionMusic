@@ -52,7 +52,7 @@ public class RapportListeArtistesAlbum extends RapportHtml {
 	@Override
 	protected void corpsRapport() {
 
-		Format entete = new Format(null, rapportLog) ;
+		Format entete = new Format(null) ;
 
 		write(F1) ;
 		entete.enteteFormat(rBuilder, "total", 1, DONT_APPEND_AUDIO_FILE) ;

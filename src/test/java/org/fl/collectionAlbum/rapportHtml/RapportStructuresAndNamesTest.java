@@ -116,7 +116,7 @@ class RapportStructuresAndNamesTest {
 
 		JsonObject jAlbum = JsonParser.parseString(albumStr1).getAsJsonObject();
 
-		ListeArtiste la = new ListeArtiste(logger);
+		ListeArtiste la = new ListeArtiste();
 		List<ListeArtiste> lla = new ArrayList<ListeArtiste>();
 		lla.add(la);
 
@@ -162,7 +162,7 @@ class RapportStructuresAndNamesTest {
 		
 		JsonObject jConcert = JsonParser.parseString(concertStr1).getAsJsonObject();
 		
-		ListeArtiste la = new ListeArtiste(logger);
+		ListeArtiste la = new ListeArtiste();
 		List<ListeArtiste> lla = new ArrayList<ListeArtiste>();
 		lla.add(la) ;
 		

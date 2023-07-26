@@ -62,9 +62,9 @@ public class AlbumParser {
 		JsonElement jElem = jAlbum.get(JsonMusicProperties.FORMAT) ;
         if (jElem == null) {
         	albumLog.warning("Format d'album null pour l'album " + jAlbum) ;
-            formatAlbum = new Format(null, albumLog) ;
+            formatAlbum = new Format(null) ;
         } else {
-        	formatAlbum = new Format(jElem.getAsJsonObject(), albumLog) ;
+        	formatAlbum = new Format(jElem.getAsJsonObject()) ;
         	if (formatAlbum.hasError()) {
         		albumLog.warning("Format d'album en erreur pour l'album " + jAlbum) ;
         	}

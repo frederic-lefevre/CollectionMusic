@@ -19,7 +19,7 @@ public class ListeAlbum {
 	public ListeAlbum(Logger al) {
 		
 		listeAlbumLog = al ;
-		formatListeAlbum = new Format(null, listeAlbumLog) ;
+		formatListeAlbum = new Format(null) ;
 		albums  = new ArrayList<Album>() ;
 	}
 	

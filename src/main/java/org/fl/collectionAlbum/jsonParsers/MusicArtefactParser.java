@@ -80,7 +80,7 @@ public class MusicArtefactParser {
 	
 	private ListeArtiste processListeArtistes(Class<? extends Artiste> cls, String artistesJprop) {
 		
-		ListeArtiste artistes = new ListeArtiste(albumLog) ;
+		ListeArtiste artistes = new ListeArtiste() ;
 		JsonElement jElem = arteFactJson.get(artistesJprop) ;
 		if (jElem != null) {
 			if (jElem.isJsonArray()) {
