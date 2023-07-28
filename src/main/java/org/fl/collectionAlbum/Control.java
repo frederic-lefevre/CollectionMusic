@@ -49,6 +49,9 @@ public class Control {
 	private static Path concertDirectoryName;
 	private static boolean initialized = false;
    	
+	private Control() {
+	}
+	
 	public static void initControl() {
 		
 		try {
