@@ -85,6 +85,12 @@ public class RapportCollection extends RapportHtml {
 		RapportListeAlbums rapportAlbumsWithAudioFile = new RapportListeAlbums(albumsContainer.getAlbumsWithAudioFile().sortRangementAlbum(), "Albums avec fichiers audio");
 		write(rapportAlbumsWithAudioFile.printReport(getNextRapportFile(), CssStyles.stylesTableauAvecBalise));
 		
+		RapportListeAlbums rapportAlbumsWithHighResAudioFile = new RapportListeAlbums(albumsContainer.getAlbumsWithHighResAudio().sortRangementAlbum(), "Albums avec fichier audio haute résolution");
+		write(rapportAlbumsWithHighResAudioFile.printReport(getNextRapportFile(), CssStyles.stylesTableauAvecBalise));
+		
+		RapportListeAlbums rapportAlbumsWithLowResAudioFile = new RapportListeAlbums(albumsContainer.getAlbumsWithLowResAudio().sortRangementAlbum(), "Albums avec fichier audio avec perte (basse qualité)");
+		write(rapportAlbumsWithLowResAudioFile.printReport(getNextRapportFile(), CssStyles.stylesTableauAvecBalise));
+		
 		RapportListeAlbums rapportAlbumsWithoutAudioFile = new RapportListeAlbums(albumsContainer.getAlbumsMissingAudioFile().sortRangementAlbum(), "Albums manquant de fichier audio");
 		write(rapportAlbumsWithoutAudioFile.printReport(getNextRapportFile(), CssStyles.stylesTableauAvecBalise));
 		
@@ -93,12 +99,6 @@ public class RapportCollection extends RapportHtml {
 		
 		RapportListeAlbums rapportAlbumsWithoutVideoFile = new RapportListeAlbums(albumsContainer.getAlbumsMissingVideoFile().sortRangementAlbum(), "Albums manquant de fichier video");
 		write(rapportAlbumsWithoutVideoFile.printReport(getNextRapportFile(), CssStyles.stylesTableauAvecBalise));
-
-		RapportListeAlbums rapportAlbumsWithHighResAudioFile = new RapportListeAlbums(albumsContainer.getAlbumsWithHighResAudio().sortRangementAlbum(), "Albums avec fichier audio haute résolution");
-		write(rapportAlbumsWithHighResAudioFile.printReport(getNextRapportFile(), CssStyles.stylesTableauAvecBalise));
-		
-		RapportListeAlbums rapportAlbumsWithLowResAudioFile = new RapportListeAlbums(albumsContainer.getAlbumsWithLowResAudio().sortRangementAlbum(), "Albums avec fichier audio avec perte (basse qualité)");
-		write(rapportAlbumsWithLowResAudioFile.printReport(getNextRapportFile(), CssStyles.stylesTableauAvecBalise));
 		
 		write("</ul>\n</td>\n</tr>\n<tr>\n<td class=\"mainpage\">\n<h3>Statistiques</h3>\n<ul>\n");
 		RapportStat rapportStat1 = new RapportStat(albumsContainer.getStatChronoEnregistrement(), "Statistiques par année d'enregistrement");
