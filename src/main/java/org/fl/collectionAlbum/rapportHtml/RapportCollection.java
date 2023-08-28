@@ -107,13 +107,15 @@ public class RapportCollection extends RapportHtml {
 		RapportStat rapportStat2 = new RapportStat(albumsContainer.getStatChronoComposition(), "Statistiques par décennie de composition");
 		write(rapportStat2.printReport(getNextRapportFile(), CssStyles.stylesStat));
 
-		writeStatAlbum();
-		write("  </ul>\n  </li>\n</ul>\n</td>\n<td class=\"mainpage\">\n<ul>\n  <li>Nombre d'artistes, de groupes et d'ensemble: " + albumsContainer.getCollectionArtistes().getNombreArtistes());
+		write("  <li>Nombre d'artistes, de groupes et d'ensemble: " + albumsContainer.getCollectionArtistes().getNombreArtistes());
 		write("</li>\n  <li>Nombre d'unit&eacute;s physiques:\n<table>\n  <tr>\n");
 		albumsContainer.getCollectionAlbumsMusiques().getFormatListeAlbum().enteteFormat(rBuilder, "total", 1, DONT_APPEND_AUDIO_FILE);
 		write("  </tr>\n  <tr>\n");
 		albumsContainer.getCollectionAlbumsMusiques().getFormatListeAlbum().rowFormat(rBuilder, "total", DONT_APPEND_AUDIO_FILE);
-		write("  </tr>\n</table>\n</li>\n</ul>\n</td>\n</tr>\n</table>\n");	
+		
+		write("  </tr>\n</table>\n</li>\n</ul>\n</td>\n<td class=\"mainpage\">\n");
+		writeStatAlbum();
+		write("</td>\n</tr>\n</table>\n");	
 	}
 	
 	 private Path getNextRapportFile() {
@@ -123,13 +125,13 @@ public class RapportCollection extends RapportHtml {
 	 
 	 private void writeStatAlbum() {
 		 
-			write("  <li>Nombre d'albums: " + albumsContainer.getCollectionAlbumsMusiques().getNombreAlbums());
+			write("<ul>\n  <li>Nombre d'albums: " + albumsContainer.getCollectionAlbumsMusiques().getNombreAlbums());
 			write("\n  <ul>\n    <li>avec fichiers audio: " + albumsContainer.getAlbumsWithAudioFile().getNombreAlbums());
 			write("</li>\n    <li>manquant de  fichiers audio: " + albumsContainer.getAlbumsMissingAudioFile().getNombreAlbums());
 			write("</li>\n    <li>haute résolution audio: " + albumsContainer.getAlbumsWithHighResAudio().getNombreAlbums());
 			write("</li>\n    <li>basse résolution audio (avec perte): " + albumsContainer.getAlbumsWithLowResAudio().getNombreAlbums());
 			write("</li>\n    <li>avec  fichiers video: " + albumsContainer.getAlbumsWithVideoFile().getNombreAlbums());
 			write("</li>\n    <li>manquant de  fichiers video: " + albumsContainer.getAlbumsMissingVideoFile().getNombreAlbums());
-			write("</li>\n");
+			write("</li>\n  </ul>\n</ul>\n");
 	 }
 }
