@@ -100,7 +100,7 @@ public class RapportCollection extends RapportHtml {
 		RapportListeAlbums rapportAlbumsWithoutVideoFile = new RapportListeAlbums(albumsContainer.getAlbumsMissingVideoFile().sortRangementAlbum(), "Albums manquant de fichier video");
 		write(rapportAlbumsWithoutVideoFile.printReport(getNextRapportFile(), CssStyles.stylesTableauAvecBalise));
 		
-		write("</ul>\n</td>\n</tr>\n<tr>\n<td colspan=2>\n<h3>Statistiques</h3>\n</td>\n</tr>\n<tr>\n<td class=\"mainpage\">\n<ul>\n");
+		write("</ul>\n</td>\n</tr>\n<tr>\n<td class=\"mainpage\">\n<h3>Statistiques</h3>\n<ul>\n");
 		RapportStat rapportStat1 = new RapportStat(albumsContainer.getStatChronoEnregistrement(), "Statistiques par année d'enregistrement");
 		write(rapportStat1.printReport(getNextRapportFile(), CssStyles.stylesStat));
 
@@ -125,13 +125,14 @@ public class RapportCollection extends RapportHtml {
 	 
 	 private void writeStatAlbum() {
 		 
-			write("<ul>\n  <li>Nombre d'albums: " + albumsContainer.getCollectionAlbumsMusiques().getNombreAlbums());
-			write("\n  <ul>\n    <li>avec fichiers audio: " + albumsContainer.getAlbumsWithAudioFile().getNombreAlbums());
-			write("</li>\n    <li>manquant de  fichiers audio: " + albumsContainer.getAlbumsMissingAudioFile().getNombreAlbums());
-			write("</li>\n    <li>haute résolution audio: " + albumsContainer.getAlbumsWithHighResAudio().getNombreAlbums());
-			write("</li>\n    <li>basse résolution audio (avec perte): " + albumsContainer.getAlbumsWithLowResAudio().getNombreAlbums());
-			write("</li>\n    <li>avec  fichiers video: " + albumsContainer.getAlbumsWithVideoFile().getNombreAlbums());
-			write("</li>\n    <li>manquant de  fichiers video: " + albumsContainer.getAlbumsMissingVideoFile().getNombreAlbums());
-			write("</li>\n  </ul>\n</ul>\n");
+			write("<ul>\n  <li>Nombre d'albums");
+			write("\n  <table>\n    <tr><td class=\"albumstatTitle\">Total</td><td class=\"albumstat\">" + albumsContainer.getCollectionAlbumsMusiques().getNombreAlbums());
+			write("</td></tr>\n    <tr><td class=\"albumstatTitle\">Avec fichiers audio</td><td class=\"albumstat\">" + albumsContainer.getAlbumsWithAudioFile().getNombreAlbums());
+			write("</td></tr>\n    <tr><td class=\"albumstatTitle\">Haute résolution audio</td><td class=\"albumstat\">" + albumsContainer.getAlbumsWithHighResAudio().getNombreAlbums());
+			write("</td></tr>\n    <tr><td class=\"albumstatTitle\">Basse résolution audio (avec perte)</td><td class=\"albumstat\">" + albumsContainer.getAlbumsWithLowResAudio().getNombreAlbums());
+			write("</td></tr>\n    <tr><td class=\"albumstatTitle\">Manquant de fichiers audio</td><td class=\"albumstat\">" + albumsContainer.getAlbumsMissingAudioFile().getNombreAlbums());
+			write("</td></tr>\n    <tr><td class=\"albumstatTitle\">Avec fichiers video</td><td class=\"albumstat\">" + albumsContainer.getAlbumsWithVideoFile().getNombreAlbums());
+			write("</td></tr>\n    <tr><td class=\"albumstatTitle\">Manquant de fichiers video</td><td class=\"albumstat\">" + albumsContainer.getAlbumsMissingVideoFile().getNombreAlbums());
+			write("</td></tr>\n  </table>\n  </li>\n</ul>\n");
 	 }
 }
