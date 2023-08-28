@@ -56,7 +56,7 @@ public class CollectionAlbumGui  extends JFrame {
    		// init main window
    		setBounds(50, 50, 1500, 1000);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setTitle("Collection d'album") ;
+		setTitle("Collection d'albums") ;
 		
 		ApplicationTabbedPane collectionTabs = new ApplicationTabbedPane(Control.getMusicRunningContext()) ;
 		

@@ -28,6 +28,11 @@ div.home { display: block;
            font-size: x-large ;
 }
 
+td.mainpage { vertical-align : top ;
+             padding : 10px ;
+             margin : 10px ;
+ }
+ 
 span.dategen { font-size: small ;
 				color: white ;
 				background-color : black ;
