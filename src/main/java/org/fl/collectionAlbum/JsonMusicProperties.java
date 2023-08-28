@@ -40,8 +40,8 @@ public class JsonMusicProperties {
 	public final static String MAXI_45T		  = "maxi45t" ;
 	public final static String VHS			  = "vhs" ;
 	public final static String DVD			  = "dvd" ;
-	public final static String BLUERAY		  = "blueray" ;
-	public final static String BLUERAY_AUDIO  = "bluerayAudio" ;
+	public final static String BLURAY		  = "blueray" ;
+	public final static String BLURAY_AUDIO  = "bluerayAudio" ;
 	public final static String NOM			  = "nom" ;
 	public final static String PRENOM		  = "prenom" ;
 	public final static String NAISSANCE	  = "naissance" ;

@@ -28,6 +28,29 @@ div.home { display: block;
            font-size: x-large ;
 }
 
+td.mainpage { vertical-align : top ;
+             padding : 10px ;
+             margin : 10px ;
+ }
+ 
+td.albumstat { vertical-align : top ;
+             padding : 3px ;
+             margin : 3px ;
+             border : 1px solid black;
+             background: white;
+             text-align: right ;
+             border-spacing: 1px;
+ }
+ 
+td.albumstatTitle { vertical-align : top ;
+             padding : 3px ;
+             margin : 3px ;
+             border : 1px solid black;
+             background: white;
+             text-align: left ;
+             border-spacing: 1px;
+ }
+ 
 span.dategen { font-size: small ;
 				color: white ;
 				background-color : black ;
