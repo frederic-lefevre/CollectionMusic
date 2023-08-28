@@ -82,7 +82,7 @@ public class RapportCollection extends RapportHtml {
 		}
 
 		write("</ul>\n</td>\n<td class=\"mainpage\">\n<h3>Albums avec et sans fichier audio ou video</h3>\n<ul>\n");
-		RapportListeAlbums rapportAlbumsWithAudioFile = new RapportListeAlbums(albumsContainer.getAlbumsWithAudioFile().sortRangementAlbum(), "Albums avec fichiers audio");
+		RapportListeAlbums rapportAlbumsWithAudioFile = new RapportListeAlbums(albumsContainer.getAlbumsWithAudioFile().sortRangementAlbum(), "Albums avec fichier audio");
 		write(rapportAlbumsWithAudioFile.printReport(getNextRapportFile(), CssStyles.stylesTableauAvecBalise));
 		
 		RapportListeAlbums rapportAlbumsWithHighResAudioFile = new RapportListeAlbums(albumsContainer.getAlbumsWithHighResAudio().sortRangementAlbum(), "Albums avec fichier audio haute résolution");
@@ -94,7 +94,7 @@ public class RapportCollection extends RapportHtml {
 		RapportListeAlbums rapportAlbumsWithoutAudioFile = new RapportListeAlbums(albumsContainer.getAlbumsMissingAudioFile().sortRangementAlbum(), "Albums manquant de fichier audio");
 		write(rapportAlbumsWithoutAudioFile.printReport(getNextRapportFile(), CssStyles.stylesTableauAvecBalise));
 		
-		RapportListeAlbums rapportAlbumsWithVideoFile = new RapportListeAlbums(albumsContainer.getAlbumsWithVideoFile().sortRangementAlbum(), "Albums avec fichiers video");
+		RapportListeAlbums rapportAlbumsWithVideoFile = new RapportListeAlbums(albumsContainer.getAlbumsWithVideoFile().sortRangementAlbum(), "Albums avec fichier video");
 		write(rapportAlbumsWithVideoFile.printReport(getNextRapportFile(), CssStyles.stylesTableauAvecBalise));
 		
 		RapportListeAlbums rapportAlbumsWithoutVideoFile = new RapportListeAlbums(albumsContainer.getAlbumsMissingVideoFile().sortRangementAlbum(), "Albums manquant de fichier video");
@@ -107,7 +107,7 @@ public class RapportCollection extends RapportHtml {
 		RapportStat rapportStat2 = new RapportStat(albumsContainer.getStatChronoComposition(), "Statistiques par décennie de composition");
 		write(rapportStat2.printReport(getNextRapportFile(), CssStyles.stylesStat));
 
-		write("  <li>Nombre d'artistes, de groupes et d'ensemble: " + albumsContainer.getCollectionArtistes().getNombreArtistes());
+		write("  <li>Nombre d'artistes, de groupes et d'ensembles: " + albumsContainer.getCollectionArtistes().getNombreArtistes());
 		write("</li>\n  <li>Nombre d'unit&eacute;s physiques:\n<table>\n  <tr>\n");
 		albumsContainer.getCollectionAlbumsMusiques().getFormatListeAlbum().enteteFormat(rBuilder, "total", 1, DONT_APPEND_AUDIO_FILE);
 		write("  </tr>\n  <tr>\n");

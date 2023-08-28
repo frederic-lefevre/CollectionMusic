@@ -46,7 +46,7 @@ import com.google.gson.JsonObject;
  * @author Frédéric Lefèvre
  *
  *  Format d'un album (ou d'une liste d'albums)
- *  un album peut comprendre plusieurs supports physiques (par exemple 1 vinyl 33T, 1 blueray, 5 CD)
+ *  un album peut comprendre plusieurs supports physiques (par exemple 1 vinyl 33T, 1 blu-ray, 5 CD)
  *  Il a un poids total calculé en fonction de ses supports physiques
  *  Il peut n'occuper qu'une fraction d'un support physique (par exemple 0.5 CD)
  *   
@@ -59,15 +59,15 @@ public class Format {
 	private enum SupportPhysique {
 		CD(		 "CD",  	 "xnbcd", 		 1),
 		K7(		 "K7",  	 "xnbk7", 		 1),
-		Vinyl33T("33T", 	 "xnb33T", 	 	 1) ,
-		Vinyl45T("45T", 	 "xnb45T",     0.5) ,
-		MiniCD(	 "Mini CD",  "xnbminicd",  0.5) ,
-		MiniDVD( "Mini DVD", "xnbminidvd", 0.5) ,
-		Mini33T( "Mini 33T", "xnbmini33T", 0.5) ,
-		Maxi45T( "Maxi 45T", "xnbmaxi45T", 0.5) ,
-		VHS(	 "VHS",		 "xnbvhs", 	 	 1) ,
-		DVD(	 "DVD",		 "xnbdvd", 	 	 1) ,
-		BlueRay( "Blue Ray", "xnbblueray",   1) ;
+		Vinyl33T("33T", 	 "xnb33T", 	 	 1),
+		Vinyl45T("45T", 	 "xnb45T",     0.5),
+		MiniCD(	 "Mini CD",  "xnbminicd",  0.5),
+		MiniDVD( "Mini DVD", "xnbminidvd", 0.5),
+		Mini33T( "Mini 33T", "xnbmini33T", 0.5),
+		Maxi45T( "Maxi 45T", "xnbmaxi45T", 0.5),
+		VHS(	 "VHS",		 "xnbvhs", 	 	 1),
+		DVD(	 "DVD",		 "xnbdvd", 	 	 1),
+		BluRay(  "Blu- ray", "xnbblueray",   1);
 		
 		private final String nom ;
 		private final String cssClass ;
@@ -88,16 +88,16 @@ public class Format {
 	private enum Support {
 		CD(		 SupportPhysique.CD,  	   JsonMusicProperties.CD,	  ContentNature.AUDIO),
 		K7(		 SupportPhysique.K7, 	   JsonMusicProperties.K7,	  ContentNature.AUDIO),
-		Vinyl33T(SupportPhysique.Vinyl33T, 	   JsonMusicProperties._33T,	  ContentNature.AUDIO) ,
-		Vinyl45T(SupportPhysique.Vinyl45T, 	   JsonMusicProperties._45T, ContentNature.AUDIO) ,
-		MiniCD(	 SupportPhysique.MiniCD,  JsonMusicProperties.MINI_CD, ContentNature.AUDIO) ,
-		MiniDVD( SupportPhysique.MiniDVD, JsonMusicProperties.MINI_DVD, ContentNature.VIDEO) ,
-		Mini33T( SupportPhysique.Mini33T, JsonMusicProperties.MINI_33T, ContentNature.AUDIO) ,
-		Maxi45T( SupportPhysique.Maxi45T, JsonMusicProperties.MAXI_45T, ContentNature.AUDIO) ,
-		VHS(	 SupportPhysique.VHS,	   JsonMusicProperties.VHS,   ContentNature.VIDEO) ,
-		DVD(	 SupportPhysique.DVD, 	   JsonMusicProperties.DVD,   ContentNature.VIDEO) ,
-		BlueRay( SupportPhysique.BlueRay, JsonMusicProperties.BLUERAY,   ContentNature.VIDEO),
-		BlueRayAudio( SupportPhysique.BlueRay, JsonMusicProperties.BLUERAY_AUDIO,   ContentNature.AUDIO) ;
+		Vinyl33T(SupportPhysique.Vinyl33T, 	   JsonMusicProperties._33T,	  ContentNature.AUDIO),
+		Vinyl45T(SupportPhysique.Vinyl45T, 	   JsonMusicProperties._45T, ContentNature.AUDIO),
+		MiniCD(	 SupportPhysique.MiniCD,  JsonMusicProperties.MINI_CD, ContentNature.AUDIO),
+		MiniDVD( SupportPhysique.MiniDVD, JsonMusicProperties.MINI_DVD, ContentNature.VIDEO),
+		Mini33T( SupportPhysique.Mini33T, JsonMusicProperties.MINI_33T, ContentNature.AUDIO),
+		Maxi45T( SupportPhysique.Maxi45T, JsonMusicProperties.MAXI_45T, ContentNature.AUDIO),
+		VHS(	 SupportPhysique.VHS,	   JsonMusicProperties.VHS,   ContentNature.VIDEO),
+		DVD(	 SupportPhysique.DVD, 	   JsonMusicProperties.DVD,   ContentNature.VIDEO),
+		BluRay( SupportPhysique.BluRay, JsonMusicProperties.BLURAY,   ContentNature.VIDEO),
+		BluRayAudio( SupportPhysique.BluRay, JsonMusicProperties.BLURAY_AUDIO,   ContentNature.AUDIO);
 		
 		private final SupportPhysique supportPhysique ;
 		private final String jsonPropertyName ;
@@ -120,7 +120,7 @@ public class Format {
 		RangementCDBox("Ordre de rangement des albums au format CD box", "cd box"),
 		RangementVinyl("Ordre de rangement des albums au format vinyl 33 tours", "33T"), 
 		RangementK7("Ordre de rangement des albums au format K7", "K7"), 
-		RangementVHS("Ordre de rangement des albums au format DVD, VHS et Blue Ray", "DVD") ;
+		RangementVHS("Ordre de rangement des albums au format DVD, VHS et Blu-ray", "DVD") ;
 		
 		private final String description ;
 		private final String jsonPropertyName ;
@@ -225,7 +225,7 @@ public class Format {
 			typeRangement = RangementSupportPhysique.RangementK7 ;
 		} else if ((supportPhysiquePresent(SupportPhysique.VHS)) || 
 					(supportPhysiquePresent(SupportPhysique.DVD)) || 
-					(supportPhysiquePresent(SupportPhysique.BlueRay))) {
+					(supportPhysiquePresent(SupportPhysique.BluRay))) {
 		// à ranger dans la collection VHS
 			typeRangement = RangementSupportPhysique.RangementVHS ;
 		}
