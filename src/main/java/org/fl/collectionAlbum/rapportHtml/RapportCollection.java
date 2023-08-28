@@ -100,7 +100,7 @@ public class RapportCollection extends RapportHtml {
 		RapportListeAlbums rapportAlbumsWithoutVideoFile = new RapportListeAlbums(albumsContainer.getAlbumsMissingVideoFile().sortRangementAlbum(), "Albums manquant de fichier video");
 		write(rapportAlbumsWithoutVideoFile.printReport(getNextRapportFile(), CssStyles.stylesTableauAvecBalise));
 		
-		write("</ul>\n</td>\n</tr>\n<tr>\n<td class=\"mainpage\">\n<h3>Statistiques</h3>\n<ul>\n");
+		write("</ul>\n</td>\n</tr>\n<tr>\n<td colspan=2>\n<h3>Statistiques</h3>\n</td>\n</tr>\n<tr>\n<td class=\"mainpage\">\n<ul>\n");
 		RapportStat rapportStat1 = new RapportStat(albumsContainer.getStatChronoEnregistrement(), "Statistiques par année d'enregistrement");
 		write(rapportStat1.printReport(getNextRapportFile(), CssStyles.stylesStat));
 
@@ -114,12 +114,12 @@ public class RapportCollection extends RapportHtml {
 		write("</li>\n    <li>basse résolution audio (avec perte): " + albumsContainer.getAlbumsWithLowResAudio().getNombreAlbums());
 		write("</li>\n    <li>avec  fichiers video: " + albumsContainer.getAlbumsWithVideoFile().getNombreAlbums());
 		write("</li>\n    <li>manquant de  fichiers video: " + albumsContainer.getAlbumsMissingVideoFile().getNombreAlbums());
-		write("</li>\n  </ul>\n  </li>\n  <li>Nombre d'artistes, de groupes et d'ensemble: " + albumsContainer.getCollectionArtistes().getNombreArtistes());
+		write("</li>\n  </ul>\n  </li>\n</ul>\n</td>\n<td class=\"mainpage\">\n<ul>\n  <li>Nombre d'artistes, de groupes et d'ensemble: " + albumsContainer.getCollectionArtistes().getNombreArtistes());
 		write("</li>\n  <li>Nombre d'unit&eacute;s physiques:\n<table>\n  <tr>\n");
 		albumsContainer.getCollectionAlbumsMusiques().getFormatListeAlbum().enteteFormat(rBuilder, "total", 1, DONT_APPEND_AUDIO_FILE);
 		write("  </tr>\n  <tr>\n");
 		albumsContainer.getCollectionAlbumsMusiques().getFormatListeAlbum().rowFormat(rBuilder, "total", DONT_APPEND_AUDIO_FILE);
-		write("  </tr>\n</table>\n</li>\n</ul>\n</td>\n<td class=\"mainpage\"></td>\n</tr>\n</table>\n");	
+		write("  </tr>\n</table>\n</li>\n</ul>\n</td>\n</tr>\n</table>\n");	
 	}
 	
 	 private Path getNextRapportFile() {
