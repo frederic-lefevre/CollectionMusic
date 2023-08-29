@@ -24,6 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.albums;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
@@ -40,14 +41,14 @@ class AlbumTest {
 
 	@Test
 	void testEmptyAlbum() {
-		
-		ListeArtiste la = new ListeArtiste() ;
-		List<ListeArtiste> lla = new ArrayList<ListeArtiste>() ;
-		lla.add(la) ;
-		
-		Album album = new Album(new JsonObject(), lla) ;
-		
-		assertNotNull(album) ;
+
+		ListeArtiste la = new ListeArtiste();
+		List<ListeArtiste> lla = new ArrayList<ListeArtiste>();
+		lla.add(la);
+
+		Album album = new Album(new JsonObject(), lla);
+
+		assertThat(album).isNotNull();
 	}
 
 	private static final String albumStr1 = """
@@ -72,29 +73,35 @@ class AlbumTest {
 		
 		JsonObject jAlbum = JsonParser.parseString(albumStr1).getAsJsonObject();
 
-		ListeArtiste la = new ListeArtiste() ;
-		List<ListeArtiste> lla = new ArrayList<ListeArtiste>() ;
-		lla.add(la) ;
+		ListeArtiste la = new ListeArtiste();
+		List<ListeArtiste> lla = new ArrayList<ListeArtiste>();
+		lla.add(la);
 
-		Album album = new Album(jAlbum, lla) ;
+		Album album = new Album(jAlbum, lla);
 		
-		assertEquals("Portrait in jazz", album.getTitre()) ;
+		assertThat(album.getTitre()).isEqualTo("Portrait in jazz");
+
 		List<String> liens = album.getUrlLinks();
-		assertNotNull(liens);
-		assertEquals(1, liens.size());
-		assertEquals("http://somwhere", liens.get(0));
+		assertThat(liens)
+			.isNotNull()
+			.singleElement()
+			.isEqualTo("http://somwhere");
 		
-		Artiste bill = album.getAuteurs().get(0) ;
-		assertNotNull(bill) ;
-		assertEquals("Bill", bill.getPrenoms()) ;
-		assertEquals("Evans", bill.getNom()) ;
+		Artiste bill = album.getAuteurs().get(0);
+		assertThat(bill).isNotNull();
+		assertThat(bill.getPrenoms()).isEqualTo("Bill");
+		assertThat(bill.getNom()).isEqualTo("Evans");
 		
-		assertEquals(0, bill.getNbAlbum()) ;
+		assertThat(bill.getNbAlbum()).isZero();
 		
 		album.addMusicArtfactArtistesToList(la);
-		assertEquals(1, bill.getNbAlbum()) ;
+		assertThat(bill.getNbAlbum()).isEqualTo(1);
 		
-		assertEquals(album, bill.getAlbums().getAlbums().get(0)) ;
+		assertThat(bill.getAlbums()).isNotNull();
+		assertThat(bill.getAlbums().getAlbums())
+			.isNotNull()
+			.singleElement()
+			.isEqualTo(album);
 
 	}
 }
