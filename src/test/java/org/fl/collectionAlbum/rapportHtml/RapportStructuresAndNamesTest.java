@@ -77,34 +77,38 @@ class RapportStructuresAndNamesTest {
 		assertThat(pAlbum.toString()).isEqualTo("artistes/albums/i0.html");
 	}
 	
-	private static final String albumStr1 = "{ " +
-			 " \"titre\": \"Portrait in jazz\"," +
-			 " \"format\": {  \"cd\": 1   }, "	+
-			"  \"auteurCompositeurs\": [ "		+
-			"    {  "							+
-			"      \"nom\": \"Evans\", "		+
-			"     \"prenom\": \"Bill\", "		+
-			"      \"naissance\": \"1929-08-16\"," +
-			"      \"mort\": \"1980-09-15\"  "      +
-			"    }   "                              +
-			"  ],    "								+
-			"  \"enregistrement\": [ \"1959-12-28\",  \"1959-12-28\"  ]  " +
-			" } " ;
+	private static final String albumStr1 = """	
+			{ 
+			  "titre": "Portrait in jazz",
+			  "format": {  "cd": 1   }, 
+			  "auteurCompositeurs": [ 
+			    {  
+			      "nom": "Evans",
+			      "prenom": "Bill", 
+			      "naissance": "1929-08-16",
+			      "mort": "1980-09-15"  
+			    }  
+			  ],   
+			  "enregistrement": [ "1959-12-28",  "1959-12-28"  ] 
+			 } 
+			""" ;
 
-	private static final String albumStr2 = "{ " +
-			 " \"titre\": \"Portrait in rock\"," +
-			 " \"format\": {  \"cd\": 1   }, "	+
-			"  \"auteurCompositeurs\": [ "		+
-			"    {  "							+
-			"      \"nom\": \"Fake\", "		+
-			"     \"prenom\": \"Bill\", "		+
-			"      \"naissance\": \"1929-08-16\"," +
-			"      \"mort\": \"1980-09-15\"  "      +
-			"    }   "                              +
-			"  ],    "								+
-			"  \"enregistrement\": [ \"1959-12-28\",  \"1959-12-28\"  ],  " +
-			" \"notes\": [ \"Version mono\" ] "					 +
-			" } ";
+	private static final String albumStr2 = """
+			{ 
+			  "titre": "Portrait in rock",
+			  "format": {  "cd": 1   }, 
+			  "auteurCompositeurs": [ 
+			    { 
+			      "nom": "Fake", 
+			      "prenom": "Bill", 
+			      "naissance": "1929-08-16",
+			      "mort": "1980-09-15" 
+			    }   
+			  ],   
+			  "enregistrement": [ "1959-12-28",  "1959-12-28"  ], 
+			  "notes": [ "Version mono" ]
+			 }			
+			""";
 
 	@Test
 	void test3() {
@@ -140,18 +144,21 @@ class RapportStructuresAndNamesTest {
 		assertThat(pInfoAlbum2).hasToString("albums/i0.html");
 	}
 	
-	private static final String concertStr1 = "{ " +
-			  "\"auteurCompositeurs\": [ "			+
-			                        " { "			+
-			        " \"nom\": \"Bridgewater\","	+
-			       "  \"prenom\": \"Dee Dee\","		+
-			        " \"naissance\": \"1950-05-27\""+
-			        "  }  ], "					+
-			   "\"date\": \"1990-07-19\","			+
-			   "\"lieu\": \"Juan-les-Pins, Alpes-Maritimes\"," +
-			   "\"imageTicket\": ["					+
-			       "\"/Annees1990/1990/07_Juillet/RayCharles01.jpg\"" +
-			   " ]  } ";
+	private static final String concertStr1 = """
+			{ 
+			  "auteurCompositeurs": [ 
+			      { 
+			        "nom": "Bridgewater",
+			        "prenom": "Dee Dee",
+			        "naissance": "1950-05-27"
+			       }  ],
+			   "date": "1990-07-19",
+			   "lieu": "Juan-les-Pins, Alpes-Maritimes",
+			   "imageTicket": [
+			       "/Annees1990/1990/07_Juillet/RayCharles01.jpg"
+			    ]  
+			 } 
+			 """;
 	@Test
 	void test4() {
 		
