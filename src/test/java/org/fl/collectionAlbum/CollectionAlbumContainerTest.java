@@ -59,19 +59,21 @@ class CollectionAlbumContainerTest {
 		assertThat(albumsContainer.getArtisteKnown("Toto", "Titi")).isNull();
 	}
 
-	private static final String albumStr1 = "{ " +
-			 " \"titre\": \"Portrait in jazz\"," +
-			 " \"format\": {  \"cd\": 1   }, "	+
-			"  \"auteurCompositeurs\": [ "		+
-			"    {  "							+
-			"      \"nom\": \"Evans\", "		+
-			"     \"prenom\": \"Bill\", "		+
-			"      \"naissance\": \"1929-08-16\"," +
-			"      \"mort\": \"1980-09-15\"  "      +
-			"    }   "                              +
-			"  ],    "								+
-			"  \"enregistrement\": [ \"1959-12-28\",  \"1959-12-28\"  ]  " +
-			" } ";
+	private static final String albumStr1 = """
+			{ 
+			  "titre": "Portrait in jazz",
+			  "format": {  "cd": 1   },
+			  "auteurCompositeurs": [ 
+			    {  
+			      "nom": "Evans", 
+			     "prenom": "Bill", 
+			     "naissance": "1929-08-16",
+			      "mort": "1980-09-15" 
+			    }  
+			  ],    
+			  "enregistrement": [ "1959-12-28",  "1959-12-28"  ]
+			 } 
+			""";
 	
 	@Test
 	void testAlbumContainer() {
