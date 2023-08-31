@@ -24,7 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.net.URI;
 
@@ -43,57 +43,65 @@ class CollectionAlbumContainerTest {
 		
 		CollectionAlbumContainer albumsContainer = CollectionAlbumContainer.getEmptyInstance() ;
 		
-		assertEquals(0, albumsContainer.getCollectionAlbumsMusiques().getNombreAlbums()) ;
-		assertEquals(0, albumsContainer.getConcerts().getNombreConcerts()) ;
-		assertEquals(0, albumsContainer.getCollectionArtistes().getNombreArtistes()) ;
-		assertEquals(0, albumsContainer.getConcertsArtistes().getNombreArtistes()) ;
-		assertNotNull(albumsContainer.getCalendrierArtistes()) ;
-		assertNull(albumsContainer.getArtisteKnown("Toto", "Titi")) ;
-		assertNotNull(albumsContainer.getStatChronoComposition()) ;
-		assertNotNull(albumsContainer.getStatChronoEnregistrement()) ;
+		assertThat(albumsContainer.getCollectionAlbumsMusiques()).isNotNull();
+		assertThat(albumsContainer.getConcerts()).isNotNull();
+		assertThat(albumsContainer.getCollectionArtistes()).isNotNull();
+		assertThat(albumsContainer.getConcertsArtistes()).isNotNull();
+		assertThat(albumsContainer.getCalendrierArtistes()).isNotNull();
+		assertThat(albumsContainer.getStatChronoComposition()).isNotNull();
+		assertThat(albumsContainer.getStatChronoEnregistrement()).isNotNull();
+		
+		assertThat(albumsContainer.getCollectionAlbumsMusiques().getNombreAlbums()).isZero();
+		assertThat(albumsContainer.getConcerts().getNombreConcerts()).isZero();
+		assertThat(albumsContainer.getCollectionArtistes().getNombreArtistes()).isZero();
+		assertThat(albumsContainer.getConcertsArtistes().getNombreArtistes()).isZero();
+
+		assertThat(albumsContainer.getArtisteKnown("Toto", "Titi")).isNull();
 	}
 
-	private static final String albumStr1 = "{ " +
-			 " \"titre\": \"Portrait in jazz\"," +
-			 " \"format\": {  \"cd\": 1   }, "	+
-			"  \"auteurCompositeurs\": [ "		+
-			"    {  "							+
-			"      \"nom\": \"Evans\", "		+
-			"     \"prenom\": \"Bill\", "		+
-			"      \"naissance\": \"1929-08-16\"," +
-			"      \"mort\": \"1980-09-15\"  "      +
-			"    }   "                              +
-			"  ],    "								+
-			"  \"enregistrement\": [ \"1959-12-28\",  \"1959-12-28\"  ]  " +
-			" } " ;
+	private static final String albumStr1 = """
+			{ 
+			  "titre": "Portrait in jazz",
+			  "format": {  "cd": 1   },
+			  "auteurCompositeurs": [ 
+			    {  
+			      "nom": "Evans", 
+			     "prenom": "Bill", 
+			     "naissance": "1929-08-16",
+			      "mort": "1980-09-15" 
+			    }  
+			  ],    
+			  "enregistrement": [ "1959-12-28",  "1959-12-28"  ]
+			 } 
+			""";
 	
 	@Test
 	void testAlbumContainer() {
 		
 		Control.initControl();
-		RapportStructuresAndNames.init() ;
+		RapportStructuresAndNames.init();
 
-		CollectionAlbumContainer albumsContainer = CollectionAlbumContainer.getEmptyInstance() ;
+		CollectionAlbumContainer albumsContainer = CollectionAlbumContainer.getEmptyInstance();
 
 		JsonObject jAlbum = JsonParser.parseString(albumStr1).getAsJsonObject();
 		
 		albumsContainer.addAlbum(jAlbum);
 		
-		assertEquals(1, albumsContainer.getCollectionAlbumsMusiques().getNombreAlbums()) ;
-		assertEquals(1, albumsContainer.getCollectionArtistes().getNombreArtistes()) ;
-		assertEquals(0, albumsContainer.getConcerts().getNombreConcerts()) ;
-		assertEquals(0, albumsContainer.getConcertsArtistes().getNombreArtistes()) ;
+		assertThat(albumsContainer.getCollectionAlbumsMusiques().getNombreAlbums()).isEqualTo(1);
+		assertThat(albumsContainer.getCollectionArtistes().getNombreArtistes()).isEqualTo(1);
+		assertThat(albumsContainer.getConcerts().getNombreConcerts()).isZero();
+		assertThat(albumsContainer.getConcertsArtistes().getNombreArtistes()).isZero();
 		
-		Album album = albumsContainer.getCollectionAlbumsMusiques().getAlbums().get(0) ;
+		Album album = albumsContainer.getCollectionAlbumsMusiques().getAlbums().get(0);
 		
-		assertEquals("Portrait in jazz", album.getTitre()) ;
+		assertThat(album.getTitre()).isEqualTo("Portrait in jazz");
 		
-		Artiste artiste = albumsContainer.getCollectionArtistes().getArtistes().get(0) ;
+		Artiste artiste = albumsContainer.getCollectionArtistes().getArtistes().get(0);
 		
-		assertEquals("Evans", artiste.getNom()) ;
-		assertEquals("Bill", artiste.getPrenoms()) ;
+		assertThat(artiste.getNom()).isEqualTo("Evans");
+		assertThat(artiste.getPrenoms()).isEqualTo("Bill");
 		
-		URI pAlbum = RapportStructuresAndNames.getArtisteAlbumRapportRelativeUri(artiste) ;
-		assertEquals("artistes/albums/i0.html", pAlbum.toString()) ;
+		URI pAlbum = RapportStructuresAndNames.getArtisteAlbumRapportRelativeUri(artiste);
+		assertThat(pAlbum).hasToString("artistes/albums/i0.html");
 	}
 }

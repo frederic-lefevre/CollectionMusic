@@ -24,7 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.artistes;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.Test;
 
@@ -34,26 +34,27 @@ class ArtisteTest {
 	
 	@Test
 	void test() {
-		
-		JsonObject jArt = new JsonObject() ;
-		jArt.addProperty("nom", "Evans") ;
-		jArt.addProperty("prenom", "Bill") ;
-		jArt.addProperty("naissance", "1929-08-16") ;
-		jArt.addProperty("mort",  "1980-09-15") ;
-		
-		Artiste artiste= new Artiste(jArt) ;
-		assertEquals("Evans", artiste.getNom()) ;
-		assertEquals("Bill", artiste.getPrenoms()) ;
-		
-		assertEquals(0, artiste.getNbAlbum());
-		assertEquals(0, artiste.getNbConcert());
-		
-		assertNull(artiste.getInstruments()) ;
-		
-		assertEquals(0, artiste.getAlbums().getNombreAlbums()) ;
-		assertEquals(0, artiste.getConcerts().getNombreConcerts()) ;
-		
-		assertEquals(0, artiste.getAlbumsFormat().getPoids()) ;
+
+		JsonObject jArt = new JsonObject();
+		jArt.addProperty("nom", "Evans");
+		jArt.addProperty("prenom", "Bill");
+		jArt.addProperty("naissance", "1929-08-16");
+		jArt.addProperty("mort", "1980-09-15");
+
+		Artiste artiste = new Artiste(jArt);
+
+		assertThat(artiste.getNom()).isEqualTo("Evans");
+		assertThat(artiste.getPrenoms()).isEqualTo("Bill");
+
+		assertThat(artiste.getNbAlbum()).isZero();
+		assertThat(artiste.getNbConcert()).isZero();
+
+		assertThat(artiste.getInstruments()).isNull();
+
+		assertThat(artiste.getAlbums().getNombreAlbums()).isZero();
+		assertThat(artiste.getConcerts().getNombreConcerts()).isZero();
+
+		assertThat(artiste.getAlbumsFormat().getPoids()).isZero();
 	}
 
 }
