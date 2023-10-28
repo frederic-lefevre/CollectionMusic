@@ -25,6 +25,7 @@ SOFTWARE.
 package org.fl.collectionAlbum.rapportHtml;
 
 import org.fl.collectionAlbum.albums.Album;
+import org.fl.collectionAlbum.utils.TemporalUtils;
 
 public class RapportAlbum extends RapportMusicArtefact {
 
@@ -40,6 +41,21 @@ public class RapportAlbum extends RapportMusicArtefact {
 	@Override
 	protected void corpsRapport() {
 		
+		write("  <h3>Dates de composition / Dates d'enregistrement</h3>\n");
+		write("  <ul>\n");
+		write("    <li>");
+		write(TemporalUtils.formatDate(album.getDebutComposition()));
+		write (" - ");
+		write(TemporalUtils.formatDate(album.getFinComposition()));
+		write("    </li>\n");
+		if (album.hasSpecificCompositionDates()) {
+			write("    <li>");
+			write(TemporalUtils.formatDate(album.getDebutEnregistrement()));
+			write (" - ");
+			write(TemporalUtils.formatDate(album.getFinEnregistrement()));
+			write("    </li>\n");
+		}
+		write("  </ul>\n");
 		super.corpsRapport();
 	}
 	
