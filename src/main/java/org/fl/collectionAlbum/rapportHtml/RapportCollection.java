@@ -109,7 +109,7 @@ public class RapportCollection extends RapportHtml {
 
 		write("  <li>Nombre d'artistes, de groupes et d'ensembles: " + albumsContainer.getCollectionArtistes().getNombreArtistes());
 		write("</li>\n  <li>Nombre d'unit&eacute;s physiques:\n<table>\n  <tr>\n");
-		albumsContainer.getCollectionAlbumsMusiques().getFormatListeAlbum().enteteFormat(rBuilder, "total", 1, DONT_APPEND_AUDIO_FILE);
+		Format.enteteFormat(rBuilder, "total", 1, DONT_APPEND_AUDIO_FILE);
 		write("  </tr>\n  <tr>\n");
 		albumsContainer.getCollectionAlbumsMusiques().getFormatListeAlbum().rowFormat(rBuilder, "total", DONT_APPEND_AUDIO_FILE);
 		

@@ -148,42 +148,47 @@ public abstract class RapportHtml {
 		}
 	}
 	
-	protected void withTitleDisplayed() {
-		displayTitle = true ;
+	protected RapportHtml withTitleDisplayed() {
+		displayTitle = true;
+		return this;
 	}
 	
-	public void withBalises(Balises b) {
-		balises =b ;
+	public RapportHtml withBalises(Balises b) {
+		balises =b;
+		return this;
 	}
 	
 	protected RapportHtml write(String s) {
-		rBuilder.append(s) ;
-		return this ;
+		rBuilder.append(s);
+		return this;
 	}
-	
+
 	protected RapportHtml write(int s) {
-		rBuilder.append(s) ;
-		return this ;
+		rBuilder.append(s);
+		return this;
 	}
-	
-	protected void withTitle(String title) {
-		titreRapport = title ;
+
+	protected RapportHtml withTitle(String title) {
+		titreRapport = title;
+		return this;
 	}
-	
-	protected void withHtmlLinkList(HtmlLinkList hll) {
-		indexes = new HtmlLinkList(hll) ;
-		indexes.setOffset(urlOffset) ;
+
+	protected RapportHtml withHtmlLinkList(HtmlLinkList hll) {
+		indexes = new HtmlLinkList(hll);
+		indexes.setOffset(urlOffset);
+		return this;
 	}
-	
-	public void withOffset(String o) {
-		urlOffset = o ;
+
+	public RapportHtml withOffset(String o) {
+		urlOffset = o;
 		if (indexes != null) {
-			indexes.setOffset(urlOffset) ;
+			indexes.setOffset(urlOffset);
 		}
+		return this;
 	}
-	
+
 	public static void withCharset(Charset cs) {
 		charset = cs;
-		htmlBegin = ENTETE1 + cs.name() + ENTETE6 ;
+		htmlBegin = ENTETE1 + cs.name() + ENTETE6;
 	}
 }

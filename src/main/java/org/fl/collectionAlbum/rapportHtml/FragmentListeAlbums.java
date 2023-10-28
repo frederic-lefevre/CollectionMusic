@@ -27,6 +27,7 @@ package org.fl.collectionAlbum.rapportHtml;
 import java.net.URI;
 import java.time.temporal.TemporalAccessor;
 
+import org.fl.collectionAlbum.Format;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.albums.ListeAlbum;
 import org.fl.collectionAlbum.artistes.Artiste;
@@ -44,9 +45,9 @@ public class FragmentListeAlbums {
 	public static void buildTable(ListeAlbum listeAlbums, StringBuilder fragment, String urlOffSet, Balises balises) {
 		
 		fragment.append(TABLE1) ;
-		listeAlbums.getFormatListeAlbum().enteteFormat(fragment, null, 2, APPEND_AUDIO_FILE) ;
+		Format.enteteFormat(fragment, null, 2, APPEND_AUDIO_FILE);
 		fragment.append(TABLE2) ;
-        listeAlbums.getFormatListeAlbum().enteteFormat(fragment, null, 2, APPEND_AUDIO_FILE) ;
+        Format.enteteFormat(fragment, null, 2, APPEND_AUDIO_FILE);
         fragment.append(TABLE3) ;
 		for (Album unAlbum : listeAlbums.getAlbums()) {
 			

@@ -26,6 +26,7 @@ package org.fl.collectionAlbum.rapportHtml;
 
 import java.net.URI;
 
+import org.fl.collectionAlbum.Format;
 import org.fl.collectionAlbum.artistes.Artiste;
 
 public class RapportAlbumsDunArtiste extends RapportHtml {
@@ -57,7 +58,7 @@ public class RapportAlbumsDunArtiste extends RapportHtml {
 		write("<table class=\"auteurTab\">\n  <tr>\n    <td rowspan=\"2\" class=\"auteurTitre\"><span class=\"auteurTitre\">") ;
 		write(artiste.getPrenoms()).write(" ").write(artiste.getNom()) ;
 		write("</span> (").write(artiste.getDateNaissance()).write(" - ").write(artiste.getDateMort()).write(")</td>\n") ;
-		artiste.getAlbumsFormat().enteteFormat(rBuilder, "total", 1, DONT_APPEND_AUDIO_FILE) ;
+		Format.enteteFormat(rBuilder, "total", 1, DONT_APPEND_AUDIO_FILE) ;
 		write("  </tr>\n  <tr>\n") ;
 		artiste.getAlbumsFormat().rowFormat(rBuilder, "artotal", DONT_APPEND_AUDIO_FILE) ;
 		write("  </tr>\n</table>\n") ;

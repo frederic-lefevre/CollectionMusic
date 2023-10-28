@@ -52,12 +52,10 @@ public class RapportListeArtistesAlbum extends RapportHtml {
 	@Override
 	protected void corpsRapport() {
 
-		Format entete = new Format(null) ;
-
 		write(F1) ;
-		entete.enteteFormat(rBuilder, "total", 1, DONT_APPEND_AUDIO_FILE) ;
+		Format.enteteFormat(rBuilder, "total", 1, DONT_APPEND_AUDIO_FILE) ;
 		write(F3) ;
-		entete.enteteFormat(rBuilder, "total", 1, DONT_APPEND_AUDIO_FILE) ;
+		Format.enteteFormat(rBuilder, "total", 1, DONT_APPEND_AUDIO_FILE) ;
 		write("  </tr>\n") ;
 
 		for (Artiste unArtiste : auteurs.getArtistes()) {
