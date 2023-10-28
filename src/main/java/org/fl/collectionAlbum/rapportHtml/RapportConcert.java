@@ -32,12 +32,13 @@ import org.fl.collectionAlbum.utils.TemporalUtils;
 
 public class RapportConcert extends RapportMusicArtefact {
 
-	private final Concert concert ;
+	private final Concert concert;
 	
-	public RapportConcert(Concert c) {
-		super(c) ;
-		concert = c ;
-		withTitle(TemporalUtils.formatDate(concert.getDateConcert()) + " " + concert.getLieuConcert().getLieu()) ;
+	private RapportConcert(Concert c) {
+		super(c);
+		concert = c;
+		withTitle(TemporalUtils.formatDate(concert.getDateConcert()) + " " + concert.getLieuConcert().getLieu());
+		withTitleDisplayed();
 	}
 
 	@Override
@@ -45,24 +46,28 @@ public class RapportConcert extends RapportMusicArtefact {
 		
 		super.corpsRapport();
 		
-		List<String> titres = concert.getTitres() ;
+		List<String> titres = concert.getTitres();
 		if ((titres != null) && (titres.size() >0)) {
-			write("<h3>Titres</h3>") ;
-			write("<ol>") ;
+			write("<h3>Titres</h3>");
+			write("<ol>");
 			for (String titre : titres) {
-				write("<li>").write(titre).write("</li>") ;
+				write("<li>").write(titre).write("</li>");
 			}
-			write("</ol>") ;
+			write("</ol>");
 		}
 		
-		List<String> ticketImages = concert.getTicketImages() ;
+		List<String> ticketImages = concert.getTicketImages();
 		if (ticketImages != null) {
 			
 			for (String ticketImage : ticketImages) {
-				URI imgUri = RapportStructuresAndNames.getTicketImageAbsoluteUri(ticketImage) ;
-				write("<a href=\"").write(imgUri.toString() ).write("\">\n") ;
-				write("    <img class=\"ticket\" src=\"").write(imgUri.toString()).write("\"/>\n</a>") ;
+				URI imgUri = RapportStructuresAndNames.getTicketImageAbsoluteUri(ticketImage);
+				write("<a href=\"").write(imgUri.toString() ).write("\">\n");
+				write("    <img class=\"ticket\" src=\"").write(imgUri.toString()).write("\"/>\n</a>");
 			}			
 		}			
+	}
+	
+	public static RapportConcert createRapportConcert(Concert c) {
+		return new RapportConcert(c);
 	}
 }    	

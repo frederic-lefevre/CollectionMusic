@@ -209,9 +209,9 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 			 if (concert.additionnalInfo()) {
 				 Path absolutePath = RapportStructuresAndNames.getConcertRapportAbsolutePath(concert);
 				 if (! Files.exists(absolutePath)) {
-					 RapportConcert rapportConcert = new RapportConcert(concert) ;
-					 rapportConcert.withOffset(getOffset(rapportPath, absolutePath.getParent())) ;
-					 rapportConcert.printReport(absolutePath, CssStyles.ticket) ;
+					 RapportConcert.createRapportConcert(concert)
+					 	.withOffset(getOffset(rapportPath, absolutePath.getParent()))
+					 	.printReport(absolutePath, CssStyles.ticket);
 				 }
 			 }
 		 }
