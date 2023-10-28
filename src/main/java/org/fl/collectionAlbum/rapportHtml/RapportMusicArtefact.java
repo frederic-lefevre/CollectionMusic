@@ -45,7 +45,7 @@ public class RapportMusicArtefact extends RapportHtml {
 		List<Artiste> artistes = musicArtefact.getAuteurs();
 		if (artistes != null) {
 			write("  <h3>Artistes</h3>\n");
-			write("  <b><ul>\n");
+			write("  <ul><b>\n");
 			for (Artiste unArtiste : artistes) {
 				write("    <li>");
 				write(unArtiste.getPrenoms());
@@ -53,7 +53,10 @@ public class RapportMusicArtefact extends RapportHtml {
 				write(unArtiste.getNom());
 				write("</li>\n");
 			}
-			write("  </ul></b>\n");
+			write("    </b>\n    <li>Interprètes:\n");
+			FragmentIntervenants.printIntervenant(musicArtefact, rBuilder, "../");
+			write("    </li>\n");
+			write("  </ul>\n");
 		}
 		
 		if (musicArtefact.getNotes() != null) {
