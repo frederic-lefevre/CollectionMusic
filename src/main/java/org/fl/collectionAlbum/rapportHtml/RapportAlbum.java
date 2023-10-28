@@ -32,13 +32,14 @@ public class RapportAlbum extends RapportMusicArtefact {
 	
 	private RapportAlbum(Album a) {
 		super(a);
-		album = a ;		
+		album = a;
 		withTitle(album.getTitre());
 		withTitleDisplayed();
 	}
 
 	@Override
 	protected void corpsRapport() {
+		
 		super.corpsRapport();
 	}
 	

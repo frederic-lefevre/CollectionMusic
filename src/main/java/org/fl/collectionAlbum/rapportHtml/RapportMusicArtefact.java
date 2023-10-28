@@ -28,6 +28,7 @@ import java.net.URI;
 import java.util.List;
 
 import org.fl.collectionAlbum.MusicArtefact;
+import org.fl.collectionAlbum.artistes.Artiste;
 
 public class RapportMusicArtefact extends RapportHtml {
 
@@ -41,7 +42,19 @@ public class RapportMusicArtefact extends RapportHtml {
 	@Override
 	protected void corpsRapport() {
 		
+		write("  <h3>Artistes</h3>\n");
+		write("  <b><ul>\n");
+		for (Artiste unArtiste : musicArtefact.getAuteurs()) {
+			write("    <li>");
+			write(unArtiste.getPrenoms());
+			write(" ");
+			write(unArtiste.getNom());
+			write("</li>\n");
+		}
+		write("  </ul></b>\n");
+		
 		if (musicArtefact.getNotes() != null) {
+			write("  <h3>Notes</h3>\n");
 			for (String note : musicArtefact.getNotes()) {
 				write("<p>").write(note).write("</p>\n") ;
 			}
