@@ -42,16 +42,19 @@ public class RapportMusicArtefact extends RapportHtml {
 	@Override
 	protected void corpsRapport() {
 		
-		write("  <h3>Artistes</h3>\n");
-		write("  <b><ul>\n");
-		for (Artiste unArtiste : musicArtefact.getAuteurs()) {
-			write("    <li>");
-			write(unArtiste.getPrenoms());
-			write(" ");
-			write(unArtiste.getNom());
-			write("</li>\n");
+		List<Artiste> artistes = musicArtefact.getAuteurs();
+		if (artistes != null) {
+			write("  <h3>Artistes</h3>\n");
+			write("  <b><ul>\n");
+			for (Artiste unArtiste : artistes) {
+				write("    <li>");
+				write(unArtiste.getPrenoms());
+				write(" ");
+				write(unArtiste.getNom());
+				write("</li>\n");
+			}
+			write("  </ul></b>\n");
 		}
-		write("  </ul></b>\n");
 		
 		if (musicArtefact.getNotes() != null) {
 			write("  <h3>Notes</h3>\n");
