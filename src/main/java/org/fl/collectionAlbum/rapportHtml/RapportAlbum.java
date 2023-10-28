@@ -30,14 +30,19 @@ public class RapportAlbum extends RapportMusicArtefact {
 
 	private final Album album ;
 	
-	public RapportAlbum(Album a) {
+	private RapportAlbum(Album a) {
 		super(a);
 		album = a ;		
-		withTitle(album.getTitre());	
+		withTitle(album.getTitre());
+		withTitleDisplayed();
 	}
 
 	@Override
 	protected void corpsRapport() {
 		super.corpsRapport();
+	}
+	
+	public static RapportAlbum createRapportAlbum(Album a) {
+		return new RapportAlbum(a);
 	}
 }

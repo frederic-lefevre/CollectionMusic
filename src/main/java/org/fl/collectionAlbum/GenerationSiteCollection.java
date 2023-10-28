@@ -198,9 +198,9 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 			 if (album.additionnalInfo()) {
 				 Path absolutePath = RapportStructuresAndNames.getAlbumRapportAbsolutePath(album);
 				 if (! Files.exists(absolutePath)) {
-					 RapportAlbum rapportAlbum = new RapportAlbum(album) ;
-					 rapportAlbum.withOffset( getOffset(rapportPath, absolutePath.getParent())) ;
-					 rapportAlbum.printReport( absolutePath, CssStyles.main) ;
+					 RapportAlbum.createRapportAlbum(album)
+					 	.withOffset(getOffset(rapportPath, absolutePath.getParent()))
+					 	.printReport(absolutePath, CssStyles.main);
 				 }
 			 }
 		 }
