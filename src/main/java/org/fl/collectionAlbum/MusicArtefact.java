@@ -105,4 +105,14 @@ public abstract class MusicArtefact {
 	public boolean additionnalInfo() {
 		return hasAdditionalInfo;
 	}
+	
+	public boolean hasIntervenant() {
+		return (notEmpty(getChefsOrchestre())) || 
+			   (notEmpty(getInterpretes()))    || 
+			   (notEmpty(getEnsembles()));
+		}
+	
+	private static boolean notEmpty(List<?> l) {
+		return (l != null) && (! l.isEmpty());
+	}
 }

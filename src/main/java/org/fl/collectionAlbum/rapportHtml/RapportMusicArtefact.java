@@ -53,9 +53,12 @@ public class RapportMusicArtefact extends RapportHtml {
 				write(unArtiste.getNom());
 				write("</li>\n");
 			}
-			write("    </b>\n    <li>Interprètes:\n");
-			FragmentIntervenants.printIntervenant(musicArtefact, rBuilder, "../");
-			write("    </li>\n");
+			write("    </b>\n");
+			if (musicArtefact.hasIntervenant()) {
+				write("    <li>Interprètes:\n");
+				FragmentIntervenants.printIntervenant(musicArtefact, rBuilder, "../");
+				write("    </li>\n");
+			}
 			write("  </ul>\n");
 		}
 		
