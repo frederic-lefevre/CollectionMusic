@@ -25,7 +25,6 @@ SOFTWARE.
 package org.fl.collectionAlbum.rapportHtml;
 
 import java.net.URI;
-import java.util.List;
 
 import org.fl.collectionAlbum.MusicArtefact;
 import org.fl.collectionAlbum.albums.Album;
