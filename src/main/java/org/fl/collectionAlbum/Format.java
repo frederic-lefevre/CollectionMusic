@@ -335,7 +335,7 @@ public class Format {
 	private final static String AUDIO_FILE_OK_CLASS = "audiook";
 	private final static String AUDIO_FILE_DETAIL_CLASS = "audiodetail";
 	
-	public void enteteFormat(StringBuilder rapport, String cssTotal, int rows, boolean putAudioFile) {
+	public static void enteteFormat(StringBuilder rapport, String cssTotal, int rows, boolean putAudioFile) {
 		
 		if (cssTotal != null) {
 			rapport.append(F_ROW1).append(rows).append(F_ROW3).append(cssTotal).append(F_ROW2) ;

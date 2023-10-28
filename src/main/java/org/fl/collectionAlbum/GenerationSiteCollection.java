@@ -200,7 +200,7 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 				 if (! Files.exists(absolutePath)) {
 					 RapportAlbum.createRapportAlbum(album)
 					 	.withOffset(getOffset(rapportPath, absolutePath.getParent()))
-					 	.printReport(absolutePath, CssStyles.main);
+					 	.printReport(absolutePath, CssStyles.stylesTableauDunArtiste);
 				 }
 			 }
 		 }

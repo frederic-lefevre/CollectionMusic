@@ -24,6 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.rapportHtml;
 
+import org.fl.collectionAlbum.Format;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.utils.TemporalUtils;
 
@@ -56,6 +57,15 @@ public class RapportAlbum extends RapportMusicArtefact {
 			write("    </li>\n");
 		}
 		write("  </ul>\n");
+		
+		Format format = album.getFormatAlbum();
+		write("  <h3>Format</h3>\n");
+		write("  <table>\n    <tr>\n");
+		Format.enteteFormat(rBuilder, null, 1, true);
+		write("    </tr>\n    <tr>\n");
+		format.rowFormat(rBuilder, null, true);
+		write("    </tr>\n  </table>\n");
+		
 		super.corpsRapport();
 	}
 	
