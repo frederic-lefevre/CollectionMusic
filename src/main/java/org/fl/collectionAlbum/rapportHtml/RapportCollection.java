@@ -77,7 +77,7 @@ public class RapportCollection extends RapportHtml {
 
 		write("</ul>\n</td>\n</tr>\n<tr>\n<td class=\"mainpage\">\n<h3>Rangement des albums</h3>\n<ul>\n");
 		for (Format.RangementSupportPhysique rangement : Format.RangementSupportPhysique.values()) {
-			RapportListeAlbums rapportAlbumsRangement = new RapportListeAlbums(albumsContainer.getRangementAlbums(rangement).sortRangementAlbum(), rangement.getDescription());
+			RapportListeAlbums rapportAlbumsRangement = new RapportListeAlbums(albumsContainer.getRangementAlbums(rangement).sortRangementAlbum(), rangement.getOrdreDescription());
 			write(rapportAlbumsRangement.printReport(getNextRapportFile(), CssStyles.stylesTableauMusicArtefact));
 		}
 
@@ -133,6 +133,12 @@ public class RapportCollection extends RapportHtml {
 			write("</td></tr>\n    <tr><td class=\"albumstatTitle\">Manquant de fichiers audio</td><td class=\"albumstat\">" + albumsContainer.getAlbumsMissingAudioFile().getNombreAlbums());
 			write("</td></tr>\n    <tr><td class=\"albumstatTitle\">Avec fichiers video</td><td class=\"albumstat\">" + albumsContainer.getAlbumsWithVideoFile().getNombreAlbums());
 			write("</td></tr>\n    <tr><td class=\"albumstatTitle\">Manquant de fichiers video</td><td class=\"albumstat\">" + albumsContainer.getAlbumsMissingVideoFile().getNombreAlbums());
+			for (Format.RangementSupportPhysique rangement : Format.RangementSupportPhysique.values()) {
+				write("</td></tr>\n    <tr><td class=\"albumstatTitle\">");
+				write(rangement.getDescription());
+				write("</td><td class=\"albumstat\">");
+				write(albumsContainer.getRangementAlbums(rangement).getNombreAlbums());
+			}
 			write("</td></tr>\n  </table>\n  </li>\n</ul>\n");
 	 }
 }
