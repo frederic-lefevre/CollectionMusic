@@ -40,6 +40,9 @@ public class RapportListeAlbums extends RapportHtml {
 	@Override
 	protected void corpsRapport() {
 	
+		write("  <p>Nombre d'albums: ");
+		write(listeAlbums.getNombreAlbums());
+		write("</p>\n");
 		FragmentListeAlbums.buildTable(listeAlbums, rBuilder, urlOffset, balises) ;
 	}	
 

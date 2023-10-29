@@ -25,7 +25,6 @@ SOFTWARE.
 package org.fl.collectionAlbum.rapportHtml;
 
 import java.net.URI;
-import java.util.List;
 
 import org.fl.collectionAlbum.MusicArtefact;
 import org.fl.collectionAlbum.albums.Album;
@@ -36,7 +35,7 @@ public class FragmentIntervenants {
 
 	public static void printIntervenant(MusicArtefact musicArtefact, StringBuilder fragment, String urlOffset) {	
 
-		if (hasIntervenant(musicArtefact)) {
+		if (musicArtefact.hasIntervenant()) {
 		
 			fragment.append("      <ul class=\"interv\">") ;
 
@@ -65,16 +64,6 @@ public class FragmentIntervenants {
 			}
 			fragment.append("      </ul>") ;
 		}
-	}
-	
-	private static boolean hasIntervenant(MusicArtefact musicArtefact) {
-		return (notEmpty(musicArtefact.getChefsOrchestre())) || 
-			   (notEmpty(musicArtefact.getInterpretes()))    || 
-			   (notEmpty(musicArtefact.getEnsembles()));
-	}
-	
-	private static boolean notEmpty(List<?> l) {
-		return (l != null) && (! l.isEmpty());
 	}
 	
 	private static void appendLinkAlbumArtiste(Artiste unArtiste, Class<? extends MusicArtefact> artefactsClass, StringBuilder fragment,  String urlOffset) {

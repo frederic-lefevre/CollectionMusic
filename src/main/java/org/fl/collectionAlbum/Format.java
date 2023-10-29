@@ -114,32 +114,41 @@ public class Format {
 		private ContentNature getContentNature() { return contentNature; }
 	}
 	
+	private static final String ORDRE_PREFIX = "Ordre de rangement des ";
+	
 	// Définition des rangements des supports physiques
 	public enum RangementSupportPhysique {
-		RangementCD("Ordre de rangement des albums au format CD", "cd"),
-		RangementCDBox("Ordre de rangement des albums au format CD box", "cd box"),
-		RangementVinyl("Ordre de rangement des albums au format vinyl 33 tours", "33T"), 
-		RangementK7("Ordre de rangement des albums au format K7", "K7"), 
-		RangementVHS("Ordre de rangement des albums au format DVD, VHS et Blu-ray", "DVD") ;
 		
-		private final String description ;
-		private final String jsonPropertyName ;
+		RangementCD("Albums au format CD", "cd"),
+		RangementCDBox("Albums au format CD box", "cd box"),
+		RangementVinyl("Albums au format vinyl 33 tours", "33T"), 
+		RangementK7("Albums au format K7", "K7"), 
+		RangementVHS("Albums au format DVD, VHS et Blu-ray", "DVD");
+		
+		private final String description;
+		private final String jsonPropertyName;
+
 		private RangementSupportPhysique(String n, String j) {
-			description = n ;
-			jsonPropertyName = j ;
+			description = n;
+			jsonPropertyName = j;
 		}
+
+		public String getOrdreDescription() {
+			return ORDRE_PREFIX + description;
+		}
+
+
 		public String getDescription() {
-			return description ;
+			return description;
 		}
+		
 		public String getJsonPropertyName() {
 			return jsonPropertyName;
 		}
-		
+
 		public static RangementSupportPhysique getRangement(String rangement) {
-			return Stream.of(RangementSupportPhysique.values())
-					.filter(r -> r.getJsonPropertyName().equals(rangement))
-					.findFirst()
-					.orElse(null);
+			return Stream.of(RangementSupportPhysique.values()).filter(r -> r.getJsonPropertyName().equals(rangement))
+					.findFirst().orElse(null);
 		}
 		
 	}
