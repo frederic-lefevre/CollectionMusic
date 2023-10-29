@@ -133,6 +133,7 @@ public class RapportCollection extends RapportHtml {
 			write("</td></tr>\n    <tr><td class=\"albumstatTitle\">Manquant de fichiers audio</td><td class=\"albumstat\">" + albumsContainer.getAlbumsMissingAudioFile().getNombreAlbums());
 			write("</td></tr>\n    <tr><td class=\"albumstatTitle\">Avec fichiers video</td><td class=\"albumstat\">" + albumsContainer.getAlbumsWithVideoFile().getNombreAlbums());
 			write("</td></tr>\n    <tr><td class=\"albumstatTitle\">Manquant de fichiers video</td><td class=\"albumstat\">" + albumsContainer.getAlbumsMissingVideoFile().getNombreAlbums());
+			write("</td></tr>\n  </table>\n  <table>\n  <tr><td>\n");
 			for (Format.RangementSupportPhysique rangement : Format.RangementSupportPhysique.values()) {
 				write("</td></tr>\n    <tr><td class=\"albumstatTitle\">");
 				write(rangement.getDescription());
