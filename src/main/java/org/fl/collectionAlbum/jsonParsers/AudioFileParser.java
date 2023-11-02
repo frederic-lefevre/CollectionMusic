@@ -63,6 +63,7 @@ public class AudioFileParser {
 			
 			String source = AbstractMediaFieldParser.parseSource(audioFileJson);
 			String note = AbstractMediaFieldParser.parseNote(audioFileJson);
+			String audioFileLocation = AbstractMediaFieldParser.parseAudioFileLocation(audioFileJson);
 			
 			if ((type == null) || (source == null) || (samplingRate == null)) {
 				

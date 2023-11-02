@@ -38,12 +38,13 @@ public class AbstractMediaFieldParser {
 	private final static Logger albumLog = Control.getAlbumLog();
 	
 	protected static String parseNote(JsonObject mediaFileJson) {
-		
-		return Optional.ofNullable(mediaFileJson.get(JsonMusicProperties.NOTE))
-				.map(JsonElement::getAsString)
-				.orElse(null);
+		return parseOptionalStringProperty(mediaFileJson, JsonMusicProperties.NOTE);
 	}
 
+	protected static String parseAudioFileLocation(JsonObject mediaFileJson) {
+		return parseOptionalStringProperty(mediaFileJson, JsonMusicProperties.LOCATION);
+	}
+	
 	protected static String parseSource(JsonObject mediaFileJson) {
 		
 		return Optional.ofNullable(mediaFileJson.get(JsonMusicProperties.SOURCE))
@@ -52,5 +53,12 @@ public class AbstractMediaFieldParser {
 					albumLog.severe("Json MediaFile null source parameter" + mediaFileJson);
 					return null;
 				});
+	}
+	
+	private static String parseOptionalStringProperty(JsonObject mediaFileJson, String property) {
+		
+		return Optional.ofNullable(mediaFileJson.get(property))
+				.map(JsonElement::getAsString)
+				.orElse(null);
 	}
 }
