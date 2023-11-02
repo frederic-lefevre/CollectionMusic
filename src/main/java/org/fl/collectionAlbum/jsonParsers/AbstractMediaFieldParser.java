@@ -24,9 +24,11 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.jsonParsers;
 
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.Control;
@@ -60,7 +62,7 @@ public class AbstractMediaFieldParser {
 				return null;
 			}
 		} catch (Exception e) {
-			albumLog.severe("Invalid media file location: " + mediaFileJson);
+			albumLog.log(Level.SEVERE, "Invalid media file location: " + mediaFileJson, e);
 			return null;
 		}
 	} else {
