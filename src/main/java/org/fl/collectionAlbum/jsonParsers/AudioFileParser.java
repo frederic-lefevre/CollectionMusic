@@ -24,6 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.jsonParsers;
 
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.logging.Logger;
@@ -63,7 +64,7 @@ public class AudioFileParser {
 			
 			String source = AbstractMediaFieldParser.parseSource(audioFileJson);
 			String note = AbstractMediaFieldParser.parseNote(audioFileJson);
-			String audioFileLocation = AbstractMediaFieldParser.parseAudioFileLocation(audioFileJson);
+			Path audioFileLocation = AbstractMediaFieldParser.parseAudioFileLocation(audioFileJson);
 			
 			if ((type == null) || (source == null) || (samplingRate == null)) {
 				

@@ -24,6 +24,8 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.jsonParsers;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -41,8 +43,30 @@ public class AbstractMediaFieldParser {
 		return parseOptionalStringProperty(mediaFileJson, JsonMusicProperties.NOTE);
 	}
 
-	protected static String parseAudioFileLocation(JsonObject mediaFileJson) {
-		return parseOptionalStringProperty(mediaFileJson, JsonMusicProperties.LOCATION);
+	protected static Path parseAudioFileLocation(JsonObject mediaFileJson) {
+		
+		String location = parseOptionalStringProperty(mediaFileJson, JsonMusicProperties.LOCATION);
+		
+	if (location != null) {
+		try {
+			Path locationPath = Path.of(location);
+			if (locationPath.isAbsolute()) {
+				if (! Files.exists(locationPath)) {
+					albumLog.warning("Media file location does not exists: " + mediaFileJson);
+				}
+				return locationPath;
+			} else {
+				albumLog.severe("Media file location is not absolute: " + mediaFileJson);
+				return null;
+			}
+		} catch (Exception e) {
+			albumLog.severe("Invalid media file location: " + mediaFileJson);
+			return null;
+		}
+	} else {
+		return null;
+	}
+		
 	}
 	
 	protected static String parseSource(JsonObject mediaFileJson) {
@@ -50,7 +74,7 @@ public class AbstractMediaFieldParser {
 		return Optional.ofNullable(mediaFileJson.get(JsonMusicProperties.SOURCE))
 				.map(JsonElement::getAsString)
 				.orElseGet(() -> {
-					albumLog.severe("Json MediaFile null source parameter" + mediaFileJson);
+					albumLog.severe("Json MediaFile null source parameter: " + mediaFileJson);
 					return null;
 				});
 	}
