@@ -24,22 +24,30 @@ SOFTWARE.
 
 package org.fl.collectionAlbum;
 
+import java.nio.file.Path;
+import java.util.function.BiConsumer;
+
 public abstract class AbstractMediaFile {
 
 	private final String source;
 	private final String note;
+	private final Path mediaFilePath;
 	
 	private static final String SOURCE_TITLE = "Source";
 	private static final String NOTE_TITLE = "Note";
+	private static final String FILE_LINK1 = "<a href=\"file:///";
+	private static final String FILE_LINK2 = "\">";
+	private static final String FILE_LINK3 = "</a>";
 	
-	protected AbstractMediaFile(String source, String note) {
+	protected AbstractMediaFile(String source, String note, Path path) {
 		super();
 		this.source = source;
 		this.note = note;
+		this.mediaFilePath = path;
 	}
 	
-	
 	public abstract String displayMediaFileDetail(String separator);
+	public abstract String displayMediaFileDetailWithFileLink(String separator);
 	
 	public abstract String displayMediaFileSummary();
 	
@@ -51,12 +59,38 @@ public abstract class AbstractMediaFile {
 		return note;
 	}
 	
+	protected Path getMediaFilePath() {
+		return mediaFilePath;
+	}
+	
 	protected void appendCommonMediaFileDetail(StringBuilder mediaFilesDetails, String separator) {
 		mediaFilesDetails.append(getSource());
 		String note = getNote();
 		if ((note != null) && (!note.isEmpty())) {
 			mediaFilesDetails.append(separator).append(getNote());
 		}
+	}
+	
+	protected void appendCommonMediaFileDetailWithLink(StringBuilder mediaFilesDetails, String separator) {
+		appendCommonMediaFileDetail(mediaFilesDetails, separator);
+		if (mediaFilePath != null) {
+			mediaFilesDetails.append(separator)
+			.append(FILE_LINK1)
+			.append(getMediaFilePath())
+			.append(FILE_LINK2)
+			.append(getMediaFilePath())
+			.append(FILE_LINK3);
+		}
+	}
+	
+	protected String fileDetail(
+			String separator, 
+			BiConsumer<StringBuilder, String> particularDetailBuilder, 
+			BiConsumer<StringBuilder, String> commonDetailBuilder) {
+		StringBuilder audioFilesDetails = new StringBuilder();
+		particularDetailBuilder.accept(audioFilesDetails, separator);
+		commonDetailBuilder.accept(audioFilesDetails, separator);
+		return audioFilesDetails.toString();
 	}
 	
 	protected static String getMediaFilePropertyTitles(String separator) {

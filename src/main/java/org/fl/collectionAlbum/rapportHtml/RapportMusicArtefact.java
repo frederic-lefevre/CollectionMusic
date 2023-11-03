@@ -62,15 +62,16 @@ public class RapportMusicArtefact extends RapportHtml {
 			write("  </ul>\n");
 		}
 		
-		if (musicArtefact.getNotes() != null) {
+		List<String> notes = musicArtefact.getNotes();
+		if ((notes != null) && !notes.isEmpty()) {
 			write("  <h3>Notes</h3>\n");
-			for (String note : musicArtefact.getNotes()) {
-				write("<p>").write(note).write("</p>\n") ;
+			for (String note : notes) {
+				write("<p>").write(note).write("</p>\n");
 			}
 		}
 		
-		List<String> urlInfos = musicArtefact.getUrlLinks() ;
-		if (urlInfos != null) {
+		List<String> urlInfos = musicArtefact.getUrlLinks();
+		if ((urlInfos != null) && !urlInfos.isEmpty()) {
 			write("<ul>\n");
 			for (String url : urlInfos) {
 				URI infosUri = RapportStructuresAndNames.getArtefactInfosAbsoluteUri(url) ;

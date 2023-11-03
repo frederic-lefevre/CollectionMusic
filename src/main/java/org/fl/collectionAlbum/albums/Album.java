@@ -148,4 +148,8 @@ public class Album extends MusicArtefact {
 		return formatAlbum.hasContentNature(contentNature);
 	}
 	
+    @Override
+    public boolean additionnalInfo() {
+    	return hasAudioFiles() || hasVideoFiles() || super.additionnalInfo();
+    }
 }

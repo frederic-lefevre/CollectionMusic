@@ -188,3 +188,13 @@ td.audiook { vertical-align : top ;
                       font-weight : bold ;
                       text-align: center;
 }
+
+td.mediadetail { vertical-align : top ;
+           background : white ;
+             width : auto;
+             padding : 2px ;
+             margin : 2px ;
+             border : 1px solid black;
+             text-align: left ;
+             border-spacing: 1px;
+ }

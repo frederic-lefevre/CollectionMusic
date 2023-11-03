@@ -24,6 +24,9 @@ SOFTWARE.
 
 package org.fl.collectionAlbum;
 
+import java.nio.file.Path;
+import java.util.function.BiConsumer;
+
 public class LosslessAudioFile extends AbstractAudioFile {
 
 	private final int bitDepth;
@@ -33,9 +36,9 @@ public class LosslessAudioFile extends AbstractAudioFile {
 	private static final int HIGH_RES_BIT_DEPTH_THRESHOLD = 16;
 	private static final double HIGH_RES_SAMPLING_RATE_THRESHOLD = 48;
 	
-	public LosslessAudioFile(AudioFileType type, String source, int bitDepth, double samplingRate, String note) {
+	public LosslessAudioFile(AudioFileType type, String source, int bitDepth, double samplingRate, String note, Path path) {
 		
-		super(type, source, samplingRate, note);
+		super(type, source, samplingRate, note, path);
 
 		this.bitDepth = bitDepth;
 	}
@@ -55,13 +58,17 @@ public class LosslessAudioFile extends AbstractAudioFile {
 	}
 	
 	@Override
-	public String displayMediaFileDetail(String separator) {
-		StringBuilder audioFilesDetails = new StringBuilder();
-		audioFilesDetails.append(getBitDepth()).append(" bits").append(separator);
-		appendCommonAudioFileDetail(audioFilesDetails, separator);
-		return audioFilesDetails.toString();
+	public String displayMediaFileDetail(String separator) {		
+		return fileDetail(separator, particularDetail, (sb, s) -> appendCommonAudioFileDetail(sb, s));
 	}
 
+	@Override
+	public String displayMediaFileDetailWithFileLink(String separator) {
+		return fileDetail(separator, particularDetail, (sb, s) -> appendCommonAudioFileDetailWithLink(sb, s));
+	}
+	
+	BiConsumer<StringBuilder, String> particularDetail = (sb, s) -> sb.append(getBitDepth()).append(" bits").append(s);
+	
 	@Override
 	public String displayMediaFileSummary() {
 		StringBuilder audioFilesSummary = new StringBuilder();
@@ -73,4 +80,5 @@ public class LosslessAudioFile extends AbstractAudioFile {
 	public static String getAudioFilePropertyTitles(String separator) {
 		return BIT_DEPTH_TITLE + separator + AbstractAudioFile.getAudioFilePropertyTitles(separator);
 	}
+
 }
