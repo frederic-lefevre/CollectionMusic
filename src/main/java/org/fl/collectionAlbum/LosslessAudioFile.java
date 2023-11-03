@@ -24,6 +24,8 @@ SOFTWARE.
 
 package org.fl.collectionAlbum;
 
+import java.nio.file.Path;
+
 public class LosslessAudioFile extends AbstractAudioFile {
 
 	private final int bitDepth;
@@ -33,9 +35,9 @@ public class LosslessAudioFile extends AbstractAudioFile {
 	private static final int HIGH_RES_BIT_DEPTH_THRESHOLD = 16;
 	private static final double HIGH_RES_SAMPLING_RATE_THRESHOLD = 48;
 	
-	public LosslessAudioFile(AudioFileType type, String source, int bitDepth, double samplingRate, String note) {
+	public LosslessAudioFile(AudioFileType type, String source, int bitDepth, double samplingRate, String note, Path path) {
 		
-		super(type, source, samplingRate, note);
+		super(type, source, samplingRate, note, path);
 
 		this.bitDepth = bitDepth;
 	}

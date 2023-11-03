@@ -24,13 +24,15 @@ SOFTWARE.
 
 package org.fl.collectionAlbum;
 
+import java.nio.file.Path;
+
 public class LossyAudioFile extends AbstractAudioFile {
 	
 	private final double bitRate;
 
-	public LossyAudioFile(AudioFileType type, String source, double bitRate, double samplingRate, String note) {
+	public LossyAudioFile(AudioFileType type, String source, double bitRate, double samplingRate, String note, Path path) {
 		
-		super(type, source, samplingRate, note);
+		super(type, source, samplingRate, note, path);
 		this.bitRate = bitRate;
 	}
 

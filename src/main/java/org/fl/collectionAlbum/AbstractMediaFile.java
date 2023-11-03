@@ -24,18 +24,22 @@ SOFTWARE.
 
 package org.fl.collectionAlbum;
 
+import java.nio.file.Path;
+
 public abstract class AbstractMediaFile {
 
 	private final String source;
 	private final String note;
+	private final Path mediaFilePath;
 	
 	private static final String SOURCE_TITLE = "Source";
 	private static final String NOTE_TITLE = "Note";
 	
-	protected AbstractMediaFile(String source, String note) {
+	protected AbstractMediaFile(String source, String note, Path path) {
 		super();
 		this.source = source;
 		this.note = note;
+		this.mediaFilePath = path;
 	}
 	
 	
@@ -49,6 +53,10 @@ public abstract class AbstractMediaFile {
 	
 	protected String getNote() {
 		return note;
+	}
+	
+	protected Path getMediaFilePath() {
+		return mediaFilePath;
 	}
 	
 	protected void appendCommonMediaFileDetail(StringBuilder mediaFilesDetails, String separator) {
