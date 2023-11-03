@@ -24,6 +24,9 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.rapportHtml;
 
+import java.util.function.Consumer;
+
+import org.fl.collectionAlbum.AbstractMediaFile;
 import org.fl.collectionAlbum.Format;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.utils.TemporalUtils;
@@ -66,8 +69,34 @@ public class RapportAlbum extends RapportMusicArtefact {
 		format.rowFormat(rBuilder, null, true);
 		write("    </tr>\n  </table>\n");
 		
+		write("  <h3>Fichiers media</h3>\n");
+		
+		if (format.hasMediaFiles()) {
+			
+			if (format.hasAudioFiles()) {
+				write("  <h4>Fichiers audio</h4>\n");
+				write("  <table>\n");
+				format.getAudioFiles().forEach(detailInCell);
+				write("  </table>\n");
+			}
+			if (format.hasVideoFiles()) {
+				write("  <h4>Fichiers video</h4>\n");
+				write("  <table>\n");
+				format.getVideoFiles().forEach(detailInCell);
+				write("  </table>\n");
+			}
+		} else {
+			write("<p>Aucun fichier media.</p>");
+		}
+		
 		super.corpsRapport();
 	}
+	
+	private Consumer<AbstractMediaFile> detailInCell = mediaFile -> {
+		write("    <tr><td class=\"mediadetail\">\n");
+		write(mediaFile.displayMediaFileDetailWithFileLink("</br>\n"));
+		write("    </td></tr>\n");
+	};
 	
 	public static RapportAlbum createRapportAlbum(Album a) {
 		return new RapportAlbum(a);

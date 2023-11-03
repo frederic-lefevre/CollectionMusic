@@ -25,6 +25,7 @@ SOFTWARE.
 package org.fl.collectionAlbum;
 
 import java.nio.file.Path;
+import java.util.function.BiConsumer;
 
 public class VideoFile extends AbstractMediaFile {
 
@@ -50,16 +51,26 @@ public class VideoFile extends AbstractMediaFile {
 	protected int getHeight() {
 		return height;
 	}
-	
+
 	@Override
-	public String displayMediaFileDetail(String separator) {
-		StringBuilder videoFilesDetails = new StringBuilder();
-		videoFilesDetails.append(getWidth()).append("x").append(getHeight()).append(" px").append(separator);
-		videoFilesDetails.append(getType()).append(separator);
-		appendCommonMediaFileDetail(videoFilesDetails, separator);
-		return videoFilesDetails.toString();
+	public String displayMediaFileDetail(String separator) {		
+		return fileDetail(separator, particularDetail, (sb, s) -> appendCommonMediaFileDetail(sb, s));
 	}
 
+	@Override
+	public String displayMediaFileDetailWithFileLink(String separator) {
+		return fileDetail(separator, particularDetail, (sb, s) -> appendCommonMediaFileDetailWithLink(sb, s));
+	}
+	
+	BiConsumer<StringBuilder, String> particularDetail = (sb, s) ->
+		sb.append(getWidth())
+			.append("x")
+			.append(getHeight())
+			.append(" px")
+			.append(s)
+			.append(getType())
+			.append(s);
+	
 	@Override
 	public String displayMediaFileSummary() {
 		return getHeight() + "p";	

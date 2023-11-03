@@ -25,6 +25,7 @@ SOFTWARE.
 package org.fl.collectionAlbum;
 
 import java.nio.file.Path;
+import java.util.function.BiConsumer;
 
 public class LosslessAudioFile extends AbstractAudioFile {
 
@@ -57,13 +58,17 @@ public class LosslessAudioFile extends AbstractAudioFile {
 	}
 	
 	@Override
-	public String displayMediaFileDetail(String separator) {
-		StringBuilder audioFilesDetails = new StringBuilder();
-		audioFilesDetails.append(getBitDepth()).append(" bits").append(separator);
-		appendCommonAudioFileDetail(audioFilesDetails, separator);
-		return audioFilesDetails.toString();
+	public String displayMediaFileDetail(String separator) {		
+		return fileDetail(separator, particularDetail, (sb, s) -> appendCommonAudioFileDetail(sb, s));
 	}
 
+	@Override
+	public String displayMediaFileDetailWithFileLink(String separator) {
+		return fileDetail(separator, particularDetail, (sb, s) -> appendCommonAudioFileDetailWithLink(sb, s));
+	}
+	
+	BiConsumer<StringBuilder, String> particularDetail = (sb, s) -> sb.append(getBitDepth()).append(" bits").append(s);
+	
 	@Override
 	public String displayMediaFileSummary() {
 		StringBuilder audioFilesSummary = new StringBuilder();
@@ -75,4 +80,5 @@ public class LosslessAudioFile extends AbstractAudioFile {
 	public static String getAudioFilePropertyTitles(String separator) {
 		return BIT_DEPTH_TITLE + separator + AbstractAudioFile.getAudioFilePropertyTitles(separator);
 	}
+
 }

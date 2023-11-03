@@ -49,9 +49,22 @@ public abstract class AbstractAudioFile extends AbstractMediaFile {
 	}
 	
 	protected void appendCommonAudioFileDetail(StringBuilder audioFilesDetails, String separator) {
-		audioFilesDetails.append(getSamplingRate()).append(" KHz").append(separator);
-		audioFilesDetails.append(getType()).append(separator);
+		appendCommonAudioSpecs(audioFilesDetails, separator);
 		appendCommonMediaFileDetail(audioFilesDetails, separator);
+	}
+	
+	protected void appendCommonAudioFileDetailWithLink(StringBuilder audioFilesDetails, String separator) {
+		appendCommonAudioSpecs(audioFilesDetails, separator);
+		appendCommonMediaFileDetailWithLink(audioFilesDetails, separator);
+	}
+	
+	private void appendCommonAudioSpecs(StringBuilder audioFilesDetails, String separator) {
+		audioFilesDetails
+			.append(getSamplingRate())
+			.append(" KHz")
+			.append(separator)
+			.append(getType())
+			.append(separator);
 	}
 	
 	public abstract boolean isHighRes();

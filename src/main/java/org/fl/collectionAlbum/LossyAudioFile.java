@@ -25,6 +25,7 @@ SOFTWARE.
 package org.fl.collectionAlbum;
 
 import java.nio.file.Path;
+import java.util.function.BiConsumer;
 
 public class LossyAudioFile extends AbstractAudioFile {
 	
@@ -59,10 +60,15 @@ public class LossyAudioFile extends AbstractAudioFile {
 	}
 	
 	@Override
-	public String displayMediaFileDetail(String separator) {
-		StringBuilder audioFilesDetails = new StringBuilder();
-		audioFilesDetails.append(getBitRate()).append(" kbit/s").append(separator);
-		appendCommonAudioFileDetail(audioFilesDetails, separator);
-		return audioFilesDetails.toString();
+	public String displayMediaFileDetail(String separator) {		
+		return fileDetail(separator, particularDetail, (sb, s) -> appendCommonAudioFileDetail(sb, s));
 	}
+
+	@Override
+	public String displayMediaFileDetailWithFileLink(String separator) {
+		return fileDetail(separator, particularDetail, (sb, s) -> appendCommonAudioFileDetailWithLink(sb, s));
+	}
+	
+	BiConsumer<StringBuilder, String> particularDetail = (sb, s) -> sb.append(getBitRate()).append(" kbit/s").append(s);
+
 }
