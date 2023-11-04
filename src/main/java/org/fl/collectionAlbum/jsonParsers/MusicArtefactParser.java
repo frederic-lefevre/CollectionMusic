@@ -145,29 +145,11 @@ public class MusicArtefactParser {
 	}
 	
 	public List<String> getNotes() {
-		return getArrayAttribute(JsonMusicProperties.NOTES);
+		return ParserHelpers.getArrayAttribute(arteFactJson, JsonMusicProperties.NOTES);
 	}
 
 	public List<String> getUrlLinks() {		
-		return getArrayAttribute(JsonMusicProperties.LIENS);
+		return ParserHelpers.getArrayAttribute(arteFactJson, JsonMusicProperties.LIENS);
 	}
-	
-	private List<String> getArrayAttribute(String jsonMusicProperty) {
 
-        JsonElement jElem = arteFactJson.get(jsonMusicProperty) ;
-		if (jElem != null) {
-			if (jElem.isJsonArray()) {
-				List<String> result = new ArrayList<String>() ;
-				JsonArray jArray = jElem.getAsJsonArray() ; 
-				for (JsonElement e : jArray) {
-					result.add(e.getAsString()) ;
-				}
-				albumLog.finest(() -> "Nombre de " + jsonMusicProperty + " " + result.size()) ;
-				return result ;
-			} else {
-				albumLog.warning(jsonMusicProperty + " n'est pas un JsonArray pour l'artefact " + arteFactJson) ;
-			}
-		}
-		return new ArrayList<String>() ;
-	}
 }

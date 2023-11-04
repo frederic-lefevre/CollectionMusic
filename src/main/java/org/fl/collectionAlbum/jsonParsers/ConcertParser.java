@@ -24,7 +24,6 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.jsonParsers;
 
-import java.lang.reflect.Type;
 import java.time.temporal.TemporalAccessor;
 import java.util.List;
 import java.util.logging.Level;
@@ -34,11 +33,8 @@ import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.utils.TemporalUtils;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
 
 public class ConcertParser {
 
@@ -60,43 +56,16 @@ public class ConcertParser {
 		return dateConcert ;
 	}
 	
-	public static String getConcertLieu(JsonObject arteFactJson) {
-		
+	public static String getConcertLieu(JsonObject arteFactJson) {		
 		return ParserHelpers.parseStringProperty(arteFactJson, JsonMusicProperties.LIEU, true);
 	}
 	
-	public static List<String> getConcertMorceaux(JsonObject arteFactJson) {
-		
-		Type listType = new TypeToken<List<String>>() {}.getType();	
-		List<String> titres = null;
-		JsonElement jElem = arteFactJson.get(JsonMusicProperties.MORCEAUX) ;
-		if (jElem != null) {
-			if (jElem.isJsonArray()) {				
-				JsonArray jTitres = jElem.getAsJsonArray() ;			
-				titres = new Gson().fromJson(jTitres, listType);
-			} else {
-				albumLog.warning(JsonMusicProperties.MORCEAUX + " n'est pas un JsonArray pour le concert " + arteFactJson) ;
-			}
-		}
-		return titres ;
+	public static List<String> getConcertMorceaux(JsonObject arteFactJson) {	
+		return ParserHelpers.getArrayAttribute(arteFactJson, JsonMusicProperties.MORCEAUX);
 	}
 	
 	public static List<String> getConcertTickets(JsonObject arteFactJson) {
-		
-		Type listType = new TypeToken<List<String>>() {}.getType();
-		List<String> ticketImages = null ;
-		JsonElement jElem = arteFactJson.get(JsonMusicProperties.TICKET_IMG) ;
-		if (jElem == null) {
-			albumLog.info("Pas de ticket pour le concert " + arteFactJson) ;
-		} else {
-			if (jElem.isJsonArray()) {
-				JsonArray jTickets = jElem.getAsJsonArray() ; 
-				ticketImages =  new Gson().fromJson(jTickets,  listType);
-			} else {
-				albumLog.warning(JsonMusicProperties.TICKET_IMG + " n'est pas un JsonArray pour le concert " + arteFactJson) ;
-			}
-		}  
-		return ticketImages ;
+		return ParserHelpers.getArrayAttribute(arteFactJson, JsonMusicProperties.TICKET_IMG);
 	}
 
 }
