@@ -43,6 +43,7 @@ public abstract class MusicArtefact {
 	// Additional information (optional)
 	private final List<String> notes;
 	private final List<String> urlLinks;
+	private final String discogsLink;
 	private final boolean hasAdditionalInfo;
 
 	protected final JsonObject arteFactJson;
@@ -61,9 +62,12 @@ public abstract class MusicArtefact {
 
 		notes = musicParser.getNotes();
 		urlLinks = musicParser.getUrlLinks();
+		discogsLink = musicParser.getDisocgs();
+		
 		hasAdditionalInfo = 
 				((notes != null) && (! notes.isEmpty())) ||
-				((urlLinks != null) && (! urlLinks.isEmpty()));
+				((urlLinks != null) && (! urlLinks.isEmpty()))  ||
+				((discogsLink != null) && (! discogsLink.isEmpty()));
 	}
 
 	public void addMusicArtfactArtistesToList(ListeArtiste artistes) {
@@ -96,6 +100,10 @@ public abstract class MusicArtefact {
 
 	public List<String> getUrlLinks() {
 		return urlLinks;
+	}
+
+	public String getDiscogsLink() {
+		return discogsLink;
 	}
 
 	public JsonObject getJson() {

@@ -74,5 +74,6 @@ public class JsonMusicProperties {
 	public final static String VIDEO_WIDTH	  = "width" ;
 	public final static String VIDEO_HEIGHT	  = "height" ;
 	public final static String LOCATION	  	  = "location" ;
+	public final static String DISCOGS	  	  = "discogs" ;
 
 }

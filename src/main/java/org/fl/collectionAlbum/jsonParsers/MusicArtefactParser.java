@@ -55,28 +55,42 @@ public class MusicArtefactParser {
 	
 	public MusicArtefactParser(JsonObject j, List<ListeArtiste> currentKnownArtistes) {
 		super();
-		
-		arteFactJson  = j ;
-		knownArtistes = new ArrayList<ListeArtiste>() ;
+
+		arteFactJson = j;
+		knownArtistes = new ArrayList<ListeArtiste>();
 		currentKnownArtistes.stream().forEach(la -> knownArtistes.add(la));
-		
-		auteurs 	= processListeArtistes(Artiste.class, JsonMusicProperties.AUTEUR) ;
-		knownArtistes.add(auteurs) ;
-		interpretes = processListeArtistes(Artiste.class, JsonMusicProperties.INTERPRETE) ;
-		knownArtistes.add(interpretes) ;
-		chefs		= processListeArtistes(Artiste.class, JsonMusicProperties.CHEF) ;
-		knownArtistes.add(chefs) ;
-		ensembles	= processListeArtistes(Groupe.class,  JsonMusicProperties.ENSEMBLE) ;
-		knownArtistes.add(ensembles) ;
-		groupes		= processListeArtistes(Groupe.class,  JsonMusicProperties.GROUPE) ;
-		knownArtistes.add(groupes) ;
+
+		auteurs = processListeArtistes(Artiste.class, JsonMusicProperties.AUTEUR);
+		knownArtistes.add(auteurs);
+		interpretes = processListeArtistes(Artiste.class, JsonMusicProperties.INTERPRETE);
+		knownArtistes.add(interpretes);
+		chefs = processListeArtistes(Artiste.class, JsonMusicProperties.CHEF);
+		knownArtistes.add(chefs);
+		ensembles = processListeArtistes(Groupe.class, JsonMusicProperties.ENSEMBLE);
+		knownArtistes.add(ensembles);
+		groupes = processListeArtistes(Groupe.class, JsonMusicProperties.GROUPE);
+		knownArtistes.add(groupes);
 	}
 
-	public List<Artiste> getListeAuteurs() 	   { return auteurs.getArtistes() ;	  }	
-	public List<Artiste> getListeInterpretes() { return interpretes.getArtistes() ; }	
-	public List<Artiste> getListeChefs() 	   { return chefs.getArtistes() ;		  }	
-	public List<Artiste> getListeEnsembles()   { return ensembles.getArtistes() ;	  }	
-	public List<Artiste> getListeGroupes() 	   { return groupes.getArtistes() ;     }
+	public List<Artiste> getListeAuteurs() {
+		return auteurs.getArtistes();
+	}
+
+	public List<Artiste> getListeInterpretes() {
+		return interpretes.getArtistes();
+	}
+
+	public List<Artiste> getListeChefs() {
+		return chefs.getArtistes();
+	}
+
+	public List<Artiste> getListeEnsembles() {
+		return ensembles.getArtistes();
+	}
+
+	public List<Artiste> getListeGroupes() {
+		return groupes.getArtistes();
+	}
 	
 	private ListeArtiste processListeArtistes(Class<? extends Artiste> cls, String artistesJprop) {
 		
@@ -125,30 +139,17 @@ public class MusicArtefactParser {
 		return artiste ;
 	}
 	
+	
+	public String getDisocgs() {
+		return ParserHelpers.parseStringProperty(arteFactJson, JsonMusicProperties.DISCOGS, false);
+	}
+	
 	public List<String> getNotes() {
-		return getArrayAttribute(JsonMusicProperties.NOTES);
+		return ParserHelpers.getArrayAttribute(arteFactJson, JsonMusicProperties.NOTES);
 	}
 
 	public List<String> getUrlLinks() {		
-		return getArrayAttribute(JsonMusicProperties.LIENS);
+		return ParserHelpers.getArrayAttribute(arteFactJson, JsonMusicProperties.LIENS);
 	}
-	
-	private List<String> getArrayAttribute(String jsonMusicProperty) {
 
-        JsonElement jElem = arteFactJson.get(jsonMusicProperty) ;
-		if (jElem != null) {
-			if (jElem.isJsonArray()) {
-				List<String> result = new ArrayList<String>() ;
-				JsonArray jArray = jElem.getAsJsonArray() ; 
-				for (JsonElement e : jArray) {
-					result.add(e.getAsString()) ;
-				}
-				albumLog.finest(() -> "Nombre de " + jsonMusicProperty + " " + result.size()) ;
-				return result ;
-			} else {
-				albumLog.warning(jsonMusicProperty + " n'est pas un JsonArray pour l'artefact " + arteFactJson) ;
-			}
-		}
-		return new ArrayList<String>() ;
-	}
 }

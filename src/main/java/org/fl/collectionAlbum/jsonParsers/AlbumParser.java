@@ -44,14 +44,7 @@ public class AlbumParser {
 	
 	public static String getAlbumTitre(JsonObject jAlbum) {
 		
-		String titre ;
-		JsonElement jElem = jAlbum.get(JsonMusicProperties.TITRE) ;
-		if (jElem == null) {
-			albumLog.warning("Titre de l'album null pour l'album " + jAlbum.toString());
-            titre = "" ;
-        } else {
-        	titre = jElem.getAsString() ;
-        }
+		String titre =  ParserHelpers.parseStringProperty(jAlbum, JsonMusicProperties.TITRE, true);
 		albumLog.finest(() -> "Titre: " + titre);
 		return titre ;
 	}
