@@ -62,14 +62,7 @@ public class ConcertParser {
 	
 	public static String getConcertLieu(JsonObject arteFactJson) {
 		
-		String lieuConcert = null ;
-		JsonElement jElem = arteFactJson.get(JsonMusicProperties.LIEU) ;
-		if (jElem == null) {
-			albumLog.warning("Pas de lieu dans le concert " + arteFactJson);
-		} else {
-			lieuConcert = jElem.getAsString() ;
-		}
-		return lieuConcert ;
+		return ParserHelpers.parseStringProperty(arteFactJson, JsonMusicProperties.LIEU, true);
 	}
 	
 	public static List<String> getConcertMorceaux(JsonObject arteFactJson) {

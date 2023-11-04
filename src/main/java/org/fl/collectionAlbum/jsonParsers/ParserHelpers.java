@@ -25,19 +25,29 @@ SOFTWARE.
 package org.fl.collectionAlbum.jsonParsers;
 
 import java.util.Optional;
+import java.util.logging.Logger;
+
+import org.fl.collectionAlbum.Control;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public class ParserHelpers {
 
+	private final static Logger albumLog = Control.getAlbumLog();
+	
 	private ParserHelpers() {
 	}
 
-	public static String parseOptionalStringProperty(JsonObject mediaFileJson, String property) {
+	public static String parseStringProperty(JsonObject json, String property, boolean mandatory) {
 		
-		return Optional.ofNullable(mediaFileJson.get(property))
+		return Optional.ofNullable(json.get(property))
 				.map(JsonElement::getAsString)
-				.orElse(null);
+				.orElseGet(() -> {
+					if (mandatory) {
+						albumLog.severe("Mandatory property " + property + " not found in " + json);
+					}
+					return null;
+				});
 	}
 }

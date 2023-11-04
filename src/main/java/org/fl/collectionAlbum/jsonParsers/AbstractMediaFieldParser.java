@@ -26,14 +26,12 @@ package org.fl.collectionAlbum.jsonParsers;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.JsonMusicProperties;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 public class AbstractMediaFieldParser {
@@ -41,12 +39,12 @@ public class AbstractMediaFieldParser {
 	private final static Logger albumLog = Control.getAlbumLog();
 	
 	protected static String parseNote(JsonObject mediaFileJson) {
-		return ParserHelpers.parseOptionalStringProperty(mediaFileJson, JsonMusicProperties.NOTE);
+		return ParserHelpers.parseStringProperty(mediaFileJson, JsonMusicProperties.NOTE, false);
 	}
 
 	protected static Path parseAudioFileLocation(JsonObject mediaFileJson) {
 
-		String location = ParserHelpers.parseOptionalStringProperty(mediaFileJson, JsonMusicProperties.LOCATION);
+		String location = ParserHelpers.parseStringProperty(mediaFileJson, JsonMusicProperties.LOCATION, false);
 
 		if (location != null) {
 			try {
@@ -72,12 +70,7 @@ public class AbstractMediaFieldParser {
 	
 	protected static String parseSource(JsonObject mediaFileJson) {
 		
-		return Optional.ofNullable(mediaFileJson.get(JsonMusicProperties.SOURCE))
-				.map(JsonElement::getAsString)
-				.orElseGet(() -> {
-					albumLog.severe("Json MediaFile null source parameter: " + mediaFileJson);
-					return null;
-				});
+		return ParserHelpers.parseStringProperty(mediaFileJson, JsonMusicProperties.SOURCE, true);
 	}
 
 }

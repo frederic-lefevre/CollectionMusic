@@ -141,7 +141,7 @@ public class MusicArtefactParser {
 	
 	
 	protected static String parseDisocgs(JsonObject mediaFileJson) {
-		return ParserHelpers.parseOptionalStringProperty(mediaFileJson, JsonMusicProperties.DISCOGS);
+		return ParserHelpers.parseStringProperty(mediaFileJson, JsonMusicProperties.DISCOGS, false);
 	}
 	
 	public List<String> getNotes() {
