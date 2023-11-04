@@ -140,8 +140,8 @@ public class MusicArtefactParser {
 	}
 	
 	
-	protected static String parseDisocgs(JsonObject mediaFileJson) {
-		return ParserHelpers.parseStringProperty(mediaFileJson, JsonMusicProperties.DISCOGS, false);
+	public String getDisocgs() {
+		return ParserHelpers.parseStringProperty(arteFactJson, JsonMusicProperties.DISCOGS, false);
 	}
 	
 	public List<String> getNotes() {
