@@ -41,33 +41,33 @@ public class AbstractMediaFieldParser {
 	private final static Logger albumLog = Control.getAlbumLog();
 	
 	protected static String parseNote(JsonObject mediaFileJson) {
-		return parseOptionalStringProperty(mediaFileJson, JsonMusicProperties.NOTE);
+		return ParserHelpers.parseOptionalStringProperty(mediaFileJson, JsonMusicProperties.NOTE);
 	}
 
 	protected static Path parseAudioFileLocation(JsonObject mediaFileJson) {
-		
-		String location = parseOptionalStringProperty(mediaFileJson, JsonMusicProperties.LOCATION);
-		
-	if (location != null) {
-		try {
-			Path locationPath = Path.of(location);
-			if (locationPath.isAbsolute()) {
-				if (! Files.exists(locationPath)) {
-					albumLog.warning("Media file location does not exists: " + mediaFileJson);
+
+		String location = ParserHelpers.parseOptionalStringProperty(mediaFileJson, JsonMusicProperties.LOCATION);
+
+		if (location != null) {
+			try {
+				Path locationPath = Path.of(location);
+				if (locationPath.isAbsolute()) {
+					if (!Files.exists(locationPath)) {
+						albumLog.warning("Media file location does not exists: " + mediaFileJson);
+					}
+					return locationPath;
+				} else {
+					albumLog.severe("Media file location is not absolute: " + mediaFileJson);
+					return null;
 				}
-				return locationPath;
-			} else {
-				albumLog.severe("Media file location is not absolute: " + mediaFileJson);
+			} catch (Exception e) {
+				albumLog.log(Level.SEVERE, "Invalid media file location: " + mediaFileJson, e);
 				return null;
 			}
-		} catch (Exception e) {
-			albumLog.log(Level.SEVERE, "Invalid media file location: " + mediaFileJson, e);
+		} else {
 			return null;
 		}
-	} else {
-		return null;
-	}
-		
+
 	}
 	
 	protected static String parseSource(JsonObject mediaFileJson) {
@@ -79,11 +79,5 @@ public class AbstractMediaFieldParser {
 					return null;
 				});
 	}
-	
-	private static String parseOptionalStringProperty(JsonObject mediaFileJson, String property) {
-		
-		return Optional.ofNullable(mediaFileJson.get(property))
-				.map(JsonElement::getAsString)
-				.orElse(null);
-	}
+
 }

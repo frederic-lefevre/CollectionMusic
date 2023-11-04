@@ -55,28 +55,42 @@ public class MusicArtefactParser {
 	
 	public MusicArtefactParser(JsonObject j, List<ListeArtiste> currentKnownArtistes) {
 		super();
-		
-		arteFactJson  = j ;
-		knownArtistes = new ArrayList<ListeArtiste>() ;
+
+		arteFactJson = j;
+		knownArtistes = new ArrayList<ListeArtiste>();
 		currentKnownArtistes.stream().forEach(la -> knownArtistes.add(la));
-		
-		auteurs 	= processListeArtistes(Artiste.class, JsonMusicProperties.AUTEUR) ;
-		knownArtistes.add(auteurs) ;
-		interpretes = processListeArtistes(Artiste.class, JsonMusicProperties.INTERPRETE) ;
-		knownArtistes.add(interpretes) ;
-		chefs		= processListeArtistes(Artiste.class, JsonMusicProperties.CHEF) ;
-		knownArtistes.add(chefs) ;
-		ensembles	= processListeArtistes(Groupe.class,  JsonMusicProperties.ENSEMBLE) ;
-		knownArtistes.add(ensembles) ;
-		groupes		= processListeArtistes(Groupe.class,  JsonMusicProperties.GROUPE) ;
-		knownArtistes.add(groupes) ;
+
+		auteurs = processListeArtistes(Artiste.class, JsonMusicProperties.AUTEUR);
+		knownArtistes.add(auteurs);
+		interpretes = processListeArtistes(Artiste.class, JsonMusicProperties.INTERPRETE);
+		knownArtistes.add(interpretes);
+		chefs = processListeArtistes(Artiste.class, JsonMusicProperties.CHEF);
+		knownArtistes.add(chefs);
+		ensembles = processListeArtistes(Groupe.class, JsonMusicProperties.ENSEMBLE);
+		knownArtistes.add(ensembles);
+		groupes = processListeArtistes(Groupe.class, JsonMusicProperties.GROUPE);
+		knownArtistes.add(groupes);
 	}
 
-	public List<Artiste> getListeAuteurs() 	   { return auteurs.getArtistes() ;	  }	
-	public List<Artiste> getListeInterpretes() { return interpretes.getArtistes() ; }	
-	public List<Artiste> getListeChefs() 	   { return chefs.getArtistes() ;		  }	
-	public List<Artiste> getListeEnsembles()   { return ensembles.getArtistes() ;	  }	
-	public List<Artiste> getListeGroupes() 	   { return groupes.getArtistes() ;     }
+	public List<Artiste> getListeAuteurs() {
+		return auteurs.getArtistes();
+	}
+
+	public List<Artiste> getListeInterpretes() {
+		return interpretes.getArtistes();
+	}
+
+	public List<Artiste> getListeChefs() {
+		return chefs.getArtistes();
+	}
+
+	public List<Artiste> getListeEnsembles() {
+		return ensembles.getArtistes();
+	}
+
+	public List<Artiste> getListeGroupes() {
+		return groupes.getArtistes();
+	}
 	
 	private ListeArtiste processListeArtistes(Class<? extends Artiste> cls, String artistesJprop) {
 		
@@ -123,6 +137,11 @@ public class MusicArtefactParser {
 			artiste.update(jArtiste);
 		}
 		return artiste ;
+	}
+	
+	
+	protected static String parseDisocgs(JsonObject mediaFileJson) {
+		return ParserHelpers.parseOptionalStringProperty(mediaFileJson, JsonMusicProperties.DISCOGS);
 	}
 	
 	public List<String> getNotes() {
