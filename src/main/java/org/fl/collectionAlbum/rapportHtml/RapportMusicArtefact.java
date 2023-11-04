@@ -32,6 +32,10 @@ import org.fl.collectionAlbum.artistes.Artiste;
 
 public class RapportMusicArtefact extends RapportHtml {
 
+	private static final String DISCOGS_LINK1 = "<p><a href=\"";
+	private static final String DISCOGS_LINK2 = "\">";
+	private static final String DISCOGS_LINK3 = "</a></p>\n";
+	
 	private final MusicArtefact musicArtefact;
 	
 	protected RapportMusicArtefact(MusicArtefact m) {
@@ -60,6 +64,16 @@ public class RapportMusicArtefact extends RapportHtml {
 				write("    </li>\n");
 			}
 			write("  </ul>\n");
+		}
+		
+		String discogsLink = musicArtefact.getDiscogsLink();
+		if ((discogsLink != null) && !discogsLink.isEmpty()) {
+			write("  <h3>Discogs link</h3>\n");
+			write(DISCOGS_LINK1);
+			write(discogsLink);
+			write(DISCOGS_LINK2);
+			write(discogsLink);
+			write(DISCOGS_LINK3);
 		}
 		
 		List<String> notes = musicArtefact.getNotes();
