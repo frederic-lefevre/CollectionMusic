@@ -24,6 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
@@ -94,9 +95,9 @@ public class CollectionAlbumContainer {
 	private CollectionAlbumContainer() {		
 	}
 
-	public void addAlbum(JsonObject arteFactJson) {
+	public void addAlbum(JsonObject arteFactJson, Path jsonFile) {
 		
-		Album album = new Album(arteFactJson, allArtistes) ;
+		Album album = new Album(arteFactJson, allArtistes, jsonFile) ;
 		
 		album.addMusicArtfactArtistesToList(collectionArtistes);
 		
@@ -132,9 +133,9 @@ public class CollectionAlbumContainer {
 	    statChronoComposition.AddAlbum(album.getDebutComposition(), album.getFormatAlbum().getPoids());
 	}
 	
-	public void addConcert(JsonObject arteFactJson) { 
+	public void addConcert(JsonObject arteFactJson, Path jsonFile) { 
 		
-		Concert concert = new Concert(arteFactJson, allArtistes, lieuxDesConcerts) ;
+		Concert concert = new Concert(arteFactJson, allArtistes, lieuxDesConcerts, jsonFile) ;
 		
 		concert.getLieuConcert().addConcert(concert) ;
 		concert.addMusicArtfactArtistesToList(concertsArtistes);

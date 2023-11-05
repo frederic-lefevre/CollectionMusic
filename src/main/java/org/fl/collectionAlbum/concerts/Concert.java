@@ -24,6 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.concerts;
 
+import java.nio.file.Path;
 import java.time.temporal.TemporalAccessor;
 import java.util.List;
 
@@ -40,30 +41,43 @@ public class Concert extends MusicArtefact {
     private List<String> titres;    
     private List<String> ticketImages;
     
-    public Concert(JsonObject concertJson, List<ListeArtiste> knownArtistes, LieuxDesConcerts lieuxDesConcerts) {
-    	super(concertJson, knownArtistes) ;
-    	
-    	dateConcert  = ConcertParser.getConcertDate(concertJson);
-    	lieuConcert  = lieuxDesConcerts.addLieuDunConcert(ConcertParser.getConcertLieu(concertJson));
-    	titres		 = ConcertParser.getConcertMorceaux(concertJson);
-    	ticketImages = ConcertParser.getConcertTickets(concertJson);
-    }
-    
-    @Override
-    public boolean additionnalInfo() {
-    
-    	boolean res = false ;
-    	if ((ticketImages != null) && (ticketImages.size() > 0)) {
-    		res = true ;
-    	} else {
-    		res = super.additionnalInfo() ;
-    	}
-    	return res ;
-    }
-    
-	public LieuConcert 		getLieuConcert()  { return lieuConcert	; }	 
-	public TemporalAccessor getDateConcert()  {	return dateConcert 	; }
-	public List<String> 	getTitres() 	  {	return titres		; }
-	public List<String> 	getTicketImages() { return ticketImages ; }	
+	public Concert(JsonObject concertJson, List<ListeArtiste> knownArtistes, LieuxDesConcerts lieuxDesConcerts,
+			Path jsonFilePath) {
+
+		super(concertJson, knownArtistes, jsonFilePath);
+
+		dateConcert = ConcertParser.getConcertDate(concertJson);
+		lieuConcert = lieuxDesConcerts.addLieuDunConcert(ConcertParser.getConcertLieu(concertJson));
+		titres = ConcertParser.getConcertMorceaux(concertJson);
+		ticketImages = ConcertParser.getConcertTickets(concertJson);
+	}
+
+	@Override
+	public boolean additionnalInfo() {
+
+		boolean res = false;
+		if ((ticketImages != null) && (ticketImages.size() > 0)) {
+			res = true;
+		} else {
+			res = super.additionnalInfo();
+		}
+		return res;
+	}
+
+	public LieuConcert getLieuConcert() {
+		return lieuConcert;
+	}
+
+	public TemporalAccessor getDateConcert() {
+		return dateConcert;
+	}
+
+	public List<String> getTitres() {
+		return titres;
+	}
+
+	public List<String> getTicketImages() {
+		return ticketImages;
+	}
 	
 }

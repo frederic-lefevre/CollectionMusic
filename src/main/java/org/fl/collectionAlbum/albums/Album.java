@@ -24,6 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.albums;
 
+import java.nio.file.Path;
 import java.time.temporal.TemporalAccessor;
 import java.util.List;
 
@@ -41,16 +42,17 @@ public class Album extends MusicArtefact {
 
     private final String titre;
     
-    private final FuzzyPeriod periodeEnregistrement ;
-    private FuzzyPeriod periodeComposition ;
+    private final FuzzyPeriod periodeEnregistrement;
+    private FuzzyPeriod periodeComposition;
     
     private final Format formatAlbum;
     private RangementSupportPhysique rangement;
     
-    private final boolean specificCompositionDates ;
+    private final boolean specificCompositionDates;
     
-    public Album(JsonObject albumJson, List<ListeArtiste> knownArtistes) {
-    	super(albumJson, knownArtistes);
+    public Album(JsonObject albumJson, List<ListeArtiste> knownArtistes, Path jsonFilePath) {
+    	
+    	super(albumJson, knownArtistes, jsonFilePath);
     	
     	titre 				  = AlbumParser.getAlbumTitre(albumJson);
     	formatAlbum 		  = AlbumParser.getFormatAlbum(albumJson);    	

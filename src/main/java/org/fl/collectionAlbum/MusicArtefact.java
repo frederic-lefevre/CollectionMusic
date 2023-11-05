@@ -24,6 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum;
 
+import java.nio.file.Path;
 import java.util.List;
 
 import org.fl.collectionAlbum.artistes.Artiste;
@@ -47,9 +48,12 @@ public abstract class MusicArtefact {
 	private final boolean hasAdditionalInfo;
 
 	protected final JsonObject arteFactJson;
+	private final Path jsonFilePath;
 
-	protected MusicArtefact(JsonObject afj, List<ListeArtiste> knownArtistes) {
+	protected MusicArtefact(JsonObject afj, List<ListeArtiste> knownArtistes, Path jsonFilePath) {
+		
 		arteFactJson = afj;
+		this.jsonFilePath = jsonFilePath;
 
 		MusicArtefactParser musicParser = new MusicArtefactParser(arteFactJson, knownArtistes);
 

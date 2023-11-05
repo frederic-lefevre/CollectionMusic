@@ -26,6 +26,7 @@ package org.fl.collectionAlbum.concerts;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +47,7 @@ class ConcertTest {
 		lla.add(la) ;
 		
 		LieuxDesConcerts lieuxDesConcerts = new LieuxDesConcerts() ;
-		Concert concert = new Concert(new JsonObject(), lla, lieuxDesConcerts) ;
+		Concert concert = new Concert(new JsonObject(), lla, lieuxDesConcerts, Path.of("dummyPath")) ;
 		
 		assertThat(concert).isNotNull();
 	}
@@ -74,7 +75,7 @@ class ConcertTest {
 		lla.add(la);
 		LieuxDesConcerts lieuxDesConcerts = new LieuxDesConcerts();
 
-		Concert concert = new Concert(jConcert, lla, lieuxDesConcerts);
+		Concert concert = new Concert(jConcert, lla, lieuxDesConcerts, Path.of("dummyPath"));
 
 		LieuConcert juan = concert.getLieuConcert();
 		assertThat(juan.getLieu()).isEqualTo("Juan-les-Pins, Alpes-Maritimes");

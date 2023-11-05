@@ -26,6 +26,7 @@ package org.fl.collectionAlbum.albums;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +46,7 @@ class AlbumTest {
 		List<ListeArtiste> lla = new ArrayList<ListeArtiste>();
 		lla.add(la);
 
-		Album album = new Album(new JsonObject(), lla);
+		Album album = new Album(new JsonObject(), lla, Path.of("dummyPath"));
 
 		assertThat(album).isNotNull();
 	}
@@ -76,7 +77,7 @@ class AlbumTest {
 		List<ListeArtiste> lla = new ArrayList<ListeArtiste>();
 		lla.add(la);
 
-		Album album = new Album(jAlbum, lla);
+		Album album = new Album(jAlbum, lla, Path.of("dummyPath"));
 		
 		assertThat(album.getTitre()).isEqualTo("Portrait in jazz");
 

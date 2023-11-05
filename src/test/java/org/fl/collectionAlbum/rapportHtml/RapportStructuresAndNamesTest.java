@@ -28,6 +28,7 @@ package org.fl.collectionAlbum.rapportHtml;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.net.URI;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -122,7 +123,7 @@ class RapportStructuresAndNamesTest {
 		List<ListeArtiste> lla = new ArrayList<ListeArtiste>();
 		lla.add(la);
 
-		Album album = new Album(jAlbum, lla);
+		Album album = new Album(jAlbum, lla, Path.of("dummyPath"));
 		Artiste bill = album.getAuteurs().get(0);
 		album.addMusicArtfactArtistesToList(la);
 		
@@ -133,7 +134,7 @@ class RapportStructuresAndNamesTest {
 		assertThat(pInfoAlbum).isNull();
 		
 		JsonObject jAlbum2 = JsonParser.parseString(albumStr2).getAsJsonObject();
-		Album album2 = new Album(jAlbum2, lla);
+		Album album2 = new Album(jAlbum2, lla, Path.of("dummyPath"));
 		album2.addMusicArtfactArtistesToList(la);
 		Artiste fake = album2.getAuteurs().get(0);
 		
@@ -172,7 +173,7 @@ class RapportStructuresAndNamesTest {
 		lla.add(la) ;
 		
 		LieuxDesConcerts lieuxDesConcerts = new LieuxDesConcerts();
-		Concert concert = new Concert(jConcert, lla, lieuxDesConcerts);
+		Concert concert = new Concert(jConcert, lla, lieuxDesConcerts, Path.of("dummyPath"));
 		concert.addMusicArtfactArtistesToList(la);
 		List<Artiste> lDeeDee = concert.getAuteurs();
 		Artiste deeDee = lDeeDee.get(0);

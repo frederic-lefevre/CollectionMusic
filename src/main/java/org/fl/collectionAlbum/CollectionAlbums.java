@@ -135,7 +135,7 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
     			
 	    		JsonObject arteFactJson = JsonUtils.getJsonObjectFromPath(file, Control.getCharset(), albumLog) ;
 	    		if (arteFactJson != null) {
-	    			addMusicArtefact(arteFactJson) ;
+	    			addMusicArtefact(arteFactJson, file) ;
 	    		} else {
 	    			albumLog.warning("Impossible de lire le fichier json " + file);
 	    		}
@@ -150,15 +150,15 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
     		 return FileVisitResult.CONTINUE;
     	}
 
-    	public abstract void addMusicArtefact(JsonObject artefactJson) ;
+    	public abstract void addMusicArtefact(JsonObject artefactJson, Path jsonFile) ;
     }
     
     private class AlbumFileVisitor extends MusicFileVisitor {
 		protected AlbumFileVisitor(String fileExtension) {	super(fileExtension); }
 
 		@Override
-		public void addMusicArtefact(JsonObject artefactJson) {
-			albumsContainer.addAlbum(artefactJson) ;			
+		public void addMusicArtefact(JsonObject artefactJson, Path jsonFile) {
+			albumsContainer.addAlbum(artefactJson, jsonFile) ;			
 		}    	
     }
     
@@ -166,8 +166,8 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 		protected ConcertFileVisitor(String fileExtension) {	super(fileExtension); }
 
 		@Override
-		public void addMusicArtefact(JsonObject artefactJson) {
-			albumsContainer.addConcert(artefactJson) ;			
+		public void addMusicArtefact(JsonObject artefactJson, Path jsonFile) {
+			albumsContainer.addConcert(artefactJson, jsonFile) ;			
 		}    	
     }
     
