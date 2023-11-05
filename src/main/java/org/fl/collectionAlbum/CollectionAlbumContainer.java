@@ -125,7 +125,7 @@ public class CollectionAlbumContainer {
 		if (album.hasHighResAudio()) {
 			albumWithHighResAudio.addAlbum(album);
 		}
-		if (! album.hasOnlyLossLessAudio()) {
+		if (album.hasAudioFiles() && !album.hasOnlyLossLessAudio()) {
 			albumWithLowResAudio.addAlbum(album);
 		}
 		

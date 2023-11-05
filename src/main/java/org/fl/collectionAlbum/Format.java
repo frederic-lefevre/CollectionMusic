@@ -294,13 +294,33 @@ public class Format {
 	}
 	
 	public boolean hasOnlyLossLessAudio() {
-		return audioFiles.stream()
-				.allMatch(audioFile -> audioFile.isLossLess());
+		return 	hasAudioFiles() &&
+				audioFiles.stream()
+					.allMatch(audioFile -> audioFile.isLossLess());
 	}
 	
 	public boolean hasHighResAudio() {
-		return audioFiles.stream()
-				.anyMatch(audioFile -> audioFile.isHighRes());
+		return hasAudioFiles() && 
+			   audioFiles.stream()
+			   	.anyMatch(audioFile -> audioFile.isHighRes());
+	}
+	
+	public boolean hasMissingOrInvalidMediaFilePath() {
+		return (hasAudioFiles() &&
+				audioFiles.stream()
+			   		.anyMatch(audioFile -> audioFile.hasMissingOrInvalidMediaFilePath())) ||
+				(hasVideoFiles() &&
+				videoFiles.stream()
+						.anyMatch(videoFile -> videoFile.hasMissingOrInvalidMediaFilePath()));
+	}
+
+	public boolean hasMediaFilePathNotFound() {
+		return (hasAudioFiles() &&
+				audioFiles.stream()
+			   		.anyMatch(audioFile -> audioFile.hasMediaFilePathNotFound())) ||
+				(hasVideoFiles() &&
+				videoFiles.stream()
+						.anyMatch(videoFile -> videoFile.hasMediaFilePathNotFound()));
 	}
 	
 	private <T extends AbstractMediaFile> boolean hasMediaFile(List<T> mediaFiles) {

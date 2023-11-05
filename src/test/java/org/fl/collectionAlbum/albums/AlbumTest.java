@@ -30,6 +30,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.fl.collectionAlbum.Format.ContentNature;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.junit.jupiter.api.Test;
@@ -49,6 +50,9 @@ class AlbumTest {
 		Album album = new Album(new JsonObject(), lla, Path.of("dummyPath"));
 
 		assertThat(album).isNotNull();
+		assertThat(album.hasAudioFiles()).isFalse();
+		assertThat(album.hasVideoFiles()).isFalse();
+		assertThat(album.hasMediaFiles()).isFalse();
 	}
 
 	private static final String albumStr1 = """
@@ -86,6 +90,24 @@ class AlbumTest {
 			.isNotNull()
 			.singleElement()
 			.isEqualTo("http://somwhere");
+		
+		assertThat(album.hasAudioFiles()).isFalse();
+		assertThat(album.hasVideoFiles()).isFalse();
+		assertThat(album.hasMediaFiles()).isFalse();
+		
+		assertThat(album.hasHighResAudio()).isFalse();
+		assertThat(album.hasSpecificCompositionDates()).isFalse();
+		assertThat(album.hasOnlyLossLessAudio()).isFalse();
+		assertThat(album.hasIntervenant()).isFalse();
+		
+		assertThat(album.hasContentNature(ContentNature.AUDIO)).isTrue();
+		assertThat(album.hasContentNature(ContentNature.VIDEO)).isFalse();
+		
+		assertThat(album.missesAudioFile()).isTrue();
+		assertThat(album.missesVideoFile()).isFalse();
+		
+		assertThat(album.hasMediaFilePathNotFound()).isFalse();
+		assertThat(album.hasMissingOrInvalidMediaFilePath()).isFalse();
 		
 		Artiste bill = album.getAuteurs().get(0);
 		assertThat(bill).isNotNull();

@@ -150,6 +150,14 @@ public class Album extends MusicArtefact {
 		return formatAlbum.hasContentNature(contentNature);
 	}
 	
+	public boolean hasMissingOrInvalidMediaFilePath() {
+		return formatAlbum.hasMissingOrInvalidMediaFilePath();
+	}
+	
+	public boolean hasMediaFilePathNotFound() {
+		return formatAlbum.hasMediaFilePathNotFound();
+	}
+	
     @Override
     public boolean additionnalInfo() {
     	return hasAudioFiles() || hasVideoFiles() || super.additionnalInfo();
