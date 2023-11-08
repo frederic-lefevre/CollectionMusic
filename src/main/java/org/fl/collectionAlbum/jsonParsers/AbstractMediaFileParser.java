@@ -34,7 +34,7 @@ import org.fl.collectionAlbum.JsonMusicProperties;
 
 import com.google.gson.JsonObject;
 
-public class AbstractMediaFieldParser {
+public class AbstractMediaFileParser {
 
 	private final static Logger albumLog = Control.getAlbumLog();
 	

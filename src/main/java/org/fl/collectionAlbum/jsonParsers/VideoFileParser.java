@@ -53,9 +53,9 @@ public class VideoFileParser {
 						return null;
 					});
 			
-			String source = AbstractMediaFieldParser.parseSource(videoFileJson);
-			String note = AbstractMediaFieldParser.parseNote(videoFileJson);
-			Path videoFileLocation = AbstractMediaFieldParser.parseAudioFileLocation(videoFileJson);
+			String source = AbstractMediaFileParser.parseSource(videoFileJson);
+			String note = AbstractMediaFileParser.parseNote(videoFileJson);
+			Path videoFileLocation = AbstractMediaFileParser.parseAudioFileLocation(videoFileJson);
 			
 			Integer width = Optional.ofNullable(videoFileJson.get(JsonMusicProperties.VIDEO_WIDTH))
 					.map(JsonElement::getAsInt)
