@@ -170,7 +170,7 @@ class AlbumTest {
 		ListeArtiste la3 = new ListeArtiste();
 		List<ListeArtiste> lla3 = new ArrayList<ListeArtiste>();
 		lla.add(la3);
-		Album album3 = new Album(modifiedJson2, lla3, Path.of("dummyPath2"));
+		Album album3 = new Album(modifiedJson2, lla3, Path.of("C:\\ForTests\\CollectionMusique\\PortraitInJazz.json"));
 		
 		testAlbumProperties(album3, la3);
 		
@@ -193,6 +193,9 @@ class AlbumTest {
 				assertThat(lossLessAudio.getSource()).isEqualTo("MOFI Fidelity Sound Lab");
 				assertThat(audio.getMediaFilePath()).hasToString("E:\\Musique\\e\\Bill Evans\\Portrait In Jazz");
 			});
+		
+		// Write json in file
+		album3.writeJson();
 	}
 	
 	private void testAlbumProperties(Album album, ListeArtiste la) {
