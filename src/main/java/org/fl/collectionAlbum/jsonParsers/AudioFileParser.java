@@ -82,7 +82,7 @@ public class AudioFileParser {
 				if (bitDepth == null) {
 					return null;
 				} else {
-					return new LosslessAudioFile(type, source, bitDepth, samplingRate, note, audioFileLocation);
+					return new LosslessAudioFile(audioFileJson, type, source, bitDepth, samplingRate, note, audioFileLocation);
 				}
 				
 			} else {
@@ -97,7 +97,7 @@ public class AudioFileParser {
 				if (bitRate == null) {
 					return null;
 				} else {
-					return new LossyAudioFile(type, source, bitRate, samplingRate, note, audioFileLocation);
+					return new LossyAudioFile(audioFileJson, type, source, bitRate, samplingRate, note, audioFileLocation);
 				}
 			}
 		} else {

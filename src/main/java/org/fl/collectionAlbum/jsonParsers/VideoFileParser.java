@@ -74,7 +74,7 @@ public class VideoFileParser {
 			if ((type == null) || (source == null) || (width == null) || (height == null)) {
 				return null;
 			} else {
-				return new VideoFile(type, source, width, height, note, videoFileLocation);
+				return new VideoFile(videoFileJson, type, source, width, height, note, videoFileLocation);
 			}
 		} else {
 			rapportLog.severe("Json VideoFile null parameter");

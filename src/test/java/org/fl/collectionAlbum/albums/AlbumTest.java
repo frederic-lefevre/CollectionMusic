@@ -27,9 +27,12 @@ package org.fl.collectionAlbum.albums;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.fl.collectionAlbum.AbstractAudioFile;
+import org.fl.collectionAlbum.LosslessAudioFile;
 import org.fl.collectionAlbum.Format.ContentNature;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
@@ -58,7 +61,13 @@ class AlbumTest {
 	private static final String albumStr1 = """
 			{ 
 			  "titre": "Portrait in jazz\",
-			  "format": {  "cd": 1   }, 
+			  "format": {  "cd": 1,
+				"audioFiles" : [{
+				    "bitDepth": 16 , 
+				    "samplingRate" : 44.1, 
+				    "source" : "MOFI Fidelity Sound Lab", 
+				    "type" : "FLAC" }]
+			     }, 
 			  "auteurCompositeurs": [ 
 			    {  
 			      "nom": "Evans",
@@ -83,6 +92,111 @@ class AlbumTest {
 
 		Album album = new Album(jAlbum, lla, Path.of("dummyPath"));
 		
+		testAlbumProperties(album, la);
+		
+		assertThat(album.hasMissingOrInvalidMediaFilePath()).isTrue();
+		assertThat(album.hasMediaFilePathNotFound()).isTrue();
+		
+		List<AbstractAudioFile> audioFiles = album.getFormatAlbum().getAudioFiles();
+		assertThat(audioFiles).isNotNull()
+			.singleElement()
+			.satisfies(audio -> {
+				assertThat(audio.hasMissingOrInvalidMediaFilePath()).isTrue();
+				assertThat(audio.isLossLess()).isTrue();
+				
+				assertThat(audio).isNotNull().isInstanceOf(LosslessAudioFile.class);
+				
+				LosslessAudioFile lossLessAudio = (LosslessAudioFile)audio;
+				assertThat(lossLessAudio.getBitDepth()).isEqualTo(16);
+				assertThat(lossLessAudio.getSamplingRate()).isEqualTo(44.1);
+				assertThat(lossLessAudio.getType().name()).isEqualTo("FLAC");
+				assertThat(lossLessAudio.getSource()).isEqualTo("MOFI Fidelity Sound Lab");
+				assertThat(audio.getMediaFilePath()).isNull();
+			});
+
+		// Add the audio file path
+		AbstractAudioFile audioFile = audioFiles.get(0);
+		audioFile.setMediaFilePath(Paths.get("E:/Musique/e/Bill Evans/Waltz for Debby/"));
+		
+		assertThat(album.getFormatAlbum().getAudioFiles()).singleElement().satisfies(audio -> {
+			assertThat(audio.hasMissingOrInvalidMediaFilePath()).isFalse();
+			assertThat(audio.getMediaFilePath()).hasToString("E:\\Musique\\e\\Bill Evans\\Waltz for Debby");
+		});
+
+		// Get the json from the album (should be modified with the path)
+		JsonObject modifiedJson = album.getJson();
+		
+		// Recreate an album from this json
+		ListeArtiste la2 = new ListeArtiste();
+		List<ListeArtiste> lla2 = new ArrayList<ListeArtiste>();
+		lla.add(la2);
+		Album album2 = new Album(modifiedJson, lla2, Path.of("dummyPath2"));
+		
+		testAlbumProperties(album2, la2);
+		
+		// The album has now a valid media file path
+		assertThat(album2.hasMissingOrInvalidMediaFilePath()).isFalse();
+		assertThat(album2.hasMediaFilePathNotFound()).isFalse();
+		
+		assertThat(album2.getFormatAlbum().getAudioFiles()).isNotNull()
+			.singleElement()
+			.satisfies(audio -> {
+				assertThat(audio.hasMissingOrInvalidMediaFilePath()).isFalse();
+				assertThat(audio.isLossLess()).isTrue();
+				
+				assertThat(audio).isNotNull().isInstanceOf(LosslessAudioFile.class);
+				
+				LosslessAudioFile lossLessAudio = (LosslessAudioFile)audio;
+				assertThat(lossLessAudio.getBitDepth()).isEqualTo(16);
+				assertThat(lossLessAudio.getSamplingRate()).isEqualTo(44.1);
+				assertThat(lossLessAudio.getType().name()).isEqualTo("FLAC");
+				assertThat(lossLessAudio.getSource()).isEqualTo("MOFI Fidelity Sound Lab");
+				assertThat(audio.getMediaFilePath()).hasToString("E:\\Musique\\e\\Bill Evans\\Waltz for Debby");
+			});
+		
+		// Fix the audio file path
+		AbstractAudioFile audioFile2 = album2.getFormatAlbum().getAudioFiles().get(0);
+		audioFile2.setMediaFilePath(Paths.get("E:/Musique/e/Bill Evans/Portrait In Jazz/"));
+		
+		assertThat(album2.getFormatAlbum().getAudioFiles()).singleElement().satisfies(audio -> {
+			assertThat(audio.hasMissingOrInvalidMediaFilePath()).isFalse();
+			assertThat(audio.getMediaFilePath()).hasToString("E:\\Musique\\e\\Bill Evans\\Portrait In Jazz");
+		});
+		
+		// Get the json from the album (should be modified with the fixed path)
+		JsonObject modifiedJson2 = album2.getJson();
+		
+		// Recreate an album from this json
+		ListeArtiste la3 = new ListeArtiste();
+		List<ListeArtiste> lla3 = new ArrayList<ListeArtiste>();
+		lla.add(la3);
+		Album album3 = new Album(modifiedJson2, lla3, Path.of("dummyPath2"));
+		
+		testAlbumProperties(album3, la3);
+		
+		// The album has now a fixed media file path
+		assertThat(album3.hasMissingOrInvalidMediaFilePath()).isFalse();
+		assertThat(album3.hasMediaFilePathNotFound()).isFalse();
+		
+		assertThat(album3.getFormatAlbum().getAudioFiles()).isNotNull()
+			.singleElement()
+			.satisfies(audio -> {
+				assertThat(audio.hasMissingOrInvalidMediaFilePath()).isFalse();
+				assertThat(audio.isLossLess()).isTrue();
+				
+				assertThat(audio).isNotNull().isInstanceOf(LosslessAudioFile.class);
+				
+				LosslessAudioFile lossLessAudio = (LosslessAudioFile)audio;
+				assertThat(lossLessAudio.getBitDepth()).isEqualTo(16);
+				assertThat(lossLessAudio.getSamplingRate()).isEqualTo(44.1);
+				assertThat(lossLessAudio.getType().name()).isEqualTo("FLAC");
+				assertThat(lossLessAudio.getSource()).isEqualTo("MOFI Fidelity Sound Lab");
+				assertThat(audio.getMediaFilePath()).hasToString("E:\\Musique\\e\\Bill Evans\\Portrait In Jazz");
+			});
+	}
+	
+	private void testAlbumProperties(Album album, ListeArtiste la) {
+		
 		assertThat(album.getTitre()).isEqualTo("Portrait in jazz");
 
 		List<String> liens = album.getUrlLinks();
@@ -91,23 +205,20 @@ class AlbumTest {
 			.singleElement()
 			.isEqualTo("http://somwhere");
 		
-		assertThat(album.hasAudioFiles()).isFalse();
+		assertThat(album.hasAudioFiles()).isTrue();
 		assertThat(album.hasVideoFiles()).isFalse();
-		assertThat(album.hasMediaFiles()).isFalse();
+		assertThat(album.hasMediaFiles()).isTrue();
 		
 		assertThat(album.hasHighResAudio()).isFalse();
 		assertThat(album.hasSpecificCompositionDates()).isFalse();
-		assertThat(album.hasOnlyLossLessAudio()).isFalse();
+		assertThat(album.hasOnlyLossLessAudio()).isTrue();
 		assertThat(album.hasIntervenant()).isFalse();
 		
 		assertThat(album.hasContentNature(ContentNature.AUDIO)).isTrue();
 		assertThat(album.hasContentNature(ContentNature.VIDEO)).isFalse();
 		
-		assertThat(album.missesAudioFile()).isTrue();
+		assertThat(album.missesAudioFile()).isFalse();
 		assertThat(album.missesVideoFile()).isFalse();
-		
-		assertThat(album.hasMediaFilePathNotFound()).isFalse();
-		assertThat(album.hasMissingOrInvalidMediaFilePath()).isFalse();
 		
 		Artiste bill = album.getAuteurs().get(0);
 		assertThat(bill).isNotNull();
@@ -124,6 +235,5 @@ class AlbumTest {
 			.isNotNull()
 			.singleElement()
 			.isEqualTo(album);
-
 	}
 }

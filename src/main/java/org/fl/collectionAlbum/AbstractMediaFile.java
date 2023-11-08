@@ -28,10 +28,13 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.function.BiConsumer;
 
+import com.google.gson.JsonObject;
+
 public abstract class AbstractMediaFile {
 
 	private final String source;
 	private final String note;
+	private final JsonObject mediaJson;
 	
 	private Path mediaFilePath;
 	private boolean missingOrInvalidMediaFilePath;
@@ -43,8 +46,9 @@ public abstract class AbstractMediaFile {
 	private static final String FILE_LINK2 = "\">";
 	private static final String FILE_LINK3 = "</a>";
 	
-	protected AbstractMediaFile(String source, String note, Path path) {
+	protected AbstractMediaFile(JsonObject mediaJson, String source, String note, Path path) {
 		super();
+		this.mediaJson = mediaJson;
 		this.source = source;
 		this.note = note;
 		this.mediaFilePath = path;
@@ -57,20 +61,21 @@ public abstract class AbstractMediaFile {
 	
 	public abstract String displayMediaFileSummary();
 	
-	protected String getSource() {
+	public String getSource() {
 		return source;
 	}
 	
-	protected String getNote() {
+	public String getNote() {
 		return note;
 	}
 	
-	protected Path getMediaFilePath() {
+	public Path getMediaFilePath() {
 		return mediaFilePath;
 	}
 	
 	public void setMediaFilePath(Path path) {
 		this.mediaFilePath = path;
+		mediaJson.addProperty(JsonMusicProperties.LOCATION, path.toString());
 		checkMediaFilePath();
 	}
 	

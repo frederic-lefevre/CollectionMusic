@@ -161,7 +161,7 @@ public class Format {
 	private final List<VideoFile> videoFiles;
 	
 	private boolean hasError;
-	
+
 	// Create a format
 	public Format(JsonObject formatJson) {
 		
