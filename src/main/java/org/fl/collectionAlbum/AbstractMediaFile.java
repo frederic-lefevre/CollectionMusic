@@ -32,9 +32,10 @@ public abstract class AbstractMediaFile {
 
 	private final String source;
 	private final String note;
-	private final Path mediaFilePath;
-	private final boolean missingOrInvalidMediaFilePath;
-	private final boolean mediaFilePathNotFound;
+	
+	private Path mediaFilePath;
+	private boolean missingOrInvalidMediaFilePath;
+	private boolean mediaFilePathNotFound;
 	
 	private static final String SOURCE_TITLE = "Source";
 	private static final String NOTE_TITLE = "Note";
@@ -48,17 +49,7 @@ public abstract class AbstractMediaFile {
 		this.note = note;
 		this.mediaFilePath = path;
 		
-		if (path == null) {
-			missingOrInvalidMediaFilePath = true;
-			mediaFilePathNotFound = true;
-		} else {
-			missingOrInvalidMediaFilePath = false;
-			if (Files.exists(mediaFilePath)) {
-				mediaFilePathNotFound = false;
-			} else {
-				mediaFilePathNotFound = true;
-			}
-		}
+		checkMediaFilePath();
 	}
 	
 	public abstract String displayMediaFileDetail(String separator);
@@ -78,6 +69,11 @@ public abstract class AbstractMediaFile {
 		return mediaFilePath;
 	}
 	
+	public void setMediaFilePath(Path path) {
+		this.mediaFilePath = path;
+		checkMediaFilePath();
+	}
+	
 	public boolean hasMissingOrInvalidMediaFilePath() {
 		return missingOrInvalidMediaFilePath;
 	}
@@ -86,6 +82,20 @@ public abstract class AbstractMediaFile {
 		return mediaFilePathNotFound;
 	}
 
+	private void checkMediaFilePath() {
+		if (mediaFilePath == null) {
+			missingOrInvalidMediaFilePath = true;
+			mediaFilePathNotFound = true;
+		} else {
+			missingOrInvalidMediaFilePath = false;
+			if (Files.exists(mediaFilePath)) {
+				mediaFilePathNotFound = false;
+			} else {
+				mediaFilePathNotFound = true;
+			}
+		}
+	}
+	
 	protected void appendCommonMediaFileDetail(StringBuilder mediaFilesDetails, String separator) {
 		mediaFilesDetails.append(getSource());
 		String note = getNote();
