@@ -25,17 +25,23 @@ SOFTWARE.
 package org.fl.collectionAlbum.albums;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.fail;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.AbstractAudioFile;
+import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.LosslessAudioFile;
 import org.fl.collectionAlbum.Format.ContentNature;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
+import org.fl.util.json.JsonUtils;
 import org.junit.jupiter.api.Test;
 
 import com.google.gson.JsonObject;
@@ -43,6 +49,8 @@ import com.google.gson.JsonParser;
 
 class AlbumTest {
 
+	protected final static Logger albumLog = Control.getAlbumLog();
+	
 	@Test
 	void testEmptyAlbum() {
 
@@ -167,10 +175,12 @@ class AlbumTest {
 		JsonObject modifiedJson2 = album2.getJson();
 		
 		// Recreate an album from this json
+		Path jsonFilePath = Path.of("C:\\ForTests\\CollectionMusique\\PortraitInJazz.json");
+		
 		ListeArtiste la3 = new ListeArtiste();
 		List<ListeArtiste> lla3 = new ArrayList<ListeArtiste>();
 		lla.add(la3);
-		Album album3 = new Album(modifiedJson2, lla3, Path.of("C:\\ForTests\\CollectionMusique\\PortraitInJazz.json"));
+		Album album3 = new Album(modifiedJson2, lla3, jsonFilePath);
 		
 		testAlbumProperties(album3, la3);
 		
@@ -194,8 +204,44 @@ class AlbumTest {
 				assertThat(audio.getMediaFilePath()).hasToString("E:\\Musique\\e\\Bill Evans\\Portrait In Jazz");
 			});
 		
+		try {
+			Files.delete(jsonFilePath);
+		} catch (IOException e) {
+			fail("Exception deleting " + jsonFilePath + " : " + e.getMessage());
+		}
+		
 		// Write json in file
 		album3.writeJson();
+		
+		// Read back json and check album
+		JsonObject readBackJson = JsonUtils.getJsonObjectFromPath(jsonFilePath, Control.getCharset(), albumLog);
+		
+		ListeArtiste la4 = new ListeArtiste();
+		List<ListeArtiste> lla4 = new ArrayList<ListeArtiste>();
+		lla.add(la4);
+		Album album4 = new Album(readBackJson, lla4, jsonFilePath);
+		
+		testAlbumProperties(album4, la4);
+		
+		assertThat(album4.hasMissingOrInvalidMediaFilePath()).isFalse();
+		assertThat(album4.hasMediaFilePathNotFound()).isFalse();
+		
+		assertThat(album4.getFormatAlbum().getAudioFiles()).isNotNull()
+			.singleElement()
+			.satisfies(audio -> {
+				assertThat(audio.hasMissingOrInvalidMediaFilePath()).isFalse();
+				assertThat(audio.isLossLess()).isTrue();
+				
+				assertThat(audio).isNotNull().isInstanceOf(LosslessAudioFile.class);
+				
+				LosslessAudioFile lossLessAudio = (LosslessAudioFile)audio;
+				assertThat(lossLessAudio.getBitDepth()).isEqualTo(16);
+				assertThat(lossLessAudio.getSamplingRate()).isEqualTo(44.1);
+				assertThat(lossLessAudio.getType().name()).isEqualTo("FLAC");
+				assertThat(lossLessAudio.getSource()).isEqualTo("MOFI Fidelity Sound Lab");
+				assertThat(audio.getMediaFilePath()).hasToString("E:\\Musique\\e\\Bill Evans\\Portrait In Jazz");
+			});
+		
 	}
 	
 	private void testAlbumProperties(Album album, ListeArtiste la) {
