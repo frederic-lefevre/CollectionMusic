@@ -39,7 +39,7 @@ public class Control {
 	private static final String MUSIQUE_DIRECTORY_URI = "file:///C:/FredericPersonnel/Loisirs/musique/";
 	private static final String DEFAULT_PROP_FILE = MUSIQUE_DIRECTORY_URI + "RapportCollection/albumCollection.properties";
 	
-	private final static String musicFileExtension = "json";
+	private static final String MUSIC_FILE_EXTENSION = "json";
 	
 	private static Logger albumLog;	
 	private static Charset charset;
@@ -48,6 +48,8 @@ public class Control {
 	private static Path collectionDirectoryName;
 	private static Path concertDirectoryName;
 	private static boolean initialized = false;
+	private static Path audioFileRootPath;
+	private static Path videoFileRootPath;
    	
 	private Control() {
 	}
@@ -75,6 +77,9 @@ public class Control {
 			collectionDirectoryName = collectionProperties.getPathFromURI("album.rootDir.name");
 			concertDirectoryName 	= collectionProperties.getPathFromURI("concert.rootDir.name");
 			
+			audioFileRootPath = collectionProperties.getPathFromURI("album.audioFile.rootPath");
+			videoFileRootPath = collectionProperties.getPathFromURI("album.videoFile.rootPath");
+			
 		} catch (URISyntaxException e) {
 			System.out.println("URI syntax exception for property file: " + DEFAULT_PROP_FILE);
 			e.printStackTrace();
@@ -90,8 +95,8 @@ public class Control {
 		return albumLog; 
 	}
 	
-	public static String getMusicfileExtension() { 
-		return musicFileExtension;
+	public static String getMusicfileExtension() {
+		return MUSIC_FILE_EXTENSION;
 	}
 	
 	public static AdvancedProperties getCollectionProperties() { 
@@ -127,5 +132,19 @@ public class Control {
 			initControl();
 		}
 		return concertDirectoryName;
+	}
+	
+	public static Path getAudioFileRootPath() {
+		if (!initialized) {
+			initControl();
+		}
+		return audioFileRootPath;
+	}
+	
+	public static Path getVideoFileRootPath() {
+		if (!initialized) {
+			initControl();
+		}
+		return videoFileRootPath;
 	}
 }
