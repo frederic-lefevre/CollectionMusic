@@ -31,6 +31,8 @@ public class AlbumsJTable extends JTable {
 		listSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		setSelectionModel(listSelectionModel);
 		
+		getColumnModel().getColumn(AlbumsTableModel.TITRE_COL_IDX).setPreferredWidth(500);
+		getColumnModel().getColumn(AlbumsTableModel.AUTEUR_COL_IDX).setPreferredWidth(500);
 		setAutoResizeMode(JTable.AUTO_RESIZE_OFF) ;
 		
 		setAutoCreateRowSorter(true);

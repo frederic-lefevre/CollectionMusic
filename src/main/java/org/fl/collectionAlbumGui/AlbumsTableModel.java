@@ -10,8 +10,8 @@ import org.fl.collectionAlbum.albums.ListeAlbum;
 
 public class AlbumsTableModel extends AbstractTableModel {
 
-	private final static int TITRE_COL_IDX = 0;
-	private final static int AUTEUR_COL_IDX = 1;
+	public final static int TITRE_COL_IDX = 0;
+	public final static int AUTEUR_COL_IDX = 1;
 	
 	private static final long serialVersionUID = 1L;
 
