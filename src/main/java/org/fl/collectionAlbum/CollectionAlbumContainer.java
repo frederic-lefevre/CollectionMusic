@@ -73,23 +73,24 @@ public class CollectionAlbumContainer {
 	
 	private final static Logger albumLog = Control.getAlbumLog();
 	
-	private static CollectionAlbumContainer collectionAlbumContainer ;
+	private static CollectionAlbumContainer collectionAlbumContainer;
 	
 	public static CollectionAlbumContainer getEmptyInstance() {
 		
 		if (collectionAlbumContainer == null) {
-			collectionAlbumContainer = new CollectionAlbumContainer() ;
+			collectionAlbumContainer = new CollectionAlbumContainer();
 		}
-		collectionAlbumContainer.reset() ;
+		collectionAlbumContainer.reset();
 		return collectionAlbumContainer ;
 	}
 	
 	public static CollectionAlbumContainer getInstance() {
 		
 		if (collectionAlbumContainer == null) {
-			collectionAlbumContainer = new CollectionAlbumContainer() ;
+			collectionAlbumContainer = new CollectionAlbumContainer();
+			collectionAlbumContainer.reset();
 		}
-		return collectionAlbumContainer ;
+		return collectionAlbumContainer;
 	}
 	
 	private CollectionAlbumContainer() {		
@@ -97,17 +98,17 @@ public class CollectionAlbumContainer {
 
 	public void addAlbum(JsonObject arteFactJson, Path jsonFile) {
 		
-		Album album = new Album(arteFactJson, allArtistes, jsonFile) ;
+		Album album = new Album(arteFactJson, allArtistes, jsonFile);
 		
 		album.addMusicArtfactArtistesToList(collectionArtistes);
 		
-		collectionAlbumsMusiques.addAlbum(album) ;
+		collectionAlbumsMusiques.addAlbum(album);
 				
-		Format.RangementSupportPhysique rangement = album.getRangement() ;
+		Format.RangementSupportPhysique rangement = album.getRangement();
 		if (rangement != null) {
-			rangementsAlbums.get(rangement).addAlbum(album) ;
+			rangementsAlbums.get(rangement).addAlbum(album);
 		} else {
-			albumLog.warning("Album impossible à ranger: " + album.getTitre()) ;
+			albumLog.warning("Album impossible à ranger: " + album.getTitre());
 		}
 			
 		if (album.missesAudioFile()) {
@@ -135,12 +136,12 @@ public class CollectionAlbumContainer {
 	
 	public void addConcert(JsonObject arteFactJson, Path jsonFile) { 
 		
-		Concert concert = new Concert(arteFactJson, allArtistes, lieuxDesConcerts, jsonFile) ;
+		Concert concert = new Concert(arteFactJson, allArtistes, lieuxDesConcerts, jsonFile);
 		
-		concert.getLieuConcert().addConcert(concert) ;
+		concert.getLieuConcert().addConcert(concert);
 		concert.addMusicArtfactArtistesToList(concertsArtistes);
 		
-		concerts.addConcert(concert) ; 	
+		concerts.addConcert(concert); 	
 	}
 	
 	public ListeAlbum getRangementAlbums(Format.RangementSupportPhysique sPhys) { return rangementsAlbums.get(sPhys) ; }

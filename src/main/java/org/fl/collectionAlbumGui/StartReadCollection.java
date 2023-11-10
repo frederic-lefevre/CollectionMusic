@@ -32,32 +32,35 @@ import org.fl.collectionAlbum.CollectionAlbums;
 
 public class StartReadCollection implements ActionListener {
 
-	private ProgressInformationPanel pip;
-	private CollectionProcessWaiter  collectionProcWaiter;
-	private StartControl  			 startCtrl;
-	private StartControl[]  		 startCtrlTab;
-	
-	public StartReadCollection(ProgressInformationPanel progInfoPanel, StartControl stCtrl, StartControl[] stList) {
+	private final AlbumsTableModel albumsTableModel;
+	private final ProgressInformationPanel pip;
+	private CollectionProcessWaiter collectionProcWaiter;
+	private final StartControl startCtrl;
+	private final StartControl[] startCtrlTab;
 
-		pip 		 = progInfoPanel;
-		startCtrl 	 = stCtrl ;
-		startCtrlTab = stList ;
+	public StartReadCollection(AlbumsTableModel albumsTableModel, ProgressInformationPanel progInfoPanel,
+			StartControl stCtrl, StartControl[] stList) {
+
+		this.albumsTableModel = albumsTableModel;
+		pip = progInfoPanel;
+		startCtrl = stCtrl;
+		startCtrlTab = stList;
 	}
-	
+
 	public void setCollectionProcWaiter(CollectionProcessWaiter collectionProcWaiter) {
 		this.collectionProcWaiter = collectionProcWaiter;
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		
-		startCtrl.setTriggered(true) ;
-		startCtrl.getStartButton().setBackground(new Color(27,224,211)) ;
-		for (StartControl st : startCtrlTab ) {
-			st.getStartButton().setEnabled(false) ;
+
+		startCtrl.setTriggered(true);
+		startCtrl.getStartButton().setBackground(new Color(27, 224, 211));
+		for (StartControl st : startCtrlTab) {
+			st.getStartButton().setEnabled(false);
 		}
-		CollectionAlbums ca = new CollectionAlbums(pip) ;
+		CollectionAlbums ca = new CollectionAlbums(albumsTableModel, pip);
 		ca.addPropertyChangeListener(collectionProcWaiter);
-		ca.execute() ;
+		ca.execute();
 	}
 }

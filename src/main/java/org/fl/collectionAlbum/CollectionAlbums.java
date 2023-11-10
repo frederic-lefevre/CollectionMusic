@@ -39,6 +39,7 @@ import javax.swing.SwingWorker;
 
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
+import org.fl.collectionAlbumGui.AlbumsTableModel;
 import org.fl.collectionAlbumGui.ProgressInformation;
 import org.fl.collectionAlbumGui.ProgressInformationPanel;
 import org.fl.util.json.JsonUtils;
@@ -51,6 +52,7 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 	
 	private CollectionAlbumContainer albumsContainer ;
 	private final ProgressInformationPanel progressPanel;
+	private final AlbumsTableModel albumsTableModel;
 	
 	// Information prefix
 	private final static String ARRET 			= "Arreté" ;
@@ -62,9 +64,10 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 	private final static String CALENDARS 		= "Construction des calendriers" ;
 	private final static String FIN_LECTURE		= "Collection chargée" ;
 	
-	public CollectionAlbums(ProgressInformationPanel pip) {
+	public CollectionAlbums(AlbumsTableModel albumsTableModel, ProgressInformationPanel pip) {
 
-		progressPanel = pip ;
+		progressPanel = pip;
+		this.albumsTableModel = albumsTableModel;
 	}
    	
 	@Override 
@@ -189,6 +192,7 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
     	progressPanel.setStepInformation("");
     	progressPanel.setStepPrefixInformation(ARRET);
     	progressPanel.setProcessStatus(FIN_LECTURE);
+    	albumsTableModel.fireTableDataChanged();
     }
 
     @Override
