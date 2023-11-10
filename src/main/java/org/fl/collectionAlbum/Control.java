@@ -22,14 +22,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-
 package org.fl.collectionAlbum;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import org.fl.util.AdvancedProperties;
 import org.fl.util.RunningContext;
@@ -50,6 +51,7 @@ public class Control {
 	private static boolean initialized = false;
 	private static Path audioFileRootPath;
 	private static Path videoFileRootPath;
+	private static List<OsAction> osActions;
    	
 	private Control() {
 	}
@@ -79,6 +81,13 @@ public class Control {
 			
 			audioFileRootPath = collectionProperties.getPathFromURI("album.audioFile.rootPath");
 			videoFileRootPath = collectionProperties.getPathFromURI("album.videoFile.rootPath");
+			
+			String osCmdPropBase = "album.command.";
+			osActions = collectionProperties.getKeysElements("album.command.").stream()
+				.map(prop -> new OsAction(
+						collectionProperties.getProperty(osCmdPropBase + prop + ".title"), 
+						collectionProperties.getProperty(osCmdPropBase + prop + ".cmd")))
+				.collect(Collectors.toList());
 			
 		} catch (URISyntaxException e) {
 			System.out.println("URI syntax exception for property file: " + DEFAULT_PROP_FILE);
@@ -146,5 +155,12 @@ public class Control {
 			initControl();
 		}
 		return videoFileRootPath;
+	}
+	
+	public static List<OsAction> getOsActions() {
+		if (!initialized) {
+			initControl();
+		}
+		return osActions;
 	}
 }

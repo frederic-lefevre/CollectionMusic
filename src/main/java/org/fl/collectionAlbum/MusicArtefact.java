@@ -129,7 +129,11 @@ public abstract class MusicArtefact {
 		return (notEmpty(getChefsOrchestre())) || 
 			   (notEmpty(getInterpretes()))    || 
 			   (notEmpty(getEnsembles()));
-		}
+	}
+	
+	public Path getJsonFilePath() {
+		return jsonFilePath;
+	}
 	
 	private static boolean notEmpty(List<?> l) {
 		return (l != null) && (! l.isEmpty());
