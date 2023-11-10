@@ -37,24 +37,27 @@ import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.concerts.Concert;
 import org.fl.collectionAlbum.concerts.LieuxDesConcerts;
 import org.fl.collectionAlbum.concerts.ListeConcert;
+import org.fl.collectionAlbum.mediaPath.MediaFileInventory;
 import org.fl.collectionAlbum.stat.StatChrono;
 
 import com.google.gson.JsonObject;
 
 public class CollectionAlbumContainer {
 
+	private final static Logger albumLog = Control.getAlbumLog();
+	
 	// Liste d'artistes pour les albums
 	private ListeArtiste collectionArtistes;
 	// Liste d'artistes pour les concerts
-	private ListeArtiste concertsArtistes ;
+	private ListeArtiste concertsArtistes;
 	
-	private List<ListeArtiste> allArtistes ;
+	private List<ListeArtiste> allArtistes;
 	
 	// Liste de tous les albums
 	private ListeAlbum collectionAlbumsMusiques;
 	
 	// Listes des albums par rangement
-	private EnumMap<Format.RangementSupportPhysique, ListeAlbum> rangementsAlbums ;	
+	private EnumMap<Format.RangementSupportPhysique, ListeAlbum> rangementsAlbums;	
 	
 	private ListeAlbum albumWithAudioFile;
 	private ListeAlbum albumMissingAudioFile;
@@ -63,15 +66,16 @@ public class CollectionAlbumContainer {
 	private ListeAlbum albumWithHighResAudio;
 	private ListeAlbum albumWithLowResAudio;
 	
-	private ListeConcert   concerts ;	
-	private ChronoArtistes calendrierArtistes ;
+	private ListeConcert concerts;	
+	private ChronoArtistes calendrierArtistes;
 	
-	private StatChrono statChronoEnregistrement ;
-	private StatChrono statChronoComposition ;
+	private StatChrono statChronoEnregistrement;
+	private StatChrono statChronoComposition;
 	
 	private LieuxDesConcerts lieuxDesConcerts ;
 	
-	private final static Logger albumLog = Control.getAlbumLog();
+	private MediaFileInventory audioFileInventory;
+	private MediaFileInventory videoFileInventory;
 	
 	private static CollectionAlbumContainer collectionAlbumContainer;
 	
@@ -81,7 +85,7 @@ public class CollectionAlbumContainer {
 			collectionAlbumContainer = new CollectionAlbumContainer();
 		}
 		collectionAlbumContainer.reset();
-		return collectionAlbumContainer ;
+		return collectionAlbumContainer;
 	}
 	
 	public static CollectionAlbumContainer getInstance() {
@@ -160,30 +164,41 @@ public class CollectionAlbumContainer {
 	public ListeAlbum 	  	getAlbumsMissingVideoFile()   { return albumMissingVideoFile 	; }
 	public ListeAlbum 	  	getAlbumsWithHighResAudio()   { return albumWithHighResAudio 	; }
 	public ListeAlbum 	  	getAlbumsWithLowResAudio() 	  { return albumWithLowResAudio 	; }
+	
+	public MediaFileInventory getAudioFileInventory() {
+		return audioFileInventory;
+	}
+	
+	public MediaFileInventory getVideoFileInventory() {
+		return videoFileInventory;
+	}
 
 	private void reset() {
 		
-   		collectionAlbumsMusiques = new ListeAlbum() ;
-		collectionArtistes 		 = new ListeArtiste() ;
-   		concertsArtistes 		 = new ListeArtiste() ;   		
+   		collectionAlbumsMusiques = new ListeAlbum();
+		collectionArtistes 		 = new ListeArtiste();
+   		concertsArtistes 		 = new ListeArtiste();   		
    		concerts 				 = new ListeConcert(); 		
-   		statChronoEnregistrement = new StatChrono() ;
-   		statChronoComposition 	 = new StatChrono() ;   		
-   		calendrierArtistes 		 = new ChronoArtistes() ;
-   		lieuxDesConcerts		 = new LieuxDesConcerts() ;
-   		allArtistes				 = new ArrayList<ListeArtiste>() ;
-   		albumWithAudioFile		 = new ListeAlbum() ;
-   		albumMissingAudioFile	 = new ListeAlbum() ;
-   		albumWithVideoFile		 = new ListeAlbum() ;
-   		albumMissingVideoFile	 = new ListeAlbum() ;
-   		albumWithHighResAudio	 = new ListeAlbum() ;
-   		albumWithLowResAudio	 = new ListeAlbum() ;
-   		rangementsAlbums 		 = new EnumMap<Format.RangementSupportPhysique, ListeAlbum>(Format.RangementSupportPhysique.class) ;
+   		statChronoEnregistrement = new StatChrono();
+   		statChronoComposition 	 = new StatChrono();   		
+   		calendrierArtistes 		 = new ChronoArtistes();
+   		lieuxDesConcerts		 = new LieuxDesConcerts();
+   		allArtistes				 = new ArrayList<ListeArtiste>();
+   		albumWithAudioFile		 = new ListeAlbum();
+   		albumMissingAudioFile	 = new ListeAlbum();
+   		albumWithVideoFile		 = new ListeAlbum();
+   		albumMissingVideoFile	 = new ListeAlbum();
+   		albumWithHighResAudio	 = new ListeAlbum();
+   		albumWithLowResAudio	 = new ListeAlbum();
+   		rangementsAlbums 		 = new EnumMap<Format.RangementSupportPhysique, ListeAlbum>(Format.RangementSupportPhysique.class);
    		for (Format.RangementSupportPhysique rangement : Format.RangementSupportPhysique.values()) {
-   			rangementsAlbums.put(rangement, new ListeAlbum()) ;
+   			rangementsAlbums.put(rangement, new ListeAlbum());
    		}
-   		allArtistes.add(collectionArtistes) ;
-   		allArtistes.add(concertsArtistes) ;
+   		allArtistes.add(collectionArtistes);
+   		allArtistes.add(concertsArtistes);
+   		
+   		audioFileInventory = new MediaFileInventory(Control.getAudioFileRootPath());
+   		videoFileInventory = new MediaFileInventory(Control.getAudioFileRootPath());
 	}
 	
 	public Artiste getArtisteKnown(String nom, String prenom) {
