@@ -79,7 +79,6 @@ class CollectionAlbumContainerTest {
 	@Test
 	void testAlbumContainer() {
 		
-		Control.initControl();
 		RapportStructuresAndNames.init();
 
 		CollectionAlbumContainer albumsContainer = CollectionAlbumContainer.getEmptyInstance();

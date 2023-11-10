@@ -52,9 +52,6 @@ public class CollectionAlbumGui  extends JFrame {
 	}
 		
 	public CollectionAlbumGui() {
-		
-		// init logger and parameters
-		Control.initControl();
    		
    		// init main window
    		setBounds(50, 50, WINDOW_WIDTH, WINDOW_HEIGHT);

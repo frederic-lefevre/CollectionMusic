@@ -42,21 +42,19 @@ public class Control {
 	
 	private static final String MUSIC_FILE_EXTENSION = "json";
 	
-	private static Logger albumLog;	
-	private static Charset charset;
-	private static RunningContext musicRunningContext;	  
-   	private static AdvancedProperties collectionProperties;
-	private static Path collectionDirectoryName;
-	private static Path concertDirectoryName;
-	private static boolean initialized = false;
-	private static Path audioFileRootPath;
-	private static Path videoFileRootPath;
-	private static List<OsAction> osActions;
+	private static Control controlInstance;
+	
+	private Logger albumLog;	
+	private Charset charset;
+	private RunningContext musicRunningContext;	  
+   	private AdvancedProperties collectionProperties;
+	private Path collectionDirectoryName;
+	private Path concertDirectoryName;
+	private Path audioFileRootPath;
+	private Path videoFileRootPath;
+	private List<OsAction> osActions;
    	
 	private Control() {
-	}
-	
-	public static void initControl() {
 		
 		try {
 			// access to properties and logger
@@ -94,14 +92,18 @@ public class Control {
 			e.printStackTrace();
 			collectionProperties = null;
 		}
-		initialized = true;
 	}
+	
+	private static Control getInstance() {
+		if (controlInstance == null) {
+			controlInstance = new Control();
+		}
+		return controlInstance;
+	}
+	
 
 	public static Logger getAlbumLog() {
-		if (!initialized) {
-			initControl();
-		}
-		return albumLog; 
+		return getInstance().albumLog; 
 	}
 	
 	public static String getMusicfileExtension() {
@@ -109,58 +111,34 @@ public class Control {
 	}
 	
 	public static AdvancedProperties getCollectionProperties() { 
-		if (!initialized) {
-			initControl();
-		}
-		return collectionProperties; 
+		return getInstance().collectionProperties; 
 	}
 	
 	public static Charset getCharset() {
-		if (!initialized) {
-			initControl();
-		}
-		return charset; 
+		return getInstance().charset; 
 	}
 	
 	public static RunningContext getMusicRunningContext() {
-		if (!initialized) {
-			initControl();
-		}
-		return musicRunningContext; 
+		return getInstance().musicRunningContext; 
 	}
 	
 	public static Path getCollectionDirectoryName() {
-		if (!initialized) {
-			initControl();
-		}
-		return collectionDirectoryName;	
+		return getInstance().collectionDirectoryName;	
 	}
 	
 	public static Path getConcertDirectoryName() {
-		if (!initialized) {
-			initControl();
-		}
-		return concertDirectoryName;
+		return getInstance().concertDirectoryName;
 	}
 	
 	public static Path getAudioFileRootPath() {
-		if (!initialized) {
-			initControl();
-		}
-		return audioFileRootPath;
+		return getInstance().audioFileRootPath;
 	}
 	
 	public static Path getVideoFileRootPath() {
-		if (!initialized) {
-			initControl();
-		}
-		return videoFileRootPath;
+		return getInstance().videoFileRootPath;
 	}
 	
 	public static List<OsAction> getOsActions() {
-		if (!initialized) {
-			initControl();
-		}
-		return osActions;
+		return getInstance().osActions;
 	}
 }

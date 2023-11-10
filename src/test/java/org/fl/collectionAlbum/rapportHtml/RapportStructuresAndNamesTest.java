@@ -50,7 +50,6 @@ class RapportStructuresAndNamesTest {
 	@Test
 	void test() {
 		
-		Control.initControl();
 		RapportStructuresAndNames.init();
 		assertThat(RapportStructuresAndNames.getRapportPath().toUri()).hasToString(MUSIQUE_DIRECTORY_URI + "RapportCollection/rapport/");
 		assertThat(RapportStructuresAndNames.getOldRapportPath().toUri()).hasToString(MUSIQUE_DIRECTORY_URI + "RapportCollection/rapport_old/");
@@ -62,8 +61,7 @@ class RapportStructuresAndNamesTest {
 
 	@Test
 	void test2() {
-		
-		Control.initControl();
+
 		RapportStructuresAndNames.init() ;
 	
 		JsonObject jArt = new JsonObject() ;
@@ -114,7 +112,6 @@ class RapportStructuresAndNamesTest {
 	@Test
 	void test3() {
 		
-		Control.initControl();
 		RapportStructuresAndNames.init();
 
 		JsonObject jAlbum = JsonParser.parseString(albumStr1).getAsJsonObject();
@@ -162,8 +159,7 @@ class RapportStructuresAndNamesTest {
 			 """;
 	@Test
 	void test4() {
-		
-		Control.initControl();
+
 		RapportStructuresAndNames.init();
 		
 		JsonObject jConcert = JsonParser.parseString(concertStr1).getAsJsonObject();
