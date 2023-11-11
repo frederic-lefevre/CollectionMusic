@@ -25,6 +25,7 @@ SOFTWARE.
 package org.fl.collectionAlbumGui;
 
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -35,14 +36,17 @@ public class MediaFilesPane extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private JLabel mediaFilesStatus;
+	private JButton mediaFilesSearch;
 	
 	public MediaFilesPane() {
 		
 		super();
-		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		
 		mediaFilesStatus = new JLabel("Status unknown");
 		add(mediaFilesStatus);
+		
+		mediaFilesSearch = new JButton("Search potential media files");
 	}
 
 	public void updateValue(Album album) {
@@ -50,11 +54,14 @@ public class MediaFilesPane extends JPanel {
 			if (album.hasMediaFilePathNotFound() ||
 				album.hasMissingOrInvalidMediaFilePath()) {
 				mediaFilesStatus.setText("Invalid or missing media file paths");
+				add(mediaFilesSearch);
 			} else {
 				mediaFilesStatus.setText("Media file paths found");
+				remove(mediaFilesSearch);
 			}
 		} else {
 			mediaFilesStatus.setText("No media files");
+			add(mediaFilesSearch);
 		}
 	}
 }

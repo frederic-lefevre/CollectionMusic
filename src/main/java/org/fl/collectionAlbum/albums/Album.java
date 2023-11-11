@@ -165,6 +165,14 @@ public class Album extends MusicArtefact {
 		return formatAlbum.hasMediaFilePathNotFound();
 	}
 	
+	public List<Path> getPotentialAudioFilesPaths() {
+		return potentialAudioFilesPath;
+	}
+	
+	public List<Path> getPotentialVideoFilesPaths() {
+		return potentialVideoFilesPath;
+	}
+	
 	public List<Path> searchPotentialAudioFilesPaths() {
 		potentialAudioFilesPath = MediaFilesInventories.getAudioFileInventory().getPotentialMediaPath(this);
 		return potentialAudioFilesPath;
