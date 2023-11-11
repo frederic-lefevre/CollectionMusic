@@ -36,12 +36,13 @@ public class AlbumsTableModel extends AbstractTableModel {
 
 	public final static int TITRE_COL_IDX = 0;
 	public final static int AUTEUR_COL_IDX = 1;
+	public final static int MEDIA_FILES_COL_IDX = 2;
 	
 	private static final long serialVersionUID = 1L;
 
 	private final static String AUTEURS_SEPARATOR = ", ";
 	
-	private final static String[] entetes = {"Titres", "Auteurs"};
+	private final static String[] entetes = {"Titres", "Auteurs", "Media files"};
 	
 	private final CollectionAlbumContainer albumsContainer;
 	
@@ -76,6 +77,8 @@ public class AlbumsTableModel extends AbstractTableModel {
 					.getAuteurs().stream()
 					.map(auteur -> auteur.getNomComplet())
 					.collect(Collectors.joining(AUTEURS_SEPARATOR));
+		case MEDIA_FILES_COL_IDX:
+			return !getAlbumsList().getAlbums().get(rowIndex).hasMissingOrInvalidMediaFilePath();
 		default:
 			return null;
 		}
