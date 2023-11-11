@@ -24,6 +24,9 @@ SOFTWARE.
 
 package org.fl.collectionAlbumGui;
 
+import java.nio.file.Path;
+import java.util.List;
+
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -38,7 +41,7 @@ public class MediaFilesPane extends JPanel {
 	private JLabel mediaFilesStatus;
 	private JButton mediaFilesSearch;
 	
-	public MediaFilesPane() {
+	public MediaFilesPane(MediaFilesSearchListener mediaFilesSearchListener) {
 		
 		super();
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
@@ -47,14 +50,22 @@ public class MediaFilesPane extends JPanel {
 		add(mediaFilesStatus);
 		
 		mediaFilesSearch = new JButton("Search potential media files");
+		mediaFilesSearch.addActionListener(mediaFilesSearchListener);
 	}
 
 	public void updateValue(Album album) {
 		if (album.hasMediaFiles()) {
 			if (album.hasMediaFilePathNotFound() ||
 				album.hasMissingOrInvalidMediaFilePath()) {
-				mediaFilesStatus.setText("Invalid or missing media file paths");
-				add(mediaFilesSearch);
+				List<Path> potentialAudioFilesPaths = album.getPotentialAudioFilesPaths();
+				if (potentialAudioFilesPaths == null) {
+					mediaFilesStatus.setText("Invalid or missing media file paths");
+					add(mediaFilesSearch);
+			
+				} else {
+					mediaFilesStatus.setText("Potential media file paths found");
+					remove(mediaFilesSearch);
+				}
 			} else {
 				mediaFilesStatus.setText("Media file paths found");
 				remove(mediaFilesSearch);

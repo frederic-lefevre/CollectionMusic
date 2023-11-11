@@ -24,36 +24,28 @@ SOFTWARE.
 
 package org.fl.collectionAlbumGui;
 
-import java.awt.Component;
-import java.util.logging.Logger;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import javax.swing.JTable;
-import javax.swing.table.TableCellRenderer;
-
-import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
 
-public class MediaFilesRenderer extends MediaFilesPane implements TableCellRenderer {
+public class MediaFilesSearchListener implements ActionListener {
 
-	private static final long serialVersionUID = 1L;
-
-	private static final Logger mLog = Control.getAlbumLog();
+	private final AlbumsJTable albumsJTable;
 	
-	public MediaFilesRenderer(MediaFilesSearchListener mediaFilesSearchListener) {
-		super(mediaFilesSearchListener);
+	public MediaFilesSearchListener(AlbumsJTable ajt) {
+		this.albumsJTable = ajt;
 	}
 
-	@Override 
-	public Component getTableCellRendererComponent(
-		      JTable table, Object value, boolean isSelected, boolean hasFocus,
-		      int row, int column) {
-		if (value == null) {
-			mLog.severe("Null value in MediaFiles cell. Should be an Album");
-		} else if (value instanceof Album) {
-			updateValue((Album)value);
-		} else {
-			mLog.severe("Invalid value type in MediaFiles cell. Should be Album but is " + value.getClass().getName());
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		
+		Album selectedAlbum = albumsJTable.getSelectedAlbum();
+		
+		if (selectedAlbum != null) {
+			selectedAlbum.searchPotentialAudioFilesPaths();
+			selectedAlbum.searchPotentialVideoFilesPaths();
 		}
-		return this;
 	}
+
 }
