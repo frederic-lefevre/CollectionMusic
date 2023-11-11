@@ -244,6 +244,23 @@ class AlbumTest {
 		
 	}
 	
+	@Test
+	void testAlbumPotentialMediaFilesSearch() {
+
+		JsonObject jAlbum = JsonParser.parseString(albumStr1).getAsJsonObject();
+
+		ListeArtiste la = new ListeArtiste();
+		List<ListeArtiste> lla = new ArrayList<ListeArtiste>();
+		lla.add(la);
+
+		Album album = new Album(jAlbum, lla, Path.of("dummyPath"));
+
+		List<Path> potentialPaths = album.searchPotentialAudioFilesPaths();
+
+		assertThat(potentialPaths).isNotNull().singleElement()
+				.hasToString("E:\\Musique\\e\\Bill Evans\\Portrait In Jazz");
+	}
+	
 	private void testAlbumProperties(Album album, ListeArtiste la) {
 		
 		assertThat(album.getTitre()).isEqualTo("Portrait in jazz");

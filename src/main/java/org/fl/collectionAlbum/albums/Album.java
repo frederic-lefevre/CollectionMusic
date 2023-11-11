@@ -34,6 +34,7 @@ import org.fl.collectionAlbum.Format.RangementSupportPhysique;
 import org.fl.collectionAlbum.MusicArtefact;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.jsonParsers.AlbumParser;
+import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 import org.fl.util.date.FuzzyPeriod;
 
 import com.google.gson.JsonObject;
@@ -50,25 +51,31 @@ public class Album extends MusicArtefact {
     
     private final boolean specificCompositionDates;
     
-    public Album(JsonObject albumJson, List<ListeArtiste> knownArtistes, Path jsonFilePath) {
-    	
-    	super(albumJson, knownArtistes, jsonFilePath);
-    	
-    	titre 				  = AlbumParser.getAlbumTitre(albumJson);
-    	formatAlbum 		  = AlbumParser.getFormatAlbum(albumJson);    	
-    	periodeEnregistrement = AlbumParser.processPeriodEnregistrement(albumJson);        
-		periodeComposition 	  = AlbumParser.processPeriodComposition(albumJson);
-		rangement			  = AlbumParser.getRangementAlbum(albumJson);
+    private List<Path> potentialAudioFilesPath;
+    private List<Path> potentialVideoFilesPath;
+    
+	public Album(JsonObject albumJson, List<ListeArtiste> knownArtistes, Path jsonFilePath) {
+
+		super(albumJson, knownArtistes, jsonFilePath);
+
+		potentialAudioFilesPath = null;
+		potentialVideoFilesPath = null;
 		
+		titre = AlbumParser.getAlbumTitre(albumJson);
+		formatAlbum = AlbumParser.getFormatAlbum(albumJson);
+		periodeEnregistrement = AlbumParser.processPeriodEnregistrement(albumJson);
+		periodeComposition = AlbumParser.processPeriodComposition(albumJson);
+		rangement = AlbumParser.getRangementAlbum(albumJson);
+
 		if (rangement == null) {
 			// pas de rangement spécifique
 			rangement = formatAlbum.getRangement();
 		}
 		specificCompositionDates = (periodeComposition != null);
-        if (!specificCompositionDates) {   
-        	periodeComposition = periodeEnregistrement ;
-        }
-    }
+		if (!specificCompositionDates) {
+			periodeComposition = periodeEnregistrement;
+		}
+	}
     
     public String getTitre() {
         return titre;
@@ -156,6 +163,16 @@ public class Album extends MusicArtefact {
 	
 	public boolean hasMediaFilePathNotFound() {
 		return formatAlbum.hasMediaFilePathNotFound();
+	}
+	
+	public List<Path> searchPotentialAudioFilesPaths() {
+		potentialAudioFilesPath = MediaFilesInventories.getAudioFileInventory().getPotentialMediaPath(this);
+		return potentialAudioFilesPath;
+	}
+	
+	public List<Path> searchPotentialVideoFilesPaths() {
+		potentialVideoFilesPath = MediaFilesInventories.getVideoFileInventory().getPotentialMediaPath(this);
+		return potentialVideoFilesPath;
 	}
 	
     @Override

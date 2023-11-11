@@ -37,7 +37,6 @@ import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.concerts.Concert;
 import org.fl.collectionAlbum.concerts.LieuxDesConcerts;
 import org.fl.collectionAlbum.concerts.ListeConcert;
-import org.fl.collectionAlbum.mediaPath.MediaFileInventory;
 import org.fl.collectionAlbum.stat.StatChrono;
 
 import com.google.gson.JsonObject;
@@ -73,9 +72,6 @@ public class CollectionAlbumContainer {
 	private StatChrono statChronoComposition;
 	
 	private LieuxDesConcerts lieuxDesConcerts ;
-	
-	private MediaFileInventory audioFileInventory;
-	private MediaFileInventory videoFileInventory;
 	
 	private static CollectionAlbumContainer collectionAlbumContainer;
 	
@@ -164,14 +160,6 @@ public class CollectionAlbumContainer {
 	public ListeAlbum 	  	getAlbumsMissingVideoFile()   { return albumMissingVideoFile 	; }
 	public ListeAlbum 	  	getAlbumsWithHighResAudio()   { return albumWithHighResAudio 	; }
 	public ListeAlbum 	  	getAlbumsWithLowResAudio() 	  { return albumWithLowResAudio 	; }
-	
-	public MediaFileInventory getAudioFileInventory() {
-		return audioFileInventory;
-	}
-	
-	public MediaFileInventory getVideoFileInventory() {
-		return videoFileInventory;
-	}
 
 	private void reset() {
 		
@@ -196,9 +184,6 @@ public class CollectionAlbumContainer {
    		}
    		allArtistes.add(collectionArtistes);
    		allArtistes.add(concertsArtistes);
-   		
-   		audioFileInventory = new MediaFileInventory(Control.getAudioFileRootPath());
-   		videoFileInventory = new MediaFileInventory(Control.getAudioFileRootPath());
 	}
 	
 	public Artiste getArtisteKnown(String nom, String prenom) {
