@@ -78,7 +78,7 @@ public class AlbumsTableModel extends AbstractTableModel {
 					.map(auteur -> auteur.getNomComplet())
 					.collect(Collectors.joining(AUTEURS_SEPARATOR));
 		case MEDIA_FILES_COL_IDX:
-			return !getAlbumsList().getAlbums().get(rowIndex).hasMissingOrInvalidMediaFilePath();
+			return getAlbumsList().getAlbums().get(rowIndex);
 		default:
 			return null;
 		}
