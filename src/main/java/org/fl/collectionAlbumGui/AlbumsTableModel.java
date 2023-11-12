@@ -42,7 +42,7 @@ public class AlbumsTableModel extends AbstractTableModel {
 
 	private final static String AUTEURS_SEPARATOR = ", ";
 	
-	private final static String[] entetes = {"Titres", "Auteurs", "Media files"};
+	private final static String[] entetes = {"Titres", "Auteurs", "Chemins des fichiers media"};
 	
 	private final CollectionAlbumContainer albumsContainer;
 	

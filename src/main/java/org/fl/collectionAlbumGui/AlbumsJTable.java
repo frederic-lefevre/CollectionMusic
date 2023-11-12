@@ -54,8 +54,8 @@ public class AlbumsJTable extends JTable {
 		
 		getColumnModel().getColumn(AlbumsTableModel.MEDIA_FILES_COL_IDX).setCellRenderer(new MediaFilesRenderer(mediaFilesSearchListener));
 		getColumnModel().getColumn(AlbumsTableModel.MEDIA_FILES_COL_IDX).setCellEditor(new MediaFilesCellEditor(this, mediaFilesSearchListener));
-		getColumnModel().getColumn(AlbumsTableModel.TITRE_COL_IDX).setPreferredWidth(400);
-		getColumnModel().getColumn(AlbumsTableModel.AUTEUR_COL_IDX).setPreferredWidth(400);
+		getColumnModel().getColumn(AlbumsTableModel.TITRE_COL_IDX).setPreferredWidth(350);
+		getColumnModel().getColumn(AlbumsTableModel.AUTEUR_COL_IDX).setPreferredWidth(350);
 		getColumnModel().getColumn(AlbumsTableModel.MEDIA_FILES_COL_IDX).setPreferredWidth(400);
 		
 		// Allow single row selection only

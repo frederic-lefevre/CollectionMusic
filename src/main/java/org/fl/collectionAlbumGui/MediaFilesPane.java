@@ -26,6 +26,7 @@ package org.fl.collectionAlbumGui;
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -41,6 +42,8 @@ public class MediaFilesPane extends JPanel {
 	private JLabel mediaFilesStatus;
 	private JButton mediaFilesSearch;
 	
+	private static final int SINGLE_ROW_HEIGHT = 30;
+	
 	public MediaFilesPane(MediaFilesSearchListener mediaFilesSearchListener) {
 		
 		super();
@@ -49,30 +52,47 @@ public class MediaFilesPane extends JPanel {
 		mediaFilesStatus = new JLabel("Etat inconnu");
 		add(mediaFilesStatus);
 		
-		mediaFilesSearch = new JButton("Chercher les fichiers media potentiels");
+		mediaFilesSearch = new JButton("Chercher");
 		mediaFilesSearch.addActionListener(mediaFilesSearchListener);
 	}
 
-	public void updateValue(Album album) {
+	public int updateValue(Album album) {
+		
 		if (album.hasMediaFiles()) {
 			if (album.hasMediaFilePathNotFound() ||
 				album.hasMissingOrInvalidMediaFilePath()) {
 				List<Path> potentialAudioFilesPaths = album.getPotentialAudioFilesPaths();
 				if (potentialAudioFilesPaths == null) {
-					mediaFilesStatus.setText("Chemin des fichiers media manquant ou invalides");
+					mediaFilesStatus.setText("Manquant ou invalides");
 					add(mediaFilesSearch);
 			
-				} else {
-					mediaFilesStatus.setText("Chemin des fichiers media non trouvé");
+				} else if (potentialAudioFilesPaths.isEmpty()) {
+					mediaFilesStatus.setText("Aucun chemin potentiel trouvé");
 					remove(mediaFilesSearch);
+				} else {
+					mediaFilesStatus.setText(potentialMediaFilesList(potentialAudioFilesPaths));
+					remove(mediaFilesSearch);
+					return (potentialAudioFilesPaths.size() + 1)*SINGLE_ROW_HEIGHT;
 				}
 			} else {
-				mediaFilesStatus.setText("Chemin des fichiers media trouvé");
+				mediaFilesStatus.setText("Trouvé");
 				remove(mediaFilesSearch);
 			}
 		} else {
 			mediaFilesStatus.setText("Pas de fichier media");
 			add(mediaFilesSearch);
 		}
+		return SINGLE_ROW_HEIGHT;
+	}
+	
+	private String potentialMediaFilesList(List<Path> potentialAudioFilesPaths) {
+
+		StringBuilder htmlString = new StringBuilder("<html><body>Chemin potentiels des fichiers media:<br/>");
+
+		htmlString
+			.append(potentialAudioFilesPaths.stream().map(path -> path.toString()).collect(Collectors.joining("<br/>")))
+			.append("</body></html>");
+		
+		return htmlString.toString();
 	}
 }
