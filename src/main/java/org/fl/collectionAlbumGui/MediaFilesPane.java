@@ -46,10 +46,10 @@ public class MediaFilesPane extends JPanel {
 		super();
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		
-		mediaFilesStatus = new JLabel("Status unknown");
+		mediaFilesStatus = new JLabel("Etat inconnu");
 		add(mediaFilesStatus);
 		
-		mediaFilesSearch = new JButton("Search potential media files");
+		mediaFilesSearch = new JButton("Chercher les fichiers media potentiels");
 		mediaFilesSearch.addActionListener(mediaFilesSearchListener);
 	}
 
@@ -59,19 +59,19 @@ public class MediaFilesPane extends JPanel {
 				album.hasMissingOrInvalidMediaFilePath()) {
 				List<Path> potentialAudioFilesPaths = album.getPotentialAudioFilesPaths();
 				if (potentialAudioFilesPaths == null) {
-					mediaFilesStatus.setText("Invalid or missing media file paths");
+					mediaFilesStatus.setText("Chemin des fichiers media manquant ou invalides");
 					add(mediaFilesSearch);
 			
 				} else {
-					mediaFilesStatus.setText("Potential media file paths found");
+					mediaFilesStatus.setText("Chemin des fichiers media non trouvé");
 					remove(mediaFilesSearch);
 				}
 			} else {
-				mediaFilesStatus.setText("Media file paths found");
+				mediaFilesStatus.setText("Chemin des fichiers media trouvé");
 				remove(mediaFilesSearch);
 			}
 		} else {
-			mediaFilesStatus.setText("No media files");
+			mediaFilesStatus.setText("Pas de fichier media");
 			add(mediaFilesSearch);
 		}
 	}
