@@ -41,10 +41,11 @@ public class MediaFilesPane extends JPanel {
 
 	private JLabel mediaFilesStatus;
 	private JButton mediaFilesSearch;
+	private JButton mediaFileValidation;
 	
 	private static final int SINGLE_ROW_HEIGHT = 30;
 	
-	public MediaFilesPane(MediaFilesSearchListener mediaFilesSearchListener) {
+	public MediaFilesPane(MediaFilesSearchListener mediaFilesSearchListener, MediaFileValidationListener mediaFilesValidationListener) {
 		
 		super();
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
@@ -54,10 +55,14 @@ public class MediaFilesPane extends JPanel {
 		
 		mediaFilesSearch = new JButton("Chercher");
 		mediaFilesSearch.addActionListener(mediaFilesSearchListener);
+		
+		mediaFileValidation = new JButton("Valider");
+		mediaFileValidation.addActionListener(mediaFilesValidationListener);
 	}
 
 	public int updateValue(Album album) {
 		
+		remove(mediaFileValidation);
 		if (album.hasMediaFiles()) {
 			if (album.hasMediaFilePathNotFound() ||
 				album.hasMissingOrInvalidMediaFilePath()) {
@@ -72,6 +77,14 @@ public class MediaFilesPane extends JPanel {
 				} else {
 					mediaFilesStatus.setText(potentialMediaFilesList(potentialAudioFilesPaths));
 					remove(mediaFilesSearch);
+
+					if ((potentialAudioFilesPaths.size() == 1) &&
+							album.hasAudioFiles() &&
+							(album.getFormatAlbum().getAudioFiles().size() == 1)) {
+						// Media file paths can be validated if and only if there is a single potential link
+						// and a single media file defined in the album
+						add(mediaFileValidation);
+					}
 					return (potentialAudioFilesPaths.size() + 1)*SINGLE_ROW_HEIGHT;
 				}
 			} else {

@@ -27,7 +27,10 @@ package org.fl.collectionAlbum.albums;
 import java.nio.file.Path;
 import java.time.temporal.TemporalAccessor;
 import java.util.List;
+import java.util.logging.Logger;
 
+import org.fl.collectionAlbum.AbstractAudioFile;
+import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.Format;
 import org.fl.collectionAlbum.Format.ContentNature;
 import org.fl.collectionAlbum.Format.RangementSupportPhysique;
@@ -41,6 +44,8 @@ import com.google.gson.JsonObject;
 
 public class Album extends MusicArtefact {
 
+	protected final static Logger albumLog = Control.getAlbumLog();
+	
     private final String titre;
     
     private final FuzzyPeriod periodeEnregistrement;
@@ -181,6 +186,32 @@ public class Album extends MusicArtefact {
 	public List<Path> searchPotentialVideoFilesPaths() {
 		potentialVideoFilesPath = MediaFilesInventories.getVideoFileInventory().getPotentialMediaPath(this);
 		return potentialVideoFilesPath;
+	}
+	
+	public boolean validatePotentialAudioFilePath() {
+		
+		if (potentialAudioFilesPath == null) {
+			albumLog.severe("Trying to validate audio file path with null value for album " + getTitre());
+			return false;
+		} else if (potentialAudioFilesPath.size() == 1) {
+			if (hasAudioFiles()) {
+				List<AbstractAudioFile> audioFiles = getFormatAlbum().getAudioFiles();
+				if (audioFiles.size() == 1) {
+					audioFiles.get(0).setMediaFilePath(potentialAudioFilesPath.get(0));
+					potentialAudioFilesPath = null;
+					return true;
+				} else {
+					albumLog.severe("Trying to validate audio file path with multiple audio files referenced for album " + getTitre());
+					return false;
+				}
+			} else {
+				albumLog.severe("Trying to validate audio file path with no audio files referenced for album " + getTitre());
+				return false;
+			}
+		} else {
+			albumLog.severe("Trying to validate audio file path with multiple values for album " + getTitre());
+			return false;
+		}
 	}
 	
     @Override

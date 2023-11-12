@@ -47,8 +47,12 @@ public class MediaFilesCellEditor extends MediaFilesPane implements TableCellEdi
 	
 	protected transient ChangeEvent changeEvent;
 	
-	public MediaFilesCellEditor(AlbumsJTable albumsTable, MediaFilesSearchListener mediaFilesSearchListener) {
-		super(mediaFilesSearchListener);
+	public MediaFilesCellEditor(
+			AlbumsJTable albumsTable, 
+			MediaFilesSearchListener mediaFilesSearchListener, 
+			MediaFileValidationListener mediaFilesValidationListener) {
+		
+		super(mediaFilesSearchListener, mediaFilesValidationListener);
 		this.albumsTable = albumsTable;
 	}
 

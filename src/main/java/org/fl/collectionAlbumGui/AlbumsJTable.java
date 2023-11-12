@@ -51,9 +51,12 @@ public class AlbumsJTable extends JTable {
 		setAutoCreateRowSorter(true);
 		
 		MediaFilesSearchListener mediaFilesSearchListener = new MediaFilesSearchListener(this);
+		MediaFileValidationListener mediaFilesValidationListener = new MediaFileValidationListener(this);
 		
-		getColumnModel().getColumn(AlbumsTableModel.MEDIA_FILES_COL_IDX).setCellRenderer(new MediaFilesRenderer(mediaFilesSearchListener));
-		getColumnModel().getColumn(AlbumsTableModel.MEDIA_FILES_COL_IDX).setCellEditor(new MediaFilesCellEditor(this, mediaFilesSearchListener));
+		getColumnModel().getColumn(AlbumsTableModel.MEDIA_FILES_COL_IDX)
+			.setCellRenderer(new MediaFilesRenderer(mediaFilesSearchListener, mediaFilesValidationListener));
+		getColumnModel().getColumn(AlbumsTableModel.MEDIA_FILES_COL_IDX)
+			.setCellEditor(new MediaFilesCellEditor(this, mediaFilesSearchListener, mediaFilesValidationListener));
 		getColumnModel().getColumn(AlbumsTableModel.TITRE_COL_IDX).setPreferredWidth(350);
 		getColumnModel().getColumn(AlbumsTableModel.AUTEUR_COL_IDX).setPreferredWidth(350);
 		getColumnModel().getColumn(AlbumsTableModel.MEDIA_FILES_COL_IDX).setPreferredWidth(400);
