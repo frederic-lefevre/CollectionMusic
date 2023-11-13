@@ -33,6 +33,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import org.fl.collectionAlbum.albums.Album;
 
@@ -43,6 +44,7 @@ public class MediaFilesPane extends JPanel {
 	private JLabel mediaFilesStatus;
 	private JButton mediaFilesSearch;
 	private JButton mediaFileValidation;
+	private JScrollPane statusScrollPane;
 	
 	private static final int SINGLE_ROW_HEIGHT = 20;
 	
@@ -58,7 +60,8 @@ public class MediaFilesPane extends JPanel {
 		mediaFileValidation.addActionListener(mediaFilesValidationListener);
 		
 		mediaFilesStatus = new JLabel("Etat inconnu");
-		add(mediaFilesStatus);
+		statusScrollPane = new JScrollPane(mediaFilesStatus);
+		add(statusScrollPane);
 	}
 
 	public int updateValue(Album album) {
@@ -72,15 +75,18 @@ public class MediaFilesPane extends JPanel {
 					mediaFilesStatus.setText("Manquant ou invalides");
 					add(mediaFilesSearch);
 					setBackground(Color.RED);
+					statusScrollPane.getViewport().setBackground(Color.RED);
 			
 				} else if (potentialAudioFilesPaths.isEmpty()) {
 					mediaFilesStatus.setText("Aucun chemin potentiel trouvé");
 					remove(mediaFilesSearch);
 					setBackground(Color.ORANGE);
+					statusScrollPane.getViewport().setBackground(Color.ORANGE);
 				} else {
 					mediaFilesStatus.setText(potentialMediaFilesList(potentialAudioFilesPaths));
 					remove(mediaFilesSearch);
 					setBackground(Color.PINK);
+					statusScrollPane.getViewport().setBackground(Color.PINK);
 					
 					if ((potentialAudioFilesPaths.size() == 1) &&
 							album.hasAudioFiles() &&
@@ -89,17 +95,19 @@ public class MediaFilesPane extends JPanel {
 						// and a single media file defined in the album
 						add(mediaFileValidation);
 					}
-					return (potentialAudioFilesPaths.size() + 1)*SINGLE_ROW_HEIGHT;
+					return (potentialAudioFilesPaths.size() + 2)*SINGLE_ROW_HEIGHT;
 				}
 			} else {
+				statusScrollPane.getViewport().setBackground(Color.GREEN);
+				setBackground(Color.GREEN);
 				mediaFilesStatus.setText("Trouvé");
 				remove(mediaFilesSearch);
-				setBackground(Color.GREEN);
 			}
 		} else {
 			mediaFilesStatus.setText("Pas de fichier media");
 			add(mediaFilesSearch);
 			setBackground(Color.MAGENTA);
+			statusScrollPane.getViewport().setBackground(Color.MAGENTA);
 		}
 		return SINGLE_ROW_HEIGHT;
 	}
