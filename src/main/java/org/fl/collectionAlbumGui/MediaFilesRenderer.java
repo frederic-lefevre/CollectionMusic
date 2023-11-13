@@ -52,7 +52,8 @@ public class MediaFilesRenderer extends MediaFilesPane implements TableCellRende
 		if (value == null) {
 			mLog.severe("Null value in MediaFiles cell. Should be an Album");
 		} else if (value instanceof Album) {
-			updateValue((Album)value);
+			int rowHeight = updateValue((Album)value);
+			table.setRowHeight(row, rowHeight);
 		} else {
 			mLog.severe("Invalid value type in MediaFiles cell. Should be Album but is " + value.getClass().getName());
 		}

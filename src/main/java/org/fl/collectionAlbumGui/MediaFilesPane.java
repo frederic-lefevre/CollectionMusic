@@ -44,21 +44,21 @@ public class MediaFilesPane extends JPanel {
 	private JButton mediaFilesSearch;
 	private JButton mediaFileValidation;
 	
-	private static final int SINGLE_ROW_HEIGHT = 30;
+	private static final int SINGLE_ROW_HEIGHT = 20;
 	
 	public MediaFilesPane(MediaFilesSearchListener mediaFilesSearchListener, MediaFileValidationListener mediaFilesValidationListener) {
 		
 		super();
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		
-		mediaFilesStatus = new JLabel("Etat inconnu");
-		add(mediaFilesStatus);
-		
 		mediaFilesSearch = new JButton("Chercher");
 		mediaFilesSearch.addActionListener(mediaFilesSearchListener);
 		
 		mediaFileValidation = new JButton("Valider");
 		mediaFileValidation.addActionListener(mediaFilesValidationListener);
+		
+		mediaFilesStatus = new JLabel("Etat inconnu");
+		add(mediaFilesStatus);
 	}
 
 	public int updateValue(Album album) {
