@@ -24,6 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbumGui;
 
+import java.awt.Color;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -70,14 +71,17 @@ public class MediaFilesPane extends JPanel {
 				if (potentialAudioFilesPaths == null) {
 					mediaFilesStatus.setText("Manquant ou invalides");
 					add(mediaFilesSearch);
+					setBackground(Color.RED);
 			
 				} else if (potentialAudioFilesPaths.isEmpty()) {
 					mediaFilesStatus.setText("Aucun chemin potentiel trouvé");
 					remove(mediaFilesSearch);
+					setBackground(Color.ORANGE);
 				} else {
 					mediaFilesStatus.setText(potentialMediaFilesList(potentialAudioFilesPaths));
 					remove(mediaFilesSearch);
-
+					setBackground(Color.PINK);
+					
 					if ((potentialAudioFilesPaths.size() == 1) &&
 							album.hasAudioFiles() &&
 							(album.getFormatAlbum().getAudioFiles().size() == 1)) {
@@ -90,10 +94,12 @@ public class MediaFilesPane extends JPanel {
 			} else {
 				mediaFilesStatus.setText("Trouvé");
 				remove(mediaFilesSearch);
+				setBackground(Color.GREEN);
 			}
 		} else {
 			mediaFilesStatus.setText("Pas de fichier media");
 			add(mediaFilesSearch);
+			setBackground(Color.MAGENTA);
 		}
 		return SINGLE_ROW_HEIGHT;
 	}
