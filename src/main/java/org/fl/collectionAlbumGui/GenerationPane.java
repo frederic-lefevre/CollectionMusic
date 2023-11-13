@@ -24,6 +24,8 @@ SOFTWARE.
 
 package org.fl.collectionAlbumGui;
 
+import java.awt.Dimension;
+
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -49,12 +51,16 @@ public class GenerationPane extends JPanel {
 		
 		AlbumsJTable albumsJTable = new AlbumsJTable(albumsTableModel);
 		
+		// Control buttons panel
+		JPanel controlPanel = new JPanel();
+		controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.X_AXIS));
+		
 		StartControl startButton = new StartControl(rText, iText, sText);
-		add(startButton.getProcCtrl());
+		controlPanel.add(startButton.getProcCtrl());
 
 		StartControl genButton = new StartControl(gText, iText, s1Text);
 		genButton.deactivate();
-		add(genButton.getProcCtrl());
+		controlPanel.add(genButton.getProcCtrl());
 
 		StartControl[] stCtrl = new StartControl[] { startButton, genButton };
 
@@ -66,11 +72,14 @@ public class GenerationPane extends JPanel {
 		sg.setCollectionProcWaiter(new CollectionProcessWaiter(stCtrl));
 		genButton.getStartButton().addActionListener(sg);
 		
+		add(controlPanel);
+		
 		// Table header
 		add(albumsJTable.getTableHeader());
 		
 		// Scroll pane to contain the tables
-		JScrollPane albumsScrollTable = new JScrollPane(albumsJTable);		
+		JScrollPane albumsScrollTable = new JScrollPane(albumsJTable);
+		albumsScrollTable.setPreferredSize(new Dimension(1800,1000));
 		add(albumsScrollTable);
 	}
 
