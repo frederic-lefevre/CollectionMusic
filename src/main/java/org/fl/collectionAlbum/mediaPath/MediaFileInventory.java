@@ -31,8 +31,11 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -43,7 +46,13 @@ public class MediaFileInventory {
 
 	private final static Logger albumLog = Control.getAlbumLog();
 	
+	private static final Set<String> mediaFileExtensions = 
+		Set.of("flac", "mp3", "wma", "aiff", "FLAC", "MP3", "m4a",
+				"m2ts", "mkv", "mpls", "VOB", "wav", "m4v", "mp4");
+	
 	private final Map<String,Path> mediaFilePathInventory;
+	
+	public static final Set<String> extensionSet = new HashSet<>();
 	
 	public MediaFileInventory(Path rootPath) {
 		
@@ -62,7 +71,8 @@ public class MediaFileInventory {
     	@Override
 		public FileVisitResult visitFile(Path file, BasicFileAttributes attr) {
     		
-    		if (Files.isRegularFile(file)) {
+    		if ((Files.isRegularFile(file)) &&
+    				isMediaFileName(file)) {
     			// It should be a media file, part of an album
     			
     			Path albumAbsolutePath = file.getParent();
@@ -99,5 +109,23 @@ public class MediaFileInventory {
 			}
 		});
 		return potentialMediaPath;
+	}
+	
+	protected static boolean isMediaFileName(Path file) {
+
+		return getFileNameExtension(file)
+				.filter(extension -> mediaFileExtensions.contains(extension))
+				.isPresent();
+	}
+
+	private static Optional<String> getFileNameExtension(Path filename) {
+		return Optional.ofNullable(filename)
+				.map(f -> f.toString())
+				.filter(f -> f.contains("."))
+				.map(f -> f.substring(f.lastIndexOf(".") + 1))
+				.map(ext -> { extensionSet.add(ext);
+				return ext;
+					});
+				
 	}
 }
