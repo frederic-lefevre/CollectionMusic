@@ -27,14 +27,17 @@ package org.fl.collectionAlbumGui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import org.fl.collectionAlbum.Format.ContentNature;
 import org.fl.collectionAlbum.albums.Album;
 
 public class MediaFileValidationListener implements ActionListener {
 
 	private final AlbumsJTable albumsJTable;
+	private final ContentNature contentNature;
 	
-	public MediaFileValidationListener(AlbumsJTable ajt) {
+	public MediaFileValidationListener(AlbumsJTable ajt, ContentNature contentNature) {
 		this.albumsJTable = ajt;
+		this.contentNature = contentNature;
 	}
 
 	@Override
@@ -42,13 +45,12 @@ public class MediaFileValidationListener implements ActionListener {
 		
 		Album selectedAlbum = albumsJTable.getSelectedAlbum();
 		if (selectedAlbum != null) {
-			boolean success = selectedAlbum.validatePotentialAudioFilePath();
+			
+			boolean success = selectedAlbum.validatePotentialMediaFilePath(contentNature);
 			if (success) {
 				// Wirte json into file
 				selectedAlbum.writeJson();
 			}
-		}
-		
+		}		
 	}
-
 }

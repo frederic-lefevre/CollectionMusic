@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.fl.collectionAlbum.Control;
+import org.fl.collectionAlbum.Format.ContentNature;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.junit.jupiter.api.BeforeAll;
@@ -24,10 +25,10 @@ class MediaFileInventoryTest {
 	@BeforeAll
 	static void readInventory() {
 		
-		Path audioFileRootPath = Control.getAudioFileRootPath();
+		Path audioFileRootPath = Control.getMediaFileRootPath(ContentNature.AUDIO);
 		audioFileInventory = new MediaFileInventory(audioFileRootPath);
 		
-		Path videoFileRootPath = Control.getVideoFileRootPath();
+		Path videoFileRootPath = Control.getMediaFileRootPath(ContentNature.VIDEO);
 		videoFileInventory = new MediaFileInventory(videoFileRootPath);
 	}
 	

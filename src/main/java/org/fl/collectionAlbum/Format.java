@@ -53,7 +53,20 @@ import com.google.gson.JsonObject;
  */
 public class Format {
 
-	public enum ContentNature { AUDIO, VIDEO }
+	public enum ContentNature { 
+		AUDIO("audio"), 
+		VIDEO("video");
+		
+		private final String nom;
+		
+		private ContentNature(String n) {
+			nom = n;
+		}
+		
+		public String getNom() {
+			return nom;
+		}
+	}
 	
 	// Définition des différents supports physiques
 	private enum SupportPhysique {
@@ -281,6 +294,14 @@ public class Format {
 		return videoFiles;
 	}
 	
+	public List<? extends AbstractMediaFile> getMediaFiles(ContentNature contentNature) {
+		
+		return switch (contentNature) {
+		case AUDIO -> audioFiles;
+		case VIDEO -> videoFiles;
+		};
+	}
+	
 	public boolean hasAudioFiles() {
 		return hasMediaFile(audioFiles);
 	}
@@ -291,6 +312,13 @@ public class Format {
 	
 	public boolean hasMediaFiles() {
 		return hasAudioFiles() || hasVideoFiles();
+	}
+	
+	public boolean hasMediaFiles(ContentNature contentNature) {
+		return switch (contentNature) {
+			case AUDIO -> hasMediaFile(audioFiles);
+			case VIDEO -> hasMediaFile(videoFiles);
+		};
 	}
 	
 	public boolean hasOnlyLossLessAudio() {
@@ -305,22 +333,30 @@ public class Format {
 			   	.anyMatch(audioFile -> audioFile.isHighRes());
 	}
 	
-	public boolean hasMissingOrInvalidMediaFilePath() {
-		return (hasAudioFiles() &&
-				audioFiles.stream()
-			   		.anyMatch(audioFile -> audioFile.hasMissingOrInvalidMediaFilePath())) ||
-				(hasVideoFiles() &&
-				videoFiles.stream()
-						.anyMatch(videoFile -> videoFile.hasMissingOrInvalidMediaFilePath()));
+	public boolean hasMissingOrInvalidMediaFilePath(ContentNature contentNature) {
+		return switch (contentNature) {
+			case AUDIO -> hasMissingOrInvalidMediaFilePath(audioFiles);
+			case VIDEO -> hasMissingOrInvalidMediaFilePath(videoFiles);
+		};
 	}
-
-	public boolean hasMediaFilePathNotFound() {
-		return (hasAudioFiles() &&
-				audioFiles.stream()
-			   		.anyMatch(audioFile -> audioFile.hasMediaFilePathNotFound())) ||
-				(hasVideoFiles() &&
-				videoFiles.stream()
-						.anyMatch(videoFile -> videoFile.hasMediaFilePathNotFound()));
+	
+	public boolean hasMediaFilePathNotFound(ContentNature contentNature) {
+		return switch (contentNature) {
+			case AUDIO -> hasMediaFilePathNotFound(audioFiles);
+			case VIDEO -> hasMediaFilePathNotFound(videoFiles);
+		};
+	}
+	
+	private <T extends AbstractMediaFile> boolean hasMediaFilePathNotFound(List<T> mediaFiles) {
+		return (hasMediaFile(mediaFiles) &&
+				mediaFiles.stream()
+					.anyMatch(mediaFile -> mediaFile.hasMediaFilePathNotFound()));
+	}
+	
+	private <T extends AbstractMediaFile> boolean hasMissingOrInvalidMediaFilePath(List<T> mediaFiles) {
+		return (hasMediaFile(mediaFiles) &&
+				mediaFiles.stream()
+					.anyMatch(mediaFile -> mediaFile.hasMissingOrInvalidMediaFilePath()));
 	}
 	
 	private <T extends AbstractMediaFile> boolean hasMediaFile(List<T> mediaFiles) {

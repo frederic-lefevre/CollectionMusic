@@ -28,10 +28,14 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import org.fl.collectionAlbum.Format.ContentNature;
 import org.fl.util.AdvancedProperties;
 import org.fl.util.RunningContext;
 
@@ -50,8 +54,7 @@ public class Control {
    	private AdvancedProperties collectionProperties;
 	private Path collectionDirectoryName;
 	private Path concertDirectoryName;
-	private Path audioFileRootPath;
-	private Path videoFileRootPath;
+	private Map<ContentNature,Path> mediaFileRootPaths;
 	private List<OsAction> osActions;
    	
 	private Control() {
@@ -77,9 +80,13 @@ public class Control {
 			collectionDirectoryName = collectionProperties.getPathFromURI("album.rootDir.name");
 			concertDirectoryName 	= collectionProperties.getPathFromURI("concert.rootDir.name");
 			
-			audioFileRootPath = collectionProperties.getPathFromURI("album.audioFile.rootPath");
-			videoFileRootPath = collectionProperties.getPathFromURI("album.videoFile.rootPath");
-			
+			mediaFileRootPaths = new HashMap<>();
+			Stream.of(ContentNature.values())
+				.forEach(contentNature -> 
+					mediaFileRootPaths.put(
+							contentNature, 
+							collectionProperties.getPathFromURI("album." + contentNature.getNom() + "File.rootPath")));
+				
 			String osCmdPropBase = "album.command.";
 			osActions = collectionProperties.getKeysElements("album.command.").stream()
 				.map(prop -> new OsAction(
@@ -130,12 +137,8 @@ public class Control {
 		return getInstance().concertDirectoryName;
 	}
 	
-	public static Path getAudioFileRootPath() {
-		return getInstance().audioFileRootPath;
-	}
-	
-	public static Path getVideoFileRootPath() {
-		return getInstance().videoFileRootPath;
+	public static Path getMediaFileRootPath(ContentNature contentNature) {
+		return getInstance().mediaFileRootPaths.get(contentNature);
 	}
 	
 	public static List<OsAction> getOsActions() {

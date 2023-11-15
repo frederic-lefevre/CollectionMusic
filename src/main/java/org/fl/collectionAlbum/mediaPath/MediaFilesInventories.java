@@ -24,33 +24,32 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.mediaPath;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.stream.Stream;
+
 import org.fl.collectionAlbum.Control;
+import org.fl.collectionAlbum.Format.ContentNature;
 
 public class MediaFilesInventories {
 
 	private static MediaFilesInventories instance;
 	
-	private final MediaFileInventory audioFileInventory;
-	private final MediaFileInventory videoFileInventory;
-	
+	private final Map<ContentNature,MediaFileInventory> mediaFilesInventories;
+
 	private MediaFilesInventories() {
    		
-   		audioFileInventory = new MediaFileInventory(Control.getAudioFileRootPath());
-   		videoFileInventory = new MediaFileInventory(Control.getAudioFileRootPath());
+		mediaFilesInventories = new HashMap<>();
+		Stream.of(ContentNature.values()).forEach(contentNature -> {
+			mediaFilesInventories.put(contentNature, new MediaFileInventory(Control.getMediaFileRootPath(contentNature)));
+		});
 	}
 
-	public static MediaFileInventory getAudioFileInventory() {
+	public static MediaFileInventory getMediaFileInventory(ContentNature contentNature) {
 		if (instance == null) {
 			instance = new MediaFilesInventories();
 		}
-		return instance.audioFileInventory;
+		return instance.mediaFilesInventories.get(contentNature);
 	}
-	
-	public static MediaFileInventory getVideoFileInventory() {
-		if (instance == null) {
-			instance = new MediaFilesInventories();
-		}
-		return instance.videoFileInventory;
-	}
-	
+
 }

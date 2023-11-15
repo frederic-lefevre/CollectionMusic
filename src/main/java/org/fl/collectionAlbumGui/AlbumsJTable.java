@@ -24,6 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbumGui;
 
+import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.swing.DefaultListSelectionModel;
@@ -32,6 +33,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.TableModel;
 
 import org.fl.collectionAlbum.Control;
+import org.fl.collectionAlbum.Format.ContentNature;
 import org.fl.collectionAlbum.albums.Album;
 
 public class AlbumsJTable extends JTable {
@@ -50,13 +52,22 @@ public class AlbumsJTable extends JTable {
 		setFillsViewportHeight(true);
 		setAutoCreateRowSorter(true);
 		
-		MediaFilesSearchListener mediaFilesSearchListener = new MediaFilesSearchListener(this);
-		MediaFileValidationListener mediaFilesValidationListener = new MediaFileValidationListener(this);
+		Map<ContentNature, MediaFilesSearchListener> mediaFilesSearchListeners = 
+				Map.of(
+					ContentNature.AUDIO, new MediaFilesSearchListener(this, ContentNature.AUDIO),
+					ContentNature.VIDEO, new MediaFilesSearchListener(this, ContentNature.VIDEO
+				));
+
+		Map<ContentNature, MediaFileValidationListener> mediaFilesValidationListeners = 
+				Map.of(
+					ContentNature.AUDIO, new MediaFileValidationListener(this, ContentNature.AUDIO),
+					ContentNature.VIDEO, new MediaFileValidationListener(this, ContentNature.VIDEO
+				));
 		
 		getColumnModel().getColumn(AlbumsTableModel.MEDIA_FILES_COL_IDX)
-			.setCellRenderer(new MediaFilesRenderer(mediaFilesSearchListener, mediaFilesValidationListener));
+			.setCellRenderer(new MediaFilesRenderer(mediaFilesSearchListeners, mediaFilesValidationListeners));
 		getColumnModel().getColumn(AlbumsTableModel.MEDIA_FILES_COL_IDX)
-			.setCellEditor(new MediaFilesCellEditor(this, mediaFilesSearchListener, mediaFilesValidationListener));
+			.setCellEditor(new MediaFilesCellEditor(this, mediaFilesSearchListeners, mediaFilesValidationListeners));
 		getColumnModel().getColumn(AlbumsTableModel.TITRE_COL_IDX).setPreferredWidth(350);
 		getColumnModel().getColumn(AlbumsTableModel.AUTEUR_COL_IDX).setPreferredWidth(350);
 		getColumnModel().getColumn(AlbumsTableModel.MEDIA_FILES_COL_IDX).setPreferredWidth(400);

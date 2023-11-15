@@ -26,6 +26,7 @@ package org.fl.collectionAlbumGui;
 
 import java.awt.Component;
 import java.util.EventObject;
+import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Logger;
 
@@ -35,6 +36,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.table.TableCellEditor;
 
 import org.fl.collectionAlbum.Control;
+import org.fl.collectionAlbum.Format.ContentNature;
 import org.fl.collectionAlbum.albums.Album;
 
 public class MediaFilesCellEditor extends MediaFilesPane implements TableCellEditor {
@@ -48,11 +50,11 @@ public class MediaFilesCellEditor extends MediaFilesPane implements TableCellEdi
 	protected transient ChangeEvent changeEvent;
 	
 	public MediaFilesCellEditor(
-			AlbumsJTable albumsTable, 
-			MediaFilesSearchListener mediaFilesSearchListener, 
-			MediaFileValidationListener mediaFilesValidationListener) {
+			AlbumsJTable albumsTable,
+			Map<ContentNature, MediaFilesSearchListener>  mediaFilesSearchListeners, 
+			Map<ContentNature, MediaFileValidationListener> mediaFilesValidationListeners) {
 		
-		super(mediaFilesSearchListener, mediaFilesValidationListener);
+		super(mediaFilesSearchListeners, mediaFilesValidationListeners);
 		this.albumsTable = albumsTable;
 	}
 

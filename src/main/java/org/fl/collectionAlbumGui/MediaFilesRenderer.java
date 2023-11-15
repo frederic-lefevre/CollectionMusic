@@ -25,12 +25,14 @@ SOFTWARE.
 package org.fl.collectionAlbumGui;
 
 import java.awt.Component;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 
 import org.fl.collectionAlbum.Control;
+import org.fl.collectionAlbum.Format.ContentNature;
 import org.fl.collectionAlbum.albums.Album;
 
 public class MediaFilesRenderer extends MediaFilesPane implements TableCellRenderer {
@@ -40,9 +42,9 @@ public class MediaFilesRenderer extends MediaFilesPane implements TableCellRende
 	private static final Logger mLog = Control.getAlbumLog();
 	
 	public MediaFilesRenderer(
-			MediaFilesSearchListener mediaFilesSearchListener, 
-			MediaFileValidationListener mediaFilesValidationListener) {
-		super(mediaFilesSearchListener, mediaFilesValidationListener);
+			Map<ContentNature, MediaFilesSearchListener>  mediaFilesSearchListeners, 
+			Map<ContentNature, MediaFileValidationListener> mediaFilesValidationListeners) {
+		super(mediaFilesSearchListeners, mediaFilesValidationListeners);
 	}
 
 	@Override 

@@ -102,8 +102,8 @@ class AlbumTest {
 		
 		testAlbumProperties(album, la);
 		
-		assertThat(album.hasMissingOrInvalidMediaFilePath()).isTrue();
-		assertThat(album.hasMediaFilePathNotFound()).isTrue();
+		assertThat(album.hasMissingOrInvalidMediaFilePath(ContentNature.AUDIO)).isTrue();
+		assertThat(album.hasMediaFilePathNotFound(ContentNature.AUDIO)).isTrue();
 		
 		List<AbstractAudioFile> audioFiles = album.getFormatAlbum().getAudioFiles();
 		assertThat(audioFiles).isNotNull()
@@ -143,8 +143,8 @@ class AlbumTest {
 		testAlbumProperties(album2, la2);
 		
 		// The album has now a valid media file path
-		assertThat(album2.hasMissingOrInvalidMediaFilePath()).isFalse();
-		assertThat(album2.hasMediaFilePathNotFound()).isFalse();
+		assertThat(album2.hasMissingOrInvalidMediaFilePath(ContentNature.AUDIO)).isFalse();
+		assertThat(album2.hasMediaFilePathNotFound(ContentNature.AUDIO)).isFalse();
 		
 		assertThat(album2.getFormatAlbum().getAudioFiles()).isNotNull()
 			.singleElement()
@@ -185,8 +185,8 @@ class AlbumTest {
 		testAlbumProperties(album3, la3);
 		
 		// The album has now a fixed media file path
-		assertThat(album3.hasMissingOrInvalidMediaFilePath()).isFalse();
-		assertThat(album3.hasMediaFilePathNotFound()).isFalse();
+		assertThat(album3.hasMissingOrInvalidMediaFilePath(ContentNature.AUDIO)).isFalse();
+		assertThat(album3.hasMediaFilePathNotFound(ContentNature.AUDIO)).isFalse();
 		
 		assertThat(album3.getFormatAlbum().getAudioFiles()).isNotNull()
 			.singleElement()
@@ -223,8 +223,8 @@ class AlbumTest {
 		
 		testAlbumProperties(album4, la4);
 		
-		assertThat(album4.hasMissingOrInvalidMediaFilePath()).isFalse();
-		assertThat(album4.hasMediaFilePathNotFound()).isFalse();
+		assertThat(album4.hasMissingOrInvalidMediaFilePath(ContentNature.AUDIO)).isFalse();
+		assertThat(album4.hasMediaFilePathNotFound(ContentNature.AUDIO)).isFalse();
 		
 		assertThat(album4.getFormatAlbum().getAudioFiles()).isNotNull()
 			.singleElement()
@@ -255,7 +255,7 @@ class AlbumTest {
 
 		Album album = new Album(jAlbum, lla, Path.of("dummyPath"));
 
-		List<Path> potentialPaths = album.searchPotentialAudioFilesPaths();
+		List<Path> potentialPaths = album.searchPotentialMediaFilesPaths(ContentNature.AUDIO);
 
 		assertThat(potentialPaths).isNotNull().singleElement()
 				.hasToString("E:\\Musique\\e\\Bill Evans\\Portrait In Jazz");

@@ -26,8 +26,11 @@ package org.fl.collectionAlbumGui;
 
 import java.awt.Color;
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -35,89 +38,132 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import org.fl.collectionAlbum.Format.ContentNature;
 import org.fl.collectionAlbum.albums.Album;
 
 public class MediaFilesPane extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	private JLabel mediaFilesStatus;
-	private JButton mediaFilesSearch;
-	private JButton mediaFileValidation;
-	private JScrollPane statusScrollPane;
+	private Map<ContentNature, JLabel> mediaFilesStatuses;
+	private Map<ContentNature, JButton> mediaFilesSearches;
+	private Map<ContentNature, JButton> mediaFilesValidations;
+	private Map<ContentNature,JScrollPane> statusScrollPanels;
+	private Map<ContentNature,JPanel> mediaFilesPanels;
 	
-	private static final int SINGLE_ROW_HEIGHT = 20;
+	private static final int SINGLE_ROW_HEIGHT = 25;
 	
-	public MediaFilesPane(MediaFilesSearchListener mediaFilesSearchListener, MediaFileValidationListener mediaFilesValidationListener) {
+	public MediaFilesPane(
+			Map<ContentNature, MediaFilesSearchListener>  mediaFilesSearchListeners, 
+			Map<ContentNature, MediaFileValidationListener> mediaFilesValidationListeners) {
 		
 		super();
-		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
-		mediaFilesSearch = new JButton("Chercher");
-		mediaFilesSearch.addActionListener(mediaFilesSearchListener);
+		mediaFilesStatuses = new HashMap<>();
+		mediaFilesSearches = new HashMap<>();
+		mediaFilesValidations = new HashMap<>();
+		statusScrollPanels = new HashMap<>();
+		mediaFilesPanels = new HashMap<>();
 		
-		mediaFileValidation = new JButton("Valider");
-		mediaFileValidation.addActionListener(mediaFilesValidationListener);
 		
-		mediaFilesStatus = new JLabel("Etat inconnu");
-		statusScrollPane = new JScrollPane(mediaFilesStatus);
-		add(statusScrollPane);
+		// Search and validation media files button
+		Stream.of(ContentNature.values()).forEach(contentNature -> {
+			
+			JPanel mediaFilePanel = new JPanel();
+			mediaFilePanel.setLayout(new BoxLayout(mediaFilePanel, BoxLayout.X_AXIS));
+			mediaFilesPanels.put(contentNature, mediaFilePanel);
+			
+			JButton searchButton = new JButton("Chercher " + contentNature.getNom());
+			searchButton.addActionListener(mediaFilesSearchListeners.get(contentNature));
+			mediaFilesSearches.put(contentNature, searchButton); 
+			
+			JButton validationButton = new JButton("Valider " + contentNature.getNom());
+			validationButton.addActionListener(mediaFilesValidationListeners.get(contentNature));
+			mediaFilesValidations.put(contentNature, validationButton);
+			
+			JLabel mediaFilesStatus = new JLabel("Etat inconnu " + contentNature.getNom());
+			mediaFilesStatuses.put(contentNature, mediaFilesStatus);
+			
+			JScrollPane statusScrollPane = new JScrollPane(mediaFilesStatus);	
+			statusScrollPanels.put(contentNature, statusScrollPane);
+			mediaFilePanel.add(statusScrollPane);
+			
+			add(mediaFilePanel);
+		});
 	}
 
 	public int updateValue(Album album) {
 		
-		remove(mediaFileValidation);
-		if (album.hasMediaFiles()) {
-			if (album.hasMediaFilePathNotFound() ||
-				album.hasMissingOrInvalidMediaFilePath()) {
-				List<Path> potentialAudioFilesPaths = album.getPotentialAudioFilesPaths();
-				if (potentialAudioFilesPaths == null) {
-					mediaFilesStatus.setText("Manquant ou invalides");
-					add(mediaFilesSearch);
-					setBackground(Color.RED);
-					statusScrollPane.getViewport().setBackground(Color.RED);
-			
-				} else if (potentialAudioFilesPaths.isEmpty()) {
-					mediaFilesStatus.setText("Aucun chemin potentiel trouvé");
-					remove(mediaFilesSearch);
-					setBackground(Color.ORANGE);
-					statusScrollPane.getViewport().setBackground(Color.ORANGE);
+		Stream.of(ContentNature.values())
+			.forEach(contentNature -> 
+				mediaFilesPanels.get(contentNature).remove(mediaFilesValidations.get(contentNature)));
+		
+		return Stream.of(ContentNature.values())
+			.map(contentNature -> {
+				JPanel contentPane = mediaFilesPanels.get(contentNature);
+				if (!album.hasContentNature(contentNature)) {
+					mediaFilesStatuses.get(contentNature).setText("Pas de contenu " + contentNature.getNom());
+					contentPane.setBackground(Color.GRAY);
+					statusScrollPanels.get(contentNature).getViewport().setBackground(Color.GRAY);
+					contentPane.remove(mediaFilesSearches.get(contentNature));
+				} else if (album.hasMediaFiles(contentNature)) {
+					if (album.hasMediaFilePathNotFound(contentNature) ||
+						album.hasMissingOrInvalidMediaFilePath(contentNature)) {
+							List<Path> potentialMediaFilesPaths = album.getPotentialMediaFilesPaths(contentNature);
+							if (potentialMediaFilesPaths == null) {
+								mediaFilesStatuses.get(contentNature).setText("Chemin " + contentNature.getNom() + " manquant ou invalides");
+								contentPane.add(mediaFilesSearches.get(contentNature));
+								contentPane.setBackground(Color.RED);
+								statusScrollPanels.get(contentNature).getViewport().setBackground(Color.RED);
+						
+							} else if (potentialMediaFilesPaths.isEmpty()) {
+								mediaFilesStatuses.get(contentNature).setText("Aucun chemin " + contentNature.getNom() + " potentiel trouvé");
+								contentPane.remove(mediaFilesSearches.get(contentNature));
+								setBackground(Color.ORANGE);
+								statusScrollPanels.get(contentNature).getViewport().setBackground(Color.ORANGE);
+							} else {
+								mediaFilesStatuses.get(contentNature).setText(potentialMediaFilesList(potentialMediaFilesPaths, contentNature));
+								contentPane.remove(mediaFilesSearches.get(contentNature));
+								contentPane.setBackground(Color.PINK);
+								statusScrollPanels.get(contentNature).getViewport().setBackground(Color.PINK);
+								
+								if ((potentialMediaFilesPaths.size() == 1) &&
+										album.hasAudioFiles() &&
+										(album.getFormatAlbum().getAudioFiles().size() == 1)) {
+									// Media file paths can be validated if and only if there is a single potential link
+									// and a single media file defined in the album
+									contentPane.add(mediaFilesValidations.get(contentNature));
+								}
+								return (potentialMediaFilesPaths.size() + 2)*SINGLE_ROW_HEIGHT;
+							}
+						} else {
+							statusScrollPanels.get(contentNature).getViewport().setBackground(Color.GREEN);
+							contentPane.setBackground(Color.GREEN);
+							mediaFilesStatuses.get(contentNature).setText("Chemin " + contentNature.getNom() + " trouvé");
+							contentPane.remove(mediaFilesSearches.get(contentNature));
+						}
 				} else {
-					mediaFilesStatus.setText(potentialMediaFilesList(potentialAudioFilesPaths));
-					remove(mediaFilesSearch);
-					setBackground(Color.PINK);
-					statusScrollPane.getViewport().setBackground(Color.PINK);
-					
-					if ((potentialAudioFilesPaths.size() == 1) &&
-							album.hasAudioFiles() &&
-							(album.getFormatAlbum().getAudioFiles().size() == 1)) {
-						// Media file paths can be validated if and only if there is a single potential link
-						// and a single media file defined in the album
-						add(mediaFileValidation);
-					}
-					return (potentialAudioFilesPaths.size() + 2)*SINGLE_ROW_HEIGHT;
+					mediaFilesStatuses.get(contentNature).setText("Pas de fichier " + contentNature.getNom());
+					contentPane.add(mediaFilesSearches.get(contentNature));
+					contentPane.setBackground(Color.MAGENTA);
+					statusScrollPanels.get(contentNature).getViewport().setBackground(Color.MAGENTA);
+					contentPane.remove(mediaFilesSearches.get(contentNature));
 				}
-			} else {
-				statusScrollPane.getViewport().setBackground(Color.GREEN);
-				setBackground(Color.GREEN);
-				mediaFilesStatus.setText("Trouvé");
-				remove(mediaFilesSearch);
-			}
-		} else {
-			mediaFilesStatus.setText("Pas de fichier media");
-			add(mediaFilesSearch);
-			setBackground(Color.MAGENTA);
-			statusScrollPane.getViewport().setBackground(Color.MAGENTA);
-		}
-		return SINGLE_ROW_HEIGHT;
+				return SINGLE_ROW_HEIGHT;
+			})
+			.mapToInt(Integer::valueOf)
+		    .sum();
+		
+		
 	}
 	
-	private String potentialMediaFilesList(List<Path> potentialAudioFilesPaths) {
+	private String potentialMediaFilesList(List<Path> potentialMediaFilesPaths, ContentNature contentNature) {
 
-		StringBuilder htmlString = new StringBuilder("<html><body>Chemin potentiels des fichiers media:<br/>");
+		StringBuilder htmlString = new StringBuilder("<html><body>Chemin potentiels des fichiers " + contentNature.getNom() + ":<br/>");
 
 		htmlString
-			.append(potentialAudioFilesPaths.stream().map(path -> path.toString()).collect(Collectors.joining("<br/>")))
+			.append(potentialMediaFilesPaths.stream().map(path -> path.toString()).collect(Collectors.joining("<br/>")))
 			.append("</body></html>");
 		
 		return htmlString.toString();
