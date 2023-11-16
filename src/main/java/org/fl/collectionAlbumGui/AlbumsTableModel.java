@@ -37,12 +37,13 @@ public class AlbumsTableModel extends AbstractTableModel {
 	public final static int TITRE_COL_IDX = 0;
 	public final static int AUTEUR_COL_IDX = 1;
 	public final static int MEDIA_FILES_COL_IDX = 2;
+	public final static int PROBLEM_COL_IDX = 3;
 	
 	private static final long serialVersionUID = 1L;
 
 	private final static String AUTEURS_SEPARATOR = ", ";
 	
-	private final static String[] entetes = {"Titres", "Auteurs", "Chemins des fichiers media"};
+	private final static String[] entetes = {"Titres", "Auteurs", "Chemins des fichiers media", "Problème"};
 	
 	private final CollectionAlbumContainer albumsContainer;
 	
@@ -74,19 +75,16 @@ public class AlbumsTableModel extends AbstractTableModel {
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		
-		switch(columnIndex){
-		case TITRE_COL_IDX:
-			return getAlbumsList().getAlbums().get(rowIndex).getTitre();
-		case AUTEUR_COL_IDX:
-			return getAlbumsList().getAlbums().get(rowIndex)
+		return switch(columnIndex){
+			case TITRE_COL_IDX -> getAlbumsList().getAlbums().get(rowIndex).getTitre();
+			case AUTEUR_COL_IDX ->getAlbumsList().getAlbums().get(rowIndex)
 					.getAuteurs().stream()
 					.map(auteur -> auteur.getNomComplet())
 					.collect(Collectors.joining(AUTEURS_SEPARATOR));
-		case MEDIA_FILES_COL_IDX:
-			return getAlbumsList().getAlbums().get(rowIndex);
-		default:
-			return null;
-		}
+			case MEDIA_FILES_COL_IDX -> getAlbumsList().getAlbums().get(rowIndex);
+			case PROBLEM_COL_IDX -> getAlbumsList().getAlbums().get(rowIndex).hasProblem();
+			default -> null;
+		};
 	}
 
 	public Album getAlbumAt(int rowIndex) {

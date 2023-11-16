@@ -177,6 +177,16 @@ public class Album extends MusicArtefact {
 		return formatAlbum.hasMediaFilePathNotFound(contentNature);
 	}
 	
+	public boolean hasProblem() {
+		return missesAudioFile() ||
+				missesVideoFile() ||
+				Stream.of(ContentNature.values())
+					.filter(contentNature -> hasContentNature(contentNature))
+					.anyMatch(contentNature -> 
+						hasMissingOrInvalidMediaFilePath(contentNature) || 
+						hasMediaFilePathNotFound(contentNature));
+	}
+	
 	public List<Path> getPotentialMediaFilesPaths(ContentNature contentNature) {
 		return potentialMediaFilesPath.get(contentNature);
 	}
