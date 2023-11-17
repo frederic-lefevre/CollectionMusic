@@ -101,9 +101,9 @@ public class MediaFileInventory {
 		mediaFilePathInventory.keySet().forEach(key -> {
 			if (key.contains(title)) {
 				
-				if (album.getAuteurs().stream()
+				if (album.getAuteurs().isEmpty() || (album.getAuteurs().stream()
 					.map(auteur -> auteur.getNomComplet().toLowerCase())
-					.anyMatch(auteurName -> key.contains(auteurName))) {
+					.anyMatch(auteurName -> key.contains(auteurName)))) {
 					potentialMediaPath.add(mediaFilePathInventory.get(key));
 				}
 			}
