@@ -41,6 +41,7 @@ import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
+import org.fl.collectionAlbum.artistes.Artiste;
 
 public class MediaFileInventory {
 
@@ -101,9 +102,13 @@ public class MediaFileInventory {
 		mediaFilePathInventory.keySet().forEach(key -> {
 			if (key.contains(title)) {
 				
-				if (album.getAuteurs().isEmpty() || (album.getAuteurs().stream()
-					.map(auteur -> auteur.getNomComplet().toLowerCase())
-					.anyMatch(auteurName -> key.contains(auteurName)))) {
+				List<Artiste> auteurs = album.getAuteurs();
+				if (auteurs.isEmpty() ||
+					(auteurs.stream()
+							.map(auteur -> auteur.getNomComplet().toLowerCase())
+							.anyMatch(auteurName -> (
+									(title.equals(auteurName) && containsAtLeastTwoOcccurences(key, title) ) ||
+									(!title.equals(auteurName) && key.contains(auteurName)))))) {
 					potentialMediaPath.add(mediaFilePathInventory.get(key));
 				}
 			}
@@ -127,5 +132,17 @@ public class MediaFileInventory {
 				return ext;
 					});
 				
+	}
+	
+	private boolean containsAtLeastTwoOcccurences(String s, String searchedString) {
+		
+		if ((s == null) || (searchedString == null)) {
+			throw new IllegalArgumentException("Null string or searched string");
+		} else if (searchedString.isEmpty()) {
+			return true;
+		} else {
+			int firstOOccurenceIndex = s.indexOf(searchedString);
+			return ((firstOOccurenceIndex > -1) && (s.indexOf(searchedString, firstOOccurenceIndex + 1) > -1));
+		}
 	}
 }
