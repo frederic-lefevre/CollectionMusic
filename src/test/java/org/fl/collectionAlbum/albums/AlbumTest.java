@@ -261,6 +261,49 @@ class AlbumTest {
 				.hasToString("E:\\Musique\\e\\Bill Evans\\Portrait In Jazz");
 	}
 	
+	private static final String albumStr2 = """
+{ 
+  "titre": "Van Halen",
+  "format": {
+    "cd": 1,
+    "audioFiles": [
+      {
+        "bitDepth": 24,
+        "samplingRate": 192,
+        "source": "File",
+        "type": "FLAC"
+      }
+    ]
+  },
+  "groupe": [
+    {
+      "nom": "Van Halen"
+    }
+  ],
+  "enregistrement": [
+    "1977-09-01",
+    "1977-11-01"
+  ]
+}
+			""" ;
+	
+	@Test
+	void testAlbumPotentialMediaFilesSearch2() {
+
+		JsonObject jAlbum = JsonParser.parseString(albumStr2).getAsJsonObject();
+
+		ListeArtiste la = new ListeArtiste();
+		List<ListeArtiste> lla = new ArrayList<ListeArtiste>();
+		lla.add(la);
+
+		Album album = new Album(jAlbum, lla, Path.of("dummyPath"));
+
+		List<Path> potentialPaths = album.searchPotentialMediaFilesPaths(ContentNature.AUDIO);
+
+		assertThat(potentialPaths).isNotNull().singleElement()
+				.hasToString("E:\\Musique\\v\\Van Halen\\Van Halen [24 - 192]");
+	}
+	
 	private void testAlbumProperties(Album album, ListeArtiste la) {
 		
 		assertThat(album.getTitre()).isEqualTo("Portrait in jazz");

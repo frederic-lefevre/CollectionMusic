@@ -38,6 +38,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
@@ -46,6 +47,8 @@ import org.fl.collectionAlbum.artistes.Artiste;
 public class MediaFileInventory {
 
 	private final static Logger albumLog = Control.getAlbumLog();
+	
+	private static final String SEPARATOR = " / ";
 	
 	private static final Set<String> mediaFileExtensions = 
 		Set.of("flac", "mp3", "wma", "aiff", "FLAC", "MP3", "m4a",
@@ -81,7 +84,7 @@ public class MediaFileInventory {
     			String artistFolder = albumAbsolutePath.getParent().getFileName().toString();
     			String albumFolder = albumAbsolutePath.getFileName().toString();
     			
-    			String inventoryKey = (artistFolder + albumFolder).toLowerCase();
+    			String inventoryKey = getInventoryKey(artistFolder, albumFolder);
     			
     			if (! mediaFilePathInventory.containsKey(inventoryKey)) {
     				mediaFilePathInventory.put(inventoryKey, albumAbsolutePath);
@@ -93,27 +96,39 @@ public class MediaFileInventory {
     	}
 	}
 	
+	private String getInventoryKey(String artist, String albumTitle) {
+		return (artist + SEPARATOR + albumTitle).toLowerCase();
+	}
+	
 	public List<Path> getPotentialMediaPath(Album album) {
 		
-		List<Path> potentialMediaPath = new ArrayList<>();
-		
 		String title = album.getTitre().toLowerCase();
+		List<Artiste> auteurs = album.getAuteurs();
 		
-		mediaFilePathInventory.keySet().forEach(key -> {
-			if (key.contains(title)) {
-				
-				List<Artiste> auteurs = album.getAuteurs();
-				if (auteurs.isEmpty() ||
-					(auteurs.stream()
-							.map(auteur -> auteur.getNomComplet().toLowerCase())
-							.anyMatch(auteurName -> (
-									(title.equals(auteurName) && containsAtLeastTwoOcccurences(key, title) ) ||
-									(!title.equals(auteurName) && key.contains(auteurName)))))) {
-					potentialMediaPath.add(mediaFilePathInventory.get(key));
-				}
+		Map<String,Path> potentialMediaPath = mediaFilePathInventory.entrySet().stream()
+			.filter(inventoryEntry -> inventoryEntry.getKey().contains(title))
+			.filter(inventoryEntry -> 
+				(auteurs.isEmpty() ||
+				(auteurs.stream()
+						.map(auteur -> auteur.getNomComplet().toLowerCase())
+						.anyMatch(auteurName -> inventoryEntry.getKey().contains(auteurName)))))
+			.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+		if (potentialMediaPath.size() > 1) {
+			Map<String,Path> potentialMediaPath2 = potentialMediaPath.entrySet().stream()
+				.filter(inventoryEntry -> auteurs.stream()
+						.map(auteur -> auteur.getNomComplet())
+						.anyMatch(auteurName -> inventoryEntry.getKey().contains(getInventoryKey(auteurName, title))))
+			.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+			
+			if (potentialMediaPath2.isEmpty()) {
+				return new ArrayList<>(potentialMediaPath.values());
+			} else {
+				return new ArrayList<>(potentialMediaPath2.values());
 			}
-		});
-		return potentialMediaPath;
+		} else {
+			return new ArrayList<>(potentialMediaPath.values());
+		}
 	}
 	
 	protected static boolean isMediaFileName(Path file) {
@@ -132,17 +147,5 @@ public class MediaFileInventory {
 				return ext;
 					});
 				
-	}
-	
-	private boolean containsAtLeastTwoOcccurences(String s, String searchedString) {
-		
-		if ((s == null) || (searchedString == null)) {
-			throw new IllegalArgumentException("Null string or searched string");
-		} else if (searchedString.isEmpty()) {
-			return true;
-		} else {
-			int firstOOccurenceIndex = s.indexOf(searchedString);
-			return ((firstOOccurenceIndex > -1) && (s.indexOf(searchedString, firstOOccurenceIndex + 1) > -1));
-		}
 	}
 }
