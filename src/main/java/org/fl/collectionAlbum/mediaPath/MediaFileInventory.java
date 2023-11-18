@@ -58,7 +58,7 @@ public class MediaFileInventory {
 	
 	public static final Set<String> extensionSet = new HashSet<>();
 	
-	public MediaFileInventory(Path rootPath) {
+	protected MediaFileInventory(Path rootPath) {
 		
 		mediaFilePathInventory = new HashMap<>();
 		
