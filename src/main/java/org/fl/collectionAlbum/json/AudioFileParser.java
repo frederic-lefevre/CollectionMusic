@@ -27,6 +27,7 @@ package org.fl.collectionAlbum.json;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.AbstractAudioFile;
@@ -64,7 +65,7 @@ public class AudioFileParser {
 			
 			String source = AbstractMediaFileParser.parseSource(audioFileJson);
 			String note = AbstractMediaFileParser.parseNote(audioFileJson);
-			Path audioFileLocation = AbstractMediaFileParser.parseAudioFileLocation(audioFileJson);
+			Set<Path> audioFileLocations = AbstractMediaFileParser.parseAudioFileLocation(audioFileJson);
 			
 			if ((type == null) || (source == null) || (samplingRate == null)) {
 				
@@ -82,7 +83,7 @@ public class AudioFileParser {
 				if (bitDepth == null) {
 					return null;
 				} else {
-					return new LosslessAudioFile(audioFileJson, type, source, bitDepth, samplingRate, note, audioFileLocation);
+					return new LosslessAudioFile(audioFileJson, type, source, bitDepth, samplingRate, note, audioFileLocations);
 				}
 				
 			} else {
@@ -97,7 +98,7 @@ public class AudioFileParser {
 				if (bitRate == null) {
 					return null;
 				} else {
-					return new LossyAudioFile(audioFileJson, type, source, bitRate, samplingRate, note, audioFileLocation);
+					return new LossyAudioFile(audioFileJson, type, source, bitRate, samplingRate, note, audioFileLocations);
 				}
 			}
 		} else {

@@ -26,8 +26,11 @@ package org.fl.collectionAlbum;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.BiConsumer;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 public abstract class AbstractMediaFile {
@@ -36,7 +39,7 @@ public abstract class AbstractMediaFile {
 	private final String note;
 	private final JsonObject mediaJson;
 	
-	private Path mediaFilePath;
+	private Set<Path> mediaFilePaths;
 	private boolean missingOrInvalidMediaFilePath;
 	private boolean mediaFilePathNotFound;
 	
@@ -46,14 +49,14 @@ public abstract class AbstractMediaFile {
 	private static final String FILE_LINK2 = "\">";
 	private static final String FILE_LINK3 = "</a>";
 	
-	protected AbstractMediaFile(JsonObject mediaJson, String source, String note, Path path) {
+	protected AbstractMediaFile(JsonObject mediaJson, String source, String note, Set<Path> paths) {
 		super();
 		this.mediaJson = mediaJson;
 		this.source = source;
 		this.note = note;
-		this.mediaFilePath = path;
+		this.mediaFilePaths = paths;
 		
-		checkMediaFilePath();
+		checkMediaFilePaths();
 	}
 	
 	public abstract String displayMediaFileDetail(String separator);
@@ -69,14 +72,34 @@ public abstract class AbstractMediaFile {
 		return note;
 	}
 	
-	public Path getMediaFilePath() {
-		return mediaFilePath;
+	public Set<Path> getMediaFilePaths() {
+		return mediaFilePaths;
 	}
 	
-	public void setMediaFilePath(Path path) {
-		this.mediaFilePath = path;
-		mediaJson.addProperty(JsonMusicProperties.LOCATION, path.toString());
-		checkMediaFilePath();
+	public void addMediaFilePath(Path path) {
+		if (mediaFilePaths == null) {
+			mediaFilePaths = new HashSet<>();
+		}
+		mediaFilePaths.add(path);
+		
+		JsonArray mediaPathsJson = new JsonArray();
+		mediaFilePaths.forEach(filePath -> mediaPathsJson.add(filePath.toString()));
+		
+		mediaJson.add(JsonMusicProperties.LOCATION, mediaPathsJson);
+		checkMediaFilePaths();
+	}
+	
+	public void setMediaFilePath(Set<Path> paths) {
+
+		mediaFilePaths = paths;
+		
+		if (mediaFilePaths != null) {
+			JsonArray mediaPathsJson = new JsonArray();
+			mediaFilePaths.forEach(filePath -> mediaPathsJson.add(filePath.toString()));
+		
+			mediaJson.add(JsonMusicProperties.LOCATION, mediaPathsJson);
+			checkMediaFilePaths();
+		}
 	}
 	
 	public boolean hasMissingOrInvalidMediaFilePath() {
@@ -87,17 +110,14 @@ public abstract class AbstractMediaFile {
 		return mediaFilePathNotFound;
 	}
 
-	private void checkMediaFilePath() {
-		if (mediaFilePath == null) {
+	private void checkMediaFilePaths() {
+		if ((mediaFilePaths == null) || mediaFilePaths.isEmpty()) {
 			missingOrInvalidMediaFilePath = true;
 			mediaFilePathNotFound = true;
 		} else {
 			missingOrInvalidMediaFilePath = false;
-			if (Files.exists(mediaFilePath)) {
-				mediaFilePathNotFound = false;
-			} else {
-				mediaFilePathNotFound = true;
-			}
+			
+			mediaFilePathNotFound = mediaFilePaths.stream().anyMatch(path -> !Files.exists(path));
 		}
 	}
 	
@@ -111,13 +131,15 @@ public abstract class AbstractMediaFile {
 	
 	protected void appendCommonMediaFileDetailWithLink(StringBuilder mediaFilesDetails, String separator) {
 		appendCommonMediaFileDetail(mediaFilesDetails, separator);
-		if (mediaFilePath != null) {
-			mediaFilesDetails.append(separator)
-			.append(FILE_LINK1)
-			.append(getMediaFilePath())
-			.append(FILE_LINK2)
-			.append(getMediaFilePath())
-			.append(FILE_LINK3);
+		if (mediaFilePaths != null) {
+			mediaFilePaths.forEach(mediaFilePath -> {
+				mediaFilesDetails.append(separator)
+				.append(FILE_LINK1)
+				.append(mediaFilePath)
+				.append(FILE_LINK2)
+				.append(mediaFilePath)
+				.append(FILE_LINK3);
+			});
 		}
 	}
 	

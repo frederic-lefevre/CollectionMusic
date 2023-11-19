@@ -96,14 +96,17 @@ class AudioFileTest {
 		assertThat(losslessAudio.hasMissingOrInvalidMediaFilePath()).isTrue();
 		assertThat(losslessAudio.hasMediaFilePathNotFound()).isTrue();
 		
-		assertThat(losslessAudio.getMediaFilePath()).isNull();
+		assertThat(losslessAudio.getMediaFilePaths()).isNull();
 		
-		losslessAudio.setMediaFilePath(Paths.get("E:/Musique/a/John Abercrombie/M [24-96]/"));
+		losslessAudio.addMediaFilePath(Paths.get("E:/Musique/a/John Abercrombie/M [24-96]/"));
 		
 		assertThat(losslessAudio.hasMissingOrInvalidMediaFilePath()).isFalse();
 		assertThat(losslessAudio.hasMediaFilePathNotFound()).isFalse();
 		
-		assertThat(losslessAudio.getMediaFilePath()).hasToString("E:\\Musique\\a\\John Abercrombie\\M [24-96]");
+		assertThat(losslessAudio.getMediaFilePaths())
+			.isNotNull()
+			.singleElement()
+			.satisfies(audioPath -> assertThat(audioPath).hasToString("E:\\Musique\\a\\John Abercrombie\\M [24-96]"));
 	}
 	
 	@Test
@@ -135,7 +138,7 @@ class AudioFileTest {
 		assertThat(losslessAudio.hasMissingOrInvalidMediaFilePath()).isTrue();
 		assertThat(losslessAudio.hasMediaFilePathNotFound()).isTrue();
 		
-		assertThat(losslessAudio.getMediaFilePath()).isNull();
+		assertThat(losslessAudio.getMediaFilePaths()).isNull();
 	}
 	
 	@Test
@@ -147,7 +150,7 @@ class AudioFileTest {
 				 "source" : "MOFI Fidelity Sound Lab", 
 				 "type" : "FLAC",
 				 "note" : "Remaster Ocean view",
-				 "location" : "E:/Musique/a/John Abercrombie/notFound/" }
+				 "location" : ["E:/Musique/a/John Abercrombie/notFound/"] }
 				""" ;
 		JsonObject jf1 = JsonParser.parseString(audioFileStr1).getAsJsonObject();
 		
@@ -167,6 +170,9 @@ class AudioFileTest {
 		assertThat(losslessAudio.hasMissingOrInvalidMediaFilePath()).isFalse();
 		assertThat(losslessAudio.hasMediaFilePathNotFound()).isTrue();
 		
-		assertThat(losslessAudio.getMediaFilePath()).hasToString("E:\\Musique\\a\\John Abercrombie\\notFound");
+		assertThat(losslessAudio.getMediaFilePaths())
+			.isNotNull()
+			.singleElement()
+			.satisfies(audioPath -> assertThat(audioPath).hasToString("E:\\Musique\\a\\John Abercrombie\\notFound"));
 	}
 }

@@ -29,6 +29,7 @@ import java.time.temporal.TemporalAccessor;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
 
@@ -211,9 +212,15 @@ public class Album extends MusicArtefact {
 			List<? extends AbstractMediaFile> mediaFiles = getFormatAlbum().getMediaFiles(contentNature);
 			if ((mediaFiles != null) && !mediaFiles.isEmpty()) {
 				if (mediaFiles.size() == 1) {
-					mediaFiles.get(0).setMediaFilePath(potentialMediaFilePath.get(0));
-					potentialMediaFilePath = null;
-					return true;
+					Set<Path> mediaFilePaths = mediaFiles.get(0).getMediaFilePaths();
+					if ((mediaFilePaths == null) || mediaFilePaths.isEmpty()) {
+						mediaFiles.get(0).addMediaFilePath(potentialMediaFilePath.get(0));
+						potentialMediaFilePath = null;
+						return true;
+					} else {
+						albumLog.severe("Trying to validate " + contentNature.getNom() + " file path with existing " + contentNature.getNom() + " files referenced for album " + getTitre());
+						return false;
+					}
 				} else {
 					albumLog.severe("Trying to validate " + contentNature.getNom() + " file path with multiple " + contentNature.getNom() + " files referenced for album " + getTitre());
 					return false;

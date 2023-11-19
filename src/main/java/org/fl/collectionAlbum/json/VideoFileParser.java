@@ -27,6 +27,7 @@ package org.fl.collectionAlbum.json;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Optional;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.Control;
@@ -55,7 +56,7 @@ public class VideoFileParser {
 			
 			String source = AbstractMediaFileParser.parseSource(videoFileJson);
 			String note = AbstractMediaFileParser.parseNote(videoFileJson);
-			Path videoFileLocation = AbstractMediaFileParser.parseAudioFileLocation(videoFileJson);
+			Set<Path> videoFileLocations = AbstractMediaFileParser.parseAudioFileLocation(videoFileJson);
 			
 			Integer width = Optional.ofNullable(videoFileJson.get(JsonMusicProperties.VIDEO_WIDTH))
 					.map(JsonElement::getAsInt)
@@ -74,7 +75,7 @@ public class VideoFileParser {
 			if ((type == null) || (source == null) || (width == null) || (height == null)) {
 				return null;
 			} else {
-				return new VideoFile(videoFileJson, type, source, width, height, note, videoFileLocation);
+				return new VideoFile(videoFileJson, type, source, width, height, note, videoFileLocations);
 			}
 		} else {
 			rapportLog.severe("Json VideoFile null parameter");
