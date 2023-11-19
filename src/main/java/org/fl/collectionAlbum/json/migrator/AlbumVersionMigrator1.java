@@ -34,10 +34,10 @@ public class AlbumVersionMigrator1 implements VersionMigrator {
 	
 	private static AlbumVersionMigrator1 instance;
 	
-	public AlbumVersionMigrator1() {
+	private AlbumVersionMigrator1() {
 	}
 
-	public static AlbumVersionMigrator1 getInstance() {
+	protected static AlbumVersionMigrator1 getInstance() {
 		if (instance == null) {
 			instance = new AlbumVersionMigrator1();
 		}

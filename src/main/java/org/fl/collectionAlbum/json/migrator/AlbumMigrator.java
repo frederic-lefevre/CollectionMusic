@@ -37,7 +37,8 @@ public class AlbumMigrator {
 	private AlbumMigrator() {
 		
 		versionMigrators = List.of(
-				AlbumVersionMigrator1.getInstance()
+				AlbumVersionMigrator1.getInstance(),
+				AlbumVersionMigrator2.getInstance()
 				);
 	}
 
