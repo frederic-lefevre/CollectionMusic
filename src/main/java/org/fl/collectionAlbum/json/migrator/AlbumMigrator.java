@@ -24,6 +24,9 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.json.migrator;
 
+import java.io.BufferedWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -56,7 +59,7 @@ public class AlbumMigrator {
 		return instance;
 	}
 	
-	public JsonObject migrate(JsonObject album) {
+	public JsonObject migrate(JsonObject album, Path jsonFilePath) {
 		
 		if (album == null) {
 			return null;
@@ -72,7 +75,20 @@ public class AlbumMigrator {
 			albumLog.log(Level.SEVERE, "Exception dans la migration de l'album " + JsonUtils.jsonPrettyPrint(album), e);
 		}
 
+		writeJson(album, jsonFilePath);
+		
 		return album;	
 	}
 	
+	private void writeJson(JsonObject album, Path jsonFilePath) {
+		
+		try (BufferedWriter buff = Files.newBufferedWriter(jsonFilePath, Control.getCharset())) {
+			
+			buff.write(JsonUtils.jsonPrettyPrint(album)) ;
+			albumLog.fine(() -> "Ecriture du fichier json: " + jsonFilePath);
+
+		} catch (Exception e) {			
+			albumLog.log(Level.SEVERE,"Erreur dans l'écriture du fichier json" + jsonFilePath, e) ;
+		}
+	}
 }

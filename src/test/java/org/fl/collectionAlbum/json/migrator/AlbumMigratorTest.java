@@ -26,6 +26,8 @@ package org.fl.collectionAlbum.json.migrator;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.nio.file.Path;
+
 import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.json.MusicArtefactParser;
 import org.junit.jupiter.api.Test;
@@ -70,7 +72,9 @@ class AlbumMigratorTest {
 		
 		assertThat(albumJson.get(JsonMusicProperties.JSON_VERSION)).isNull();
 		
-		JsonObject migratedAlbum = migrator.migrate(albumJson);
+		Path jsonFilePath = Path.of("C:\\ForTests\\CollectionMusique\\PortraitInJazz2.json");
+		
+		JsonObject migratedAlbum = migrator.migrate(albumJson, jsonFilePath);
 		
 		assertThat(migratedAlbum.get(JsonMusicProperties.JSON_VERSION).getAsInt())
 			.isEqualTo(albumJson.get(JsonMusicProperties.JSON_VERSION).getAsInt())

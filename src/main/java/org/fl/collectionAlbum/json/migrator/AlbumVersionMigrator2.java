@@ -85,10 +85,11 @@ public class AlbumVersionMigrator2 implements VersionMigrator {
 
 				JsonObject audioFileJsonObject = jsonAudioFile.getAsJsonObject();						
 				String location = ParserHelpers.parseStringProperty(audioFileJsonObject, JsonMusicProperties.LOCATION, false);
-				JsonArray locationArray = new JsonArray();
-				locationArray.add(location);
-				audioFileJsonObject.add(JsonMusicProperties.LOCATION, locationArray);
-			
+				if (location != null) {
+					JsonArray locationArray = new JsonArray();
+					locationArray.add(location);
+					audioFileJsonObject.add(JsonMusicProperties.LOCATION, locationArray);
+				}
 			});
 		}
 	}

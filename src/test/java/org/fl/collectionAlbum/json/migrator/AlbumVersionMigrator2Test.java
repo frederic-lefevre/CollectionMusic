@@ -173,6 +173,48 @@ class AlbumVersionMigrator2Test {
 }
 			""";
 	
+	private static final String albumStr5 = """
+	{
+  "titre": "Suites pour violoncelle",
+  "format": {
+    "cd": 2,
+    "dvd": 1,
+	"audioFiles" : [{
+		"bitDepth": 16, 
+		"samplingRate" : 44.1, 
+		"source" : "CD", 
+		"type" : "FLAC" }],
+	"videoFiles" : [{
+		"width": 720, 
+		"height" : 480, 
+		"source" : "DVD", 
+		"type" : "MKV" }]
+  },
+  "interpretes": [
+    {
+      "nom": "Queyras",
+      "prenom": "Jean-Guihen",
+      "naissance": "1967-03-11"
+    }
+  ],
+  "auteurCompositeurs": [
+    {
+      "nom": "Bach",
+      "prenom": "Jean Sebastien"
+    }
+  ],
+  "enregistrement": [
+    "2007-03-01",
+    "2007-03-31"
+  ],
+  "composition": [
+    "1717-01-01",
+    "1723-01-01"
+  ],
+  "jsonVersion" : 1
+}		
+			""";
+	
 	@Test
 	void albumVersionShouldBeOk() {
 		
@@ -185,7 +227,7 @@ class AlbumVersionMigrator2Test {
 	
 	
 	@ParameterizedTest
-	@ValueSource(strings = {albumStr2, albumStr3, albumStr4})
+	@ValueSource(strings = {albumStr2, albumStr3, albumStr4, albumStr5})
 	void shouldMigrateAlbum(String albumStr) {
 		
 		AlbumVersionMigrator2 migrator = AlbumVersionMigrator2.getInstance();
