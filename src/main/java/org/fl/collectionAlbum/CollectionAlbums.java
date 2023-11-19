@@ -39,6 +39,7 @@ import javax.swing.SwingWorker;
 
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
+import org.fl.collectionAlbum.json.migrator.MusicArtefactMigrator;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 import org.fl.collectionAlbumGui.AlbumsTableModel;
 import org.fl.collectionAlbumGui.ProgressInformation;
@@ -164,7 +165,11 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 
 		@Override
 		public void addMusicArtefact(JsonObject artefactJson, Path jsonFile) {
-			albumsContainer.addAlbum(artefactJson, jsonFile) ;			
+			
+			// Migration if needed
+			JsonObject migratedJson = MusicArtefactMigrator.getMigrator().migrateAlbum(artefactJson, jsonFile);
+			
+			albumsContainer.addAlbum(migratedJson, jsonFile) ;			
 		}    	
     }
     
@@ -172,7 +177,7 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 		protected ConcertFileVisitor(String fileExtension) {	super(fileExtension); }
 
 		@Override
-		public void addMusicArtefact(JsonObject artefactJson, Path jsonFile) {
+		public void addMusicArtefact(JsonObject artefactJson, Path jsonFile) {		
 			albumsContainer.addConcert(artefactJson, jsonFile) ;			
 		}    	
     }
