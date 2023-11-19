@@ -22,57 +22,55 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.jsonParsers;
+package org.fl.collectionAlbum.json;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.Control;
+import org.fl.collectionAlbum.JsonMusicProperties;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-public class ParserHelpers {
+public class AbstractMediaFileParser {
 
 	private final static Logger albumLog = Control.getAlbumLog();
 	
-	private ParserHelpers() {
+	protected static String parseNote(JsonObject mediaFileJson) {
+		return ParserHelpers.parseStringProperty(mediaFileJson, JsonMusicProperties.NOTE, false);
 	}
 
-	public static String parseStringProperty(JsonObject json, String property, boolean mandatory) {
-		
-		return Optional.ofNullable(json.get(property))
-				.map(JsonElement::getAsString)
-				.orElseGet(() -> {
-					if (mandatory) {
-						albumLog.severe("Mandatory property " + property + " not found in " + json);
+	protected static Path parseAudioFileLocation(JsonObject mediaFileJson) {
+
+		String location = ParserHelpers.parseStringProperty(mediaFileJson, JsonMusicProperties.LOCATION, false);
+
+		if (location != null) {
+			try {
+				Path locationPath = Path.of(location);
+				if (locationPath.isAbsolute()) {
+					if (!Files.exists(locationPath)) {
+						albumLog.warning("Media file location does not exists: " + mediaFileJson);
 					}
+					return locationPath;
+				} else {
+					albumLog.severe("Media file location is not absolute: " + mediaFileJson);
 					return null;
-				});
-	}
-	
-	
-	public static List<String> getArrayAttribute(JsonObject json, String jsonMusicProperty) {
-
-		JsonElement jElem = json.get(jsonMusicProperty);
-		if (jElem != null) {
-			if (jElem.isJsonArray()) {
-				List<String> result = new ArrayList<String>();
-				JsonArray jArray = jElem.getAsJsonArray();
-				for (JsonElement e : jArray) {
-					result.add(e.getAsString());
 				}
-				albumLog.finest(() -> "Nombre de " + jsonMusicProperty + " " + result.size());
-				return result;
-			} else {
-				albumLog.warning(jsonMusicProperty + " n'est pas un JsonArray pour l'artefact " + json);
+			} catch (Exception e) {
+				albumLog.log(Level.SEVERE, "Invalid media file location: " + mediaFileJson, e);
+				return null;
 			}
 		} else {
-			albumLog.info(() -> "No proerty " + jsonMusicProperty + " for " + json);
+			return null;
 		}
-		return new ArrayList<String>();
+
 	}
+	
+	protected static String parseSource(JsonObject mediaFileJson) {
+		
+		return ParserHelpers.parseStringProperty(mediaFileJson, JsonMusicProperties.SOURCE, true);
+	}
+
 }

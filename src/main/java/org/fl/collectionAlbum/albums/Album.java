@@ -39,7 +39,7 @@ import org.fl.collectionAlbum.Format.ContentNature;
 import org.fl.collectionAlbum.Format.RangementSupportPhysique;
 import org.fl.collectionAlbum.MusicArtefact;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
-import org.fl.collectionAlbum.jsonParsers.AlbumParser;
+import org.fl.collectionAlbum.json.AlbumParser;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 import org.fl.util.date.FuzzyPeriod;
 

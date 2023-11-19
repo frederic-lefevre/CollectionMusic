@@ -22,50 +22,57 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.jsonParsers;
+package org.fl.collectionAlbum.json;
 
-import java.time.temporal.TemporalAccessor;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
+import java.util.Optional;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.Control;
-import org.fl.collectionAlbum.JsonMusicProperties;
-import org.fl.collectionAlbum.utils.TemporalUtils;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-public class ConcertParser {
+public class ParserHelpers {
 
 	private final static Logger albumLog = Control.getAlbumLog();
 	
-	public static TemporalAccessor getConcertDate(JsonObject arteFactJson) {
+	private ParserHelpers() {
+	}
 
-		TemporalAccessor dateConcert = null ;
-		JsonElement jElem = arteFactJson.get(JsonMusicProperties.DATE) ;
-		if (jElem == null) {
-			albumLog.warning("Pas de date dans le concert " + arteFactJson);
-		} else {
-			try {
-				dateConcert = TemporalUtils.parseDate(jElem.getAsString()) ;
-			} catch (Exception e) {
-				albumLog.log(Level.SEVERE, "Erreur dans les dates du concert " + arteFactJson, e) ;
+	public static String parseStringProperty(JsonObject json, String property, boolean mandatory) {
+		
+		return Optional.ofNullable(json.get(property))
+				.map(JsonElement::getAsString)
+				.orElseGet(() -> {
+					if (mandatory) {
+						albumLog.severe("Mandatory property " + property + " not found in " + json);
+					}
+					return null;
+				});
+	}
+	
+	
+	public static List<String> getArrayAttribute(JsonObject json, String jsonMusicProperty) {
+
+		JsonElement jElem = json.get(jsonMusicProperty);
+		if (jElem != null) {
+			if (jElem.isJsonArray()) {
+				List<String> result = new ArrayList<String>();
+				JsonArray jArray = jElem.getAsJsonArray();
+				for (JsonElement e : jArray) {
+					result.add(e.getAsString());
+				}
+				albumLog.finest(() -> "Nombre de " + jsonMusicProperty + " " + result.size());
+				return result;
+			} else {
+				albumLog.warning(jsonMusicProperty + " n'est pas un JsonArray pour l'artefact " + json);
 			}
+		} else {
+			albumLog.info(() -> "No proerty " + jsonMusicProperty + " for " + json);
 		}
-		return dateConcert ;
+		return new ArrayList<String>();
 	}
-	
-	public static String getConcertLieu(JsonObject arteFactJson) {		
-		return ParserHelpers.parseStringProperty(arteFactJson, JsonMusicProperties.LIEU, true);
-	}
-	
-	public static List<String> getConcertMorceaux(JsonObject arteFactJson) {	
-		return ParserHelpers.getArrayAttribute(arteFactJson, JsonMusicProperties.MORCEAUX);
-	}
-	
-	public static List<String> getConcertTickets(JsonObject arteFactJson) {
-		return ParserHelpers.getArrayAttribute(arteFactJson, JsonMusicProperties.TICKET_IMG);
-	}
-
 }

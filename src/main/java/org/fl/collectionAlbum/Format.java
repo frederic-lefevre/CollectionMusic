@@ -36,8 +36,8 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.fl.collectionAlbum.jsonParsers.AudioFileParser;
-import org.fl.collectionAlbum.jsonParsers.VideoFileParser;
+import org.fl.collectionAlbum.json.AudioFileParser;
+import org.fl.collectionAlbum.json.VideoFileParser;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

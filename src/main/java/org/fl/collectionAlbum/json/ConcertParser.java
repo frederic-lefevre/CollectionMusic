@@ -22,55 +22,50 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.jsonParsers;
+package org.fl.collectionAlbum.json;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.time.temporal.TemporalAccessor;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.JsonMusicProperties;
+import org.fl.collectionAlbum.utils.TemporalUtils;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-public class AbstractMediaFileParser {
+public class ConcertParser {
 
 	private final static Logger albumLog = Control.getAlbumLog();
 	
-	protected static String parseNote(JsonObject mediaFileJson) {
-		return ParserHelpers.parseStringProperty(mediaFileJson, JsonMusicProperties.NOTE, false);
-	}
+	public static TemporalAccessor getConcertDate(JsonObject arteFactJson) {
 
-	protected static Path parseAudioFileLocation(JsonObject mediaFileJson) {
-
-		String location = ParserHelpers.parseStringProperty(mediaFileJson, JsonMusicProperties.LOCATION, false);
-
-		if (location != null) {
-			try {
-				Path locationPath = Path.of(location);
-				if (locationPath.isAbsolute()) {
-					if (!Files.exists(locationPath)) {
-						albumLog.warning("Media file location does not exists: " + mediaFileJson);
-					}
-					return locationPath;
-				} else {
-					albumLog.severe("Media file location is not absolute: " + mediaFileJson);
-					return null;
-				}
-			} catch (Exception e) {
-				albumLog.log(Level.SEVERE, "Invalid media file location: " + mediaFileJson, e);
-				return null;
-			}
+		TemporalAccessor dateConcert = null ;
+		JsonElement jElem = arteFactJson.get(JsonMusicProperties.DATE) ;
+		if (jElem == null) {
+			albumLog.warning("Pas de date dans le concert " + arteFactJson);
 		} else {
-			return null;
+			try {
+				dateConcert = TemporalUtils.parseDate(jElem.getAsString()) ;
+			} catch (Exception e) {
+				albumLog.log(Level.SEVERE, "Erreur dans les dates du concert " + arteFactJson, e) ;
+			}
 		}
-
+		return dateConcert ;
 	}
 	
-	protected static String parseSource(JsonObject mediaFileJson) {
-		
-		return ParserHelpers.parseStringProperty(mediaFileJson, JsonMusicProperties.SOURCE, true);
+	public static String getConcertLieu(JsonObject arteFactJson) {		
+		return ParserHelpers.parseStringProperty(arteFactJson, JsonMusicProperties.LIEU, true);
+	}
+	
+	public static List<String> getConcertMorceaux(JsonObject arteFactJson) {	
+		return ParserHelpers.getArrayAttribute(arteFactJson, JsonMusicProperties.MORCEAUX);
+	}
+	
+	public static List<String> getConcertTickets(JsonObject arteFactJson) {
+		return ParserHelpers.getArrayAttribute(arteFactJson, JsonMusicProperties.TICKET_IMG);
 	}
 
 }

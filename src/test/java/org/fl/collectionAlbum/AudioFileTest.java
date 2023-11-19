@@ -28,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.nio.file.Paths;
 
-import org.fl.collectionAlbum.jsonParsers.AudioFileParser;
+import org.fl.collectionAlbum.json.AudioFileParser;
 import org.junit.jupiter.api.Test;
 
 import com.google.gson.JsonObject;

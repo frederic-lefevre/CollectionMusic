@@ -30,7 +30,7 @@ import java.util.List;
 
 import org.fl.collectionAlbum.MusicArtefact;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
-import org.fl.collectionAlbum.jsonParsers.ConcertParser;
+import org.fl.collectionAlbum.json.ConcertParser;
 
 import com.google.gson.JsonObject;
 

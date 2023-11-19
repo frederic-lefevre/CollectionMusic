@@ -26,7 +26,7 @@ package org.fl.collectionAlbum;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.fl.collectionAlbum.jsonParsers.VideoFileParser;
+import org.fl.collectionAlbum.json.VideoFileParser;
 import org.junit.jupiter.api.Test;
 
 import com.google.gson.JsonObject;

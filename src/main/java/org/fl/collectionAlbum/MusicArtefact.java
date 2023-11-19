@@ -33,7 +33,7 @@ import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
-import org.fl.collectionAlbum.jsonParsers.MusicArtefactParser;
+import org.fl.collectionAlbum.json.MusicArtefactParser;
 import org.fl.util.json.JsonUtils;
 
 import com.google.gson.JsonObject;
