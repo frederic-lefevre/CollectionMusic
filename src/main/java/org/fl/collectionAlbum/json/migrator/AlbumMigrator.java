@@ -25,11 +25,18 @@ SOFTWARE.
 package org.fl.collectionAlbum.json.migrator;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.fl.collectionAlbum.Control;
+import org.fl.util.json.JsonUtils;
 
 import com.google.gson.JsonObject;
 
 public class AlbumMigrator {
 
+	private final static Logger albumLog = Control.getAlbumLog();
+	
 	private static AlbumMigrator instance;
 	
 	protected final List<VersionMigrator> versionMigrators;
@@ -55,11 +62,15 @@ public class AlbumMigrator {
 			return null;
 		}
 		
-		versionMigrators.forEach(versionMigrator -> {
-			if (versionMigrator.checkVersion(album)) {
-				versionMigrator.migrate(album);
-			}
-		});
+		try {
+			versionMigrators.forEach(versionMigrator -> {
+				if (versionMigrator.checkVersion(album)) {
+					versionMigrator.migrate(album);
+				}
+			});
+		} catch (Exception e) {
+			albumLog.log(Level.SEVERE, "Exception dans la migration de l'album " + JsonUtils.jsonPrettyPrint(album), e);
+		}
 
 		return album;	
 	}
