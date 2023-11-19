@@ -35,7 +35,7 @@ import org.junit.jupiter.api.Test;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-class AlbumMigratorTest {
+class MusicArtefactMigratorTest {
 	
 	private static final String albumStr1 = """
 			{ 
@@ -63,7 +63,7 @@ class AlbumMigratorTest {
 	@Test
 	void shouldMigrateAlbum() {
 		
-		AlbumMigrator migrator = AlbumMigrator.getMigrator();
+		MusicArtefactMigrator migrator = MusicArtefactMigrator.getMigrator();
 		
 		JsonObject albumJson = JsonParser.parseString(albumStr1).getAsJsonObject();
 		
@@ -74,13 +74,13 @@ class AlbumMigratorTest {
 		
 		Path jsonFilePath = Path.of("C:\\ForTests\\CollectionMusique\\PortraitInJazz2.json");
 		
-		JsonObject migratedAlbum = migrator.migrate(albumJson, jsonFilePath);
+		JsonObject migratedAlbum = migrator.migrateAlbum(albumJson, jsonFilePath);
 		
 		assertThat(migratedAlbum.get(JsonMusicProperties.JSON_VERSION).getAsInt())
 			.isEqualTo(albumJson.get(JsonMusicProperties.JSON_VERSION).getAsInt())
 			.isEqualTo(MusicArtefactParser.getVersion(migratedAlbum))
 			.isEqualTo(MusicArtefactParser.getVersion(albumJson))
-			.isEqualTo(migrator.versionMigrators.size());
+			.isEqualTo(migrator.albumVersionMigrators.size());
 	}
 
 }

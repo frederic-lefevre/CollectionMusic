@@ -36,55 +36,60 @@ import org.fl.util.json.JsonUtils;
 
 import com.google.gson.JsonObject;
 
-public class AlbumMigrator {
+public class MusicArtefactMigrator {
 
 	private final static Logger albumLog = Control.getAlbumLog();
 	
-	private static AlbumMigrator instance;
+	private static MusicArtefactMigrator instance;
 	
-	protected final List<VersionMigrator> versionMigrators;
+	protected final List<VersionMigrator> albumVersionMigrators;
 	
-	private AlbumMigrator() {
+	private MusicArtefactMigrator() {
 		
-		versionMigrators = List.of(
+		albumVersionMigrators = List.of(
 				AlbumVersionMigrator1.getInstance(),
 				AlbumVersionMigrator2.getInstance()
 				);
 	}
 
-	public static AlbumMigrator getMigrator() {
+	public static MusicArtefactMigrator getMigrator() {
 		if (instance == null) {
-			instance = new AlbumMigrator();
+			instance = new MusicArtefactMigrator();
 		}
 		return instance;
 	}
 	
-	public JsonObject migrate(JsonObject album, Path jsonFilePath) {
+	public JsonObject migrateAlbum(JsonObject album, Path jsonFilePath) {
 		
-		if (album == null) {
+		return migrateMusicArtefact(album, jsonFilePath, albumVersionMigrators);
+	}
+	
+	private JsonObject migrateMusicArtefact(JsonObject artefactJson, Path jsonFilePath, List<VersionMigrator> migrators) {
+		
+		if (artefactJson == null) {
 			return null;
 		}
 		
 		try {
-			versionMigrators.forEach(versionMigrator -> {
-				if (versionMigrator.checkVersion(album)) {
-					versionMigrator.migrate(album);
+			migrators.forEach(versionMigrator -> {
+				if (versionMigrator.checkVersion(artefactJson)) {
+					versionMigrator.migrate(artefactJson);
 				}
 			});
 		} catch (Exception e) {
-			albumLog.log(Level.SEVERE, "Exception dans la migration de l'album " + JsonUtils.jsonPrettyPrint(album), e);
+			albumLog.log(Level.SEVERE, "Exception dans la migration de l'artefact " + JsonUtils.jsonPrettyPrint(artefactJson), e);
 		}
 
-		writeJson(album, jsonFilePath);
+		writeJson(artefactJson, jsonFilePath);
 		
-		return album;	
+		return artefactJson;	
 	}
 	
-	private void writeJson(JsonObject album, Path jsonFilePath) {
+	private void writeJson(JsonObject musicArtefact, Path jsonFilePath) {
 		
 		try (BufferedWriter buff = Files.newBufferedWriter(jsonFilePath, Control.getCharset())) {
 			
-			buff.write(JsonUtils.jsonPrettyPrint(album)) ;
+			buff.write(JsonUtils.jsonPrettyPrint(musicArtefact)) ;
 			albumLog.fine(() -> "Ecriture du fichier json: " + jsonFilePath);
 
 		} catch (Exception e) {			
