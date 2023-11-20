@@ -75,7 +75,7 @@ public class AlbumsTableModel extends AbstractTableModel {
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		
-		if (getAlbumsList().getNombreAlbums() < rowIndex) {
+		if (getAlbumsList().getNombreAlbums() < rowIndex + 1) {
 			// This may happen when triggering a rescan of the collection
 			return null;
 		} else {

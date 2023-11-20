@@ -52,7 +52,8 @@ public class MediaFilesRenderer extends MediaFilesPane implements TableCellRende
 		      JTable table, Object value, boolean isSelected, boolean hasFocus,
 		      int row, int column) {
 		if (value == null) {
-			mLog.severe("Null value in MediaFiles cell. Should be an Album");
+			// This may happen when rescanning the album collection
+			mLog.fine("Null value in MediaFiles cell. Should be an Album");
 		} else if (value instanceof Album) {
 			int rowHeight = updateValue((Album)value);
 			table.setRowHeight(row, rowHeight);

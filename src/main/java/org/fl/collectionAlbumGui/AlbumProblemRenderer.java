@@ -47,7 +47,8 @@ public class AlbumProblemRenderer extends DefaultTableCellRenderer {
 		
 		setFont(getFont().deriveFont(Font.BOLD));
 		if (value == null) {
-			mLog.severe("Null value in Album problem cell. Should be a boolean");
+			// This may happen when rescanning the album collection
+			mLog.fine("Null value in MediaFiles cell. Should be an Album");
 		} else if (value instanceof Boolean) {
 			if ((Boolean)value) {
 				setText("Oui");
