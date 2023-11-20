@@ -66,21 +66,29 @@ public class MusicArtefactMigrator {
 	
 	private JsonObject migrateMusicArtefact(JsonObject artefactJson, Path jsonFilePath, List<VersionMigrator> migrators) {
 		
+		boolean modifiedByMigration = false;
+		
 		if (artefactJson == null) {
 			return null;
 		}
 		
 		try {
-			migrators.forEach(versionMigrator -> {
-				if (versionMigrator.checkVersion(artefactJson)) {
-					versionMigrator.migrate(artefactJson);
-				}
-			});
+			long nbMigrationDone = migrators.stream()
+				.filter(versionMigrator -> versionMigrator.checkVersion(artefactJson))
+				.map(versionMigrator -> versionMigrator.migrate(artefactJson))
+				.count();
+
+			if (nbMigrationDone > 0) {
+				albumLog.warning(nbMigrationDone + " migrations done for the json album " + jsonFilePath);
+				modifiedByMigration = true;
+			}
 		} catch (Exception e) {
 			albumLog.log(Level.SEVERE, "Exception dans la migration de l'artefact " + JsonUtils.jsonPrettyPrint(artefactJson), e);
 		}
 
-		writeJson(artefactJson, jsonFilePath);
+		if (modifiedByMigration) {
+			writeJson(artefactJson, jsonFilePath);
+		}
 		
 		return artefactJson;	
 	}

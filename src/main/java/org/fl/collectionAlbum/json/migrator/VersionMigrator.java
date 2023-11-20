@@ -34,6 +34,7 @@ public interface VersionMigrator {
 	
 	int targetVersion();
 	
+	// return true is the json need the to migrated
 	default boolean checkVersion(JsonObject json) {
 		return (json != null) &&  (targetVersion() == MusicArtefactParser.getVersion(json) + 1);
 	}
