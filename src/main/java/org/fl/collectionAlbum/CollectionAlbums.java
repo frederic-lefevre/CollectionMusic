@@ -94,6 +94,9 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 		progressPanel.setProcessStatus(CALENDARS);
 		buildCalendrier() ;
 		
+		// Sort for display when scanning the collection
+		albumsContainer.getCollectionAlbumsMusiques().sortRangementAlbum();
+		
 		return albumsContainer;
 	}
    	
@@ -119,9 +122,6 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 			MusicFileVisitor concertsVisitor = new ConcertFileVisitor(Control.getMusicfileExtension()) ;
 			
 			Files.walkFileTree(concertsPath, concertsVisitor) ;
-			
-			// Sort for display when scanning the collection
-			albumsContainer.getCollectionAlbumsMusiques().sortRangementAlbum();
 			
 		} catch (Exception e) {
 			albumLog.log(Level.SEVERE, "Exception scanning concert directory " + concertsPath, e);

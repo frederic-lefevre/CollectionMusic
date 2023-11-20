@@ -93,6 +93,9 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 		progressPanel.setStepPrefixInformation(ECRITURE) ;
 		rapportCollection() ;
 		
+		// Sort for display when scanning the collection
+		collectionAlbumContainer.getCollectionAlbumsMusiques().sortRangementAlbum();
+		
 		albumLog.info("Fin de la génération");
 		return "" ;	
   	}
