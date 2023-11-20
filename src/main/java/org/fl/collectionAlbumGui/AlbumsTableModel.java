@@ -75,16 +75,21 @@ public class AlbumsTableModel extends AbstractTableModel {
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		
-		return switch(columnIndex){
-			case TITRE_COL_IDX -> getAlbumsList().getAlbums().get(rowIndex).getTitre();
-			case AUTEUR_COL_IDX ->getAlbumsList().getAlbums().get(rowIndex)
-					.getAuteurs().stream()
-					.map(auteur -> auteur.getNomComplet())
-					.collect(Collectors.joining(AUTEURS_SEPARATOR));
-			case MEDIA_FILES_COL_IDX -> getAlbumsList().getAlbums().get(rowIndex);
-			case PROBLEM_COL_IDX -> getAlbumsList().getAlbums().get(rowIndex).hasProblem();
-			default -> null;
-		};
+		if (getAlbumsList().getNombreAlbums() < rowIndex) {
+			// This may happen when triggering a rescan of the collection
+			return null;
+		} else {
+			return switch(columnIndex){
+				case TITRE_COL_IDX -> getAlbumsList().getAlbums().get(rowIndex).getTitre();
+				case AUTEUR_COL_IDX ->getAlbumsList().getAlbums().get(rowIndex)
+						.getAuteurs().stream()
+						.map(auteur -> auteur.getNomComplet())
+						.collect(Collectors.joining(AUTEURS_SEPARATOR));
+				case MEDIA_FILES_COL_IDX -> getAlbumsList().getAlbums().get(rowIndex);
+				case PROBLEM_COL_IDX -> getAlbumsList().getAlbums().get(rowIndex).hasProblem();
+				default -> null;
+			};
+		}
 	}
 
 	public Album getAlbumAt(int rowIndex) {
