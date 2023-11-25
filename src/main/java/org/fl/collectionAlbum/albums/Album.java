@@ -213,14 +213,18 @@ public class Album extends MusicArtefact {
 			if ((mediaFiles != null) && !mediaFiles.isEmpty()) {
 				if (mediaFiles.size() == 1) {
 					Set<Path> mediaFilePaths = mediaFiles.get(0).getMediaFilePaths();
-					if ((mediaFilePaths == null) || mediaFilePaths.isEmpty()) {
-						mediaFiles.get(0).addMediaFilePath(potentialMediaFilePath.get(0));
-						potentialMediaFilePath = null;
-						return true;
-					} else {
-						albumLog.severe("Trying to validate " + contentNature.getNom() + " file path with existing " + contentNature.getNom() + " files referenced for album " + getTitre());
-						return false;
+					if ((mediaFilePaths != null) && !mediaFilePaths.isEmpty()) {	
+						if (mediaFilePaths.size() == 1){
+							albumLog.info("Validate " + contentNature.getNom() + " file path with existing " + contentNature.getNom() + " file referenced for album " + getTitre());
+						} else {
+							albumLog.severe("Trying to validate " + contentNature.getNom() + " file path with multiple existing " + contentNature.getNom() + " files referenced for album " + getTitre());
+							return false;
+						}
 					}
+					mediaFiles.get(0).replaceMediaFilePath(potentialMediaFilePath.get(0));
+					potentialMediaFilePath = null;
+					return true;
+					
 				} else {
 					albumLog.severe("Trying to validate " + contentNature.getNom() + " file path with multiple " + contentNature.getNom() + " files referenced for album " + getTitre());
 					return false;

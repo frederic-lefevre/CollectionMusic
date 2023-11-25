@@ -94,6 +94,9 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 		progressPanel.setProcessStatus(CALENDARS);
 		buildCalendrier() ;
 		
+		// Sort for display when scanning the collection
+		albumsContainer.getCollectionAlbumsMusiques().sortRangementAlbum();
+				
 		return albumsContainer;
 	}
    	

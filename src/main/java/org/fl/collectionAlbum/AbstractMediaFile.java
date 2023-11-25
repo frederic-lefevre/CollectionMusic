@@ -82,10 +82,16 @@ public abstract class AbstractMediaFile {
 		}
 		mediaFilePaths.add(path);
 		
-		JsonArray mediaPathsJson = new JsonArray();
-		mediaFilePaths.forEach(filePath -> mediaPathsJson.add(filePath.toString()));
+		modifiyJson();
+		checkMediaFilePaths();
+	}
+	
+	public void replaceMediaFilePath(Path path) {
+
+		mediaFilePaths = new HashSet<>();
+		mediaFilePaths.add(path);
 		
-		mediaJson.add(JsonMusicProperties.LOCATION, mediaPathsJson);
+		modifiyJson();
 		checkMediaFilePaths();
 	}
 	
@@ -94,10 +100,7 @@ public abstract class AbstractMediaFile {
 		mediaFilePaths = paths;
 		
 		if (mediaFilePaths != null) {
-			JsonArray mediaPathsJson = new JsonArray();
-			mediaFilePaths.forEach(filePath -> mediaPathsJson.add(filePath.toString()));
-		
-			mediaJson.add(JsonMusicProperties.LOCATION, mediaPathsJson);
+			modifiyJson();
 			checkMediaFilePaths();
 		}
 	}
@@ -110,6 +113,13 @@ public abstract class AbstractMediaFile {
 		return mediaFilePathNotFound;
 	}
 
+	private void modifiyJson() {
+		JsonArray mediaPathsJson = new JsonArray();
+		mediaFilePaths.forEach(filePath -> mediaPathsJson.add(filePath.toString()));
+		
+		mediaJson.add(JsonMusicProperties.LOCATION, mediaPathsJson);
+	}
+	
 	private void checkMediaFilePaths() {
 		if ((mediaFilePaths == null) || mediaFilePaths.isEmpty()) {
 			missingOrInvalidMediaFilePath = true;
