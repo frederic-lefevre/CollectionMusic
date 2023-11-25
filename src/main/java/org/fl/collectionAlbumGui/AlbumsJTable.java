@@ -31,9 +31,11 @@ import javax.swing.DefaultListSelectionModel;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.Format.ContentNature;
+import org.fl.collectionAlbum.RangementComparator;
 import org.fl.collectionAlbum.albums.Album;
 
 public class AlbumsJTable extends JTable {
@@ -64,6 +66,8 @@ public class AlbumsJTable extends JTable {
 					ContentNature.VIDEO, new MediaFileValidationListener(this, ContentNature.VIDEO
 				));
 		
+		getColumnModel().getColumn(AlbumsTableModel.AUTEUR_COL_IDX)
+			.setCellRenderer(new AuteursRenderer());
 		getColumnModel().getColumn(AlbumsTableModel.MEDIA_FILES_COL_IDX)
 			.setCellRenderer(new MediaFilesRenderer(mediaFilesSearchListeners, mediaFilesValidationListeners));
 		getColumnModel().getColumn(AlbumsTableModel.MEDIA_FILES_COL_IDX)
@@ -74,6 +78,14 @@ public class AlbumsJTable extends JTable {
 		getColumnModel().getColumn(AlbumsTableModel.AUTEUR_COL_IDX).setPreferredWidth(350);
 		getColumnModel().getColumn(AlbumsTableModel.MEDIA_FILES_COL_IDX).setPreferredWidth(400);
 		getColumnModel().getColumn(AlbumsTableModel.PROBLEM_COL_IDX).setPreferredWidth(70);
+		
+		// Row sorter
+		TableRowSorter<TableModel> sorter = new TableRowSorter<>(getModel());
+		setRowSorter(sorter);
+		sorter.sort();
+		
+		sorter.setComparator(AlbumsTableModel.AUTEUR_COL_IDX, new RangementComparator());
+		sorter.setComparator(AlbumsTableModel.MEDIA_FILES_COL_IDX, new RangementComparator());
 		
 		// Allow single row selection only
 		ListSelectionModel listSelectionModel = new DefaultListSelectionModel();

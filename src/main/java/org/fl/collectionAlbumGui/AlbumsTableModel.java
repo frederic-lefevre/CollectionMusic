@@ -24,8 +24,6 @@ SOFTWARE.
 
 package org.fl.collectionAlbumGui;
 
-import java.util.stream.Collectors;
-
 import javax.swing.table.AbstractTableModel;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
@@ -40,8 +38,6 @@ public class AlbumsTableModel extends AbstractTableModel {
 	public final static int PROBLEM_COL_IDX = 3;
 	
 	private static final long serialVersionUID = 1L;
-
-	private final static String AUTEURS_SEPARATOR = ", ";
 	
 	private final static String[] entetes = {"Titres", "Auteurs", "Chemins des fichiers media", "Problème"};
 	
@@ -72,6 +68,18 @@ public class AlbumsTableModel extends AbstractTableModel {
         return true;
     }
     
+    @Override
+    public Class<?> getColumnClass(int columnIndex) {
+        if (getAlbumsList().getAlbums().isEmpty()) {
+            return Object.class;
+        } else {
+        	return switch(columnIndex){
+				case MEDIA_FILES_COL_IDX, AUTEUR_COL_IDX -> Album.class;
+				default ->  getValueAt(0, columnIndex).getClass();
+        	};
+        }
+    }
+    
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		
@@ -81,10 +89,7 @@ public class AlbumsTableModel extends AbstractTableModel {
 		} else {
 			return switch(columnIndex){
 				case TITRE_COL_IDX -> getAlbumsList().getAlbums().get(rowIndex).getTitre();
-				case AUTEUR_COL_IDX ->getAlbumsList().getAlbums().get(rowIndex)
-						.getAuteurs().stream()
-						.map(auteur -> auteur.getNomComplet())
-						.collect(Collectors.joining(AUTEURS_SEPARATOR));
+				case AUTEUR_COL_IDX ->getAlbumsList().getAlbums().get(rowIndex);
 				case MEDIA_FILES_COL_IDX -> getAlbumsList().getAlbums().get(rowIndex);
 				case PROBLEM_COL_IDX -> getAlbumsList().getAlbums().get(rowIndex).hasProblem();
 				default -> null;
