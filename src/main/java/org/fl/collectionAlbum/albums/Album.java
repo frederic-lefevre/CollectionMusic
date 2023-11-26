@@ -24,49 +24,67 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.albums;
 
+import java.nio.file.Path;
 import java.time.temporal.TemporalAccessor;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.logging.Logger;
+import java.util.stream.Stream;
 
+import org.fl.collectionAlbum.AbstractMediaFile;
+import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.Format;
 import org.fl.collectionAlbum.Format.ContentNature;
 import org.fl.collectionAlbum.Format.RangementSupportPhysique;
 import org.fl.collectionAlbum.MusicArtefact;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
-import org.fl.collectionAlbum.jsonParsers.AlbumParser;
+import org.fl.collectionAlbum.json.AlbumParser;
+import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 import org.fl.util.date.FuzzyPeriod;
 
 import com.google.gson.JsonObject;
 
 public class Album extends MusicArtefact {
 
+	protected final static Logger albumLog = Control.getAlbumLog();
+	
     private final String titre;
     
-    private final FuzzyPeriod periodeEnregistrement ;
-    private FuzzyPeriod periodeComposition ;
+    private final FuzzyPeriod periodeEnregistrement;
+    private FuzzyPeriod periodeComposition;
     
     private final Format formatAlbum;
     private RangementSupportPhysique rangement;
     
-    private final boolean specificCompositionDates ;
+    private final boolean specificCompositionDates;
     
-    public Album(JsonObject albumJson, List<ListeArtiste> knownArtistes) {
-    	super(albumJson, knownArtistes);
-    	
-    	titre 				  = AlbumParser.getAlbumTitre(albumJson);
-    	formatAlbum 		  = AlbumParser.getFormatAlbum(albumJson);    	
-    	periodeEnregistrement = AlbumParser.processPeriodEnregistrement(albumJson);        
-		periodeComposition 	  = AlbumParser.processPeriodComposition(albumJson);
-		rangement			  = AlbumParser.getRangementAlbum(albumJson);
+    private Map<ContentNature, List<Path>> potentialMediaFilesPath;
+    
+	public Album(JsonObject albumJson, List<ListeArtiste> knownArtistes, Path jsonFilePath) {
+
+		super(albumJson, knownArtistes, jsonFilePath);
+
+		potentialMediaFilesPath = new HashMap<>();
+		Stream.of(ContentNature.values())
+			.forEach(contentNature -> potentialMediaFilesPath.put(contentNature, null));
 		
+		titre = AlbumParser.getAlbumTitre(albumJson);
+		formatAlbum = AlbumParser.getFormatAlbum(albumJson);
+		periodeEnregistrement = AlbumParser.processPeriodEnregistrement(albumJson);
+		periodeComposition = AlbumParser.processPeriodComposition(albumJson);
+		rangement = AlbumParser.getRangementAlbum(albumJson);
+
 		if (rangement == null) {
 			// pas de rangement spécifique
 			rangement = formatAlbum.getRangement();
 		}
 		specificCompositionDates = (periodeComposition != null);
-        if (!specificCompositionDates) {   
-        	periodeComposition = periodeEnregistrement ;
-        }
-    }
+		if (!specificCompositionDates) {
+			periodeComposition = periodeEnregistrement;
+		}
+	}
     
     public String getTitre() {
         return titre;
@@ -112,6 +130,10 @@ public class Album extends MusicArtefact {
     	return formatAlbum.hasMediaFiles();
     }
     
+    public boolean hasMediaFiles(ContentNature contentNature) {
+    	return formatAlbum.hasMediaFiles(contentNature);
+    }
+    
     public boolean hasAudioFiles() {
     	return formatAlbum.hasAudioFiles();
     }
@@ -144,8 +166,77 @@ public class Album extends MusicArtefact {
 		return formatAlbum.hasHighResAudio();
 	}
 	
-	public boolean hasContentNature(Format.ContentNature contentNature) {
+	public boolean hasContentNature(ContentNature contentNature) {
 		return formatAlbum.hasContentNature(contentNature);
+	}
+	
+	public boolean hasMissingOrInvalidMediaFilePath(ContentNature contentNature) {
+		return formatAlbum.hasMissingOrInvalidMediaFilePath(contentNature);
+	}
+	
+	public boolean hasMediaFilePathNotFound(ContentNature contentNature) {
+		return formatAlbum.hasMediaFilePathNotFound(contentNature);
+	}
+	
+	public boolean hasProblem() {
+		return missesAudioFile() ||
+				missesVideoFile() ||
+				Stream.of(ContentNature.values())
+					.filter(contentNature -> hasContentNature(contentNature))
+					.anyMatch(contentNature -> 
+						hasMissingOrInvalidMediaFilePath(contentNature) || 
+						hasMediaFilePathNotFound(contentNature));
+	}
+	
+	public List<Path> getPotentialMediaFilesPaths(ContentNature contentNature) {
+		return potentialMediaFilesPath.get(contentNature);
+	}
+	
+	public List<Path> searchPotentialMediaFilesPaths(ContentNature contentNature) {
+		
+		List<Path> potentialMediaPaths = MediaFilesInventories.getMediaFileInventory(contentNature).getPotentialMediaPath(this);
+		potentialMediaFilesPath.put(contentNature, potentialMediaPaths);
+		return potentialMediaPaths;
+	}
+	
+	public boolean validatePotentialMediaFilePath(ContentNature contentNature) {		
+		return validatePotentialMediaFilePath(potentialMediaFilesPath.get(contentNature), contentNature);
+	}
+	
+	private boolean validatePotentialMediaFilePath(List<Path> potentialMediaFilePath, ContentNature contentNature) {
+		
+		if (potentialMediaFilePath == null) {
+			albumLog.severe("Trying to validate " + contentNature.getNom() + " file path with null value for album " + getTitre());
+			return false;
+		} else if (potentialMediaFilePath.size() == 1) {
+			List<? extends AbstractMediaFile> mediaFiles = getFormatAlbum().getMediaFiles(contentNature);
+			if ((mediaFiles != null) && !mediaFiles.isEmpty()) {
+				if (mediaFiles.size() == 1) {
+					Set<Path> mediaFilePaths = mediaFiles.get(0).getMediaFilePaths();
+					if ((mediaFilePaths != null) && !mediaFilePaths.isEmpty()) {	
+						if (mediaFilePaths.size() == 1){
+							albumLog.info("Validate " + contentNature.getNom() + " file path with existing " + contentNature.getNom() + " file referenced for album " + getTitre());
+						} else {
+							albumLog.severe("Trying to validate " + contentNature.getNom() + " file path with multiple existing " + contentNature.getNom() + " files referenced for album " + getTitre());
+							return false;
+						}
+					}
+					mediaFiles.get(0).replaceMediaFilePath(potentialMediaFilePath.get(0));
+					potentialMediaFilePath = null;
+					return true;
+					
+				} else {
+					albumLog.severe("Trying to validate " + contentNature.getNom() + " file path with multiple " + contentNature.getNom() + " files referenced for album " + getTitre());
+					return false;
+				}
+			} else {
+				albumLog.severe("Trying to validate " + contentNature.getNom() + " file path with no " + contentNature.getNom() + " files referenced for album " + getTitre());
+				return false;
+			}
+		} else {
+			albumLog.severe("Trying to validate " + contentNature.getNom() + " file path with multiple values for album " + getTitre());
+			return false;
+		}
 	}
 	
     @Override

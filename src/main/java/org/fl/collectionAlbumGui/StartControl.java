@@ -25,7 +25,6 @@ SOFTWARE.
 package org.fl.collectionAlbumGui;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 
 import javax.swing.BorderFactory;
@@ -48,10 +47,9 @@ public class StartControl {
 		
 		triggered = false ;
 		
-		procCtrl = new JPanel() ;
-		procCtrl.setLayout(new BoxLayout(procCtrl, BoxLayout.X_AXIS));
-		procCtrl.setBorder(BorderFactory.createMatteBorder(10,10,10,10,Color.BLACK)) ;
-		procCtrl.setPreferredSize(new Dimension(400,120)) ;
+		procCtrl = new JPanel();
+		procCtrl.setLayout(new BoxLayout(procCtrl, BoxLayout.Y_AXIS));
+		procCtrl.setBorder(BorderFactory.createMatteBorder(10,10,10,10,Color.BLACK));
 		
 		pStart = new JButton(buttonText) ;
 		

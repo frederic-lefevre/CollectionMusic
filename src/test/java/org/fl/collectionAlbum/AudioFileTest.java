@@ -26,7 +26,9 @@ package org.fl.collectionAlbum;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import org.fl.collectionAlbum.jsonParsers.AudioFileParser;
+import java.nio.file.Paths;
+
+import org.fl.collectionAlbum.json.AudioFileParser;
 import org.junit.jupiter.api.Test;
 
 import com.google.gson.JsonObject;
@@ -88,5 +90,89 @@ class AudioFileTest {
 		assertThat(losslessAudio.getType().name()).isEqualTo("FLAC");
 		assertThat(losslessAudio.getSource()).isEqualTo("MOFI Fidelity Sound Lab");
 		assertThat(losslessAudio.getNote()).isEqualTo("Remaster Ocean view");
+		
+		assertThat(losslessAudio.isHighRes()).isTrue();
+		assertThat(losslessAudio.isLossLess()).isTrue();
+		assertThat(losslessAudio.hasMissingOrInvalidMediaFilePath()).isTrue();
+		assertThat(losslessAudio.hasMediaFilePathNotFound()).isTrue();
+		
+		assertThat(losslessAudio.getMediaFilePaths()).isNull();
+		
+		losslessAudio.addMediaFilePath(Paths.get("E:/Musique/a/John Abercrombie/M [24-96]/"));
+		
+		assertThat(losslessAudio.hasMissingOrInvalidMediaFilePath()).isFalse();
+		assertThat(losslessAudio.hasMediaFilePathNotFound()).isFalse();
+		
+		assertThat(losslessAudio.getMediaFilePaths())
+			.isNotNull()
+			.singleElement()
+			.satisfies(audioPath -> assertThat(audioPath).hasToString("E:\\Musique\\a\\John Abercrombie\\M [24-96]"));
+	}
+	
+	@Test
+	void shouldDeserializeToAudioFileWithInvalidPath() {
+		
+		String audioFileStr1 = """
+				{"bitDepth": 32 , 
+				 "samplingRate" : 192, 
+				 "source" : "MOFI Fidelity Sound Lab", 
+				 "type" : "FLAC",
+				 "note" : "Remaster Ocean view",
+				 "location" : "invalid path" }
+				""" ;
+		JsonObject jf1 = JsonParser.parseString(audioFileStr1).getAsJsonObject();
+		
+		AbstractAudioFile audio = AudioFileParser.parseAudioFile(jf1);
+		assertThat(audio).isInstanceOf(LosslessAudioFile.class);
+
+		LosslessAudioFile losslessAudio = (LosslessAudioFile)audio;
+		
+		assertThat(losslessAudio.getBitDepth()).isEqualTo(32);
+		assertThat(losslessAudio.getSamplingRate()).isEqualTo(192);
+		assertThat(losslessAudio.getType().name()).isEqualTo("FLAC");
+		assertThat(losslessAudio.getSource()).isEqualTo("MOFI Fidelity Sound Lab");
+		assertThat(losslessAudio.getNote()).isEqualTo("Remaster Ocean view");
+		
+		assertThat(losslessAudio.isHighRes()).isTrue();
+		assertThat(losslessAudio.isLossLess()).isTrue();
+		assertThat(losslessAudio.hasMissingOrInvalidMediaFilePath()).isTrue();
+		assertThat(losslessAudio.hasMediaFilePathNotFound()).isTrue();
+		
+		assertThat(losslessAudio.getMediaFilePaths()).isNull();
+	}
+	
+	@Test
+	void shouldDeserializeToAudioFileWithPathNotFound() {
+		
+		String audioFileStr1 = """
+				{"bitDepth": 32 , 
+				 "samplingRate" : 192, 
+				 "source" : "MOFI Fidelity Sound Lab", 
+				 "type" : "FLAC",
+				 "note" : "Remaster Ocean view",
+				 "location" : ["E:/Musique/a/John Abercrombie/notFound/"] }
+				""" ;
+		JsonObject jf1 = JsonParser.parseString(audioFileStr1).getAsJsonObject();
+		
+		AbstractAudioFile audio = AudioFileParser.parseAudioFile(jf1);
+		assertThat(audio).isInstanceOf(LosslessAudioFile.class);
+
+		LosslessAudioFile losslessAudio = (LosslessAudioFile)audio;
+		
+		assertThat(losslessAudio.getBitDepth()).isEqualTo(32);
+		assertThat(losslessAudio.getSamplingRate()).isEqualTo(192);
+		assertThat(losslessAudio.getType().name()).isEqualTo("FLAC");
+		assertThat(losslessAudio.getSource()).isEqualTo("MOFI Fidelity Sound Lab");
+		assertThat(losslessAudio.getNote()).isEqualTo("Remaster Ocean view");
+		
+		assertThat(losslessAudio.isHighRes()).isTrue();
+		assertThat(losslessAudio.isLossLess()).isTrue();
+		assertThat(losslessAudio.hasMissingOrInvalidMediaFilePath()).isFalse();
+		assertThat(losslessAudio.hasMediaFilePathNotFound()).isTrue();
+		
+		assertThat(losslessAudio.getMediaFilePaths())
+			.isNotNull()
+			.singleElement()
+			.satisfies(audioPath -> assertThat(audioPath).hasToString("E:\\Musique\\a\\John Abercrombie\\notFound"));
 	}
 }

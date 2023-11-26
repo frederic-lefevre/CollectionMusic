@@ -26,7 +26,6 @@ package org.fl.collectionAlbumGui;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.time.LocalDateTime;
@@ -56,7 +55,6 @@ public class ProgressInformationPanel {
 		procInfos = new JPanel() ;
 		procInfos.setLayout(new BoxLayout(procInfos, BoxLayout.Y_AXIS));
 		procInfos.setBackground(Color.WHITE) ;
-		procInfos.setPreferredSize(new Dimension(800, 300)) ;
 		procInfos.setBorder(BorderFactory.createMatteBorder(10,10,10,10,Color.WHITE)) ;
 		procInfos.setAlignmentX(Component.LEFT_ALIGNMENT) ;
 		

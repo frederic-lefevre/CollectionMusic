@@ -22,19 +22,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.jsonParsers;
+package org.fl.collectionAlbum.json;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Objects;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.JsonMusicProperties;
 
 import com.google.gson.JsonObject;
 
-public class AbstractMediaFieldParser {
+public class AbstractMediaFileParser {
 
 	private final static Logger albumLog = Control.getAlbumLog();
 	
@@ -42,30 +45,33 @@ public class AbstractMediaFieldParser {
 		return ParserHelpers.parseStringProperty(mediaFileJson, JsonMusicProperties.NOTE, false);
 	}
 
-	protected static Path parseAudioFileLocation(JsonObject mediaFileJson) {
+	protected static Set<Path> parseAudioFileLocation(JsonObject mediaFileJson) {
 
-		String location = ParserHelpers.parseStringProperty(mediaFileJson, JsonMusicProperties.LOCATION, false);
-
-		if (location != null) {
-			try {
-				Path locationPath = Path.of(location);
-				if (locationPath.isAbsolute()) {
-					if (!Files.exists(locationPath)) {
-						albumLog.warning("Media file location does not exists: " + mediaFileJson);
-					}
-					return locationPath;
-				} else {
-					albumLog.severe("Media file location is not absolute: " + mediaFileJson);
-					return null;
-				}
-			} catch (Exception e) {
-				albumLog.log(Level.SEVERE, "Invalid media file location: " + mediaFileJson, e);
-				return null;
-			}
-		} else {
+		Set<String> locations = ParserHelpers.getArrayAttributeAsSet(mediaFileJson,  JsonMusicProperties.LOCATION);
+		if (locations == null) {
 			return null;
+		} else {
+			return locations.stream()
+					.map(locationString -> {
+						try {
+							Path locationPath = Path.of(locationString);
+							if (locationPath.isAbsolute()) {
+								if (!Files.exists(locationPath)) {
+									albumLog.warning("Media file location does not exists: " + mediaFileJson);
+								}
+								return locationPath;
+							} else {
+								albumLog.severe("Media file location is not absolute: " + mediaFileJson);
+								return null;
+							}
+						} catch (Exception e) {
+							albumLog.log(Level.SEVERE, "Invalid media file location: " + mediaFileJson, e);
+							return null;
+						}
+					})
+					.filter(Objects::nonNull)
+					.collect(Collectors.toSet());
 		}
-
 	}
 	
 	protected static String parseSource(JsonObject mediaFileJson) {

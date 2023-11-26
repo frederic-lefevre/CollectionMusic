@@ -24,16 +24,24 @@ SOFTWARE.
 
 package org.fl.collectionAlbum;
 
+import java.io.BufferedWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
-import org.fl.collectionAlbum.jsonParsers.MusicArtefactParser;
+import org.fl.collectionAlbum.json.MusicArtefactParser;
+import org.fl.util.json.JsonUtils;
 
 import com.google.gson.JsonObject;
 
 public abstract class MusicArtefact {
 
+	protected final static Logger mLog = Control.getAlbumLog();
+	
 	// liste des auteurs (artiste ou groupe)
 	private final List<Artiste> auteurs;
 	private final List<Artiste> interpretes;
@@ -47,9 +55,12 @@ public abstract class MusicArtefact {
 	private final boolean hasAdditionalInfo;
 
 	protected final JsonObject arteFactJson;
+	private final Path jsonFilePath;
 
-	protected MusicArtefact(JsonObject afj, List<ListeArtiste> knownArtistes) {
+	protected MusicArtefact(JsonObject afj, List<ListeArtiste> knownArtistes, Path jsonFilePath) {
+		
 		arteFactJson = afj;
+		this.jsonFilePath = jsonFilePath;
 
 		MusicArtefactParser musicParser = new MusicArtefactParser(arteFactJson, knownArtistes);
 
@@ -118,9 +129,25 @@ public abstract class MusicArtefact {
 		return (notEmpty(getChefsOrchestre())) || 
 			   (notEmpty(getInterpretes()))    || 
 			   (notEmpty(getEnsembles()));
-		}
+	}
+	
+	public Path getJsonFilePath() {
+		return jsonFilePath;
+	}
 	
 	private static boolean notEmpty(List<?> l) {
 		return (l != null) && (! l.isEmpty());
+	}
+	
+	public void writeJson() {
+		
+		try (BufferedWriter buff = Files.newBufferedWriter(jsonFilePath, Control.getCharset())) {
+			
+			buff.write(JsonUtils.jsonPrettyPrint(arteFactJson)) ;
+			mLog.fine(() -> "Ecriture du fichier json: " + jsonFilePath);
+
+		} catch (Exception e) {			
+			mLog.log(Level.SEVERE,"Erreur dans l'écriture du fichier json" + jsonFilePath, e) ;
+		}
 	}
 }

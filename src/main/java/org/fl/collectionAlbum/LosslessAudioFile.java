@@ -25,7 +25,10 @@ SOFTWARE.
 package org.fl.collectionAlbum;
 
 import java.nio.file.Path;
+import java.util.Set;
 import java.util.function.BiConsumer;
+
+import com.google.gson.JsonObject;
 
 public class LosslessAudioFile extends AbstractAudioFile {
 
@@ -36,9 +39,9 @@ public class LosslessAudioFile extends AbstractAudioFile {
 	private static final int HIGH_RES_BIT_DEPTH_THRESHOLD = 16;
 	private static final double HIGH_RES_SAMPLING_RATE_THRESHOLD = 48;
 	
-	public LosslessAudioFile(AudioFileType type, String source, int bitDepth, double samplingRate, String note, Path path) {
+	public LosslessAudioFile(JsonObject audioJson, AudioFileType type, String source, int bitDepth, double samplingRate, String note, Set<Path> paths) {
 		
-		super(type, source, samplingRate, note, path);
+		super(audioJson, type, source, samplingRate, note, paths);
 
 		this.bitDepth = bitDepth;
 	}

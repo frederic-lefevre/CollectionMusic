@@ -27,6 +27,7 @@ package org.fl.collectionAlbum;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.net.URI;
+import java.nio.file.Paths;
 
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.Artiste;
@@ -78,14 +79,13 @@ class CollectionAlbumContainerTest {
 	@Test
 	void testAlbumContainer() {
 		
-		Control.initControl();
 		RapportStructuresAndNames.init();
 
 		CollectionAlbumContainer albumsContainer = CollectionAlbumContainer.getEmptyInstance();
 
 		JsonObject jAlbum = JsonParser.parseString(albumStr1).getAsJsonObject();
 		
-		albumsContainer.addAlbum(jAlbum);
+		albumsContainer.addAlbum(jAlbum, Paths.get("dummyPath"));
 		
 		assertThat(albumsContainer.getCollectionAlbumsMusiques().getNombreAlbums()).isEqualTo(1);
 		assertThat(albumsContainer.getCollectionArtistes().getNombreArtistes()).isEqualTo(1);

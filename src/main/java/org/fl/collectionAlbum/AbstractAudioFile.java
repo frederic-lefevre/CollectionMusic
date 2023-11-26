@@ -25,6 +25,9 @@ SOFTWARE.
 package org.fl.collectionAlbum;
 
 import java.nio.file.Path;
+import java.util.Set;
+
+import com.google.gson.JsonObject;
 
 public abstract class AbstractAudioFile extends AbstractMediaFile {
 
@@ -34,17 +37,17 @@ public abstract class AbstractAudioFile extends AbstractMediaFile {
 	private static final String TYPE_TITLE = "Type";
 	private static final String SAMPLING_RATE_TITLE = "Sampling Rate";
 	
-	protected AbstractAudioFile(AudioFileType type, String source, double samplingRate, String note, Path path) {
-		super(source, note, path);
+	protected AbstractAudioFile(JsonObject audioJson, AudioFileType type, String source, double samplingRate, String note, Set<Path> paths) {
+		super(audioJson, source, note, paths);
 		this.type = type;
 		this.samplingRate = samplingRate;
 	}
 	
-	protected AudioFileType getType() {
+	public AudioFileType getType() {
 		return type;
 	}
 
-	protected double getSamplingRate() {
+	public double getSamplingRate() {
 		return samplingRate;
 	}
 	

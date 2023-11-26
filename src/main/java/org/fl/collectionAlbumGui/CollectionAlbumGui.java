@@ -33,6 +33,9 @@ import org.fl.util.swing.ApplicationTabbedPane;
 
 public class CollectionAlbumGui  extends JFrame {
 	
+	public static final int WINDOW_WIDTH  = 1880;
+	public static final int WINDOW_HEIGHT = 1000;
+	
 	private static final long serialVersionUID = 8726429353709418534L;
 
 	public static void main(String[] args) {
@@ -49,12 +52,9 @@ public class CollectionAlbumGui  extends JFrame {
 	}
 		
 	public CollectionAlbumGui() {
-		
-		// init logger and parameters
-		Control.initControl();
    		
    		// init main window
-   		setBounds(50, 50, 1500, 1000);
+   		setBounds(50, 50, WINDOW_WIDTH, WINDOW_HEIGHT);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Collection d'albums") ;
 		

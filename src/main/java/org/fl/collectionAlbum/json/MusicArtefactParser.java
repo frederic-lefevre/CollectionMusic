@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.jsonParsers;
+package org.fl.collectionAlbum.json;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -152,4 +152,11 @@ public class MusicArtefactParser {
 		return ParserHelpers.getArrayAttribute(arteFactJson, JsonMusicProperties.LIENS);
 	}
 
+	public static int getVersion(JsonObject json) {
+		
+		return Optional.ofNullable(json.get(JsonMusicProperties.JSON_VERSION))
+				.map(JsonElement::getAsInt)
+				.orElse(0);
+
+	}
 }

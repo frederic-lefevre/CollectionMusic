@@ -22,15 +22,20 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-
 package org.fl.collectionAlbum;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import org.fl.collectionAlbum.Format.ContentNature;
 import org.fl.util.AdvancedProperties;
 import org.fl.util.RunningContext;
 
@@ -39,20 +44,20 @@ public class Control {
 	private static final String MUSIQUE_DIRECTORY_URI = "file:///C:/FredericPersonnel/Loisirs/musique/";
 	private static final String DEFAULT_PROP_FILE = MUSIQUE_DIRECTORY_URI + "RapportCollection/albumCollection.properties";
 	
-	private final static String musicFileExtension = "json";
+	private static final String MUSIC_FILE_EXTENSION = "json";
 	
-	private static Logger albumLog;	
-	private static Charset charset;
-	private static RunningContext musicRunningContext;	  
-   	private static AdvancedProperties collectionProperties;
-	private static Path collectionDirectoryName;
-	private static Path concertDirectoryName;
-	private static boolean initialized = false;
+	private static Control controlInstance;
+	
+	private Logger albumLog;	
+	private Charset charset;
+	private RunningContext musicRunningContext;	  
+   	private AdvancedProperties collectionProperties;
+	private Path collectionDirectoryName;
+	private Path concertDirectoryName;
+	private Map<ContentNature,Path> mediaFileRootPaths;
+	private List<OsAction> osActions;
    	
 	private Control() {
-	}
-	
-	public static void initControl() {
 		
 		try {
 			// access to properties and logger
@@ -75,57 +80,68 @@ public class Control {
 			collectionDirectoryName = collectionProperties.getPathFromURI("album.rootDir.name");
 			concertDirectoryName 	= collectionProperties.getPathFromURI("concert.rootDir.name");
 			
+			mediaFileRootPaths = new HashMap<>();
+			Stream.of(ContentNature.values())
+				.forEach(contentNature -> 
+					mediaFileRootPaths.put(
+							contentNature, 
+							collectionProperties.getPathFromURI("album." + contentNature.getNom() + "File.rootPath")));
+				
+			String osCmdPropBase = "album.command.";
+			osActions = collectionProperties.getKeysElements("album.command.").stream()
+				.map(prop -> new OsAction(
+						collectionProperties.getProperty(osCmdPropBase + prop + ".title"), 
+						collectionProperties.getProperty(osCmdPropBase + prop + ".cmd")))
+				.collect(Collectors.toList());
+			
 		} catch (URISyntaxException e) {
 			System.out.println("URI syntax exception for property file: " + DEFAULT_PROP_FILE);
 			e.printStackTrace();
 			collectionProperties = null;
 		}
-		initialized = true;
-	}
-
-	public static Logger getAlbumLog() {
-		if (!initialized) {
-			initControl();
-		}
-		return albumLog; 
 	}
 	
-	public static String getMusicfileExtension() { 
-		return musicFileExtension;
+	private static Control getInstance() {
+		if (controlInstance == null) {
+			controlInstance = new Control();
+		}
+		return controlInstance;
+	}
+	
+
+	public static Logger getAlbumLog() {
+		return getInstance().albumLog; 
+	}
+	
+	public static String getMusicfileExtension() {
+		return MUSIC_FILE_EXTENSION;
 	}
 	
 	public static AdvancedProperties getCollectionProperties() { 
-		if (!initialized) {
-			initControl();
-		}
-		return collectionProperties; 
+		return getInstance().collectionProperties; 
 	}
 	
 	public static Charset getCharset() {
-		if (!initialized) {
-			initControl();
-		}
-		return charset; 
+		return getInstance().charset; 
 	}
 	
 	public static RunningContext getMusicRunningContext() {
-		if (!initialized) {
-			initControl();
-		}
-		return musicRunningContext; 
+		return getInstance().musicRunningContext; 
 	}
 	
 	public static Path getCollectionDirectoryName() {
-		if (!initialized) {
-			initControl();
-		}
-		return collectionDirectoryName;	
+		return getInstance().collectionDirectoryName;	
 	}
 	
 	public static Path getConcertDirectoryName() {
-		if (!initialized) {
-			initControl();
-		}
-		return concertDirectoryName;
+		return getInstance().concertDirectoryName;
+	}
+	
+	public static Path getMediaFileRootPath(ContentNature contentNature) {
+		return getInstance().mediaFileRootPaths.get(contentNature);
+	}
+	
+	public static List<OsAction> getOsActions() {
+		return getInstance().osActions;
 	}
 }

@@ -39,6 +39,9 @@ import javax.swing.SwingWorker;
 
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
+import org.fl.collectionAlbum.json.migrator.MusicArtefactMigrator;
+import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
+import org.fl.collectionAlbumGui.AlbumsTableModel;
 import org.fl.collectionAlbumGui.ProgressInformation;
 import org.fl.collectionAlbumGui.ProgressInformationPanel;
 import org.fl.util.json.JsonUtils;
@@ -51,6 +54,7 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 	
 	private CollectionAlbumContainer albumsContainer ;
 	private final ProgressInformationPanel progressPanel;
+	private final AlbumsTableModel albumsTableModel;
 	
 	// Information prefix
 	private final static String ARRET 			= "Arreté" ;
@@ -62,9 +66,10 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 	private final static String CALENDARS 		= "Construction des calendriers" ;
 	private final static String FIN_LECTURE		= "Collection chargée" ;
 	
-	public CollectionAlbums(ProgressInformationPanel pip) {
+	public CollectionAlbums(AlbumsTableModel albumsTableModel, ProgressInformationPanel pip) {
 
-		progressPanel = pip ;
+		progressPanel = pip;
+		this.albumsTableModel = albumsTableModel;
 	}
    	
 	@Override 
@@ -72,6 +77,8 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 
 		progressPanel.setStepInformation("");
 
+		MediaFilesInventories.resetInventories();
+		
 		albumsContainer = CollectionAlbumContainer.getEmptyInstance() ;
 		progressPanel.setStepPrefixInformation(EN_EXAMEN);
 
@@ -87,6 +94,9 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 		progressPanel.setProcessStatus(CALENDARS);
 		buildCalendrier() ;
 		
+		// Sort for display when scanning the collection
+		albumsContainer.getCollectionAlbumsMusiques().sortRangementAlbum();
+				
 		return albumsContainer;
 	}
    	
@@ -112,7 +122,7 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 			MusicFileVisitor concertsVisitor = new ConcertFileVisitor(Control.getMusicfileExtension()) ;
 			
 			Files.walkFileTree(concertsPath, concertsVisitor) ;
-				
+			
 		} catch (Exception e) {
 			albumLog.log(Level.SEVERE, "Exception scanning concert directory " + concertsPath, e);
 		}
@@ -135,7 +145,7 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
     			
 	    		JsonObject arteFactJson = JsonUtils.getJsonObjectFromPath(file, Control.getCharset(), albumLog) ;
 	    		if (arteFactJson != null) {
-	    			addMusicArtefact(arteFactJson) ;
+	    			addMusicArtefact(arteFactJson, file) ;
 	    		} else {
 	    			albumLog.warning("Impossible de lire le fichier json " + file);
 	    		}
@@ -150,15 +160,19 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
     		 return FileVisitResult.CONTINUE;
     	}
 
-    	public abstract void addMusicArtefact(JsonObject artefactJson) ;
+    	public abstract void addMusicArtefact(JsonObject artefactJson, Path jsonFile) ;
     }
     
     private class AlbumFileVisitor extends MusicFileVisitor {
 		protected AlbumFileVisitor(String fileExtension) {	super(fileExtension); }
 
 		@Override
-		public void addMusicArtefact(JsonObject artefactJson) {
-			albumsContainer.addAlbum(artefactJson) ;			
+		public void addMusicArtefact(JsonObject artefactJson, Path jsonFile) {
+			
+			// Migration if needed
+			JsonObject migratedJson = MusicArtefactMigrator.getMigrator().migrateAlbum(artefactJson, jsonFile);
+			
+			albumsContainer.addAlbum(migratedJson, jsonFile) ;			
 		}    	
     }
     
@@ -166,8 +180,8 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 		protected ConcertFileVisitor(String fileExtension) {	super(fileExtension); }
 
 		@Override
-		public void addMusicArtefact(JsonObject artefactJson) {
-			albumsContainer.addConcert(artefactJson) ;			
+		public void addMusicArtefact(JsonObject artefactJson, Path jsonFile) {		
+			albumsContainer.addConcert(artefactJson, jsonFile) ;			
 		}    	
     }
     
@@ -189,6 +203,7 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
     	progressPanel.setStepInformation("");
     	progressPanel.setStepPrefixInformation(ARRET);
     	progressPanel.setProcessStatus(FIN_LECTURE);
+    	albumsTableModel.fireTableDataChanged();
     }
 
     @Override
