@@ -33,6 +33,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -53,6 +55,8 @@ import com.google.gson.JsonObject;
  */
 public class Format {
 
+	private final static Logger albumLog = Control.getAlbumLog();
+	
 	public enum ContentNature { 
 		AUDIO("audio"), 
 		VIDEO("video");
@@ -169,54 +173,62 @@ public class Format {
 	// Supports de l'album et leur nombre correspondant
 	private final EnumMap<Support, Double> tableFormat ;
 	
-	private final List<AbstractAudioFile> audioFiles;
+	private List<AbstractAudioFile> audioFiles;
 	
-	private final List<VideoFile> videoFiles;
+	private List<VideoFile> videoFiles;
 	
 	private boolean hasError;
 
 	// Create a format
 	public Format(JsonObject formatJson) {
 		
-		tableFormat = new EnumMap<Support, Double>(Support.class) ;
+		tableFormat = new EnumMap<Support, Double>(Support.class);
+		
 		if (formatJson != null) {
-			hasError = false;
-			for (Support support : Support.values()) {
-				JsonElement elemFormat = formatJson.get(support.getJsonPropertyName()) ;
-				if (elemFormat != null) {
-					tableFormat.put(support, Double.valueOf(elemFormat.getAsDouble())) ;
+			try {
+						
+				for (Support support : Support.values()) {
+					JsonElement elemFormat = formatJson.get(support.getJsonPropertyName());
+					if (elemFormat != null) {
+						tableFormat.put(support, Double.valueOf(elemFormat.getAsDouble()));
+					}
 				}
+	
+				audioFiles = Optional.ofNullable(formatJson.getAsJsonArray(JsonMusicProperties.AUDIO_FILE))
+						.map(ja -> {
+							List<AbstractAudioFile> audioFileList = new ArrayList<>();
+							ja.forEach(jsonAudioFile -> {
+								AbstractAudioFile audioFile = AudioFileParser.parseAudioFile(jsonAudioFile.getAsJsonObject());
+								if (audioFile != null) {
+									audioFileList.add(audioFile);
+								} else {
+									hasError = true ;
+								}
+							});
+							return audioFileList;
+						})
+						.orElse(new ArrayList<>());
+				
+				videoFiles = Optional.ofNullable(formatJson.getAsJsonArray(JsonMusicProperties.VIDEO_FILE))
+						.map(jv -> {
+							List<VideoFile> videoFileList = new ArrayList<>();
+							jv.forEach(jsonVideoFile -> {
+								VideoFile videoFile = VideoFileParser.parseVideoFile(jsonVideoFile.getAsJsonObject());
+								if (videoFile != null) {
+									videoFileList.add(videoFile);
+								} else {
+									hasError = true ;
+								}
+							});
+							return videoFileList;
+						})
+						.orElse(new ArrayList<>());
+				hasError = false;
+				
+			} catch (Exception e) {
+				hasError = true;
+				albumLog.log(Level.SEVERE, "Exception when parsing album format", e);
 			}
-
-			audioFiles = Optional.ofNullable(formatJson.getAsJsonArray(JsonMusicProperties.AUDIO_FILE))
-					.map(ja -> {
-						List<AbstractAudioFile> audioFileList = new ArrayList<>();
-						ja.forEach(jsonAudioFile -> {
-							AbstractAudioFile audioFile = AudioFileParser.parseAudioFile(jsonAudioFile.getAsJsonObject());
-							if (audioFile != null) {
-								audioFileList.add(audioFile);
-							} else {
-								hasError = true ;
-							}
-						});
-						return audioFileList;
-					})
-					.orElse(new ArrayList<>());
-			
-			videoFiles = Optional.ofNullable(formatJson.getAsJsonArray(JsonMusicProperties.VIDEO_FILE))
-					.map(jv -> {
-						List<VideoFile> videoFileList = new ArrayList<>();
-						jv.forEach(jsonVideoFile -> {
-							VideoFile videoFile = VideoFileParser.parseVideoFile(jsonVideoFile.getAsJsonObject());
-							if (videoFile != null) {
-								videoFileList.add(videoFile);
-							} else {
-								hasError = true ;
-							}
-						});
-						return videoFileList;
-					})
-					.orElse(new ArrayList<>());
 			
 		} else {
 			hasError = true;
