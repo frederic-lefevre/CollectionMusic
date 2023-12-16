@@ -43,7 +43,7 @@ public class MediaFilesTableModel extends AbstractTableModel {
 	
 	public MediaFilesTableModel(MediaFileInventory mediaFileInventory) {
 		super();
-		this.mediaFilePaths = mediaFileInventory.getMediaFilePaths();
+		this.mediaFilePaths = mediaFileInventory.getMediaFilePathList();
 	}
 
 	@Override

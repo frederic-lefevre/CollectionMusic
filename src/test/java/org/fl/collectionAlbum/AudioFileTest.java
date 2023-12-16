@@ -29,6 +29,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.nio.file.Paths;
 
 import org.fl.collectionAlbum.json.AudioFileParser;
+import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.junit.jupiter.api.Test;
 
 import com.google.gson.JsonObject;
@@ -98,7 +99,7 @@ class AudioFileTest {
 		
 		assertThat(losslessAudio.getMediaFilePaths()).isNull();
 		
-		losslessAudio.addMediaFilePath(Paths.get("E:/Musique/a/John Abercrombie/M [24-96]/"));
+		losslessAudio.addMediaFilePath(new MediaFilePath(Paths.get("E:/Musique/a/John Abercrombie/M [24-96]/")));
 		
 		assertThat(losslessAudio.hasMissingOrInvalidMediaFilePath()).isFalse();
 		assertThat(losslessAudio.hasMediaFilePathNotFound()).isFalse();
@@ -106,7 +107,7 @@ class AudioFileTest {
 		assertThat(losslessAudio.getMediaFilePaths())
 			.isNotNull()
 			.singleElement()
-			.satisfies(audioPath -> assertThat(audioPath).hasToString("E:\\Musique\\a\\John Abercrombie\\M [24-96]"));
+			.satisfies(audioPath -> assertThat(audioPath.getPath()).hasToString("E:\\Musique\\a\\John Abercrombie\\M [24-96]"));
 	}
 	
 	@Test
@@ -167,12 +168,11 @@ class AudioFileTest {
 		
 		assertThat(losslessAudio.isHighRes()).isTrue();
 		assertThat(losslessAudio.isLossLess()).isTrue();
-		assertThat(losslessAudio.hasMissingOrInvalidMediaFilePath()).isFalse();
+		assertThat(losslessAudio.hasMissingOrInvalidMediaFilePath()).isTrue();
 		assertThat(losslessAudio.hasMediaFilePathNotFound()).isTrue();
 		
 		assertThat(losslessAudio.getMediaFilePaths())
 			.isNotNull()
-			.singleElement()
-			.satisfies(audioPath -> assertThat(audioPath).hasToString("E:\\Musique\\a\\John Abercrombie\\notFound"));
+			.isEmpty();
 	}
 }

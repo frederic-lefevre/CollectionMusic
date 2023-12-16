@@ -24,7 +24,6 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.json;
 
-import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.Set;
@@ -33,9 +32,11 @@ import java.util.logging.Logger;
 import org.fl.collectionAlbum.AbstractAudioFile;
 import org.fl.collectionAlbum.AudioFileType;
 import org.fl.collectionAlbum.Control;
+import org.fl.collectionAlbum.Format.ContentNature;
 import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.LosslessAudioFile;
 import org.fl.collectionAlbum.LossyAudioFile;
+import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -65,7 +66,7 @@ public class AudioFileParser {
 			
 			String source = AbstractMediaFileParser.parseSource(audioFileJson);
 			String note = AbstractMediaFileParser.parseNote(audioFileJson);
-			Set<Path> audioFileLocations = AbstractMediaFileParser.parseAudioFileLocation(audioFileJson);
+			Set<MediaFilePath> audioFileLocations = AbstractMediaFileParser.parseMediaFileLocation(audioFileJson, ContentNature.AUDIO);
 			
 			if ((type == null) || (source == null) || (samplingRate == null)) {
 				

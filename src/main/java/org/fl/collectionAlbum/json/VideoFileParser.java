@@ -24,16 +24,17 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.json;
 
-import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.Control;
+import org.fl.collectionAlbum.Format.ContentNature;
 import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.VideoFile;
 import org.fl.collectionAlbum.VideoFileType;
+import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -56,7 +57,7 @@ public class VideoFileParser {
 			
 			String source = AbstractMediaFileParser.parseSource(videoFileJson);
 			String note = AbstractMediaFileParser.parseNote(videoFileJson);
-			Set<Path> videoFileLocations = AbstractMediaFileParser.parseAudioFileLocation(videoFileJson);
+			Set<MediaFilePath> videoFileLocations = AbstractMediaFileParser.parseMediaFileLocation(videoFileJson, ContentNature.VIDEO);
 			
 			Integer width = Optional.ofNullable(videoFileJson.get(JsonMusicProperties.VIDEO_WIDTH))
 					.map(JsonElement::getAsInt)

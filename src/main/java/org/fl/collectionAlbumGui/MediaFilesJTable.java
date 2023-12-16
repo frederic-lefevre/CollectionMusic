@@ -32,6 +32,10 @@ public class MediaFilesJTable extends JTable {
 
 	public MediaFilesJTable(MediaFilesTableModel dm) {
 		super(dm);
+		
+		setFillsViewportHeight(true);
+		setAutoCreateRowSorter(true);
+		setAutoResizeMode(JTable.AUTO_RESIZE_OFF) ;
 	}
 
 }

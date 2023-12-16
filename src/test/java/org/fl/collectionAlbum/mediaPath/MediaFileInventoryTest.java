@@ -66,12 +66,12 @@ class MediaFileInventoryTest {
 
 		Album album = new Album(jAlbum, lla, Path.of("dummyPath"));
 		
-		List<Path> potentialPaths = audioFileInventory.getPotentialMediaPath(album);
+		List<MediaFilePath> potentialPaths = audioFileInventory.getPotentialMediaPath(album);
 		
 		assertThat(potentialPaths)
 			.isNotNull()
 			.singleElement()
-			.hasToString("E:\\Musique\\e\\Bill Evans\\Portrait In Jazz");
+			.satisfies(audioPath -> assertThat(audioPath.getPath()).hasToString("E:\\Musique\\e\\Bill Evans\\Portrait In Jazz"));
 	}
 
 	@Test
@@ -116,19 +116,19 @@ class MediaFileInventoryTest {
 
 		Album album = new Album(jAlbum, lla, Path.of("dummyPath"));
 		
-		List<Path> potentialAudioPaths = audioFileInventory.getPotentialMediaPath(album);
+		List<MediaFilePath> potentialAudioPaths = audioFileInventory.getPotentialMediaPath(album);
 		
 		assertThat(potentialAudioPaths)
 			.isNotNull()
 			.hasSize(2)
-			.allMatch(audioPath -> audioPath.toString().contains("A Bigger Bang, Live On Copacabana Beach"));
+			.allMatch(audioPath -> audioPath.getPath().toString().contains("A Bigger Bang, Live On Copacabana Beach"));
 		
-		List<Path> potentialVideoPaths = videoFileInventory.getPotentialMediaPath(album);
+		List<MediaFilePath> potentialVideoPaths = videoFileInventory.getPotentialMediaPath(album);
 		
 		assertThat(potentialVideoPaths)
 			.isNotNull()
 			.singleElement()
-			.matches(audioPath -> audioPath.toString().contains("A Bigger Bang"));
+			.matches(audioPath -> audioPath.getPath().toString().contains("A Bigger Bang"));
 	}
 	
 	@Test

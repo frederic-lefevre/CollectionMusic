@@ -42,6 +42,7 @@ import org.fl.collectionAlbum.LosslessAudioFile;
 import org.fl.collectionAlbum.Format.ContentNature;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
+import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.fl.util.json.JsonUtils;
 import org.junit.jupiter.api.Test;
 
@@ -125,14 +126,14 @@ class AlbumTest {
 
 		// Add the audio file path
 		AbstractAudioFile audioFile = audioFiles.get(0);
-		audioFile.addMediaFilePath(Paths.get("E:/Musique/e/Bill Evans/Waltz for Debby/"));
+		audioFile.addMediaFilePath(new MediaFilePath(Paths.get("E:/Musique/e/Bill Evans/Waltz for Debby/")));
 		
 		assertThat(album.getFormatAlbum().getAudioFiles()).singleElement().satisfies(audio -> {
 			assertThat(audio.hasMissingOrInvalidMediaFilePath()).isFalse();
 			assertThat(audio.getMediaFilePaths())
 				.isNotNull()
 				.singleElement()
-				.satisfies(audioPath -> assertThat(audioPath).hasToString("E:\\Musique\\e\\Bill Evans\\Waltz for Debby"));
+				.satisfies(audioPath -> assertThat(audioPath.getPath()).hasToString("E:\\Musique\\e\\Bill Evans\\Waltz for Debby"));
 		});
 
 		// Get the json from the album (should be modified with the path)
@@ -166,19 +167,19 @@ class AlbumTest {
 				assertThat(audio.getMediaFilePaths())
 					.isNotNull()
 					.singleElement()
-					.satisfies(audioPath -> assertThat(audioPath).hasToString("E:\\Musique\\e\\Bill Evans\\Waltz for Debby"));
+					.satisfies(audioPath -> assertThat(audioPath.getPath()).hasToString("E:\\Musique\\e\\Bill Evans\\Waltz for Debby"));
 			});
 		
 		// Fix the audio file path
 		AbstractAudioFile audioFile2 = album2.getFormatAlbum().getAudioFiles().get(0);
-		audioFile2.setMediaFilePath(Set.of(Paths.get("E:/Musique/e/Bill Evans/Portrait In Jazz/")));
+		audioFile2.setMediaFilePath(Set.of(new MediaFilePath(Paths.get("E:/Musique/e/Bill Evans/Portrait In Jazz/"))));
 		
 		assertThat(album2.getFormatAlbum().getAudioFiles()).singleElement().satisfies(audio -> {
 			assertThat(audio.hasMissingOrInvalidMediaFilePath()).isFalse();
 			assertThat(audio.getMediaFilePaths())
 				.isNotNull()
 				.singleElement()
-				.satisfies(audioPath -> assertThat(audioPath).hasToString("E:\\Musique\\e\\Bill Evans\\Portrait In Jazz"));
+				.satisfies(audioPath -> assertThat(audioPath.getPath()).hasToString("E:\\Musique\\e\\Bill Evans\\Portrait In Jazz"));
 		});
 		
 		// Get the json from the album (should be modified with the fixed path)
@@ -214,7 +215,7 @@ class AlbumTest {
 				assertThat(audio.getMediaFilePaths())
 					.isNotNull()
 					.singleElement()
-					.satisfies(audioPath -> assertThat(audioPath).hasToString("E:\\Musique\\e\\Bill Evans\\Portrait In Jazz"));
+					.satisfies(audioPath -> assertThat(audioPath.getPath()).hasToString("E:\\Musique\\e\\Bill Evans\\Portrait In Jazz"));
 			});
 		
 		try {
@@ -255,7 +256,7 @@ class AlbumTest {
 				assertThat(audio.getMediaFilePaths())
 					.isNotNull()
 					.singleElement()
-					.satisfies(audioPath -> assertThat(audioPath).hasToString("E:\\Musique\\e\\Bill Evans\\Portrait In Jazz"));
+					.satisfies(audioPath -> assertThat(audioPath.getPath()).hasToString("E:\\Musique\\e\\Bill Evans\\Portrait In Jazz"));
 			});
 		
 	}
@@ -271,10 +272,10 @@ class AlbumTest {
 
 		Album album = new Album(jAlbum, lla, Path.of("dummyPath"));
 
-		List<Path> potentialPaths = album.searchPotentialMediaFilesPaths(ContentNature.AUDIO);
+		List<MediaFilePath> potentialPaths = album.searchPotentialMediaFilesPaths(ContentNature.AUDIO);
 
 		assertThat(potentialPaths).isNotNull().singleElement()
-				.hasToString("E:\\Musique\\e\\Bill Evans\\Portrait In Jazz");
+			.satisfies(mediaFilePath -> assertThat(mediaFilePath.getPath()).hasToString("E:\\Musique\\e\\Bill Evans\\Portrait In Jazz"));
 	}
 	
 	private static final String albumStr2 = """
@@ -314,10 +315,10 @@ class AlbumTest {
 
 		Album album = new Album(jAlbum, lla, Path.of("dummyPath"));
 
-		List<Path> potentialPaths = album.searchPotentialMediaFilesPaths(ContentNature.AUDIO);
+		List<MediaFilePath> potentialPaths = album.searchPotentialMediaFilesPaths(ContentNature.AUDIO);
 
 		assertThat(potentialPaths).isNotNull().singleElement()
-				.hasToString("E:\\Musique\\v\\Van Halen\\Van Halen [24 - 192]");
+		.satisfies(mediaFilePath -> assertThat(mediaFilePath.getPath()).hasToString("E:\\Musique\\v\\Van Halen\\Van Halen [24 - 192]"));
 	}
 	
 	private void testAlbumProperties(Album album, ListeArtiste la) {
