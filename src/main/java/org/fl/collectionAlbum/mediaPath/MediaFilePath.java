@@ -24,35 +24,17 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.mediaPath;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.stream.Stream;
+import java.nio.file.Path;
 
-import org.fl.collectionAlbum.Control;
-import org.fl.collectionAlbum.Format.ContentNature;
+public class MediaFilePath {
 
-public class MediaFilesInventories {
-
-	private static MediaFilesInventories instance;
+	private final Path mediaFilesPath;
 	
-	private final Map<ContentNature,MediaFileInventory> mediaFilesInventories;
-
-	private MediaFilesInventories() {
-   		
-		mediaFilesInventories = new LinkedHashMap<>();
-		Stream.of(ContentNature.values()).forEach(contentNature -> {
-			mediaFilesInventories.put(contentNature, new MediaFileInventory(Control.getMediaFileRootPath(contentNature)));
-		});
+	public MediaFilePath(Path mediaFilesPath) {
+		this.mediaFilesPath = mediaFilesPath;
 	}
 
-	public static MediaFileInventory getMediaFileInventory(ContentNature contentNature) {
-		if (instance == null) {
-			instance = new MediaFilesInventories();
-		}
-		return instance.mediaFilesInventories.get(contentNature);
-	}
-
-	public static void resetInventories() {
-		instance = null;
+	public Path getPath() {
+		return mediaFilesPath;
 	}
 }

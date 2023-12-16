@@ -30,8 +30,8 @@ import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -54,13 +54,13 @@ public class MediaFileInventory {
 		Set.of("flac", "mp3", "wma", "aiff", "FLAC", "MP3", "m4a",
 				"m2ts", "mkv", "mpls", "VOB", "wav", "m4v", "mp4");
 	
-	private final Map<String,Path> mediaFilePathInventory;
+	private final LinkedHashMap<String,MediaFilePath> mediaFilePathInventory;
 	
 	public static final Set<String> extensionSet = new HashSet<>();
 	
 	protected MediaFileInventory(Path rootPath) {
 		
-		mediaFilePathInventory = new HashMap<>();
+		mediaFilePathInventory = new LinkedHashMap<>();
 		
 		try {
 			MediaFileVisitor mediaFileVisitor = new MediaFileVisitor();
@@ -87,7 +87,7 @@ public class MediaFileInventory {
     			String inventoryKey = getInventoryKey(artistFolder, albumFolder);
     			
     			if (! mediaFilePathInventory.containsKey(inventoryKey)) {
-    				mediaFilePathInventory.put(inventoryKey, albumAbsolutePath);
+    				mediaFilePathInventory.put(inventoryKey, new MediaFilePath(albumAbsolutePath));
     			}
     			return FileVisitResult.SKIP_SUBTREE;
     		} else {
@@ -105,7 +105,7 @@ public class MediaFileInventory {
 		String title = album.getTitre().toLowerCase();
 		List<Artiste> auteurs = album.getAuteurs();
 		
-		Map<String,Path> potentialMediaPath = mediaFilePathInventory.entrySet().stream()
+		Map<String,MediaFilePath> potentialMediaPath = mediaFilePathInventory.entrySet().stream()
 			.filter(inventoryEntry -> inventoryEntry.getKey().contains(title))
 			.filter(inventoryEntry -> 
 				(auteurs.isEmpty() ||
@@ -115,20 +115,33 @@ public class MediaFileInventory {
 			.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
 		if (potentialMediaPath.size() > 1) {
-			Map<String,Path> potentialMediaPath2 = potentialMediaPath.entrySet().stream()
+			List<Path> potentialMediaPath2 = potentialMediaPath.entrySet().stream()
 				.filter(inventoryEntry -> auteurs.stream()
 						.map(auteur -> auteur.getNomComplet())
 						.anyMatch(auteurName -> inventoryEntry.getKey().contains(getInventoryKey(auteurName, title))))
-			.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+				.map(inventoryEntry -> inventoryEntry.getValue().getPath())
+				.collect(Collectors.toList());
 			
 			if (potentialMediaPath2.isEmpty()) {
-				return new ArrayList<>(potentialMediaPath.values());
+				return potentialMediaPath.values().stream()
+						.map(inventoryPath -> inventoryPath.getPath())
+						.collect(Collectors.toList());
 			} else {
-				return new ArrayList<>(potentialMediaPath2.values());
+				return potentialMediaPath2;
 			}
 		} else {
-			return new ArrayList<>(potentialMediaPath.values());
+			return potentialMediaPath.values().stream()
+					.map(inventoryPath -> inventoryPath.getPath())
+					.collect(Collectors.toList());
 		}
+	}
+	
+	public int getNbMediaPath() {
+		return mediaFilePathInventory.size();
+	}
+	
+	public List<MediaFilePath> getMediaFilePaths() {
+		return new ArrayList<MediaFilePath>(mediaFilePathInventory.values());
 	}
 	
 	protected static boolean isMediaFileName(Path file) {

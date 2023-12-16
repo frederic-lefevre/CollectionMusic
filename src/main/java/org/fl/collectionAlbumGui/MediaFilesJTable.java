@@ -22,37 +22,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.mediaPath;
+package org.fl.collectionAlbumGui;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.stream.Stream;
+import javax.swing.JTable;
 
-import org.fl.collectionAlbum.Control;
-import org.fl.collectionAlbum.Format.ContentNature;
+public class MediaFilesJTable extends JTable {
 
-public class MediaFilesInventories {
+	private static final long serialVersionUID = 1L;
 
-	private static MediaFilesInventories instance;
-	
-	private final Map<ContentNature,MediaFileInventory> mediaFilesInventories;
-
-	private MediaFilesInventories() {
-   		
-		mediaFilesInventories = new LinkedHashMap<>();
-		Stream.of(ContentNature.values()).forEach(contentNature -> {
-			mediaFilesInventories.put(contentNature, new MediaFileInventory(Control.getMediaFileRootPath(contentNature)));
-		});
+	public MediaFilesJTable(MediaFilesTableModel dm) {
+		super(dm);
 	}
 
-	public static MediaFileInventory getMediaFileInventory(ContentNature contentNature) {
-		if (instance == null) {
-			instance = new MediaFilesInventories();
-		}
-		return instance.mediaFilesInventories.get(contentNature);
-	}
-
-	public static void resetInventories() {
-		instance = null;
-	}
 }
