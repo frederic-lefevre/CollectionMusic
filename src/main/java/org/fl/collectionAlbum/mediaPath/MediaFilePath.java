@@ -25,16 +25,31 @@ SOFTWARE.
 package org.fl.collectionAlbum.mediaPath;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.fl.collectionAlbum.albums.Album;
 
 public class MediaFilePath {
 
 	private final Path mediaFilesPath;
 	
+	private final List<Album> albumsList;
+	
 	public MediaFilePath(Path mediaFilesPath) {
 		this.mediaFilesPath = mediaFilesPath;
+		albumsList = new ArrayList<>();
 	}
 
 	public Path getPath() {
 		return mediaFilesPath;
+	}
+	
+	public void addAlbum(Album album) {
+		albumsList.add(album);
+	}
+	
+	public List<Album> getAlbumList() {
+		return albumsList;
 	}
 }

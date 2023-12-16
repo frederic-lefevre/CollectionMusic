@@ -141,7 +141,7 @@ public class MediaFileInventory {
 	}
 	
 	public List<MediaFilePath> getMediaFilePaths() {
-		return new ArrayList<MediaFilePath>(mediaFilePathInventory.values());
+		return new ArrayList<>(mediaFilePathInventory.values());
 	}
 	
 	protected static boolean isMediaFileName(Path file) {
