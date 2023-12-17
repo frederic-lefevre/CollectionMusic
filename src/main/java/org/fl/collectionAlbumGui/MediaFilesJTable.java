@@ -24,14 +24,21 @@ SOFTWARE.
 
 package org.fl.collectionAlbumGui;
 
+import java.util.logging.Logger;
+
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+
+import org.fl.collectionAlbum.Control;
+import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
 public class MediaFilesJTable extends JTable {
 
 	private static final long serialVersionUID = 1L;
 
+	private static final Logger tLog = Control.getAlbumLog();
+	
 	public MediaFilesJTable(MediaFilesTableModel dm) {
 		super(dm);
 		
@@ -48,4 +55,14 @@ public class MediaFilesJTable extends JTable {
 		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 	}
 
+	public MediaFilePath getSelectedMediaFile() {
+		
+		int[] rowIdxs = getSelectedRows();
+		if (rowIdxs.length == 0) {
+			return null;
+		} else if (rowIdxs.length > 1) {
+			tLog.severe("Found several selected rows for MediaFilesJTable. Number of selected rows: " + rowIdxs.length);
+		}
+		return ((MediaFilesTableModel)getModel()).getMediaFileAt(convertRowIndexToModel(rowIdxs[0]));
+	}
 }

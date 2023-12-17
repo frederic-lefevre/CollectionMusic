@@ -79,4 +79,7 @@ public class MediaFilesTableModel extends AbstractTableModel {
 		};
 	}
 
+	public MediaFilePath getMediaFileAt(int rowIndex) {
+		return mediaFilePaths.get(rowIndex);
+	}
 }
