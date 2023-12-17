@@ -35,7 +35,9 @@ public class MediaFilesJTable extends JTable {
 		
 		setFillsViewportHeight(true);
 		setAutoCreateRowSorter(true);
-		setAutoResizeMode(JTable.AUTO_RESIZE_OFF) ;
+		
+		getColumnModel().getColumn(MediaFilesTableModel.PATH_COL_IDX).setPreferredWidth(700);
+		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 	}
 
 }
