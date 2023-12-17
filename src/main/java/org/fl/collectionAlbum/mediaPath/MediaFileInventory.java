@@ -163,6 +163,7 @@ public class MediaFileInventory {
 		Optional<MediaFilePath> firstLevelMediaFile = findFirstMediaFilePath(path);
 		
 		if (firstLevelMediaFile.isEmpty()) {
+			// Search sub folders
 			try (Stream<Path> stream = Files.list(path)) {
 				if (stream.anyMatch(subPath -> findFirstMediaFilePath(subPath).isPresent())) {
 					return addMediaFilePathToInventory(path);

@@ -24,7 +24,9 @@ SOFTWARE.
 
 package org.fl.collectionAlbumGui;
 
+import javax.swing.DefaultListSelectionModel;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 
 public class MediaFilesJTable extends JTable {
 
@@ -37,6 +39,12 @@ public class MediaFilesJTable extends JTable {
 		setAutoCreateRowSorter(true);
 		
 		getColumnModel().getColumn(MediaFilesTableModel.PATH_COL_IDX).setPreferredWidth(700);
+		
+		// Allow single row selection only
+		ListSelectionModel listSelectionModel = new DefaultListSelectionModel();
+		listSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		setSelectionModel(listSelectionModel);
+		
 		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 	}
 
