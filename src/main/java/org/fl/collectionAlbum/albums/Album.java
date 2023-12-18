@@ -26,6 +26,7 @@ package org.fl.collectionAlbum.albums;
 
 import java.nio.file.Path;
 import java.time.temporal.TemporalAccessor;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,7 +71,7 @@ public class Album extends MusicArtefact {
 
 		potentialMediaFilesPath = new HashMap<>();
 		Stream.of(ContentNature.values())
-			.forEach(contentNature -> potentialMediaFilesPath.put(contentNature, null));
+			.forEach(contentNature -> potentialMediaFilesPath.put(contentNature, new ArrayList<>()));
 		
 		titre = AlbumParser.getAlbumTitre(albumJson);
 		formatAlbum = AlbumParser.getFormatAlbum(albumJson);
