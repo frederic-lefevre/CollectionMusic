@@ -26,7 +26,6 @@ package org.fl.collectionAlbum.albums;
 
 import java.nio.file.Path;
 import java.time.temporal.TemporalAccessor;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -71,7 +70,7 @@ public class Album extends MusicArtefact {
 
 		potentialMediaFilesPath = new HashMap<>();
 		Stream.of(ContentNature.values())
-			.forEach(contentNature -> potentialMediaFilesPath.put(contentNature, new ArrayList<>()));
+			.forEach(contentNature -> potentialMediaFilesPath.put(contentNature, null));
 		
 		titre = AlbumParser.getAlbumTitre(albumJson);
 		formatAlbum = AlbumParser.getFormatAlbum(albumJson);
@@ -192,9 +191,20 @@ public class Album extends MusicArtefact {
 	}
 	
 	public List<Path> getPotentialMediaFilesPaths(ContentNature contentNature) {
-		return potentialMediaFilesPath.get(contentNature).stream()
-				.map(mediaFilePath -> mediaFilePath.getPath())
-				.collect(Collectors.toList());
+		
+		if (potentialMediaFilesPath == null) {
+			return null;
+		}
+		
+		List<MediaFilePath> mediaPaths = potentialMediaFilesPath.get(contentNature);
+		if (mediaPaths == null) {
+			return null;
+		} else {
+			return mediaPaths.stream()
+					.map(mediaFilePath -> mediaFilePath.getPath())
+					.collect(Collectors.toList());
+		}
+		
 	}
 	
 	public List<MediaFilePath> searchPotentialMediaFilesPaths(ContentNature contentNature) {
