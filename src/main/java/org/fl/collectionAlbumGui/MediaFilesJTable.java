@@ -53,6 +53,8 @@ public class MediaFilesJTable extends JTable {
 		setSelectionModel(listSelectionModel);
 		
 		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		
+		addMouseListener(new MediaFileMouseAdapter(this));
 	}
 
 	public MediaFilePath getSelectedMediaFile() {
