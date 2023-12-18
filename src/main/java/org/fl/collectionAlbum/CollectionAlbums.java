@@ -77,7 +77,7 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 
 		progressPanel.setStepInformation("");
 
-		MediaFilesInventories.resetInventories();
+		MediaFilesInventories.rebuildInventories();
 		
 		albumsContainer = CollectionAlbumContainer.getEmptyInstance() ;
 		progressPanel.setStepPrefixInformation(EN_EXAMEN);

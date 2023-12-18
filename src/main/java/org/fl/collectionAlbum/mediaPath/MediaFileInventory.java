@@ -56,6 +56,8 @@ public class MediaFileInventory {
 		Set.of("flac", "mp3", "wma", "aiff", "FLAC", "MP3", "m4a",
 				"m2ts", "mkv", "mpls", "VOB", "wav", "m4v", "mp4", "bdmv");
 	
+	private final Path rootPath;
+	
 	private final LinkedHashMap<String,MediaFilePath> mediaFilePathInventory;
 	
 	// MediaFilePath values maintained as List to be displayed in a JTable
@@ -65,9 +67,14 @@ public class MediaFileInventory {
 	
 	protected MediaFileInventory(Path rootPath) {
 		
+		this.rootPath = rootPath;
 		mediaFilePathInventory = new LinkedHashMap<>();
 		mediaFilePathList = new ArrayList<>();
 		
+		buildInventory();
+	}
+
+	public void buildInventory() {
 		try {
 			MediaFileVisitor mediaFileVisitor = new MediaFileVisitor();
 			Files.walkFileTree(rootPath, mediaFileVisitor);
@@ -75,7 +82,7 @@ public class MediaFileInventory {
 			albumLog.log(Level.SEVERE, "Exception scanning media directory " + rootPath, e);
 		}
 	}
-
+	
 	private class MediaFileVisitor extends SimpleFileVisitor<Path> {
 		
     	@Override

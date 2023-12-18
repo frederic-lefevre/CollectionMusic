@@ -52,7 +52,9 @@ public class MediaFilesInventories {
 		return instance.mediaFilesInventories.get(contentNature);
 	}
 
-	public static void resetInventories() {
-		instance = null;
+	public static void rebuildInventories() {
+		if (instance != null) {
+			instance.mediaFilesInventories.values().forEach(MediaFileInventory::buildInventory);
+		}
 	}
 }

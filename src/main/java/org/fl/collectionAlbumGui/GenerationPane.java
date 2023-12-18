@@ -113,8 +113,6 @@ public class GenerationPane extends JPanel {
 			collectionTabPanes.add(mediaFilesPane, contentNature.getNom());
 		});
 		
-		
-		
 		add(collectionTabPanes);
 	}
 
