@@ -46,6 +46,7 @@ public class MediaFilesJTable extends JTable {
 		setAutoCreateRowSorter(true);
 		
 		getColumnModel().getColumn(MediaFilesTableModel.PATH_COL_IDX).setPreferredWidth(700);
+		getColumnModel().getColumn(MediaFilesTableModel.ALBUMS_COL_IDX).setPreferredWidth(500);
 		
 		// Allow single row selection only
 		ListSelectionModel listSelectionModel = new DefaultListSelectionModel();

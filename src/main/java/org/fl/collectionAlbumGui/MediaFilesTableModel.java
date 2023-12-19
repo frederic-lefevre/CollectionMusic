@@ -36,8 +36,9 @@ public class MediaFilesTableModel extends AbstractTableModel {
 	private static final long serialVersionUID = 1L;
 
 	public final static int PATH_COL_IDX = 0;
+	public final static int ALBUMS_COL_IDX = 1;
 	
-	private final static String[] entetes = {"Chemins"};
+	private final static String[] entetes = {"Chemins", "Albums"};
 	
 	private final List<MediaFilePath> mediaFilePaths;
 	
@@ -75,6 +76,7 @@ public class MediaFilesTableModel extends AbstractTableModel {
 
 		return switch(columnIndex){
 			case PATH_COL_IDX -> mediaFilePaths.get(rowIndex).getPath().toString();
+			case ALBUMS_COL_IDX -> mediaFilePaths.get(rowIndex).getAlbumList();
 			default -> null;
 		};
 	}
