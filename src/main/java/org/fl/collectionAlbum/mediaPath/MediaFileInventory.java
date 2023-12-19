@@ -76,6 +76,8 @@ public class MediaFileInventory {
 
 	public void buildInventory() {
 		try {
+			mediaFilePathList.clear();
+			mediaFilePathInventory.clear();
 			MediaFileVisitor mediaFileVisitor = new MediaFileVisitor();
 			Files.walkFileTree(rootPath, mediaFileVisitor);
 		} catch (Exception e) {
