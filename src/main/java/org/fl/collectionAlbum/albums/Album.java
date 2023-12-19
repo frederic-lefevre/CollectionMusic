@@ -137,11 +137,11 @@ public class Album extends MusicArtefact {
     }
     
     public boolean hasAudioFiles() {
-    	return formatAlbum.hasAudioFiles();
+    	return formatAlbum.hasMediaFiles(ContentNature.AUDIO);
     }
     
     public boolean hasVideoFiles() {
-    	return formatAlbum.hasVideoFiles();
+    	return formatAlbum.hasMediaFiles(ContentNature.VIDEO);
     }
     
     public RangementSupportPhysique getRangement() {

@@ -146,9 +146,9 @@ public abstract class AbstractMediaFile {
 			mediaFilePaths.forEach(mediaFilePath -> {
 				mediaFilesDetails.append(separator)
 				.append(FILE_LINK1)
-				.append(mediaFilePath)
+				.append(mediaFilePath.getPath())
 				.append(FILE_LINK2)
-				.append(mediaFilePath)
+				.append(mediaFilePath.getPath())
 				.append(FILE_LINK3);
 			});
 		}

@@ -28,6 +28,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 
+import org.assertj.core.api.InstanceOfAssertFactories;
+import org.fl.collectionAlbum.Format.ContentNature;
 import org.junit.jupiter.api.Test;
 
 import com.google.gson.JsonObject;
@@ -54,8 +56,8 @@ class FormatTest {
 		Format format1 = new Format(jf1) ;
 
 		assertThat(format1.getPoids()).isEqualTo(3);
-		assertThat(format1.hasAudioFiles()).isFalse();
-		assertThat(format1.hasVideoFiles()).isFalse();
+		assertThat(format1.hasMediaFiles(ContentNature.AUDIO)).isFalse();
+		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isFalse();
 
 	}
 	
@@ -68,9 +70,9 @@ class FormatTest {
 		
 		assertThat(format1.getPoids()).isEqualTo(2.5);
 		assertThat(format1.getAudioFiles()).isEmpty();
-		assertThat(format1.getVideoFiles()).isEmpty();
-		assertThat(format1.hasAudioFiles()).isFalse();
-		assertThat(format1.hasVideoFiles()).isFalse();
+		assertThat(format1.getMediaFiles(ContentNature.VIDEO)).isEmpty();
+		assertThat(format1.hasMediaFiles(ContentNature.AUDIO)).isFalse();
+		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isFalse();
 	}
 	
 	@Test
@@ -94,10 +96,10 @@ class FormatTest {
 		assertThat(format3.getPoids()).isEqualTo(format1.getPoids() + format2.getPoids());
 		
 		assertThat(format3.hasError()).isTrue();
-		assertThat(format3.hasAudioFiles()).isFalse();
+		assertThat(format3.hasMediaFiles(ContentNature.AUDIO)).isFalse();
 		assertThat(format3.getAudioFiles()).isNull();
-		assertThat(format3.hasVideoFiles()).isFalse();
-		assertThat(format3.getVideoFiles()).isNull();
+		assertThat(format3.hasMediaFiles(ContentNature.VIDEO)).isFalse();
+		assertThat(format3.getMediaFiles(ContentNature.VIDEO)).isNull();
 	}
 	
 	@Test
@@ -118,9 +120,9 @@ class FormatTest {
 		Format format1 = new Format(jf1) ;
 		
 		assertThat(format1.getPoids()).isEqualTo(2.5);
-		assertThat(format1.hasAudioFiles()).isTrue();
-		assertThat(format1.hasVideoFiles()).isFalse();
-		assertThat(format1.getVideoFiles()).isEmpty();
+		assertThat(format1.hasMediaFiles(ContentNature.AUDIO)).isTrue();
+		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isFalse();
+		assertThat(format1.getMediaFiles(ContentNature.VIDEO)).isEmpty();
 		
 		assertThat(format1.getAudioFiles()).singleElement()
 			.satisfies(audio -> {
@@ -153,9 +155,9 @@ class FormatTest {
 		Format format1 = new Format(jf1) ;
 		
 		assertThat(format1.getPoids()).isEqualTo(2.5);
-		assertThat(format1.hasAudioFiles()).isTrue();
-		assertThat(format1.hasVideoFiles()).isFalse();
-		assertThat(format1.getVideoFiles()).isEmpty();
+		assertThat(format1.hasMediaFiles(ContentNature.AUDIO)).isTrue();
+		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isFalse();
+		assertThat(format1.getMediaFiles(ContentNature.VIDEO)).isEmpty();
 
 		assertThat(format1.getAudioFiles()).singleElement()
 			.satisfies(audio -> {
@@ -194,9 +196,9 @@ class FormatTest {
 		Format format1 = new Format(jf1) ;
 		
 		assertThat(format1.getPoids()).isEqualTo(2.5);
-		assertThat(format1.hasAudioFiles()).isTrue();
-		assertThat(format1.hasVideoFiles()).isFalse();
-		assertThat(format1.getVideoFiles()).isEmpty();
+		assertThat(format1.hasMediaFiles(ContentNature.AUDIO)).isTrue();
+		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isFalse();
+		assertThat(format1.getMediaFiles(ContentNature.VIDEO)).isEmpty();
 
 		assertThat(format1.getAudioFiles()).hasSize(2)
 			.anySatisfy(audio -> {
@@ -253,8 +255,8 @@ class FormatTest {
 		Format format1 = new Format(jf1) ;
 		
 		assertThat(format1.getPoids()).isEqualTo(2.5);
-		assertThat(format1.hasAudioFiles()).isTrue();
-		assertThat(format1.hasVideoFiles()).isTrue();
+		assertThat(format1.hasMediaFiles(ContentNature.AUDIO)).isTrue();
+		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isTrue();
 
 		assertThat(format1.getAudioFiles()).singleElement()
 			.satisfies(audio -> {
@@ -267,7 +269,8 @@ class FormatTest {
 				assertThat(lossLessAudio.getSource()).isEqualTo("MOFI Fidelity Sound Lab");
 			});
 		
-		assertThat(format1.getVideoFiles()).singleElement()
+		assertThat(format1.getMediaFiles(ContentNature.VIDEO)).singleElement()
+			.asInstanceOf(InstanceOfAssertFactories.type(VideoFile.class))
 			.satisfies(videoFile -> {
 				assertThat(videoFile.getHeight()).isEqualTo(480);
 				assertThat(videoFile.getWidth()).isEqualTo(720);
@@ -301,10 +304,11 @@ class FormatTest {
 		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
 		Format format1 = new Format(jf1) ;
 
-		assertThat(format1.hasAudioFiles()).isFalse();
-		assertThat(format1.hasVideoFiles()).isTrue();
+		assertThat(format1.hasMediaFiles(ContentNature.AUDIO)).isFalse();
+		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isTrue();
 		
-		assertThat(format1.getVideoFiles()).hasSize(2)
+		assertThat(format1.getMediaFiles(ContentNature.VIDEO)).hasSize(2)
+			.asInstanceOf(InstanceOfAssertFactories.list(VideoFile.class))
 			.anySatisfy(videoFile -> {
 				assertThat(videoFile.getHeight()).isEqualTo(1024);
 				assertThat(videoFile.getWidth()).isEqualTo(1920);

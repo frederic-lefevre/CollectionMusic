@@ -45,6 +45,10 @@ public class AudioFileParser extends AbstractMediaFileParser {
 
 	private final static Logger albumLog = Control.getAlbumLog();
 	
+	public AudioFileParser() {
+		super();
+	}
+
 	private static AudioFileType findType(String type) {
 		
 		return Arrays.stream(AudioFileType.values())

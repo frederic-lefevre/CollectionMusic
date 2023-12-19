@@ -43,6 +43,10 @@ public class VideoFileParser extends AbstractMediaFileParser {
 
 	private final static Logger rapportLog = Control.getAlbumLog();
 	
+	public VideoFileParser() {
+		super();
+	}
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public VideoFile parseMediaFile(JsonObject videoFileJson) {

@@ -36,7 +36,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import org.assertj.core.api.InstanceOfAssertFactories;
 import org.fl.collectionAlbum.AbstractAudioFile;
+import org.fl.collectionAlbum.AbstractMediaFile;
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.LosslessAudioFile;
 import org.fl.collectionAlbum.Format.ContentNature;
@@ -107,9 +109,10 @@ class AlbumTest {
 		assertThat(album.hasMissingOrInvalidMediaFilePath(ContentNature.AUDIO)).isTrue();
 		assertThat(album.hasMediaFilePathNotFound(ContentNature.AUDIO)).isTrue();
 		
-		List<AbstractAudioFile> audioFiles = album.getFormatAlbum().getAudioFiles();
+		List<? extends AbstractMediaFile> audioFiles = album.getFormatAlbum().getMediaFiles(ContentNature.AUDIO);
 		assertThat(audioFiles).isNotNull()
 			.singleElement()
+			.asInstanceOf(InstanceOfAssertFactories.type(AbstractAudioFile.class))
 			.satisfies(audio -> {
 				assertThat(audio.hasMissingOrInvalidMediaFilePath()).isTrue();
 				assertThat(audio.isLossLess()).isTrue();
@@ -125,7 +128,7 @@ class AlbumTest {
 			});
 
 		// Add the audio file path
-		AbstractAudioFile audioFile = audioFiles.get(0);
+		AbstractAudioFile audioFile = (AbstractAudioFile) audioFiles.get(0);
 		audioFile.addMediaFilePath(new MediaFilePath(Paths.get("E:/Musique/e/Bill Evans/Waltz for Debby/")));
 		
 		assertThat(album.getFormatAlbum().getAudioFiles()).singleElement().satisfies(audio -> {
@@ -153,6 +156,7 @@ class AlbumTest {
 		
 		assertThat(album2.getFormatAlbum().getAudioFiles()).isNotNull()
 			.singleElement()
+			.asInstanceOf(InstanceOfAssertFactories.type(AbstractAudioFile.class))
 			.satisfies(audio -> {
 				assertThat(audio.hasMissingOrInvalidMediaFilePath()).isFalse();
 				assertThat(audio.isLossLess()).isTrue();
@@ -171,7 +175,7 @@ class AlbumTest {
 			});
 		
 		// Fix the audio file path
-		AbstractAudioFile audioFile2 = album2.getFormatAlbum().getAudioFiles().get(0);
+		AbstractAudioFile audioFile2 = (AbstractAudioFile) album2.getFormatAlbum().getMediaFiles(ContentNature.AUDIO).get(0);
 		audioFile2.setMediaFilePath(Set.of(new MediaFilePath(Paths.get("E:/Musique/e/Bill Evans/Portrait In Jazz/"))));
 		
 		assertThat(album2.getFormatAlbum().getAudioFiles()).singleElement().satisfies(audio -> {
@@ -201,6 +205,7 @@ class AlbumTest {
 		
 		assertThat(album3.getFormatAlbum().getAudioFiles()).isNotNull()
 			.singleElement()
+			.asInstanceOf(InstanceOfAssertFactories.type(AbstractAudioFile.class))
 			.satisfies(audio -> {
 				assertThat(audio.hasMissingOrInvalidMediaFilePath()).isFalse();
 				assertThat(audio.isLossLess()).isTrue();
@@ -242,6 +247,7 @@ class AlbumTest {
 		
 		assertThat(album4.getFormatAlbum().getAudioFiles()).isNotNull()
 			.singleElement()
+			.asInstanceOf(InstanceOfAssertFactories.type(AbstractAudioFile.class))
 			.satisfies(audio -> {
 				assertThat(audio.hasMissingOrInvalidMediaFilePath()).isFalse();
 				assertThat(audio.isLossLess()).isTrue();

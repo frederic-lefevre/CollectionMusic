@@ -43,6 +43,10 @@ import com.google.gson.JsonObject;
 
 public abstract class AbstractMediaFileParser {
 
+	public AbstractMediaFileParser() {
+		super();
+	}
+
 	private final static Logger albumLog = Control.getAlbumLog();
 	
 	protected String parseNote(JsonObject mediaFileJson) {
@@ -82,5 +86,5 @@ public abstract class AbstractMediaFileParser {
 		return ParserHelpers.parseStringProperty(mediaFileJson, JsonMusicProperties.SOURCE, true);
 	}
 
-	abstract <T extends AbstractMediaFile> T parseMediaFile(JsonObject mediaFileJson);
+	public abstract <T extends AbstractMediaFile> T parseMediaFile(JsonObject mediaFileJson);
 }
