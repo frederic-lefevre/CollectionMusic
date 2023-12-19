@@ -31,12 +31,10 @@ import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -52,18 +50,12 @@ public class MediaFileInventory {
 	
 	private static final String SEPARATOR = " / ";
 	
-	private static final Set<String> mediaFileExtensions = 
-		Set.of("flac", "mp3", "wma", "aiff", "FLAC", "MP3", "m4a",
-				"m2ts", "mkv", "mpls", "VOB", "wav", "m4v", "mp4", "bdmv");
-	
 	private final Path rootPath;
 	
 	private final LinkedHashMap<String,MediaFilePath> mediaFilePathInventory;
 	
 	// MediaFilePath values maintained as List to be displayed in a JTable
 	private final List<MediaFilePath> mediaFilePathList;
-	
-	public static final Set<String> extensionSet = new HashSet<>();
 	
 	protected MediaFileInventory(Path rootPath) {
 		
@@ -91,7 +83,7 @@ public class MediaFileInventory {
 		public FileVisitResult visitFile(Path file, BasicFileAttributes attr) {
     		
     		if ((Files.isRegularFile(file)) &&
-    				isMediaFileName(file)) {
+    				MediaFilePath.isMediaFileName(file)) {
     			// It should be a media file, part of an album
     			
     			addMediaFilePathToInventory(file.getParent());
@@ -195,21 +187,4 @@ public class MediaFileInventory {
 				.findFirst();
 	}
 	
-	protected static boolean isMediaFileName(Path file) {
-
-		return getFileNameExtension(file)
-				.filter(extension -> mediaFileExtensions.contains(extension))
-				.isPresent();
-	}
-
-	private static Optional<String> getFileNameExtension(Path filename) {
-		return Optional.ofNullable(filename)
-				.map(f -> f.toString())
-				.filter(f -> f.contains("."))
-				.map(f -> f.substring(f.lastIndexOf(".") + 1))
-				.map(ext -> { extensionSet.add(ext);
-				return ext;
-					});
-				
-	}
 }

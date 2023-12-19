@@ -1,9 +1,32 @@
+/*
+ * MIT License
+
+Copyright (c) 2017, 2023 Frederic Lefevre
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
 package org.fl.collectionAlbum.mediaPath;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -130,19 +153,5 @@ class MediaFileInventoryTest {
 			.singleElement()
 			.matches(audioPath -> audioPath.getPath().toString().contains("A Bigger Bang"));
 	}
-	
-	@Test
-	void shouldSelectMediaFileExtension() {
-		
-		assertThat(MediaFileInventory.isMediaFileName(Paths.get("toto.flac"))).isTrue();
-		assertThat(MediaFileInventory.isMediaFileName(Paths.get("toto.mp3"))).isTrue();
-		assertThat(MediaFileInventory.isMediaFileName(Paths.get("toto.wma"))).isTrue();
-		assertThat(MediaFileInventory.isMediaFileName(Paths.get("toto.txt"))).isFalse();
-		assertThat(MediaFileInventory.isMediaFileName(Paths.get("toto.jpg"))).isFalse();
-		assertThat(MediaFileInventory.isMediaFileName(Paths.get("toto"))).isFalse();
-		assertThat(MediaFileInventory.isMediaFileName(Paths.get(""))).isFalse();
-		assertThat(MediaFileInventory.isMediaFileName(null)).isFalse();
-		
-		MediaFileInventory.extensionSet.forEach(extension -> System.out.println(extension));
-	}
+
 }

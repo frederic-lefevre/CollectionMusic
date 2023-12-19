@@ -24,21 +24,38 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.mediaPath;
 
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import org.fl.collectionAlbum.albums.Album;
 
 public class MediaFilePath {
 
+	private static final Set<String> mediaFileExtensions = 
+			Set.of("flac", "mp3", "wma", "aiff", "FLAC", "MP3", "m4a",
+					"m2ts", "mkv", "mpls", "VOB", "wav", "m4v", "mp4", "bdmv");
+	
+	public static final Set<String> extensionSet = new HashSet<>();
+	
 	private final Path mediaFilesPath;
 	
 	private final Set<Album> albumsSet;
 	
+	private long mediaFileNumber;
+	
 	public MediaFilePath(Path mediaFilesPath) {
 		this.mediaFilesPath = mediaFilesPath;
 		albumsSet = new HashSet<>();
+		
+		try (Stream<Path> fileStream = Files.list(mediaFilesPath)) {
+			mediaFileNumber = fileStream.filter(file -> Files.isRegularFile(file) && isMediaFileName(file)).count();
+		} catch (Exception e) {
+			mediaFileNumber = 0;
+		}
 	}
 
 	public Path getPath() {
@@ -51,5 +68,27 @@ public class MediaFilePath {
 	
 	public Set<Album> getAlbumSet() {
 		return albumsSet;
+	}
+	
+	public long getMediaFileNumber() {
+		return mediaFileNumber;
+	}
+
+	public static boolean isMediaFileName(Path file) {
+
+		return getFileNameExtension(file)
+				.filter(extension -> mediaFileExtensions.contains(extension))
+				.isPresent();
+	}
+
+	private static Optional<String> getFileNameExtension(Path filename) {
+		return Optional.ofNullable(filename)
+				.map(f -> f.toString())
+				.filter(f -> f.contains("."))
+				.map(f -> f.substring(f.lastIndexOf(".") + 1))
+				.map(ext -> { extensionSet.add(ext);
+				return ext;
+					});
+				
 	}
 }
