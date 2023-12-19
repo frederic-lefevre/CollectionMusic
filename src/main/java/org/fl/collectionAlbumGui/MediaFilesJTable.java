@@ -29,9 +29,12 @@ import java.util.logging.Logger;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
+import org.fl.collectionAlbum.mediaPath.MediaFilePathAlbumComparator;
 
 public class MediaFilesJTable extends JTable {
 
@@ -49,6 +52,13 @@ public class MediaFilesJTable extends JTable {
 		getColumnModel().getColumn(MediaFilesTableModel.PATH_COL_IDX).setPreferredWidth(700);
 		getColumnModel().getColumn(MediaFilesTableModel.ALBUMS_COL_IDX).setPreferredWidth(500);
 		getColumnModel().getColumn(MediaFilesTableModel.NB_FILES_COL_IDX).setPreferredWidth(150);
+		
+		// Row sorter
+		TableRowSorter<TableModel> sorter = new TableRowSorter<>(getModel());
+		setRowSorter(sorter);
+		sorter.sort();
+				
+		sorter.setComparator(MediaFilesTableModel.ALBUMS_COL_IDX, new MediaFilePathAlbumComparator());
 		
 		// Allow single row selection only
 		ListSelectionModel listSelectionModel = new DefaultListSelectionModel();
