@@ -71,6 +71,7 @@ class FormatTest {
 		assertThat(format1.getPoids()).isEqualTo(2.5);
 		assertThat(format1.getMediaFiles(ContentNature.AUDIO)).isEmpty();
 		assertThat(format1.getMediaFiles(ContentNature.VIDEO)).isEmpty();
+		assertThat(format1.getAllMediaFiles()).isEmpty();
 		assertThat(format1.hasMediaFiles(ContentNature.AUDIO)).isFalse();
 		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isFalse();
 	}
@@ -100,6 +101,7 @@ class FormatTest {
 		assertThat(format3.getMediaFiles(ContentNature.AUDIO)).isNull();
 		assertThat(format3.hasMediaFiles(ContentNature.VIDEO)).isFalse();
 		assertThat(format3.getMediaFiles(ContentNature.VIDEO)).isNull();
+		assertThat(format3.getAllMediaFiles()).isEmpty();
 	}
 	
 	@Test
@@ -135,6 +137,7 @@ class FormatTest {
 				assertThat(lossLessAudio.getSource()).isEqualTo("MOFI Fidelity Sound Lab");
 			});
 		
+		assertThat(format1.getAllMediaFiles()).hasSameElementsAs(format1.getMediaFiles(ContentNature.AUDIO));
 	}
 	
 	@Test
@@ -170,6 +173,7 @@ class FormatTest {
 				assertThat(lossLessAudio.getSource()).isEqualTo("MOFI Fidelity Sound Lab");
 			});
 		
+		assertThat(format1.getAllMediaFiles()).hasSameElementsAs(format1.getMediaFiles(ContentNature.AUDIO));
 	}
 	
 	@Test
@@ -229,6 +233,7 @@ class FormatTest {
 					csvAudio -> assertThat(csvAudio).isEqualTo("320.0 kbit/s;44.1 KHz;MP3;MOFI Fidelity Sound Lab;Mix Bob Smith"),
 					csvAudio -> assertThat(csvAudio).isEqualTo("24 bits;88.0 KHz;FLAC;CD"));
 
+		assertThat(format1.getAllMediaFiles()).hasSameElementsAs(format1.getMediaFiles(ContentNature.AUDIO));
 	}
 	
 	@Test
@@ -278,6 +283,10 @@ class FormatTest {
 				assertThat(videoFile.getType()).isEqualTo(VideoFileType.MKV);
 				assertThat(videoFile.getNote()).isEqualTo("version noir et blanc");
 			});
+		
+		assertThat(format1.getAllMediaFiles())
+			.containsAll(format1.getMediaFiles(ContentNature.VIDEO))
+			.containsAll(format1.getMediaFiles(ContentNature.AUDIO));
 	}
 	
 	@Test
@@ -323,5 +332,7 @@ class FormatTest {
 				assertThat(videoFile.getType()).isEqualTo(VideoFileType.MP4);
 				assertThat(videoFile.getNote()).isEqualTo("version noir et blanc");
 			});
+		
+		assertThat(format1.getAllMediaFiles()).hasSameElementsAs(format1.getMediaFiles(ContentNature.VIDEO));
 	}
 }

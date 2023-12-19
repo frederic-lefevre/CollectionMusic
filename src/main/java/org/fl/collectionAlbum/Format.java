@@ -475,20 +475,21 @@ public class Format {
 	}
 	
 	private String displayAudioFilesDetail() {
-		return displayMediaFileInformation(allMediaFiles(), (af) -> af.displayMediaFileDetail("<br/>"), "<br/>---<br/>");
+		return displayMediaFileInformation(getAllMediaFiles(), (af) -> af.displayMediaFileDetail("<br/>"), "<br/>---<br/>");
 	}
 	
 	private String displayMediaFilesSummary() {
-		return displayMediaFileInformation(allMediaFiles(), (af) -> af.displayMediaFileSummary(), "<br/>");
+		return displayMediaFileInformation(getAllMediaFiles(), (af) -> af.displayMediaFileSummary(), "<br/>");
 		
 	}
 	
-	private List<AbstractMediaFile> allMediaFiles() {
+	public List<AbstractMediaFile> getAllMediaFiles() {
 		List<AbstractMediaFile> allMediaFiles = new ArrayList<>();
-		Stream.of(ContentNature.values()).forEach(contentNature -> {
-			List<AbstractMediaFile> mf = mediaFiles.get(contentNature);
-			allMediaFiles.addAll(mf);
-		});
+		Stream.of(ContentNature.values())
+			.map(contentNature -> mediaFiles.get(contentNature))
+			.filter(Objects::nonNull)
+			.forEach(mediaFileList -> allMediaFiles.addAll(mediaFileList));
+		
 		return allMediaFiles;
 	}
 	

@@ -68,6 +68,8 @@ class AlbumTest {
 		assertThat(album.hasAudioFiles()).isFalse();
 		assertThat(album.hasVideoFiles()).isFalse();
 		assertThat(album.hasMediaFiles()).isFalse();
+		
+		assertThat(album.getAllMediaFiles()).isEmpty();
 	}
 
 	private static final String albumStr1 = """
@@ -127,6 +129,8 @@ class AlbumTest {
 				assertThat(audio.getMediaFilePaths()).isNull();
 			});
 
+		assertThat(album.getAllMediaFiles()).hasSameElementsAs(audioFiles);
+		
 		// Add the audio file path
 		AbstractAudioFile audioFile = (AbstractAudioFile) audioFiles.get(0);
 		audioFile.addMediaFilePath(new MediaFilePath(Paths.get("E:/Musique/e/Bill Evans/Waltz for Debby/")));

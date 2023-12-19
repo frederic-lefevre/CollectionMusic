@@ -218,6 +218,10 @@ public class Album extends MusicArtefact {
 		return validatePotentialMediaFilePath(potentialMediaFilesPath.get(contentNature), contentNature);
 	}
 	
+	public List<AbstractMediaFile> getAllMediaFiles() {
+		return formatAlbum.getAllMediaFiles();
+	}
+	
 	private boolean validatePotentialMediaFilePath(List<MediaFilePath> potentialMediaFilePath, ContentNature contentNature) {
 		
 		if (potentialMediaFilePath == null) {
