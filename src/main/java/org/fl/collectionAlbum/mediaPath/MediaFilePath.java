@@ -29,12 +29,17 @@ import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Stream;
 
+import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
 
 public class MediaFilePath {
 
+	private static final Logger mLog = Control.getAlbumLog();
+	
 	private static final Set<String> mediaFileExtensions = 
 			Set.of("flac", "mp3", "wma", "aiff", "FLAC", "MP3", "m4a",
 					"m2ts", "mkv", "mpls", "VOB", "wav", "m4v", "mp4", "bdmv");
@@ -54,6 +59,7 @@ public class MediaFilePath {
 		try (Stream<Path> fileStream = Files.list(mediaFilesPath)) {
 			mediaFileNumber = fileStream.filter(file -> Files.isRegularFile(file) && isMediaFileName(file)).count();
 		} catch (Exception e) {
+			mLog.log(Level.SEVERE, "Exception when listing files in " + mediaFilesPath, e);
 			mediaFileNumber = 0;
 		}
 	}
