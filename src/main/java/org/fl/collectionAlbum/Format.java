@@ -310,10 +310,6 @@ public class Format {
 			.sum();
 	}
 	
-	public List<AbstractMediaFile> getAudioFiles() {
-		return mediaFiles.get(ContentNature.AUDIO);
-	}
-	
 	public List<? extends AbstractMediaFile> getMediaFiles(ContentNature contentNature) {
 		return mediaFiles.get(contentNature);
 	}

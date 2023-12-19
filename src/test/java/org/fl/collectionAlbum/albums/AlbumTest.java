@@ -131,7 +131,7 @@ class AlbumTest {
 		AbstractAudioFile audioFile = (AbstractAudioFile) audioFiles.get(0);
 		audioFile.addMediaFilePath(new MediaFilePath(Paths.get("E:/Musique/e/Bill Evans/Waltz for Debby/")));
 		
-		assertThat(album.getFormatAlbum().getAudioFiles()).singleElement().satisfies(audio -> {
+		assertThat(album.getFormatAlbum().getMediaFiles(ContentNature.AUDIO)).singleElement().satisfies(audio -> {
 			assertThat(audio.hasMissingOrInvalidMediaFilePath()).isFalse();
 			assertThat(audio.getMediaFilePaths())
 				.isNotNull()
@@ -154,7 +154,7 @@ class AlbumTest {
 		assertThat(album2.hasMissingOrInvalidMediaFilePath(ContentNature.AUDIO)).isFalse();
 		assertThat(album2.hasMediaFilePathNotFound(ContentNature.AUDIO)).isFalse();
 		
-		assertThat(album2.getFormatAlbum().getAudioFiles()).isNotNull()
+		assertThat(album2.getFormatAlbum().getMediaFiles(ContentNature.AUDIO)).isNotNull()
 			.singleElement()
 			.asInstanceOf(InstanceOfAssertFactories.type(AbstractAudioFile.class))
 			.satisfies(audio -> {
@@ -178,7 +178,7 @@ class AlbumTest {
 		AbstractAudioFile audioFile2 = (AbstractAudioFile) album2.getFormatAlbum().getMediaFiles(ContentNature.AUDIO).get(0);
 		audioFile2.setMediaFilePath(Set.of(new MediaFilePath(Paths.get("E:/Musique/e/Bill Evans/Portrait In Jazz/"))));
 		
-		assertThat(album2.getFormatAlbum().getAudioFiles()).singleElement().satisfies(audio -> {
+		assertThat(album2.getFormatAlbum().getMediaFiles(ContentNature.AUDIO)).singleElement().satisfies(audio -> {
 			assertThat(audio.hasMissingOrInvalidMediaFilePath()).isFalse();
 			assertThat(audio.getMediaFilePaths())
 				.isNotNull()
@@ -203,7 +203,7 @@ class AlbumTest {
 		assertThat(album3.hasMissingOrInvalidMediaFilePath(ContentNature.AUDIO)).isFalse();
 		assertThat(album3.hasMediaFilePathNotFound(ContentNature.AUDIO)).isFalse();
 		
-		assertThat(album3.getFormatAlbum().getAudioFiles()).isNotNull()
+		assertThat(album3.getFormatAlbum().getMediaFiles(ContentNature.AUDIO)).isNotNull()
 			.singleElement()
 			.asInstanceOf(InstanceOfAssertFactories.type(AbstractAudioFile.class))
 			.satisfies(audio -> {
@@ -245,7 +245,7 @@ class AlbumTest {
 		assertThat(album4.hasMissingOrInvalidMediaFilePath(ContentNature.AUDIO)).isFalse();
 		assertThat(album4.hasMediaFilePathNotFound(ContentNature.AUDIO)).isFalse();
 		
-		assertThat(album4.getFormatAlbum().getAudioFiles()).isNotNull()
+		assertThat(album4.getFormatAlbum().getMediaFiles(ContentNature.AUDIO)).isNotNull()
 			.singleElement()
 			.asInstanceOf(InstanceOfAssertFactories.type(AbstractAudioFile.class))
 			.satisfies(audio -> {

@@ -69,7 +69,7 @@ class FormatTest {
 		Format format1 = new Format(jf1) ;
 		
 		assertThat(format1.getPoids()).isEqualTo(2.5);
-		assertThat(format1.getAudioFiles()).isEmpty();
+		assertThat(format1.getMediaFiles(ContentNature.AUDIO)).isEmpty();
 		assertThat(format1.getMediaFiles(ContentNature.VIDEO)).isEmpty();
 		assertThat(format1.hasMediaFiles(ContentNature.AUDIO)).isFalse();
 		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isFalse();
@@ -97,7 +97,7 @@ class FormatTest {
 		
 		assertThat(format3.hasError()).isTrue();
 		assertThat(format3.hasMediaFiles(ContentNature.AUDIO)).isFalse();
-		assertThat(format3.getAudioFiles()).isNull();
+		assertThat(format3.getMediaFiles(ContentNature.AUDIO)).isNull();
 		assertThat(format3.hasMediaFiles(ContentNature.VIDEO)).isFalse();
 		assertThat(format3.getMediaFiles(ContentNature.VIDEO)).isNull();
 	}
@@ -124,7 +124,7 @@ class FormatTest {
 		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isFalse();
 		assertThat(format1.getMediaFiles(ContentNature.VIDEO)).isEmpty();
 		
-		assertThat(format1.getAudioFiles()).singleElement()
+		assertThat(format1.getMediaFiles(ContentNature.AUDIO)).singleElement()
 			.satisfies(audio -> {
 				assertThat(audio).isNotNull().isInstanceOf(LosslessAudioFile.class);
 				
@@ -159,7 +159,7 @@ class FormatTest {
 		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isFalse();
 		assertThat(format1.getMediaFiles(ContentNature.VIDEO)).isEmpty();
 
-		assertThat(format1.getAudioFiles()).singleElement()
+		assertThat(format1.getMediaFiles(ContentNature.AUDIO)).singleElement()
 			.satisfies(audio -> {
 				assertThat(audio).isNotNull().isInstanceOf(LosslessAudioFile.class);
 				
@@ -200,7 +200,7 @@ class FormatTest {
 		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isFalse();
 		assertThat(format1.getMediaFiles(ContentNature.VIDEO)).isEmpty();
 
-		assertThat(format1.getAudioFiles()).hasSize(2)
+		assertThat(format1.getMediaFiles(ContentNature.AUDIO)).hasSize(2)
 			.anySatisfy(audio -> {
 				assertThat(audio).isNotNull().isInstanceOf(LossyAudioFile.class);
 				
@@ -258,7 +258,7 @@ class FormatTest {
 		assertThat(format1.hasMediaFiles(ContentNature.AUDIO)).isTrue();
 		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isTrue();
 
-		assertThat(format1.getAudioFiles()).singleElement()
+		assertThat(format1.getMediaFiles(ContentNature.AUDIO)).singleElement()
 			.satisfies(audio -> {
 				assertThat(audio).isNotNull().isInstanceOf(LosslessAudioFile.class);
 				
