@@ -28,6 +28,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.albums.Album;
@@ -102,6 +103,13 @@ public class CollectionAlbumContainer {
 		
 		album.addMusicArtfactArtistesToList(collectionArtistes);
 		
+		// Add the album to each media files that it references
+		album.getAllMediaFiles().stream()
+			.map(mediaFile -> mediaFile.getMediaFilePaths())
+			.filter(Objects::nonNull)
+			.flatMap(mediaFileList -> mediaFileList.stream())
+			.forEach(mediaFile -> mediaFile.addAlbum(album));
+						
 		collectionAlbumsMusiques.addAlbum(album);
 				
 		Format.RangementSupportPhysique rangement = album.getRangement();
