@@ -25,8 +25,8 @@ SOFTWARE.
 package org.fl.collectionAlbum.mediaPath;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.fl.collectionAlbum.albums.Album;
 
@@ -34,11 +34,11 @@ public class MediaFilePath {
 
 	private final Path mediaFilesPath;
 	
-	private final List<Album> albumsList;
+	private final Set<Album> albumsSet;
 	
 	public MediaFilePath(Path mediaFilesPath) {
 		this.mediaFilesPath = mediaFilesPath;
-		albumsList = new ArrayList<>();
+		albumsSet = new HashSet<>();
 	}
 
 	public Path getPath() {
@@ -46,10 +46,10 @@ public class MediaFilePath {
 	}
 	
 	public void addAlbum(Album album) {
-		albumsList.add(album);
+		albumsSet.add(album);
 	}
 	
-	public List<Album> getAlbumList() {
-		return albumsList;
+	public Set<Album> getAlbumSet() {
+		return albumsSet;
 	}
 }

@@ -114,7 +114,7 @@ class CollectionAlbumContainerTest {
 		
 		assertThat(album.getAllMediaFiles()).singleElement()
 			.satisfies(mediaFile -> assertThat(mediaFile.getMediaFilePaths()).singleElement()
-					.satisfies(mediaFilePath -> assertThat(mediaFilePath.getAlbumList()).singleElement()
+					.satisfies(mediaFilePath -> assertThat(mediaFilePath.getAlbumSet()).singleElement()
 							.satisfies(album1 -> assertThat(album1).isEqualTo(album))));
 
 	}

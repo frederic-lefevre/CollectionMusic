@@ -55,7 +55,7 @@ public class AlbumsRenderer extends JLabel implements TableCellRenderer {
 			// This may happen when rescanning the album collection
 			mLog.fine("Null value in MediaFiles cell. Should be an Album");
 		} else if (value instanceof MediaFilePath) {
-			setText(((MediaFilePath)value).getAlbumList().stream()
+			setText(((MediaFilePath)value).getAlbumSet().stream()
 					.map(Album::getTitre)
 					.collect(Collectors.joining(ALBUMS_SEPARATOR)));
 		} else {
