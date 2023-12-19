@@ -28,7 +28,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
@@ -58,17 +60,23 @@ public class Format {
 	private final static Logger albumLog = Control.getAlbumLog();
 	
 	public enum ContentNature { 
-		AUDIO("audio"), 
-		VIDEO("video");
+		AUDIO("audio", JsonMusicProperties.AUDIO_FILE), 
+		VIDEO("video", JsonMusicProperties.VIDEO_FILE);
 		
 		private final String nom;
+		private final String jsonProperty;
 		
-		private ContentNature(String n) {
+		private ContentNature(String n, String jp) {
 			nom = n;
+			jsonProperty = jp;
 		}
 		
 		public String getNom() {
 			return nom;
+		}
+		
+		public String getJsonProperty() {
+			return jsonProperty;
 		}
 	}
 	
@@ -173,6 +181,8 @@ public class Format {
 	// Supports de l'album et leur nombre correspondant
 	private final EnumMap<Support, Double> tableFormat ;
 	
+	private Map<ContentNature, List<AbstractMediaFile>> mediaFiles;
+	
 	private List<AbstractAudioFile> audioFiles;
 	
 	private List<VideoFile> videoFiles;
@@ -194,11 +204,22 @@ public class Format {
 					}
 				}
 	
+				mediaFiles = new HashMap<>();
+				
+				/*
+				Stream.of(ContentNature.values()).forEach(contentNature -> {
+					Optional.ofNullable(formatJson.getAsJsonArray(contentNature.getJsonProperty()))
+					.map(jsonMediaFile -> {
+						
+					});
+				});
+				*/
+				AudioFileParser audioFileParser = new AudioFileParser();
 				audioFiles = Optional.ofNullable(formatJson.getAsJsonArray(JsonMusicProperties.AUDIO_FILE))
 						.map(ja -> {
 							List<AbstractAudioFile> audioFileList = new ArrayList<>();
 							ja.forEach(jsonAudioFile -> {
-								AbstractAudioFile audioFile = AudioFileParser.parseAudioFile(jsonAudioFile.getAsJsonObject());
+								AbstractAudioFile audioFile = audioFileParser.parseMediaFile(jsonAudioFile.getAsJsonObject());
 								if (audioFile != null) {
 									audioFileList.add(audioFile);
 								} else {
@@ -209,11 +230,12 @@ public class Format {
 						})
 						.orElse(new ArrayList<>());
 				
+				VideoFileParser videoFileParser = new VideoFileParser();
 				videoFiles = Optional.ofNullable(formatJson.getAsJsonArray(JsonMusicProperties.VIDEO_FILE))
 						.map(jv -> {
 							List<VideoFile> videoFileList = new ArrayList<>();
 							jv.forEach(jsonVideoFile -> {
-								VideoFile videoFile = VideoFileParser.parseVideoFile(jsonVideoFile.getAsJsonObject());
+								VideoFile videoFile = videoFileParser.parseMediaFile(jsonVideoFile.getAsJsonObject());
 								if (videoFile != null) {
 									videoFileList.add(videoFile);
 								} else {

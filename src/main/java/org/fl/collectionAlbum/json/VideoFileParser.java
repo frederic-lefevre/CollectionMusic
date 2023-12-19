@@ -39,11 +39,13 @@ import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-public class VideoFileParser {
+public class VideoFileParser extends AbstractMediaFileParser {
 
 	private final static Logger rapportLog = Control.getAlbumLog();
 	
-	public static VideoFile parseVideoFile(JsonObject videoFileJson) {
+	@SuppressWarnings("unchecked")
+	@Override
+	public VideoFile parseMediaFile(JsonObject videoFileJson) {
 		
 		if (videoFileJson != null) {
 		
@@ -55,9 +57,9 @@ public class VideoFileParser {
 						return null;
 					});
 			
-			String source = AbstractMediaFileParser.parseSource(videoFileJson);
-			String note = AbstractMediaFileParser.parseNote(videoFileJson);
-			Set<MediaFilePath> videoFileLocations = AbstractMediaFileParser.parseMediaFileLocation(videoFileJson, ContentNature.VIDEO);
+			String source = parseSource(videoFileJson);
+			String note = parseNote(videoFileJson);
+			Set<MediaFilePath> videoFileLocations = parseMediaFileLocation(videoFileJson, ContentNature.VIDEO);
 			
 			Integer width = Optional.ofNullable(videoFileJson.get(JsonMusicProperties.VIDEO_WIDTH))
 					.map(JsonElement::getAsInt)

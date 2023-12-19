@@ -43,14 +43,16 @@ class AudioFileTest {
 		String audioFileStr1 = "{}" ;
 		JsonObject jf1 = JsonParser.parseString(audioFileStr1).getAsJsonObject();
 		
-		AbstractAudioFile audio = AudioFileParser.parseAudioFile(jf1);
+		AudioFileParser audioFileParser = new AudioFileParser();
+		AbstractAudioFile audio = audioFileParser.parseMediaFile(jf1);
 		assertThat(audio).isNull();
 	}
 	
 	@Test
 	void shouldAcceptNullWithError() {
 		
-		AbstractAudioFile audio = AudioFileParser.parseAudioFile(null);
+		AudioFileParser audioFileParser = new AudioFileParser();
+		AbstractAudioFile audio = audioFileParser.parseMediaFile(null);
 		assertThat(audio).isNull();
 	}
 	
@@ -64,7 +66,8 @@ class AudioFileTest {
 				""" ;
 		JsonObject jf1 = JsonParser.parseString(audioFileStr1).getAsJsonObject();
 		
-		AbstractAudioFile audio = AudioFileParser.parseAudioFile(jf1);
+		AudioFileParser audioFileParser = new AudioFileParser();
+		AbstractAudioFile audio = audioFileParser.parseMediaFile(jf1);
 		assertThat(audio).isNull();
 
 	}
@@ -81,7 +84,8 @@ class AudioFileTest {
 				""" ;
 		JsonObject jf1 = JsonParser.parseString(audioFileStr1).getAsJsonObject();
 		
-		AbstractAudioFile audio = AudioFileParser.parseAudioFile(jf1);
+		AudioFileParser audioFileParser = new AudioFileParser();
+		AbstractAudioFile audio = audioFileParser.parseMediaFile(jf1);
 		assertThat(audio).isInstanceOf(LosslessAudioFile.class);
 
 		LosslessAudioFile losslessAudio = (LosslessAudioFile)audio;
@@ -123,7 +127,8 @@ class AudioFileTest {
 				""" ;
 		JsonObject jf1 = JsonParser.parseString(audioFileStr1).getAsJsonObject();
 		
-		AbstractAudioFile audio = AudioFileParser.parseAudioFile(jf1);
+		AudioFileParser audioFileParser = new AudioFileParser();
+		AbstractAudioFile audio = audioFileParser.parseMediaFile(jf1);
 		assertThat(audio).isInstanceOf(LosslessAudioFile.class);
 
 		LosslessAudioFile losslessAudio = (LosslessAudioFile)audio;
@@ -155,7 +160,8 @@ class AudioFileTest {
 				""" ;
 		JsonObject jf1 = JsonParser.parseString(audioFileStr1).getAsJsonObject();
 		
-		AbstractAudioFile audio = AudioFileParser.parseAudioFile(jf1);
+		AudioFileParser audioFileParser = new AudioFileParser();
+		AbstractAudioFile audio = audioFileParser.parseMediaFile(jf1);
 		assertThat(audio).isInstanceOf(LosslessAudioFile.class);
 
 		LosslessAudioFile losslessAudio = (LosslessAudioFile)audio;

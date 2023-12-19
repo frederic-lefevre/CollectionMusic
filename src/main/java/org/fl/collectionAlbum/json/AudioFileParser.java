@@ -41,12 +41,22 @@ import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-public class AudioFileParser {
+public class AudioFileParser extends AbstractMediaFileParser {
 
 	private final static Logger albumLog = Control.getAlbumLog();
 	
-	public static AbstractAudioFile parseAudioFile(JsonObject audioFileJson) {
+	private static AudioFileType findType(String type) {
 		
+		return Arrays.stream(AudioFileType.values())
+				.filter(t -> t.name().equals(type))
+				.findFirst()
+				.orElse(null);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public AbstractAudioFile parseMediaFile(JsonObject audioFileJson) {
+
 		if (audioFileJson != null) {
 			
 			AudioFileType type = Optional.ofNullable(audioFileJson.get(JsonMusicProperties.TYPE))
@@ -64,9 +74,9 @@ public class AudioFileParser {
 						return null;
 					});
 			
-			String source = AbstractMediaFileParser.parseSource(audioFileJson);
-			String note = AbstractMediaFileParser.parseNote(audioFileJson);
-			Set<MediaFilePath> audioFileLocations = AbstractMediaFileParser.parseMediaFileLocation(audioFileJson, ContentNature.AUDIO);
+			String source = parseSource(audioFileJson);
+			String note = parseNote(audioFileJson);
+			Set<MediaFilePath> audioFileLocations = parseMediaFileLocation(audioFileJson, ContentNature.AUDIO);
 			
 			if ((type == null) || (source == null) || (samplingRate == null)) {
 				
@@ -106,13 +116,5 @@ public class AudioFileParser {
 			albumLog.severe("Json AudioFile null parameter");
 			return null;
 		}
-	}
-
-	private static AudioFileType findType(String type) {
-		
-		return Arrays.stream(AudioFileType.values())
-				.filter(t -> t.name().equals(type))
-				.findFirst()
-				.orElse(null);
 	}
 }
