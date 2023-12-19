@@ -24,49 +24,44 @@ SOFTWARE.
 
 package org.fl.collectionAlbumGui;
 
+import java.awt.Component;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
-import javax.swing.DefaultListSelectionModel;
+import javax.swing.JLabel;
 import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
+import javax.swing.table.TableCellRenderer;
 
 import org.fl.collectionAlbum.Control;
+import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
-public class MediaFilesJTable extends JTable {
+public class AlbumsRenderer extends JLabel implements TableCellRenderer {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger tLog = Control.getAlbumLog();
+	private static final Logger mLog = Control.getAlbumLog();
 	
-	public MediaFilesJTable(MediaFilesTableModel dm) {
-		super(dm);
-		
-		setFillsViewportHeight(true);
-		setAutoCreateRowSorter(true);
-		
-		getColumnModel().getColumn(MediaFilesTableModel.ALBUMS_COL_IDX).setCellRenderer(new AlbumsRenderer());
-		getColumnModel().getColumn(MediaFilesTableModel.PATH_COL_IDX).setPreferredWidth(700);
-		getColumnModel().getColumn(MediaFilesTableModel.ALBUMS_COL_IDX).setPreferredWidth(500);
-		
-		// Allow single row selection only
-		ListSelectionModel listSelectionModel = new DefaultListSelectionModel();
-		listSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		setSelectionModel(listSelectionModel);
-		
-		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		
-		addMouseListener(new MediaFileMouseAdapter(this));
+	private final static String ALBUMS_SEPARATOR = ", ";
+	
+	public AlbumsRenderer() {
+		super();
 	}
 
-	public MediaFilePath getSelectedMediaFile() {
-		
-		int[] rowIdxs = getSelectedRows();
-		if (rowIdxs.length == 0) {
-			return null;
-		} else if (rowIdxs.length > 1) {
-			tLog.severe("Found several selected rows for MediaFilesJTable. Number of selected rows: " + rowIdxs.length);
+	@Override
+	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+			int row, int column) {
+		if (value == null) {
+			// This may happen when rescanning the album collection
+			mLog.fine("Null value in MediaFiles cell. Should be an Album");
+		} else if (value instanceof MediaFilePath) {
+			setText(((MediaFilePath)value).getAlbumList().stream()
+					.map(Album::getTitre)
+					.collect(Collectors.joining(ALBUMS_SEPARATOR)));
+		} else {
+			mLog.severe("Invalid value type in Auteurs cell. Should be Album but is " + value.getClass().getName());
 		}
-		return ((MediaFilesTableModel)getModel()).getMediaFileAt(convertRowIndexToModel(rowIdxs[0]));
+		return this;
 	}
+
 }

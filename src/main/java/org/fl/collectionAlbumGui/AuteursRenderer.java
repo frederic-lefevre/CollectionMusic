@@ -34,6 +34,7 @@ import javax.swing.table.TableCellRenderer;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
+import org.fl.collectionAlbum.artistes.Artiste;
 
 public class AuteursRenderer extends JLabel implements TableCellRenderer {
 
@@ -56,7 +57,7 @@ public class AuteursRenderer extends JLabel implements TableCellRenderer {
 			mLog.fine("Null value in MediaFiles cell. Should be an Album");
 		} else if (value instanceof Album) {
 			setText(((Album)value).getAuteurs().stream()
-					.map(auteur -> auteur.getNomComplet())
+					.map(Artiste::getNomComplet)
 					.collect(Collectors.joining(AUTEURS_SEPARATOR)));
 		} else {
 			mLog.severe("Invalid value type in Auteurs cell. Should be Album but is " + value.getClass().getName());

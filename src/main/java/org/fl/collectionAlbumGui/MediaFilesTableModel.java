@@ -76,7 +76,7 @@ public class MediaFilesTableModel extends AbstractTableModel {
 
 		return switch(columnIndex){
 			case PATH_COL_IDX -> mediaFilePaths.get(rowIndex).getPath().toString();
-			case ALBUMS_COL_IDX -> mediaFilePaths.get(rowIndex).getAlbumList();
+			case ALBUMS_COL_IDX -> mediaFilePaths.get(rowIndex);
 			default -> null;
 		};
 	}
