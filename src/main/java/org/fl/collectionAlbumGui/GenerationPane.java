@@ -89,7 +89,7 @@ public class GenerationPane extends JPanel {
 		
 		// Scroll pane to contain the collection table
 		JScrollPane albumsScrollTable = new JScrollPane(albumsJTable);
-		albumsScrollTable.setPreferredSize(new Dimension(1800,1000));
+		albumsScrollTable.setPreferredSize(new Dimension(1800,700));
 		collectionPane.add(albumsScrollTable);
 		
 		collectionTabPanes.add(collectionPane, "Collection", 0);
@@ -105,9 +105,9 @@ public class GenerationPane extends JPanel {
 			
 			mediaFilesPane.add(mediaFilesJTable.getTableHeader());
 			
-			// Scroll pane to contain the collection table
+			// Scroll pane to contain the media path table
 			JScrollPane mediaFilesScrollTable = new JScrollPane(mediaFilesJTable);
-			mediaFilesScrollTable.setPreferredSize(new Dimension(1800,1000));
+			mediaFilesScrollTable.setPreferredSize(new Dimension(1800,700));
 			mediaFilesPane.add(mediaFilesScrollTable);
 			
 			collectionTabPanes.add(mediaFilesPane, contentNature.getNom());
