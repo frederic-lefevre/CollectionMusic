@@ -54,7 +54,7 @@ public class CollectionAlbumGui  extends JFrame {
 	public CollectionAlbumGui() {
    		
    		// init main window
-   		setBounds(50, 50, WINDOW_WIDTH, WINDOW_HEIGHT);
+   		setBounds(20, 20, WINDOW_WIDTH, WINDOW_HEIGHT);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Collection d'albums") ;
 		

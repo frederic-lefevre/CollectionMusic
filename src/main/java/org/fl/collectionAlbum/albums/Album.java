@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.fl.collectionAlbum.AbstractMediaFile;
@@ -41,6 +42,7 @@ import org.fl.collectionAlbum.Format.RangementSupportPhysique;
 import org.fl.collectionAlbum.MusicArtefact;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.json.AlbumParser;
+import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 import org.fl.util.date.FuzzyPeriod;
 
@@ -60,7 +62,7 @@ public class Album extends MusicArtefact {
     
     private final boolean specificCompositionDates;
     
-    private Map<ContentNature, List<Path>> potentialMediaFilesPath;
+    private Map<ContentNature, List<MediaFilePath>> potentialMediaFilesPath;
     
 	public Album(JsonObject albumJson, List<ListeArtiste> knownArtistes, Path jsonFilePath) {
 
@@ -135,11 +137,11 @@ public class Album extends MusicArtefact {
     }
     
     public boolean hasAudioFiles() {
-    	return formatAlbum.hasAudioFiles();
+    	return formatAlbum.hasMediaFiles(ContentNature.AUDIO);
     }
     
     public boolean hasVideoFiles() {
-    	return formatAlbum.hasVideoFiles();
+    	return formatAlbum.hasMediaFiles(ContentNature.VIDEO);
     }
     
     public RangementSupportPhysique getRangement() {
@@ -189,12 +191,25 @@ public class Album extends MusicArtefact {
 	}
 	
 	public List<Path> getPotentialMediaFilesPaths(ContentNature contentNature) {
-		return potentialMediaFilesPath.get(contentNature);
+		
+		if (potentialMediaFilesPath == null) {
+			return null;
+		}
+		
+		List<MediaFilePath> mediaPaths = potentialMediaFilesPath.get(contentNature);
+		if (mediaPaths == null) {
+			return null;
+		} else {
+			return mediaPaths.stream()
+					.map(mediaFilePath -> mediaFilePath.getPath())
+					.collect(Collectors.toList());
+		}
+		
 	}
 	
-	public List<Path> searchPotentialMediaFilesPaths(ContentNature contentNature) {
+	public List<MediaFilePath> searchPotentialMediaFilesPaths(ContentNature contentNature) {
 		
-		List<Path> potentialMediaPaths = MediaFilesInventories.getMediaFileInventory(contentNature).getPotentialMediaPath(this);
+		List<MediaFilePath> potentialMediaPaths = MediaFilesInventories.getMediaFileInventory(contentNature).getPotentialMediaPath(this);
 		potentialMediaFilesPath.put(contentNature, potentialMediaPaths);
 		return potentialMediaPaths;
 	}
@@ -203,7 +218,11 @@ public class Album extends MusicArtefact {
 		return validatePotentialMediaFilePath(potentialMediaFilesPath.get(contentNature), contentNature);
 	}
 	
-	private boolean validatePotentialMediaFilePath(List<Path> potentialMediaFilePath, ContentNature contentNature) {
+	public List<AbstractMediaFile> getAllMediaFiles() {
+		return formatAlbum.getAllMediaFiles();
+	}
+	
+	private boolean validatePotentialMediaFilePath(List<MediaFilePath> potentialMediaFilePath, ContentNature contentNature) {
 		
 		if (potentialMediaFilePath == null) {
 			albumLog.severe("Trying to validate " + contentNature.getNom() + " file path with null value for album " + getTitre());
@@ -212,7 +231,7 @@ public class Album extends MusicArtefact {
 			List<? extends AbstractMediaFile> mediaFiles = getFormatAlbum().getMediaFiles(contentNature);
 			if ((mediaFiles != null) && !mediaFiles.isEmpty()) {
 				if (mediaFiles.size() == 1) {
-					Set<Path> mediaFilePaths = mediaFiles.get(0).getMediaFilePaths();
+					Set<MediaFilePath> mediaFilePaths = mediaFiles.get(0).getMediaFilePaths();
 					if ((mediaFilePaths != null) && !mediaFilePaths.isEmpty()) {	
 						if (mediaFilePaths.size() == 1){
 							albumLog.info("Validate " + contentNature.getNom() + " file path with existing " + contentNature.getNom() + " file referenced for album " + getTitre());

@@ -40,14 +40,16 @@ public class VideoFileTest {
 		String videoFileStr1 = "{}" ;
 		JsonObject jf1 = JsonParser.parseString(videoFileStr1).getAsJsonObject();
 		
-		VideoFile videoFile = VideoFileParser.parseVideoFile(jf1);
+		VideoFileParser videoFileParser = new VideoFileParser();
+		VideoFile videoFile = videoFileParser.parseMediaFile(jf1);
 		assertThat(videoFile).isNull();
 	}
 
 	@Test
 	void shouldAcceptNullWithError() {
 		
-		VideoFile videoFile = VideoFileParser.parseVideoFile(null);
+		VideoFileParser videoFileParser = new VideoFileParser();
+		VideoFile videoFile = videoFileParser.parseMediaFile(null);
 		assertThat(videoFile).isNull();
 	}
 	
@@ -61,7 +63,8 @@ public class VideoFileTest {
 				""" ;
 		JsonObject jf1 = JsonParser.parseString(videoFileStr1).getAsJsonObject();
 		
-		VideoFile videoFile = VideoFileParser.parseVideoFile(jf1);
+		VideoFileParser videoFileParser = new VideoFileParser();
+		VideoFile videoFile = videoFileParser.parseMediaFile(jf1);
 		assertThat(videoFile).isNull();
 	}
 	
@@ -76,7 +79,8 @@ public class VideoFileTest {
 				""" ;
 		JsonObject jf1 = JsonParser.parseString(videoFileStr1).getAsJsonObject();
 		
-		VideoFile videoFile = VideoFileParser.parseVideoFile(jf1);
+		VideoFileParser videoFileParser = new VideoFileParser();
+		VideoFile videoFile = videoFileParser.parseMediaFile(jf1);
 		assertThat(videoFile).isNotNull();
 		assertThat(videoFile.getHeight()).isEqualTo(480);
 		assertThat(videoFile.getWidth()).isEqualTo(720);
@@ -97,7 +101,8 @@ public class VideoFileTest {
 				""" ;
 		JsonObject jf1 = JsonParser.parseString(videoFileStr1).getAsJsonObject();
 		
-		VideoFile videoFile = VideoFileParser.parseVideoFile(jf1);
+		VideoFileParser videoFileParser = new VideoFileParser();
+		VideoFile videoFile = videoFileParser.parseMediaFile(jf1);
 		assertThat(videoFile).isNotNull();
 		assertThat(videoFile.getHeight()).isEqualTo(480);
 		assertThat(videoFile.getWidth()).isEqualTo(720);

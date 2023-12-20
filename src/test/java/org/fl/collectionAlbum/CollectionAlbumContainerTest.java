@@ -63,7 +63,15 @@ class CollectionAlbumContainerTest {
 	private static final String albumStr1 = """
 			{ 
 			  "titre": "Portrait in jazz",
-			  "format": {  "cd": 1   },
+			  "format": {  "cd": 1,
+				"audioFiles" : [{
+				    "bitDepth": 16 , 
+				    "samplingRate" : 44.1, 
+				    "source" : "MOFI Fidelity Sound Lab", 
+				    "type" : "FLAC",
+                    "location": ["E:\\\\Musique\\\\e\\\\Bill Evans\\\\Portrait In Jazz"] 
+                   }]
+				 },
 			  "auteurCompositeurs": [ 
 			    {  
 			      "nom": "Evans", 
@@ -103,5 +111,11 @@ class CollectionAlbumContainerTest {
 		
 		URI pAlbum = RapportStructuresAndNames.getArtisteAlbumRapportRelativeUri(artiste);
 		assertThat(pAlbum).hasToString("artistes/albums/i0.html");
+		
+		assertThat(album.getAllMediaFiles()).singleElement()
+			.satisfies(mediaFile -> assertThat(mediaFile.getMediaFilePaths()).singleElement()
+					.satisfies(mediaFilePath -> assertThat(mediaFilePath.getAlbumSet()).singleElement()
+							.satisfies(album1 -> assertThat(album1).isEqualTo(album))));
+
 	}
 }

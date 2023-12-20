@@ -44,7 +44,7 @@ public class AlbumsJTable extends JTable {
 
 	private static final Logger tLog = Control.getAlbumLog();
 	
-	public AlbumsJTable(TableModel dm) {
+	public AlbumsJTable(AlbumsTableModel dm) {
 		super(dm);
 		init();
 	}

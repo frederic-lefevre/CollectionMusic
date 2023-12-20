@@ -24,9 +24,10 @@ SOFTWARE.
 
 package org.fl.collectionAlbum;
 
-import java.nio.file.Path;
 import java.util.Set;
 import java.util.function.BiConsumer;
+
+import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
 import com.google.gson.JsonObject;
 
@@ -34,9 +35,9 @@ public class LossyAudioFile extends AbstractAudioFile {
 	
 	private final double bitRate;
 
-	public LossyAudioFile(JsonObject audioJson, AudioFileType type, String source, double bitRate, double samplingRate, String note, Set<Path> paths) {
+	public LossyAudioFile(JsonObject audioJson, AudioFileType type, String source, double bitRate, double samplingRate, String note, Set<MediaFilePath> mediaFilePaths) {
 		
-		super(audioJson, type, source, samplingRate, note, paths);
+		super(audioJson, type, source, samplingRate, note, mediaFilePaths);
 		this.bitRate = bitRate;
 	}
 

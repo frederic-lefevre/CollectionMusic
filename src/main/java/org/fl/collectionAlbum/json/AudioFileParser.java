@@ -24,7 +24,6 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.json;
 
-import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.Set;
@@ -33,19 +32,35 @@ import java.util.logging.Logger;
 import org.fl.collectionAlbum.AbstractAudioFile;
 import org.fl.collectionAlbum.AudioFileType;
 import org.fl.collectionAlbum.Control;
+import org.fl.collectionAlbum.Format.ContentNature;
 import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.LosslessAudioFile;
 import org.fl.collectionAlbum.LossyAudioFile;
+import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-public class AudioFileParser {
+public class AudioFileParser extends AbstractMediaFileParser {
 
 	private final static Logger albumLog = Control.getAlbumLog();
 	
-	public static AbstractAudioFile parseAudioFile(JsonObject audioFileJson) {
+	public AudioFileParser() {
+		super();
+	}
+
+	private static AudioFileType findType(String type) {
 		
+		return Arrays.stream(AudioFileType.values())
+				.filter(t -> t.name().equals(type))
+				.findFirst()
+				.orElse(null);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public AbstractAudioFile parseMediaFile(JsonObject audioFileJson) {
+
 		if (audioFileJson != null) {
 			
 			AudioFileType type = Optional.ofNullable(audioFileJson.get(JsonMusicProperties.TYPE))
@@ -63,9 +78,9 @@ public class AudioFileParser {
 						return null;
 					});
 			
-			String source = AbstractMediaFileParser.parseSource(audioFileJson);
-			String note = AbstractMediaFileParser.parseNote(audioFileJson);
-			Set<Path> audioFileLocations = AbstractMediaFileParser.parseAudioFileLocation(audioFileJson);
+			String source = parseSource(audioFileJson);
+			String note = parseNote(audioFileJson);
+			Set<MediaFilePath> audioFileLocations = parseMediaFileLocation(audioFileJson, ContentNature.AUDIO);
 			
 			if ((type == null) || (source == null) || (samplingRate == null)) {
 				
@@ -105,13 +120,5 @@ public class AudioFileParser {
 			albumLog.severe("Json AudioFile null parameter");
 			return null;
 		}
-	}
-
-	private static AudioFileType findType(String type) {
-		
-		return Arrays.stream(AudioFileType.values())
-				.filter(t -> t.name().equals(type))
-				.findFirst()
-				.orElse(null);
 	}
 }

@@ -28,9 +28,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.logging.Level;
@@ -38,9 +39,11 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.fl.collectionAlbum.json.AbstractMediaFileParser;
 import org.fl.collectionAlbum.json.AudioFileParser;
 import org.fl.collectionAlbum.json.VideoFileParser;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -58,17 +61,35 @@ public class Format {
 	private final static Logger albumLog = Control.getAlbumLog();
 	
 	public enum ContentNature { 
-		AUDIO("audio"), 
-		VIDEO("video");
+		AUDIO("audio", JsonMusicProperties.AUDIO_FILE), 
+		VIDEO("video", JsonMusicProperties.VIDEO_FILE);
 		
 		private final String nom;
+		private final String jsonProperty;
+		private AbstractMediaFileParser mediaFileParser;
 		
-		private ContentNature(String n) {
+		private ContentNature(String n, String jp) {
 			nom = n;
+			jsonProperty = jp;
 		}
 		
 		public String getNom() {
 			return nom;
+		}
+		
+		public String getJsonProperty() {
+			return jsonProperty;
+		}
+
+		public AbstractMediaFileParser getMediaFileParser() {
+			if (mediaFileParser == null) {
+				if (this == AUDIO) {
+					mediaFileParser = new AudioFileParser();
+				} else if (this == VIDEO) {
+					mediaFileParser = new VideoFileParser();
+				}
+			}
+			return mediaFileParser;
 		}
 	}
 	
@@ -173,9 +194,11 @@ public class Format {
 	// Supports de l'album et leur nombre correspondant
 	private final EnumMap<Support, Double> tableFormat ;
 	
-	private List<AbstractAudioFile> audioFiles;
+	private Map<ContentNature, List<AbstractMediaFile>> mediaFiles;
 	
-	private List<VideoFile> videoFiles;
+//	private List<AbstractAudioFile> audioFiles;
+	
+//	private List<VideoFile> videoFiles;
 	
 	private boolean hasError;
 
@@ -184,9 +207,11 @@ public class Format {
 		
 		tableFormat = new EnumMap<Support, Double>(Support.class);
 		
+		mediaFiles = new HashMap<>();
 		if (formatJson != null) {
 			try {
-						
+					
+				hasError = false;
 				for (Support support : Support.values()) {
 					JsonElement elemFormat = formatJson.get(support.getJsonPropertyName());
 					if (elemFormat != null) {
@@ -194,36 +219,22 @@ public class Format {
 					}
 				}
 	
-				audioFiles = Optional.ofNullable(formatJson.getAsJsonArray(JsonMusicProperties.AUDIO_FILE))
-						.map(ja -> {
-							List<AbstractAudioFile> audioFileList = new ArrayList<>();
-							ja.forEach(jsonAudioFile -> {
-								AbstractAudioFile audioFile = AudioFileParser.parseAudioFile(jsonAudioFile.getAsJsonObject());
-								if (audioFile != null) {
-									audioFileList.add(audioFile);
-								} else {
-									hasError = true ;
-								}
-							});
-							return audioFileList;
-						})
-						.orElse(new ArrayList<>());
-				
-				videoFiles = Optional.ofNullable(formatJson.getAsJsonArray(JsonMusicProperties.VIDEO_FILE))
-						.map(jv -> {
-							List<VideoFile> videoFileList = new ArrayList<>();
-							jv.forEach(jsonVideoFile -> {
-								VideoFile videoFile = VideoFileParser.parseVideoFile(jsonVideoFile.getAsJsonObject());
-								if (videoFile != null) {
-									videoFileList.add(videoFile);
-								} else {
-									hasError = true ;
-								}
-							});
-							return videoFileList;
-						})
-						.orElse(new ArrayList<>());
-				hasError = false;
+				Stream.of(ContentNature.values()).forEach(contentNature -> {
+					
+					JsonArray mediaFileArray = formatJson.getAsJsonArray(contentNature.getJsonProperty());
+					List<AbstractMediaFile> mediaFileList = new ArrayList<>();
+					if (mediaFileArray != null) {
+						mediaFileArray.forEach(mediaFileJson -> {
+							AbstractMediaFile mediaFile = contentNature.getMediaFileParser().parseMediaFile(mediaFileJson.getAsJsonObject());
+							if (mediaFile != null) {
+								mediaFileList.add(mediaFile);
+							} else {
+								hasError = true ;
+							}
+						});
+					}
+					mediaFiles.put(contentNature, mediaFileList);
+				});
 				
 			} catch (Exception e) {
 				hasError = true;
@@ -232,8 +243,9 @@ public class Format {
 			
 		} else {
 			hasError = true;
-			audioFiles = null;
-			videoFiles = null;
+			Stream.of(ContentNature.values()).forEach(contentNature -> {
+				mediaFiles.put(contentNature, null);
+			});
 		}
 	}
 
@@ -298,65 +310,39 @@ public class Format {
 			.sum();
 	}
 	
-	public List<AbstractAudioFile> getAudioFiles() {
-		return audioFiles;
-	}
-
-	public List<VideoFile> getVideoFiles() {
-		return videoFiles;
-	}
-	
 	public List<? extends AbstractMediaFile> getMediaFiles(ContentNature contentNature) {
-		
-		return switch (contentNature) {
-		case AUDIO -> audioFiles;
-		case VIDEO -> videoFiles;
-		};
-	}
-	
-	public boolean hasAudioFiles() {
-		return hasMediaFile(audioFiles);
-	}
-	
-	public boolean hasVideoFiles() {
-		return hasMediaFile(videoFiles);
+		return mediaFiles.get(contentNature);
 	}
 	
 	public boolean hasMediaFiles() {
-		return hasAudioFiles() || hasVideoFiles();
+		return Stream.of(ContentNature.values()).anyMatch(contentNature -> hasMediaFiles(contentNature));
 	}
 	
 	public boolean hasMediaFiles(ContentNature contentNature) {
-		return switch (contentNature) {
-			case AUDIO -> hasMediaFile(audioFiles);
-			case VIDEO -> hasMediaFile(videoFiles);
-		};
+		return hasMediaFile(getMediaFiles(contentNature));
+
 	}
 	
 	public boolean hasOnlyLossLessAudio() {
-		return 	hasAudioFiles() &&
-				audioFiles.stream()
+		return 	hasMediaFiles(ContentNature.AUDIO) &&
+				getMediaFiles(ContentNature.AUDIO).stream()
+					.map(mediaFile -> (AbstractAudioFile)mediaFile)
 					.allMatch(audioFile -> audioFile.isLossLess());
 	}
 	
 	public boolean hasHighResAudio() {
-		return hasAudioFiles() && 
-			   audioFiles.stream()
+		return hasMediaFiles(ContentNature.AUDIO) && 
+				getMediaFiles(ContentNature.AUDIO).stream()
+				.map(mediaFile -> (AbstractAudioFile)mediaFile)
 			   	.anyMatch(audioFile -> audioFile.isHighRes());
 	}
 	
 	public boolean hasMissingOrInvalidMediaFilePath(ContentNature contentNature) {
-		return switch (contentNature) {
-			case AUDIO -> hasMissingOrInvalidMediaFilePath(audioFiles);
-			case VIDEO -> hasMissingOrInvalidMediaFilePath(videoFiles);
-		};
+		return hasMissingOrInvalidMediaFilePath(getMediaFiles(contentNature));
 	}
 	
 	public boolean hasMediaFilePathNotFound(ContentNature contentNature) {
-		return switch (contentNature) {
-			case AUDIO -> hasMediaFilePathNotFound(audioFiles);
-			case VIDEO -> hasMediaFilePathNotFound(videoFiles);
-		};
+		return hasMediaFilePathNotFound(getMediaFiles(contentNature));
 	}
 	
 	private <T extends AbstractMediaFile> boolean hasMediaFilePathNotFound(List<T> mediaFiles) {
@@ -446,7 +432,7 @@ public class Format {
 		}
 
 		if (putMediaFile) {
-			if (hasAudioFiles() || hasVideoFiles()) {
+			if (hasMediaFiles()) {
 				rapport.append(F_ROW0).append(AUDIO_FILE_OK_CLASS).append(F_ROW4).append(displayMediaFilesSummary())
 					.append(F_ROW8).append(AUDIO_FILE_DETAIL_CLASS).append(F_ROW4).append(displayAudioFilesDetail()).append(F_ROW7) ;
 			} else {
@@ -489,24 +475,31 @@ public class Format {
 	}
 	
 	private String displayAudioFilesDetail() {
-		return displayMediaFileInformation(allMediaFiles(), (af) -> af.displayMediaFileDetail("<br/>"), "<br/>---<br/>");
+		return displayMediaFileInformation(getAllMediaFiles(), (af) -> af.displayMediaFileDetail("<br/>"), "<br/>---<br/>");
 	}
 	
 	private String displayMediaFilesSummary() {
-		return displayMediaFileInformation(allMediaFiles(), (af) -> af.displayMediaFileSummary(), "<br/>");
+		return displayMediaFileInformation(getAllMediaFiles(), (af) -> af.displayMediaFileSummary(), "<br/>");
 		
 	}
 	
-	private List<AbstractMediaFile> allMediaFiles() {
+	public List<AbstractMediaFile> getAllMediaFiles() {
 		List<AbstractMediaFile> allMediaFiles = new ArrayList<>();
-		allMediaFiles.addAll(audioFiles);
-		allMediaFiles.addAll(videoFiles);	
+		Stream.of(ContentNature.values())
+			.map(contentNature -> mediaFiles.get(contentNature))
+			.filter(Objects::nonNull)
+			.forEach(mediaFileList -> allMediaFiles.addAll(mediaFileList));
+		
 		return allMediaFiles;
 	}
 	
 	public List<String> printAudioFilesCsvParts(String csvSeparator, Predicate<AbstractAudioFile> audioFileFilter) {
-		if (hasAudioFiles()) {
-			return audioFiles.stream().filter(audioFileFilter).map(af -> af.displayMediaFileDetail(csvSeparator)).collect(Collectors.toList());
+		if (hasMediaFiles(ContentNature.AUDIO)) {
+			return getMediaFiles(ContentNature.AUDIO).stream()
+					.map(mediaFile -> (AbstractAudioFile)mediaFile)
+					.filter(audioFileFilter)
+					.map(af -> af.displayMediaFileDetail(csvSeparator))
+					.collect(Collectors.toList());
 		} else {
 			return Collections.emptyList();
 		}

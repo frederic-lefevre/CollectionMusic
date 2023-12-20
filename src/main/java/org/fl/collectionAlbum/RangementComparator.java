@@ -35,7 +35,7 @@ import org.fl.collectionAlbum.artistes.AuteurComparator;
 
 import java.util.Collections;
 
-public class RangementComparator  implements Comparator<Album> {
+public class RangementComparator implements Comparator<Album> {
 	
 	public RangementComparator() {
 	}

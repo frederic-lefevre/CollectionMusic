@@ -36,12 +36,15 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import org.assertj.core.api.InstanceOfAssertFactories;
 import org.fl.collectionAlbum.AbstractAudioFile;
+import org.fl.collectionAlbum.AbstractMediaFile;
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.LosslessAudioFile;
 import org.fl.collectionAlbum.Format.ContentNature;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
+import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.fl.util.json.JsonUtils;
 import org.junit.jupiter.api.Test;
 
@@ -65,6 +68,8 @@ class AlbumTest {
 		assertThat(album.hasAudioFiles()).isFalse();
 		assertThat(album.hasVideoFiles()).isFalse();
 		assertThat(album.hasMediaFiles()).isFalse();
+		
+		assertThat(album.getAllMediaFiles()).isEmpty();
 	}
 
 	private static final String albumStr1 = """
@@ -106,9 +111,10 @@ class AlbumTest {
 		assertThat(album.hasMissingOrInvalidMediaFilePath(ContentNature.AUDIO)).isTrue();
 		assertThat(album.hasMediaFilePathNotFound(ContentNature.AUDIO)).isTrue();
 		
-		List<AbstractAudioFile> audioFiles = album.getFormatAlbum().getAudioFiles();
+		List<? extends AbstractMediaFile> audioFiles = album.getFormatAlbum().getMediaFiles(ContentNature.AUDIO);
 		assertThat(audioFiles).isNotNull()
 			.singleElement()
+			.asInstanceOf(InstanceOfAssertFactories.type(AbstractAudioFile.class))
 			.satisfies(audio -> {
 				assertThat(audio.hasMissingOrInvalidMediaFilePath()).isTrue();
 				assertThat(audio.isLossLess()).isTrue();
@@ -123,16 +129,18 @@ class AlbumTest {
 				assertThat(audio.getMediaFilePaths()).isNull();
 			});
 
-		// Add the audio file path
-		AbstractAudioFile audioFile = audioFiles.get(0);
-		audioFile.addMediaFilePath(Paths.get("E:/Musique/e/Bill Evans/Waltz for Debby/"));
+		assertThat(album.getAllMediaFiles()).hasSameElementsAs(audioFiles);
 		
-		assertThat(album.getFormatAlbum().getAudioFiles()).singleElement().satisfies(audio -> {
+		// Add the audio file path
+		AbstractAudioFile audioFile = (AbstractAudioFile) audioFiles.get(0);
+		audioFile.addMediaFilePath(new MediaFilePath(Paths.get("E:/Musique/e/Bill Evans/Waltz for Debby/")));
+		
+		assertThat(album.getFormatAlbum().getMediaFiles(ContentNature.AUDIO)).singleElement().satisfies(audio -> {
 			assertThat(audio.hasMissingOrInvalidMediaFilePath()).isFalse();
 			assertThat(audio.getMediaFilePaths())
 				.isNotNull()
 				.singleElement()
-				.satisfies(audioPath -> assertThat(audioPath).hasToString("E:\\Musique\\e\\Bill Evans\\Waltz for Debby"));
+				.satisfies(audioPath -> assertThat(audioPath.getPath()).hasToString("E:\\Musique\\e\\Bill Evans\\Waltz for Debby"));
 		});
 
 		// Get the json from the album (should be modified with the path)
@@ -150,8 +158,9 @@ class AlbumTest {
 		assertThat(album2.hasMissingOrInvalidMediaFilePath(ContentNature.AUDIO)).isFalse();
 		assertThat(album2.hasMediaFilePathNotFound(ContentNature.AUDIO)).isFalse();
 		
-		assertThat(album2.getFormatAlbum().getAudioFiles()).isNotNull()
+		assertThat(album2.getFormatAlbum().getMediaFiles(ContentNature.AUDIO)).isNotNull()
 			.singleElement()
+			.asInstanceOf(InstanceOfAssertFactories.type(AbstractAudioFile.class))
 			.satisfies(audio -> {
 				assertThat(audio.hasMissingOrInvalidMediaFilePath()).isFalse();
 				assertThat(audio.isLossLess()).isTrue();
@@ -166,19 +175,19 @@ class AlbumTest {
 				assertThat(audio.getMediaFilePaths())
 					.isNotNull()
 					.singleElement()
-					.satisfies(audioPath -> assertThat(audioPath).hasToString("E:\\Musique\\e\\Bill Evans\\Waltz for Debby"));
+					.satisfies(audioPath -> assertThat(audioPath.getPath()).hasToString("E:\\Musique\\e\\Bill Evans\\Waltz for Debby"));
 			});
 		
 		// Fix the audio file path
-		AbstractAudioFile audioFile2 = album2.getFormatAlbum().getAudioFiles().get(0);
-		audioFile2.setMediaFilePath(Set.of(Paths.get("E:/Musique/e/Bill Evans/Portrait In Jazz/")));
+		AbstractAudioFile audioFile2 = (AbstractAudioFile) album2.getFormatAlbum().getMediaFiles(ContentNature.AUDIO).get(0);
+		audioFile2.setMediaFilePath(Set.of(new MediaFilePath(Paths.get("E:/Musique/e/Bill Evans/Portrait In Jazz/"))));
 		
-		assertThat(album2.getFormatAlbum().getAudioFiles()).singleElement().satisfies(audio -> {
+		assertThat(album2.getFormatAlbum().getMediaFiles(ContentNature.AUDIO)).singleElement().satisfies(audio -> {
 			assertThat(audio.hasMissingOrInvalidMediaFilePath()).isFalse();
 			assertThat(audio.getMediaFilePaths())
 				.isNotNull()
 				.singleElement()
-				.satisfies(audioPath -> assertThat(audioPath).hasToString("E:\\Musique\\e\\Bill Evans\\Portrait In Jazz"));
+				.satisfies(audioPath -> assertThat(audioPath.getPath()).hasToString("E:\\Musique\\e\\Bill Evans\\Portrait In Jazz"));
 		});
 		
 		// Get the json from the album (should be modified with the fixed path)
@@ -198,8 +207,9 @@ class AlbumTest {
 		assertThat(album3.hasMissingOrInvalidMediaFilePath(ContentNature.AUDIO)).isFalse();
 		assertThat(album3.hasMediaFilePathNotFound(ContentNature.AUDIO)).isFalse();
 		
-		assertThat(album3.getFormatAlbum().getAudioFiles()).isNotNull()
+		assertThat(album3.getFormatAlbum().getMediaFiles(ContentNature.AUDIO)).isNotNull()
 			.singleElement()
+			.asInstanceOf(InstanceOfAssertFactories.type(AbstractAudioFile.class))
 			.satisfies(audio -> {
 				assertThat(audio.hasMissingOrInvalidMediaFilePath()).isFalse();
 				assertThat(audio.isLossLess()).isTrue();
@@ -214,7 +224,7 @@ class AlbumTest {
 				assertThat(audio.getMediaFilePaths())
 					.isNotNull()
 					.singleElement()
-					.satisfies(audioPath -> assertThat(audioPath).hasToString("E:\\Musique\\e\\Bill Evans\\Portrait In Jazz"));
+					.satisfies(audioPath -> assertThat(audioPath.getPath()).hasToString("E:\\Musique\\e\\Bill Evans\\Portrait In Jazz"));
 			});
 		
 		try {
@@ -239,8 +249,9 @@ class AlbumTest {
 		assertThat(album4.hasMissingOrInvalidMediaFilePath(ContentNature.AUDIO)).isFalse();
 		assertThat(album4.hasMediaFilePathNotFound(ContentNature.AUDIO)).isFalse();
 		
-		assertThat(album4.getFormatAlbum().getAudioFiles()).isNotNull()
+		assertThat(album4.getFormatAlbum().getMediaFiles(ContentNature.AUDIO)).isNotNull()
 			.singleElement()
+			.asInstanceOf(InstanceOfAssertFactories.type(AbstractAudioFile.class))
 			.satisfies(audio -> {
 				assertThat(audio.hasMissingOrInvalidMediaFilePath()).isFalse();
 				assertThat(audio.isLossLess()).isTrue();
@@ -255,7 +266,7 @@ class AlbumTest {
 				assertThat(audio.getMediaFilePaths())
 					.isNotNull()
 					.singleElement()
-					.satisfies(audioPath -> assertThat(audioPath).hasToString("E:\\Musique\\e\\Bill Evans\\Portrait In Jazz"));
+					.satisfies(audioPath -> assertThat(audioPath.getPath()).hasToString("E:\\Musique\\e\\Bill Evans\\Portrait In Jazz"));
 			});
 		
 	}
@@ -271,10 +282,10 @@ class AlbumTest {
 
 		Album album = new Album(jAlbum, lla, Path.of("dummyPath"));
 
-		List<Path> potentialPaths = album.searchPotentialMediaFilesPaths(ContentNature.AUDIO);
+		List<MediaFilePath> potentialPaths = album.searchPotentialMediaFilesPaths(ContentNature.AUDIO);
 
 		assertThat(potentialPaths).isNotNull().singleElement()
-				.hasToString("E:\\Musique\\e\\Bill Evans\\Portrait In Jazz");
+			.satisfies(mediaFilePath -> assertThat(mediaFilePath.getPath()).hasToString("E:\\Musique\\e\\Bill Evans\\Portrait In Jazz"));
 	}
 	
 	private static final String albumStr2 = """
@@ -314,10 +325,10 @@ class AlbumTest {
 
 		Album album = new Album(jAlbum, lla, Path.of("dummyPath"));
 
-		List<Path> potentialPaths = album.searchPotentialMediaFilesPaths(ContentNature.AUDIO);
+		List<MediaFilePath> potentialPaths = album.searchPotentialMediaFilesPaths(ContentNature.AUDIO);
 
 		assertThat(potentialPaths).isNotNull().singleElement()
-				.hasToString("E:\\Musique\\v\\Van Halen\\Van Halen [24 - 192]");
+		.satisfies(mediaFilePath -> assertThat(mediaFilePath.getPath()).hasToString("E:\\Musique\\v\\Van Halen\\Van Halen [24 - 192]"));
 	}
 	
 	private void testAlbumProperties(Album album, ListeArtiste la) {

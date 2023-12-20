@@ -24,37 +24,45 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.mediaPath;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.stream.Stream;
+import java.util.Comparator;
+import java.util.Set;
+import java.util.TreeSet;
 
-import org.fl.collectionAlbum.Control;
-import org.fl.collectionAlbum.Format.ContentNature;
+import org.fl.collectionAlbum.RangementComparator;
+import org.fl.collectionAlbum.albums.Album;
 
-public class MediaFilesInventories {
+public class MediaFilePathAlbumComparator implements Comparator<MediaFilePath> {
 
-	private static MediaFilesInventories instance;
+	private final RangementComparator albumComparator;
 	
-	private final Map<ContentNature,MediaFileInventory> mediaFilesInventories;
-
-	private MediaFilesInventories() {
-   		
-		mediaFilesInventories = new LinkedHashMap<>();
-		Stream.of(ContentNature.values()).forEach(contentNature -> {
-			mediaFilesInventories.put(contentNature, new MediaFileInventory(Control.getMediaFileRootPath(contentNature)));
-		});
+	public MediaFilePathAlbumComparator() {
+		albumComparator = new RangementComparator();
 	}
 
-	public static MediaFileInventory getMediaFileInventory(ContentNature contentNature) {
-		if (instance == null) {
-			instance = new MediaFilesInventories();
+	@Override
+	public int compare(MediaFilePath o1, MediaFilePath o2) {
+		
+		Set<Album> as1 = o1.getAlbumSet();
+		Set<Album> as2 = o2.getAlbumSet();
+		
+		if ((as1 == null) || (as1.isEmpty())) {
+			if ((as2 == null) || (as2.isEmpty())) {
+				return 0;
+			} else {
+				return -1;
+			}
+		} else if ((as2 == null) || (as2.isEmpty())) {
+			return 1;
+		} else {
+			TreeSet<Album> ts1 = new TreeSet<>(albumComparator);
+			ts1.addAll(as1);
+			
+			TreeSet<Album> ts2 = new TreeSet<>(albumComparator);
+			ts2.addAll(as2);
+			
+			return albumComparator.compare(ts1.first(), ts2.first());
 		}
-		return instance.mediaFilesInventories.get(contentNature);
+		
 	}
 
-	public static void rebuildInventories() {
-		if (instance != null) {
-			instance.mediaFilesInventories.values().forEach(MediaFileInventory::buildInventory);
-		}
-	}
 }

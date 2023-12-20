@@ -32,20 +32,28 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import org.fl.collectionAlbum.AbstractMediaFile;
 import org.fl.collectionAlbum.Control;
+import org.fl.collectionAlbum.Format.ContentNature;
 import org.fl.collectionAlbum.JsonMusicProperties;
+import org.fl.collectionAlbum.mediaPath.MediaFilePath;
+import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 
 import com.google.gson.JsonObject;
 
-public class AbstractMediaFileParser {
+public abstract class AbstractMediaFileParser {
+
+	public AbstractMediaFileParser() {
+		super();
+	}
 
 	private final static Logger albumLog = Control.getAlbumLog();
 	
-	protected static String parseNote(JsonObject mediaFileJson) {
+	protected String parseNote(JsonObject mediaFileJson) {
 		return ParserHelpers.parseStringProperty(mediaFileJson, JsonMusicProperties.NOTE, false);
 	}
 
-	protected static Set<Path> parseAudioFileLocation(JsonObject mediaFileJson) {
+	protected Set<MediaFilePath> parseMediaFileLocation(JsonObject mediaFileJson, ContentNature contentNature) {
 
 		Set<String> locations = ParserHelpers.getArrayAttributeAsSet(mediaFileJson,  JsonMusicProperties.LOCATION);
 		if (locations == null) {
@@ -59,7 +67,7 @@ public class AbstractMediaFileParser {
 								if (!Files.exists(locationPath)) {
 									albumLog.warning("Media file location does not exists: " + mediaFileJson);
 								}
-								return locationPath;
+								return MediaFilesInventories.getMediaFileInventory(contentNature).searchMediaFilePath(locationPath);
 							} else {
 								albumLog.severe("Media file location is not absolute: " + mediaFileJson);
 								return null;
@@ -74,9 +82,9 @@ public class AbstractMediaFileParser {
 		}
 	}
 	
-	protected static String parseSource(JsonObject mediaFileJson) {
-		
+	protected String parseSource(JsonObject mediaFileJson) {		
 		return ParserHelpers.parseStringProperty(mediaFileJson, JsonMusicProperties.SOURCE, true);
 	}
 
+	public abstract <T extends AbstractMediaFile> T parseMediaFile(JsonObject mediaFileJson);
 }

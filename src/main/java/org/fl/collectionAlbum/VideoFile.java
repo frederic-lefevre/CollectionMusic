@@ -24,9 +24,10 @@ SOFTWARE.
 
 package org.fl.collectionAlbum;
 
-import java.nio.file.Path;
 import java.util.Set;
 import java.util.function.BiConsumer;
+
+import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
 import com.google.gson.JsonObject;
 
@@ -36,8 +37,8 @@ public class VideoFile extends AbstractMediaFile {
 	private final int height;
 	private final VideoFileType type;
 	
-	public VideoFile(JsonObject videoJson, VideoFileType type, String source, int width, int height, String note, Set<Path> paths) {
-		super(videoJson, source, note, paths);
+	public VideoFile(JsonObject videoJson, VideoFileType type, String source, int width, int height, String note, Set<MediaFilePath> mediaFilePaths) {
+		super(videoJson, source, note, mediaFilePaths);
 		this.type = type;
 		this.width = width;
 		this.height = height;

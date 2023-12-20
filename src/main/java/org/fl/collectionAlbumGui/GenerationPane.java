@@ -25,12 +25,16 @@ SOFTWARE.
 package org.fl.collectionAlbumGui;
 
 import java.awt.Dimension;
+import java.util.stream.Stream;
 
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
+import org.fl.collectionAlbum.Format.ContentNature;
+import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 
 public class GenerationPane extends JPanel {
 
@@ -74,13 +78,42 @@ public class GenerationPane extends JPanel {
 		
 		add(controlPanel);
 		
-		// Table header
-		add(albumsJTable.getTableHeader());
+		// Tab pane for generation of collection
+		JTabbedPane collectionTabPanes = new JTabbedPane();
 		
-		// Scroll pane to contain the tables
+		// collection tab
+		JPanel collectionPane = new JPanel();
+		
+		// Collection Table header
+		collectionPane.add(albumsJTable.getTableHeader());
+		
+		// Scroll pane to contain the collection table
 		JScrollPane albumsScrollTable = new JScrollPane(albumsJTable);
-		albumsScrollTable.setPreferredSize(new Dimension(1800,1000));
-		add(albumsScrollTable);
+		albumsScrollTable.setPreferredSize(new Dimension(1800,700));
+		collectionPane.add(albumsScrollTable);
+		
+		collectionTabPanes.add(collectionPane, "Collection", 0);
+		
+		// Media files tabs
+		Stream.of(ContentNature.values()).forEach(contentNature -> {
+			
+			MediaFilesTableModel tm = new MediaFilesTableModel(MediaFilesInventories.getMediaFileInventory(contentNature));
+			
+			MediaFilesJTable mediaFilesJTable = new MediaFilesJTable(tm);
+			
+			JPanel mediaFilesPane = new JPanel();
+			
+			mediaFilesPane.add(mediaFilesJTable.getTableHeader());
+			
+			// Scroll pane to contain the media path table
+			JScrollPane mediaFilesScrollTable = new JScrollPane(mediaFilesJTable);
+			mediaFilesScrollTable.setPreferredSize(new Dimension(1800,700));
+			mediaFilesPane.add(mediaFilesScrollTable);
+			
+			collectionTabPanes.add(mediaFilesPane, contentNature.getNom());
+		});
+		
+		add(collectionTabPanes);
 	}
 
 }

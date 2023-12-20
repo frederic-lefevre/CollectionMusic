@@ -34,31 +34,30 @@ import javax.swing.table.TableCellRenderer;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
-import org.fl.collectionAlbum.artistes.Artiste;
+import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
-public class AuteursRenderer extends JLabel implements TableCellRenderer {
+public class AlbumsRenderer extends JLabel implements TableCellRenderer {
 
 	private static final long serialVersionUID = 1L;
 
 	private static final Logger mLog = Control.getAlbumLog();
 	
-	private final static String AUTEURS_SEPARATOR = ", ";
+	private final static String ALBUMS_SEPARATOR = ", ";
 	
-	public AuteursRenderer() {
+	public AlbumsRenderer() {
 		super();
 	}
 
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
 			int row, int column) {
-
 		if (value == null) {
 			// This may happen when rescanning the album collection
 			mLog.fine("Null value in MediaFiles cell. Should be an Album");
-		} else if (value instanceof Album) {
-			setText(((Album)value).getAuteurs().stream()
-					.map(Artiste::getNomComplet)
-					.collect(Collectors.joining(AUTEURS_SEPARATOR)));
+		} else if (value instanceof MediaFilePath) {
+			setText(((MediaFilePath)value).getAlbumSet().stream()
+					.map(Album::getTitre)
+					.collect(Collectors.joining(ALBUMS_SEPARATOR)));
 		} else {
 			mLog.severe("Invalid value type in Auteurs cell. Should be Album but is " + value.getClass().getName());
 		}

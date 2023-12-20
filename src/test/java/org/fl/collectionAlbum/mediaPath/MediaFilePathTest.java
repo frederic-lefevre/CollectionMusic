@@ -24,37 +24,27 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.mediaPath;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.stream.Stream;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import org.fl.collectionAlbum.Control;
-import org.fl.collectionAlbum.Format.ContentNature;
+import java.nio.file.Paths;
 
-public class MediaFilesInventories {
+import org.junit.jupiter.api.Test;
 
-	private static MediaFilesInventories instance;
-	
-	private final Map<ContentNature,MediaFileInventory> mediaFilesInventories;
+class MediaFilePathTest {
 
-	private MediaFilesInventories() {
-   		
-		mediaFilesInventories = new LinkedHashMap<>();
-		Stream.of(ContentNature.values()).forEach(contentNature -> {
-			mediaFilesInventories.put(contentNature, new MediaFileInventory(Control.getMediaFileRootPath(contentNature)));
-		});
+	@Test
+	void shouldSelectMediaFileExtension() {
+		
+		assertThat(MediaFilePath.isMediaFileName(Paths.get("toto.flac"))).isTrue();
+		assertThat(MediaFilePath.isMediaFileName(Paths.get("toto.mp3"))).isTrue();
+		assertThat(MediaFilePath.isMediaFileName(Paths.get("toto.wma"))).isTrue();
+		assertThat(MediaFilePath.isMediaFileName(Paths.get("toto.txt"))).isFalse();
+		assertThat(MediaFilePath.isMediaFileName(Paths.get("toto.jpg"))).isFalse();
+		assertThat(MediaFilePath.isMediaFileName(Paths.get("toto"))).isFalse();
+		assertThat(MediaFilePath.isMediaFileName(Paths.get(""))).isFalse();
+		assertThat(MediaFilePath.isMediaFileName(null)).isFalse();
+		
+		MediaFilePath.extensionSet.forEach(extension -> System.out.println(extension));
 	}
 
-	public static MediaFileInventory getMediaFileInventory(ContentNature contentNature) {
-		if (instance == null) {
-			instance = new MediaFilesInventories();
-		}
-		return instance.mediaFilesInventories.get(contentNature);
-	}
-
-	public static void rebuildInventories() {
-		if (instance != null) {
-			instance.mediaFilesInventories.values().forEach(MediaFileInventory::buildInventory);
-		}
-	}
 }
