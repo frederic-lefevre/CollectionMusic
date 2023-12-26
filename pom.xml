@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>CollectionMusic</groupId>
 	<artifactId>CollectionMusic</artifactId>
-	<version>4.0.0</version>
+	<version>5.0.0</version>
 	<name>CollectionMusic</name>
 
 	<dependencies>
@@ -16,13 +16,13 @@
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
-			<version>5.10.0</version>
+			<version>5.10.1</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
     		<groupId>org.junit.jupiter</groupId>
     		<artifactId>junit-jupiter-params</artifactId>
-    		<version>5.10.0</version>
+    		<version>5.10.1</version>
     		<scope>test</scope>
 		</dependency>
 		<dependency>
