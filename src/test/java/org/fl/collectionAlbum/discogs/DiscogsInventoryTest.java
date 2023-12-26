@@ -73,6 +73,25 @@ class DiscogsInventoryTest {
 				assertThat(album.getCollectionMediaCondition()).isEqualTo("Near Mint (NM or M-)");
 				assertThat(album.getCollectionSleeveCondition()).isEqualTo("Near Mint (NM or M-)");
 				assertThat(album.getCollectionNotes()).isEqualTo("Limited Edition 2nd pressing of 5000. Number 3801");
-	});
+		});
+	}
+	
+	@Test
+	void shouldFindAlbum() {
+		
+		assertThat(DiscogsInventory.containsOneAndOnlyOneAlbum(List.of("Albert Collins"), "Ice Pickin'")).isTrue();
+	}
+	
+	@Test
+	void shouldNotFindAlbumWithMultipleOccurences() {
+		
+		assertThat(DiscogsInventory.containsOneAndOnlyOneAlbum(List.of("Bob Dylan"), "Blonde on Blonde")).isFalse();
+	}
+	
+	@Test
+	void shouldNotFindAlbumAbsentAlbums() {
+		
+		assertThat(DiscogsInventory.containsOneAndOnlyOneAlbum(List.of("Bob Dylan"), "A Love Supreme")).isFalse();
+		assertThat(DiscogsInventory.containsOneAndOnlyOneAlbum(List.of("John Coltrane"), "Blonde on Blonde")).isFalse();
 	}
 }

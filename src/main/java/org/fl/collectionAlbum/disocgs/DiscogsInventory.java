@@ -47,12 +47,31 @@ public class DiscogsInventory {
 	
 	private final Path disocgsInventoryCsvPath;
 	
+	private List<InventoryCsvAlbum> discogsInventory;
+	
 	private DiscogsInventory() {
 		
 		disocgsInventoryCsvPath = Control.getDiscogsCollectionCsvExportPath();
 	}
 
 	public static List<InventoryCsvAlbum> getDiscogsInventory() {
-		return Inventory.parseCsvFile(getInstance().disocgsInventoryCsvPath, albumLog);
+		
+		getInstance().discogsInventory = Inventory.parseCsvFile(getInstance().disocgsInventoryCsvPath, albumLog);
+		return getInstance().discogsInventory;
+	}
+	
+	public static boolean containsOneAndOnlyOneAlbum(List<String> artists, String title) {
+		return getInstance().containsOneAndOnlyOne(artists, title);
+	}
+	
+	private boolean containsOneAndOnlyOne(List<String> artists, String title) {
+		
+		if (discogsInventory == null) {
+			discogsInventory = Inventory.parseCsvFile(getInstance().disocgsInventoryCsvPath, albumLog);
+		}
+		return (1 == discogsInventory.stream()
+			.filter(discogsRelease -> discogsRelease.getTitle().toLowerCase().contains(title.toLowerCase()))
+			.filter(discogsRelease -> discogsRelease.getArtists().stream().anyMatch(artist -> artists.contains(artist)))
+			.count());
 	}
 }
