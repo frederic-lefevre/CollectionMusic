@@ -58,6 +58,7 @@ public class Control {
 	private Path concertDirectoryName;
 	private Map<ContentNature,Path> mediaFileRootPaths;
 	private List<OsAction> osActions;
+	private Path discogsCollectionCsvExportPath;
    	
 	private Control() {
 		
@@ -72,15 +73,17 @@ public class Control {
 			// Get CharSet to read music files and write rapport
 		    String cs = collectionProperties.getProperty("rapport.charset", "UTF-8");
 			if (Charset.isSupported(cs)) {
-				charset = Charset.forName(cs) ;
+				charset = Charset.forName(cs);
 			} else {
-				charset = Charset.defaultCharset() ;
-				albumLog.severe("Unsupported charset: " + cs + ". Default JVM charset assumed: " + charset) ;				
+				charset = Charset.defaultCharset();
+				albumLog.severe("Unsupported charset: " + cs + ". Default JVM charset assumed: " + charset);				
 			}
 		
 			// Get the root directory for the album collection and concert
 			collectionDirectoryName = collectionProperties.getPathFromURI("album.rootDir.name");
-			concertDirectoryName 	= collectionProperties.getPathFromURI("concert.rootDir.name");
+			concertDirectoryName = collectionProperties.getPathFromURI("concert.rootDir.name");
+			
+			discogsCollectionCsvExportPath = collectionProperties.getPathFromURI("album.discogs.collection.csvExport");
 			
 			mediaFileRootPaths = new HashMap<>();
 			Stream.of(ContentNature.values())
@@ -154,5 +157,9 @@ public class Control {
 	
 	public static List<OsAction> getOsActions() {
 		return getInstance().osActions;
+	}
+
+	public static Path getDiscogsCollectionCsvExportPath() {
+		return getInstance().discogsCollectionCsvExportPath;
 	}
 }
