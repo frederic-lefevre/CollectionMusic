@@ -94,4 +94,34 @@ class DiscogsInventoryTest {
 		assertThat(DiscogsInventory.containsOneAndOnlyOneAlbum(List.of("Bob Dylan"), "A Love Supreme")).isFalse();
 		assertThat(DiscogsInventory.containsOneAndOnlyOneAlbum(List.of("John Coltrane"), "Blonde on Blonde")).isFalse();
 	}
+	
+	@Test
+	void shouldGetPotentialReleaseMatch() {
+		
+		assertThat(DiscogsInventory.getPotentialReleaseMatch(List.of("Soft Machine"), "Third"))
+			.isNotNull().singleElement()
+			.satisfies(release -> {
+				assertThat(release.getArtists()).contains("Soft Machine");
+				assertThat(release.getTitle().toLowerCase()).isEqualTo("third");
+			});
+	}
+	
+	@Test
+	void shouldGetSeveralPotentialReleaseMatch() {
+		
+		assertThat(DiscogsInventory.getPotentialReleaseMatch(List.of("Bob Dylan"), "Blonde on Blonde"))
+			.isNotNull().hasSizeGreaterThan(1)
+			.allSatisfy(release -> {
+				assertThat(release.getArtists()).contains("Bob Dylan");
+				assertThat(release.getTitle()).isEqualToIgnoringCase("Blonde on Blonde");
+			});
+
+	}
+	
+	@Test
+	void shouldNotGetPotentialReleaseMatch() {
+		
+		assertThat(DiscogsInventory.getPotentialReleaseMatch(List.of("Charlie Christian"), "Third"))
+			.isNotNull().isEmpty();
+	}
 }

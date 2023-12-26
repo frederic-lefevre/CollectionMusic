@@ -27,6 +27,7 @@ package org.fl.collectionAlbum.disocgs;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.discogsInterface.inventory.Inventory;
@@ -64,14 +65,27 @@ public class DiscogsInventory {
 		return getInstance().containsOneAndOnlyOne(artists, title);
 	}
 	
+	
 	private boolean containsOneAndOnlyOne(List<String> artists, String title) {
 		
 		if (discogsInventory == null) {
 			discogsInventory = Inventory.parseCsvFile(getInstance().disocgsInventoryCsvPath, albumLog);
 		}
-		return (1 == discogsInventory.stream()
-			.filter(discogsRelease -> discogsRelease.getTitle().toLowerCase().contains(title.toLowerCase()))
-			.filter(discogsRelease -> discogsRelease.getArtists().stream().anyMatch(artist -> artists.contains(artist)))
-			.count());
+		return (1 == getPotentialReleaseMatch(artists, title).size());
+	}
+	
+	public static List<InventoryCsvAlbum> getPotentialReleaseMatch(List<String> artists, String title) {
+		return getInstance().getPotentialMatch(artists, title);
+	}
+	
+	private List<InventoryCsvAlbum> getPotentialMatch(List<String> artists, String title) {
+		
+		if (discogsInventory == null) {
+			discogsInventory = Inventory.parseCsvFile(getInstance().disocgsInventoryCsvPath, albumLog);
+		}
+		return discogsInventory.stream()
+				.filter(discogsRelease -> discogsRelease.getTitle().toLowerCase().contains(title.toLowerCase()))
+				.filter(discogsRelease -> discogsRelease.getArtists().stream().anyMatch(artist -> artists.contains(artist)))
+				.collect(Collectors.toList());
 	}
 }
