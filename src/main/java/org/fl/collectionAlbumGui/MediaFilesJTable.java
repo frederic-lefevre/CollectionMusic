@@ -50,8 +50,8 @@ public class MediaFilesJTable extends JTable {
 		
 		getColumnModel().getColumn(MediaFilesTableModel.ALBUMS_COL_IDX).setCellRenderer(new AlbumsRenderer());
 		getColumnModel().getColumn(MediaFilesTableModel.PATH_COL_IDX).setPreferredWidth(700);
-		getColumnModel().getColumn(MediaFilesTableModel.ALBUMS_COL_IDX).setPreferredWidth(500);
-		getColumnModel().getColumn(MediaFilesTableModel.NB_FILES_COL_IDX).setPreferredWidth(150);
+		getColumnModel().getColumn(MediaFilesTableModel.ALBUMS_COL_IDX).setPreferredWidth(700);
+		getColumnModel().getColumn(MediaFilesTableModel.NB_FILES_COL_IDX).setPreferredWidth(125);
 		
 		// Row sorter
 		TableRowSorter<TableModel> sorter = new TableRowSorter<>(getModel());
