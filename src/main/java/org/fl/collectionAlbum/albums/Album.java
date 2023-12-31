@@ -49,7 +49,7 @@ import org.fl.util.date.FuzzyPeriod;
 import com.google.gson.JsonObject;
 
 public class Album extends MusicArtefact {
-
+	
 	protected final static Logger albumLog = Control.getAlbumLog();
 	
     private final String titre;
