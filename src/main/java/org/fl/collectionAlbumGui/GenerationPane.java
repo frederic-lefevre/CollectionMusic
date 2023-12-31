@@ -92,7 +92,7 @@ public class GenerationPane extends JPanel {
 		albumsScrollTable.setPreferredSize(new Dimension(1800,700));
 		collectionPane.add(albumsScrollTable);
 		
-		collectionTabPanes.add(collectionPane, "Collection", 0);
+		collectionTabPanes.add(collectionPane, "Collection d'albums", 0);
 		
 		// Media files tabs
 		Stream.of(ContentNature.values()).forEach(contentNature -> {
@@ -110,7 +110,7 @@ public class GenerationPane extends JPanel {
 			mediaFilesScrollTable.setPreferredSize(new Dimension(1800,700));
 			mediaFilesPane.add(mediaFilesScrollTable);
 			
-			collectionTabPanes.add(mediaFilesPane, contentNature.getNom());
+			collectionTabPanes.add(mediaFilesPane, "Chemins des fichiers " + contentNature.getNom());
 		});
 		
 		add(collectionTabPanes);
