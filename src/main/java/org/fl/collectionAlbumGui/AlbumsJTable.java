@@ -78,6 +78,7 @@ public class AlbumsJTable extends JTable {
 		getColumnModel().getColumn(AlbumsTableModel.AUTEUR_COL_IDX).setPreferredWidth(350);
 		getColumnModel().getColumn(AlbumsTableModel.MEDIA_FILES_COL_IDX).setPreferredWidth(400);
 		getColumnModel().getColumn(AlbumsTableModel.PROBLEM_COL_IDX).setPreferredWidth(70);
+		getColumnModel().getColumn(AlbumsTableModel.DISCOGS_COL_IDX).setPreferredWidth(70);
 		
 		// Row sorter
 		TableRowSorter<TableModel> sorter = new TableRowSorter<>(getModel());

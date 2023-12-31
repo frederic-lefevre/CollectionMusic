@@ -24,6 +24,8 @@ SOFTWARE.
 
 package org.fl.collectionAlbumGui;
 
+import java.util.Optional;
+
 import javax.swing.table.AbstractTableModel;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
@@ -36,10 +38,11 @@ public class AlbumsTableModel extends AbstractTableModel {
 	public final static int AUTEUR_COL_IDX = 1;
 	public final static int MEDIA_FILES_COL_IDX = 2;
 	public final static int PROBLEM_COL_IDX = 3;
+	public final static int DISCOGS_COL_IDX = 4;
 	
 	private static final long serialVersionUID = 1L;
 	
-	private final static String[] entetes = {"Titres", "Auteurs", "Chemins des fichiers media", "Problème"};
+	private final static String[] entetes = {"Titres", "Auteurs", "Chemins des fichiers media", "Problème", "Discogs release"};
 	
 	private final CollectionAlbumContainer albumsContainer;
 	
@@ -92,6 +95,7 @@ public class AlbumsTableModel extends AbstractTableModel {
 				case AUTEUR_COL_IDX ->getAlbumsList().getAlbums().get(rowIndex);
 				case MEDIA_FILES_COL_IDX -> getAlbumsList().getAlbums().get(rowIndex);
 				case PROBLEM_COL_IDX -> getAlbumsList().getAlbums().get(rowIndex).hasProblem();
+				case DISCOGS_COL_IDX -> Optional.ofNullable(getAlbumsList().getAlbums().get(rowIndex).getDiscogsLink()).orElse("");
 				default -> null;
 			};
 		}
