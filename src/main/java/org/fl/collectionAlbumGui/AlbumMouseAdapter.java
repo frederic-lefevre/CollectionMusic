@@ -52,7 +52,7 @@ public class AlbumMouseAdapter extends MouseAdapter {
 		anyMenuItems = new ArrayList<JMenuItem>();
 		
 		osActions.forEach(osAction -> {
-			anyMenuItems.add(addMenuItem(osAction.getActionTitle(), new AlbumCommandListener(albumsJTable, osAction.getActionCommand())));
+			anyMenuItems.add(addMenuItem(osAction.getActionTitle(), new AlbumCommandListener(albumsJTable, osAction)));
 		});
 	}
 

@@ -1,7 +1,7 @@
 /*
- * MIT License
+ MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2022 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -20,34 +20,25 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-*/
+ */
 
-package org.fl.collectionAlbum;
+package org.fl.collectionAlbum.albums;
 
-import org.fl.collectionAlbum.albums.AlbumCommandParameter;
+import java.util.function.Function;
 
-public class OsAction {
+public enum AlbumCommandParameter {
 
-	private final String actionTitle;
-	private final String actionCommand;
-	private final AlbumCommandParameter albumCommandParameter;
+	JSON((album) -> album.getJsonFilePath().toAbsolutePath().toString()),
+	DISCOGS_RELEASE((album) -> album.getDiscogsLink());
 	
-	public OsAction(String t, String c, AlbumCommandParameter a) {
-		actionTitle   = t;
-		actionCommand = c;
-		albumCommandParameter = a;
+	private final Function<Album,String> parametersGetter;
+	
+	private AlbumCommandParameter(Function<Album,String> gp) {
+		parametersGetter = gp;
 	}
 
-	public String getActionTitle() {
-		return actionTitle;
-	}
-
-	public String getActionCommand() {
-		return actionCommand;
-	}
-
-	public AlbumCommandParameter getAlbumCommandParameter() {
-		return albumCommandParameter;
+	public Function<Album, String> getParametersGetter() {
+		return parametersGetter;
 	}
 
 }

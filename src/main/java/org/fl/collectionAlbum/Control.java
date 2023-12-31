@@ -36,6 +36,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.fl.collectionAlbum.Format.ContentNature;
+import org.fl.collectionAlbum.albums.AlbumCommandParameter;
 import org.fl.collectionAlbumGui.MediaFileCustomActionListener;
 import org.fl.collectionAlbumGui.MediaFileCustomActionListener.CustomAction;
 import org.fl.util.AdvancedProperties;
@@ -98,7 +99,8 @@ public class Control {
 			osActions = collectionProperties.getKeysElements("album.command.").stream()
 				.map(prop -> new OsAction(
 						collectionProperties.getProperty(osCmdPropBase + prop + ".title"), 
-						collectionProperties.getProperty(osCmdPropBase + prop + ".cmd")))
+						collectionProperties.getProperty(osCmdPropBase + prop + ".cmd"),
+						AlbumCommandParameter.valueOf(collectionProperties.getProperty(osCmdPropBase + prop + ".param"))))
 				.collect(Collectors.toList());
 			
 			Map<CustomAction, String> customActions = new HashMap<>();

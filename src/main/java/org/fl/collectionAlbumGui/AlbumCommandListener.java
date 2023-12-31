@@ -28,6 +28,7 @@ import java.awt.event.ActionEvent;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.Control;
+import org.fl.collectionAlbum.OsAction;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.util.os.OScommand;
 
@@ -35,13 +36,13 @@ public class AlbumCommandListener implements java.awt.event.ActionListener {
 
 	private static final Logger aLog = Control.getAlbumLog();
 	
-	private final String command;
 	private final AlbumsJTable albumsJTable;
+	private final OsAction osAction;
 	
-	public AlbumCommandListener(AlbumsJTable ajt, String command) {
+	public AlbumCommandListener(AlbumsJTable ajt, OsAction osAction) {
 		
 		this.albumsJTable = ajt;
-		this.command = command;
+		this.osAction = osAction;
 	}
 
 	@Override
@@ -51,10 +52,10 @@ public class AlbumCommandListener implements java.awt.event.ActionListener {
 		
 		if (selectedAlbum != null) {
 			
-			StringBuilder fullCommand = new StringBuilder(command);
+			StringBuilder fullCommand = new StringBuilder(osAction.getActionCommand());
 			
 			fullCommand.append(" ")
-				.append(selectedAlbum.getJsonFilePath().toAbsolutePath().toString());
+				.append(osAction.getAlbumCommandParameter().getParametersGetter().apply(selectedAlbum));
 			
 			OScommand osCommand = new OScommand(fullCommand.toString(), false, aLog) ;
 			osCommand.run();
