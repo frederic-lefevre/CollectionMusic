@@ -59,6 +59,7 @@ public class Control {
 	private Map<ContentNature,Path> mediaFileRootPaths;
 	private List<OsAction> osActions;
 	private Path discogsCollectionCsvExportPath;
+	private String discogsBaseUrlForRelease;
    	
 	private Control() {
 		
@@ -84,6 +85,7 @@ public class Control {
 			concertDirectoryName = collectionProperties.getPathFromURI("concert.rootDir.name");
 			
 			discogsCollectionCsvExportPath = collectionProperties.getPathFromURI("album.discogs.collection.csvExport");
+			discogsBaseUrlForRelease = collectionProperties.getProperty("album.discogs.baseUrl.release");
 			
 			mediaFileRootPaths = new HashMap<>();
 			Stream.of(ContentNature.values())
@@ -161,5 +163,9 @@ public class Control {
 
 	public static Path getDiscogsCollectionCsvExportPath() {
 		return getInstance().discogsCollectionCsvExportPath;
+	}
+
+	public static String getDiscogsBaseUrlForRelease() {
+		return getInstance().discogsBaseUrlForRelease;
 	}
 }
