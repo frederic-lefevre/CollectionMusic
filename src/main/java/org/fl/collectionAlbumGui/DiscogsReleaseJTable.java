@@ -48,8 +48,8 @@ public class DiscogsReleaseJTable extends JTable {
 		setAutoCreateRowSorter(true);
 		
 		getColumnModel().getColumn(DisocgsReleaseTableModel.ID_COL_IDX).setPreferredWidth(70);
-		getColumnModel().getColumn(DisocgsReleaseTableModel.ARTISTS_COL_IDX).setPreferredWidth(600);
-		getColumnModel().getColumn(DisocgsReleaseTableModel.TITLE_COL_IDX).setPreferredWidth(450);
+		getColumnModel().getColumn(DisocgsReleaseTableModel.ARTISTS_COL_IDX).setPreferredWidth(800);
+		getColumnModel().getColumn(DisocgsReleaseTableModel.TITLE_COL_IDX).setPreferredWidth(600);
 		getColumnModel().getColumn(DisocgsReleaseTableModel.FORMAT_COL_IDX).setPreferredWidth(200);
 		
 		// Row sorter
