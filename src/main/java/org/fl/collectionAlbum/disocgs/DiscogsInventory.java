@@ -48,35 +48,35 @@ public class DiscogsInventory {
 	
 	private final Path disocgsInventoryCsvPath;
 	
-	private List<InventoryCsvAlbum> discogsInventory;
+	private final List<InventoryCsvAlbum> discogsInventory;
 	
 	private DiscogsInventory() {
 		
 		disocgsInventoryCsvPath = Control.getDiscogsCollectionCsvExportPath();
+		discogsInventory = Inventory.parseCsvFile(disocgsInventoryCsvPath, albumLog);
 	}
 
+	public static void rebuildDiscogsInventory() {
+		getInstance().rebuildDiscogsReleasesInventory();
+	}
+	
 	public static List<InventoryCsvAlbum> getDiscogsInventory() {
 
-		return getInstance().getDiscogsReleasesInventory();
+		return getInstance().discogsInventory;
 	}
 	
 	public static boolean containsOneAndOnlyOneAlbum(List<String> artists, String title) {
 		return getInstance().containsOneAndOnlyOne(artists, title);
 	}
 	
-	private List<InventoryCsvAlbum> getDiscogsReleasesInventory() {
+	private void rebuildDiscogsReleasesInventory() {
 		
-		if (discogsInventory == null) {
-			discogsInventory = Inventory.parseCsvFile(getInstance().disocgsInventoryCsvPath, albumLog);
-		}
-		return discogsInventory;
+		discogsInventory.clear();
+		discogsInventory.addAll(Inventory.parseCsvFile(disocgsInventoryCsvPath, albumLog));
 	}
 	
 	private boolean containsOneAndOnlyOne(List<String> artists, String title) {
 		
-		if (discogsInventory == null) {
-			discogsInventory = Inventory.parseCsvFile(getInstance().disocgsInventoryCsvPath, albumLog);
-		}
 		return (1 == getPotentialReleaseMatch(artists, title).size());
 	}
 	
@@ -86,9 +86,6 @@ public class DiscogsInventory {
 	
 	private List<InventoryCsvAlbum> getPotentialMatch(List<String> artists, String title) {
 		
-		if (discogsInventory == null) {
-			discogsInventory = Inventory.parseCsvFile(getInstance().disocgsInventoryCsvPath, albumLog);
-		}
 		return discogsInventory.stream()
 				.filter(discogsRelease -> discogsRelease.getTitle().toLowerCase().contains(title.toLowerCase()))
 				.filter(discogsRelease -> discogsRelease.getArtists().stream().anyMatch(artist -> artists.contains(artist)))
