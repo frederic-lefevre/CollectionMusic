@@ -26,10 +26,12 @@ package org.fl.collectionAlbum.albums;
 
 import java.util.function.Function;
 
+import org.fl.collectionAlbum.Control;
+
 public enum AlbumCommandParameter {
 
 	JSON((album) -> album.getJsonFilePath().toAbsolutePath().toString()),
-	DISCOGS_RELEASE((album) -> album.getDiscogsLink());
+	DISCOGS_RELEASE_INFO((album) -> Control.getDiscogsBaseUrlForRelease() + album.getDiscogsLink());
 	
 	private final Function<Album,String> parametersGetter;
 	
