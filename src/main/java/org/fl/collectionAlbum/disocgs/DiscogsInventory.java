@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -56,15 +56,21 @@ public class DiscogsInventory {
 	}
 
 	public static List<InventoryCsvAlbum> getDiscogsInventory() {
-		
-		getInstance().discogsInventory = Inventory.parseCsvFile(getInstance().disocgsInventoryCsvPath, albumLog);
-		return getInstance().discogsInventory;
+
+		return getInstance().getDiscogsReleasesInventory();
 	}
 	
 	public static boolean containsOneAndOnlyOneAlbum(List<String> artists, String title) {
 		return getInstance().containsOneAndOnlyOne(artists, title);
 	}
 	
+	private List<InventoryCsvAlbum> getDiscogsReleasesInventory() {
+		
+		if (discogsInventory == null) {
+			discogsInventory = Inventory.parseCsvFile(getInstance().disocgsInventoryCsvPath, albumLog);
+		}
+		return discogsInventory;
+	}
 	
 	private boolean containsOneAndOnlyOne(List<String> artists, String title) {
 		
