@@ -113,6 +113,22 @@ public class GenerationPane extends JPanel {
 			collectionTabPanes.add(mediaFilesPane, "Chemins des fichiers " + contentNature.getNom());
 		});
 		
+		// Discogs releases pane
+		DisocgsReleaseTableModel dtm = new DisocgsReleaseTableModel();
+		
+		DiscogsReleaseJTable discogsReleaseJTable = new DiscogsReleaseJTable(dtm);
+		
+		JPanel discogsReleasesPane = new JPanel();
+		discogsReleasesPane.add(discogsReleaseJTable.getTableHeader());
+		
+		// Scroll pane to contain the discogs releases pane
+		JScrollPane discogsReleasesScrollPane = new JScrollPane(discogsReleaseJTable);
+		discogsReleasesScrollPane.setPreferredSize(new Dimension(1800,700));
+		discogsReleasesPane.add(discogsReleasesScrollPane);
+		
+		collectionTabPanes.add(discogsReleasesPane, "Discos releases");
+		
+		
 		add(collectionTabPanes);
 	}
 
