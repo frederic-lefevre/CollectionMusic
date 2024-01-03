@@ -57,7 +57,11 @@ public class CollectionBooleanRenderer extends DefaultTableCellRenderer {
 				setBackground(Color.ORANGE);
 			} else {
 				setText("Non");
-				setBackground(Color.WHITE);
+				if (isSelected) {
+					setBackground(Color.LIGHT_GRAY);
+				} else {
+					setBackground(Color.WHITE);
+				}
 			}
 			setHorizontalAlignment(SwingConstants.CENTER);
 		}

@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,6 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbumGui;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -54,9 +55,13 @@ public class MediaFilesRenderer extends MediaFilesPane implements TableCellRende
 		if (value == null) {
 			// This may happen when rescanning the album collection
 			mLog.fine("Null value in MediaFiles cell. Should be an Album");
+			setBackground(Color.RED);
 		} else if (value instanceof Album) {
 			int rowHeight = updateValue((Album)value);
 			table.setRowHeight(row, rowHeight);
+			if (isSelected) {
+				setBackground(Color.LIGHT_GRAY);
+			}
 		} else {
 			mLog.severe("Invalid value type in MediaFiles cell. Should be Album but is " + value.getClass().getName());
 		}

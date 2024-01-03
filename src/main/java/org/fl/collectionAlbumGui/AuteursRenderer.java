@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -55,6 +55,7 @@ public class AuteursRenderer extends JLabel implements TableCellRenderer {
 		if (value == null) {
 			// This may happen when rescanning the album collection
 			mLog.fine("Null value in MediaFiles cell. Should be an Album");
+			setText("Valeur null");
 		} else if (value instanceof Album) {
 			setText(((Album)value).getAuteurs().stream()
 					.map(Artiste::getNomComplet)
