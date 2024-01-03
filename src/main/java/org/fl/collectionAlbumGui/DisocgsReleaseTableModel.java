@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 import javax.swing.table.AbstractTableModel;
 
 import org.fl.collectionAlbum.disocgs.DiscogsInventory;
-import org.fl.discogsInterface.inventory.InventoryCsvAlbum;
+import org.fl.collectionAlbum.disocgs.DiscogsInventory.DiscogsAlbumRelease;
 
 public class DisocgsReleaseTableModel extends AbstractTableModel {
 
@@ -70,16 +70,16 @@ public class DisocgsReleaseTableModel extends AbstractTableModel {
 	public Object getValueAt(int rowIndex, int columnIndex) {
 
 		return switch(columnIndex){
-			case ID_COL_IDX -> DiscogsInventory.getDiscogsInventory().get(rowIndex).getReleaseId();
-			case ARTISTS_COL_IDX -> DiscogsInventory.getDiscogsInventory().get(rowIndex).getArtists().stream().collect(Collectors.joining(","));
-			case TITLE_COL_IDX -> DiscogsInventory.getDiscogsInventory().get(rowIndex).getTitle();
-			case FORMAT_COL_IDX -> DiscogsInventory.getDiscogsInventory().get(rowIndex).getFormats().stream().collect(Collectors.joining(","));
+			case ID_COL_IDX -> DiscogsInventory.getDiscogsInventory().get(rowIndex).getInventoryCsvAlbum().getReleaseId();
+			case ARTISTS_COL_IDX -> DiscogsInventory.getDiscogsInventory().get(rowIndex).getInventoryCsvAlbum().getArtists().stream().collect(Collectors.joining(","));
+			case TITLE_COL_IDX -> DiscogsInventory.getDiscogsInventory().get(rowIndex).getInventoryCsvAlbum().getTitle();
+			case FORMAT_COL_IDX -> DiscogsInventory.getDiscogsInventory().get(rowIndex).getInventoryCsvAlbum().getFormats().stream().collect(Collectors.joining(","));
 			default -> null;
 		};
 
 	}
 
-	public InventoryCsvAlbum getDiscogsReleaseAt(int rowIndex) {
+	public DiscogsAlbumRelease getDiscogsReleaseAt(int rowIndex) {
 		return DiscogsInventory.getDiscogsInventory().get(rowIndex);
 	}
 }

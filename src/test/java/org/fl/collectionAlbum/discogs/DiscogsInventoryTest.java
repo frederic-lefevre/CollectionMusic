@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -34,6 +34,7 @@ import java.util.List;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory;
+import org.fl.collectionAlbum.disocgs.DiscogsInventory.DiscogsAlbumRelease;
 import org.fl.discogsInterface.inventory.InventoryCsvAlbum;
 import org.junit.jupiter.api.Test;
 
@@ -44,18 +45,20 @@ class DiscogsInventoryTest {
 		
 		int releaseCount = Files.readAllLines(Control.getDiscogsCollectionCsvExportPath()).size() - 1;
 		
-		List<InventoryCsvAlbum> inventory = DiscogsInventory.getDiscogsInventory();
+		List<DiscogsAlbumRelease> inventory = DiscogsInventory.getDiscogsInventory();
 		
 		assertThat(inventory).isNotNull().hasSize(releaseCount)
 			.anySatisfy(album -> {
-				assertThat(album.getArtists()).isNotNull().singleElement()
+				
+				InventoryCsvAlbum csvAlbum = album.getInventoryCsvAlbum();
+				assertThat(csvAlbum.getArtists()).isNotNull().singleElement()
 					.satisfies(artist -> assertThat(artist).isEqualTo("Jaco Pastorius"));
-				assertThat(album.getCatalogNumbers()).isNotNull().singleElement()
+				assertThat(csvAlbum.getCatalogNumbers()).isNotNull().singleElement()
 					.satisfies(catalogNb -> assertThat(catalogNb).isEqualTo("HLP-9027"));
-				assertThat(album.getTitle()).isEqualTo("Truth, Liberty & Soul - Live In NYC The Complete 1982 NPR Jazz Alive! Recordings");
-				assertThat(album.getLabels()).isNotNull().singleElement()
+				assertThat(csvAlbum.getTitle()).isEqualTo("Truth, Liberty & Soul - Live In NYC The Complete 1982 NPR Jazz Alive! Recordings");
+				assertThat(csvAlbum.getLabels()).isNotNull().singleElement()
 				.satisfies(label -> assertThat(label).isEqualTo("Resonance Records"));
-				assertThat(album.getFormats()).isNotNull().hasSize(6)
+				assertThat(csvAlbum.getFormats()).isNotNull().hasSize(6)
 					.satisfiesExactlyInAnyOrder(
 							format -> assertThat(format).isEqualTo("3xLP"),
 							format -> assertThat(format).isEqualTo("Album"),
@@ -63,16 +66,16 @@ class DiscogsInventoryTest {
 							format -> assertThat(format).isEqualTo("180 + Box"),
 							format -> assertThat(format).isEqualTo("RSD"),
 							format -> assertThat(format).isEqualTo("Num"));
-				assertThat(album.getRating()).isNull();
-				assertThat(album.getReleased()).isEqualTo(Year.of(2017));
-				assertThat(album.getReleaseId()).isEqualTo("10131632");
-				assertThat(album.getCollectionFolder()).isEqualTo("p");
-				assertThat(album.getDateAdded())
+				assertThat(csvAlbum.getRating()).isNull();
+				assertThat(csvAlbum.getReleased()).isEqualTo(Year.of(2017));
+				assertThat(csvAlbum.getReleaseId()).isEqualTo("10131632");
+				assertThat(csvAlbum.getCollectionFolder()).isEqualTo("p");
+				assertThat(csvAlbum.getDateAdded())
 					.hasYear(2023).hasMonth(Month.SEPTEMBER).hasDayOfMonth(24)
 					.hasHour(23).hasMinute(39).hasSecond(34);
-				assertThat(album.getCollectionMediaCondition()).isEqualTo("Near Mint (NM or M-)");
-				assertThat(album.getCollectionSleeveCondition()).isEqualTo("Near Mint (NM or M-)");
-				assertThat(album.getCollectionNotes()).isEqualTo("Limited Edition 2nd pressing of 5000. Number 3801");
+				assertThat(csvAlbum.getCollectionMediaCondition()).isEqualTo("Near Mint (NM or M-)");
+				assertThat(csvAlbum.getCollectionSleeveCondition()).isEqualTo("Near Mint (NM or M-)");
+				assertThat(csvAlbum.getCollectionNotes()).isEqualTo("Limited Edition 2nd pressing of 5000. Number 3801");
 		});
 	}
 	
@@ -101,8 +104,8 @@ class DiscogsInventoryTest {
 		assertThat(DiscogsInventory.getPotentialReleaseMatch(List.of("Soft Machine"), "Third"))
 			.isNotNull().singleElement()
 			.satisfies(release -> {
-				assertThat(release.getArtists()).contains("Soft Machine");
-				assertThat(release.getTitle().toLowerCase()).isEqualTo("third");
+				assertThat(release.getInventoryCsvAlbum().getArtists()).contains("Soft Machine");
+				assertThat(release.getInventoryCsvAlbum().getTitle().toLowerCase()).isEqualTo("third");
 			});
 	}
 	
@@ -112,8 +115,8 @@ class DiscogsInventoryTest {
 		assertThat(DiscogsInventory.getPotentialReleaseMatch(List.of("Bob Dylan"), "Blonde on Blonde"))
 			.isNotNull().hasSizeGreaterThan(1)
 			.allSatisfy(release -> {
-				assertThat(release.getArtists()).contains("Bob Dylan");
-				assertThat(release.getTitle()).isEqualToIgnoringCase("Blonde on Blonde");
+				assertThat(release.getInventoryCsvAlbum().getArtists()).contains("Bob Dylan");
+				assertThat(release.getInventoryCsvAlbum().getTitle()).isEqualToIgnoringCase("Blonde on Blonde");
 			});
 
 	}

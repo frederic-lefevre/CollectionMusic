@@ -25,16 +25,41 @@ SOFTWARE.
 package org.fl.collectionAlbum.disocgs;
 
 import java.nio.file.Path;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import org.fl.collectionAlbum.Control;
+import org.fl.collectionAlbum.albums.Album;
 import org.fl.discogsInterface.inventory.Inventory;
 import org.fl.discogsInterface.inventory.InventoryCsvAlbum;
 
 public class DiscogsInventory {
 
+	public static class DiscogsAlbumRelease {
+		
+		private InventoryCsvAlbum inventoryCsvAlbum;
+		private Album collectionAlbum;
+		
+		protected DiscogsAlbumRelease(InventoryCsvAlbum inventoryCsvAlbum) {
+			this.inventoryCsvAlbum = inventoryCsvAlbum;
+			collectionAlbum = null;
+		}
+
+		public Album getCollectionAlbum() {
+			return collectionAlbum;
+		}
+
+		public void setCollectionAlbum(Album collectionAlbum) {
+			this.collectionAlbum = collectionAlbum;
+		}
+
+		public InventoryCsvAlbum getInventoryCsvAlbum() {
+			return inventoryCsvAlbum;
+		}		
+	}
+	
 	private final static Logger albumLog = Control.getAlbumLog();
 	
 	private static DiscogsInventory discogsInventoryInstance;
@@ -48,21 +73,29 @@ public class DiscogsInventory {
 	
 	private final Path disocgsInventoryCsvPath;
 	
-	private final List<InventoryCsvAlbum> discogsInventory;
+	private LinkedHashMap<String,DiscogsAlbumRelease> discogsAlbumReleaseMap;
+	
+	// DiscogsAlbumRalease values maintained as List to be displayed in a JTable
+	private final List<DiscogsAlbumRelease> discogsAlbumReleases;
 	
 	private DiscogsInventory() {
 		
 		disocgsInventoryCsvPath = Control.getDiscogsCollectionCsvExportPath();
-		discogsInventory = Inventory.parseCsvFile(disocgsInventoryCsvPath, albumLog);
+		
+		discogsAlbumReleases = Inventory.parseCsvFile(disocgsInventoryCsvPath, albumLog).stream()
+				.map(DiscogsAlbumRelease::new).collect(Collectors.toList());
+		
+		discogsAlbumReleaseMap = new LinkedHashMap<>();
+		discogsAlbumReleases.forEach(release -> discogsAlbumReleaseMap.put(release.getInventoryCsvAlbum().getReleaseId(), release));
 	}
 
 	public static void rebuildDiscogsInventory() {
 		getInstance().rebuildDiscogsReleasesInventory();
 	}
 	
-	public static List<InventoryCsvAlbum> getDiscogsInventory() {
+	public static List<DiscogsAlbumRelease> getDiscogsInventory() {
 
-		return getInstance().discogsInventory;
+		return getInstance().discogsAlbumReleases;
 	}
 	
 	public static boolean containsOneAndOnlyOneAlbum(List<String> artists, String title) {
@@ -71,8 +104,11 @@ public class DiscogsInventory {
 	
 	private void rebuildDiscogsReleasesInventory() {
 		
-		discogsInventory.clear();
-		discogsInventory.addAll(Inventory.parseCsvFile(disocgsInventoryCsvPath, albumLog));
+		discogsAlbumReleases.clear();
+		Inventory.parseCsvFile(disocgsInventoryCsvPath, albumLog).forEach(csvRelease -> discogsAlbumReleases.add(new DiscogsAlbumRelease(csvRelease)));
+		
+		discogsAlbumReleaseMap.clear();
+		discogsAlbumReleases.forEach(release -> discogsAlbumReleaseMap.put(release.getInventoryCsvAlbum().getReleaseId(), release));
 	}
 	
 	private boolean containsOneAndOnlyOne(List<String> artists, String title) {
@@ -80,15 +116,16 @@ public class DiscogsInventory {
 		return (1 == getPotentialReleaseMatch(artists, title).size());
 	}
 	
-	public static List<InventoryCsvAlbum> getPotentialReleaseMatch(List<String> artists, String title) {
+	public static List<DiscogsAlbumRelease> getPotentialReleaseMatch(List<String> artists, String title) {
 		return getInstance().getPotentialMatch(artists, title);
 	}
 	
-	private List<InventoryCsvAlbum> getPotentialMatch(List<String> artists, String title) {
+	private List<DiscogsAlbumRelease> getPotentialMatch(List<String> artists, String title) {
 		
-		return discogsInventory.stream()
-				.filter(discogsRelease -> discogsRelease.getTitle().toLowerCase().contains(title.toLowerCase()))
-				.filter(discogsRelease -> discogsRelease.getArtists().stream().anyMatch(artist -> artists.contains(artist)))
+		return discogsAlbumReleases.stream()
+				.filter(discogsRelease -> discogsRelease.getCollectionAlbum() == null)
+				.filter(discogsRelease -> discogsRelease.getInventoryCsvAlbum().getTitle().toLowerCase().contains(title.toLowerCase()))
+				.filter(discogsRelease -> discogsRelease.getInventoryCsvAlbum().getArtists().stream().anyMatch(artist -> artists.contains(artist)))
 				.collect(Collectors.toList());
 	}
 }

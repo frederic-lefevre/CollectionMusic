@@ -33,7 +33,7 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import org.fl.collectionAlbum.Control;
-import org.fl.discogsInterface.inventory.InventoryCsvAlbum;
+import org.fl.collectionAlbum.disocgs.DiscogsInventory.DiscogsAlbumRelease;
 
 public class DiscogsReleaseJTable extends JTable {
 
@@ -65,7 +65,7 @@ public class DiscogsReleaseJTable extends JTable {
 		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 	}
 
-	public InventoryCsvAlbum getSelectedDisocgsRelease(){
+	public DiscogsAlbumRelease getSelectedDisocgsRelease(){
 		
 		int[] rowIdxs = getSelectedRows();
 		if (rowIdxs.length == 0) {
