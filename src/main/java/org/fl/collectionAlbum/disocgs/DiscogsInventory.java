@@ -102,6 +102,10 @@ public class DiscogsInventory {
 		return getInstance().containsOneAndOnlyOne(artists, title);
 	}
 	
+	private DiscogsAlbumRelease getDiscogsRelease(String discogsReleaseId) {
+		return discogsAlbumReleaseMap.get(discogsReleaseId);
+	}
+	
 	private void rebuildDiscogsReleasesInventory() {
 		
 		discogsAlbumReleases.clear();
@@ -127,5 +131,15 @@ public class DiscogsInventory {
 				.filter(discogsRelease -> discogsRelease.getInventoryCsvAlbum().getTitle().toLowerCase().contains(title.toLowerCase()))
 				.filter(discogsRelease -> discogsRelease.getInventoryCsvAlbum().getArtists().stream().anyMatch(artist -> artists.contains(artist)))
 				.collect(Collectors.toList());
+	}
+	
+	public static void linkToAlbum(String releaseId, Album album) {
+		
+		DiscogsAlbumRelease discogsAlbumRelease = getInstance().getDiscogsRelease(releaseId);
+		if (discogsAlbumRelease == null) {
+			albumLog.severe("L'album " + album.getTitre() + " est lié à une release discogs (" + releaseId + ") inconnue dans l'inventaire");
+		} else {
+			discogsAlbumRelease.setCollectionAlbum(album);
+		}
 	}
 }

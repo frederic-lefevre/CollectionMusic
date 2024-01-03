@@ -39,8 +39,9 @@ public class DisocgsReleaseTableModel extends AbstractTableModel {
 	public final static int ARTISTS_COL_IDX = 1;
 	public final static int TITLE_COL_IDX = 2;
 	public final static int FORMAT_COL_IDX = 3;
-	
-	private final static String[] entetes = {"Id", "Auteurs", "Titre de l'album", "Formats"};
+	public final static int ALBUM_LINK_COL_IDX = 4;
+			
+	private final static String[] entetes = {"Id", "Auteurs", "Titre de l'album", "Formats", "Lié à un album"};
 	
 	public DisocgsReleaseTableModel() {
 		super();
@@ -74,6 +75,7 @@ public class DisocgsReleaseTableModel extends AbstractTableModel {
 			case ARTISTS_COL_IDX -> DiscogsInventory.getDiscogsInventory().get(rowIndex).getInventoryCsvAlbum().getArtists().stream().collect(Collectors.joining(","));
 			case TITLE_COL_IDX -> DiscogsInventory.getDiscogsInventory().get(rowIndex).getInventoryCsvAlbum().getTitle();
 			case FORMAT_COL_IDX -> DiscogsInventory.getDiscogsInventory().get(rowIndex).getInventoryCsvAlbum().getFormats().stream().collect(Collectors.joining(","));
+			case ALBUM_LINK_COL_IDX -> DiscogsInventory.getDiscogsInventory().get(rowIndex).getCollectionAlbum() != null;
 			default -> null;
 		};
 
