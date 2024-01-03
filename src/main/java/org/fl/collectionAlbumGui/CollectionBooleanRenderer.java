@@ -48,7 +48,9 @@ public class CollectionBooleanRenderer extends DefaultTableCellRenderer {
 		setFont(getFont().deriveFont(Font.BOLD));
 		if (value == null) {
 			// This may happen when rescanning the album collection
-			mLog.fine("Null value in MediaFiles cell. Should be an Album");
+			mLog.fine("Null value in MediaFiles cell. Should be non null Boolean");
+			setText("Valeur null");
+			setBackground(Color.RED);
 		} else if (value instanceof Boolean) {
 			if ((Boolean)value) {
 				setText("Oui");
