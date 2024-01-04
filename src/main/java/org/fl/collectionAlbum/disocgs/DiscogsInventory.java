@@ -35,6 +35,7 @@ import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.discogsInterface.inventory.Inventory;
 import org.fl.discogsInterface.inventory.InventoryCsvAlbum;
+import org.fl.util.json.JsonUtils;
 
 public class DiscogsInventory {
 
@@ -77,6 +78,13 @@ public class DiscogsInventory {
 			addPropertyInfo(info, "Etat du media", inventoryCsvAlbum.getCollectionMediaCondition());
 			addPropertyInfo(info, "Etat de la pochette", inventoryCsvAlbum.getCollectionSleeveCondition());
 			addPropertyInfo(info, "Notes", inventoryCsvAlbum.getCollectionNotes());
+			
+			if (collectionAlbum != null) {
+				info.append("\n-------------------------------------\n  Album de la collection lié\n");
+				info.append(JsonUtils.jsonPrettyPrint(collectionAlbum.getJson()));	
+			} else {
+				info.append("\n-------------------------------------\n  Non lié à un album de la collection\n");
+			}
 			
 			return info.toString();
 		}
