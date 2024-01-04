@@ -57,7 +57,19 @@ public class DiscogsInventory {
 
 		public InventoryCsvAlbum getInventoryCsvAlbum() {
 			return inventoryCsvAlbum;
-		}		
+		}
+		
+		public String getInfo() {
+			
+			StringBuilder info = new StringBuilder();
+			
+			addPropertyInfo(info, "releaseId", inventoryCsvAlbum.getReleaseId());
+			return info.toString();
+		}
+		
+		private static void addPropertyInfo(StringBuilder info, String name, String value) {
+			info.append(name).append(": ").append(value).append("\n");
+		}
 	}
 	
 	private final static Logger albumLog = Control.getAlbumLog();

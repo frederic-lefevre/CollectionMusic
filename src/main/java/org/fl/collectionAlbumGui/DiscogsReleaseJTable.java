@@ -66,6 +66,8 @@ public class DiscogsReleaseJTable extends JTable {
 		setSelectionModel(listSelectionModel);
 		
 		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		
+		addMouseListener(new DiscogsInventoryMouseAdapter(this));
 	}
 
 	public DiscogsAlbumRelease getSelectedDisocgsRelease(){
