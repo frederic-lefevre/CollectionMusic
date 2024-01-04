@@ -27,6 +27,7 @@ package org.fl.collectionAlbum.disocgs;
 import java.nio.file.Path;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -64,11 +65,24 @@ public class DiscogsInventory {
 			StringBuilder info = new StringBuilder();
 			
 			addPropertyInfo(info, "releaseId", inventoryCsvAlbum.getReleaseId());
+			addPropertyInfo(info, "Titre", inventoryCsvAlbum.getTitle());
+			addPropertyInfo(info, "Artistes", inventoryCsvAlbum.getArtists());
+			addPropertyInfo(info, "Formats", inventoryCsvAlbum.getFormats());
+			addPropertyInfo(info, "Labels", inventoryCsvAlbum.getLabels());
+			addPropertyInfo(info, "Numéros de catalogues", inventoryCsvAlbum.getCatalogNumbers());
+			addPropertyInfo(info, "Notation", inventoryCsvAlbum.getRating());
+			addPropertyInfo(info, "Année de sortie", inventoryCsvAlbum.getReleased());
+			addPropertyInfo(info, "Dossier de collection", inventoryCsvAlbum.getCollectionFolder());
+			addPropertyInfo(info, "Date d'ajout", inventoryCsvAlbum.getDateAdded());
+			addPropertyInfo(info, "Etat du media", inventoryCsvAlbum.getCollectionMediaCondition());
+			addPropertyInfo(info, "Etat de la pochette", inventoryCsvAlbum.getCollectionSleeveCondition());
+			addPropertyInfo(info, "Notes", inventoryCsvAlbum.getCollectionNotes());
+			
 			return info.toString();
 		}
 		
-		private static void addPropertyInfo(StringBuilder info, String name, String value) {
-			info.append(name).append(": ").append(value).append("\n");
+		private static void addPropertyInfo(StringBuilder info, String name, Object value) {
+			info.append(name).append(": ").append(Optional.ofNullable(value).map(v -> v.toString()).orElse("valeur null")).append("\n");
 		}
 	}
 	
