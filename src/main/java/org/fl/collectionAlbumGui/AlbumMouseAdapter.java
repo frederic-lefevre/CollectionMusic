@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -35,6 +35,7 @@ import javax.swing.JPopupMenu;
 
 import org.fl.collectionAlbum.OsAction;
 import org.fl.collectionAlbum.albums.Album;
+import org.fl.collectionAlbumGui.AlbumCustomActionListener.CustomAction;
 
 public class AlbumMouseAdapter extends MouseAdapter {
 
@@ -54,6 +55,8 @@ public class AlbumMouseAdapter extends MouseAdapter {
 		osActions.forEach(osAction -> {
 			anyMenuItems.add(addMenuItem(osAction.getActionTitle(), new AlbumCommandListener(albumsJTable, osAction)));
 		});
+		
+		anyMenuItems.add(addMenuItem("Afficher ou chercher la release discogs", new AlbumCustomActionListener(albumsJTable, CustomAction.DISCOGS_RELEASE_LINK)));
 	}
 
 	@Override

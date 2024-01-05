@@ -22,43 +22,68 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
+
 package org.fl.collectionAlbumGui;
 
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.util.logging.Logger;
 
-import org.fl.collectionAlbum.Control;
-import org.fl.collectionAlbum.OsAction;
-import org.fl.collectionAlbum.albums.Album;
-import org.fl.util.os.OScommand;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
-public class AlbumCommandListener implements java.awt.event.ActionListener {
+import org.fl.collectionAlbum.Control;
+import org.fl.collectionAlbum.albums.Album;
+import org.fl.collectionAlbum.disocgs.DiscogsInventory;
+import org.fl.collectionAlbum.disocgs.DiscogsInventory.DiscogsAlbumRelease;
+
+public class AlbumCustomActionListener implements java.awt.event.ActionListener {
 
 	private static final Logger aLog = Control.getAlbumLog();
 	
-	private final AlbumsJTable albumsJTable;
-	private final OsAction osAction;
+	public enum CustomAction { DISCOGS_RELEASE_LINK };
 	
-	public AlbumCommandListener(AlbumsJTable ajt, OsAction osAction) {
+	private final AlbumsJTable albumsJTable;
+	private final CustomAction customAction;
+	
+	public AlbumCustomActionListener(AlbumsJTable ajt, CustomAction ca) {
 		
-		this.albumsJTable = ajt;
-		this.osAction = osAction;
+		albumsJTable = ajt;
+		customAction = ca;
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		
+
 		Album selectedAlbum = albumsJTable.getSelectedAlbum();
 		
 		if (selectedAlbum != null) {
 			
-			StringBuilder fullCommand = new StringBuilder(osAction.getActionCommand());
+			switch (customAction) {
 			
-			fullCommand.append(" ")
-				.append(osAction.getAlbumCommandParameter().getParametersGetter().apply(selectedAlbum));
-			
-			OScommand osCommand = new OScommand(fullCommand.toString(), false, aLog) ;
-			osCommand.run();
+				case DISCOGS_RELEASE_LINK:
+					
+					String discogsReleaseId = selectedAlbum.getDiscogsLink();					
+					if (discogsReleaseId != null) {
+						
+						DiscogsAlbumRelease release = DiscogsInventory.getDiscogsAlbumRelease(discogsReleaseId);
+						if (release != null) {
+							
+							// Show informations in popup message
+							JTextArea infoRelease = new JTextArea(40, 200);	
+							
+							infoRelease.setText(release.getInfo());
+							infoRelease.setFont(new Font("monospaced", Font.BOLD, 14));
+							JScrollPane infoFilesScroll = new JScrollPane(infoRelease) ;
+							JOptionPane.showMessageDialog(null, infoFilesScroll, "Informations", JOptionPane.INFORMATION_MESSAGE);
+						}
+					}
+					break;
+					
+				default:
+					aLog.severe("Unkown custom action triggered for discogs release: " + customAction);
+			}
 		}
 		
 	}
