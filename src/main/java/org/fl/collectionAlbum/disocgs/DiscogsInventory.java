@@ -149,18 +149,6 @@ public class DiscogsInventory {
 		return getInstance().getDiscogsRelease(releaseId);
 	}
 	
-	public static List<DiscogsAlbumRelease> getPotentialReleaseMatch(List<String> artists, String title) {
-		return getInstance().getPotentialMatch(artists, title);
-	}
-	
-	private List<DiscogsAlbumRelease> getPotentialMatch(List<String> artists, String title) {
-		
-		return discogsAlbumReleases.stream()
-				.filter(discogsRelease -> discogsRelease.getInventoryCsvAlbum().getTitle().toLowerCase().contains(title.toLowerCase()))
-				.filter(discogsRelease -> discogsRelease.getInventoryCsvAlbum().getArtists().stream().anyMatch(artist -> artists.contains(artist)))
-				.collect(Collectors.toList());
-	}
-	
 	public static void linkToAlbum(String releaseId, Album album) {
 		
 		DiscogsAlbumRelease discogsAlbumRelease = getInstance().getDiscogsRelease(releaseId);
