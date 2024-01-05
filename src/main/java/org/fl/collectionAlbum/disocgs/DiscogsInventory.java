@@ -154,6 +154,10 @@ public class DiscogsInventory {
 		return (1 == getPotentialReleaseMatch(artists, title).size());
 	}
 	
+	public static DiscogsAlbumRelease getDiscogsAlbumRelease(String releaseId) {		
+		return getInstance().getDiscogsRelease(releaseId);
+	}
+	
 	public static List<DiscogsAlbumRelease> getPotentialReleaseMatch(List<String> artists, String title) {
 		return getInstance().getPotentialMatch(artists, title);
 	}

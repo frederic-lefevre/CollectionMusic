@@ -40,6 +40,9 @@ import org.junit.jupiter.api.Test;
 
 class DiscogsInventoryTest {
 
+	private static final String JACO_RELEASE_ID = "10131632";  // must exist in discogs
+	private static final String JACO_ALBUM_TITLE = "Truth, Liberty & Soul - Live In NYC The Complete 1982 NPR Jazz Alive! Recordings";
+	
 	@Test
 	void shouldGetDiscogsCsvInventory() throws IOException {
 		
@@ -55,9 +58,9 @@ class DiscogsInventoryTest {
 					.satisfies(artist -> assertThat(artist).isEqualTo("Jaco Pastorius"));
 				assertThat(csvAlbum.getCatalogNumbers()).isNotNull().singleElement()
 					.satisfies(catalogNb -> assertThat(catalogNb).isEqualTo("HLP-9027"));
-				assertThat(csvAlbum.getTitle()).isEqualTo("Truth, Liberty & Soul - Live In NYC The Complete 1982 NPR Jazz Alive! Recordings");
+				assertThat(csvAlbum.getTitle()).isEqualTo(JACO_ALBUM_TITLE);
 				assertThat(csvAlbum.getLabels()).isNotNull().singleElement()
-				.satisfies(label -> assertThat(label).isEqualTo("Resonance Records"));
+					.satisfies(label -> assertThat(label).isEqualTo("Resonance Records"));
 				assertThat(csvAlbum.getFormats()).isNotNull().hasSize(6)
 					.satisfiesExactlyInAnyOrder(
 							format -> assertThat(format).isEqualTo("3xLP"),
@@ -68,7 +71,7 @@ class DiscogsInventoryTest {
 							format -> assertThat(format).isEqualTo("Num"));
 				assertThat(csvAlbum.getRating()).isNull();
 				assertThat(csvAlbum.getReleased()).isEqualTo(Year.of(2017));
-				assertThat(csvAlbum.getReleaseId()).isEqualTo("10131632");
+				assertThat(csvAlbum.getReleaseId()).isEqualTo(JACO_RELEASE_ID);
 				assertThat(csvAlbum.getCollectionFolder()).isEqualTo("p");
 				assertThat(csvAlbum.getDateAdded())
 					.hasYear(2023).hasMonth(Month.SEPTEMBER).hasDayOfMonth(24)
@@ -77,6 +80,19 @@ class DiscogsInventoryTest {
 				assertThat(csvAlbum.getCollectionSleeveCondition()).isEqualTo("Near Mint (NM or M-)");
 				assertThat(csvAlbum.getCollectionNotes()).isEqualTo("Limited Edition 2nd pressing of 5000. Number 3801");
 		});
+	}
+	
+	@Test
+	void shouldGetRelease() {
+		
+		assertThat(DiscogsInventory.getDiscogsAlbumRelease(JACO_RELEASE_ID)).isNotNull()
+			.satisfies(album -> assertThat(album.getInventoryCsvAlbum().getTitle()).isEqualTo(JACO_ALBUM_TITLE));
+	}
+	
+	@Test
+	void shouldNotGetRelease() {
+		
+		assertThat(DiscogsInventory.getDiscogsAlbumRelease("ThisOneDoesNotExist")).isNull();
 	}
 	
 	@Test
