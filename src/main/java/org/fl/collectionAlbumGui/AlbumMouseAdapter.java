@@ -29,6 +29,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -40,9 +42,30 @@ import org.fl.collectionAlbumGui.AlbumCustomActionListener.CustomAction;
 public class AlbumMouseAdapter extends MouseAdapter {
 
 	private final AlbumsJTable albumsJTable;
-	private JPopupMenu localJPopupMenu;
+	private final JPopupMenu localJPopupMenu;
 	
-	private List<JMenuItem> anyMenuItems;
+	private final List<AlbumMenuItem> albumMenuItems;
+	
+	private static class AlbumMenuItem {
+
+		private final JMenuItem menuitem;
+		private final Predicate<Album> enabledPredicate;
+		
+		public AlbumMenuItem(JMenuItem menuitem, Predicate<Album> enabledPredicate) {
+			super();
+			this.menuitem = menuitem;
+			this.enabledPredicate = enabledPredicate;
+		}
+		
+		public JMenuItem getMenuitem() {
+			return menuitem;
+		}
+
+		public Predicate<Album> getEnabledPredicate() {
+			return enabledPredicate;
+		}
+		
+	}
 	
 	public AlbumMouseAdapter(AlbumsJTable ajt, List<OsAction> osActions) {
 		
@@ -50,13 +73,16 @@ public class AlbumMouseAdapter extends MouseAdapter {
 		this.albumsJTable = ajt;
 		localJPopupMenu = new JPopupMenu();
 		
-		anyMenuItems = new ArrayList<JMenuItem>();
+		albumMenuItems = new ArrayList<>();
 		
-		osActions.forEach(osAction -> {
-			anyMenuItems.add(addMenuItem(osAction.getActionTitle(), new AlbumCommandListener(albumsJTable, osAction)));
-		});
+		osActions.forEach(osAction ->
+			addMenuItem(osAction.getActionTitle(), new AlbumCommandListener(albumsJTable, osAction), (album) -> true)
+		);
 		
-		anyMenuItems.add(addMenuItem("Afficher ou chercher la release discogs", new AlbumCustomActionListener(albumsJTable, CustomAction.DISCOGS_RELEASE_LINK)));
+		Stream.of(CustomAction.values())
+			.forEach(customAction -> 
+				addMenuItem(customAction.getActionTitle(), new AlbumCustomActionListener(albumsJTable, customAction), customAction.getDisplayable()));
+
 	}
 
 	@Override
@@ -79,14 +105,14 @@ public class AlbumMouseAdapter extends MouseAdapter {
 
 		Album album = albumsJTable.getSelectedAlbum();
 		if (album != null) {
-			anyMenuItems.forEach(menuItem -> menuItem.setEnabled(true));
+			albumMenuItems.forEach(menuItem -> menuItem.getMenuitem().setEnabled(menuItem.getEnabledPredicate().test(album)));
 		}
 	}
 	
-	private JMenuItem addMenuItem(String title, ActionListener act) {
+	private void addMenuItem(String title, ActionListener act, Predicate<Album> enabledPredicate) {
 		JMenuItem localJMenuItem = new JMenuItem(title);
-	     localJMenuItem.addActionListener(act);
-	     localJPopupMenu.add(localJMenuItem);
-	     return localJMenuItem ;
+		localJMenuItem.addActionListener(act);
+		localJPopupMenu.add(localJMenuItem);
+		albumMenuItems.add(new AlbumMenuItem(localJMenuItem, enabledPredicate));
 	}
 }
