@@ -1,7 +1,7 @@
 /*
  MIT License
 
-Copyright (c) 2017, 2022 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -196,10 +196,6 @@ public class Format {
 	
 	private Map<ContentNature, List<AbstractMediaFile>> mediaFiles;
 	
-//	private List<AbstractAudioFile> audioFiles;
-	
-//	private List<VideoFile> videoFiles;
-	
 	private boolean hasError;
 
 	// Create a format
@@ -274,6 +270,8 @@ public class Format {
 					(supportPhysiquePresent(SupportPhysique.BluRay))) {
 		// à ranger dans la collection VHS
 			typeRangement = RangementSupportPhysique.RangementVHS ;
+		} else {
+			albumLog.severe("Rangement du support physiques non trouvé");
 		}
 		return typeRangement ;
 	}
