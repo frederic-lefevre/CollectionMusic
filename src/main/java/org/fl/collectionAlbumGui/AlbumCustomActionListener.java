@@ -27,8 +27,10 @@ package org.fl.collectionAlbumGui;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;
+import java.util.List;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
@@ -99,13 +101,29 @@ public class AlbumCustomActionListener implements java.awt.event.ActionListener 
 							infoRelease.setText(release.getInfo());
 							infoRelease.setFont(new Font("monospaced", Font.BOLD, 14));
 							JScrollPane infoFilesScroll = new JScrollPane(infoRelease) ;
-							JOptionPane.showMessageDialog(null, infoFilesScroll, "Informations", JOptionPane.INFORMATION_MESSAGE);
+							JOptionPane.showMessageDialog(null, infoFilesScroll, "Informations de la release discogs", JOptionPane.INFORMATION_MESSAGE);
 						}
 					}
 					break;
 					
 				case DISCOGS_RELEASE_SEARCH:
 					
+					// Show informations in popup message
+					JTextArea infoPotentialRelease = new JTextArea(40, 200);	
+					
+					List<DiscogsAlbumRelease> potentialReleases = selectedAlbum.searchPotentialDiscogsReleases();
+					if ((potentialReleases == null) || potentialReleases.isEmpty()) {
+						infoPotentialRelease.setText("Pas de release discogs potentielle trouvée");
+					} else {
+						infoPotentialRelease.setText(
+								potentialReleases.stream()
+									.map(r -> r.getInventoryCsvAlbum().getReleaseId())
+									.collect(Collectors.toList())
+									.toString());
+					}
+					infoPotentialRelease.setFont(new Font("monospaced", Font.BOLD, 14));
+					JScrollPane infoReleaseScroll = new JScrollPane(infoPotentialRelease) ;
+					JOptionPane.showMessageDialog(null, infoReleaseScroll, "Recherche de release discogs", JOptionPane.INFORMATION_MESSAGE);
 					
 					break;
 				default:
