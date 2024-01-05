@@ -24,12 +24,14 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.rapportHtml;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import org.fl.collectionAlbum.AbstractMediaFile;
 import org.fl.collectionAlbum.Format;
 import org.fl.collectionAlbum.Format.ContentNature;
+import org.fl.collectionAlbum.Format.RangementSupportPhysique;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.utils.TemporalUtils;
 
@@ -71,8 +73,9 @@ public class RapportAlbum extends RapportMusicArtefact {
 		format.rowFormat(rBuilder, null, true);
 		write("    </tr>\n  </table>\n");
 		
+		
 		write("  <p>Rangement: ");
-		write(format.getRangement().getDescription());
+		write(Optional.ofNullable(format.getRangement()).map(RangementSupportPhysique::getDescription).orElse("NON DEFINI"));
 		write("</p>\n");
 		
 		write("  <h3>Fichiers media</h3>\n");
