@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -70,6 +70,10 @@ public class RapportAlbum extends RapportMusicArtefact {
 		write("    </tr>\n    <tr>\n");
 		format.rowFormat(rBuilder, null, true);
 		write("    </tr>\n  </table>\n");
+		
+		write("  <p>Rangement: ");
+		write(format.getRangement().getDescription());
+		write("</p>\n");
 		
 		write("  <h3>Fichiers media</h3>\n");
 		
