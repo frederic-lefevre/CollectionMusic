@@ -41,7 +41,10 @@ import org.fl.collectionAlbum.Format;
 import org.fl.collectionAlbum.Format.ContentNature;
 import org.fl.collectionAlbum.Format.RangementSupportPhysique;
 import org.fl.collectionAlbum.MusicArtefact;
+import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
+import org.fl.collectionAlbum.disocgs.DiscogsInventory;
+import org.fl.collectionAlbum.disocgs.DiscogsInventory.DiscogsAlbumRelease;
 import org.fl.collectionAlbum.json.AlbumParser;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
@@ -213,6 +216,10 @@ public class Album extends MusicArtefact {
 		List<MediaFilePath> potentialMediaPaths = MediaFilesInventories.getMediaFileInventory(contentNature).getPotentialMediaPath(this);
 		potentialMediaFilesPath.put(contentNature, potentialMediaPaths);
 		return potentialMediaPaths;
+	}
+	
+	public List<DiscogsAlbumRelease> searchPotentialDiscogsReleases() {
+		return DiscogsInventory.getPotentialReleaseMatch(getAuteurs().stream().map(Artiste::getNomComplet).collect(Collectors.toList()), titre);
 	}
 	
 	public boolean validatePotentialMediaFilePath(ContentNature contentNature) {		

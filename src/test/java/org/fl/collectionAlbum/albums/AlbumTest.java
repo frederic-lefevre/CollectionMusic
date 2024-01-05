@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -45,6 +45,7 @@ import org.fl.collectionAlbum.Format.ContentNature;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
+import org.fl.discogsInterface.inventory.InventoryCsvAlbum;
 import org.fl.util.json.JsonUtils;
 import org.junit.jupiter.api.Test;
 
@@ -74,7 +75,7 @@ class AlbumTest {
 
 	private static final String albumStr1 = """
 			{ 
-			  "titre": "Portrait in jazz\",
+			  "titre": "Portrait in jazz",
 			  "format": {  "cd": 1,
 				"audioFiles" : [{
 				    "bitDepth": 16 , 
@@ -286,6 +287,56 @@ class AlbumTest {
 
 		assertThat(potentialPaths).isNotNull().singleElement()
 			.satisfies(mediaFilePath -> assertThat(mediaFilePath.getPath()).hasToString("E:\\Musique\\e\\Bill Evans\\Portrait In Jazz"));
+	}
+	
+	private static final String albumStr3 = """
+{
+  "titre": "Magical mystery tour",
+  "format": {
+    "cd": 1,
+    "audioFiles": [
+      {
+        "bitDepth": 16,
+        "samplingRate": 44.1,
+        "source": "CD",
+        "type": "FLAC",
+        "location": [
+          "E:\\\\Musique\\\\b\\\\The Beatles\\\\Magical Mystery Tour"
+        ]
+      }
+    ]
+  },
+  "groupe": [
+    {
+      "nom": "Beatles",
+      "article": "The"
+    }
+  ],
+  "enregistrement": [
+    "1966-11-24",
+    "1967-11-07"
+  ],
+  "jsonVersion": 2
+}
+			""";
+	
+	@Test
+	void testAlbumPotentialDiscogsReleaseSearch() {
+		
+		JsonObject jAlbum = JsonParser.parseString(albumStr3).getAsJsonObject();
+
+		ListeArtiste la = new ListeArtiste();
+		List<ListeArtiste> lla = new ArrayList<ListeArtiste>();
+		lla.add(la);
+
+		Album album = new Album(jAlbum, lla, Path.of("dummyPath"));
+		
+		assertThat(album.searchPotentialDiscogsReleases()).isNotNull().singleElement()
+			.satisfies(discogsRelease -> {
+				InventoryCsvAlbum csvRelease = discogsRelease.getInventoryCsvAlbum();
+				assertThat(csvRelease.getArtists()).singleElement().isEqualTo("The Beatles");
+				assertThat(csvRelease.getReleaseId()).isEqualTo("2519903");
+			});
 	}
 	
 	private static final String albumStr2 = """

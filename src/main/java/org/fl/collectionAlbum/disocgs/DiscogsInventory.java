@@ -165,7 +165,6 @@ public class DiscogsInventory {
 	private List<DiscogsAlbumRelease> getPotentialMatch(List<String> artists, String title) {
 		
 		return discogsAlbumReleases.stream()
-				.filter(discogsRelease -> discogsRelease.getCollectionAlbum() == null)
 				.filter(discogsRelease -> discogsRelease.getInventoryCsvAlbum().getTitle().toLowerCase().contains(title.toLowerCase()))
 				.filter(discogsRelease -> discogsRelease.getInventoryCsvAlbum().getArtists().stream().anyMatch(artist -> artists.contains(artist)))
 				.collect(Collectors.toList());
