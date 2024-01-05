@@ -115,11 +115,11 @@ public class AlbumCustomActionListener implements java.awt.event.ActionListener 
 					if ((potentialReleases == null) || potentialReleases.isEmpty()) {
 						infoPotentialRelease.setText("Pas de release discogs potentielle trouvée");
 					} else {
-						infoPotentialRelease.setText(
-								potentialReleases.stream()
-									.map(r -> r.getInventoryCsvAlbum().getReleaseId())
-									.collect(Collectors.toList())
-									.toString());
+						StringBuilder infoReleases = new StringBuilder();
+						potentialReleases.forEach(release -> {
+							infoReleases.append(release.getInfo()).append("\n----------------\n");
+						});
+						infoPotentialRelease.setText(infoReleases.toString());
 					}
 					infoPotentialRelease.setFont(new Font("monospaced", Font.BOLD, 14));
 					JScrollPane infoReleaseScroll = new JScrollPane(infoPotentialRelease) ;
