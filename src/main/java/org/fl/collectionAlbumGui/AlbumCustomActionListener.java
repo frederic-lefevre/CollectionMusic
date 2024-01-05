@@ -105,6 +105,8 @@ public class AlbumCustomActionListener implements java.awt.event.ActionListener 
 					break;
 					
 				case DISCOGS_RELEASE_SEARCH:
+					
+					
 					break;
 				default:
 					aLog.severe("Unkown custom action triggered for discogs release: " + customAction);

@@ -76,7 +76,7 @@ public class AlbumMouseAdapter extends MouseAdapter {
 		albumMenuItems = new ArrayList<>();
 		
 		osActions.forEach(osAction ->
-			addMenuItem(osAction.getActionTitle(), new AlbumCommandListener(albumsJTable, osAction), (album) -> true)
+			addMenuItem(osAction.getActionTitle(), new AlbumCommandListener(albumsJTable, osAction), osAction.getAlbumCommandParameter().getActionValidityPredicate())
 		);
 		
 		Stream.of(CustomAction.values())

@@ -1,7 +1,7 @@
 /*
  MIT License
 
-Copyright (c) 2017, 2022 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -25,22 +25,33 @@ SOFTWARE.
 package org.fl.collectionAlbum.albums;
 
 import java.util.function.Function;
+import java.util.function.Predicate;
 
 import org.fl.collectionAlbum.Control;
 
 public enum AlbumCommandParameter {
 
-	JSON((album) -> album.getJsonFilePath().toAbsolutePath().toString()),
-	DISCOGS_RELEASE_INFO((album) -> Control.getDiscogsBaseUrlForRelease() + album.getDiscogsLink());
+	JSON(
+			(album) -> album.getJsonFilePath().toAbsolutePath().toString(), 
+			(album) -> true),
+	DISCOGS_RELEASE_INFO(
+			(album) -> Control.getDiscogsBaseUrlForRelease() + album.getDiscogsLink(), 
+			(album) -> (album.getDiscogsLink() != null) && !album.getDiscogsLink().isEmpty());
 	
 	private final Function<Album,String> parametersGetter;
+	private final Predicate<Album> actionValidityPredicate;
 	
-	private AlbumCommandParameter(Function<Album,String> gp) {
+	private AlbumCommandParameter(Function<Album,String> gp, Predicate<Album> vp) {
 		parametersGetter = gp;
+		actionValidityPredicate = vp;
 	}
 
 	public Function<Album, String> getParametersGetter() {
 		return parametersGetter;
+	}
+
+	public Predicate<Album> getActionValidityPredicate() {
+		return actionValidityPredicate;
 	}
 
 }
