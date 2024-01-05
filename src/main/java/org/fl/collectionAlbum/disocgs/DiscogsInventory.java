@@ -132,10 +132,6 @@ public class DiscogsInventory {
 		return getInstance().discogsAlbumReleases;
 	}
 	
-	public static boolean containsOneAndOnlyOneAlbum(List<String> artists, String title) {
-		return getInstance().containsOneAndOnlyOne(artists, title);
-	}
-	
 	private DiscogsAlbumRelease getDiscogsRelease(String discogsReleaseId) {
 		return discogsAlbumReleaseMap.get(discogsReleaseId);
 	}
@@ -147,11 +143,6 @@ public class DiscogsInventory {
 		
 		discogsAlbumReleaseMap.clear();
 		discogsAlbumReleases.forEach(release -> discogsAlbumReleaseMap.put(release.getInventoryCsvAlbum().getReleaseId(), release));
-	}
-	
-	private boolean containsOneAndOnlyOne(List<String> artists, String title) {
-		
-		return (1 == getPotentialReleaseMatch(artists, title).size());
 	}
 	
 	public static DiscogsAlbumRelease getDiscogsAlbumRelease(String releaseId) {		

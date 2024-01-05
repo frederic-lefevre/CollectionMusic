@@ -30,7 +30,6 @@ import java.awt.event.ActionEvent;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;

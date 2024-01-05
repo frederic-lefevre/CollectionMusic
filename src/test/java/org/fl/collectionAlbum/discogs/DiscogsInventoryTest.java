@@ -96,25 +96,6 @@ class DiscogsInventoryTest {
 	}
 	
 	@Test
-	void shouldFindAlbum() {
-		
-		assertThat(DiscogsInventory.containsOneAndOnlyOneAlbum(List.of("Albert Collins"), "Ice Pickin'")).isTrue();
-	}
-	
-	@Test
-	void shouldNotFindAlbumWithMultipleOccurences() {
-		
-		assertThat(DiscogsInventory.containsOneAndOnlyOneAlbum(List.of("Bob Dylan"), "Blonde on Blonde")).isFalse();
-	}
-	
-	@Test
-	void shouldNotFindAlbumAbsentAlbums() {
-		
-		assertThat(DiscogsInventory.containsOneAndOnlyOneAlbum(List.of("Bob Dylan"), "A Love Supreme")).isFalse();
-		assertThat(DiscogsInventory.containsOneAndOnlyOneAlbum(List.of("John Coltrane"), "Blonde on Blonde")).isFalse();
-	}
-	
-	@Test
 	void shouldGetPotentialReleaseMatch() {
 		
 		assertThat(DiscogsInventory.getPotentialReleaseMatch(List.of("Soft Machine"), "Third"))
