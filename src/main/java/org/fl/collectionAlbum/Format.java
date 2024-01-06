@@ -94,7 +94,7 @@ public class Format {
 	}
 	
 	// Définition des différents supports physiques
-	private enum SupportPhysique {
+	public enum SupportPhysique {
 		CD(		 "CD",  	 "xnbcd", 		 1),
 		K7(		 "K7",  	 "xnbk7", 		 1),
 		Vinyl33T("33T", 	 "xnb33T", 	 	 1),
@@ -117,9 +117,17 @@ public class Format {
 			poidsSupport 	 = ps ;
 		}
 		
-		private String getCssClass() 		 {	return cssClass 		;}		
-		private String getNom() 			 {	return nom 				;}	
-		private double getPoidsSupport() 	 {	return poidsSupport 	;}
+		public String getNom() {
+			return nom;
+		}
+		
+		private String getCssClass() {
+			return cssClass;
+		}
+
+		private double getPoidsSupport() {
+			return poidsSupport;
+		}
 	}
 	
 	// Définition des différents support
