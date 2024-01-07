@@ -142,7 +142,7 @@ public class AlbumCustomActionListener implements java.awt.event.ActionListener 
 					}
 					infoPotentialRelease.setFont(new Font("monospaced", Font.BOLD, 14));
 					potentialReleasesPane.add(infoPotentialRelease);
-					potentialReleases.forEach(release -> potentialReleasesPane.add(discogsPotentialReleasePane(release)));
+					potentialReleases.forEach(release -> potentialReleasesPane.add(discogsPotentialReleasePane(release, selectedAlbum, potentialReleasesPane)));
 					
 					JScrollPane infoReleaseScroll = new JScrollPane(potentialReleasesPane);
 					infoReleaseScroll.setPreferredSize(new Dimension(1650,850));
@@ -156,7 +156,7 @@ public class AlbumCustomActionListener implements java.awt.event.ActionListener 
 		
 	}
 	
-	private JPanel discogsPotentialReleasePane(DiscogsAlbumRelease release) {
+	private JPanel discogsPotentialReleasePane(DiscogsAlbumRelease release, Album album, JPanel potentialReleasesPane) {
 		
 		JPanel potentialReleasePane = new JPanel();
 		potentialReleasePane.setLayout(new BoxLayout(potentialReleasePane, BoxLayout.X_AXIS));
@@ -170,7 +170,8 @@ public class AlbumCustomActionListener implements java.awt.event.ActionListener 
 		JButton releaseValidate = new JButton("Valider cette release");
 		releaseValidate.setBackground(Color.GREEN);
 		Font buttonFont = new Font("Verdana", Font.BOLD, 12);
-		releaseValidate.setFont(buttonFont);	
+		releaseValidate.setFont(buttonFont);
+		releaseValidate.addActionListener(new ReleaseValidationListener(release, album, potentialReleasesPane));
 		potentialReleasePane.add(releaseValidate);
 		
 		return potentialReleasePane;

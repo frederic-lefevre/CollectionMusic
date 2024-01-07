@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -51,8 +51,8 @@ public abstract class MusicArtefact {
 	// Additional information (optional)
 	private final List<String> notes;
 	private final List<String> urlLinks;
-	private final String discogsLink;
-	private final boolean hasAdditionalInfo;
+	private String discogsLink;
+	private boolean hasAdditionalInfo;
 
 	protected final JsonObject arteFactJson;
 	private final Path jsonFilePath;
@@ -121,6 +121,12 @@ public abstract class MusicArtefact {
 		return arteFactJson;
 	}
 
+	public void setDiscogsLink(String discogsLink) {
+		this.discogsLink = discogsLink;
+		hasAdditionalInfo = hasAdditionalInfo || ((discogsLink != null) && !discogsLink.isEmpty());
+		arteFactJson.addProperty(JsonMusicProperties.DISCOGS, discogsLink);
+	}
+	
 	public boolean additionnalInfo() {
 		return hasAdditionalInfo;
 	}

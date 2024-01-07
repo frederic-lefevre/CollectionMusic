@@ -51,10 +51,14 @@ public class DiscogsInventory {
 			collectionAlbums = new HashSet<>();
 		}
 
-		public Set<Album> getCollectionAlbum() {
+		public Set<Album> getCollectionAlbums() {
 			return collectionAlbums;
 		}
 
+		public boolean isLinkedToAlbum() {
+			return (collectionAlbums != null) && !collectionAlbums.isEmpty();
+		}
+		
 		public void addCollectionAlbums(Album collectionAlbum) {
 			this.collectionAlbums.add(collectionAlbum);
 		}
