@@ -37,6 +37,7 @@ import javax.swing.JTextArea;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
+import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.ReleaseMatchResult;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory.DiscogsAlbumRelease;
 
@@ -110,17 +111,27 @@ public class AlbumCustomActionListener implements java.awt.event.ActionListener 
 					// Show informations in popup message
 					JTextArea infoPotentialRelease = new JTextArea(40, 200);	
 					
-					Set<DiscogsAlbumRelease> potentialReleases = selectedAlbum.searchPotentialDiscogsReleases().getMatchingReleases();
-					// TODO check match type
-					if ((potentialReleases == null) || potentialReleases.isEmpty()) {
-						infoPotentialRelease.setText("Pas de release discogs potentielle trouvée");
-					} else {
-						StringBuilder infoReleases = new StringBuilder();
-						potentialReleases.forEach(release -> {
-							infoReleases.append(release.getInfo()).append("\n----------------\n");
-						});
-						infoPotentialRelease.setText(infoReleases.toString());
+					ReleaseMatchResult releaseMatchResult = selectedAlbum.searchPotentialDiscogsReleases();
+					
+					Set<DiscogsAlbumRelease> potentialReleases = releaseMatchResult.getMatchingReleases();
+					
+					StringBuilder infoReleases = new StringBuilder();
+					switch (releaseMatchResult.getMatchResultType()) {
+					case MATCH:
+						infoReleases.append("Releases discogs potentielles trouvées:\n\n");
+						potentialReleases.forEach(release -> infoReleases.append(release.getInfo()).append("\n----------------\n"));
+						break;
+					case NO_FORMAT_MATCH:
+						infoReleases.append(
+								"Pas de release discogs potentielle trouvée\nRelease potentielle avec le même titre et des auteurs communs:\n\n");
+						potentialReleases.forEach(release -> infoReleases.append(release.getInfo()).append("\n----------------\n"));
+						break;
+					case NO_MATCH:
+						infoReleases.append("Pas de release discogs potentielle trouvée");
+						break;
 					}
+					infoPotentialRelease.setText(infoReleases.toString());
+					
 					infoPotentialRelease.setFont(new Font("monospaced", Font.BOLD, 14));
 					JScrollPane infoReleaseScroll = new JScrollPane(infoPotentialRelease) ;
 					JOptionPane.showMessageDialog(null, infoReleaseScroll, "Recherche de release discogs", JOptionPane.INFORMATION_MESSAGE);
