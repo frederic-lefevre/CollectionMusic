@@ -25,13 +25,16 @@ SOFTWARE.
 
 package org.fl.collectionAlbumGui;
 
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
+import javax.swing.BoxLayout;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
@@ -109,31 +112,37 @@ public class AlbumCustomActionListener implements java.awt.event.ActionListener 
 				case DISCOGS_RELEASE_SEARCH:
 					
 					// Show informations in popup message
-					JTextArea infoPotentialRelease = new JTextArea(40, 200);	
+					JPanel potentialReleasesPane = new JPanel();
+					potentialReleasesPane.setLayout(new BoxLayout(potentialReleasesPane, BoxLayout.Y_AXIS));
+					
+					JTextArea infoPotentialRelease = new JTextArea(0, 200);
+					infoPotentialRelease.setPreferredSize(new Dimension(1600,50));
+					infoPotentialRelease.setMaximumSize(new Dimension(1600,50));
 					
 					ReleaseMatchResult releaseMatchResult = selectedAlbum.searchPotentialDiscogsReleases();
 					
 					Set<DiscogsAlbumRelease> potentialReleases = releaseMatchResult.getMatchingReleases();
 					
-					StringBuilder infoReleases = new StringBuilder();
 					switch (releaseMatchResult.getMatchResultType()) {
 					case MATCH:
-						infoReleases.append("Releases discogs potentielles trouvées:\n\n");
-						potentialReleases.forEach(release -> infoReleases.append(release.getInfo()).append("\n----------------\n"));
+						infoPotentialRelease.setText("Releases discogs potentielles trouvées:\n\n");
 						break;
+						
 					case NO_FORMAT_MATCH:
-						infoReleases.append(
-								"Pas de release discogs potentielle trouvée\nRelease potentielle avec le même titre et des auteurs communs:\n\n");
-						potentialReleases.forEach(release -> infoReleases.append(release.getInfo()).append("\n----------------\n"));
+						infoPotentialRelease.setText("Pas de release discogs potentielle trouvée\nRelease potentielle avec le même titre et des auteurs communs:\n\n");
 						break;
+						
 					case NO_MATCH:
-						infoReleases.append("Pas de release discogs potentielle trouvée");
+						infoPotentialRelease.setText("Pas de release discogs potentielle trouvée");
 						break;
+						
 					}
-					infoPotentialRelease.setText(infoReleases.toString());
-					
 					infoPotentialRelease.setFont(new Font("monospaced", Font.BOLD, 14));
-					JScrollPane infoReleaseScroll = new JScrollPane(infoPotentialRelease) ;
+					potentialReleasesPane.add(infoPotentialRelease);
+					potentialReleases.forEach(release -> potentialReleasesPane.add(discogsPotentialReleasePane(release)));
+					
+					JScrollPane infoReleaseScroll = new JScrollPane(potentialReleasesPane);
+					infoReleaseScroll.setPreferredSize(new Dimension(1650,850));
 					JOptionPane.showMessageDialog(null, infoReleaseScroll, "Recherche de release discogs", JOptionPane.INFORMATION_MESSAGE);
 					
 					break;
@@ -142,6 +151,16 @@ public class AlbumCustomActionListener implements java.awt.event.ActionListener 
 			}
 		}
 		
+	}
+	
+	private JPanel discogsPotentialReleasePane(DiscogsAlbumRelease release) {
+		
+		JPanel potentialReleasePane = new JPanel();
+		JTextArea infoPotentialRelease = new JTextArea(0, 200);
+		infoPotentialRelease.setText(release.getInfo());
+		infoPotentialRelease.setFont(new Font("monospaced", Font.BOLD, 14));
+		potentialReleasePane.add(infoPotentialRelease);
+		return potentialReleasePane;
 	}
 
 }
