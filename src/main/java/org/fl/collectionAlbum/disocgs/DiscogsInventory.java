@@ -25,9 +25,11 @@ SOFTWARE.
 package org.fl.collectionAlbum.disocgs;
 
 import java.nio.file.Path;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -42,19 +44,19 @@ public class DiscogsInventory {
 	public static class DiscogsAlbumRelease {
 		
 		private InventoryCsvAlbum inventoryCsvAlbum;
-		private Album collectionAlbum;
+		private Set<Album> collectionAlbums;
 		
 		protected DiscogsAlbumRelease(InventoryCsvAlbum inventoryCsvAlbum) {
 			this.inventoryCsvAlbum = inventoryCsvAlbum;
-			collectionAlbum = null;
+			collectionAlbums = new HashSet<>();
 		}
 
-		public Album getCollectionAlbum() {
-			return collectionAlbum;
+		public Set<Album> getCollectionAlbum() {
+			return collectionAlbums;
 		}
 
-		public void setCollectionAlbum(Album collectionAlbum) {
-			this.collectionAlbum = collectionAlbum;
+		public void addCollectionAlbums(Album collectionAlbum) {
+			this.collectionAlbums.add(collectionAlbum);
 		}
 
 		public InventoryCsvAlbum getInventoryCsvAlbum() {
@@ -79,11 +81,16 @@ public class DiscogsInventory {
 			addPropertyInfo(info, "Etat de la pochette", inventoryCsvAlbum.getCollectionSleeveCondition());
 			addPropertyInfo(info, "Notes", inventoryCsvAlbum.getCollectionNotes());
 			
-			if (collectionAlbum != null) {
-				info.append("\n-------------------------------------\n  Album de la collection lié\n");
-				info.append(JsonUtils.jsonPrettyPrint(collectionAlbum.getJson()));	
-			} else {
+			if (collectionAlbums.isEmpty()) {
 				info.append("\n-------------------------------------\n  Non lié à un album de la collection\n");
+				
+			} else {
+				info.append("\n-------------------------------------\n  Albums de la collection liés\n");
+				
+				collectionAlbums.forEach(collectionAlbum -> 
+					info.append(JsonUtils.jsonPrettyPrint(collectionAlbum.getJson()))
+						.append("\n-------------------------------------\n")
+					);
 			}
 			
 			return info.toString();
@@ -155,7 +162,7 @@ public class DiscogsInventory {
 		if (discogsAlbumRelease == null) {
 			albumLog.severe("L'album " + album.getTitre() + " est lié à une release discogs (" + releaseId + ") inconnue dans l'inventaire");
 		} else {
-			discogsAlbumRelease.setCollectionAlbum(album);
+			discogsAlbumRelease.addCollectionAlbums(album);
 		}
 	}
 }
