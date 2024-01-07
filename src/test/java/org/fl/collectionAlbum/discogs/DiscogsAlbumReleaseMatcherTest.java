@@ -33,6 +33,8 @@ import java.util.List;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher;
+import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.MatchResultType;
+import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.ReleaseMatchResult;
 import org.junit.jupiter.api.Test;
 
 import com.google.gson.JsonObject;
@@ -106,6 +108,36 @@ class DiscogsAlbumReleaseMatcherTest {
 }			
 			""";
 	
+	private final static String softMachineThirdK7 = """
+{
+"titre": "Third",
+"format": {
+"k7": 1,
+"audioFiles": [
+  {
+    "bitDepth": 16,
+    "samplingRate": 44.1,
+    "source": "CD",
+    "type": "FLAC",
+    "location": [
+      "E:\\\\Musique\\\\s\\\\Soft Machine\\\\Third"
+    ]
+  }
+]
+},
+"groupe": [
+{
+  "nom": "Soft Machine"
+}
+],
+"enregistrement": [
+"1970-01-04",
+"1970-01-31"
+],
+"jsonVersion": 2
+}
+			""" ;
+	
 	private final static String nonExistentAlbum = """
 {
 "titre": "Third",
@@ -136,34 +168,59 @@ class DiscogsAlbumReleaseMatcherTest {
 }
 			""" ;
 	
-	
 	@Test
 	void shouldGetPotentialReleaseMatch() {
 		
-		assertThat(DiscogsAlbumReleaseMatcher.getPotentialReleaseMatch(getAlbumFromJson(softMachineThird)))
+		ReleaseMatchResult releaseMatchResult = DiscogsAlbumReleaseMatcher.getPotentialReleaseMatch(getAlbumFromJson(softMachineThird));
+		
+		assertThat(releaseMatchResult.getMatchResultType()).isEqualTo(MatchResultType.MATCH);
+		assertThat(releaseMatchResult.getMatchingReleases())
 			.isNotNull().singleElement()
 			.satisfies(release -> {
 				assertThat(release.getInventoryCsvAlbum().getArtists()).contains("Soft Machine");
 				assertThat(release.getInventoryCsvAlbum().getTitle().toLowerCase()).isEqualTo("third");
+				assertThat(release.getInventoryCsvAlbum().getFormats()).anyMatch(format -> format.contains("LP"));
 			});
 	}
 	
 	@Test
 	void shouldGetSeveralPotentialReleaseMatch() {
 		
-		assertThat(DiscogsAlbumReleaseMatcher.getPotentialReleaseMatch(getAlbumFromJson(electricLadylandDoubleCD)))
+		ReleaseMatchResult releaseMatchResult = DiscogsAlbumReleaseMatcher.getPotentialReleaseMatch(getAlbumFromJson(electricLadylandDoubleCD));
+		
+		assertThat(releaseMatchResult.getMatchResultType()).isEqualTo(MatchResultType.MATCH);
+		assertThat(releaseMatchResult.getMatchingReleases())
 			.isNotNull().hasSizeGreaterThan(1)
 			.allSatisfy(release -> {
 				assertThat(release.getInventoryCsvAlbum().getArtists()).anyMatch(artist -> artist.contains("Jimi Hendrix"));
 				assertThat(release.getInventoryCsvAlbum().getTitle().toLowerCase()).isEqualTo("electric ladyland");
+				assertThat(release.getInventoryCsvAlbum().getFormats()).anyMatch(format -> format.contains("CD"));
 			});
 
 	}
 	
 	@Test
+	void shouldGetPotentialReleaseMatchOnAuteursAndTitleOnly() {
+		
+		ReleaseMatchResult releaseMatchResult = DiscogsAlbumReleaseMatcher.getPotentialReleaseMatch(getAlbumFromJson(softMachineThirdK7));
+		
+		assertThat(releaseMatchResult.getMatchResultType()).isEqualTo(MatchResultType.NO_FORMAT_MATCH);
+		assertThat(releaseMatchResult.getMatchingReleases())
+			.isNotNull().singleElement()
+			.satisfies(release -> {
+				assertThat(release.getInventoryCsvAlbum().getArtists()).contains("Soft Machine");
+				assertThat(release.getInventoryCsvAlbum().getTitle().toLowerCase()).isEqualTo("third");
+				assertThat(release.getInventoryCsvAlbum().getFormats()).anyMatch(format -> format.contains("LP"));
+			});
+	}
+	
+	@Test
 	void shouldNotGetPotentialReleaseMatch() {
 		
-		assertThat(DiscogsAlbumReleaseMatcher.getPotentialReleaseMatch(getAlbumFromJson(nonExistentAlbum)))
+		ReleaseMatchResult releaseMatchResult = DiscogsAlbumReleaseMatcher.getPotentialReleaseMatch(getAlbumFromJson(nonExistentAlbum));
+		
+		assertThat(releaseMatchResult.getMatchResultType()).isEqualTo(MatchResultType.NO_MATCH);
+		assertThat(releaseMatchResult.getMatchingReleases())
 			.isNotNull().isEmpty();
 	}
 

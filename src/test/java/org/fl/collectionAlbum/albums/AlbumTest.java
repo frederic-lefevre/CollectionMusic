@@ -44,6 +44,8 @@ import org.fl.collectionAlbum.LosslessAudioFile;
 import org.fl.collectionAlbum.Format.ContentNature;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
+import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.MatchResultType;
+import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.ReleaseMatchResult;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.fl.discogsInterface.inventory.InventoryCsvAlbum;
 import org.fl.util.json.JsonUtils;
@@ -331,7 +333,11 @@ class AlbumTest {
 
 		Album album = new Album(jAlbum, lla, Path.of("dummyPath"));
 		
-		assertThat(album.searchPotentialDiscogsReleases()).isNotNull().singleElement()
+		ReleaseMatchResult releaseMatchResult = album.searchPotentialDiscogsReleases();
+		
+		assertThat(releaseMatchResult.getMatchResultType()).isEqualTo(MatchResultType.MATCH);
+		
+		assertThat(releaseMatchResult.getMatchingReleases()).isNotNull().singleElement()
 			.satisfies(discogsRelease -> {
 				InventoryCsvAlbum csvRelease = discogsRelease.getInventoryCsvAlbum();
 				assertThat(csvRelease.getArtists()).singleElement().isEqualTo("The Beatles");

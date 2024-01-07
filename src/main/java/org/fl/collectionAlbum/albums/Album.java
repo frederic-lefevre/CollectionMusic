@@ -43,7 +43,7 @@ import org.fl.collectionAlbum.Format.RangementSupportPhysique;
 import org.fl.collectionAlbum.MusicArtefact;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher;
-import org.fl.collectionAlbum.disocgs.DiscogsInventory.DiscogsAlbumRelease;
+import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.ReleaseMatchResult;
 import org.fl.collectionAlbum.json.AlbumParser;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
@@ -217,7 +217,7 @@ public class Album extends MusicArtefact {
 		return potentialMediaPaths;
 	}
 	
-	public List<DiscogsAlbumRelease> searchPotentialDiscogsReleases() {
+	public ReleaseMatchResult searchPotentialDiscogsReleases() {
 		return DiscogsAlbumReleaseMatcher.getPotentialReleaseMatch(this);
 	}
 	

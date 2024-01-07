@@ -32,6 +32,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.logging.Level;
@@ -284,6 +285,13 @@ public class Format {
 		return typeRangement ;
 	}
 
+    public Set<SupportPhysique> getSupportsPhysiques() {
+    	
+    	return tableFormat.keySet().stream()
+    			.map(Support::getSupportPhysique)
+    			.collect(Collectors.toSet());
+    }
+    
 	private double getNb(Support support) {
 		Double nb = tableFormat.get(support) ;
 		if (nb == null) {

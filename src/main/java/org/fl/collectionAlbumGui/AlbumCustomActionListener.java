@@ -27,7 +27,7 @@ package org.fl.collectionAlbumGui;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;
-import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
@@ -110,7 +110,8 @@ public class AlbumCustomActionListener implements java.awt.event.ActionListener 
 					// Show informations in popup message
 					JTextArea infoPotentialRelease = new JTextArea(40, 200);	
 					
-					List<DiscogsAlbumRelease> potentialReleases = selectedAlbum.searchPotentialDiscogsReleases();
+					Set<DiscogsAlbumRelease> potentialReleases = selectedAlbum.searchPotentialDiscogsReleases().getMatchingReleases();
+					// TODO check match type
 					if ((potentialReleases == null) || potentialReleases.isEmpty()) {
 						infoPotentialRelease.setText("Pas de release discogs potentielle trouvée");
 					} else {
