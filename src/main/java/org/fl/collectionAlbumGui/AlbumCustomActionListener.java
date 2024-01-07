@@ -25,6 +25,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbumGui;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -32,7 +33,9 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -156,10 +159,20 @@ public class AlbumCustomActionListener implements java.awt.event.ActionListener 
 	private JPanel discogsPotentialReleasePane(DiscogsAlbumRelease release) {
 		
 		JPanel potentialReleasePane = new JPanel();
-		JTextArea infoPotentialRelease = new JTextArea(0, 200);
+		potentialReleasePane.setLayout(new BoxLayout(potentialReleasePane, BoxLayout.X_AXIS));
+		potentialReleasePane.setBorder(BorderFactory.createLineBorder(Color.BLACK,2,true)) ;
+	
+		JTextArea infoPotentialRelease = new JTextArea(0, 150);
 		infoPotentialRelease.setText(release.getInfo());
 		infoPotentialRelease.setFont(new Font("monospaced", Font.BOLD, 14));
 		potentialReleasePane.add(infoPotentialRelease);
+		
+		JButton releaseValidate = new JButton("Valider cette release");
+		releaseValidate.setBackground(Color.GREEN);
+		Font buttonFont = new Font("Verdana", Font.BOLD, 12);
+		releaseValidate.setFont(buttonFont);	
+		potentialReleasePane.add(releaseValidate);
+		
 		return potentialReleasePane;
 	}
 
