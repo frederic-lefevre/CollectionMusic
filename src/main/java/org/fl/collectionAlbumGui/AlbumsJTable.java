@@ -95,7 +95,7 @@ public class AlbumsJTable extends JTable {
 		
 		setAutoResizeMode(JTable.AUTO_RESIZE_OFF) ;
 		
-		addMouseListener(new AlbumMouseAdapter(this, Control.getOsActions()));
+		addMouseListener(new AlbumMouseAdapter(this, Control.getOsActionsOnAlbum()));
 
 	}
 

@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -58,7 +58,8 @@ public class Control {
 	private Path collectionDirectoryName;
 	private Path concertDirectoryName;
 	private Map<ContentNature,Path> mediaFileRootPaths;
-	private List<OsAction> osActions;
+	private List<OsActionOnAlbum> osActionsOnAlbum;
+	private List<OsActionOnAlbum> osActionsOnDiscogsRelease;
 	private Path discogsCollectionCsvExportPath;
 	private String discogsBaseUrlForRelease;
    	
@@ -95,13 +96,8 @@ public class Control {
 							contentNature, 
 							collectionProperties.getPathFromURI("album." + contentNature.getNom() + "File.rootPath")));
 				
-			String osCmdPropBase = "album.command.";
-			osActions = collectionProperties.getKeysElements("album.command.").stream()
-				.map(prop -> new OsAction(
-						collectionProperties.getProperty(osCmdPropBase + prop + ".title"), 
-						collectionProperties.getProperty(osCmdPropBase + prop + ".cmd"),
-						AlbumCommandParameter.valueOf(collectionProperties.getProperty(osCmdPropBase + prop + ".param"))))
-				.collect(Collectors.toList());
+			osActionsOnAlbum = getOsActionsOnAlbum("album.command.");
+			osActionsOnDiscogsRelease = getOsActionsOnAlbum("album.discogs.command.");
 			
 			Map<CustomAction, String> customActions = new HashMap<>();
 			Stream.of(CustomAction.values()).forEach(customAction -> {
@@ -159,8 +155,8 @@ public class Control {
 		return getInstance().mediaFileRootPaths.get(contentNature);
 	}
 	
-	public static List<OsAction> getOsActions() {
-		return getInstance().osActions;
+	public static List<OsActionOnAlbum> getOsActionsOnAlbum() {
+		return getInstance().osActionsOnAlbum;
 	}
 
 	public static Path getDiscogsCollectionCsvExportPath() {
@@ -169,5 +165,14 @@ public class Control {
 
 	public static String getDiscogsBaseUrlForRelease() {
 		return getInstance().discogsBaseUrlForRelease;
+	}
+	
+	private List<OsActionOnAlbum> getOsActionsOnAlbum(String osCmdPropBase) {
+
+		return collectionProperties.getKeysElements(osCmdPropBase).stream()
+				.map(prop -> new OsActionOnAlbum(collectionProperties.getProperty(osCmdPropBase + prop + ".title"),
+						collectionProperties.getProperty(osCmdPropBase + prop + ".cmd"),
+						AlbumCommandParameter.valueOf(collectionProperties.getProperty(osCmdPropBase + prop + ".param"))))
+				.collect(Collectors.toList());
 	}
 }

@@ -35,7 +35,7 @@ import java.util.stream.Stream;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-import org.fl.collectionAlbum.OsAction;
+import org.fl.collectionAlbum.OsActionOnAlbum;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbumGui.AlbumCustomActionListener.CustomAction;
 
@@ -67,7 +67,7 @@ public class AlbumMouseAdapter extends MouseAdapter {
 		
 	}
 	
-	public AlbumMouseAdapter(AlbumsJTable ajt, List<OsAction> osActions) {
+	public AlbumMouseAdapter(AlbumsJTable ajt, List<OsActionOnAlbum> osActions) {
 		
 		super();
 		this.albumsJTable = ajt;

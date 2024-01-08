@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,13 +26,13 @@ package org.fl.collectionAlbum;
 
 import org.fl.collectionAlbum.albums.AlbumCommandParameter;
 
-public class OsAction {
+public class OsActionOnAlbum {
 
 	private final String actionTitle;
 	private final String actionCommand;
 	private final AlbumCommandParameter albumCommandParameter;
 	
-	public OsAction(String t, String c, AlbumCommandParameter a) {
+	public OsActionOnAlbum(String t, String c, AlbumCommandParameter a) {
 		actionTitle   = t;
 		actionCommand = c;
 		albumCommandParameter = a;
