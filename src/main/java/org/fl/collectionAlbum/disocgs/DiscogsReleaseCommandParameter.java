@@ -26,6 +26,7 @@ package org.fl.collectionAlbum.disocgs;
 
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.OsActionCommandParameter;
@@ -36,6 +37,12 @@ public enum DiscogsReleaseCommandParameter implements OsActionCommandParameter<D
 	DISCOGS_RELEASE_INFO( 
 			(release) -> Control.getDiscogsBaseUrlForRelease() + release.getInventoryCsvAlbum().getReleaseId(),
 			(release) -> release.getInventoryCsvAlbum().getReleaseId() != null
+			),
+	ALBUMS_JSON(
+			(release) -> release.getCollectionAlbums().stream()
+				.map(album -> album.getJsonFilePath().toAbsolutePath().toString())
+				.collect(Collectors.joining(" ")),
+				(release) -> ((release.getCollectionAlbums() != null) && !release.getCollectionAlbums().isEmpty())
 			);
 	
 	private final Function<DiscogsAlbumRelease,String> parametersGetter;
