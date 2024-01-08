@@ -28,8 +28,8 @@ import java.awt.event.ActionEvent;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.Control;
-import org.fl.collectionAlbum.OsActionOnAlbum;
 import org.fl.collectionAlbum.albums.Album;
+import org.fl.collectionAlbum.albums.OsAction;
 import org.fl.util.os.OScommand;
 
 public class AlbumCommandListener implements java.awt.event.ActionListener {
@@ -37,9 +37,9 @@ public class AlbumCommandListener implements java.awt.event.ActionListener {
 	private static final Logger aLog = Control.getAlbumLog();
 	
 	private final AlbumsJTable albumsJTable;
-	private final OsActionOnAlbum osAction;
+	private final OsAction<Album> osAction;
 	
-	public AlbumCommandListener(AlbumsJTable ajt, OsActionOnAlbum osAction) {
+	public AlbumCommandListener(AlbumsJTable ajt, OsAction<Album> osAction) {
 		
 		this.albumsJTable = ajt;
 		this.osAction = osAction;
@@ -55,7 +55,7 @@ public class AlbumCommandListener implements java.awt.event.ActionListener {
 			StringBuilder fullCommand = new StringBuilder(osAction.getActionCommand());
 			
 			fullCommand.append(" ")
-				.append(osAction.getAlbumCommandParameter().getParametersGetter().apply(selectedAlbum));
+				.append(osAction.getCommandParameter().getParametersGetter().apply(selectedAlbum));
 			
 			OScommand osCommand = new OScommand(fullCommand.toString(), false, aLog) ;
 			osCommand.run();

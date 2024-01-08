@@ -36,7 +36,11 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.fl.collectionAlbum.Format.ContentNature;
+import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.albums.AlbumCommandParameter;
+import org.fl.collectionAlbum.albums.OsAction;
+import org.fl.collectionAlbum.disocgs.DiscogsInventory.DiscogsAlbumRelease;
+import org.fl.collectionAlbum.disocgs.DiscogsReleaseCommandParameter;
 import org.fl.collectionAlbumGui.MediaFileCustomActionListener;
 import org.fl.collectionAlbumGui.MediaFileCustomActionListener.CustomAction;
 import org.fl.util.AdvancedProperties;
@@ -58,8 +62,8 @@ public class Control {
 	private Path collectionDirectoryName;
 	private Path concertDirectoryName;
 	private Map<ContentNature,Path> mediaFileRootPaths;
-	private List<OsActionOnAlbum> osActionsOnAlbum;
-	private List<OsActionOnAlbum> osActionsOnDiscogsRelease;
+	private List<OsAction<Album>> osActionsOnAlbum;
+	private List<OsAction<DiscogsAlbumRelease>> osActionsOnDiscogsRelease;
 	private Path discogsCollectionCsvExportPath;
 	private String discogsBaseUrlForRelease;
    	
@@ -97,7 +101,7 @@ public class Control {
 							collectionProperties.getPathFromURI("album." + contentNature.getNom() + "File.rootPath")));
 				
 			osActionsOnAlbum = getOsActionsOnAlbum("album.command.");
-			osActionsOnDiscogsRelease = getOsActionsOnAlbum("album.discogs.command.");
+			osActionsOnDiscogsRelease = getOsActionsOnDiscogsRelease("album.discogs.command.");
 			
 			Map<CustomAction, String> customActions = new HashMap<>();
 			Stream.of(CustomAction.values()).forEach(customAction -> {
@@ -155,10 +159,14 @@ public class Control {
 		return getInstance().mediaFileRootPaths.get(contentNature);
 	}
 	
-	public static List<OsActionOnAlbum> getOsActionsOnAlbum() {
+	public static List<OsAction<Album>> getOsActionsOnAlbum() {
 		return getInstance().osActionsOnAlbum;
 	}
 
+	public static List<OsAction<DiscogsAlbumRelease>> getOsActionOnDiscogsRelease() {
+		return getInstance().osActionsOnDiscogsRelease;
+	}
+	
 	public static Path getDiscogsCollectionCsvExportPath() {
 		return getInstance().discogsCollectionCsvExportPath;
 	}
@@ -167,12 +175,21 @@ public class Control {
 		return getInstance().discogsBaseUrlForRelease;
 	}
 	
-	private List<OsActionOnAlbum> getOsActionsOnAlbum(String osCmdPropBase) {
+	private List<OsAction<Album>> getOsActionsOnAlbum(String osCmdPropBase) {
 
 		return collectionProperties.getKeysElements(osCmdPropBase).stream()
-				.map(prop -> new OsActionOnAlbum(collectionProperties.getProperty(osCmdPropBase + prop + ".title"),
+				.map(prop -> new OsAction<Album>(collectionProperties.getProperty(osCmdPropBase + prop + ".title"),
 						collectionProperties.getProperty(osCmdPropBase + prop + ".cmd"),
 						AlbumCommandParameter.valueOf(collectionProperties.getProperty(osCmdPropBase + prop + ".param"))))
+				.collect(Collectors.toList());
+	}
+	
+	private List<OsAction<DiscogsAlbumRelease>> getOsActionsOnDiscogsRelease(String osCmdPropBase) {
+
+		return collectionProperties.getKeysElements(osCmdPropBase).stream()
+				.map(prop -> new OsAction<DiscogsAlbumRelease>(collectionProperties.getProperty(osCmdPropBase + prop + ".title"),
+						collectionProperties.getProperty(osCmdPropBase + prop + ".cmd"),
+						DiscogsReleaseCommandParameter.valueOf(collectionProperties.getProperty(osCmdPropBase + prop + ".param"))))
 				.collect(Collectors.toList());
 	}
 }

@@ -22,38 +22,37 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-package org.fl.collectionAlbum.albums;
+package org.fl.collectionAlbum.disocgs;
 
 import java.util.function.Function;
 import java.util.function.Predicate;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.OsActionCommandParameter;
+import org.fl.collectionAlbum.disocgs.DiscogsInventory.DiscogsAlbumRelease;
 
-public enum AlbumCommandParameter implements OsActionCommandParameter<Album> {
+public enum DiscogsReleaseCommandParameter implements OsActionCommandParameter<DiscogsAlbumRelease> {
 
-	JSON(
-			(album) -> album.getJsonFilePath().toAbsolutePath().toString(), 
-			(album) -> true),
-	DISCOGS_RELEASE_INFO(
-			(album) -> Control.getDiscogsBaseUrlForRelease() + album.getDiscogsLink(), 
-			(album) -> (album.getDiscogsLink() != null) && !album.getDiscogsLink().isEmpty());
+	DISCOGS_RELEASE_INFO( 
+			(release) -> Control.getDiscogsBaseUrlForRelease() + release.getInventoryCsvAlbum().getReleaseId(),
+			(release) -> release.getInventoryCsvAlbum().getReleaseId() != null
+			);
 	
-	private final Function<Album,String> parametersGetter;
-	private final Predicate<Album> actionValidityPredicate;
+	private final Function<DiscogsAlbumRelease,String> parametersGetter;
+	private final Predicate<DiscogsAlbumRelease> actionValidityPredicate;
 	
-	private AlbumCommandParameter(Function<Album,String> gp, Predicate<Album> vp) {
-		parametersGetter = gp;
+	private DiscogsReleaseCommandParameter(Function<DiscogsAlbumRelease,String> pg, Predicate<DiscogsAlbumRelease> vp) {
+		parametersGetter = pg;
 		actionValidityPredicate = vp;
 	}
 
 	@Override
-	public Function<Album, String> getParametersGetter() {
+	public Function<DiscogsAlbumRelease, String> getParametersGetter() {
 		return parametersGetter;
 	}
 
 	@Override
-	public Predicate<Album> getActionValidityPredicate() {
+	public Predicate<DiscogsAlbumRelease> getActionValidityPredicate() {
 		return actionValidityPredicate;
 	}
 

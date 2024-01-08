@@ -24,30 +24,12 @@ SOFTWARE.
 
 package org.fl.collectionAlbum;
 
-import org.fl.collectionAlbum.albums.AlbumCommandParameter;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
-public class OsActionOnAlbum {
+public interface OsActionCommandParameter<T> {
 
-	private final String actionTitle;
-	private final String actionCommand;
-	private final AlbumCommandParameter albumCommandParameter;
+	public Function<T, String> getParametersGetter();
 	
-	public OsActionOnAlbum(String t, String c, AlbumCommandParameter a) {
-		actionTitle   = t;
-		actionCommand = c;
-		albumCommandParameter = a;
-	}
-
-	public String getActionTitle() {
-		return actionTitle;
-	}
-
-	public String getActionCommand() {
-		return actionCommand;
-	}
-
-	public AlbumCommandParameter getAlbumCommandParameter() {
-		return albumCommandParameter;
-	}
-
+	public Predicate<T> getActionValidityPredicate();
 }

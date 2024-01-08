@@ -35,8 +35,8 @@ import java.util.stream.Stream;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
-import org.fl.collectionAlbum.OsActionOnAlbum;
 import org.fl.collectionAlbum.albums.Album;
+import org.fl.collectionAlbum.albums.OsAction;
 import org.fl.collectionAlbumGui.AlbumCustomActionListener.CustomAction;
 
 public class AlbumMouseAdapter extends MouseAdapter {
@@ -67,7 +67,7 @@ public class AlbumMouseAdapter extends MouseAdapter {
 		
 	}
 	
-	public AlbumMouseAdapter(AlbumsJTable ajt, List<OsActionOnAlbum> osActions) {
+	public AlbumMouseAdapter(AlbumsJTable ajt, List<OsAction<Album>> osActions) {
 		
 		super();
 		this.albumsJTable = ajt;
@@ -76,7 +76,7 @@ public class AlbumMouseAdapter extends MouseAdapter {
 		albumMenuItems = new ArrayList<>();
 		
 		osActions.forEach(osAction ->
-			addMenuItem(osAction.getActionTitle(), new AlbumCommandListener(albumsJTable, osAction), osAction.getAlbumCommandParameter().getActionValidityPredicate())
+			addMenuItem(osAction.getActionTitle(), new AlbumCommandListener(albumsJTable, osAction), osAction.getCommandParameter().getActionValidityPredicate())
 		);
 		
 		Stream.of(CustomAction.values())

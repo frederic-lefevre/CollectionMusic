@@ -1,5 +1,5 @@
 /*
- MIT License
+ * MIT License
 
 Copyright (c) 2017, 2024 Frederic Lefevre
 
@@ -20,41 +20,34 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
- */
+*/
 
 package org.fl.collectionAlbum.albums;
 
-import java.util.function.Function;
-import java.util.function.Predicate;
-
-import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.OsActionCommandParameter;
 
-public enum AlbumCommandParameter implements OsActionCommandParameter<Album> {
+public class OsAction<T> {
 
-	JSON(
-			(album) -> album.getJsonFilePath().toAbsolutePath().toString(), 
-			(album) -> true),
-	DISCOGS_RELEASE_INFO(
-			(album) -> Control.getDiscogsBaseUrlForRelease() + album.getDiscogsLink(), 
-			(album) -> (album.getDiscogsLink() != null) && !album.getDiscogsLink().isEmpty());
+	private final String actionTitle;
+	private final String actionCommand;
+	private final OsActionCommandParameter<T> commandParameter;
 	
-	private final Function<Album,String> parametersGetter;
-	private final Predicate<Album> actionValidityPredicate;
-	
-	private AlbumCommandParameter(Function<Album,String> gp, Predicate<Album> vp) {
-		parametersGetter = gp;
-		actionValidityPredicate = vp;
+	public OsAction(String t, String c, OsActionCommandParameter<T> a) {
+		actionTitle   = t;
+		actionCommand = c;
+		commandParameter = a;
 	}
 
-	@Override
-	public Function<Album, String> getParametersGetter() {
-		return parametersGetter;
+	public String getActionTitle() {
+		return actionTitle;
 	}
 
-	@Override
-	public Predicate<Album> getActionValidityPredicate() {
-		return actionValidityPredicate;
+	public String getActionCommand() {
+		return actionCommand;
+	}
+
+	public OsActionCommandParameter<T> getCommandParameter() {
+		return commandParameter;
 	}
 
 }
