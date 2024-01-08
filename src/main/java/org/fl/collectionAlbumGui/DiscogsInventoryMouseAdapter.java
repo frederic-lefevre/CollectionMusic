@@ -29,6 +29,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -41,18 +42,44 @@ public class DiscogsInventoryMouseAdapter extends MouseAdapter {
 
 	private final DiscogsReleaseJTable discogsReleaseJTable;
 	private final JPopupMenu localJPopupMenu;
-	private final List<JMenuItem> menuItems;
+	
+	private final List<DiscogsReleaseMenuItem> discogsReleaseMenuItems;
+	
+	private static class DiscogsReleaseMenuItem {
+		
+		private final JMenuItem menuitem;
+		private final Predicate<DiscogsAlbumRelease> enabledPredicate;
+		
+		public DiscogsReleaseMenuItem(JMenuItem menuitem, Predicate<DiscogsAlbumRelease> enabledPredicate) {
+			super();
+			this.menuitem = menuitem;
+			this.enabledPredicate = enabledPredicate;
+		}
+
+		public JMenuItem getMenuitem() {
+			return menuitem;
+		}
+
+		public Predicate<DiscogsAlbumRelease> getEnabledPredicate() {
+			return enabledPredicate;
+		}
+	}
 	
 	public DiscogsInventoryMouseAdapter(DiscogsReleaseJTable discogsReleaseJTable, List<OsAction<DiscogsAlbumRelease>> osActions) {
 		
 		this.discogsReleaseJTable = discogsReleaseJTable;
 		localJPopupMenu = new JPopupMenu();
-		menuItems = new ArrayList<JMenuItem>();
 		
-		osActions.forEach(osAction -> addMenuItem(osAction.getActionTitle(), new DiscogsReleaseCommandListener(discogsReleaseJTable, osAction)));
+		discogsReleaseMenuItems = new ArrayList<>();
+		
+		osActions.forEach(osAction -> 
+			addMenuItem(
+					osAction.getActionTitle(),
+					new DiscogsReleaseCommandListener(discogsReleaseJTable, osAction), 
+					osAction.getCommandParameter().getActionValidityPredicate()));
 		
 		ActionListener infoListener = new DiscogsReleaseCustomActionListener(discogsReleaseJTable, CustomAction.SHOW_INFO);
-		menuItems.add(addMenuItem("Afficher les informations", infoListener));
+		addMenuItem("Afficher les informations", infoListener, (release) -> release != null);
 	}
 
 	@Override
@@ -75,14 +102,14 @@ public class DiscogsInventoryMouseAdapter extends MouseAdapter {
 		
 		DiscogsAlbumRelease release = discogsReleaseJTable.getSelectedDisocgsRelease();
 		if (release != null) {
-			menuItems.forEach(menuItem -> menuItem.setEnabled(true));
+			discogsReleaseMenuItems.forEach(menuItem -> menuItem.getMenuitem().setEnabled(menuItem.getEnabledPredicate().test(release)));
 		}
 	}
 	
-	private JMenuItem addMenuItem(String title, ActionListener act) {
+	private void addMenuItem(String title, ActionListener act, Predicate<DiscogsAlbumRelease> enabledPredicate) {
 		JMenuItem localJMenuItem = new JMenuItem(title);
 	     localJMenuItem.addActionListener(act);
 	     localJPopupMenu.add(localJMenuItem);
-	     return localJMenuItem ;
+	     discogsReleaseMenuItems.add(new DiscogsReleaseMenuItem(localJMenuItem, enabledPredicate));
 	}
 }
