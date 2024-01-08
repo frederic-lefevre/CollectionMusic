@@ -22,32 +22,31 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.albums;
+package org.fl.collectionAlbumGui;
 
-import org.fl.collectionAlbum.OsActionCommandParameter;
+import java.awt.event.ActionEvent;
 
-public class OsAction<T> {
+import org.fl.collectionAlbum.OsAction;
+import org.fl.collectionAlbum.disocgs.DiscogsInventory.DiscogsAlbumRelease;
 
-	private final String actionTitle;
-	private final String actionCommand;
-	private final OsActionCommandParameter<T> commandParameter;
+public class DiscogsReleaseCommandListener implements java.awt.event.ActionListener {
+
+	private final DiscogsReleaseJTable discogsReleaseJTable;
+	private final OsAction<DiscogsAlbumRelease> osAction;
 	
-	public OsAction(String t, String c, OsActionCommandParameter<T> a) {
-		actionTitle   = t;
-		actionCommand = c;
-		commandParameter = a;
+	public DiscogsReleaseCommandListener(DiscogsReleaseJTable discogsReleaseJTable, OsAction<DiscogsAlbumRelease> osAction) {
+		this.discogsReleaseJTable = discogsReleaseJTable;
+		this.osAction = osAction;
 	}
 
-	public String getActionTitle() {
-		return actionTitle;
-	}
-
-	public String getActionCommand() {
-		return actionCommand;
-	}
-
-	public OsActionCommandParameter<T> getCommandParameter() {
-		return commandParameter;
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		
+		DiscogsAlbumRelease release = discogsReleaseJTable.getSelectedDisocgsRelease();
+		
+		if (release != null) {
+			osAction.runOsAction(release);
+		}		
 	}
 
 }

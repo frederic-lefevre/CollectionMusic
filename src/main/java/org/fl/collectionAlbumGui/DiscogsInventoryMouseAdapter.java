@@ -33,6 +33,7 @@ import java.util.List;
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import org.fl.collectionAlbum.OsAction;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory.DiscogsAlbumRelease;
 import org.fl.collectionAlbumGui.DiscogsReleaseCustomActionListener.CustomAction;
 
@@ -42,11 +43,13 @@ public class DiscogsInventoryMouseAdapter extends MouseAdapter {
 	private final JPopupMenu localJPopupMenu;
 	private final List<JMenuItem> menuItems;
 	
-	public DiscogsInventoryMouseAdapter(DiscogsReleaseJTable discogsReleaseJTable) {
+	public DiscogsInventoryMouseAdapter(DiscogsReleaseJTable discogsReleaseJTable, List<OsAction<DiscogsAlbumRelease>> osActions) {
 		
 		this.discogsReleaseJTable = discogsReleaseJTable;
 		localJPopupMenu = new JPopupMenu();
 		menuItems = new ArrayList<JMenuItem>();
+		
+		osActions.forEach(osAction -> addMenuItem(osAction.getActionTitle(), new DiscogsReleaseCommandListener(discogsReleaseJTable, osAction)));
 		
 		ActionListener infoListener = new DiscogsReleaseCustomActionListener(discogsReleaseJTable, CustomAction.SHOW_INFO);
 		menuItems.add(addMenuItem("Afficher les informations", infoListener));

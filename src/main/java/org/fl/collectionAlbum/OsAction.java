@@ -22,32 +22,46 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbumGui;
+package org.fl.collectionAlbum;
 
-import java.awt.event.ActionEvent;
+import java.util.logging.Logger;
 
-import org.fl.collectionAlbum.OsAction;
-import org.fl.collectionAlbum.albums.Album;
+import org.fl.util.os.OScommand;
 
-public class AlbumCommandListener implements java.awt.event.ActionListener {
+public class OsAction<T> {
+
+	private static final Logger aLog = Control.getAlbumLog();
 	
-	private final AlbumsJTable albumsJTable;
-	private final OsAction<Album> osAction;
+	private final String actionTitle;
+	private final String actionCommand;
+	private final OsActionCommandParameter<T> commandParameter;
 	
-	public AlbumCommandListener(AlbumsJTable ajt, OsAction<Album> osAction) {
-		
-		this.albumsJTable = ajt;
-		this.osAction = osAction;
+	public OsAction(String t, String c, OsActionCommandParameter<T> a) {
+		actionTitle   = t;
+		actionCommand = c;
+		commandParameter = a;
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		
-		Album selectedAlbum = albumsJTable.getSelectedAlbum();
-		
-		if (selectedAlbum != null) {		
-			osAction.runOsAction(selectedAlbum);
-		}		
+	public String getActionTitle() {
+		return actionTitle;
 	}
 
+	public String getActionCommand() {
+		return actionCommand;
+	}
+
+	public OsActionCommandParameter<T> getCommandParameter() {
+		return commandParameter;
+	}
+
+	public void runOsAction(T o) {
+		
+		StringBuilder fullCommand = new StringBuilder(getActionCommand());
+		
+		fullCommand.append(" ")
+			.append(getCommandParameter().getParametersGetter().apply(o));
+		
+		OScommand osCommand = new OScommand(fullCommand.toString(), false, aLog) ;
+		osCommand.run();
+	}
 }

@@ -38,7 +38,6 @@ import java.util.stream.Stream;
 import org.fl.collectionAlbum.Format.ContentNature;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.albums.AlbumCommandParameter;
-import org.fl.collectionAlbum.albums.OsAction;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory.DiscogsAlbumRelease;
 import org.fl.collectionAlbum.disocgs.DiscogsReleaseCommandParameter;
 import org.fl.collectionAlbumGui.MediaFileCustomActionListener;
