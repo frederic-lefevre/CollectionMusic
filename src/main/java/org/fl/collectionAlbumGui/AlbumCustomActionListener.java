@@ -103,7 +103,7 @@ public class AlbumCustomActionListener implements java.awt.event.ActionListener 
 							
 							// Show informations in popup message
 							JTextArea infoRelease = new JTextArea(40, 200);	
-							
+							infoRelease.setEditable(false);
 							infoRelease.setText(release.getInfo());
 							infoRelease.setFont(new Font("monospaced", Font.BOLD, 14));
 							JScrollPane infoFilesScroll = new JScrollPane(infoRelease) ;
@@ -121,6 +121,7 @@ public class AlbumCustomActionListener implements java.awt.event.ActionListener 
 					JTextArea infoPotentialRelease = new JTextArea(0, 200);
 					infoPotentialRelease.setPreferredSize(new Dimension(1600,50));
 					infoPotentialRelease.setMaximumSize(new Dimension(1600,50));
+					infoPotentialRelease.setEditable(false);
 					
 					ReleaseMatchResult releaseMatchResult = selectedAlbum.searchPotentialDiscogsReleases();
 					
@@ -163,6 +164,7 @@ public class AlbumCustomActionListener implements java.awt.event.ActionListener 
 		potentialReleasePane.setBorder(BorderFactory.createLineBorder(Color.BLACK,2,true)) ;
 	
 		JTextArea infoPotentialRelease = new JTextArea(0, 150);
+		infoPotentialRelease.setEditable(false);
 		infoPotentialRelease.setText(release.getInfo());
 		infoPotentialRelease.setFont(new Font("monospaced", Font.BOLD, 14));
 		potentialReleasePane.add(infoPotentialRelease);

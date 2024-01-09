@@ -62,7 +62,8 @@ public class DiscogsReleaseCustomActionListener implements java.awt.event.Action
 				case SHOW_INFO:
 					
 					// Show informations in popup message
-					JTextArea infoRelease = new JTextArea(40, 200);	
+					JTextArea infoRelease = new JTextArea(40, 200);
+					infoRelease.setEditable(false);
 					
 					infoRelease.setText(release.getInfo());
 					infoRelease.setFont(new Font("monospaced", Font.BOLD, 14));
