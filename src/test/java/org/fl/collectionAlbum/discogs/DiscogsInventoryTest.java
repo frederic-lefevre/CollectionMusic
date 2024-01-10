@@ -31,6 +31,7 @@ import java.nio.file.Files;
 import java.time.Month;
 import java.time.Year;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory;
@@ -50,7 +51,13 @@ class DiscogsInventoryTest {
 		
 		List<DiscogsAlbumRelease> inventory = DiscogsInventory.getDiscogsInventory();
 		
-		assertThat(inventory).isNotNull().hasSize(releaseCount)
+		assertThat(inventory).isNotNull().hasSize(releaseCount);
+		
+		List<DiscogsAlbumRelease> inventoryJaco = inventory.stream()
+				.filter(album -> album.getInventoryCsvAlbum().getArtists().contains("Jaco Pastorius"))
+				.collect(Collectors.toList());
+		
+		assertThat(inventoryJaco)
 			.anySatisfy(album -> {
 				
 				InventoryCsvAlbum csvAlbum = album.getInventoryCsvAlbum();
@@ -72,7 +79,7 @@ class DiscogsInventoryTest {
 				assertThat(csvAlbum.getRating()).isNull();
 				assertThat(csvAlbum.getReleased()).isEqualTo(Year.of(2017));
 				assertThat(csvAlbum.getReleaseId()).isEqualTo(JACO_RELEASE_ID);
-				assertThat(csvAlbum.getCollectionFolder()).isEqualTo("p");
+				assertThat(csvAlbum.getCollectionFolder()).isEqualTo("Jaco Pastorius");
 				assertThat(csvAlbum.getDateAdded())
 					.hasYear(2023).hasMonth(Month.SEPTEMBER).hasDayOfMonth(24)
 					.hasHour(23).hasMinute(39).hasSecond(34);

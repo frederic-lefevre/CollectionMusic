@@ -46,9 +46,11 @@ public class MediaFilePath {
 			Set.of("flac", "mp3", "wma", "aiff", "FLAC", "MP3", "m4a",
 					"m2ts", "mkv", "mpls", "VOB", "wav", "m4v", "mp4", "bdmv");
 	
+	private static final Set<String> coverExtensions = Set.of("jpg", "png");
+	
 	public static final Set<String> extensionSet = new HashSet<>();
 
-	private static final String COVER_NAME = "cover.jpg";
+	private static final String COVER_START_NAME = "cover.";
 	
 	private final Path mediaFilesPath;
 	
@@ -66,7 +68,7 @@ public class MediaFilePath {
 			
 			List<Path> files = fileStream.collect(Collectors.toList());
 			mediaFileNumber = files.stream().filter(file -> Files.isRegularFile(file) && isMediaFileName(file)).count();
-			hasCover = files.stream().anyMatch(path -> path.getFileName().toString().equalsIgnoreCase(COVER_NAME));
+			hasCover = files.stream().anyMatch(path -> isCoverFilename(path.getFileName()));
 		} catch (Exception e) {
 			mLog.log(Level.SEVERE, "Exception when listing files in " + mediaFilesPath, e);
 			mediaFileNumber = 0;
@@ -110,5 +112,13 @@ public class MediaFilePath {
 
 	public boolean hasCover() {
 		return hasCover;
+	}
+	
+	private boolean isCoverFilename(Path filename) {
+		
+		return filename.toString().toLowerCase().startsWith(COVER_START_NAME) &&
+				getFileNameExtension(filename)
+				.filter(extension -> coverExtensions.contains(extension.toLowerCase()))
+				.isPresent();
 	}
 }
