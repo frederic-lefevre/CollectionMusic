@@ -61,8 +61,13 @@ public class MediaFilePath {
 	private boolean hasCover;
 	
 	public MediaFilePath(Path mediaFilesPath) {
+		
 		this.mediaFilesPath = mediaFilesPath;
 		albumsSet = new HashSet<>();
+		if (mediaFilesPath.toString().contains("  ")) {
+			// Launching windows explorer on path with double blank does not work
+			mLog.warning("Double blank in path name for media file path " + mediaFilesPath);
+		}
 		
 		try (Stream<Path> fileStream = Files.list(mediaFilesPath)) {
 			
