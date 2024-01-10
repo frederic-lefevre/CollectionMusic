@@ -27,10 +27,12 @@ package org.fl.collectionAlbum.mediaPath;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.fl.collectionAlbum.Control;
@@ -45,6 +47,8 @@ public class MediaFilePath {
 					"m2ts", "mkv", "mpls", "VOB", "wav", "m4v", "mp4", "bdmv");
 	
 	public static final Set<String> extensionSet = new HashSet<>();
+
+	private static final String COVER_NAME = "cover.jpg";
 	
 	private final Path mediaFilesPath;
 	
@@ -52,15 +56,21 @@ public class MediaFilePath {
 	
 	private long mediaFileNumber;
 	
+	private boolean hasCover;
+	
 	public MediaFilePath(Path mediaFilesPath) {
 		this.mediaFilesPath = mediaFilesPath;
 		albumsSet = new HashSet<>();
 		
 		try (Stream<Path> fileStream = Files.list(mediaFilesPath)) {
-			mediaFileNumber = fileStream.filter(file -> Files.isRegularFile(file) && isMediaFileName(file)).count();
+			
+			List<Path> files = fileStream.collect(Collectors.toList());
+			mediaFileNumber = files.stream().filter(file -> Files.isRegularFile(file) && isMediaFileName(file)).count();
+			hasCover = files.stream().anyMatch(path -> path.getFileName().toString().equalsIgnoreCase(COVER_NAME));
 		} catch (Exception e) {
 			mLog.log(Level.SEVERE, "Exception when listing files in " + mediaFilesPath, e);
 			mediaFileNumber = 0;
+			hasCover = false;
 		}
 	}
 
@@ -96,5 +106,9 @@ public class MediaFilePath {
 				return ext;
 					});
 				
+	}
+
+	public boolean hasCover() {
+		return hasCover;
 	}
 }

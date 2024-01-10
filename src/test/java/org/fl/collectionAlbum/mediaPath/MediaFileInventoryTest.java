@@ -94,7 +94,10 @@ class MediaFileInventoryTest {
 		assertThat(potentialPaths)
 			.isNotNull()
 			.singleElement()
-			.satisfies(audioPath -> assertThat(audioPath.getPath()).hasToString("E:\\Musique\\e\\Bill Evans\\Portrait In Jazz"));
+			.satisfies(audioPath -> {
+				assertThat(audioPath.getPath()).hasToString("E:\\Musique\\e\\Bill Evans\\Portrait In Jazz");
+				assertThat(audioPath.hasCover()).isTrue();
+			});
 	}
 
 	@Test
@@ -144,7 +147,10 @@ class MediaFileInventoryTest {
 		assertThat(potentialAudioPaths)
 			.isNotNull()
 			.hasSize(2)
-			.allMatch(audioPath -> audioPath.getPath().toString().contains("A Bigger Bang, Live On Copacabana Beach"));
+			.allSatisfy(audioPath -> {
+				assertThat(audioPath.getPath().toString()).contains("A Bigger Bang, Live On Copacabana Beach");
+				assertThat(audioPath.hasCover()).isTrue();
+			});
 		
 		List<MediaFilePath> potentialVideoPaths = videoFileInventory.getPotentialMediaPath(album);
 		
