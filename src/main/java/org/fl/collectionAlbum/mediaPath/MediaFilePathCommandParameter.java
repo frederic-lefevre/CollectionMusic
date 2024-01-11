@@ -22,45 +22,41 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-package org.fl.collectionAlbum.disocgs;
+package org.fl.collectionAlbum.mediaPath;
 
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.OsActionCommandParameter;
-import org.fl.collectionAlbum.disocgs.DiscogsInventory.DiscogsAlbumRelease;
 
-public enum DiscogsReleaseCommandParameter implements OsActionCommandParameter<DiscogsAlbumRelease> {
-
-	DISCOGS_RELEASE_INFO( 
-			(release) -> Control.getDiscogsBaseUrlForRelease() + release.getInventoryCsvAlbum().getReleaseId(),
-			(release) -> release.getInventoryCsvAlbum().getReleaseId() != null
-			),
+public enum MediaFilePathCommandParameter implements OsActionCommandParameter<MediaFilePath> {
+	
 	ALBUMS_JSON(
-			(release) -> release.getCollectionAlbums().stream()
-				.map(album -> album.getJsonFilePath().toAbsolutePath().toString())
-				.collect(Collectors.joining(" ")),
-			(release) -> ((release.getCollectionAlbums() != null) && !release.getCollectionAlbums().isEmpty())
+		(mediaFile) -> mediaFile.getAlbumSet().stream()
+			.map(album -> album.getJsonFilePath().toAbsolutePath().toString())
+			.collect(Collectors.joining(" ")),
+		(mediaFile) -> ((mediaFile.getAlbumSet() != null) && !mediaFile.getAlbumSet().isEmpty())	
 			);
+
+	private final Function<MediaFilePath,String> parametersGetter;
+	private final Predicate<MediaFilePath> actionValidityPredicate;
 	
-	private final Function<DiscogsAlbumRelease,String> parametersGetter;
-	private final Predicate<DiscogsAlbumRelease> actionValidityPredicate;
-	
-	private DiscogsReleaseCommandParameter(Function<DiscogsAlbumRelease,String> pg, Predicate<DiscogsAlbumRelease> vp) {
-		parametersGetter = pg;
-		actionValidityPredicate = vp;
+	private MediaFilePathCommandParameter(Function<MediaFilePath, String> pg, Predicate<MediaFilePath> vp) {
+		this.parametersGetter = pg;
+		this.actionValidityPredicate = vp;
 	}
 
 	@Override
-	public Function<DiscogsAlbumRelease, String> getParametersGetter() {
+	public Function<MediaFilePath, String> getParametersGetter() {
 		return parametersGetter;
 	}
 
 	@Override
-	public Predicate<DiscogsAlbumRelease> getActionValidityPredicate() {
+	public Predicate<MediaFilePath> getActionValidityPredicate() {
 		return actionValidityPredicate;
 	}
+
+
 
 }

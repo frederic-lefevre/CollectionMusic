@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -29,10 +29,12 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
+import org.fl.collectionAlbum.OsAction;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.fl.collectionAlbumGui.MediaFileCustomActionListener.CustomAction;
 
@@ -42,7 +44,7 @@ public class MediaFileMouseAdapter extends MouseAdapter {
 	private final JPopupMenu localJPopupMenu;
 	private final List<JMenuItem> menuItems;
 	
-	public MediaFileMouseAdapter(MediaFilesJTable mediaFileTable) {
+	public MediaFileMouseAdapter(MediaFilesJTable mediaFileTable, List<OsAction<MediaFilePath>> osActions) {
 		super();
 		
 		this.mediaFileTable = mediaFileTable;
@@ -50,7 +52,13 @@ public class MediaFileMouseAdapter extends MouseAdapter {
 		menuItems = new ArrayList<JMenuItem>();
 		
 		ActionListener explorerActionListener = new MediaFileCustomActionListener(mediaFileTable, CustomAction.ShowInExplorer);
-		menuItems.add(addMenuItem("Afficher le dossier", explorerActionListener));
+		menuItems.add(addMenuItem("Afficher le dossier", explorerActionListener, (mediaFile) -> mediaFile != null));
+		
+		osActions.forEach(osAction -> 
+		addMenuItem(
+				osAction.getActionTitle(),
+				new MediaFileCommandListener(mediaFileTable, osAction),
+				osAction.getCommandParameter().getActionValidityPredicate()));
 	}
 
 
@@ -78,7 +86,7 @@ public class MediaFileMouseAdapter extends MouseAdapter {
 		}
 	}
 	
-	private JMenuItem addMenuItem(String title, ActionListener act) {
+	private JMenuItem addMenuItem(String title, ActionListener act, Predicate<MediaFilePath> enabledPredicate) {
 		JMenuItem localJMenuItem = new JMenuItem(title);
 	     localJMenuItem.addActionListener(act);
 	     localJPopupMenu.add(localJMenuItem);

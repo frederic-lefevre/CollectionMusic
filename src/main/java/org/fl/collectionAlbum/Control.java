@@ -40,6 +40,8 @@ import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.albums.AlbumCommandParameter;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory.DiscogsAlbumRelease;
 import org.fl.collectionAlbum.disocgs.DiscogsReleaseCommandParameter;
+import org.fl.collectionAlbum.mediaPath.MediaFilePath;
+import org.fl.collectionAlbum.mediaPath.MediaFilePathCommandParameter;
 import org.fl.collectionAlbumGui.MediaFileCustomActionListener;
 import org.fl.collectionAlbumGui.MediaFileCustomActionListener.CustomAction;
 import org.fl.util.AdvancedProperties;
@@ -63,6 +65,7 @@ public class Control {
 	private Map<ContentNature,Path> mediaFileRootPaths;
 	private List<OsAction<Album>> osActionsOnAlbum;
 	private List<OsAction<DiscogsAlbumRelease>> osActionsOnDiscogsRelease;
+	private List<OsAction<MediaFilePath>> osActionsOnMediaFilePath;
 	private Path discogsCollectionCsvExportPath;
 	private String discogsBaseUrlForRelease;
    	
@@ -101,6 +104,7 @@ public class Control {
 				
 			osActionsOnAlbum = getOsActionsOnAlbum("album.command.");
 			osActionsOnDiscogsRelease = getOsActionsOnDiscogsRelease("album.discogs.command.");
+			osActionsOnMediaFilePath = getOsActionOnMediaFilePath("album.mediaFile.command.");
 			
 			Map<CustomAction, String> customActions = new HashMap<>();
 			Stream.of(CustomAction.values()).forEach(customAction -> {
@@ -166,6 +170,10 @@ public class Control {
 		return getInstance().osActionsOnDiscogsRelease;
 	}
 	
+	public static List<OsAction<MediaFilePath>> getOsActionOnMediaFilePath() {
+		return getInstance().osActionsOnMediaFilePath;
+	}
+	
 	public static Path getDiscogsCollectionCsvExportPath() {
 		return getInstance().discogsCollectionCsvExportPath;
 	}
@@ -189,6 +197,15 @@ public class Control {
 				.map(prop -> new OsAction<DiscogsAlbumRelease>(collectionProperties.getProperty(osCmdPropBase + prop + ".title"),
 						collectionProperties.getProperty(osCmdPropBase + prop + ".cmd"),
 						DiscogsReleaseCommandParameter.valueOf(collectionProperties.getProperty(osCmdPropBase + prop + ".param"))))
+				.collect(Collectors.toList());
+	}
+	
+	private List<OsAction<MediaFilePath>> getOsActionOnMediaFilePath(String osCmdPropBase) {
+		
+		return collectionProperties.getKeysElements(osCmdPropBase).stream()
+				.map(prop -> new OsAction<MediaFilePath>(collectionProperties.getProperty(osCmdPropBase + prop + ".title"),
+						collectionProperties.getProperty(osCmdPropBase + prop + ".cmd"),
+						MediaFilePathCommandParameter.valueOf(collectionProperties.getProperty(osCmdPropBase + prop + ".param"))))
 				.collect(Collectors.toList());
 	}
 }
