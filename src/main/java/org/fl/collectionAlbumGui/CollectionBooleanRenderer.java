@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +35,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 
 import org.fl.collectionAlbum.Control;
 
-public class AlbumProblemRenderer extends DefaultTableCellRenderer {
+public class CollectionBooleanRenderer extends DefaultTableCellRenderer {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -48,14 +48,20 @@ public class AlbumProblemRenderer extends DefaultTableCellRenderer {
 		setFont(getFont().deriveFont(Font.BOLD));
 		if (value == null) {
 			// This may happen when rescanning the album collection
-			mLog.fine("Null value in MediaFiles cell. Should be an Album");
+			mLog.fine("Null value in MediaFiles cell. Should be non null Boolean");
+			setText("Valeur null");
+			setBackground(Color.RED);
 		} else if (value instanceof Boolean) {
 			if ((Boolean)value) {
 				setText("Oui");
 				setBackground(Color.ORANGE);
 			} else {
 				setText("Non");
-				setBackground(Color.WHITE);
+				if (isSelected) {
+					setBackground(Color.LIGHT_GRAY);
+				} else {
+					setBackground(Color.WHITE);
+				}
 			}
 			setHorizontalAlignment(SwingConstants.CENTER);
 		}

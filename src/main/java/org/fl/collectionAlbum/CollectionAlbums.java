@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -39,6 +39,7 @@ import javax.swing.SwingWorker;
 
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
+import org.fl.collectionAlbum.disocgs.DiscogsInventory;
 import org.fl.collectionAlbum.json.migrator.MusicArtefactMigrator;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 import org.fl.collectionAlbumGui.AlbumsTableModel;
@@ -78,6 +79,7 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 		progressPanel.setStepInformation("");
 
 		MediaFilesInventories.rebuildInventories();
+		DiscogsInventory.rebuildDiscogsInventory();
 		
 		albumsContainer = CollectionAlbumContainer.getEmptyInstance() ;
 		progressPanel.setStepPrefixInformation(EN_EXAMEN);

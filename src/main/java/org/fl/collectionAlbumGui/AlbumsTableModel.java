@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,6 +24,9 @@ SOFTWARE.
 
 package org.fl.collectionAlbumGui;
 
+import java.util.Optional;
+import java.util.stream.Collectors;
+
 import javax.swing.table.AbstractTableModel;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
@@ -34,12 +37,14 @@ public class AlbumsTableModel extends AbstractTableModel {
 
 	public final static int TITRE_COL_IDX = 0;
 	public final static int AUTEUR_COL_IDX = 1;
-	public final static int MEDIA_FILES_COL_IDX = 2;
-	public final static int PROBLEM_COL_IDX = 3;
+	public final static int FORMAT_COL_IDX = 2;
+	public final static int MEDIA_FILES_COL_IDX = 3;
+	public final static int PROBLEM_COL_IDX = 4;
+	public final static int DISCOGS_COL_IDX = 5;
 	
 	private static final long serialVersionUID = 1L;
 	
-	private final static String[] entetes = {"Titres", "Auteurs", "Chemins des fichiers media", "Problème"};
+	private final static String[] entetes = {"Titres", "Auteurs", "Formats", "Chemins des fichiers media", "Problème", "Discogs release"};
 	
 	private final CollectionAlbumContainer albumsContainer;
 	
@@ -89,9 +94,15 @@ public class AlbumsTableModel extends AbstractTableModel {
 		} else {
 			return switch(columnIndex){
 				case TITRE_COL_IDX -> getAlbumsList().getAlbums().get(rowIndex).getTitre();
-				case AUTEUR_COL_IDX ->getAlbumsList().getAlbums().get(rowIndex);
+				case AUTEUR_COL_IDX -> getAlbumsList().getAlbums().get(rowIndex);
+				case FORMAT_COL_IDX -> getAlbumsList().getAlbums().get(rowIndex)
+					.getFormatAlbum()
+					.getSupportsPhysiques().stream()
+					.map(f -> f.getNom())
+					.collect(Collectors.joining(","));
 				case MEDIA_FILES_COL_IDX -> getAlbumsList().getAlbums().get(rowIndex);
 				case PROBLEM_COL_IDX -> getAlbumsList().getAlbums().get(rowIndex).hasProblem();
+				case DISCOGS_COL_IDX -> Optional.ofNullable(getAlbumsList().getAlbums().get(rowIndex).getDiscogsLink()).orElse("");
 				default -> null;
 			};
 		}

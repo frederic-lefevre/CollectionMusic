@@ -30,59 +30,56 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import org.fl.collectionAlbum.OsAction;
-import org.fl.collectionAlbum.albums.Album;
-import org.fl.collectionAlbumGui.AlbumCustomActionListener.CustomAction;
+import org.fl.collectionAlbum.disocgs.DiscogsInventory.DiscogsAlbumRelease;
+import org.fl.collectionAlbumGui.DiscogsReleaseCustomActionListener.CustomAction;
 
-public class AlbumMouseAdapter extends MouseAdapter {
+public class DiscogsInventoryMouseAdapter extends MouseAdapter {
 
-	private final AlbumsJTable albumsJTable;
+	private final DiscogsReleaseJTable discogsReleaseJTable;
 	private final JPopupMenu localJPopupMenu;
 	
-	private final List<AlbumMenuItem> albumMenuItems;
+	private final List<DiscogsReleaseMenuItem> discogsReleaseMenuItems;
 	
-	private static class AlbumMenuItem {
-
-		private final JMenuItem menuitem;
-		private final Predicate<Album> enabledPredicate;
+	private static class DiscogsReleaseMenuItem {
 		
-		public AlbumMenuItem(JMenuItem menuitem, Predicate<Album> enabledPredicate) {
+		private final JMenuItem menuitem;
+		private final Predicate<DiscogsAlbumRelease> enabledPredicate;
+		
+		public DiscogsReleaseMenuItem(JMenuItem menuitem, Predicate<DiscogsAlbumRelease> enabledPredicate) {
 			super();
 			this.menuitem = menuitem;
 			this.enabledPredicate = enabledPredicate;
 		}
-		
+
 		public JMenuItem getMenuitem() {
 			return menuitem;
 		}
 
-		public Predicate<Album> getEnabledPredicate() {
+		public Predicate<DiscogsAlbumRelease> getEnabledPredicate() {
 			return enabledPredicate;
 		}
-		
 	}
 	
-	public AlbumMouseAdapter(AlbumsJTable ajt, List<OsAction<Album>> osActions) {
+	public DiscogsInventoryMouseAdapter(DiscogsReleaseJTable discogsReleaseJTable, List<OsAction<DiscogsAlbumRelease>> osActions) {
 		
-		super();
-		this.albumsJTable = ajt;
+		this.discogsReleaseJTable = discogsReleaseJTable;
 		localJPopupMenu = new JPopupMenu();
 		
-		albumMenuItems = new ArrayList<>();
+		discogsReleaseMenuItems = new ArrayList<>();
 		
-		osActions.forEach(osAction ->
-			addMenuItem(osAction.getActionTitle(), new AlbumCommandListener(albumsJTable, osAction), osAction.getCommandParameter().getActionValidityPredicate())
-		);
+		osActions.forEach(osAction -> 
+			addMenuItem(
+					osAction.getActionTitle(),
+					new DiscogsReleaseCommandListener(discogsReleaseJTable, osAction), 
+					osAction.getCommandParameter().getActionValidityPredicate()));
 		
-		Stream.of(CustomAction.values())
-			.forEach(customAction -> 
-				addMenuItem(customAction.getActionTitle(), new AlbumCustomActionListener(albumsJTable, customAction), customAction.getDisplayable()));
-
+		ActionListener infoListener = new DiscogsReleaseCustomActionListener(discogsReleaseJTable, CustomAction.SHOW_INFO);
+		addMenuItem("Afficher les informations", infoListener, (release) -> release != null);
 	}
 
 	@Override
@@ -100,19 +97,19 @@ public class AlbumMouseAdapter extends MouseAdapter {
 			localJPopupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
 		}
 	}
-
+	
 	private void enableMenuItems() {
-
-		Album album = albumsJTable.getSelectedAlbum();
-		if (album != null) {
-			albumMenuItems.forEach(menuItem -> menuItem.getMenuitem().setEnabled(menuItem.getEnabledPredicate().test(album)));
+		
+		DiscogsAlbumRelease release = discogsReleaseJTable.getSelectedDisocgsRelease();
+		if (release != null) {
+			discogsReleaseMenuItems.forEach(menuItem -> menuItem.getMenuitem().setEnabled(menuItem.getEnabledPredicate().test(release)));
 		}
 	}
 	
-	private void addMenuItem(String title, ActionListener act, Predicate<Album> enabledPredicate) {
+	private void addMenuItem(String title, ActionListener act, Predicate<DiscogsAlbumRelease> enabledPredicate) {
 		JMenuItem localJMenuItem = new JMenuItem(title);
-		localJMenuItem.addActionListener(act);
-		localJPopupMenu.add(localJMenuItem);
-		albumMenuItems.add(new AlbumMenuItem(localJMenuItem, enabledPredicate));
+	     localJMenuItem.addActionListener(act);
+	     localJPopupMenu.add(localJMenuItem);
+	     discogsReleaseMenuItems.add(new DiscogsReleaseMenuItem(localJMenuItem, enabledPredicate));
 	}
 }

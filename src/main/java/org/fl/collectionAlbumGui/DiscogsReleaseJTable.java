@@ -33,34 +33,32 @@ import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import org.fl.collectionAlbum.Control;
-import org.fl.collectionAlbum.mediaPath.MediaFilePath;
-import org.fl.collectionAlbum.mediaPath.MediaFilePathAlbumComparator;
+import org.fl.collectionAlbum.disocgs.DiscogsInventory.DiscogsAlbumRelease;
 
-public class MediaFilesJTable extends JTable {
+public class DiscogsReleaseJTable extends JTable {
 
 	private static final long serialVersionUID = 1L;
 
 	private static final Logger tLog = Control.getAlbumLog();
 	
-	public MediaFilesJTable(MediaFilesTableModel dm) {
+	public DiscogsReleaseJTable(DisocgsReleaseTableModel dm) {
 		super(dm);
 		
 		setFillsViewportHeight(true);
 		setAutoCreateRowSorter(true);
 		
-		getColumnModel().getColumn(MediaFilesTableModel.ALBUMS_COL_IDX).setCellRenderer(new AlbumsRenderer());
-		getColumnModel().getColumn(MediaFilesTableModel.PATH_COL_IDX).setPreferredWidth(700);
-		getColumnModel().getColumn(MediaFilesTableModel.ALBUMS_COL_IDX).setPreferredWidth(700);
-		getColumnModel().getColumn(MediaFilesTableModel.NB_FILES_COL_IDX).setPreferredWidth(125);
-		getColumnModel().getColumn(MediaFilesTableModel.COVER_IMAGE_COL_IDX).setPreferredWidth(140);
-		getColumnModel().getColumn(MediaFilesTableModel.COVER_IMAGE_COL_IDX).setCellRenderer(new CollectionBooleanRenderer());
+		getColumnModel().getColumn(DisocgsReleaseTableModel.ID_COL_IDX).setPreferredWidth(70);
+		getColumnModel().getColumn(DisocgsReleaseTableModel.ARTISTS_COL_IDX).setPreferredWidth(750);
+		getColumnModel().getColumn(DisocgsReleaseTableModel.TITLE_COL_IDX).setPreferredWidth(600);
+		getColumnModel().getColumn(DisocgsReleaseTableModel.FORMAT_COL_IDX).setPreferredWidth(200);
+		getColumnModel().getColumn(DisocgsReleaseTableModel.ALBUM_LINK_COL_IDX).setPreferredWidth(160);
+		getColumnModel().getColumn(DisocgsReleaseTableModel.ALBUM_LINK_COL_IDX)
+			.setCellRenderer(new CollectionBooleanRenderer());
 		
 		// Row sorter
 		TableRowSorter<TableModel> sorter = new TableRowSorter<>(getModel());
 		setRowSorter(sorter);
 		sorter.sort();
-				
-		sorter.setComparator(MediaFilesTableModel.ALBUMS_COL_IDX, new MediaFilePathAlbumComparator());
 		
 		// Allow single row selection only
 		ListSelectionModel listSelectionModel = new DefaultListSelectionModel();
@@ -69,10 +67,10 @@ public class MediaFilesJTable extends JTable {
 		
 		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		
-		addMouseListener(new MediaFileMouseAdapter(this, Control.getOsActionOnMediaFilePath()));
+		addMouseListener(new DiscogsInventoryMouseAdapter(this, Control.getOsActionOnDiscogsRelease()));
 	}
 
-	public MediaFilePath getSelectedMediaFile() {
+	public DiscogsAlbumRelease getSelectedDisocgsRelease(){
 		
 		int[] rowIdxs = getSelectedRows();
 		if (rowIdxs.length == 0) {
@@ -80,6 +78,6 @@ public class MediaFilesJTable extends JTable {
 		} else if (rowIdxs.length > 1) {
 			tLog.severe("Found several selected rows for MediaFilesJTable. Number of selected rows: " + rowIdxs.length);
 		}
-		return ((MediaFilesTableModel)getModel()).getMediaFileAt(convertRowIndexToModel(rowIdxs[0]));
+		return ((DisocgsReleaseTableModel)getModel()).getDiscogsReleaseAt(convertRowIndexToModel(rowIdxs[0]));
 	}
 }

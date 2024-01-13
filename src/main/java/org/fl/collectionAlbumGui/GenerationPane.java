@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -31,6 +31,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.ScrollPaneConstants;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.Format.ContentNature;
@@ -84,15 +85,12 @@ public class GenerationPane extends JPanel {
 		// collection tab
 		JPanel collectionPane = new JPanel();
 		
-		// Collection Table header
-		collectionPane.add(albumsJTable.getTableHeader());
-		
 		// Scroll pane to contain the collection table
 		JScrollPane albumsScrollTable = new JScrollPane(albumsJTable);
 		albumsScrollTable.setPreferredSize(new Dimension(1800,700));
 		collectionPane.add(albumsScrollTable);
 		
-		collectionTabPanes.add(collectionPane, "Collection", 0);
+		collectionTabPanes.add(collectionPane, "Collection d'albums", 0);
 		
 		// Media files tabs
 		Stream.of(ContentNature.values()).forEach(contentNature -> {
@@ -103,15 +101,29 @@ public class GenerationPane extends JPanel {
 			
 			JPanel mediaFilesPane = new JPanel();
 			
-			mediaFilesPane.add(mediaFilesJTable.getTableHeader());
-			
 			// Scroll pane to contain the media path table
 			JScrollPane mediaFilesScrollTable = new JScrollPane(mediaFilesJTable);
 			mediaFilesScrollTable.setPreferredSize(new Dimension(1800,700));
+			mediaFilesScrollTable.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 			mediaFilesPane.add(mediaFilesScrollTable);
 			
-			collectionTabPanes.add(mediaFilesPane, contentNature.getNom());
+			collectionTabPanes.add(mediaFilesPane, "Chemins des fichiers " + contentNature.getNom());
 		});
+		
+		// Discogs releases pane
+		DisocgsReleaseTableModel dtm = new DisocgsReleaseTableModel();
+		
+		DiscogsReleaseJTable discogsReleaseJTable = new DiscogsReleaseJTable(dtm);
+		
+		JPanel discogsReleasesPane = new JPanel();
+		
+		// Scroll pane to contain the discogs releases pane
+		JScrollPane discogsReleasesScrollPane = new JScrollPane(discogsReleaseJTable);
+		discogsReleasesScrollPane.setPreferredSize(new Dimension(1800,700));
+		discogsReleasesPane.add(discogsReleasesScrollPane);
+		
+		collectionTabPanes.add(discogsReleasesPane, "Discogs releases");
+		
 		
 		add(collectionTabPanes);
 	}

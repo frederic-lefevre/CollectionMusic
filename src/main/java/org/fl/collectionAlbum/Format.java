@@ -1,7 +1,7 @@
 /*
  MIT License
 
-Copyright (c) 2017, 2022 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -32,6 +32,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.logging.Level;
@@ -94,7 +95,7 @@ public class Format {
 	}
 	
 	// Définition des différents supports physiques
-	private enum SupportPhysique {
+	public enum SupportPhysique {
 		CD(		 "CD",  	 "xnbcd", 		 1),
 		K7(		 "K7",  	 "xnbk7", 		 1),
 		Vinyl33T("33T", 	 "xnb33T", 	 	 1),
@@ -117,9 +118,17 @@ public class Format {
 			poidsSupport 	 = ps ;
 		}
 		
-		private String getCssClass() 		 {	return cssClass 		;}		
-		private String getNom() 			 {	return nom 				;}	
-		private double getPoidsSupport() 	 {	return poidsSupport 	;}
+		public String getNom() {
+			return nom;
+		}
+		
+		private String getCssClass() {
+			return cssClass;
+		}
+
+		private double getPoidsSupport() {
+			return poidsSupport;
+		}
 	}
 	
 	// Définition des différents support
@@ -196,10 +205,6 @@ public class Format {
 	
 	private Map<ContentNature, List<AbstractMediaFile>> mediaFiles;
 	
-//	private List<AbstractAudioFile> audioFiles;
-	
-//	private List<VideoFile> videoFiles;
-	
 	private boolean hasError;
 
 	// Create a format
@@ -274,10 +279,19 @@ public class Format {
 					(supportPhysiquePresent(SupportPhysique.BluRay))) {
 		// à ranger dans la collection VHS
 			typeRangement = RangementSupportPhysique.RangementVHS ;
+		} else {
+			albumLog.severe("Rangement du support physiques non trouvé");
 		}
 		return typeRangement ;
 	}
 
+    public Set<SupportPhysique> getSupportsPhysiques() {
+    	
+    	return tableFormat.keySet().stream()
+    			.map(Support::getSupportPhysique)
+    			.collect(Collectors.toSet());
+    }
+    
 	private double getNb(Support support) {
 		Double nb = tableFormat.get(support) ;
 		if (nb == null) {

@@ -1,5 +1,5 @@
 /*
- * MIT License
+ MIT License
 
 Copyright (c) 2017, 2024 Frederic Lefevre
 
@@ -20,34 +20,41 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-*/
+ */
 
-package org.fl.collectionAlbumGui;
+package org.fl.collectionAlbum.albums;
 
-import java.awt.event.ActionEvent;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
-import org.fl.collectionAlbum.OsAction;
-import org.fl.collectionAlbum.albums.Album;
+import org.fl.collectionAlbum.Control;
+import org.fl.collectionAlbum.OsActionCommandParameter;
 
-public class AlbumCommandListener implements java.awt.event.ActionListener {
+public enum AlbumCommandParameter implements OsActionCommandParameter<Album> {
+
+	JSON(
+			(album) -> album.getJsonFilePath().toAbsolutePath().toString(), 
+			(album) -> true),
+	DISCOGS_RELEASE_INFO(
+			(album) -> Control.getDiscogsBaseUrlForRelease() + album.getDiscogsLink(), 
+			(album) -> (album.getDiscogsLink() != null) && !album.getDiscogsLink().isEmpty());
 	
-	private final AlbumsJTable albumsJTable;
-	private final OsAction<Album> osAction;
+	private final Function<Album,String> parametersGetter;
+	private final Predicate<Album> actionValidityPredicate;
 	
-	public AlbumCommandListener(AlbumsJTable ajt, OsAction<Album> osAction) {
-		
-		this.albumsJTable = ajt;
-		this.osAction = osAction;
+	private AlbumCommandParameter(Function<Album,String> gp, Predicate<Album> vp) {
+		parametersGetter = gp;
+		actionValidityPredicate = vp;
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		
-		Album selectedAlbum = albumsJTable.getSelectedAlbum();
-		
-		if (selectedAlbum != null) {		
-			osAction.runOsAction(selectedAlbum);
-		}		
+	public Function<Album, String> getParametersGetter() {
+		return parametersGetter;
+	}
+
+	@Override
+	public Predicate<Album> getActionValidityPredicate() {
+		return actionValidityPredicate;
 	}
 
 }

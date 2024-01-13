@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -53,7 +53,8 @@ public class AlbumsRenderer extends JLabel implements TableCellRenderer {
 			int row, int column) {
 		if (value == null) {
 			// This may happen when rescanning the album collection
-			mLog.fine("Null value in MediaFiles cell. Should be an Album");
+			mLog.fine("Null value in MediaFiles cell. Should be an MediaFilePath");
+			setText("Valeur null");
 		} else if (value instanceof MediaFilePath) {
 			setText(((MediaFilePath)value).getAlbumSet().stream()
 					.map(Album::getTitre)

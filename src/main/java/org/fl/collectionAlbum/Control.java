@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -36,6 +36,12 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.fl.collectionAlbum.Format.ContentNature;
+import org.fl.collectionAlbum.albums.Album;
+import org.fl.collectionAlbum.albums.AlbumCommandParameter;
+import org.fl.collectionAlbum.disocgs.DiscogsInventory.DiscogsAlbumRelease;
+import org.fl.collectionAlbum.disocgs.DiscogsReleaseCommandParameter;
+import org.fl.collectionAlbum.mediaPath.MediaFilePath;
+import org.fl.collectionAlbum.mediaPath.MediaFilePathCommandParameter;
 import org.fl.collectionAlbumGui.MediaFileCustomActionListener;
 import org.fl.collectionAlbumGui.MediaFileCustomActionListener.CustomAction;
 import org.fl.util.AdvancedProperties;
@@ -57,7 +63,11 @@ public class Control {
 	private Path collectionDirectoryName;
 	private Path concertDirectoryName;
 	private Map<ContentNature,Path> mediaFileRootPaths;
-	private List<OsAction> osActions;
+	private List<OsAction<Album>> osActionsOnAlbum;
+	private List<OsAction<DiscogsAlbumRelease>> osActionsOnDiscogsRelease;
+	private List<OsAction<MediaFilePath>> osActionsOnMediaFilePath;
+	private Path discogsCollectionCsvExportPath;
+	private String discogsBaseUrlForRelease;
    	
 	private Control() {
 		
@@ -72,15 +82,18 @@ public class Control {
 			// Get CharSet to read music files and write rapport
 		    String cs = collectionProperties.getProperty("rapport.charset", "UTF-8");
 			if (Charset.isSupported(cs)) {
-				charset = Charset.forName(cs) ;
+				charset = Charset.forName(cs);
 			} else {
-				charset = Charset.defaultCharset() ;
-				albumLog.severe("Unsupported charset: " + cs + ". Default JVM charset assumed: " + charset) ;				
+				charset = Charset.defaultCharset();
+				albumLog.severe("Unsupported charset: " + cs + ". Default JVM charset assumed: " + charset);				
 			}
 		
 			// Get the root directory for the album collection and concert
 			collectionDirectoryName = collectionProperties.getPathFromURI("album.rootDir.name");
-			concertDirectoryName 	= collectionProperties.getPathFromURI("concert.rootDir.name");
+			concertDirectoryName = collectionProperties.getPathFromURI("concert.rootDir.name");
+			
+			discogsCollectionCsvExportPath = collectionProperties.getPathFromURI("album.discogs.collection.csvExport");
+			discogsBaseUrlForRelease = collectionProperties.getProperty("album.discogs.baseUrl.release");
 			
 			mediaFileRootPaths = new HashMap<>();
 			Stream.of(ContentNature.values())
@@ -89,12 +102,9 @@ public class Control {
 							contentNature, 
 							collectionProperties.getPathFromURI("album." + contentNature.getNom() + "File.rootPath")));
 				
-			String osCmdPropBase = "album.command.";
-			osActions = collectionProperties.getKeysElements("album.command.").stream()
-				.map(prop -> new OsAction(
-						collectionProperties.getProperty(osCmdPropBase + prop + ".title"), 
-						collectionProperties.getProperty(osCmdPropBase + prop + ".cmd")))
-				.collect(Collectors.toList());
+			osActionsOnAlbum = getOsActionsOnAlbum("album.command.");
+			osActionsOnDiscogsRelease = getOsActionsOnDiscogsRelease("album.discogs.command.");
+			osActionsOnMediaFilePath = getOsActionOnMediaFilePath("album.mediaFile.command.");
 			
 			Map<CustomAction, String> customActions = new HashMap<>();
 			Stream.of(CustomAction.values()).forEach(customAction -> {
@@ -152,7 +162,50 @@ public class Control {
 		return getInstance().mediaFileRootPaths.get(contentNature);
 	}
 	
-	public static List<OsAction> getOsActions() {
-		return getInstance().osActions;
+	public static List<OsAction<Album>> getOsActionsOnAlbum() {
+		return getInstance().osActionsOnAlbum;
+	}
+
+	public static List<OsAction<DiscogsAlbumRelease>> getOsActionOnDiscogsRelease() {
+		return getInstance().osActionsOnDiscogsRelease;
+	}
+	
+	public static List<OsAction<MediaFilePath>> getOsActionOnMediaFilePath() {
+		return getInstance().osActionsOnMediaFilePath;
+	}
+	
+	public static Path getDiscogsCollectionCsvExportPath() {
+		return getInstance().discogsCollectionCsvExportPath;
+	}
+
+	public static String getDiscogsBaseUrlForRelease() {
+		return getInstance().discogsBaseUrlForRelease;
+	}
+	
+	private List<OsAction<Album>> getOsActionsOnAlbum(String osCmdPropBase) {
+
+		return collectionProperties.getKeysElements(osCmdPropBase).stream()
+				.map(prop -> new OsAction<Album>(collectionProperties.getProperty(osCmdPropBase + prop + ".title"),
+						collectionProperties.getProperty(osCmdPropBase + prop + ".cmd"),
+						AlbumCommandParameter.valueOf(collectionProperties.getProperty(osCmdPropBase + prop + ".param"))))
+				.collect(Collectors.toList());
+	}
+	
+	private List<OsAction<DiscogsAlbumRelease>> getOsActionsOnDiscogsRelease(String osCmdPropBase) {
+
+		return collectionProperties.getKeysElements(osCmdPropBase).stream()
+				.map(prop -> new OsAction<DiscogsAlbumRelease>(collectionProperties.getProperty(osCmdPropBase + prop + ".title"),
+						collectionProperties.getProperty(osCmdPropBase + prop + ".cmd"),
+						DiscogsReleaseCommandParameter.valueOf(collectionProperties.getProperty(osCmdPropBase + prop + ".param"))))
+				.collect(Collectors.toList());
+	}
+	
+	private List<OsAction<MediaFilePath>> getOsActionOnMediaFilePath(String osCmdPropBase) {
+		
+		return collectionProperties.getKeysElements(osCmdPropBase).stream()
+				.map(prop -> new OsAction<MediaFilePath>(collectionProperties.getProperty(osCmdPropBase + prop + ".title"),
+						collectionProperties.getProperty(osCmdPropBase + prop + ".cmd"),
+						MediaFilePathCommandParameter.valueOf(collectionProperties.getProperty(osCmdPropBase + prop + ".param"))))
+				.collect(Collectors.toList());
 	}
 }

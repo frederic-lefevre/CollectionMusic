@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -94,7 +94,10 @@ class MediaFileInventoryTest {
 		assertThat(potentialPaths)
 			.isNotNull()
 			.singleElement()
-			.satisfies(audioPath -> assertThat(audioPath.getPath()).hasToString("E:\\Musique\\e\\Bill Evans\\Portrait In Jazz"));
+			.satisfies(audioPath -> {
+				assertThat(audioPath.getPath()).hasToString("E:\\Musique\\e\\Bill Evans\\Portrait In Jazz");
+				assertThat(audioPath.hasCover()).isTrue();
+			});
 	}
 
 	@Test
@@ -144,7 +147,10 @@ class MediaFileInventoryTest {
 		assertThat(potentialAudioPaths)
 			.isNotNull()
 			.hasSize(2)
-			.allMatch(audioPath -> audioPath.getPath().toString().contains("A Bigger Bang, Live On Copacabana Beach"));
+			.allSatisfy(audioPath -> {
+				assertThat(audioPath.getPath().toString()).contains("A Bigger Bang, Live On Copacabana Beach");
+				assertThat(audioPath.hasCover()).isTrue();
+			});
 		
 		List<MediaFilePath> potentialVideoPaths = videoFileInventory.getPotentialMediaPath(album);
 		

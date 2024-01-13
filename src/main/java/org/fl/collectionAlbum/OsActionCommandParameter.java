@@ -22,32 +22,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbumGui;
+package org.fl.collectionAlbum;
 
-import java.awt.event.ActionEvent;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
-import org.fl.collectionAlbum.OsAction;
-import org.fl.collectionAlbum.albums.Album;
+public interface OsActionCommandParameter<T> {
 
-public class AlbumCommandListener implements java.awt.event.ActionListener {
+	public Function<T, String> getParametersGetter();
 	
-	private final AlbumsJTable albumsJTable;
-	private final OsAction<Album> osAction;
-	
-	public AlbumCommandListener(AlbumsJTable ajt, OsAction<Album> osAction) {
-		
-		this.albumsJTable = ajt;
-		this.osAction = osAction;
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		
-		Album selectedAlbum = albumsJTable.getSelectedAlbum();
-		
-		if (selectedAlbum != null) {		
-			osAction.runOsAction(selectedAlbum);
-		}		
-	}
-
+	public Predicate<T> getActionValidityPredicate();
 }

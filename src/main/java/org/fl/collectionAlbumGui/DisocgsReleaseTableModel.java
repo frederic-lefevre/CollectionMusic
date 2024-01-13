@@ -24,38 +24,32 @@ SOFTWARE.
 
 package org.fl.collectionAlbumGui;
 
-import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.swing.table.AbstractTableModel;
 
-import org.fl.collectionAlbum.mediaPath.MediaFileInventory;
-import org.fl.collectionAlbum.mediaPath.MediaFilePath;
+import org.fl.collectionAlbum.disocgs.DiscogsInventory;
+import org.fl.collectionAlbum.disocgs.DiscogsInventory.DiscogsAlbumRelease;
 
-public class MediaFilesTableModel extends AbstractTableModel {
+public class DisocgsReleaseTableModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 1L;
 
-	public final static int PATH_COL_IDX = 0;
-	public final static int ALBUMS_COL_IDX = 1;
-	public final static int NB_FILES_COL_IDX = 2;
-	public final static int COVER_IMAGE_COL_IDX = 3;
+	public final static int ID_COL_IDX = 0;
+	public final static int ARTISTS_COL_IDX = 1;
+	public final static int TITLE_COL_IDX = 2;
+	public final static int FORMAT_COL_IDX = 3;
+	public final static int ALBUM_LINK_COL_IDX = 4;
+			
+	private final static String[] entetes = {"Id", "Auteurs", "Titre de l'album", "Formats", "Lié à un album"};
 	
-	private final static String[] entetes = {"Chemins", "Albums", "Nombre de medias", "Image de la pochette"};
-	
-	private final List<MediaFilePath> mediaFilePaths;
-	
-	public MediaFilesTableModel(MediaFileInventory mediaFileInventory) {
+	public DisocgsReleaseTableModel() {
 		super();
-		this.mediaFilePaths = mediaFileInventory.getMediaFilePathList();
 	}
 
 	@Override
 	public int getRowCount() {
-		if (mediaFilePaths == null) {
-			return 0;
-		} else {
-			return mediaFilePaths.size();
-		}
+		return DiscogsInventory.getDiscogsInventory().size();
 	}
 
 	@Override
@@ -77,15 +71,17 @@ public class MediaFilesTableModel extends AbstractTableModel {
 	public Object getValueAt(int rowIndex, int columnIndex) {
 
 		return switch(columnIndex){
-			case PATH_COL_IDX -> mediaFilePaths.get(rowIndex).getPath().toString();
-			case ALBUMS_COL_IDX -> mediaFilePaths.get(rowIndex);
-			case NB_FILES_COL_IDX -> mediaFilePaths.get(rowIndex).getMediaFileNumber();
-			case COVER_IMAGE_COL_IDX -> mediaFilePaths.get(rowIndex).hasCover();
+			case ID_COL_IDX -> DiscogsInventory.getDiscogsInventory().get(rowIndex).getInventoryCsvAlbum().getReleaseId();
+			case ARTISTS_COL_IDX -> DiscogsInventory.getDiscogsInventory().get(rowIndex).getInventoryCsvAlbum().getArtists().stream().collect(Collectors.joining(","));
+			case TITLE_COL_IDX -> DiscogsInventory.getDiscogsInventory().get(rowIndex).getInventoryCsvAlbum().getTitle();
+			case FORMAT_COL_IDX -> DiscogsInventory.getDiscogsInventory().get(rowIndex).getInventoryCsvAlbum().getFormats().stream().collect(Collectors.joining(","));
+			case ALBUM_LINK_COL_IDX -> DiscogsInventory.getDiscogsInventory().get(rowIndex).isLinkedToAlbum();
 			default -> null;
 		};
+
 	}
 
-	public MediaFilePath getMediaFileAt(int rowIndex) {
-		return mediaFilePaths.get(rowIndex);
+	public DiscogsAlbumRelease getDiscogsReleaseAt(int rowIndex) {
+		return DiscogsInventory.getDiscogsInventory().get(rowIndex);
 	}
 }

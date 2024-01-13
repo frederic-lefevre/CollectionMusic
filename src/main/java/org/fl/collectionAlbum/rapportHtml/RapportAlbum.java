@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,12 +24,14 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.rapportHtml;
 
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
 import org.fl.collectionAlbum.AbstractMediaFile;
 import org.fl.collectionAlbum.Format;
 import org.fl.collectionAlbum.Format.ContentNature;
+import org.fl.collectionAlbum.Format.RangementSupportPhysique;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.utils.TemporalUtils;
 
@@ -70,6 +72,11 @@ public class RapportAlbum extends RapportMusicArtefact {
 		write("    </tr>\n    <tr>\n");
 		format.rowFormat(rBuilder, null, true);
 		write("    </tr>\n  </table>\n");
+		
+		
+		write("  <p>Rangement: ");
+		write(Optional.ofNullable(format.getRangement()).map(RangementSupportPhysique::getDescription).orElse("NON DEFINI"));
+		write("</p>\n");
 		
 		write("  <h3>Fichiers media</h3>\n");
 		

@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -38,6 +38,7 @@ import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.concerts.Concert;
 import org.fl.collectionAlbum.concerts.LieuxDesConcerts;
 import org.fl.collectionAlbum.concerts.ListeConcert;
+import org.fl.collectionAlbum.disocgs.DiscogsInventory;
 import org.fl.collectionAlbum.stat.StatChrono;
 
 import com.google.gson.JsonObject;
@@ -109,7 +110,13 @@ public class CollectionAlbumContainer {
 			.filter(Objects::nonNull)
 			.flatMap(mediaFileList -> mediaFileList.stream())
 			.forEach(mediaFile -> mediaFile.addAlbum(album));
-						
+			
+		// Add the album to the discogs inventory if a discogs release is referenced
+		String discogsReleaseId = album.getDiscogsLink();
+		if (discogsReleaseId != null) {
+			DiscogsInventory.linkToAlbum(discogsReleaseId, album);
+		}
+		
 		collectionAlbumsMusiques.addAlbum(album);
 				
 		Format.RangementSupportPhysique rangement = album.getRangement();

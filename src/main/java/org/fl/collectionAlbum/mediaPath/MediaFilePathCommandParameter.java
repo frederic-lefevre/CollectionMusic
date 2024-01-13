@@ -1,5 +1,5 @@
 /*
- * MIT License
+ MIT License
 
 Copyright (c) 2017, 2024 Frederic Lefevre
 
@@ -20,34 +20,43 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-*/
+ */
 
-package org.fl.collectionAlbumGui;
+package org.fl.collectionAlbum.mediaPath;
 
-import java.awt.event.ActionEvent;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
-import org.fl.collectionAlbum.OsAction;
-import org.fl.collectionAlbum.albums.Album;
+import org.fl.collectionAlbum.OsActionCommandParameter;
 
-public class AlbumCommandListener implements java.awt.event.ActionListener {
+public enum MediaFilePathCommandParameter implements OsActionCommandParameter<MediaFilePath> {
 	
-	private final AlbumsJTable albumsJTable;
-	private final OsAction<Album> osAction;
+	ALBUMS_JSON(
+		(mediaFile) -> mediaFile.getAlbumSet().stream()
+			.map(album -> album.getJsonFilePath().toAbsolutePath().toString())
+			.collect(Collectors.joining(" ")),
+		(mediaFile) -> ((mediaFile.getAlbumSet() != null) && !mediaFile.getAlbumSet().isEmpty())	
+			);
+
+	private final Function<MediaFilePath,String> parametersGetter;
+	private final Predicate<MediaFilePath> actionValidityPredicate;
 	
-	public AlbumCommandListener(AlbumsJTable ajt, OsAction<Album> osAction) {
-		
-		this.albumsJTable = ajt;
-		this.osAction = osAction;
+	private MediaFilePathCommandParameter(Function<MediaFilePath, String> pg, Predicate<MediaFilePath> vp) {
+		this.parametersGetter = pg;
+		this.actionValidityPredicate = vp;
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		
-		Album selectedAlbum = albumsJTable.getSelectedAlbum();
-		
-		if (selectedAlbum != null) {		
-			osAction.runOsAction(selectedAlbum);
-		}		
+	public Function<MediaFilePath, String> getParametersGetter() {
+		return parametersGetter;
 	}
+
+	@Override
+	public Predicate<MediaFilePath> getActionValidityPredicate() {
+		return actionValidityPredicate;
+	}
+
+
 
 }

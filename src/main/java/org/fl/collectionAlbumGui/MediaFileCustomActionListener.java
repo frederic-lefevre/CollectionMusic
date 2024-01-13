@@ -68,7 +68,7 @@ public class MediaFileCustomActionListener implements java.awt.event.ActionListe
 					Path folder = selectedMediaFile.getPath();
 					if (Files.exists(folder)) {
 						if (Files.isDirectory(folder)) {
-							OScommand osCommand = new OScommand(showInExplorerCmd + " " + folder.toAbsolutePath(), false, albumLog);
+							OScommand osCommand = new OScommand(showInExplorerCmd + " \"" + folder.toAbsolutePath() + "\"", false, albumLog);
 							osCommand.run();
 						} else {
 							albumLog.warning("Cannot launch explorer on media file folder, it is not a directory : " + folder);

@@ -27,27 +27,26 @@ package org.fl.collectionAlbumGui;
 import java.awt.event.ActionEvent;
 
 import org.fl.collectionAlbum.OsAction;
-import org.fl.collectionAlbum.albums.Album;
+import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
-public class AlbumCommandListener implements java.awt.event.ActionListener {
+public class MediaFileCommandListener implements java.awt.event.ActionListener {
+
+	private final MediaFilesJTable mediaFileJTable;
+	private final OsAction<MediaFilePath> osAction;
 	
-	private final AlbumsJTable albumsJTable;
-	private final OsAction<Album> osAction;
-	
-	public AlbumCommandListener(AlbumsJTable ajt, OsAction<Album> osAction) {
-		
-		this.albumsJTable = ajt;
+	public MediaFileCommandListener(MediaFilesJTable mediaFileJTable, OsAction<MediaFilePath> osAction) {
+		this.mediaFileJTable = mediaFileJTable;
 		this.osAction = osAction;
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
-		Album selectedAlbum = albumsJTable.getSelectedAlbum();
+		MediaFilePath mediaFilePath = mediaFileJTable.getSelectedMediaFile();
 		
-		if (selectedAlbum != null) {		
-			osAction.runOsAction(selectedAlbum);
-		}		
+		if (mediaFilePath != null) {
+			osAction.runOsAction(mediaFilePath);
+		}
 	}
 
 }

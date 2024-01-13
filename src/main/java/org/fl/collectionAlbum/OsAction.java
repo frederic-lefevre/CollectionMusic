@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,14 +24,22 @@ SOFTWARE.
 
 package org.fl.collectionAlbum;
 
-public class OsAction {
+import java.util.logging.Logger;
 
-	private final String  actionTitle;
-	private final String  actionCommand;
+import org.fl.util.os.OScommand;
+
+public class OsAction<T> {
+
+	private static final Logger aLog = Control.getAlbumLog();
 	
-	public OsAction(String t, String c) {
-		actionTitle   = t ;
-		actionCommand = c ;
+	private final String actionTitle;
+	private final String actionCommand;
+	private final OsActionCommandParameter<T> commandParameter;
+	
+	public OsAction(String t, String c, OsActionCommandParameter<T> a) {
+		actionTitle   = t;
+		actionCommand = c;
+		commandParameter = a;
 	}
 
 	public String getActionTitle() {
@@ -42,4 +50,18 @@ public class OsAction {
 		return actionCommand;
 	}
 
+	public OsActionCommandParameter<T> getCommandParameter() {
+		return commandParameter;
+	}
+
+	public void runOsAction(T o) {
+		
+		StringBuilder fullCommand = new StringBuilder(getActionCommand());
+		
+		fullCommand.append(" ")
+			.append(getCommandParameter().getParametersGetter().apply(o));
+		
+		OScommand osCommand = new OScommand(fullCommand.toString(), false, aLog) ;
+		osCommand.run();
+	}
 }

@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -27,10 +27,12 @@ package org.fl.collectionAlbum.mediaPath;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.fl.collectionAlbum.Control;
@@ -44,7 +46,11 @@ public class MediaFilePath {
 			Set.of("flac", "mp3", "wma", "aiff", "FLAC", "MP3", "m4a",
 					"m2ts", "mkv", "mpls", "VOB", "wav", "m4v", "mp4", "bdmv");
 	
+	private static final Set<String> coverExtensions = Set.of("jpg", "png");
+	
 	public static final Set<String> extensionSet = new HashSet<>();
+
+	private static final String COVER_START_NAME = "cover.";
 	
 	private final Path mediaFilesPath;
 	
@@ -52,15 +58,26 @@ public class MediaFilePath {
 	
 	private long mediaFileNumber;
 	
+	private boolean hasCover;
+	
 	public MediaFilePath(Path mediaFilesPath) {
+		
 		this.mediaFilesPath = mediaFilesPath;
 		albumsSet = new HashSet<>();
+		if (mediaFilesPath.toString().contains("  ")) {
+			// Launching windows explorer on path with double blank does not work
+			mLog.warning("Double blank in path name for media file path " + mediaFilesPath);
+		}
 		
 		try (Stream<Path> fileStream = Files.list(mediaFilesPath)) {
-			mediaFileNumber = fileStream.filter(file -> Files.isRegularFile(file) && isMediaFileName(file)).count();
+			
+			List<Path> files = fileStream.collect(Collectors.toList());
+			mediaFileNumber = files.stream().filter(file -> Files.isRegularFile(file) && isMediaFileName(file)).count();
+			hasCover = files.stream().anyMatch(path -> isCoverFilename(path.getFileName()));
 		} catch (Exception e) {
 			mLog.log(Level.SEVERE, "Exception when listing files in " + mediaFilesPath, e);
 			mediaFileNumber = 0;
+			hasCover = false;
 		}
 	}
 
@@ -96,5 +113,17 @@ public class MediaFilePath {
 				return ext;
 					});
 				
+	}
+
+	public boolean hasCover() {
+		return hasCover;
+	}
+	
+	private boolean isCoverFilename(Path filename) {
+		
+		return filename.toString().toLowerCase().startsWith(COVER_START_NAME) &&
+				getFileNameExtension(filename)
+				.filter(extension -> coverExtensions.contains(extension.toLowerCase()))
+				.isPresent();
 	}
 }

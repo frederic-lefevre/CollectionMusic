@@ -27,6 +27,7 @@ package org.fl.collectionAlbum.rapportHtml;
 import java.net.URI;
 import java.util.List;
 
+import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.MusicArtefact;
 import org.fl.collectionAlbum.artistes.Artiste;
 
@@ -68,11 +69,12 @@ public class RapportMusicArtefact extends RapportHtml {
 		
 		String discogsLink = musicArtefact.getDiscogsLink();
 		if ((discogsLink != null) && !discogsLink.isEmpty()) {
+			String discogsReleaseUrl = Control.getDiscogsBaseUrlForRelease() + discogsLink;
 			write("  <h3>Discogs link</h3>\n");
 			write(DISCOGS_LINK1);
-			write(discogsLink);
+			write(discogsReleaseUrl);
 			write(DISCOGS_LINK2);
-			write(discogsLink);
+			write(discogsReleaseUrl);
 			write(DISCOGS_LINK3);
 		}
 		

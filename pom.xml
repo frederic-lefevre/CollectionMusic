@@ -4,25 +4,30 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>CollectionMusic</groupId>
 	<artifactId>CollectionMusic</artifactId>
-	<version>4.0.0</version>
+	<version>5.0.0</version>
 	<name>CollectionMusic</name>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.fl.FlUtils</groupId>
 			<artifactId>FlUtils</artifactId>
-			<version>3.0.0</version>
+			<version>3.1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.fl</groupId>
+  			<artifactId>discogsInterface</artifactId>
+  			<version>0.1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
-			<version>5.10.0</version>
+			<version>5.10.1</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
     		<groupId>org.junit.jupiter</groupId>
     		<artifactId>junit-jupiter-params</artifactId>
-    		<version>5.10.0</version>
+    		<version>5.10.1</version>
     		<scope>test</scope>
 		</dependency>
 		<dependency>

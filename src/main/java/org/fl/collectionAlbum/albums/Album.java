@@ -1,7 +1,7 @@
 /*
  MIT License
 
-Copyright (c) 2017, 2022 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -29,6 +29,7 @@ import java.time.temporal.TemporalAccessor;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -41,6 +42,8 @@ import org.fl.collectionAlbum.Format.ContentNature;
 import org.fl.collectionAlbum.Format.RangementSupportPhysique;
 import org.fl.collectionAlbum.MusicArtefact;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
+import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher;
+import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.ReleaseMatchResult;
 import org.fl.collectionAlbum.json.AlbumParser;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
@@ -49,20 +52,20 @@ import org.fl.util.date.FuzzyPeriod;
 import com.google.gson.JsonObject;
 
 public class Album extends MusicArtefact {
-
+	
 	protected final static Logger albumLog = Control.getAlbumLog();
 	
     private final String titre;
     
     private final FuzzyPeriod periodeEnregistrement;
-    private FuzzyPeriod periodeComposition;
+    private final FuzzyPeriod periodeComposition;
     
     private final Format formatAlbum;
-    private RangementSupportPhysique rangement;
+    private final RangementSupportPhysique rangement;
     
     private final boolean specificCompositionDates;
     
-    private Map<ContentNature, List<MediaFilePath>> potentialMediaFilesPath;
+    private final Map<ContentNature, List<MediaFilePath>> potentialMediaFilesPath;
     
 	public Album(JsonObject albumJson, List<ListeArtiste> knownArtistes, Path jsonFilePath) {
 
@@ -74,17 +77,17 @@ public class Album extends MusicArtefact {
 		
 		titre = AlbumParser.getAlbumTitre(albumJson);
 		formatAlbum = AlbumParser.getFormatAlbum(albumJson);
+		
 		periodeEnregistrement = AlbumParser.processPeriodEnregistrement(albumJson);
-		periodeComposition = AlbumParser.processPeriodComposition(albumJson);
-		rangement = AlbumParser.getRangementAlbum(albumJson);
+		periodeComposition = Optional.ofNullable(AlbumParser.processPeriodComposition(albumJson))
+				.orElse(periodeEnregistrement);
+		specificCompositionDates = (periodeComposition != periodeEnregistrement);
+		
+		rangement = Optional.ofNullable(AlbumParser.getRangementAlbum(albumJson))
+				.orElse(formatAlbum.getRangement());
 
 		if (rangement == null) {
-			// pas de rangement spécifique
-			rangement = formatAlbum.getRangement();
-		}
-		specificCompositionDates = (periodeComposition != null);
-		if (!specificCompositionDates) {
-			periodeComposition = periodeEnregistrement;
+			albumLog.severe("Pas de rangement trouvé pour l'album " + getTitre());
 		}
 	}
     
@@ -212,6 +215,10 @@ public class Album extends MusicArtefact {
 		List<MediaFilePath> potentialMediaPaths = MediaFilesInventories.getMediaFileInventory(contentNature).getPotentialMediaPath(this);
 		potentialMediaFilesPath.put(contentNature, potentialMediaPaths);
 		return potentialMediaPaths;
+	}
+	
+	public ReleaseMatchResult searchPotentialDiscogsReleases() {
+		return DiscogsAlbumReleaseMatcher.getPotentialReleaseMatch(this);
 	}
 	
 	public boolean validatePotentialMediaFilePath(ContentNature contentNature) {		

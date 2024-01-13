@@ -1,5 +1,5 @@
 /*
- * MIT License
+ MIT License
 
 Copyright (c) 2017, 2024 Frederic Lefevre
 
@@ -20,50 +20,51 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-*/
+ */
 
 package org.fl.collectionAlbumGui;
 
-import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
-import javax.swing.JLabel;
-import javax.swing.JTable;
-import javax.swing.table.TableCellRenderer;
+import javax.swing.JPanel;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
-import org.fl.collectionAlbum.artistes.Artiste;
+import org.fl.collectionAlbum.disocgs.DiscogsInventory.DiscogsAlbumRelease;
 
-public class AuteursRenderer extends JLabel implements TableCellRenderer {
+public class ReleaseValidationListener implements ActionListener {
 
-	private static final long serialVersionUID = 1L;
-
-	private static final Logger mLog = Control.getAlbumLog();
+	private static final Logger aLog = Control.getAlbumLog();
 	
-	private final static String AUTEURS_SEPARATOR = ", ";
+	private final DiscogsAlbumRelease release;
+	private final Album album;
+	private final JPanel potentialReleasesPane;
 	
-	public AuteursRenderer() {
+	public ReleaseValidationListener(DiscogsAlbumRelease release, Album album, JPanel potentialReleasesPane) {
 		super();
+		this.release = release;
+		this.album = album;
+		this.potentialReleasesPane = potentialReleasesPane;
 	}
 
 	@Override
-	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-			int row, int column) {
+	public void actionPerformed(ActionEvent e) {
 
-		if (value == null) {
-			// This may happen when rescanning the album collection
-			mLog.fine("Null value in MediaFiles cell. Should be an Album");
-			setText("Valeur null");
-		} else if (value instanceof Album) {
-			setText(((Album)value).getAuteurs().stream()
-					.map(Artiste::getNomComplet)
-					.collect(Collectors.joining(AUTEURS_SEPARATOR)));
+		String presentDiscogsLink = album.getDiscogsLink();
+		if ((presentDiscogsLink == null) || (presentDiscogsLink.isEmpty())) {
+			
+			album.setDiscogsLink(release.getInventoryCsvAlbum().getReleaseId());
+			release.addCollectionAlbums(album);
+			album.writeJson();
+			potentialReleasesPane.removeAll();
+			potentialReleasesPane.updateUI();
+			
 		} else {
-			mLog.severe("Invalid value type in Auteurs cell. Should be Album but is " + value.getClass().getName());
+			
+			aLog.severe("Trying to set a discogs link that is already set");
 		}
-		return this;
 	}
 
 }
