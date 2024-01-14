@@ -58,7 +58,7 @@ public class MediaFilePath {
 	
 	private long mediaFileNumber;
 	
-	private boolean hasCover;
+	private Path coverPath;
 	
 	public MediaFilePath(Path mediaFilesPath) {
 		
@@ -73,16 +73,21 @@ public class MediaFilePath {
 			
 			List<Path> files = fileStream.collect(Collectors.toList());
 			mediaFileNumber = files.stream().filter(file -> Files.isRegularFile(file) && isMediaFileName(file)).count();
-			hasCover = files.stream().anyMatch(path -> isCoverFilename(path.getFileName()));
+			coverPath = files.stream().filter(path -> isCoverFilename(path.getFileName())).findFirst().orElse(null);
+			
 		} catch (Exception e) {
 			mLog.log(Level.SEVERE, "Exception when listing files in " + mediaFilesPath, e);
 			mediaFileNumber = 0;
-			hasCover = false;
+			coverPath = null;
 		}
 	}
 
 	public Path getPath() {
 		return mediaFilesPath;
+	}
+	
+	public Path getCoverPath() {
+		return coverPath;
 	}
 	
 	public void addAlbum(Album album) {
@@ -116,7 +121,7 @@ public class MediaFilePath {
 	}
 
 	public boolean hasCover() {
-		return hasCover;
+		return coverPath != null;
 	}
 	
 	private boolean isCoverFilename(Path filename) {

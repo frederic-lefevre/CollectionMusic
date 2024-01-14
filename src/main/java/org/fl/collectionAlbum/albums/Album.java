@@ -26,9 +26,11 @@ package org.fl.collectionAlbum.albums;
 
 import java.nio.file.Path;
 import java.time.temporal.TemporalAccessor;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -262,6 +264,22 @@ public class Album extends MusicArtefact {
 		} else {
 			albumLog.severe("Trying to validate " + contentNature.getNom() + " file path with multiple values for album " + getTitre());
 			return false;
+		}
+	}
+	
+	public Path getCoverImage() {
+
+		if (hasMediaFiles()) {
+			return getAllMediaFiles().stream()
+					.map(mediaFile -> mediaFile.getMediaFilePaths())
+					.filter(Objects::nonNull)
+					.flatMap(Collection::stream)
+					.map(MediaFilePath::getCoverPath)
+					.filter(Objects::nonNull)
+					.findFirst()
+					.orElse(null);
+		} else {
+			return null;
 		}
 	}
 	

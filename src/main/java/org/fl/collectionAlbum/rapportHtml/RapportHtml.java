@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -45,7 +45,7 @@ public abstract class RapportHtml {
 	// Useful HTML fragment
 	private final static String ENTETE1 = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN_\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">\n" +
 										  "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">\n<head>\n" +
-										  "  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=" ;
+										  "  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=";
 	private final static String ENTETE6 = "\" />\n  <title>" ;
 	private final static String ENTETE2 = "</title>\n" ;
 	private final static String ENTETE3 = "  <link rel=\"STYLESHEET\" href=\"" ;
@@ -53,43 +53,44 @@ public abstract class RapportHtml {
 	private final static String ENTETE5 = "</head>\n<body>\n" ;
 	private final static String H2_B 	= "<h2>" ;
 	private final static String H2_E 	= "</h2>\n" ;
-	private final static String L_LIST1 = "<div class=\"home\">" ;
-	private final static String L_LIST2 = "<span  class=\"dategen\">Généré " ;
+	private final static String L_LIST1 = "<div class=\"home\">\n" ;
+	private final static String L_LIST2 = "  <span  class=\"dategen\">Généré " ;
 	private final static String L_LIST3 = "</span><br/>\n" ;
+	private final static String IMG_1   = "  <img  class=\"cover\" src=\"";
 	private final static String L_LIST4 = "</div>\n" ;
 	private final static String END		= "</body>\n</html>" ;
 	
 	// Initialize a default charset
-	private static String htmlBegin = ENTETE1 + StandardCharsets.UTF_8.name() + ENTETE6 ;
+	private static String htmlBegin = ENTETE1 + StandardCharsets.UTF_8.name() + ENTETE6;
 	
 	// Initial size of the StringBuilder buffer
-	private final static int TAILLE_INITIALE = 8192 ;
+	private final static int TAILLE_INITIALE = 8192;
 	
 	private static Charset charset;
 	
-	protected 		String 	     titreRapport ;
-	private  		HtmlLinkList indexes ;
+	protected String titreRapport;
+	private HtmlLinkList indexes;
+	private String imageUri;
 	
-	protected StringBuilder rBuilder ;
+	protected final StringBuilder rBuilder;
 	
 	// directory pour les css
-	private final static String CSSOFFSET = "../css/" ;
+	private final static String CSSOFFSET = "../css/";
 	
 	protected String urlOffset;
-
-	private boolean displayTitle ;
-
-	protected Balises balises ;
+	private boolean displayTitle;
+	protected Balises balises;
 	
 	protected RapportHtml(String titre) {
 		
 		super();
-		titreRapport 	 = titre ;
-		urlOffset	 	 = "" ;
-		rBuilder 	 	 = new StringBuilder(TAILLE_INITIALE) ;
-		indexes 	 	 = null ;
-		displayTitle 	 = false ;
-		balises		 	 = null ;
+		titreRapport = titre;
+		urlOffset = "";
+		rBuilder = new StringBuilder(TAILLE_INITIALE);
+		indexes = null;
+		displayTitle = false;
+		balises = null;
+		imageUri = null;
 	}
 
 	protected abstract void corpsRapport() ;
@@ -120,13 +121,21 @@ public abstract class RapportHtml {
 		if ((titreRapport != null) && (titreRapport.length() > 0) && displayTitle) {
 			rBuilder.append(H2_B).append(titreRapport).append(H2_E) ;
 		}
-		if ((indexes != null) && (indexes.getNbLink()> 0)) {
-			rBuilder.append(L_LIST1) ;
-			indexes.writeLinkList(rBuilder) ;
+		
+		if ((indexes != null) || (imageUri != null)) {
+			
+			rBuilder.append(L_LIST1);
+			if (indexes != null) {
+				indexes.writeLinkList(rBuilder);
+			}
 
 			DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(dateFrancePattern, Locale.FRANCE) ;
 			rBuilder.append(L_LIST2).append(dateTimeFormatter.format(LocalDateTime.now())).append(L_LIST3) ;
 
+			if (imageUri != null) {
+				rBuilder.append(IMG_1).append(imageUri).append("\">\n");
+			}
+			
 			rBuilder.append(L_LIST4) ;
 		}		
 	}
@@ -179,6 +188,11 @@ public abstract class RapportHtml {
 		return this;
 	}
 
+	protected RapportHtml withImageUri(String iUri) {
+		imageUri = iUri;
+		return this;
+	}
+	
 	public RapportHtml withOffset(String o) {
 		urlOffset = o;
 		if (indexes != null) {

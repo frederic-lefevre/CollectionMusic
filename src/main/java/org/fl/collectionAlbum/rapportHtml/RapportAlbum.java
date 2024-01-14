@@ -24,8 +24,11 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.rapportHtml;
 
+
+import java.nio.file.Path;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.logging.Level;
 import java.util.stream.Stream;
 
 import org.fl.collectionAlbum.AbstractMediaFile;
@@ -36,7 +39,7 @@ import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.utils.TemporalUtils;
 
 public class RapportAlbum extends RapportMusicArtefact {
-
+	
 	private final Album album ;
 	
 	private RapportAlbum(Album a) {
@@ -44,6 +47,18 @@ public class RapportAlbum extends RapportMusicArtefact {
 		album = a;
 		withTitle(album.getTitre());
 		withTitleDisplayed();
+		
+		HtmlLinkList albumLink = new HtmlLinkList(RapportStructuresAndNames.getAccueils());
+		withHtmlLinkList(albumLink);
+		
+		Path coverPath = album.getCoverImage();
+		if (coverPath != null) {
+			try {
+				withImageUri(coverPath.toUri().toString());
+			} catch (Exception e) {
+				rapportLog.log(Level.SEVERE, "Exception when adding cover image to album " + album.getTitre() + " with cover path " + coverPath, e);
+			}
+		}
 	}
 
 	@Override
@@ -55,13 +70,13 @@ public class RapportAlbum extends RapportMusicArtefact {
 		write(TemporalUtils.formatDate(album.getDebutComposition()));
 		write (" - ");
 		write(TemporalUtils.formatDate(album.getFinComposition()));
-		write("    </li>\n");
+		write("</li>\n");
 		if (album.hasSpecificCompositionDates()) {
 			write("    <li>");
 			write(TemporalUtils.formatDate(album.getDebutEnregistrement()));
 			write (" - ");
 			write(TemporalUtils.formatDate(album.getFinEnregistrement()));
-			write("    </li>\n");
+			write("</li>\n");
 		}
 		write("  </ul>\n");
 		
@@ -100,7 +115,7 @@ public class RapportAlbum extends RapportMusicArtefact {
 	
 	private Consumer<AbstractMediaFile> detailInCell = mediaFile -> {
 		write("    <tr><td class=\"mediadetail\">\n");
-		write(mediaFile.displayMediaFileDetailWithFileLink("</br>\n"));
+		write(mediaFile.displayMediaFileDetailWithFileLink("<br/>\n"));
 		write("    </td></tr>\n");
 	};
 	

@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -76,29 +76,34 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 		progressPanel 	= pip ;
 	}
 
-	 @Override 
-	 public String doInBackground() {
-  		
-  		collectionAlbumContainer = CollectionAlbumContainer.getInstance() ;
-  		progressPanel.setProcessStatus(GENERATION) ;
-  		
-  		RapportHtml.withCharset(Control.getCharset());
-  		RapportStructuresAndNames.init();
-  		
-		albumLog.info("Nettoyage de l'ancien site") ;
-		progressPanel.setStepPrefixInformation(CLEANUP) ;
-		cleanRapport() ;
-		
-		albumLog.info("Ecriture du nouveau site") ;
-		progressPanel.setStepPrefixInformation(ECRITURE) ;
-		rapportCollection() ;
-		
-		// Sort for display when scanning the collection
-		collectionAlbumContainer.getCollectionAlbumsMusiques().sortRangementAlbum();
-		
-		albumLog.info("Fin de la génération");
-		return "" ;	
-  	}
+	@Override
+	public String doInBackground() {
+
+		try {
+			collectionAlbumContainer = CollectionAlbumContainer.getInstance();
+			progressPanel.setProcessStatus(GENERATION);
+
+			RapportHtml.withCharset(Control.getCharset());
+			RapportStructuresAndNames.init();
+
+			albumLog.info("Nettoyage de l'ancien site");
+			progressPanel.setStepPrefixInformation(CLEANUP);
+			cleanRapport();
+
+			albumLog.info("Ecriture du nouveau site");
+			progressPanel.setStepPrefixInformation(ECRITURE);
+			rapportCollection();
+
+			// Sort for display when scanning the collection
+			collectionAlbumContainer.getCollectionAlbumsMusiques().sortRangementAlbum();
+
+			albumLog.info("Fin de la génération");
+
+		} catch (Exception e) {
+			albumLog.log(Level.SEVERE, "Exception dans la génération du site", e);
+		}
+		return "";
+	}
 	
 	 private void cleanRapport() {
 
@@ -172,7 +177,7 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 		 RapportCsv.writeCsvAudioFile(collectionAlbumContainer.getAlbumsWithHighResAudio(), (audioFile) -> audioFile.isHighRes(), RapportStructuresAndNames.getAbsoluteCsvHdAudioFiles());
 	 }
 	   
-	 public void createRapports(ListeArtiste listeArtiste, 
+	 private void createRapports(ListeArtiste listeArtiste, 
 			 ListeAlbum listeAlbum, 
 			 ListeConcert listeConcert, 
 			 LieuxDesConcerts lieuxDesConcerts) {

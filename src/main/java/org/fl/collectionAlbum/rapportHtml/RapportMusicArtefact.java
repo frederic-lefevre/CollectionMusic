@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -50,21 +50,12 @@ public class RapportMusicArtefact extends RapportHtml {
 		List<Artiste> artistes = musicArtefact.getAuteurs();
 		if (artistes != null) {
 			write("  <h3>Artistes</h3>\n");
-			write("  <ul><b>\n");
-			for (Artiste unArtiste : artistes) {
-				write("    <li>");
-				write(unArtiste.getPrenoms());
-				write(" ");
-				write(unArtiste.getNom());
-				write("</li>\n");
-			}
-			write("    </b>\n");
+			FragmentIntervenants.printAuteurs(musicArtefact, rBuilder, "../");
+
 			if (musicArtefact.hasIntervenant()) {
-				write("    <li>Interprètes:\n");
+				write("    Interprètes:\n");
 				FragmentIntervenants.printIntervenant(musicArtefact, rBuilder, "../");
-				write("    </li>\n");
 			}
-			write("  </ul>\n");
 		}
 		
 		String discogsLink = musicArtefact.getDiscogsLink();
