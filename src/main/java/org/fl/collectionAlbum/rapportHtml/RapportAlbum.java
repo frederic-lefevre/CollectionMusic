@@ -115,7 +115,7 @@ public class RapportAlbum extends RapportMusicArtefact {
 	
 	private Consumer<AbstractMediaFile> detailInCell = mediaFile -> {
 		write("    <tr><td class=\"mediadetail\">\n");
-		write(mediaFile.displayMediaFileDetailWithFileLink("</br>\n"));
+		write(mediaFile.displayMediaFileDetailWithFileLink("<br/>\n"));
 		write("    </td></tr>\n");
 	};
 	
