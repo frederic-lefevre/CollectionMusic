@@ -26,7 +26,6 @@ package org.fl.collectionAlbum.rapportHtml;
 
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.logging.Level;
@@ -51,8 +50,8 @@ public class RapportAlbum extends RapportMusicArtefact {
 		
 		HtmlLinkList albumLink = new HtmlLinkList(RapportStructuresAndNames.getAccueils());
 		withHtmlLinkList(albumLink);
+		
 		Path coverPath = album.getCoverImage();
-//		Path coverPath = Paths.get("E:/");
 		if (coverPath != null) {
 			try {
 				withImageUri(coverPath.toUri().toString());
