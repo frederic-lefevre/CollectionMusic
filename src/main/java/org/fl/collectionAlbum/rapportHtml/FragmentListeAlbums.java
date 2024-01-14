@@ -91,7 +91,7 @@ public class FragmentListeAlbums {
 			}
 			
 			FragmentIntervenants.printIntervenant(unAlbum, fragment, urlOffSet) ;
-			fragment.append("    </td>\n") ;
+			fragment.append("\n    </td>\n") ;
 			unAlbum.getFormatAlbum().rowFormat(fragment, null, APPEND_AUDIO_FILE) ;
 			fragment.append("  </tr>\n") ;
 		}
