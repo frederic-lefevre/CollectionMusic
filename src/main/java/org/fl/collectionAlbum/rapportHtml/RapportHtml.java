@@ -133,7 +133,7 @@ public abstract class RapportHtml {
 			rBuilder.append(L_LIST2).append(dateTimeFormatter.format(LocalDateTime.now())).append(L_LIST3) ;
 
 			if (imageUri != null) {
-				rBuilder.append(IMG_1).append(imageUri).append("\">");
+				rBuilder.append(IMG_1).append(imageUri).append("\">\n");
 			}
 			
 			rBuilder.append(L_LIST4) ;

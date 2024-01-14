@@ -70,13 +70,13 @@ public class RapportAlbum extends RapportMusicArtefact {
 		write(TemporalUtils.formatDate(album.getDebutComposition()));
 		write (" - ");
 		write(TemporalUtils.formatDate(album.getFinComposition()));
-		write("    </li>\n");
+		write("</li>\n");
 		if (album.hasSpecificCompositionDates()) {
 			write("    <li>");
 			write(TemporalUtils.formatDate(album.getDebutEnregistrement()));
 			write (" - ");
 			write(TemporalUtils.formatDate(album.getFinEnregistrement()));
-			write("    </li>\n");
+			write("</li>\n");
 		}
 		write("  </ul>\n");
 		
