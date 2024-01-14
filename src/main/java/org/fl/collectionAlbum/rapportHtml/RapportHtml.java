@@ -56,7 +56,7 @@ public abstract class RapportHtml {
 	private final static String L_LIST1 = "<div class=\"home\">\n" ;
 	private final static String L_LIST2 = "  <span  class=\"dategen\">Généré " ;
 	private final static String L_LIST3 = "</span><br/>\n" ;
-	private final static String IMG_1   = "  <img src=\"";
+	private final static String IMG_1   = "  <img  class=\"cover\" src=\"";
 	private final static String L_LIST4 = "</div>\n" ;
 	private final static String END		= "</body>\n</html>" ;
 	
