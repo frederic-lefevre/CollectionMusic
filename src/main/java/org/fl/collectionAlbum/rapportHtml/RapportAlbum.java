@@ -44,6 +44,9 @@ public class RapportAlbum extends RapportMusicArtefact {
 		album = a;
 		withTitle(album.getTitre());
 		withTitleDisplayed();
+		
+		HtmlLinkList albumLink = new HtmlLinkList(RapportStructuresAndNames.getAccueils());
+		withHtmlLinkList(albumLink);
 	}
 
 	@Override
