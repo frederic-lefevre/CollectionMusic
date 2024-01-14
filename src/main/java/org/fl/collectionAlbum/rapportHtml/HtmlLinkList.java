@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -31,49 +31,50 @@ public class HtmlLinkList {
 
 	private class HtmlLink {
 		
-		private final static String AHREF1 = "<a href=\"" ;
+		private final static String AHREF1 = "  <a href=\"" ;
 		private final static String AHREF2 = "\">" ;
 		private final static String AHREF3 = "</a><br/>\n" ;
 		
-		private final String title ;
-		private final String url ;
-		
+		private final String title;
+		private final String url;
+
 		public HtmlLink(String title, String url) {
-			this.title = title ;
-			this.url   = url ;
+			this.title = title;
+			this.url = url;
 		}
-			
+
 		// Print the hyper link
 		public void writeLink(StringBuilder rBuilder, String offset) {
-			rBuilder.append(AHREF1).append(offset).append(url).append(AHREF2).append(title).append(AHREF3) ;
+			rBuilder.append(AHREF1).append(offset).append(url).append(AHREF2).append(title).append(AHREF3);
 		}
 	}
-	
-	private List<HtmlLink> 	   linkList ;
-	private String 	   		   linkOffset ;
-	
+
+	private final List<HtmlLink> linkList;
+	private String linkOffset;
+
 	public HtmlLinkList(HtmlLinkList otherLinks) {
-		linkOffset = "" ;	
-		linkList   = new ArrayList<>(otherLinks.linkList) ;
+		linkOffset = "";
+		linkList = new ArrayList<>(otherLinks.linkList);
 	}
-	
+
 	public HtmlLinkList() {
-		linkOffset = "" ;
-		linkList 		  = new ArrayList<>() ;
+		linkOffset = "";
+		linkList = new ArrayList<>();
 	}
-	
+
 	public void addLink(String t, String l) {
-		linkList.add(new HtmlLink(t,l)) ;
+		linkList.add(new HtmlLink(t, l));
 	}
-	
+
 	public void setOffset(String offSet) {
-		linkOffset = offSet ;
+		linkOffset = offSet;
 	}
 	
 	public void writeLinkList(StringBuilder rBuilder) {
 		for (HtmlLink htmlLink : linkList) {
-			htmlLink.writeLink(rBuilder, linkOffset) ;
+			htmlLink.writeLink(rBuilder, linkOffset);
 		}
+
 	}
 	
 	public int getNbLink() {
