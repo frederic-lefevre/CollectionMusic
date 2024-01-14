@@ -268,12 +268,14 @@ public class Album extends MusicArtefact {
 	}
 	
 	public Path getCoverImage() {
+
 		if (hasMediaFiles()) {
 			return getAllMediaFiles().stream()
 					.map(mediaFile -> mediaFile.getMediaFilePaths())
 					.filter(Objects::nonNull)
 					.flatMap(Collection::stream)
 					.map(MediaFilePath::getCoverPath)
+					.filter(Objects::nonNull)
 					.findFirst()
 					.orElse(null);
 		} else {
