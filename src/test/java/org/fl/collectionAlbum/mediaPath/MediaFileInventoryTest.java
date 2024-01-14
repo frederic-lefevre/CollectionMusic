@@ -27,6 +27,7 @@ package org.fl.collectionAlbum.mediaPath;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -97,6 +98,7 @@ class MediaFileInventoryTest {
 			.satisfies(audioPath -> {
 				assertThat(audioPath.getPath()).hasToString("E:\\Musique\\e\\Bill Evans\\Portrait In Jazz");
 				assertThat(audioPath.hasCover()).isTrue();
+				assertThat(audioPath.getCoverPath()).isNotNull().isEqualTo(Paths.get("E:\\Musique\\e\\Bill Evans\\Portrait In Jazz\\cover.jpg"));
 			});
 	}
 
