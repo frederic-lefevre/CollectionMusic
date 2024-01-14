@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -66,6 +66,15 @@ public class FragmentIntervenants {
 		}
 	}
 	
+	public static void printAuteurs(MusicArtefact musicArtefact, StringBuilder fragment, String urlOffset) {
+
+		if (musicArtefact.getAuteurs() != null) {
+			for (Artiste unArtiste : musicArtefact.getAuteurs()) {
+				appendLinkAlbumArtiste(unArtiste, musicArtefact.getClass(), fragment, urlOffset);
+			}
+		}
+	}
+	
 	private static void appendLinkAlbumArtiste(Artiste unArtiste, Class<? extends MusicArtefact> artefactsClass, StringBuilder fragment,  String urlOffset) {
 		URI artefactsUri = null ;
 		if (artefactsClass.equals(Album.class)) {
@@ -77,4 +86,5 @@ public class FragmentIntervenants {
 			fragment.append("      <a href=\"").append(urlOffset).append(artefactsUri.toString()).append("\">").append(unArtiste.getPrenoms()).append(" ").append(unArtiste.getNom()).append("</a><br/>\n") ;
 		}
 	}
+
 }

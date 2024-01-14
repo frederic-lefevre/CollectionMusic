@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -30,7 +30,6 @@ import java.time.temporal.TemporalAccessor;
 import org.fl.collectionAlbum.Format;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.albums.ListeAlbum;
-import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.utils.TemporalUtils;
 
 public class FragmentListeAlbums {
@@ -79,11 +78,7 @@ public class FragmentListeAlbums {
 			}
 			fragment.append("</td>\n    <td class=\"auteur\">\n") ;
 			
-			if (unAlbum.getAuteurs() != null) {
-				for (Artiste unArtiste : unAlbum.getAuteurs()) {
-					appendLinkAlbumArtiste(unArtiste, fragment, urlOffSet) ;
-				}
-			}
+			FragmentIntervenants.printAuteurs(unAlbum, fragment, urlOffSet);
 			fragment.append("    </td>\n    <td class=\"album\">") ; 
 			
 			if (unAlbum.additionnalInfo()) {
@@ -103,10 +98,4 @@ public class FragmentListeAlbums {
 		fragment.append("</table>\n") ;
 	}
 	
-	private static void appendLinkAlbumArtiste(Artiste unArtiste, StringBuilder fragment,  String urlOffset) {
-		URI albumUri = RapportStructuresAndNames.getArtisteAlbumRapportRelativeUri(unArtiste) ;
-		if (albumUri != null) {
-			fragment.append("      <a href=\"").append(urlOffset).append(albumUri.toString()).append("\">").append(unArtiste.getPrenoms()).append(" ").append(unArtiste.getNom()).append("</a><br/>\n") ;
-		}
-	}
 }
