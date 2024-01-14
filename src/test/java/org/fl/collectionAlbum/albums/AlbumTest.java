@@ -134,6 +134,8 @@ class AlbumTest {
 
 		assertThat(album.getAllMediaFiles()).hasSameElementsAs(audioFiles);
 		
+		assertThat(album.getCoverImage()).isNull();
+		
 		// Add the audio file path
 		AbstractAudioFile audioFile = (AbstractAudioFile) audioFiles.get(0);
 		audioFile.addMediaFilePath(new MediaFilePath(Paths.get("E:/Musique/e/Bill Evans/Waltz for Debby/")));
@@ -146,6 +148,10 @@ class AlbumTest {
 				.satisfies(audioPath -> assertThat(audioPath.getPath()).hasToString("E:\\Musique\\e\\Bill Evans\\Waltz for Debby"));
 		});
 
+		assertThat(album.getCoverImage())
+			.isNotNull()
+			.hasToString("E:\\Musique\\e\\Bill Evans\\Waltz for Debby\\cover.jpg");
+		
 		// Get the json from the album (should be modified with the path)
 		JsonObject modifiedJson = album.getJson();
 		
