@@ -24,12 +24,13 @@ SOFTWARE.
 
 package org.fl.collectionAlbum;
 
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
 public interface OsActionCommandParameter<T> {
 
-	public Function<T, String> getParametersGetter();
+	public Function<T, List<String>> getParametersGetter();
 	
 	public Predicate<T> getActionValidityPredicate();
 }

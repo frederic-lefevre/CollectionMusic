@@ -187,6 +187,7 @@ public class Control {
 		return collectionProperties.getKeysElements(osCmdPropBase).stream()
 				.map(prop -> new OsAction<Album>(collectionProperties.getProperty(osCmdPropBase + prop + ".title"),
 						collectionProperties.getProperty(osCmdPropBase + prop + ".cmd"),
+						collectionProperties.getListOfString(osCmdPropBase + prop + ".options", ","),
 						AlbumCommandParameter.valueOf(collectionProperties.getProperty(osCmdPropBase + prop + ".param"))))
 				.collect(Collectors.toList());
 	}
@@ -196,6 +197,7 @@ public class Control {
 		return collectionProperties.getKeysElements(osCmdPropBase).stream()
 				.map(prop -> new OsAction<DiscogsAlbumRelease>(collectionProperties.getProperty(osCmdPropBase + prop + ".title"),
 						collectionProperties.getProperty(osCmdPropBase + prop + ".cmd"),
+						collectionProperties.getListOfString(osCmdPropBase + prop + ".options", ","),
 						DiscogsReleaseCommandParameter.valueOf(collectionProperties.getProperty(osCmdPropBase + prop + ".param"))))
 				.collect(Collectors.toList());
 	}
@@ -205,6 +207,7 @@ public class Control {
 		return collectionProperties.getKeysElements(osCmdPropBase).stream()
 				.map(prop -> new OsAction<MediaFilePath>(collectionProperties.getProperty(osCmdPropBase + prop + ".title"),
 						collectionProperties.getProperty(osCmdPropBase + prop + ".cmd"),
+						collectionProperties.getListOfString(osCmdPropBase + prop + ".options", ","),
 						MediaFilePathCommandParameter.valueOf(collectionProperties.getProperty(osCmdPropBase + prop + ".param"))))
 				.collect(Collectors.toList());
 	}

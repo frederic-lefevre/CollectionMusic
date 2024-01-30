@@ -24,6 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.albums;
 
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
@@ -33,22 +34,22 @@ import org.fl.collectionAlbum.OsActionCommandParameter;
 public enum AlbumCommandParameter implements OsActionCommandParameter<Album> {
 
 	JSON(
-			(album) -> album.getJsonFilePath().toAbsolutePath().toString(), 
+			(album) -> List.of(album.getJsonFilePath().toAbsolutePath().toString()), 
 			(album) -> true),
 	DISCOGS_RELEASE_INFO(
-			(album) -> Control.getDiscogsBaseUrlForRelease() + album.getDiscogsLink(), 
+			(album) -> List.of(Control.getDiscogsBaseUrlForRelease() + album.getDiscogsLink()), 
 			(album) -> (album.getDiscogsLink() != null) && !album.getDiscogsLink().isEmpty());
 	
-	private final Function<Album,String> parametersGetter;
+	private final Function<Album,List<String>> parametersGetter;
 	private final Predicate<Album> actionValidityPredicate;
 	
-	private AlbumCommandParameter(Function<Album,String> gp, Predicate<Album> vp) {
+	private AlbumCommandParameter(Function<Album,List<String>> gp, Predicate<Album> vp) {
 		parametersGetter = gp;
 		actionValidityPredicate = vp;
 	}
 
 	@Override
-	public Function<Album, String> getParametersGetter() {
+	public Function<Album, List<String>> getParametersGetter() {
 		return parametersGetter;
 	}
 

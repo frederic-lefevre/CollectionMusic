@@ -24,6 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.disocgs;
 
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -35,26 +36,26 @@ import org.fl.collectionAlbum.disocgs.DiscogsInventory.DiscogsAlbumRelease;
 public enum DiscogsReleaseCommandParameter implements OsActionCommandParameter<DiscogsAlbumRelease> {
 
 	DISCOGS_RELEASE_INFO( 
-			(release) -> Control.getDiscogsBaseUrlForRelease() + release.getInventoryCsvAlbum().getReleaseId(),
+			(release) -> List.of(Control.getDiscogsBaseUrlForRelease() + release.getInventoryCsvAlbum().getReleaseId()),
 			(release) -> release.getInventoryCsvAlbum().getReleaseId() != null
 			),
 	ALBUMS_JSON(
 			(release) -> release.getCollectionAlbums().stream()
 				.map(album -> album.getJsonFilePath().toAbsolutePath().toString())
-				.collect(Collectors.joining(" ")),
+				.collect(Collectors.toList()),
 			(release) -> ((release.getCollectionAlbums() != null) && !release.getCollectionAlbums().isEmpty())
 			);
 	
-	private final Function<DiscogsAlbumRelease,String> parametersGetter;
+	private final Function<DiscogsAlbumRelease,List<String>> parametersGetter;
 	private final Predicate<DiscogsAlbumRelease> actionValidityPredicate;
 	
-	private DiscogsReleaseCommandParameter(Function<DiscogsAlbumRelease,String> pg, Predicate<DiscogsAlbumRelease> vp) {
+	private DiscogsReleaseCommandParameter(Function<DiscogsAlbumRelease,List<String>> pg, Predicate<DiscogsAlbumRelease> vp) {
 		parametersGetter = pg;
 		actionValidityPredicate = vp;
 	}
 
 	@Override
-	public Function<DiscogsAlbumRelease, String> getParametersGetter() {
+	public Function<DiscogsAlbumRelease, List<String>> getParametersGetter() {
 		return parametersGetter;
 	}
 

@@ -25,6 +25,8 @@ SOFTWARE.
 package org.fl.collectionAlbum;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -34,11 +36,13 @@ public class OsAction<T> {
 	
 	private final String actionTitle;
 	private final String actionCommand;
+	private final List<String> actionOptions;
 	private final OsActionCommandParameter<T> commandParameter;
 	
-	public OsAction(String t, String c, OsActionCommandParameter<T> a) {
+	public OsAction(String t, String c, List<String> o, OsActionCommandParameter<T> a) {
 		actionTitle   = t;
 		actionCommand = c;
+		actionOptions = o;
 		commandParameter = a;
 	}
 
@@ -56,22 +60,21 @@ public class OsAction<T> {
 
 	public void runOsAction(T o) {
 		
-		StringBuilder fullCommand = new StringBuilder(getActionCommand());
-		
-		fullCommand.append(" ")
-			.append(getCommandParameter().getParametersGetter().apply(o));
-		
-		String command = fullCommand.toString();
+		List<String> cmdAndParams = new ArrayList<>();
+		cmdAndParams.add(getActionCommand());
+		if ((actionOptions != null) && !actionOptions.isEmpty()) {
+			cmdAndParams.addAll(actionOptions);
+		}
+		cmdAndParams.addAll(getCommandParameter().getParametersGetter().apply(o));
 		
 		try {
-			Runtime.getRuntime().exec(command);
+			Runtime.getRuntime().exec(cmdAndParams.toArray(new String[0]));
 		} catch (IOException e) {
-			oLog.log(Level.SEVERE, "IOException executing command " + command, e) ;
+			oLog.log(Level.SEVERE, "IOException executing command " + cmdAndParams.toString(), e) ;
 		} catch (SecurityException e) {
-			oLog.log(Level.SEVERE, "SecurityException executing command " + command, e) ;
+			oLog.log(Level.SEVERE, "SecurityException executing command " + cmdAndParams.toString(), e) ;
 		} catch (Exception e) {
-			oLog.log(Level.SEVERE, "Exception executing command " + command, e) ;
+			oLog.log(Level.SEVERE, "Exception executing command " + cmdAndParams.toString(), e) ;
 		}
-
 	}
 }
