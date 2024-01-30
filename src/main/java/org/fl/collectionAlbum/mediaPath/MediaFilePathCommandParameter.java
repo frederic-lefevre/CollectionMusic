@@ -24,6 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.mediaPath;
 
+import java.nio.file.Files;
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -38,6 +39,10 @@ public enum MediaFilePathCommandParameter implements OsActionCommandParameter<Me
 			.map(album -> album.getJsonFilePath().toAbsolutePath().toString())
 			.collect(Collectors.toList()),
 		(mediaFile) -> ((mediaFile.getAlbumSet() != null) && !mediaFile.getAlbumSet().isEmpty())	
+			),
+	MEDIA_FILE_PATH(
+			(mediaFile) -> List.of(mediaFile.getPath().toAbsolutePath().toString()),
+			(mediaFile) -> ((mediaFile.getPath() != null) && Files.exists(mediaFile.getPath()) && Files.isDirectory(mediaFile.getPath()))
 			);
 
 	private final Function<MediaFilePath,List<String>> parametersGetter;

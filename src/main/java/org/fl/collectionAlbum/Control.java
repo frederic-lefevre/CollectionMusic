@@ -42,8 +42,6 @@ import org.fl.collectionAlbum.disocgs.DiscogsInventory.DiscogsAlbumRelease;
 import org.fl.collectionAlbum.disocgs.DiscogsReleaseCommandParameter;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.fl.collectionAlbum.mediaPath.MediaFilePathCommandParameter;
-import org.fl.collectionAlbumGui.MediaFileCustomActionListener;
-import org.fl.collectionAlbumGui.MediaFileCustomActionListener.CustomAction;
 import org.fl.util.AdvancedProperties;
 import org.fl.util.RunningContext;
 
@@ -105,15 +103,6 @@ public class Control {
 			osActionsOnAlbum = getOsActionsOnAlbum("album.command.");
 			osActionsOnDiscogsRelease = getOsActionsOnDiscogsRelease("album.discogs.command.");
 			osActionsOnMediaFilePath = getOsActionOnMediaFilePath("album.mediaFile.command.");
-			
-			Map<CustomAction, String> customActions = new HashMap<>();
-			Stream.of(CustomAction.values()).forEach(customAction -> {
-				String customCmd = collectionProperties.getProperty("album.mediaFile.customActionCommand." + customAction.name());
-				if ((customCmd != null) && (!customCmd.isEmpty())) {
-					customActions.put(customAction, customCmd);
-				}
-			});
-			MediaFileCustomActionListener.setCustomActionCommands(customActions);
 			
 		} catch (URISyntaxException e) {
 			System.out.println("URI syntax exception for property file: " + DEFAULT_PROP_FILE);

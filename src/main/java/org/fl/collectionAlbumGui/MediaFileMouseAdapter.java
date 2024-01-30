@@ -36,7 +36,6 @@ import javax.swing.JPopupMenu;
 
 import org.fl.collectionAlbum.OsAction;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
-import org.fl.collectionAlbumGui.MediaFileCustomActionListener.CustomAction;
 
 public class MediaFileMouseAdapter extends MouseAdapter {
 
@@ -50,9 +49,6 @@ public class MediaFileMouseAdapter extends MouseAdapter {
 		this.mediaFileTable = mediaFileTable;
 		localJPopupMenu = new JPopupMenu();
 		menuItems = new ArrayList<JMenuItem>();
-		
-		ActionListener explorerActionListener = new MediaFileCustomActionListener(mediaFileTable, CustomAction.ShowInExplorer);
-		menuItems.add(addMenuItem("Afficher le dossier", explorerActionListener, (mediaFile) -> mediaFile != null));
 		
 		osActions.forEach(osAction -> 
 		addMenuItem(
