@@ -24,13 +24,13 @@ SOFTWARE.
 
 package org.fl.collectionAlbum;
 
+import java.io.IOException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import org.fl.util.os.OScommand;
 
 public class OsAction<T> {
 
-	private static final Logger aLog = Control.getAlbumLog();
+	private static final Logger oLog = Control.getAlbumLog();
 	
 	private final String actionTitle;
 	private final String actionCommand;
@@ -61,7 +61,17 @@ public class OsAction<T> {
 		fullCommand.append(" ")
 			.append(getCommandParameter().getParametersGetter().apply(o));
 		
-		OScommand osCommand = new OScommand(fullCommand.toString(), false, aLog) ;
-		osCommand.run();
+		String command = fullCommand.toString();
+		
+		try {
+			Runtime.getRuntime().exec(command);
+		} catch (IOException e) {
+			oLog.log(Level.SEVERE, "IOException executing command " + command, e) ;
+		} catch (SecurityException e) {
+			oLog.log(Level.SEVERE, "SecurityException executing command " + command, e) ;
+		} catch (Exception e) {
+			oLog.log(Level.SEVERE, "Exception executing command " + command, e) ;
+		}
+
 	}
 }
