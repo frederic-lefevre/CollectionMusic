@@ -41,14 +41,34 @@ public class MediaFileMouseAdapter extends MouseAdapter {
 
 	private final MediaFilesJTable mediaFileTable;
 	private final JPopupMenu localJPopupMenu;
-	private final List<JMenuItem> menuItems;
+	private final List<MediaFileMenuItem> mediaFileMenuItems;
+	
+	private static class MediaFileMenuItem {
+		
+		private final JMenuItem menuitem;
+		private final Predicate<MediaFilePath> enabledPredicate;
+		
+		public MediaFileMenuItem(JMenuItem menuitem, Predicate<MediaFilePath> enabledPredicate) {
+			super();
+			this.menuitem = menuitem;
+			this.enabledPredicate = enabledPredicate;
+		}
+
+		public JMenuItem getMenuitem() {
+			return menuitem;
+		}
+
+		public Predicate<MediaFilePath> getEnabledPredicate() {
+			return enabledPredicate;
+		}	
+	}
 	
 	public MediaFileMouseAdapter(MediaFilesJTable mediaFileTable, List<OsAction<MediaFilePath>> osActions) {
 		super();
 		
 		this.mediaFileTable = mediaFileTable;
 		localJPopupMenu = new JPopupMenu();
-		menuItems = new ArrayList<JMenuItem>();
+		mediaFileMenuItems = new ArrayList<>();
 		
 		osActions.forEach(osAction -> 
 			addMenuItem(
@@ -78,14 +98,14 @@ public class MediaFileMouseAdapter extends MouseAdapter {
 		
 		MediaFilePath selectedMediaFile = mediaFileTable.getSelectedMediaFile();
 		if (selectedMediaFile != null) {
-			menuItems.forEach(menuItem -> menuItem.setEnabled(true));
+			mediaFileMenuItems.forEach(menuItem -> menuItem.getMenuitem().setEnabled(menuItem.getEnabledPredicate().test(selectedMediaFile)));
 		}
 	}
 	
-	private JMenuItem addMenuItem(String title, ActionListener act, Predicate<MediaFilePath> enabledPredicate) {
+	private void addMenuItem(String title, ActionListener act, Predicate<MediaFilePath> enabledPredicate) {
 		JMenuItem localJMenuItem = new JMenuItem(title);
-	     localJMenuItem.addActionListener(act);
-	     localJPopupMenu.add(localJMenuItem);
-	     return localJMenuItem ;
+		localJMenuItem.addActionListener(act);
+		localJPopupMenu.add(localJMenuItem);
+		mediaFileMenuItems.add(new MediaFileMenuItem(localJMenuItem, enabledPredicate));
 	}
 }
