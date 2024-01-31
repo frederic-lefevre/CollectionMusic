@@ -24,14 +24,10 @@ SOFTWARE.
 
 package org.fl.collectionAlbumGui;
 
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 
-import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import org.fl.collectionAlbum.OsAction;
@@ -41,22 +37,24 @@ public class MediaFileMouseAdapter extends MouseAdapter {
 
 	private final MediaFilesJTable mediaFileTable;
 	private final JPopupMenu localJPopupMenu;
-	private final List<CollectionMenuItem<MediaFilePath>> mediaFileMenuItems;
+	private final CollectionMenuItems<MediaFilePath> mediaFileMenuItems;
 	
 	public MediaFileMouseAdapter(MediaFilesJTable mediaFileTable, List<OsAction<MediaFilePath>> osActions) {
 		super();
 		
 		this.mediaFileTable = mediaFileTable;
 		localJPopupMenu = new JPopupMenu();
-		mediaFileMenuItems = new ArrayList<>();
+		mediaFileMenuItems = new CollectionMenuItems<>();
 		
 		osActions.forEach(osAction -> 
-			addMenuItem(
+			mediaFileMenuItems.addMenuItem(
 				osAction.getActionTitle(),
 				new MediaFileCommandListener(mediaFileTable, osAction),
-				osAction.getCommandParameter().getActionValidityPredicate()));
+				osAction.getCommandParameter().getActionValidityPredicate(),
+				localJPopupMenu
+			)
+		);
 	}
-
 
 	@Override
 	public void mousePressed(MouseEvent evt) {
@@ -75,16 +73,7 @@ public class MediaFileMouseAdapter extends MouseAdapter {
 	}
 	
 	private void enableMenuItems() {
-		
-		MediaFilePath mediaFile = mediaFileTable.getSelectedMediaFile();
-		mediaFileMenuItems.forEach(menuItem -> 
-			menuItem.getMenuitem().setEnabled((mediaFile != null) && menuItem.getEnabledPredicate().test(mediaFile)));
+		mediaFileMenuItems.enableMenuItems(mediaFileTable.getSelectedMediaFile());
 	}
-	
-	private void addMenuItem(String title, ActionListener act, Predicate<MediaFilePath> enabledPredicate) {
-		JMenuItem localJMenuItem = new JMenuItem(title);
-		localJMenuItem.addActionListener(act);
-		localJPopupMenu.add(localJMenuItem);
-		mediaFileMenuItems.add(new CollectionMenuItem<>(localJMenuItem, enabledPredicate));
-	}
+
 }

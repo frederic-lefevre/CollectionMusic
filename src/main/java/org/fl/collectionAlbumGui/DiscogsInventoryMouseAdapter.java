@@ -27,11 +27,8 @@ package org.fl.collectionAlbumGui;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 
-import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import org.fl.collectionAlbum.OsAction;
@@ -43,23 +40,25 @@ public class DiscogsInventoryMouseAdapter extends MouseAdapter {
 	private final DiscogsReleaseJTable discogsReleaseJTable;
 	private final JPopupMenu localJPopupMenu;
 	
-	private final List<CollectionMenuItem<DiscogsAlbumRelease>> discogsReleaseMenuItems;
+	private final CollectionMenuItems<DiscogsAlbumRelease> discogsReleaseMenuItems;
 	
 	public DiscogsInventoryMouseAdapter(DiscogsReleaseJTable discogsReleaseJTable, List<OsAction<DiscogsAlbumRelease>> osActions) {
 		
 		this.discogsReleaseJTable = discogsReleaseJTable;
 		localJPopupMenu = new JPopupMenu();
 		
-		discogsReleaseMenuItems = new ArrayList<>();
+		discogsReleaseMenuItems = new CollectionMenuItems<>();
 		
 		osActions.forEach(osAction -> 
-			addMenuItem(
-					osAction.getActionTitle(),
-					new DiscogsReleaseCommandListener(discogsReleaseJTable, osAction), 
-					osAction.getCommandParameter().getActionValidityPredicate()));
+			discogsReleaseMenuItems.addMenuItem(
+				osAction.getActionTitle(),
+				new DiscogsReleaseCommandListener(discogsReleaseJTable, osAction), 
+				osAction.getCommandParameter().getActionValidityPredicate(),
+				localJPopupMenu
+		));
 		
 		ActionListener infoListener = new DiscogsReleaseCustomActionListener(discogsReleaseJTable, CustomAction.SHOW_INFO);
-		addMenuItem("Afficher les informations", infoListener, (release) -> release != null);
+		discogsReleaseMenuItems.addMenuItem("Afficher les informations", infoListener, (release) -> release != null, localJPopupMenu);
 	}
 
 	@Override
@@ -79,16 +78,7 @@ public class DiscogsInventoryMouseAdapter extends MouseAdapter {
 	}
 	
 	private void enableMenuItems() {
-		
-		DiscogsAlbumRelease release = discogsReleaseJTable.getSelectedDisocgsRelease();
-		discogsReleaseMenuItems.forEach(menuItem -> 
-			menuItem.getMenuitem().setEnabled((release != null) && menuItem.getEnabledPredicate().test(release)));
+		discogsReleaseMenuItems.enableMenuItems(discogsReleaseJTable.getSelectedDisocgsRelease());
 	}
-	
-	private void addMenuItem(String title, ActionListener act, Predicate<DiscogsAlbumRelease> enabledPredicate) {
-		JMenuItem localJMenuItem = new JMenuItem(title);
-	     localJMenuItem.addActionListener(act);
-	     localJPopupMenu.add(localJMenuItem);
-	     discogsReleaseMenuItems.add(new CollectionMenuItem<>(localJMenuItem, enabledPredicate));
-	}
+
 }

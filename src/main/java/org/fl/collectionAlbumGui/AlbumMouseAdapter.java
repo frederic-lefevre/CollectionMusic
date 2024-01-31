@@ -24,15 +24,11 @@ SOFTWARE.
 
 package org.fl.collectionAlbumGui;
 
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 import java.util.stream.Stream;
 
-import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import org.fl.collectionAlbum.OsAction;
@@ -44,7 +40,7 @@ public class AlbumMouseAdapter extends MouseAdapter {
 	private final AlbumsJTable albumsJTable;
 	private final JPopupMenu localJPopupMenu;
 	
-	private final List<CollectionMenuItem<Album>> albumMenuItems;
+	private final CollectionMenuItems<Album> albumMenuItems;
 	
 	public AlbumMouseAdapter(AlbumsJTable ajt, List<OsAction<Album>> osActions) {
 		
@@ -52,15 +48,23 @@ public class AlbumMouseAdapter extends MouseAdapter {
 		this.albumsJTable = ajt;
 		localJPopupMenu = new JPopupMenu();
 		
-		albumMenuItems = new ArrayList<>();
+		albumMenuItems = new CollectionMenuItems<>();
 		
 		osActions.forEach(osAction ->
-			addMenuItem(osAction.getActionTitle(), new AlbumCommandListener(albumsJTable, osAction), osAction.getCommandParameter().getActionValidityPredicate())
+			albumMenuItems.addMenuItem(
+					osAction.getActionTitle(), 
+					new AlbumCommandListener(albumsJTable, osAction), 
+					osAction.getCommandParameter().getActionValidityPredicate(),
+					localJPopupMenu
+			)
 		);
 		
-		Stream.of(CustomAction.values())
-			.forEach(customAction -> 
-				addMenuItem(customAction.getActionTitle(), new AlbumCustomActionListener(albumsJTable, customAction), customAction.getDisplayable()));
+		Stream.of(CustomAction.values()).forEach(customAction -> 
+				albumMenuItems.addMenuItem(
+						customAction.getActionTitle(), 
+						new AlbumCustomActionListener(albumsJTable, customAction), 
+						customAction.getDisplayable(),
+						localJPopupMenu));
 
 	}
 
@@ -81,16 +85,7 @@ public class AlbumMouseAdapter extends MouseAdapter {
 	}
 
 	private void enableMenuItems() {
+		albumMenuItems.enableMenuItems(albumsJTable.getSelectedAlbum());
+	}
 
-		Album album = albumsJTable.getSelectedAlbum();
-		albumMenuItems.forEach(menuItem -> 
-			menuItem.getMenuitem().setEnabled((album != null) && menuItem.getEnabledPredicate().test(album)));
-	}
-	
-	private void addMenuItem(String title, ActionListener act, Predicate<Album> enabledPredicate) {
-		JMenuItem localJMenuItem = new JMenuItem(title);
-		localJMenuItem.addActionListener(act);
-		localJPopupMenu.add(localJMenuItem);
-		albumMenuItems.add(new CollectionMenuItem<>(localJMenuItem, enabledPredicate));
-	}
 }
