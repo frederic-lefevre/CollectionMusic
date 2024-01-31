@@ -81,9 +81,8 @@ public class DiscogsInventoryMouseAdapter extends MouseAdapter {
 	private void enableMenuItems() {
 		
 		DiscogsAlbumRelease release = discogsReleaseJTable.getSelectedDisocgsRelease();
-		if (release != null) {
-			discogsReleaseMenuItems.forEach(menuItem -> menuItem.getMenuitem().setEnabled(menuItem.getEnabledPredicate().test(release)));
-		}
+		discogsReleaseMenuItems.forEach(menuItem -> 
+			menuItem.getMenuitem().setEnabled((release != null) && menuItem.getEnabledPredicate().test(release)));
 	}
 	
 	private void addMenuItem(String title, ActionListener act, Predicate<DiscogsAlbumRelease> enabledPredicate) {

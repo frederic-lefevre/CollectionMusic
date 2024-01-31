@@ -76,10 +76,9 @@ public class MediaFileMouseAdapter extends MouseAdapter {
 	
 	private void enableMenuItems() {
 		
-		MediaFilePath selectedMediaFile = mediaFileTable.getSelectedMediaFile();
-		if (selectedMediaFile != null) {
-			mediaFileMenuItems.forEach(menuItem -> menuItem.getMenuitem().setEnabled(menuItem.getEnabledPredicate().test(selectedMediaFile)));
-		}
+		MediaFilePath mediaFile = mediaFileTable.getSelectedMediaFile();
+		mediaFileMenuItems.forEach(menuItem -> 
+			menuItem.getMenuitem().setEnabled((mediaFile != null) && menuItem.getEnabledPredicate().test(mediaFile)));
 	}
 	
 	private void addMenuItem(String title, ActionListener act, Predicate<MediaFilePath> enabledPredicate) {

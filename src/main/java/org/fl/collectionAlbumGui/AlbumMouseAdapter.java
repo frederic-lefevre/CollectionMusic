@@ -83,9 +83,8 @@ public class AlbumMouseAdapter extends MouseAdapter {
 	private void enableMenuItems() {
 
 		Album album = albumsJTable.getSelectedAlbum();
-		if (album != null) {
-			albumMenuItems.forEach(menuItem -> menuItem.getMenuitem().setEnabled(menuItem.getEnabledPredicate().test(album)));
-		}
+		albumMenuItems.forEach(menuItem -> 
+			menuItem.getMenuitem().setEnabled((album != null) && menuItem.getEnabledPredicate().test(album)));
 	}
 	
 	private void addMenuItem(String title, ActionListener act, Predicate<Album> enabledPredicate) {
