@@ -44,28 +44,7 @@ public class AlbumMouseAdapter extends MouseAdapter {
 	private final AlbumsJTable albumsJTable;
 	private final JPopupMenu localJPopupMenu;
 	
-	private final List<AlbumMenuItem> albumMenuItems;
-	
-	private static class AlbumMenuItem {
-
-		private final JMenuItem menuitem;
-		private final Predicate<Album> enabledPredicate;
-		
-		public AlbumMenuItem(JMenuItem menuitem, Predicate<Album> enabledPredicate) {
-			super();
-			this.menuitem = menuitem;
-			this.enabledPredicate = enabledPredicate;
-		}
-		
-		public JMenuItem getMenuitem() {
-			return menuitem;
-		}
-
-		public Predicate<Album> getEnabledPredicate() {
-			return enabledPredicate;
-		}
-		
-	}
+	private final List<CollectionMenuItem<Album>> albumMenuItems;
 	
 	public AlbumMouseAdapter(AlbumsJTable ajt, List<OsAction<Album>> osActions) {
 		
@@ -113,6 +92,6 @@ public class AlbumMouseAdapter extends MouseAdapter {
 		JMenuItem localJMenuItem = new JMenuItem(title);
 		localJMenuItem.addActionListener(act);
 		localJPopupMenu.add(localJMenuItem);
-		albumMenuItems.add(new AlbumMenuItem(localJMenuItem, enabledPredicate));
+		albumMenuItems.add(new CollectionMenuItem<>(localJMenuItem, enabledPredicate));
 	}
 }

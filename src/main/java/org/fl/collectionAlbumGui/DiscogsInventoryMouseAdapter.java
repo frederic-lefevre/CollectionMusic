@@ -43,27 +43,7 @@ public class DiscogsInventoryMouseAdapter extends MouseAdapter {
 	private final DiscogsReleaseJTable discogsReleaseJTable;
 	private final JPopupMenu localJPopupMenu;
 	
-	private final List<DiscogsReleaseMenuItem> discogsReleaseMenuItems;
-	
-	private static class DiscogsReleaseMenuItem {
-		
-		private final JMenuItem menuitem;
-		private final Predicate<DiscogsAlbumRelease> enabledPredicate;
-		
-		public DiscogsReleaseMenuItem(JMenuItem menuitem, Predicate<DiscogsAlbumRelease> enabledPredicate) {
-			super();
-			this.menuitem = menuitem;
-			this.enabledPredicate = enabledPredicate;
-		}
-
-		public JMenuItem getMenuitem() {
-			return menuitem;
-		}
-
-		public Predicate<DiscogsAlbumRelease> getEnabledPredicate() {
-			return enabledPredicate;
-		}
-	}
+	private final List<CollectionMenuItem<DiscogsAlbumRelease>> discogsReleaseMenuItems;
 	
 	public DiscogsInventoryMouseAdapter(DiscogsReleaseJTable discogsReleaseJTable, List<OsAction<DiscogsAlbumRelease>> osActions) {
 		
@@ -110,6 +90,6 @@ public class DiscogsInventoryMouseAdapter extends MouseAdapter {
 		JMenuItem localJMenuItem = new JMenuItem(title);
 	     localJMenuItem.addActionListener(act);
 	     localJPopupMenu.add(localJMenuItem);
-	     discogsReleaseMenuItems.add(new DiscogsReleaseMenuItem(localJMenuItem, enabledPredicate));
+	     discogsReleaseMenuItems.add(new CollectionMenuItem<>(localJMenuItem, enabledPredicate));
 	}
 }
