@@ -24,43 +24,37 @@ SOFTWARE.
 
 package org.fl.collectionAlbumGui;
 
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 
-import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import org.fl.collectionAlbum.OsAction;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
-import org.fl.collectionAlbumGui.MediaFileCustomActionListener.CustomAction;
 
 public class MediaFileMouseAdapter extends MouseAdapter {
 
 	private final MediaFilesJTable mediaFileTable;
 	private final JPopupMenu localJPopupMenu;
-	private final List<JMenuItem> menuItems;
+	private final CollectionMenuItems<MediaFilePath> mediaFileMenuItems;
 	
 	public MediaFileMouseAdapter(MediaFilesJTable mediaFileTable, List<OsAction<MediaFilePath>> osActions) {
 		super();
 		
 		this.mediaFileTable = mediaFileTable;
 		localJPopupMenu = new JPopupMenu();
-		menuItems = new ArrayList<JMenuItem>();
-		
-		ActionListener explorerActionListener = new MediaFileCustomActionListener(mediaFileTable, CustomAction.ShowInExplorer);
-		menuItems.add(addMenuItem("Afficher le dossier", explorerActionListener, (mediaFile) -> mediaFile != null));
+		mediaFileMenuItems = new CollectionMenuItems<>();
 		
 		osActions.forEach(osAction -> 
-		addMenuItem(
+			mediaFileMenuItems.addMenuItem(
 				osAction.getActionTitle(),
 				new MediaFileCommandListener(mediaFileTable, osAction),
-				osAction.getCommandParameter().getActionValidityPredicate()));
+				osAction.getCommandParameter().getActionValidityPredicate(),
+				localJPopupMenu
+			)
+		);
 	}
-
 
 	@Override
 	public void mousePressed(MouseEvent evt) {
@@ -79,17 +73,7 @@ public class MediaFileMouseAdapter extends MouseAdapter {
 	}
 	
 	private void enableMenuItems() {
-		
-		MediaFilePath selectedMediaFile = mediaFileTable.getSelectedMediaFile();
-		if (selectedMediaFile != null) {
-			menuItems.forEach(menuItem -> menuItem.setEnabled(true));
-		}
+		mediaFileMenuItems.enableMenuItems(mediaFileTable.getSelectedMediaFile());
 	}
-	
-	private JMenuItem addMenuItem(String title, ActionListener act, Predicate<MediaFilePath> enabledPredicate) {
-		JMenuItem localJMenuItem = new JMenuItem(title);
-	     localJMenuItem.addActionListener(act);
-	     localJPopupMenu.add(localJMenuItem);
-	     return localJMenuItem ;
-	}
+
 }

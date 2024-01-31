@@ -24,6 +24,8 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.mediaPath;
 
+import java.nio.file.Files;
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -35,20 +37,24 @@ public enum MediaFilePathCommandParameter implements OsActionCommandParameter<Me
 	ALBUMS_JSON(
 		(mediaFile) -> mediaFile.getAlbumSet().stream()
 			.map(album -> album.getJsonFilePath().toAbsolutePath().toString())
-			.collect(Collectors.joining(" ")),
+			.collect(Collectors.toList()),
 		(mediaFile) -> ((mediaFile.getAlbumSet() != null) && !mediaFile.getAlbumSet().isEmpty())	
+			),
+	MEDIA_FILE_PATH(
+			(mediaFile) -> List.of(mediaFile.getPath().toAbsolutePath().toString()),
+			(mediaFile) -> ((mediaFile.getPath() != null) && Files.exists(mediaFile.getPath()) && Files.isDirectory(mediaFile.getPath()))
 			);
 
-	private final Function<MediaFilePath,String> parametersGetter;
+	private final Function<MediaFilePath,List<String>> parametersGetter;
 	private final Predicate<MediaFilePath> actionValidityPredicate;
 	
-	private MediaFilePathCommandParameter(Function<MediaFilePath, String> pg, Predicate<MediaFilePath> vp) {
+	private MediaFilePathCommandParameter(Function<MediaFilePath, List<String>> pg, Predicate<MediaFilePath> vp) {
 		this.parametersGetter = pg;
 		this.actionValidityPredicate = vp;
 	}
 
 	@Override
-	public Function<MediaFilePath, String> getParametersGetter() {
+	public Function<MediaFilePath, List<String>> getParametersGetter() {
 		return parametersGetter;
 	}
 

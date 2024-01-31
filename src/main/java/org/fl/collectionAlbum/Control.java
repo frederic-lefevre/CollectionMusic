@@ -42,8 +42,6 @@ import org.fl.collectionAlbum.disocgs.DiscogsInventory.DiscogsAlbumRelease;
 import org.fl.collectionAlbum.disocgs.DiscogsReleaseCommandParameter;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.fl.collectionAlbum.mediaPath.MediaFilePathCommandParameter;
-import org.fl.collectionAlbumGui.MediaFileCustomActionListener;
-import org.fl.collectionAlbumGui.MediaFileCustomActionListener.CustomAction;
 import org.fl.util.AdvancedProperties;
 import org.fl.util.RunningContext;
 
@@ -105,15 +103,6 @@ public class Control {
 			osActionsOnAlbum = getOsActionsOnAlbum("album.command.");
 			osActionsOnDiscogsRelease = getOsActionsOnDiscogsRelease("album.discogs.command.");
 			osActionsOnMediaFilePath = getOsActionOnMediaFilePath("album.mediaFile.command.");
-			
-			Map<CustomAction, String> customActions = new HashMap<>();
-			Stream.of(CustomAction.values()).forEach(customAction -> {
-				String customCmd = collectionProperties.getProperty("album.mediaFile.customActionCommand." + customAction.name());
-				if ((customCmd != null) && (!customCmd.isEmpty())) {
-					customActions.put(customAction, customCmd);
-				}
-			});
-			MediaFileCustomActionListener.setCustomActionCommands(customActions);
 			
 		} catch (URISyntaxException e) {
 			System.out.println("URI syntax exception for property file: " + DEFAULT_PROP_FILE);
@@ -187,6 +176,7 @@ public class Control {
 		return collectionProperties.getKeysElements(osCmdPropBase).stream()
 				.map(prop -> new OsAction<Album>(collectionProperties.getProperty(osCmdPropBase + prop + ".title"),
 						collectionProperties.getProperty(osCmdPropBase + prop + ".cmd"),
+						collectionProperties.getListOfString(osCmdPropBase + prop + ".options", ","),
 						AlbumCommandParameter.valueOf(collectionProperties.getProperty(osCmdPropBase + prop + ".param"))))
 				.collect(Collectors.toList());
 	}
@@ -196,6 +186,7 @@ public class Control {
 		return collectionProperties.getKeysElements(osCmdPropBase).stream()
 				.map(prop -> new OsAction<DiscogsAlbumRelease>(collectionProperties.getProperty(osCmdPropBase + prop + ".title"),
 						collectionProperties.getProperty(osCmdPropBase + prop + ".cmd"),
+						collectionProperties.getListOfString(osCmdPropBase + prop + ".options", ","),
 						DiscogsReleaseCommandParameter.valueOf(collectionProperties.getProperty(osCmdPropBase + prop + ".param"))))
 				.collect(Collectors.toList());
 	}
@@ -205,6 +196,7 @@ public class Control {
 		return collectionProperties.getKeysElements(osCmdPropBase).stream()
 				.map(prop -> new OsAction<MediaFilePath>(collectionProperties.getProperty(osCmdPropBase + prop + ".title"),
 						collectionProperties.getProperty(osCmdPropBase + prop + ".cmd"),
+						collectionProperties.getListOfString(osCmdPropBase + prop + ".options", ","),
 						MediaFilePathCommandParameter.valueOf(collectionProperties.getProperty(osCmdPropBase + prop + ".param"))))
 				.collect(Collectors.toList());
 	}
