@@ -36,6 +36,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.fl.collectionAlbum.Control;
+import org.fl.collectionAlbum.Format.ContentNature;
 import org.fl.collectionAlbum.albums.Album;
 
 public class MediaFilePath {
@@ -60,9 +61,12 @@ public class MediaFilePath {
 	
 	private Path coverPath;
 	
-	public MediaFilePath(Path mediaFilesPath) {
+	private final ContentNature contentNature;
+	
+	public MediaFilePath(Path mediaFilesPath, ContentNature contentNature) {
 		
 		this.mediaFilesPath = mediaFilesPath;
+		this.contentNature = contentNature;
 		albumsSet = new HashSet<>();
 		if (mediaFilesPath.toString().contains("  ")) {
 			// Launching windows explorer on path with double blank does not work

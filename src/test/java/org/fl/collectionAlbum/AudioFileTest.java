@@ -1,7 +1,7 @@
 /*
  MIT License
 
-Copyright (c) 2017, 2022 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,6 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.nio.file.Paths;
 
+import org.fl.collectionAlbum.Format.ContentNature;
 import org.fl.collectionAlbum.json.AudioFileParser;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.junit.jupiter.api.Test;
@@ -103,7 +104,7 @@ class AudioFileTest {
 		
 		assertThat(losslessAudio.getMediaFilePaths()).isNull();
 		
-		losslessAudio.addMediaFilePath(new MediaFilePath(Paths.get("E:/Musique/a/John Abercrombie/M [24-96]/")));
+		losslessAudio.addMediaFilePath(new MediaFilePath(Paths.get("E:/Musique/a/John Abercrombie/M [24-96]/"), ContentNature.AUDIO));
 		
 		assertThat(losslessAudio.hasMissingOrInvalidMediaFilePath()).isFalse();
 		assertThat(losslessAudio.hasMediaFilePathNotFound()).isFalse();

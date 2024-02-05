@@ -104,7 +104,7 @@ public class MediaFileInventory {
 		String inventoryKey = getInventoryKey(albumAbsolutePath);
 		
 		if (! mediaFilePathInventory.containsKey(inventoryKey)) {
-			MediaFilePath newMediaFilePath = new MediaFilePath(albumAbsolutePath);
+			MediaFilePath newMediaFilePath = new MediaFilePath(albumAbsolutePath, contentNature);
 			mediaFilePathInventory.put(inventoryKey, newMediaFilePath);
 			mediaFilePathList.add(newMediaFilePath);
 		}
