@@ -71,7 +71,7 @@ public class MediaFilePath {
 		private final boolean isCoverFile;
 		private final boolean isInfoFile;
 		
-		public MediaFilePathMember(Path fp, Optional<String> ext, ContentNature mediaContentNature) {
+		public MediaFilePathMember(Path fp, Optional<String> ext, ContentNature mediaContentNature, Level logLevel) {
 			super();
 			filePath = fp;
 			extension = ext;
@@ -88,7 +88,7 @@ public class MediaFilePath {
 					.isPresent();
 			
 			if (!isMediaFile && !isCoverFile && !isInfoFile) {
-				mLog.warning("Unexpected file in media path : " + filePath);
+				mLog.log(logLevel, "Unexpected file in media path : " + filePath);
 			}
 		}
 
@@ -119,14 +119,14 @@ public class MediaFilePath {
 		
 		try (Stream<Path> fileStream = Files.list(mediaFilesPath)) {
 			
+			Level level = logWarnings ? Level.WARNING : Level.INFO;
 			List<MediaFilePathMember> files = fileStream
 					.filter(file -> Files.isRegularFile(file))
-					.map(f -> new MediaFilePathMember(f, getFileNameExtension(f), contentNature)).collect(Collectors.toList());
+					.map(f -> new MediaFilePathMember(f, getFileNameExtension(f), contentNature, level)).collect(Collectors.toList());
 			
 			mediaFileNumber = files.stream().filter(file -> file.isMediaFile()).count();
 			
-			Set<String> mediaExtensions = files.stream().filter(file -> file.isMediaFile()).map(f -> f.getExtension().get()).collect(Collectors.toSet());
-			Level level = logWarnings ? Level.WARNING : Level.INFO;
+			Set<String> mediaExtensions = files.stream().filter(file -> file.isMediaFile()).map(f -> f.getExtension().get()).collect(Collectors.toSet());		
 			if (mediaExtensions.isEmpty()) {
 				mLog.log(level, "No media file found in " + mediaFilesPath.toString());
 			} else if (mediaExtensions.size() == 1) {

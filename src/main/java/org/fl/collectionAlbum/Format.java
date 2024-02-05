@@ -63,7 +63,7 @@ public class Format {
 	
 	public enum ContentNature { 
 		AUDIO("audio", JsonMusicProperties.AUDIO_FILE, Set.of("flac", "mp3", "wma", "aiff", "m4a", "wav"), true), 
-		VIDEO("video", JsonMusicProperties.VIDEO_FILE, Set.of("m2ts", "mkv", "mpls", "VOB", "m4v", "mp4", "bdmv"), false);
+		VIDEO("video", JsonMusicProperties.VIDEO_FILE, Set.of("m2ts", "mkv", "mpls", "vob", "m4v", "mp4", "bdmv"), false);
 		
 		private final String nom;
 		private final String jsonProperty;

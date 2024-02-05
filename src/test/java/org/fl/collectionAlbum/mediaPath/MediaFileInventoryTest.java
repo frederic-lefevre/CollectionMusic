@@ -50,10 +50,10 @@ class MediaFileInventoryTest {
 	static void readInventory() {
 		
 		Path audioFileRootPath = Control.getMediaFileRootPath(ContentNature.AUDIO);
-		audioFileInventory = new MediaFileInventory(audioFileRootPath, ContentNature.AUDIO);
+		audioFileInventory = new MediaFileInventory(audioFileRootPath, ContentNature.AUDIO, ContentNature.AUDIO.strictCheckings());
 		
 		Path videoFileRootPath = Control.getMediaFileRootPath(ContentNature.VIDEO);
-		videoFileInventory = new MediaFileInventory(videoFileRootPath, ContentNature.VIDEO);
+		videoFileInventory = new MediaFileInventory(videoFileRootPath, ContentNature.VIDEO, ContentNature.VIDEO.strictCheckings());
 	}
 	
 	@Test
@@ -99,6 +99,7 @@ class MediaFileInventoryTest {
 				assertThat(audioPath.getPath()).hasToString("E:\\Musique\\e\\Bill Evans\\Portrait In Jazz");
 				assertThat(audioPath.hasCover()).isTrue();
 				assertThat(audioPath.getCoverPath()).isNotNull().isEqualTo(Paths.get("E:\\Musique\\e\\Bill Evans\\Portrait In Jazz\\cover.jpg"));
+				assertThat(audioPath.getMediaFileExtension()).isEqualTo("flac");
 			});
 	}
 
@@ -162,4 +163,15 @@ class MediaFileInventoryTest {
 			.matches(audioPath -> audioPath.getPath().toString().contains("A Bigger Bang"));
 	}
 
+	@Test
+	void shouldNotFindVideoPath() {
+		
+		assertThat(videoFileInventory.searchMediaFilePath(Path.of("G:\\Video\\Pratique"))).isNull();
+	}
+	
+	@Test
+	void shouldFindVideoPath() {
+		
+		assertThat(videoFileInventory.searchMediaFilePath(Path.of("G:\\Video\\Musique\\u\\u2\\The Joshua Tree (Super Deluxe Edition Bonus DVD)"))).isNotNull();
+	}
 }
