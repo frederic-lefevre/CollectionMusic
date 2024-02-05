@@ -45,6 +45,8 @@ public class MediaFilePath {
 	
 	private static final Set<String> coverExtensions = Set.of("jpg", "png");
 	
+	private static final Set<String> infoFileExtensions = Set.of("pdf","crt");
+	
 	public static final Set<String> extensionSet = new HashSet<>();
 
 	private static final String COVER_START_NAME = "cover.";
@@ -59,21 +61,80 @@ public class MediaFilePath {
 	
 	private final ContentNature contentNature;
 	
-	public MediaFilePath(Path mediaFilesPath, ContentNature contentNature) {
+	private String mediaFileExtension;
+	
+	private static class MediaFilePathMember {
+		
+		private final Path filePath;
+		private final Optional<String> extension;
+		private final boolean isMediaFile;
+		private final boolean isCoverFile;
+		private final boolean isInfoFile;
+		
+		public MediaFilePathMember(Path fp, Optional<String> ext, ContentNature mediaContentNature) {
+			super();
+			filePath = fp;
+			extension = ext;
+			
+			isMediaFile = extension.filter(e -> mediaContentNature.getFileExtensions().contains(e.toLowerCase())).isPresent();
+			
+			isCoverFile = filePath.getFileName().toString().toLowerCase().startsWith(COVER_START_NAME) &&
+					extension
+					.filter(e -> coverExtensions.contains(e.toLowerCase()))
+					.isPresent();
+			
+			isInfoFile = extension
+					.filter(e -> infoFileExtensions.contains(e.toLowerCase()))
+					.isPresent();
+			
+			if (!isMediaFile && !isCoverFile && !isInfoFile) {
+				mLog.warning("Unexpected file in media path : " + filePath);
+			}
+		}
+
+		public Path getFilePath() {
+			return filePath;
+		}
+
+		public Optional<String> getExtension() {
+			return extension;
+		}
+
+		public boolean isMediaFile() {
+			return isMediaFile;
+		}
+
+		public boolean isCoverFile() {
+			return isCoverFile;
+		}
+
+	}
+	
+	public MediaFilePath(Path mediaFilesPath, ContentNature cn) {
 		
 		this.mediaFilesPath = mediaFilesPath;
-		this.contentNature = contentNature;
+		contentNature = cn;
 		albumsSet = new HashSet<>();
-		if (mediaFilesPath.toString().contains("  ")) {
-			// Launching windows explorer on path with double blank does not work
-			mLog.warning("Double blank in path name for media file path " + mediaFilesPath);
-		}
+		mediaFileExtension = null;
 		
 		try (Stream<Path> fileStream = Files.list(mediaFilesPath)) {
 			
-			List<Path> files = fileStream.collect(Collectors.toList());
-			mediaFileNumber = files.stream().filter(file -> Files.isRegularFile(file) && isMediaFileName(file, this.contentNature)).count();
-			coverPath = files.stream().filter(path -> isCoverFilename(path.getFileName())).findFirst().orElse(null);
+			List<MediaFilePathMember> files = fileStream
+					.filter(file -> Files.isRegularFile(file))
+					.map(f -> new MediaFilePathMember(f, getFileNameExtension(f), contentNature)).collect(Collectors.toList());
+			
+			mediaFileNumber = files.stream().filter(file -> file.isMediaFile()).count();
+			
+			Set<String> mediaExtensions = files.stream().filter(file -> file.isMediaFile()).map(f -> f.getExtension().get()).collect(Collectors.toSet());
+			if (mediaExtensions.isEmpty()) {
+				mLog.warning("No media file found in " + mediaFilesPath.toString());
+			} else if (mediaExtensions.size() == 1) {
+				mediaFileExtension = mediaExtensions.iterator().next();
+			} else {
+				mLog.warning("More than 1 media file type found in " + mediaFilesPath.toString());
+			}
+			
+			coverPath = files.stream().filter(f -> f.isCoverFile()).map(f -> f.getFilePath()).findFirst().orElse(null);
 			
 		} catch (Exception e) {
 			mLog.log(Level.SEVERE, "Exception when listing files in " + mediaFilesPath, e);
@@ -124,11 +185,5 @@ public class MediaFilePath {
 		return coverPath != null;
 	}
 	
-	private boolean isCoverFilename(Path filename) {
-		
-		return filename.toString().toLowerCase().startsWith(COVER_START_NAME) &&
-				getFileNameExtension(filename)
-				.filter(extension -> coverExtensions.contains(extension.toLowerCase()))
-				.isPresent();
-	}
+
 }
