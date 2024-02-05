@@ -87,7 +87,7 @@ public class MediaFileInventory {
 		public FileVisitResult visitFile(Path file, BasicFileAttributes attr) {
     		
     		if ((Files.isRegularFile(file)) &&
-    				MediaFilePath.isMediaFileName(file)) {
+    				MediaFilePath.isMediaFileName(file, contentNature)) {
     			// It should be a media file, part of an album
     			
     			addMediaFilePathToInventory(file.getParent());

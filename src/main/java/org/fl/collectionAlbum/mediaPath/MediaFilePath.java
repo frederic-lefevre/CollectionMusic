@@ -43,10 +43,6 @@ public class MediaFilePath {
 
 	private static final Logger mLog = Control.getAlbumLog();
 	
-	private static final Set<String> mediaFileExtensions = 
-			Set.of("flac", "mp3", "wma", "aiff", "FLAC", "MP3", "m4a",
-					"m2ts", "mkv", "mpls", "VOB", "wav", "m4v", "mp4", "bdmv");
-	
 	private static final Set<String> coverExtensions = Set.of("jpg", "png");
 	
 	public static final Set<String> extensionSet = new HashSet<>();
@@ -76,7 +72,7 @@ public class MediaFilePath {
 		try (Stream<Path> fileStream = Files.list(mediaFilesPath)) {
 			
 			List<Path> files = fileStream.collect(Collectors.toList());
-			mediaFileNumber = files.stream().filter(file -> Files.isRegularFile(file) && isMediaFileName(file)).count();
+			mediaFileNumber = files.stream().filter(file -> Files.isRegularFile(file) && isMediaFileName(file, this.contentNature)).count();
 			coverPath = files.stream().filter(path -> isCoverFilename(path.getFileName())).findFirst().orElse(null);
 			
 		} catch (Exception e) {
@@ -106,10 +102,10 @@ public class MediaFilePath {
 		return mediaFileNumber;
 	}
 
-	public static boolean isMediaFileName(Path file) {
+	public static boolean isMediaFileName(Path file, ContentNature mediaContentNature) {
 
 		return getFileNameExtension(file)
-				.filter(extension -> mediaFileExtensions.contains(extension))
+				.filter(extension -> mediaContentNature.getFileExtensions().contains(extension))
 				.isPresent();
 	}
 
