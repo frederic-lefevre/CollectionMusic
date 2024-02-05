@@ -133,6 +133,7 @@ public class MediaFilePath {
 				mediaFileExtension = mediaExtensions.iterator().next();
 			} else {
 				mLog.log(level, "More than 1 media file type found in " + mediaFilesPath.toString());
+				mediaFileExtension = mediaExtensions.toString();
 			}
 			
 			coverPath = files.stream().filter(f -> f.isCoverFile()).map(f -> f.getFilePath()).findFirst().orElse(null);
