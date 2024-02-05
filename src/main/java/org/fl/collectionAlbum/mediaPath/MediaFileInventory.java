@@ -59,11 +59,13 @@ public class MediaFileInventory {
 	private final List<MediaFilePath> mediaFilePathList;
 	
 	private final ContentNature contentNature;
+	private final boolean logWarnings;
 	
-	protected MediaFileInventory(Path rootPath, ContentNature contentNature) {
+	protected MediaFileInventory(Path rootPath, ContentNature contentNature, boolean logWarnings) {
 		
 		this.rootPath = rootPath;
 		this.contentNature = contentNature;
+		this.logWarnings = logWarnings;
 		mediaFilePathInventory = new LinkedHashMap<>();
 		mediaFilePathList = new ArrayList<>();
 		
@@ -104,7 +106,7 @@ public class MediaFileInventory {
 		String inventoryKey = getInventoryKey(albumAbsolutePath);
 		
 		if (! mediaFilePathInventory.containsKey(inventoryKey)) {
-			MediaFilePath newMediaFilePath = new MediaFilePath(albumAbsolutePath, contentNature);
+			MediaFilePath newMediaFilePath = new MediaFilePath(albumAbsolutePath, contentNature, logWarnings);
 			mediaFilePathInventory.put(inventoryKey, newMediaFilePath);
 			mediaFilePathList.add(newMediaFilePath);
 		}

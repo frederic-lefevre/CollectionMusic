@@ -41,7 +41,9 @@ public class MediaFilesInventories {
    		
 		mediaFilesInventories = new LinkedHashMap<>();
 		Stream.of(ContentNature.values()).forEach(contentNature -> {
-			mediaFilesInventories.put(contentNature, new MediaFileInventory(Control.getMediaFileRootPath(contentNature), contentNature));
+			mediaFilesInventories.put(
+					contentNature, 
+					new MediaFileInventory(Control.getMediaFileRootPath(contentNature), contentNature, contentNature.strictCheckings()));
 		});
 	}
 

@@ -104,7 +104,7 @@ class AudioFileTest {
 		
 		assertThat(losslessAudio.getMediaFilePaths()).isNull();
 		
-		losslessAudio.addMediaFilePath(new MediaFilePath(Paths.get("E:/Musique/a/John Abercrombie/M [24-96]/"), ContentNature.AUDIO));
+		losslessAudio.addMediaFilePath(new MediaFilePath(Paths.get("E:/Musique/a/John Abercrombie/M [24-96]/"), ContentNature.AUDIO, true));
 		
 		assertThat(losslessAudio.hasMissingOrInvalidMediaFilePath()).isFalse();
 		assertThat(losslessAudio.hasMediaFilePathNotFound()).isFalse();

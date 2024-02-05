@@ -62,18 +62,20 @@ public class Format {
 	private final static Logger albumLog = Control.getAlbumLog();
 	
 	public enum ContentNature { 
-		AUDIO("audio", JsonMusicProperties.AUDIO_FILE, Set.of("flac", "mp3", "wma", "aiff", "m4a", "wav")), 
-		VIDEO("video", JsonMusicProperties.VIDEO_FILE, Set.of("m2ts", "mkv", "mpls", "VOB", "m4v", "mp4", "bdmv"));
+		AUDIO("audio", JsonMusicProperties.AUDIO_FILE, Set.of("flac", "mp3", "wma", "aiff", "m4a", "wav"), true), 
+		VIDEO("video", JsonMusicProperties.VIDEO_FILE, Set.of("m2ts", "mkv", "mpls", "VOB", "m4v", "mp4", "bdmv"), false);
 		
 		private final String nom;
 		private final String jsonProperty;
 		private final Set<String> fileExtensions;
+		private final boolean strictCheckings;
 		private AbstractMediaFileParser mediaFileParser;
 		
-		private ContentNature(String n, String jp, Set<String> exts) {
+		private ContentNature(String n, String jp, Set<String> exts, boolean sc) {
 			nom = n;
 			jsonProperty = jp;
 			fileExtensions = exts;
+			strictCheckings = sc;
 		}
 		
 		public String getNom() {
@@ -97,6 +99,10 @@ public class Format {
 				}
 			}
 			return mediaFileParser;
+		}
+		
+		public boolean strictCheckings() {
+			return strictCheckings;
 		}
 	}
 	

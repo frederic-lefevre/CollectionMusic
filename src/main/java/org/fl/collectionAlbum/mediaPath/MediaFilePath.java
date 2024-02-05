@@ -110,7 +110,7 @@ public class MediaFilePath {
 
 	}
 	
-	public MediaFilePath(Path mediaFilesPath, ContentNature cn) {
+	public MediaFilePath(Path mediaFilesPath, ContentNature cn, boolean logWarnings) {
 		
 		this.mediaFilesPath = mediaFilesPath;
 		contentNature = cn;
@@ -126,12 +126,13 @@ public class MediaFilePath {
 			mediaFileNumber = files.stream().filter(file -> file.isMediaFile()).count();
 			
 			Set<String> mediaExtensions = files.stream().filter(file -> file.isMediaFile()).map(f -> f.getExtension().get()).collect(Collectors.toSet());
+			Level level = logWarnings ? Level.WARNING : Level.INFO;
 			if (mediaExtensions.isEmpty()) {
-				mLog.warning("No media file found in " + mediaFilesPath.toString());
+				mLog.log(level, "No media file found in " + mediaFilesPath.toString());
 			} else if (mediaExtensions.size() == 1) {
 				mediaFileExtension = mediaExtensions.iterator().next();
 			} else {
-				mLog.warning("More than 1 media file type found in " + mediaFilesPath.toString());
+				mLog.log(level, "More than 1 media file type found in " + mediaFilesPath.toString());
 			}
 			
 			coverPath = files.stream().filter(f -> f.isCoverFile()).map(f -> f.getFilePath()).findFirst().orElse(null);
@@ -183,6 +184,10 @@ public class MediaFilePath {
 
 	public boolean hasCover() {
 		return coverPath != null;
+	}
+
+	public String getMediaFileExtension() {
+		return mediaFileExtension;
 	}
 	
 
