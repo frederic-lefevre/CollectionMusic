@@ -62,7 +62,7 @@ public class Format {
 	private final static Logger albumLog = Control.getAlbumLog();
 	
 	public enum ContentNature { 
-		AUDIO("audio", JsonMusicProperties.AUDIO_FILE, Set.of("flac", "mp3", "wma", "aiff", "FLAC", "MP3", "m4a", "wav")), 
+		AUDIO("audio", JsonMusicProperties.AUDIO_FILE, Set.of("flac", "mp3", "wma", "aiff", "m4a", "wav")), 
 		VIDEO("video", JsonMusicProperties.VIDEO_FILE, Set.of("m2ts", "mkv", "mpls", "VOB", "m4v", "mp4", "bdmv"));
 		
 		private final String nom;

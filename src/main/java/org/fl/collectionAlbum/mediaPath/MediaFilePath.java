@@ -105,7 +105,7 @@ public class MediaFilePath {
 	public static boolean isMediaFileName(Path file, ContentNature mediaContentNature) {
 
 		return getFileNameExtension(file)
-				.filter(extension -> mediaContentNature.getFileExtensions().contains(extension))
+				.filter(extension -> mediaContentNature.getFileExtensions().contains(extension.toLowerCase()))
 				.isPresent();
 	}
 
