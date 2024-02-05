@@ -50,10 +50,10 @@ class MediaFileInventoryTest {
 	static void readInventory() {
 		
 		Path audioFileRootPath = Control.getMediaFileRootPath(ContentNature.AUDIO);
-		audioFileInventory = new MediaFileInventory(audioFileRootPath);
+		audioFileInventory = new MediaFileInventory(audioFileRootPath, ContentNature.AUDIO);
 		
 		Path videoFileRootPath = Control.getMediaFileRootPath(ContentNature.VIDEO);
-		videoFileInventory = new MediaFileInventory(videoFileRootPath);
+		videoFileInventory = new MediaFileInventory(videoFileRootPath, ContentNature.VIDEO);
 	}
 	
 	@Test

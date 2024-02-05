@@ -41,6 +41,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.fl.collectionAlbum.Control;
+import org.fl.collectionAlbum.Format.ContentNature;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.Artiste;
 
@@ -57,9 +58,12 @@ public class MediaFileInventory {
 	// MediaFilePath values maintained as List to be displayed in a JTable
 	private final List<MediaFilePath> mediaFilePathList;
 	
-	protected MediaFileInventory(Path rootPath) {
+	private final ContentNature contentNature;
+	
+	protected MediaFileInventory(Path rootPath, ContentNature contentNature) {
 		
 		this.rootPath = rootPath;
+		this.contentNature = contentNature;
 		mediaFilePathInventory = new LinkedHashMap<>();
 		mediaFilePathList = new ArrayList<>();
 		
