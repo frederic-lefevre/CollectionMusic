@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +25,7 @@ SOFTWARE.
 package org.fl.collectionAlbum;
 
 import java.util.Set;
+import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
@@ -32,6 +33,8 @@ import com.google.gson.JsonObject;
 
 public abstract class AbstractAudioFile extends AbstractMediaFile {
 
+	private final static Logger albumLog = Control.getAlbumLog();
+	
 	private final AudioFileType type;
 	private final double samplingRate;
 	
@@ -42,6 +45,12 @@ public abstract class AbstractAudioFile extends AbstractMediaFile {
 		super(audioJson, source, note, mediaFilePaths);
 		this.type = type;
 		this.samplingRate = samplingRate;
+		
+		// Check type versus media file paths extensions
+		mediaFilePaths.stream()
+			.filter(mediaFilePath -> !type.getExtensions().contains(mediaFilePath.getMediaFileExtension()))
+			.forEach(mediaFilePath -> albumLog.warning("Extension mismatch for " + audioJson + "\n Waited extension " + mediaFilePath.getMediaFileExtension()));
+
 	}
 	
 	public AudioFileType getType() {

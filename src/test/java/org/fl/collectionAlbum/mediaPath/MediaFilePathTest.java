@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,6 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.nio.file.Paths;
 
+import org.fl.collectionAlbum.Format.ContentNature;
 import org.junit.jupiter.api.Test;
 
 class MediaFilePathTest {
@@ -35,14 +36,18 @@ class MediaFilePathTest {
 	@Test
 	void shouldSelectMediaFileExtension() {
 		
-		assertThat(MediaFilePath.isMediaFileName(Paths.get("toto.flac"))).isTrue();
-		assertThat(MediaFilePath.isMediaFileName(Paths.get("toto.mp3"))).isTrue();
-		assertThat(MediaFilePath.isMediaFileName(Paths.get("toto.wma"))).isTrue();
-		assertThat(MediaFilePath.isMediaFileName(Paths.get("toto.txt"))).isFalse();
-		assertThat(MediaFilePath.isMediaFileName(Paths.get("toto.jpg"))).isFalse();
-		assertThat(MediaFilePath.isMediaFileName(Paths.get("toto"))).isFalse();
-		assertThat(MediaFilePath.isMediaFileName(Paths.get(""))).isFalse();
-		assertThat(MediaFilePath.isMediaFileName(null)).isFalse();
+		assertThat(MediaFilePath.isMediaFileName(Paths.get("toto.flac"), ContentNature.AUDIO)).isTrue();
+		assertThat(MediaFilePath.isMediaFileName(Paths.get("toto.mp3"), ContentNature.AUDIO)).isTrue();
+		assertThat(MediaFilePath.isMediaFileName(Paths.get("toto.wma"), ContentNature.AUDIO)).isTrue();
+		assertThat(MediaFilePath.isMediaFileName(Paths.get("toto.txt"), ContentNature.AUDIO)).isFalse();
+		assertThat(MediaFilePath.isMediaFileName(Paths.get("toto.jpg"), ContentNature.AUDIO)).isFalse();
+		assertThat(MediaFilePath.isMediaFileName(Paths.get("toto"), ContentNature.AUDIO)).isFalse();
+		assertThat(MediaFilePath.isMediaFileName(Paths.get(""), ContentNature.AUDIO)).isFalse();
+		assertThat(MediaFilePath.isMediaFileName(null, ContentNature.AUDIO)).isFalse();
+		assertThat(MediaFilePath.isMediaFileName(Paths.get("toto.mkv"), ContentNature.AUDIO)).isFalse();
+		
+		assertThat(MediaFilePath.isMediaFileName(Paths.get("toto.flac"), ContentNature.VIDEO)).isFalse();
+		assertThat(MediaFilePath.isMediaFileName(Paths.get("toto.mkv"), ContentNature.VIDEO)).isTrue();
 		
 		MediaFilePath.extensionSet.forEach(extension -> System.out.println(extension));
 	}

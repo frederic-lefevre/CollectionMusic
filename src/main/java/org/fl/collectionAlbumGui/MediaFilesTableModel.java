@@ -39,8 +39,9 @@ public class MediaFilesTableModel extends AbstractTableModel {
 	public final static int ALBUMS_COL_IDX = 1;
 	public final static int NB_FILES_COL_IDX = 2;
 	public final static int COVER_IMAGE_COL_IDX = 3;
+	public final static int EXTENSION_COL_IDX = 4;
 	
-	private final static String[] entetes = {"Chemins", "Albums", "Nombre de medias", "Image de la pochette"};
+	private final static String[] entetes = {"Chemins", "Albums", "Nombre de medias", "Image de la pochette", "Type de media"};
 	
 	private final List<MediaFilePath> mediaFilePaths;
 	
@@ -81,6 +82,7 @@ public class MediaFilesTableModel extends AbstractTableModel {
 			case ALBUMS_COL_IDX -> mediaFilePaths.get(rowIndex);
 			case NB_FILES_COL_IDX -> mediaFilePaths.get(rowIndex).getMediaFileNumber();
 			case COVER_IMAGE_COL_IDX -> mediaFilePaths.get(rowIndex).hasCover();
+			case EXTENSION_COL_IDX -> mediaFilePaths.get(rowIndex).getMediaFileExtension();
 			default -> null;
 		};
 	}

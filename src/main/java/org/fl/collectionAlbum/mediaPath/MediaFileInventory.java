@@ -41,6 +41,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.fl.collectionAlbum.Control;
+import org.fl.collectionAlbum.Format.ContentNature;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.Artiste;
 
@@ -57,9 +58,14 @@ public class MediaFileInventory {
 	// MediaFilePath values maintained as List to be displayed in a JTable
 	private final List<MediaFilePath> mediaFilePathList;
 	
-	protected MediaFileInventory(Path rootPath) {
+	private final ContentNature contentNature;
+	private final boolean logWarnings;
+	
+	protected MediaFileInventory(Path rootPath, ContentNature contentNature, boolean logWarnings) {
 		
 		this.rootPath = rootPath;
+		this.contentNature = contentNature;
+		this.logWarnings = logWarnings;
 		mediaFilePathInventory = new LinkedHashMap<>();
 		mediaFilePathList = new ArrayList<>();
 		
@@ -83,7 +89,7 @@ public class MediaFileInventory {
 		public FileVisitResult visitFile(Path file, BasicFileAttributes attr) {
     		
     		if ((Files.isRegularFile(file)) &&
-    				MediaFilePath.isMediaFileName(file)) {
+    				MediaFilePath.isMediaFileName(file, contentNature)) {
     			// It should be a media file, part of an album
     			
     			addMediaFilePathToInventory(file.getParent());
@@ -100,7 +106,7 @@ public class MediaFileInventory {
 		String inventoryKey = getInventoryKey(albumAbsolutePath);
 		
 		if (! mediaFilePathInventory.containsKey(inventoryKey)) {
-			MediaFilePath newMediaFilePath = new MediaFilePath(albumAbsolutePath);
+			MediaFilePath newMediaFilePath = new MediaFilePath(albumAbsolutePath, contentNature, logWarnings);
 			mediaFilePathInventory.put(inventoryKey, newMediaFilePath);
 			mediaFilePathList.add(newMediaFilePath);
 		}

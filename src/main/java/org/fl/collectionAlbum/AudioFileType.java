@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,6 +24,9 @@ SOFTWARE.
 
 package org.fl.collectionAlbum;
 
+import java.util.Collections;
+import java.util.Set;
+
 public enum AudioFileType {
 	
 	FLAC {
@@ -32,12 +35,34 @@ public enum AudioFileType {
         public boolean isLossLess() {
 			return true;
 		}
+		
+		@Override
+		public Set<String> getExtensions() {
+			return Set.of("flac", "FLAC");
+		}
 	},
 	WAV {
 		
 		@Override
         public boolean isLossLess() {
 			return true;
+		}
+		
+		@Override
+		public Set<String> getExtensions() {
+			return Set.of("wav", "WAV");
+		}
+	},
+	AIFF {
+		
+		@Override
+        public boolean isLossLess() {
+			return true;
+		}
+		
+		@Override
+		public Set<String> getExtensions() {
+			return Set.of("aiff", "AIFF");
 		}
 	},
 	MP3 {
@@ -46,6 +71,11 @@ public enum AudioFileType {
         public boolean isLossLess() {
 			return false;
 		}
+		
+		@Override
+		public Set<String> getExtensions() {
+			return Set.of("mp3", "MP3");
+		}
 	},
 	M4A {
 		
@@ -53,10 +83,18 @@ public enum AudioFileType {
         public boolean isLossLess() {
 			return false;
 		}
+		
+		@Override
+		public Set<String> getExtensions() {
+			return Set.of("m4a", "M4A");
+		}
 	};
 	
 	public boolean isLossLess() {
 		return true;
 	}
 
+	public Set<String> getExtensions() {
+		return Collections.emptySet();
+	}
 }
