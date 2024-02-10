@@ -124,6 +124,10 @@ public class DiscogsAlbumReleaseMatcher {
 	private static boolean isSupportPhysiquePresent(MediaSupportCategories supportPhysique, InventoryCsvAlbum inventoryCsvAlbum) {
 		
 		return inventoryCsvAlbum.getFormats().stream()
-			.anyMatch(inventoryCsvAlbumFormat -> inventoryCsvAlbumFormat.contains(formatMatchMap.get(supportPhysique)));
+			.anyMatch(inventoryCsvAlbumFormat -> inventoryCsvAlbumFormat.contains(getFormatMatch(supportPhysique)));
+	}
+	
+	public static String getFormatMatch(MediaSupportCategories supportPhysique) {
+		return formatMatchMap.get(supportPhysique);
 	}
 }
