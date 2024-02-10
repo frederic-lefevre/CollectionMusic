@@ -41,7 +41,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.fl.collectionAlbum.Control;
-import org.fl.collectionAlbum.JsonMusicProperties;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -59,36 +58,6 @@ import com.google.gson.JsonObject;
 public class Format {
 
 	private final static Logger albumLog = Control.getAlbumLog();
-	
-	// Définition des différents supports tels que définis dans la description json des albums
-	public enum MediaSupports {
-		CD(		 MediaSupportCategories.CD,  	   JsonMusicProperties.CD,	  ContentNature.AUDIO),
-		K7(		 MediaSupportCategories.K7, 	   JsonMusicProperties.K7,	  ContentNature.AUDIO),
-		Vinyl33T(MediaSupportCategories.Vinyl33T, 	   JsonMusicProperties._33T,	  ContentNature.AUDIO),
-		Vinyl45T(MediaSupportCategories.Vinyl45T, 	   JsonMusicProperties._45T, ContentNature.AUDIO),
-		MiniCD(	 MediaSupportCategories.MiniCD,  JsonMusicProperties.MINI_CD, ContentNature.AUDIO),
-		MiniDVD( MediaSupportCategories.MiniDVD, JsonMusicProperties.MINI_DVD, ContentNature.VIDEO),
-		Mini33T( MediaSupportCategories.Mini33T, JsonMusicProperties.MINI_33T, ContentNature.AUDIO),
-		Maxi45T( MediaSupportCategories.Maxi45T, JsonMusicProperties.MAXI_45T, ContentNature.AUDIO),
-		VHS(	 MediaSupportCategories.VHS,	   JsonMusicProperties.VHS,   ContentNature.VIDEO),
-		DVD(	 MediaSupportCategories.DVD, 	   JsonMusicProperties.DVD,   ContentNature.VIDEO),
-		BluRay( MediaSupportCategories.BluRay, JsonMusicProperties.BLURAY,   ContentNature.VIDEO),
-		BluRayAudio( MediaSupportCategories.BluRay, JsonMusicProperties.BLURAY_AUDIO,   ContentNature.AUDIO);
-		
-		private final MediaSupportCategories supportPhysique ;
-		private final String jsonPropertyName ;
-		private final ContentNature contentNature;
-		
-		private MediaSupports(MediaSupportCategories sp, String jp, ContentNature cn) {
-			supportPhysique  = sp ;
-			jsonPropertyName = jp ;
-			contentNature	 = cn;
-		}
-		
-		private MediaSupportCategories getSupportPhysique() { return supportPhysique; }
-		private String getJsonPropertyName() {	return jsonPropertyName ;}
-		private ContentNature getContentNature() { return contentNature; }
-	}
 	
 	private static final String ORDRE_PREFIX = "Ordre de rangement des ";
 	
