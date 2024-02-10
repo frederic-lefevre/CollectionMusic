@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-package org.fl.collectionAlbum;
+package org.fl.collectionAlbum.format;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -40,6 +40,8 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.fl.collectionAlbum.Control;
+import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.json.AbstractMediaFileParser;
 import org.fl.collectionAlbum.json.AudioFileParser;
 import org.fl.collectionAlbum.json.VideoFileParser;

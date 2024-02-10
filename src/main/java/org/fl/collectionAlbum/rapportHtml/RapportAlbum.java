@@ -31,11 +31,11 @@ import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.stream.Stream;
 
-import org.fl.collectionAlbum.AbstractMediaFile;
-import org.fl.collectionAlbum.Format;
-import org.fl.collectionAlbum.Format.ContentNature;
-import org.fl.collectionAlbum.Format.RangementSupportPhysique;
 import org.fl.collectionAlbum.albums.Album;
+import org.fl.collectionAlbum.format.AbstractMediaFile;
+import org.fl.collectionAlbum.format.Format;
+import org.fl.collectionAlbum.format.Format.ContentNature;
+import org.fl.collectionAlbum.format.Format.RangementSupportPhysique;
 import org.fl.collectionAlbum.utils.TemporalUtils;
 
 public class RapportAlbum extends RapportMusicArtefact {

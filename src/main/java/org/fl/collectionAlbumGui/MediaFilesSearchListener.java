@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -27,8 +27,8 @@ package org.fl.collectionAlbumGui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import org.fl.collectionAlbum.Format.ContentNature;
 import org.fl.collectionAlbum.albums.Album;
+import org.fl.collectionAlbum.format.Format.ContentNature;
 
 public class MediaFilesSearchListener implements ActionListener {
 

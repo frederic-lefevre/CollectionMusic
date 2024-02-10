@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -36,8 +36,8 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.table.TableCellEditor;
 
 import org.fl.collectionAlbum.Control;
-import org.fl.collectionAlbum.Format.ContentNature;
 import org.fl.collectionAlbum.albums.Album;
+import org.fl.collectionAlbum.format.Format.ContentNature;
 
 public class MediaFilesCellEditor extends MediaFilesPane implements TableCellEditor {
 

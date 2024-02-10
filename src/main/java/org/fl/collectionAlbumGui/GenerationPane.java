@@ -34,7 +34,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.ScrollPaneConstants;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
-import org.fl.collectionAlbum.Format.ContentNature;
+import org.fl.collectionAlbum.format.Format.ContentNature;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 
 public class GenerationPane extends JPanel {

@@ -33,8 +33,8 @@ import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 
 import org.fl.collectionAlbum.Control;
-import org.fl.collectionAlbum.Format.ContentNature;
 import org.fl.collectionAlbum.albums.Album;
+import org.fl.collectionAlbum.format.Format.ContentNature;
 
 public class MediaFilesRenderer extends MediaFilesPane implements TableCellRenderer {
 

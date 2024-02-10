@@ -31,10 +31,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.fl.collectionAlbum.Format.SupportPhysique;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory.DiscogsAlbumRelease;
+import org.fl.collectionAlbum.format.Format.SupportPhysique;
 import org.fl.discogsInterface.inventory.InventoryCsvAlbum;
 
 public class DiscogsAlbumReleaseMatcher {

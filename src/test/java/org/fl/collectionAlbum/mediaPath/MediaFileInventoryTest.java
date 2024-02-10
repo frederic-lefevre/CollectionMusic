@@ -32,9 +32,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.fl.collectionAlbum.Control;
-import org.fl.collectionAlbum.Format.ContentNature;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
+import org.fl.collectionAlbum.format.Format.ContentNature;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
