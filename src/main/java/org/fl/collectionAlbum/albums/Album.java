@@ -86,7 +86,7 @@ public class Album extends MusicArtefact {
 		specificCompositionDates = (periodeComposition != periodeEnregistrement);
 		
 		rangement = Optional.ofNullable(AlbumParser.getRangementAlbum(albumJson))
-				.orElse(formatAlbum.getRangement());
+				.orElse(formatAlbum.inferRangement());
 
 		if (rangement == null) {
 			albumLog.severe("Pas de rangement trouvé pour l'album " + getTitre());

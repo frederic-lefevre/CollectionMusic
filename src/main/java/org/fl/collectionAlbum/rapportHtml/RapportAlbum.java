@@ -90,7 +90,7 @@ public class RapportAlbum extends RapportMusicArtefact {
 		
 		
 		write("  <p>Rangement: ");
-		write(Optional.ofNullable(format.getRangement()).map(RangementSupportPhysique::getDescription).orElse("NON DEFINI"));
+		write(Optional.ofNullable(format.inferRangement()).map(RangementSupportPhysique::getDescription).orElse("NON DEFINI"));
 		write("</p>\n");
 		
 		write("  <h3>Fichiers media</h3>\n");

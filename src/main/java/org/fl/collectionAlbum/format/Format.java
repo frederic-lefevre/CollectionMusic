@@ -221,10 +221,10 @@ public class Format {
 	}
 
     /**
-     * Get rangement for this format
+     * Infer rangement for this format : Depending on the physical supports included in the format, infer the rangement
      * @return Rangement (Vinyl, CD, VHS, K7)
      */
-    public RangementSupportPhysique getRangement() {
+    public RangementSupportPhysique inferRangement() {
     	RangementSupportPhysique typeRangement = null ;
 		if ((supportPhysiquePresent(SupportPhysique.Vinyl33T)) || 
 			(supportPhysiquePresent(SupportPhysique.Vinyl45T)) || 
