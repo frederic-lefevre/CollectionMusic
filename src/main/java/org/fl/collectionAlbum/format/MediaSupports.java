@@ -34,6 +34,7 @@ public enum MediaSupports {
 	CD(		 MediaSupportCategories.CD,  	   JsonMusicProperties.CD,	  Set.of(ContentNature.AUDIO)),
 	K7(		 MediaSupportCategories.K7, 	   JsonMusicProperties.K7,	  Set.of(ContentNature.AUDIO)),
 	Vinyl33T(MediaSupportCategories.VinylLP, 	   JsonMusicProperties._33T,	  Set.of(ContentNature.AUDIO)),
+	Vinyl45TLP(MediaSupportCategories.VinylLP, 	   JsonMusicProperties._45T_LP,	  Set.of(ContentNature.AUDIO)),
 	Vinyl45T(MediaSupportCategories.MiniVinyl, 	   JsonMusicProperties._45T, Set.of(ContentNature.AUDIO)),
 	MiniCD(	 MediaSupportCategories.MiniCD,  JsonMusicProperties.MINI_CD, Set.of(ContentNature.AUDIO)),
 	MiniDVD( MediaSupportCategories.MiniDVD, JsonMusicProperties.MINI_DVD, Set.of(ContentNature.VIDEO)),

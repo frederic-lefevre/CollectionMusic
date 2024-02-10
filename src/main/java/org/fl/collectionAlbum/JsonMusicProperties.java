@@ -36,6 +36,7 @@ public class JsonMusicProperties {
 	public final static String K7 			  = "k7" ;
 	public final static String _33T 		  = "33t" ;
 	public final static String _45T 		  = "45t" ;
+	public final static String _45T_LP 		  = "45tLP" ;
 	public final static String MINI_33T		  = "mini33t" ;
 	public final static String MAXI_45T		  = "maxi45t" ;
 	public final static String VHS			  = "vhs" ;
