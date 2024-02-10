@@ -60,7 +60,7 @@ public class Format {
 
 	private final static Logger albumLog = Control.getAlbumLog();
 	
-	// Définition des différents supports physiques
+	// Définition des différents supports physiques tels qu'affichés dans les récapitulatifs des albums et des artistes
 	public enum SupportPhysique {
 		CD(		 "CD",  	 "xnbcd", 		 1),
 		K7(		 "K7",  	 "xnbk7", 		 1),
@@ -97,7 +97,7 @@ public class Format {
 		}
 	}
 	
-	// Définition des différents support
+	// Définition des différents supports tels que définis dans la description json des albums
 	private enum Support {
 		CD(		 SupportPhysique.CD,  	   JsonMusicProperties.CD,	  ContentNature.AUDIO),
 		K7(		 SupportPhysique.K7, 	   JsonMusicProperties.K7,	  ContentNature.AUDIO),
