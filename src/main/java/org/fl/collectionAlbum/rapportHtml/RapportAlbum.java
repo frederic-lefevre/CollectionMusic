@@ -33,8 +33,8 @@ import java.util.stream.Stream;
 
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.format.AbstractMediaFile;
+import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.format.Format;
-import org.fl.collectionAlbum.format.Format.ContentNature;
 import org.fl.collectionAlbum.format.Format.RangementSupportPhysique;
 import org.fl.collectionAlbum.utils.TemporalUtils;
 

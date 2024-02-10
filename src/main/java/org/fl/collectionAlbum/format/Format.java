@@ -42,9 +42,6 @@ import java.util.stream.Stream;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.JsonMusicProperties;
-import org.fl.collectionAlbum.json.AbstractMediaFileParser;
-import org.fl.collectionAlbum.json.AudioFileParser;
-import org.fl.collectionAlbum.json.VideoFileParser;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -62,51 +59,6 @@ import com.google.gson.JsonObject;
 public class Format {
 
 	private final static Logger albumLog = Control.getAlbumLog();
-	
-	public enum ContentNature { 
-		AUDIO("audio", JsonMusicProperties.AUDIO_FILE, Set.of("flac", "mp3", "wma", "aiff", "m4a", "wav"), true), 
-		VIDEO("video", JsonMusicProperties.VIDEO_FILE, Set.of("m2ts", "mkv", "mpls", "vob", "m4v", "mp4", "bdmv"), false);
-		
-		private final String nom;
-		private final String jsonProperty;
-		private final Set<String> fileExtensions;
-		private final boolean strictCheckings;
-		private AbstractMediaFileParser mediaFileParser;
-		
-		private ContentNature(String n, String jp, Set<String> exts, boolean sc) {
-			nom = n;
-			jsonProperty = jp;
-			fileExtensions = exts;
-			strictCheckings = sc;
-		}
-		
-		public String getNom() {
-			return nom;
-		}
-		
-		public String getJsonProperty() {
-			return jsonProperty;
-		}
-
-		public Set<String> getFileExtensions() {
-			return fileExtensions;
-		}
-		
-		public AbstractMediaFileParser getMediaFileParser() {
-			if (mediaFileParser == null) {
-				if (this == AUDIO) {
-					mediaFileParser = new AudioFileParser();
-				} else if (this == VIDEO) {
-					mediaFileParser = new VideoFileParser();
-				}
-			}
-			return mediaFileParser;
-		}
-		
-		public boolean strictCheckings() {
-			return strictCheckings;
-		}
-	}
 	
 	// Définition des différents supports physiques
 	public enum SupportPhysique {

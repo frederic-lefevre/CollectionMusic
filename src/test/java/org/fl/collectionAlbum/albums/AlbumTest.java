@@ -44,8 +44,8 @@ import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.MatchResultType
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.ReleaseMatchResult;
 import org.fl.collectionAlbum.format.AbstractAudioFile;
 import org.fl.collectionAlbum.format.AbstractMediaFile;
+import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.format.LosslessAudioFile;
-import org.fl.collectionAlbum.format.Format.ContentNature;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.fl.discogsInterface.inventory.InventoryCsvAlbum;
 import org.fl.util.json.JsonUtils;

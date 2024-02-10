@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.format.AbstractMediaFile;
-import org.fl.collectionAlbum.format.Format.ContentNature;
+import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 

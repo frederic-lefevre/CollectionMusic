@@ -28,7 +28,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.nio.file.Paths;
 
-import org.fl.collectionAlbum.format.Format.ContentNature;
 import org.fl.collectionAlbum.json.AudioFileParser;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.junit.jupiter.api.Test;

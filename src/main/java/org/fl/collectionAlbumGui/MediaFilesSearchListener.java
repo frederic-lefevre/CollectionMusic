@@ -28,7 +28,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import org.fl.collectionAlbum.albums.Album;
-import org.fl.collectionAlbum.format.Format.ContentNature;
+import org.fl.collectionAlbum.format.ContentNature;
 
 public class MediaFilesSearchListener implements ActionListener {
 

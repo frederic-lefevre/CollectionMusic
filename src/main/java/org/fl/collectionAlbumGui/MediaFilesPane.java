@@ -39,7 +39,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import org.fl.collectionAlbum.albums.Album;
-import org.fl.collectionAlbum.format.Format.ContentNature;
+import org.fl.collectionAlbum.format.ContentNature;
 
 public class MediaFilesPane extends JPanel {
 

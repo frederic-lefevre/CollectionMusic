@@ -33,9 +33,9 @@ import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.format.AbstractAudioFile;
 import org.fl.collectionAlbum.format.AudioFileType;
+import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.format.LosslessAudioFile;
 import org.fl.collectionAlbum.format.LossyAudioFile;
-import org.fl.collectionAlbum.format.Format.ContentNature;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
 import com.google.gson.JsonElement;

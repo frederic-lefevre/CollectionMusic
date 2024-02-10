@@ -37,7 +37,7 @@ import javax.swing.table.TableCellEditor;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
-import org.fl.collectionAlbum.format.Format.ContentNature;
+import org.fl.collectionAlbum.format.ContentNature;
 
 public class MediaFilesCellEditor extends MediaFilesPane implements TableCellEditor {
 

@@ -37,7 +37,7 @@ import java.util.stream.Stream;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
-import org.fl.collectionAlbum.format.Format.ContentNature;
+import org.fl.collectionAlbum.format.ContentNature;
 
 public class MediaFilePath {
 

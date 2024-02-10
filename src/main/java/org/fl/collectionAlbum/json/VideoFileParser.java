@@ -31,9 +31,9 @@ import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.JsonMusicProperties;
+import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.format.VideoFile;
 import org.fl.collectionAlbum.format.VideoFileType;
-import org.fl.collectionAlbum.format.Format.ContentNature;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
 import com.google.gson.JsonElement;

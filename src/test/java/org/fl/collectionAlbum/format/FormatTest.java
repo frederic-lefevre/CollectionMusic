@@ -29,7 +29,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.util.List;
 
 import org.assertj.core.api.InstanceOfAssertFactories;
-import org.fl.collectionAlbum.format.Format.ContentNature;
 import org.junit.jupiter.api.Test;
 
 import com.google.gson.JsonObject;
