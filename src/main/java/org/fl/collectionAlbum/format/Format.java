@@ -121,6 +121,10 @@ public class Format {
 						tableFormat.put(support, Double.valueOf(elemFormat.getAsDouble()));
 					}
 				}
+				if (tableFormat.isEmpty()) {
+					hasError = true;
+					albumLog.warning("Pas de support media connu pour le format " + formatJson.toString());
+				}
 	
 				Stream.of(ContentNature.values()).forEach(contentNature -> {
 					
@@ -275,7 +279,7 @@ public class Format {
 	
 	public boolean hasContentNature(ContentNature cn) {
 		return Arrays.asList(MediaSupports.values()).stream()
-				.filter(s -> s.getContentNature().equals(cn))
+				.filter(s -> s.getContentNatures().contains(cn))
 				.map(s -> tableFormat.get(s))
 				.filter(Objects::nonNull)
 				.anyMatch(p -> p > 0);

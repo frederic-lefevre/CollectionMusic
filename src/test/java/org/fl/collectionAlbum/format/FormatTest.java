@@ -57,7 +57,6 @@ class FormatTest {
 		assertThat(format1.getPoids()).isEqualTo(3);
 		assertThat(format1.hasMediaFiles(ContentNature.AUDIO)).isFalse();
 		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isFalse();
-
 	}
 	
 	@Test
@@ -73,6 +72,25 @@ class FormatTest {
 		assertThat(format1.getAllMediaFiles()).isEmpty();
 		assertThat(format1.hasMediaFiles(ContentNature.AUDIO)).isFalse();
 		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isFalse();
+		assertThat(format1.hasContentNature(ContentNature.AUDIO)).isTrue();
+		assertThat(format1.hasContentNature(ContentNature.VIDEO)).isFalse();
+	}
+	
+	@Test
+	void test3b() {
+		
+		String formatStr1 = "{\"cd\": 2 , \"dvd\" : 1 }" ;
+		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
+		Format format1 = new Format(jf1) ;
+		
+		assertThat(format1.getPoids()).isEqualTo(3);
+		assertThat(format1.getMediaFiles(ContentNature.AUDIO)).isEmpty();
+		assertThat(format1.getMediaFiles(ContentNature.VIDEO)).isEmpty();
+		assertThat(format1.getAllMediaFiles()).isEmpty();
+		assertThat(format1.hasMediaFiles(ContentNature.AUDIO)).isFalse();
+		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isFalse();
+		assertThat(format1.hasContentNature(ContentNature.AUDIO)).isTrue();
+		assertThat(format1.hasContentNature(ContentNature.VIDEO)).isTrue();
 	}
 	
 	@Test
@@ -101,6 +119,8 @@ class FormatTest {
 		assertThat(format3.hasMediaFiles(ContentNature.VIDEO)).isFalse();
 		assertThat(format3.getMediaFiles(ContentNature.VIDEO)).isNull();
 		assertThat(format3.getAllMediaFiles()).isEmpty();
+		assertThat(format3.hasContentNature(ContentNature.AUDIO)).isTrue();
+		assertThat(format3.hasContentNature(ContentNature.VIDEO)).isFalse();
 	}
 	
 	@Test
@@ -333,5 +353,48 @@ class FormatTest {
 			});
 		
 		assertThat(format1.getAllMediaFiles()).hasSameElementsAs(format1.getMediaFiles(ContentNature.VIDEO));
+		
+		assertThat(format1.hasContentNature(ContentNature.VIDEO)).isTrue();
+		assertThat(format1.hasContentNature(ContentNature.AUDIO)).isFalse();
+	}
+	
+	@Test
+	void test10() {
+		
+		String formatStr1 = "{\"bluray\": 3 }" ;
+		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
+		Format format1 = new Format(jf1) ;
+
+		assertThat(format1.getPoids()).isZero();
+		assertThat(format1.hasMediaFiles(ContentNature.AUDIO)).isFalse();
+		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isFalse();
+	}
+	
+	@Test
+	void test11() {
+		
+		String formatStr1 = "{\"blueray\": 3 }" ;
+		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
+		Format format1 = new Format(jf1) ;
+
+		assertThat(format1.getPoids()).isEqualTo(3);
+		assertThat(format1.hasMediaFiles(ContentNature.AUDIO)).isFalse();
+		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isFalse();
+		assertThat(format1.hasContentNature(ContentNature.AUDIO)).isFalse();
+		assertThat(format1.hasContentNature(ContentNature.VIDEO)).isTrue();
+	}
+	
+	@Test
+	void test12() {
+		
+		String formatStr1 = "{\"bluerayAudio\": 3 }" ;
+		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
+		Format format1 = new Format(jf1) ;
+
+		assertThat(format1.getPoids()).isEqualTo(3);
+		assertThat(format1.hasMediaFiles(ContentNature.AUDIO)).isFalse();
+		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isFalse();
+		assertThat(format1.hasContentNature(ContentNature.AUDIO)).isTrue();
+		assertThat(format1.hasContentNature(ContentNature.VIDEO)).isFalse();
 	}
 }

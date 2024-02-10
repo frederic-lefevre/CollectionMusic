@@ -24,29 +24,31 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.format;
 
+import java.util.Set;
+
 import org.fl.collectionAlbum.JsonMusicProperties;
 
 // Définition des différents supports tels que définis dans la description json des albums
 public enum MediaSupports {
 	
-	CD(		 MediaSupportCategories.CD,  	   JsonMusicProperties.CD,	  ContentNature.AUDIO),
-	K7(		 MediaSupportCategories.K7, 	   JsonMusicProperties.K7,	  ContentNature.AUDIO),
-	Vinyl33T(MediaSupportCategories.Vinyl33T, 	   JsonMusicProperties._33T,	  ContentNature.AUDIO),
-	Vinyl45T(MediaSupportCategories.Vinyl45T, 	   JsonMusicProperties._45T, ContentNature.AUDIO),
-	MiniCD(	 MediaSupportCategories.MiniCD,  JsonMusicProperties.MINI_CD, ContentNature.AUDIO),
-	MiniDVD( MediaSupportCategories.MiniDVD, JsonMusicProperties.MINI_DVD, ContentNature.VIDEO),
-	Mini33T( MediaSupportCategories.Mini33T, JsonMusicProperties.MINI_33T, ContentNature.AUDIO),
-	Maxi45T( MediaSupportCategories.Maxi45T, JsonMusicProperties.MAXI_45T, ContentNature.AUDIO),
-	VHS(	 MediaSupportCategories.VHS,	   JsonMusicProperties.VHS,   ContentNature.VIDEO),
-	DVD(	 MediaSupportCategories.DVD, 	   JsonMusicProperties.DVD,   ContentNature.VIDEO),
-	BluRay( MediaSupportCategories.BluRay, JsonMusicProperties.BLURAY,   ContentNature.VIDEO),
-	BluRayAudio( MediaSupportCategories.BluRay, JsonMusicProperties.BLURAY_AUDIO,   ContentNature.AUDIO);
+	CD(		 MediaSupportCategories.CD,  	   JsonMusicProperties.CD,	  Set.of(ContentNature.AUDIO)),
+	K7(		 MediaSupportCategories.K7, 	   JsonMusicProperties.K7,	  Set.of(ContentNature.AUDIO)),
+	Vinyl33T(MediaSupportCategories.Vinyl33T, 	   JsonMusicProperties._33T,	  Set.of(ContentNature.AUDIO)),
+	Vinyl45T(MediaSupportCategories.Vinyl45T, 	   JsonMusicProperties._45T, Set.of(ContentNature.AUDIO)),
+	MiniCD(	 MediaSupportCategories.MiniCD,  JsonMusicProperties.MINI_CD, Set.of(ContentNature.AUDIO)),
+	MiniDVD( MediaSupportCategories.MiniDVD, JsonMusicProperties.MINI_DVD, Set.of(ContentNature.VIDEO)),
+	Mini33T( MediaSupportCategories.Mini33T, JsonMusicProperties.MINI_33T, Set.of(ContentNature.AUDIO)),
+	Maxi45T( MediaSupportCategories.Maxi45T, JsonMusicProperties.MAXI_45T, Set.of(ContentNature.AUDIO)),
+	VHS(	 MediaSupportCategories.VHS,	   JsonMusicProperties.VHS,   Set.of(ContentNature.VIDEO)),
+	DVD(	 MediaSupportCategories.DVD, 	   JsonMusicProperties.DVD,   Set.of(ContentNature.VIDEO)),
+	BluRay( MediaSupportCategories.BluRay, JsonMusicProperties.BLURAY,   Set.of(ContentNature.VIDEO)),
+	BluRayAudio( MediaSupportCategories.BluRay, JsonMusicProperties.BLURAY_AUDIO,   Set.of(ContentNature.AUDIO));
 	
 	private final MediaSupportCategories supportPhysique ;
 	private final String jsonPropertyName ;
-	private final ContentNature contentNature;
+	private final Set<ContentNature> contentNature;
 	
-	private MediaSupports(MediaSupportCategories sp, String jp, ContentNature cn) {
+	private MediaSupports(MediaSupportCategories sp, String jp, Set<ContentNature> cn) {
 		supportPhysique  = sp ;
 		jsonPropertyName = jp ;
 		contentNature	 = cn;
@@ -60,7 +62,7 @@ public enum MediaSupports {
 		return jsonPropertyName;
 	}
 
-	ContentNature getContentNature() {
+	Set<ContentNature> getContentNatures() {
 		return contentNature;
 	}
 }
