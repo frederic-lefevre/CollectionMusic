@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -42,6 +42,7 @@ public class JsonMusicProperties {
 	public final static String DVD			  = "dvd" ;
 	public final static String BLURAY		  = "blueray" ;
 	public final static String BLURAY_AUDIO   = "bluerayAudio" ;
+	public final static String BLURAY_MIXED   = "bluerayMixed" ;
 	public final static String NOM			  = "nom" ;
 	public final static String PRENOM		  = "prenom" ;
 	public final static String NAISSANCE	  = "naissance" ;

@@ -397,4 +397,18 @@ class FormatTest {
 		assertThat(format1.hasContentNature(ContentNature.AUDIO)).isTrue();
 		assertThat(format1.hasContentNature(ContentNature.VIDEO)).isFalse();
 	}
+	
+	@Test
+	void test13() {
+		
+		String formatStr1 = "{\"bluerayMixed\": 3 }" ;
+		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
+		Format format1 = new Format(jf1) ;
+
+		assertThat(format1.getPoids()).isEqualTo(3);
+		assertThat(format1.hasMediaFiles(ContentNature.AUDIO)).isFalse();
+		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isFalse();
+		assertThat(format1.hasContentNature(ContentNature.AUDIO)).isTrue();
+		assertThat(format1.hasContentNature(ContentNature.VIDEO)).isTrue();
+	}
 }

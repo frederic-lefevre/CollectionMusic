@@ -42,7 +42,8 @@ public enum MediaSupports {
 	VHS(	 MediaSupportCategories.VHS,	   JsonMusicProperties.VHS,   Set.of(ContentNature.VIDEO)),
 	DVD(	 MediaSupportCategories.DVD, 	   JsonMusicProperties.DVD,   Set.of(ContentNature.VIDEO)),
 	BluRay( MediaSupportCategories.BluRay, JsonMusicProperties.BLURAY,   Set.of(ContentNature.VIDEO)),
-	BluRayAudio( MediaSupportCategories.BluRay, JsonMusicProperties.BLURAY_AUDIO,   Set.of(ContentNature.AUDIO));
+	BluRayAudio( MediaSupportCategories.BluRay, JsonMusicProperties.BLURAY_AUDIO,   Set.of(ContentNature.AUDIO)),
+	BluRayMixed( MediaSupportCategories.BluRay, JsonMusicProperties.BLURAY_MIXED,   Set.of(ContentNature.AUDIO, ContentNature.VIDEO));
 	
 	private final MediaSupportCategories supportPhysique ;
 	private final String jsonPropertyName ;
