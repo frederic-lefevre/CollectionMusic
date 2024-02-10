@@ -60,69 +60,32 @@ public class Format {
 
 	private final static Logger albumLog = Control.getAlbumLog();
 	
-	// Définition des différents supports physiques tels qu'affichés dans les récapitulatifs des albums et des artistes
-	public enum SupportPhysique {
-		CD(		 "CD",  	 "xnbcd", 		 1),
-		K7(		 "K7",  	 "xnbk7", 		 1),
-		Vinyl33T("33T", 	 "xnb33T", 	 	 1),
-		Vinyl45T("45T", 	 "xnb45T",     0.5),
-		MiniCD(	 "Mini CD",  "xnbminicd",  0.5),
-		MiniDVD( "Mini DVD", "xnbminidvd", 0.5),
-		Mini33T( "Mini 33T", "xnbmini33T", 0.5),
-		Maxi45T( "Maxi 45T", "xnbmaxi45T", 0.5),
-		VHS(	 "VHS",		 "xnbvhs", 	 	 1),
-		DVD(	 "DVD",		 "xnbdvd", 	 	 1),
-		BluRay(  "Blu- ray", "xnbblueray",   1);
-		
-		private final String nom ;
-		private final String cssClass ;
-		private final double poidsSupport ;
-		
-		private SupportPhysique(String n, String cssCl, double ps) {
-			nom 	 	 	 = n ;
-			cssClass 	 	 = cssCl ;
-			poidsSupport 	 = ps ;
-		}
-		
-		public String getNom() {
-			return nom;
-		}
-		
-		private String getCssClass() {
-			return cssClass;
-		}
-
-		private double getPoidsSupport() {
-			return poidsSupport;
-		}
-	}
-	
 	// Définition des différents supports tels que définis dans la description json des albums
-	private enum Support {
-		CD(		 SupportPhysique.CD,  	   JsonMusicProperties.CD,	  ContentNature.AUDIO),
-		K7(		 SupportPhysique.K7, 	   JsonMusicProperties.K7,	  ContentNature.AUDIO),
-		Vinyl33T(SupportPhysique.Vinyl33T, 	   JsonMusicProperties._33T,	  ContentNature.AUDIO),
-		Vinyl45T(SupportPhysique.Vinyl45T, 	   JsonMusicProperties._45T, ContentNature.AUDIO),
-		MiniCD(	 SupportPhysique.MiniCD,  JsonMusicProperties.MINI_CD, ContentNature.AUDIO),
-		MiniDVD( SupportPhysique.MiniDVD, JsonMusicProperties.MINI_DVD, ContentNature.VIDEO),
-		Mini33T( SupportPhysique.Mini33T, JsonMusicProperties.MINI_33T, ContentNature.AUDIO),
-		Maxi45T( SupportPhysique.Maxi45T, JsonMusicProperties.MAXI_45T, ContentNature.AUDIO),
-		VHS(	 SupportPhysique.VHS,	   JsonMusicProperties.VHS,   ContentNature.VIDEO),
-		DVD(	 SupportPhysique.DVD, 	   JsonMusicProperties.DVD,   ContentNature.VIDEO),
-		BluRay( SupportPhysique.BluRay, JsonMusicProperties.BLURAY,   ContentNature.VIDEO),
-		BluRayAudio( SupportPhysique.BluRay, JsonMusicProperties.BLURAY_AUDIO,   ContentNature.AUDIO);
+	public enum MediaSupports {
+		CD(		 MediaSupportCategories.CD,  	   JsonMusicProperties.CD,	  ContentNature.AUDIO),
+		K7(		 MediaSupportCategories.K7, 	   JsonMusicProperties.K7,	  ContentNature.AUDIO),
+		Vinyl33T(MediaSupportCategories.Vinyl33T, 	   JsonMusicProperties._33T,	  ContentNature.AUDIO),
+		Vinyl45T(MediaSupportCategories.Vinyl45T, 	   JsonMusicProperties._45T, ContentNature.AUDIO),
+		MiniCD(	 MediaSupportCategories.MiniCD,  JsonMusicProperties.MINI_CD, ContentNature.AUDIO),
+		MiniDVD( MediaSupportCategories.MiniDVD, JsonMusicProperties.MINI_DVD, ContentNature.VIDEO),
+		Mini33T( MediaSupportCategories.Mini33T, JsonMusicProperties.MINI_33T, ContentNature.AUDIO),
+		Maxi45T( MediaSupportCategories.Maxi45T, JsonMusicProperties.MAXI_45T, ContentNature.AUDIO),
+		VHS(	 MediaSupportCategories.VHS,	   JsonMusicProperties.VHS,   ContentNature.VIDEO),
+		DVD(	 MediaSupportCategories.DVD, 	   JsonMusicProperties.DVD,   ContentNature.VIDEO),
+		BluRay( MediaSupportCategories.BluRay, JsonMusicProperties.BLURAY,   ContentNature.VIDEO),
+		BluRayAudio( MediaSupportCategories.BluRay, JsonMusicProperties.BLURAY_AUDIO,   ContentNature.AUDIO);
 		
-		private final SupportPhysique supportPhysique ;
+		private final MediaSupportCategories supportPhysique ;
 		private final String jsonPropertyName ;
 		private final ContentNature contentNature;
 		
-		private Support(SupportPhysique sp, String jp, ContentNature cn) {
+		private MediaSupports(MediaSupportCategories sp, String jp, ContentNature cn) {
 			supportPhysique  = sp ;
 			jsonPropertyName = jp ;
 			contentNature	 = cn;
 		}
 		
-		private SupportPhysique getSupportPhysique() { return supportPhysique; }
+		private MediaSupportCategories getSupportPhysique() { return supportPhysique; }
 		private String getJsonPropertyName() {	return jsonPropertyName ;}
 		private ContentNature getContentNature() { return contentNature; }
 	}
@@ -167,7 +130,7 @@ public class Format {
 	}
 	
 	// Supports de l'album et leur nombre correspondant
-	private final EnumMap<Support, Double> tableFormat ;
+	private final EnumMap<MediaSupports, Double> tableFormat ;
 	
 	private Map<ContentNature, List<AbstractMediaFile>> mediaFiles;
 	
@@ -176,14 +139,14 @@ public class Format {
 	// Create a format
 	public Format(JsonObject formatJson) {
 		
-		tableFormat = new EnumMap<Support, Double>(Support.class);
+		tableFormat = new EnumMap<MediaSupports, Double>(MediaSupports.class);
 		
 		mediaFiles = new HashMap<>();
 		if (formatJson != null) {
 			try {
 					
 				hasError = false;
-				for (Support support : Support.values()) {
+				for (MediaSupports support : MediaSupports.values()) {
 					JsonElement elemFormat = formatJson.get(support.getJsonPropertyName());
 					if (elemFormat != null) {
 						tableFormat.put(support, Double.valueOf(elemFormat.getAsDouble()));
@@ -226,23 +189,23 @@ public class Format {
      */
     public RangementSupportPhysique inferRangement() {
     	RangementSupportPhysique typeRangement = null ;
-		if ((supportPhysiquePresent(SupportPhysique.Vinyl33T)) || 
-			(supportPhysiquePresent(SupportPhysique.Vinyl45T)) || 
-			(supportPhysiquePresent(SupportPhysique.Mini33T) ) || 
-			(supportPhysiquePresent(SupportPhysique.Maxi45T) )) {
+		if ((supportPhysiquePresent(MediaSupportCategories.Vinyl33T)) || 
+			(supportPhysiquePresent(MediaSupportCategories.Vinyl45T)) || 
+			(supportPhysiquePresent(MediaSupportCategories.Mini33T) ) || 
+			(supportPhysiquePresent(MediaSupportCategories.Maxi45T) )) {
 		// à ranger dans la collection Vinyl
 			typeRangement = RangementSupportPhysique.RangementVinyl ;
-		} else if ((supportPhysiquePresent(SupportPhysique.CD)) || 
-					(supportPhysiquePresent(SupportPhysique.MiniCD)) ||
-					(supportPhysiquePresent(SupportPhysique.MiniDVD)) ) {
+		} else if ((supportPhysiquePresent(MediaSupportCategories.CD)) || 
+					(supportPhysiquePresent(MediaSupportCategories.MiniCD)) ||
+					(supportPhysiquePresent(MediaSupportCategories.MiniDVD)) ) {
 		// à ranger dans la collection CD
 			typeRangement = RangementSupportPhysique.RangementCD ;
-		} else if (supportPhysiquePresent(SupportPhysique.K7)) {
+		} else if (supportPhysiquePresent(MediaSupportCategories.K7)) {
 		// à ranger dans la collection K7
 			typeRangement = RangementSupportPhysique.RangementK7 ;
-		} else if ((supportPhysiquePresent(SupportPhysique.VHS)) || 
-					(supportPhysiquePresent(SupportPhysique.DVD)) || 
-					(supportPhysiquePresent(SupportPhysique.BluRay))) {
+		} else if ((supportPhysiquePresent(MediaSupportCategories.VHS)) || 
+					(supportPhysiquePresent(MediaSupportCategories.DVD)) || 
+					(supportPhysiquePresent(MediaSupportCategories.BluRay))) {
 		// à ranger dans la collection VHS
 			typeRangement = RangementSupportPhysique.RangementVHS ;
 		} else {
@@ -251,14 +214,14 @@ public class Format {
 		return typeRangement ;
 	}
 
-    public Set<SupportPhysique> getSupportsPhysiques() {
+    public Set<MediaSupportCategories> getSupportsPhysiques() {
     	
     	return tableFormat.keySet().stream()
-    			.map(Support::getSupportPhysique)
+    			.map(MediaSupports::getSupportPhysique)
     			.collect(Collectors.toSet());
     }
     
-	private double getNb(Support support) {
+	private double getNb(MediaSupports support) {
 		Double nb = tableFormat.get(support) ;
 		if (nb == null) {
 			return 0 ;
@@ -267,16 +230,16 @@ public class Format {
 		}
 	}
 	
-	private double getNbSupportPhysique(SupportPhysique supportPhysique) {
+	private double getNbSupportPhysique(MediaSupportCategories supportPhysique) {
 		return tableFormat.entrySet().stream()
 				.filter(entry -> entry.getKey().getSupportPhysique().equals(supportPhysique))
 				.mapToDouble(entry -> entry.getValue())			
 				.sum();
 	}
 	
-	private boolean supportPhysiquePresent(SupportPhysique supportPhysique) {
+	private boolean supportPhysiquePresent(MediaSupportCategories supportPhysique) {
 		return tableFormat.keySet().stream()
-			.map(Support::getSupportPhysique)
+			.map(MediaSupports::getSupportPhysique)
 			.filter(sp -> sp.equals(supportPhysique))
 			.findFirst()
 			.isPresent();
@@ -342,7 +305,7 @@ public class Format {
 	}
 	
 	public boolean hasContentNature(ContentNature cn) {
-		return Arrays.asList(Support.values()).stream()
+		return Arrays.asList(MediaSupports.values()).stream()
 				.filter(s -> s.getContentNature().equals(cn))
 				.map(s -> tableFormat.get(s))
 				.filter(Objects::nonNull)
@@ -358,7 +321,7 @@ public class Format {
 	 * @param addFormat
 	 */
 	public void incrementFormat(Format addFormat) {
-		for (Support support : Support.values()) {
+		for (MediaSupports support : MediaSupports.values()) {
 			tableFormat.put(support, Double.valueOf(this.getNb(support) + addFormat.getNb(support))) ;
 		}
 	}
@@ -383,7 +346,7 @@ public class Format {
 		if (cssTotal != null) {
 			rapport.append(F_ROW1).append(rows).append(F_ROW3).append(cssTotal).append(F_ROW2) ;
 		}
-		for (SupportPhysique sPhys : SupportPhysique.values()) {
+		for (MediaSupportCategories sPhys : MediaSupportCategories.values()) {
 			rapport.append(F_ROW1).append(rows).append(F_ROW3).append(sPhys.getCssClass()).append(F_ROW4).append(sPhys.getNom()).append(F_ROW5) ;
 		}
 		
@@ -395,7 +358,7 @@ public class Format {
 	public String csvEnteteAudioFormat(String csvSeparator) {
 		
 		StringBuilder csvRapport = new StringBuilder();
-		for (SupportPhysique sPhys : SupportPhysique.values()) {
+		for (MediaSupportCategories sPhys : MediaSupportCategories.values()) {
 			csvRapport.append(sPhys.getNom()).append(csvSeparator);
 		}
 		csvRapport.append(LosslessAudioFile.getAudioFilePropertyTitles(csvSeparator)).append(csvSeparator);
@@ -407,7 +370,7 @@ public class Format {
 		if (cssTotal != null) {
 			rapport.append(F_ROW0).append(cssTotal).append(F_ROW6).append(cssTotal).append(F_ROW4).append(displayPoids(getPoids())).append(F_ROW7) ;
 		}
-		for (SupportPhysique sPhys : SupportPhysique.values()) {
+		for (MediaSupportCategories sPhys : MediaSupportCategories.values()) {
 			rapport.append(F_ROW0).append(sPhys.getCssClass()).append(F_ROW4).append(displayPoids(getNbSupportPhysique(sPhys))).append(F_ROW5) ;			 
 		}
 
