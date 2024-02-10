@@ -42,12 +42,10 @@ public class DiscogsAlbumReleaseMatcher {
 	private static final EnumMap<MediaSupportCategories,String> formatMatchMap = new EnumMap<>(Map.ofEntries( 
 			new AbstractMap.SimpleEntry<MediaSupportCategories,String>(MediaSupportCategories.CD, "CD"), 
 			new AbstractMap.SimpleEntry<MediaSupportCategories,String>(MediaSupportCategories.K7, "Cass"),
-			new AbstractMap.SimpleEntry<MediaSupportCategories,String>(MediaSupportCategories.Vinyl33T, "LP"),
-			new AbstractMap.SimpleEntry<MediaSupportCategories,String>(MediaSupportCategories.Vinyl45T, "Single"),
+			new AbstractMap.SimpleEntry<MediaSupportCategories,String>(MediaSupportCategories.VinylLP, "LP"),
+			new AbstractMap.SimpleEntry<MediaSupportCategories,String>(MediaSupportCategories.MiniVinyl, "Single"),
 			new AbstractMap.SimpleEntry<MediaSupportCategories,String>(MediaSupportCategories.MiniCD, "CD"),
 			new AbstractMap.SimpleEntry<MediaSupportCategories,String>(MediaSupportCategories.MiniDVD, "DVD"),
-			new AbstractMap.SimpleEntry<MediaSupportCategories,String>(MediaSupportCategories.Mini33T, ""),
-			new AbstractMap.SimpleEntry<MediaSupportCategories,String>(MediaSupportCategories.Maxi45T, "Maxi"),
 			new AbstractMap.SimpleEntry<MediaSupportCategories,String>(MediaSupportCategories.VHS, "VHS"),
 			new AbstractMap.SimpleEntry<MediaSupportCategories,String>(MediaSupportCategories.DVD, "DVD"),
 			new AbstractMap.SimpleEntry<MediaSupportCategories,String>(MediaSupportCategories.BluRay, "Blu-ray")));

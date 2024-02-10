@@ -162,10 +162,8 @@ public class Format {
      */
     public RangementSupportPhysique inferRangement() {
     	RangementSupportPhysique typeRangement = null ;
-		if ((supportPhysiquePresent(MediaSupportCategories.Vinyl33T)) || 
-			(supportPhysiquePresent(MediaSupportCategories.Vinyl45T)) || 
-			(supportPhysiquePresent(MediaSupportCategories.Mini33T) ) || 
-			(supportPhysiquePresent(MediaSupportCategories.Maxi45T) )) {
+		if ((supportPhysiquePresent(MediaSupportCategories.VinylLP)) || 
+			(supportPhysiquePresent(MediaSupportCategories.MiniVinyl))) {
 		// à ranger dans la collection Vinyl
 			typeRangement = RangementSupportPhysique.RangementVinyl ;
 		} else if ((supportPhysiquePresent(MediaSupportCategories.CD)) || 
