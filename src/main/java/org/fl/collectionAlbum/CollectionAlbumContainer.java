@@ -26,6 +26,7 @@ package org.fl.collectionAlbum;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Objects;
@@ -40,6 +41,7 @@ import org.fl.collectionAlbum.concerts.LieuxDesConcerts;
 import org.fl.collectionAlbum.concerts.ListeConcert;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory;
 import org.fl.collectionAlbum.format.Format;
+import org.fl.collectionAlbum.format.MediaSupports;
 import org.fl.collectionAlbum.stat.StatChrono;
 
 import com.google.gson.JsonObject;
@@ -59,7 +61,10 @@ public class CollectionAlbumContainer {
 	private ListeAlbum collectionAlbumsMusiques;
 	
 	// Listes des albums par rangement
-	private EnumMap<Format.RangementSupportPhysique, ListeAlbum> rangementsAlbums;	
+	private EnumMap<Format.RangementSupportPhysique, ListeAlbum> rangementsAlbums;
+	
+	// Listes des albums par MediaSupports
+	private EnumMap<MediaSupports, ListeAlbum> albumsPerMediaSupports;
 	
 	private ListeAlbum albumWithAudioFile;
 	private ListeAlbum albumMissingAudioFile;
@@ -127,6 +132,10 @@ public class CollectionAlbumContainer {
 			albumLog.warning("Album impossible à ranger: " + album.getTitre());
 		}
 			
+		Arrays.stream(MediaSupports.values())
+			.filter(mediaSupport -> album.hasMediaSupport(mediaSupport))
+			.forEach(mediaSupport -> albumsPerMediaSupports.get(mediaSupport).addAlbum(album));
+		
 		if (album.missesAudioFile()) {
 			albumMissingAudioFile.addAlbum(album);
 		} else if (album.hasAudioFiles()){
@@ -160,7 +169,13 @@ public class CollectionAlbumContainer {
 		concerts.addConcert(concert); 	
 	}
 	
-	public ListeAlbum getRangementAlbums(Format.RangementSupportPhysique sPhys) { return rangementsAlbums.get(sPhys) ; }
+	public ListeAlbum getRangementAlbums(Format.RangementSupportPhysique sPhys) {
+		return rangementsAlbums.get(sPhys);
+	}
+	
+	public ListeAlbum getAlbumWithMediaSupport(MediaSupports mediaSupport) {
+		return albumsPerMediaSupports.get(mediaSupport);
+	}
 	
 	public ListeArtiste     getCollectionArtistes() 	  { return collectionArtistes		; }
 	public ListeAlbum 	  	getCollectionAlbumsMusiques() { return collectionAlbumsMusiques ; }
@@ -195,9 +210,13 @@ public class CollectionAlbumContainer {
    		albumWithHighResAudio	 = new ListeAlbum();
    		albumWithLowResAudio	 = new ListeAlbum();
    		rangementsAlbums 		 = new EnumMap<Format.RangementSupportPhysique, ListeAlbum>(Format.RangementSupportPhysique.class);
-   		for (Format.RangementSupportPhysique rangement : Format.RangementSupportPhysique.values()) {
-   			rangementsAlbums.put(rangement, new ListeAlbum());
-   		}
+   		albumsPerMediaSupports	 = new EnumMap<MediaSupports, ListeAlbum>(MediaSupports.class);
+
+   		Arrays.stream(Format.RangementSupportPhysique.values())
+   			.forEach(rangement -> rangementsAlbums.put(rangement, new ListeAlbum()));
+   		Arrays.stream(MediaSupports.values())
+   			.forEach(mediaSupport -> albumsPerMediaSupports.put(mediaSupport, new ListeAlbum()));
+   		
    		allArtistes.add(collectionArtistes);
    		allArtistes.add(concertsArtistes);
 	}
