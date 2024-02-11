@@ -31,6 +31,7 @@ import java.nio.file.Paths;
 
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.Artiste;
+import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.format.Format.RangementSupportPhysique;
 import org.fl.collectionAlbum.format.MediaSupports;
 import org.fl.collectionAlbum.rapportHtml.RapportStructuresAndNames;
@@ -62,10 +63,14 @@ class CollectionAlbumContainerTest {
 		assertThat(albumsContainer.getArtisteKnown("Toto", "Titi")).isNull();
 		
 		assertThat(MediaSupports.values())
-			.allSatisfy(mediaSupport -> assertThat(albumsContainer.getAlbumWithMediaSupport(mediaSupport).getAlbums()).isEmpty());
+			.allSatisfy(mediaSupport -> assertThat(albumsContainer.getAlbumsWithMediaSupport(mediaSupport).getAlbums()).isEmpty());
 
 		assertThat(RangementSupportPhysique.values())
 			.allSatisfy(rangement -> assertThat(albumsContainer.getRangementAlbums(rangement).getAlbums()).isEmpty());
+		
+		assertThat(albumsContainer.getAlbumsWithMixedContentNature().getAlbums()).isEmpty();
+		assertThat(ContentNature.values())
+			.allSatisfy(contentNature -> assertThat(albumsContainer.getAlbumsWithOnlyContentNature(contentNature).getAlbums()).isEmpty());
 	}
 
 	private static final String albumStr1 = """
@@ -128,10 +133,10 @@ class CollectionAlbumContainerTest {
 		assertThat(MediaSupports.values())
 			.allSatisfy(mediaSupport -> {
 				if (mediaSupport == MediaSupports.CD) {
-					assertThat(albumsContainer.getAlbumWithMediaSupport(mediaSupport).getAlbums()).singleElement()
+					assertThat(albumsContainer.getAlbumsWithMediaSupport(mediaSupport).getAlbums()).singleElement()
 						.satisfies(album1 -> assertThat(album1).isEqualTo(album)); 
 				} else {
-					assertThat(albumsContainer.getAlbumWithMediaSupport(mediaSupport).getAlbums()).isEmpty();
+					assertThat(albumsContainer.getAlbumsWithMediaSupport(mediaSupport).getAlbums()).isEmpty();
 				}
 			});
 
@@ -144,5 +149,15 @@ class CollectionAlbumContainerTest {
 					assertThat(albumsContainer.getRangementAlbums(rangement).getAlbums()).isEmpty(); 
 				}		
 			});
+		
+		assertThat(albumsContainer.getAlbumsWithMixedContentNature().getAlbums()).isEmpty();
+		assertThat(ContentNature.values())
+			.allSatisfy(contentNature -> {
+				if (contentNature == ContentNature.AUDIO) {
+					assertThat(albumsContainer.getAlbumsWithOnlyContentNature(contentNature).getAlbums()).containsExactly(album);
+				} else {
+					assertThat(albumsContainer.getAlbumsWithOnlyContentNature(contentNature).getAlbums()).isEmpty(); 
+				}			
+		});
 	}
 }
