@@ -45,6 +45,7 @@ import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.ReleaseMatchRes
 import org.fl.collectionAlbum.format.AbstractMediaFile;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.format.Format;
+import org.fl.collectionAlbum.format.MediaSupports;
 import org.fl.collectionAlbum.format.Format.RangementSupportPhysique;
 import org.fl.collectionAlbum.json.AlbumParser;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
@@ -147,6 +148,10 @@ public class Album extends MusicArtefact {
     
     public boolean hasVideoFiles() {
     	return formatAlbum.hasMediaFiles(ContentNature.VIDEO);
+    }
+    
+    public boolean hasMediaSupport(MediaSupports mediaSupport) {
+    	return formatAlbum.hasMediaSupport(mediaSupport);
     }
     
     public RangementSupportPhysique getRangement() {

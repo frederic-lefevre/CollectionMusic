@@ -32,6 +32,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
@@ -46,6 +47,7 @@ import org.fl.collectionAlbum.format.AbstractAudioFile;
 import org.fl.collectionAlbum.format.AbstractMediaFile;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.format.LosslessAudioFile;
+import org.fl.collectionAlbum.format.MediaSupports;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.fl.discogsInterface.inventory.InventoryCsvAlbum;
 import org.fl.util.json.JsonUtils;
@@ -73,6 +75,8 @@ class AlbumTest {
 		assertThat(album.hasMediaFiles()).isFalse();
 		
 		assertThat(album.getAllMediaFiles()).isEmpty();
+		
+		assertMediaSupports(album, Collections.emptySet());
 	}
 
 	private static final String albumStr1 = """
@@ -349,6 +353,8 @@ class AlbumTest {
 				assertThat(csvRelease.getArtists()).singleElement().isEqualTo("The Beatles");
 				assertThat(csvRelease.getReleaseId()).isEqualTo("2519903");
 			});
+		
+		assertMediaSupports(album, Set.of(MediaSupports.CD));
 	}
 	
 	private static final String albumStr2 = """
@@ -392,6 +398,8 @@ class AlbumTest {
 
 		assertThat(potentialPaths).isNotNull().singleElement()
 		.satisfies(mediaFilePath -> assertThat(mediaFilePath.getPath()).hasToString("E:\\Musique\\v\\Van Halen\\Van Halen [24 - 192]"));
+		
+		assertMediaSupports(album, Set.of(MediaSupports.CD));
 	}
 	
 	private void testAlbumProperties(Album album, ListeArtiste la) {
@@ -434,5 +442,14 @@ class AlbumTest {
 			.isNotNull()
 			.singleElement()
 			.isEqualTo(album);
+		
+		assertMediaSupports(album, Set.of(MediaSupports.CD));
+	}
+	
+	private void assertMediaSupports(Album album, Set<MediaSupports> mediaSupports) {
+		
+		assertThat(MediaSupports.values()).allSatisfy((mediaSupport -> 
+			assertThat(album.hasMediaSupport(mediaSupport)).isEqualTo(mediaSupports.contains(mediaSupport))));
+
 	}
 }
