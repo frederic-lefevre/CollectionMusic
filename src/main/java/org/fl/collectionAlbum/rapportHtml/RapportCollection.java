@@ -28,6 +28,7 @@ import java.nio.file.Path;
 import java.util.Arrays;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
+import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.format.Format;
 import org.fl.collectionAlbum.format.MediaSupports;
 
@@ -104,12 +105,20 @@ public class RapportCollection extends RapportHtml {
 		
 		write("</ul>\n</td>\n</tr>\n<tr>\n<td class=\"mainpage\">\n<h3>Albums par support media</h3>\n<ul>\n");
 		Arrays.stream(MediaSupports.values()).forEach(mediaSupport -> {
-			RapportListeAlbums mediaSupportAlbum = new RapportListeAlbums(albumsContainer.getAlbumWithMediaSupport(mediaSupport).sortRangementAlbum(), "Albums avec " + mediaSupport.getDescription());
+			RapportListeAlbums mediaSupportAlbum = new RapportListeAlbums(albumsContainer.getAlbumsWithMediaSupport(mediaSupport).sortRangementAlbum(), "Albums avec " + mediaSupport.getDescription());
 			write(mediaSupportAlbum.printReport(getNextRapportFile(), CssStyles.stylesTableauMusicArtefact));
 		});
 		
-		write("</ul>\n</td>\n<td class=\"mainpage\">\n<h3>Albums XXXX A venir</h3>\n<ul>\n");
-		
+		write("</ul>\n</td>\n<td class=\"mainpage\">\n<h3>Albums par nature de contenu</h3>\n<ul>\n");
+		Arrays.stream(ContentNature.values()).forEach(contentNature -> {
+			RapportListeAlbums contentNatureAlbums = 
+					new RapportListeAlbums(albumsContainer.getAlbumsWithOnlyContentNature(contentNature).sortRangementAlbum(), "Albums avec seulement du contenu " + contentNature.getNom());
+			write(contentNatureAlbums.printReport(getNextRapportFile(),CssStyles.stylesTableauMusicArtefact));
+		});
+		RapportListeAlbums mixedContentNatureAlbums = 
+				new RapportListeAlbums(albumsContainer.getAlbumsWithMixedContentNature().sortRangementAlbum(), "Albums avec plusieurs types de contenus");
+		write(mixedContentNatureAlbums.printReport(getNextRapportFile(),CssStyles.stylesTableauMusicArtefact));
+
 		write("</ul>\n</td>\n</tr>\n<tr>\n<td class=\"mainpage\">\n<h3>Statistiques</h3>\n<ul>\n");
 		RapportStat rapportStat1 = new RapportStat(albumsContainer.getStatChronoEnregistrement(), "Statistiques par année d'enregistrement");
 		write(rapportStat1.printReport(getNextRapportFile(), CssStyles.stylesStat));
