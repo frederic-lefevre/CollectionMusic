@@ -28,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.nio.file.Paths;
 
-import org.fl.collectionAlbum.Format.ContentNature;
+import org.fl.collectionAlbum.format.ContentNature;
 import org.junit.jupiter.api.Test;
 
 class MediaFilePathTest {

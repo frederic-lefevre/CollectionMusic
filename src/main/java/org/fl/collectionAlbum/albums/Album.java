@@ -37,15 +37,16 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.fl.collectionAlbum.AbstractMediaFile;
 import org.fl.collectionAlbum.Control;
-import org.fl.collectionAlbum.Format;
-import org.fl.collectionAlbum.Format.ContentNature;
-import org.fl.collectionAlbum.Format.RangementSupportPhysique;
 import org.fl.collectionAlbum.MusicArtefact;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.ReleaseMatchResult;
+import org.fl.collectionAlbum.format.AbstractMediaFile;
+import org.fl.collectionAlbum.format.ContentNature;
+import org.fl.collectionAlbum.format.Format;
+import org.fl.collectionAlbum.format.MediaSupports;
+import org.fl.collectionAlbum.format.Format.RangementSupportPhysique;
 import org.fl.collectionAlbum.json.AlbumParser;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
@@ -86,7 +87,7 @@ public class Album extends MusicArtefact {
 		specificCompositionDates = (periodeComposition != periodeEnregistrement);
 		
 		rangement = Optional.ofNullable(AlbumParser.getRangementAlbum(albumJson))
-				.orElse(formatAlbum.getRangement());
+				.orElse(formatAlbum.inferRangement());
 
 		if (rangement == null) {
 			albumLog.severe("Pas de rangement trouvé pour l'album " + getTitre());
@@ -149,6 +150,10 @@ public class Album extends MusicArtefact {
     	return formatAlbum.hasMediaFiles(ContentNature.VIDEO);
     }
     
+    public boolean hasMediaSupport(MediaSupports mediaSupport) {
+    	return formatAlbum.hasMediaSupport(mediaSupport);
+    }
+    
     public RangementSupportPhysique getRangement() {
         return rangement;
     }
@@ -183,6 +188,10 @@ public class Album extends MusicArtefact {
 	
 	public boolean hasMediaFilePathNotFound(ContentNature contentNature) {
 		return formatAlbum.hasMediaFilePathNotFound(contentNature);
+	}
+	
+	public Set<ContentNature> getContentNatures() {
+		return formatAlbum.getContentNatures();
 	}
 	
 	public boolean hasProblem() {

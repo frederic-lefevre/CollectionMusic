@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -31,6 +31,9 @@ import java.nio.file.Paths;
 
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.Artiste;
+import org.fl.collectionAlbum.format.ContentNature;
+import org.fl.collectionAlbum.format.Format.RangementSupportPhysique;
+import org.fl.collectionAlbum.format.MediaSupports;
 import org.fl.collectionAlbum.rapportHtml.RapportStructuresAndNames;
 import org.junit.jupiter.api.Test;
 
@@ -58,6 +61,16 @@ class CollectionAlbumContainerTest {
 		assertThat(albumsContainer.getConcertsArtistes().getNombreArtistes()).isZero();
 
 		assertThat(albumsContainer.getArtisteKnown("Toto", "Titi")).isNull();
+		
+		assertThat(MediaSupports.values())
+			.allSatisfy(mediaSupport -> assertThat(albumsContainer.getAlbumsWithMediaSupport(mediaSupport).getAlbums()).isEmpty());
+
+		assertThat(RangementSupportPhysique.values())
+			.allSatisfy(rangement -> assertThat(albumsContainer.getRangementAlbums(rangement).getAlbums()).isEmpty());
+		
+		assertThat(albumsContainer.getAlbumsWithMixedContentNature().getAlbums()).isEmpty();
+		assertThat(ContentNature.values())
+			.allSatisfy(contentNature -> assertThat(albumsContainer.getAlbumsWithOnlyContentNature(contentNature).getAlbums()).isEmpty());
 	}
 
 	private static final String albumStr1 = """
@@ -117,5 +130,34 @@ class CollectionAlbumContainerTest {
 					.satisfies(mediaFilePath -> assertThat(mediaFilePath.getAlbumSet()).singleElement()
 							.satisfies(album1 -> assertThat(album1).isEqualTo(album))));
 
+		assertThat(MediaSupports.values())
+			.allSatisfy(mediaSupport -> {
+				if (mediaSupport == MediaSupports.CD) {
+					assertThat(albumsContainer.getAlbumsWithMediaSupport(mediaSupport).getAlbums()).singleElement()
+						.satisfies(album1 -> assertThat(album1).isEqualTo(album)); 
+				} else {
+					assertThat(albumsContainer.getAlbumsWithMediaSupport(mediaSupport).getAlbums()).isEmpty();
+				}
+			});
+
+		assertThat(RangementSupportPhysique.values())
+			.allSatisfy(rangement -> {
+				if (rangement == RangementSupportPhysique.RangementCD) {
+					assertThat(albumsContainer.getRangementAlbums(rangement).getAlbums()).singleElement()
+						.satisfies(album1 -> assertThat(album1).isEqualTo(album));
+				} else {
+					assertThat(albumsContainer.getRangementAlbums(rangement).getAlbums()).isEmpty(); 
+				}		
+			});
+		
+		assertThat(albumsContainer.getAlbumsWithMixedContentNature().getAlbums()).isEmpty();
+		assertThat(ContentNature.values())
+			.allSatisfy(contentNature -> {
+				if (contentNature == ContentNature.AUDIO) {
+					assertThat(albumsContainer.getAlbumsWithOnlyContentNature(contentNature).getAlbums()).containsExactly(album);
+				} else {
+					assertThat(albumsContainer.getAlbumsWithOnlyContentNature(contentNature).getAlbums()).isEmpty(); 
+				}			
+		});
 	}
 }

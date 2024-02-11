@@ -27,9 +27,9 @@ package org.fl.collectionAlbum.rapportHtml;
 import java.net.URI;
 import java.time.temporal.TemporalAccessor;
 
-import org.fl.collectionAlbum.Format;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.albums.ListeAlbum;
+import org.fl.collectionAlbum.format.Format;
 import org.fl.collectionAlbum.utils.TemporalUtils;
 
 public class FragmentListeAlbums {

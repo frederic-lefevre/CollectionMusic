@@ -26,9 +26,11 @@ package org.fl.collectionAlbum;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.albums.Album;
@@ -39,6 +41,9 @@ import org.fl.collectionAlbum.concerts.Concert;
 import org.fl.collectionAlbum.concerts.LieuxDesConcerts;
 import org.fl.collectionAlbum.concerts.ListeConcert;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory;
+import org.fl.collectionAlbum.format.ContentNature;
+import org.fl.collectionAlbum.format.Format;
+import org.fl.collectionAlbum.format.MediaSupports;
 import org.fl.collectionAlbum.stat.StatChrono;
 
 import com.google.gson.JsonObject;
@@ -58,7 +63,15 @@ public class CollectionAlbumContainer {
 	private ListeAlbum collectionAlbumsMusiques;
 	
 	// Listes des albums par rangement
-	private EnumMap<Format.RangementSupportPhysique, ListeAlbum> rangementsAlbums;	
+	private EnumMap<Format.RangementSupportPhysique, ListeAlbum> rangementsAlbums;
+	
+	// Listes des albums par MediaSupports
+	private EnumMap<MediaSupports, ListeAlbum> albumsPerMediaSupports;
+	
+	// Listes des albums avec une seule nature de contenu
+	private EnumMap<ContentNature, ListeAlbum> albumsWithOnlyContentNature;
+	
+	private ListeAlbum albumsWithMixedContentNature;
 	
 	private ListeAlbum albumWithAudioFile;
 	private ListeAlbum albumMissingAudioFile;
@@ -126,6 +139,19 @@ public class CollectionAlbumContainer {
 			albumLog.warning("Album impossible à ranger: " + album.getTitre());
 		}
 			
+		Arrays.stream(MediaSupports.values())
+			.filter(mediaSupport -> album.hasMediaSupport(mediaSupport))
+			.forEach(mediaSupport -> albumsPerMediaSupports.get(mediaSupport).addAlbum(album));
+		
+		Set<ContentNature> contentNatures = album.getContentNatures();
+		if ((contentNatures == null) || contentNatures.isEmpty()) {
+			albumLog.warning("Album sans nature de contenu trouvé : " + album.getTitre());
+		} else if (contentNatures.size() == 1) {
+			albumsWithOnlyContentNature.get(contentNatures.iterator().next()).addAlbum(album);
+		} else {
+			albumsWithMixedContentNature.addAlbum(album);
+		}
+		
 		if (album.missesAudioFile()) {
 			albumMissingAudioFile.addAlbum(album);
 		} else if (album.hasAudioFiles()){
@@ -159,44 +185,63 @@ public class CollectionAlbumContainer {
 		concerts.addConcert(concert); 	
 	}
 	
-	public ListeAlbum getRangementAlbums(Format.RangementSupportPhysique sPhys) { return rangementsAlbums.get(sPhys) ; }
+	public ListeAlbum getRangementAlbums(Format.RangementSupportPhysique sPhys) {
+		return rangementsAlbums.get(sPhys);
+	}
 	
-	public ListeArtiste     getCollectionArtistes() 	  { return collectionArtistes		; }
-	public ListeAlbum 	  	getCollectionAlbumsMusiques() { return collectionAlbumsMusiques ; }
-	public ListeArtiste   	getConcertsArtistes() 		  { return concertsArtistes		 	; }
-	public ListeConcert   	getConcerts() 				  { return concerts				 	; }
-	public ChronoArtistes 	getCalendrierArtistes() 	  { return calendrierArtistes		; }
-	public StatChrono 	  	getStatChronoComposition() 	  { return statChronoComposition	; }
-	public StatChrono 	  	getStatChronoEnregistrement() { return statChronoEnregistrement ; }
-	public LieuxDesConcerts getLieuxDesConcerts() 		  { return lieuxDesConcerts			; }
-	public ListeAlbum 	  	getAlbumsWithAudioFile() 	  { return albumWithAudioFile 		; }
-	public ListeAlbum 	  	getAlbumsMissingAudioFile()   { return albumMissingAudioFile 	; }
-	public ListeAlbum 	  	getAlbumsWithVideoFile() 	  { return albumWithVideoFile 		; }
-	public ListeAlbum 	  	getAlbumsMissingVideoFile()   { return albumMissingVideoFile 	; }
-	public ListeAlbum 	  	getAlbumsWithHighResAudio()   { return albumWithHighResAudio 	; }
-	public ListeAlbum 	  	getAlbumsWithLowResAudio() 	  { return albumWithLowResAudio 	; }
+	public ListeAlbum getAlbumsWithMediaSupport(MediaSupports mediaSupport) {
+		return albumsPerMediaSupports.get(mediaSupport);
+	}
+	
+	public ListeAlbum getAlbumsWithOnlyContentNature(ContentNature contentNature) {
+		return albumsWithOnlyContentNature.get(contentNature);
+	}
+		
+	public ListeArtiste     getCollectionArtistes() 	  	  { return collectionArtistes			; }
+	public ListeAlbum 	  	getCollectionAlbumsMusiques() 	  { return collectionAlbumsMusiques 	; }
+	public ListeArtiste   	getConcertsArtistes() 		  	  { return concertsArtistes		 		; }
+	public ListeConcert   	getConcerts() 				  	  { return concerts				 		; }
+	public ChronoArtistes 	getCalendrierArtistes() 	  	  { return calendrierArtistes			; }
+	public StatChrono 	  	getStatChronoComposition() 	  	  { return statChronoComposition		; }
+	public StatChrono 	  	getStatChronoEnregistrement() 	  { return statChronoEnregistrement 	; }
+	public LieuxDesConcerts getLieuxDesConcerts() 		  	  { return lieuxDesConcerts				; }
+	public ListeAlbum 	  	getAlbumsWithAudioFile() 	  	  { return albumWithAudioFile 			; }
+	public ListeAlbum 	  	getAlbumsMissingAudioFile()   	  { return albumMissingAudioFile 		; }
+	public ListeAlbum 	  	getAlbumsWithVideoFile() 	  	  { return albumWithVideoFile 			; }
+	public ListeAlbum 	  	getAlbumsMissingVideoFile()   	  { return albumMissingVideoFile 		; }
+	public ListeAlbum 	  	getAlbumsWithHighResAudio()   	  { return albumWithHighResAudio 		; }
+	public ListeAlbum 	  	getAlbumsWithLowResAudio() 	  	  { return albumWithLowResAudio 		; }
+	public ListeAlbum 	  	getAlbumsWithMixedContentNature() { return albumsWithMixedContentNature	; }
 
 	private void reset() {
 		
-   		collectionAlbumsMusiques = new ListeAlbum();
-		collectionArtistes 		 = new ListeArtiste();
-   		concertsArtistes 		 = new ListeArtiste();   		
-   		concerts 				 = new ListeConcert(); 		
-   		statChronoEnregistrement = new StatChrono();
-   		statChronoComposition 	 = new StatChrono();   		
-   		calendrierArtistes 		 = new ChronoArtistes();
-   		lieuxDesConcerts		 = new LieuxDesConcerts();
-   		allArtistes				 = new ArrayList<ListeArtiste>();
-   		albumWithAudioFile		 = new ListeAlbum();
-   		albumMissingAudioFile	 = new ListeAlbum();
-   		albumWithVideoFile		 = new ListeAlbum();
-   		albumMissingVideoFile	 = new ListeAlbum();
-   		albumWithHighResAudio	 = new ListeAlbum();
-   		albumWithLowResAudio	 = new ListeAlbum();
-   		rangementsAlbums 		 = new EnumMap<Format.RangementSupportPhysique, ListeAlbum>(Format.RangementSupportPhysique.class);
-   		for (Format.RangementSupportPhysique rangement : Format.RangementSupportPhysique.values()) {
-   			rangementsAlbums.put(rangement, new ListeAlbum());
-   		}
+   		collectionAlbumsMusiques 	 = new ListeAlbum();
+		collectionArtistes 		 	 = new ListeArtiste();
+   		concertsArtistes 		 	 = new ListeArtiste();   		
+   		concerts 				 	 = new ListeConcert(); 		
+   		statChronoEnregistrement 	 = new StatChrono();
+   		statChronoComposition 	 	 = new StatChrono();   		
+   		calendrierArtistes 		 	 = new ChronoArtistes();
+   		lieuxDesConcerts		 	 = new LieuxDesConcerts();
+   		allArtistes				 	 = new ArrayList<ListeArtiste>();
+   		albumWithAudioFile		 	 = new ListeAlbum();
+   		albumMissingAudioFile	 	 = new ListeAlbum();
+   		albumWithVideoFile		 	 = new ListeAlbum();
+   		albumMissingVideoFile	 	 = new ListeAlbum();
+   		albumWithHighResAudio	 	 = new ListeAlbum();
+   		albumWithLowResAudio	 	 = new ListeAlbum();
+   		albumsWithMixedContentNature = new ListeAlbum();
+   		rangementsAlbums 		 	 = new EnumMap<Format.RangementSupportPhysique, ListeAlbum>(Format.RangementSupportPhysique.class);
+   		albumsPerMediaSupports	 	 = new EnumMap<MediaSupports, ListeAlbum>(MediaSupports.class);
+   		albumsWithOnlyContentNature  = new EnumMap<ContentNature, ListeAlbum>(ContentNature.class);
+
+   		Arrays.stream(Format.RangementSupportPhysique.values())
+   			.forEach(rangement -> rangementsAlbums.put(rangement, new ListeAlbum()));
+   		Arrays.stream(MediaSupports.values())
+   			.forEach(mediaSupport -> albumsPerMediaSupports.put(mediaSupport, new ListeAlbum()));
+   		Arrays.stream(ContentNature.values())
+   			.forEach(contentNature -> albumsWithOnlyContentNature.put(contentNature, new ListeAlbum()));
+   		
    		allArtistes.add(collectionArtistes);
    		allArtistes.add(concertsArtistes);
 	}

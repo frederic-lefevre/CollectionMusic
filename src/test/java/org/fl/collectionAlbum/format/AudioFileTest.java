@@ -22,13 +22,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-package org.fl.collectionAlbum;
+package org.fl.collectionAlbum.format;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.nio.file.Paths;
 
-import org.fl.collectionAlbum.Format.ContentNature;
 import org.fl.collectionAlbum.json.AudioFileParser;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.junit.jupiter.api.Test;

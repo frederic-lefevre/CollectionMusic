@@ -29,7 +29,7 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import org.fl.collectionAlbum.Control;
-import org.fl.collectionAlbum.Format.ContentNature;
+import org.fl.collectionAlbum.format.ContentNature;
 
 public class MediaFilesInventories {
 

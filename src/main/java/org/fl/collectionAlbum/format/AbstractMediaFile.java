@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,13 +22,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum;
+package org.fl.collectionAlbum.format;
 
 import java.nio.file.Files;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.BiConsumer;
 
+import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
 import com.google.gson.JsonArray;

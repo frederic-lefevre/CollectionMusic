@@ -1,7 +1,7 @@
 /*
  MIT License
 
-Copyright (c) 2017, 2022 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,14 +22,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-package org.fl.collectionAlbum;
+package org.fl.collectionAlbum.format;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import org.assertj.core.api.InstanceOfAssertFactories;
-import org.fl.collectionAlbum.Format.ContentNature;
 import org.junit.jupiter.api.Test;
 
 import com.google.gson.JsonObject;
@@ -45,7 +46,9 @@ class FormatTest {
 		Format format1 = new Format(jf1) ;
 
 		assertThat(format1.getPoids()).isZero();
+		assertMediaSupports(format1, Collections.emptySet());
 
+		assertThat(format1.getContentNatures()).isEmpty();
 	}
 
 	@Test
@@ -58,7 +61,11 @@ class FormatTest {
 		assertThat(format1.getPoids()).isEqualTo(3);
 		assertThat(format1.hasMediaFiles(ContentNature.AUDIO)).isFalse();
 		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isFalse();
-
+		
+		assertMediaSupports(format1, Set.of(MediaSupports.CD));
+		
+		assertThat(format1.getContentNatures()).singleElement()
+			.matches(contentNature -> contentNature.equals(ContentNature.AUDIO));
 	}
 	
 	@Test
@@ -74,6 +81,34 @@ class FormatTest {
 		assertThat(format1.getAllMediaFiles()).isEmpty();
 		assertThat(format1.hasMediaFiles(ContentNature.AUDIO)).isFalse();
 		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isFalse();
+		assertThat(format1.hasContentNature(ContentNature.AUDIO)).isTrue();
+		assertThat(format1.hasContentNature(ContentNature.VIDEO)).isFalse();
+		
+		assertMediaSupports(format1, Set.of(MediaSupports.CD, MediaSupports.Vinyl45T));
+		
+		assertThat(format1.getContentNatures()).singleElement()
+			.matches(contentNature -> contentNature.equals(ContentNature.AUDIO));
+	}
+	
+	@Test
+	void test3b() {
+		
+		String formatStr1 = "{\"cd\": 2 , \"dvd\" : 1 }" ;
+		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
+		Format format1 = new Format(jf1) ;
+		
+		assertThat(format1.getPoids()).isEqualTo(3);
+		assertThat(format1.getMediaFiles(ContentNature.AUDIO)).isEmpty();
+		assertThat(format1.getMediaFiles(ContentNature.VIDEO)).isEmpty();
+		assertThat(format1.getAllMediaFiles()).isEmpty();
+		assertThat(format1.hasMediaFiles(ContentNature.AUDIO)).isFalse();
+		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isFalse();
+		assertThat(format1.hasContentNature(ContentNature.AUDIO)).isTrue();
+		assertThat(format1.hasContentNature(ContentNature.VIDEO)).isTrue();
+		
+		assertMediaSupports(format1, Set.of(MediaSupports.CD, MediaSupports.DVD));
+		
+		assertThat(format1.getContentNatures()).containsExactlyInAnyOrder(ContentNature.AUDIO, ContentNature.VIDEO);
 	}
 	
 	@Test
@@ -102,6 +137,15 @@ class FormatTest {
 		assertThat(format3.hasMediaFiles(ContentNature.VIDEO)).isFalse();
 		assertThat(format3.getMediaFiles(ContentNature.VIDEO)).isNull();
 		assertThat(format3.getAllMediaFiles()).isEmpty();
+		assertThat(format3.hasContentNature(ContentNature.AUDIO)).isTrue();
+		assertThat(format3.hasContentNature(ContentNature.VIDEO)).isFalse();
+		
+		assertMediaSupports(format1, Set.of(MediaSupports.Vinyl33T, MediaSupports.Vinyl45T));
+		assertMediaSupports(format2, Set.of(MediaSupports.CD, MediaSupports.Vinyl45T));
+		assertMediaSupports(format3, Set.of(MediaSupports.CD, MediaSupports.Vinyl45T, MediaSupports.Vinyl33T));
+		
+		assertThat(format3.getContentNatures()).singleElement()
+			.matches(contentNature -> contentNature.equals(ContentNature.AUDIO));
 	}
 	
 	@Test
@@ -138,6 +182,11 @@ class FormatTest {
 			});
 		
 		assertThat(format1.getAllMediaFiles()).hasSameElementsAs(format1.getMediaFiles(ContentNature.AUDIO));
+		
+		assertMediaSupports(format1, Set.of(MediaSupports.CD, MediaSupports.Vinyl45T));
+		
+		assertThat(format1.getContentNatures()).singleElement()
+			.matches(contentNature -> contentNature.equals(ContentNature.AUDIO));
 	}
 	
 	@Test
@@ -174,6 +223,11 @@ class FormatTest {
 			});
 		
 		assertThat(format1.getAllMediaFiles()).hasSameElementsAs(format1.getMediaFiles(ContentNature.AUDIO));
+		
+		assertMediaSupports(format1, Set.of(MediaSupports.CD, MediaSupports.Vinyl45T));
+		
+		assertThat(format1.getContentNatures()).singleElement()
+			.matches(contentNature -> contentNature.equals(ContentNature.AUDIO));
 	}
 	
 	@Test
@@ -234,6 +288,11 @@ class FormatTest {
 					csvAudio -> assertThat(csvAudio).isEqualTo("24 bits;88.0 KHz;FLAC;CD"));
 
 		assertThat(format1.getAllMediaFiles()).hasSameElementsAs(format1.getMediaFiles(ContentNature.AUDIO));
+		
+		assertMediaSupports(format1, Set.of(MediaSupports.CD, MediaSupports.Vinyl45T));
+		
+		assertThat(format1.getContentNatures()).singleElement()
+			.matches(contentNature -> contentNature.equals(ContentNature.AUDIO));
 	}
 	
 	@Test
@@ -287,6 +346,11 @@ class FormatTest {
 		assertThat(format1.getAllMediaFiles())
 			.containsAll(format1.getMediaFiles(ContentNature.VIDEO))
 			.containsAll(format1.getMediaFiles(ContentNature.AUDIO));
+		
+		assertMediaSupports(format1, Set.of(MediaSupports.CD, MediaSupports.Vinyl45T));
+		
+		assertThat(format1.getContentNatures()).singleElement()
+			.matches(contentNature -> contentNature.equals(ContentNature.AUDIO));
 	}
 	
 	@Test
@@ -334,5 +398,93 @@ class FormatTest {
 			});
 		
 		assertThat(format1.getAllMediaFiles()).hasSameElementsAs(format1.getMediaFiles(ContentNature.VIDEO));
+		
+		assertThat(format1.hasContentNature(ContentNature.VIDEO)).isTrue();
+		assertThat(format1.hasContentNature(ContentNature.AUDIO)).isFalse();
+		
+		assertMediaSupports(format1, Set.of(MediaSupports.DVD));
+		
+		assertThat(format1.getContentNatures()).singleElement()
+			.matches(contentNature -> contentNature.equals(ContentNature.VIDEO));
+	}
+	
+	@Test
+	void test10() {
+		
+		String formatStr1 = "{\"bluray\": 3 }" ;
+		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
+		Format format1 = new Format(jf1) ;
+
+		assertThat(format1.getPoids()).isZero();
+		assertThat(format1.hasMediaFiles(ContentNature.AUDIO)).isFalse();
+		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isFalse();
+		
+		assertMediaSupports(format1, Collections.emptySet());
+		
+		assertThat(format1.getContentNatures()).isEmpty();
+	}
+	
+	@Test
+	void test11() {
+		
+		String formatStr1 = "{\"blueray\": 3 }" ;
+		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
+		Format format1 = new Format(jf1) ;
+
+		assertThat(format1.getPoids()).isEqualTo(3);
+		assertThat(format1.hasMediaFiles(ContentNature.AUDIO)).isFalse();
+		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isFalse();
+		assertThat(format1.hasContentNature(ContentNature.AUDIO)).isFalse();
+		assertThat(format1.hasContentNature(ContentNature.VIDEO)).isTrue();
+		
+		assertMediaSupports(format1, Set.of(MediaSupports.BluRay));
+		
+		assertThat(format1.getContentNatures()).singleElement()
+			.matches(contentNature -> contentNature.equals(ContentNature.VIDEO));
+	}
+	
+	@Test
+	void test12() {
+		
+		String formatStr1 = "{\"bluerayAudio\": 3 }" ;
+		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
+		Format format1 = new Format(jf1) ;
+
+		assertThat(format1.getPoids()).isEqualTo(3);
+		assertThat(format1.hasMediaFiles(ContentNature.AUDIO)).isFalse();
+		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isFalse();
+		assertThat(format1.hasContentNature(ContentNature.AUDIO)).isTrue();
+		assertThat(format1.hasContentNature(ContentNature.VIDEO)).isFalse();
+		
+		assertMediaSupports(format1, Set.of(MediaSupports.BluRayAudio));
+		
+		assertThat(format1.getContentNatures()).singleElement()
+			.matches(contentNature -> contentNature.equals(ContentNature.AUDIO));
+	}
+	
+	@Test
+	void test13() {
+		
+		String formatStr1 = "{\"bluerayMixed\": 3 }" ;
+		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
+		Format format1 = new Format(jf1) ;
+
+		assertThat(format1.getPoids()).isEqualTo(3);
+		assertThat(format1.hasMediaFiles(ContentNature.AUDIO)).isFalse();
+		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isFalse();
+		assertThat(format1.hasContentNature(ContentNature.AUDIO)).isTrue();
+		assertThat(format1.hasContentNature(ContentNature.VIDEO)).isTrue();
+		
+		assertMediaSupports(format1, Set.of(MediaSupports.BluRayMixed));
+		
+		assertThat(format1.getContentNatures()).containsExactlyInAnyOrder(ContentNature.AUDIO, ContentNature.VIDEO);
+
+	}
+	
+	private void assertMediaSupports(Format format, Set<MediaSupports> mediaSupports) {
+		
+		assertThat(MediaSupports.values()).allSatisfy((mediaSupport -> 
+			assertThat(format.hasMediaSupport(mediaSupport)).isEqualTo(mediaSupports.contains(mediaSupport))));
+
 	}
 }

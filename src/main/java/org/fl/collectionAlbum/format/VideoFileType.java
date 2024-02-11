@@ -22,32 +22,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbumGui;
+package org.fl.collectionAlbum.format;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+public enum VideoFileType {
 
-import org.fl.collectionAlbum.albums.Album;
-import org.fl.collectionAlbum.format.ContentNature;
-
-public class MediaFilesSearchListener implements ActionListener {
-
-	private final AlbumsJTable albumsJTable;
-	private final ContentNature contentNature;
-	
-	public MediaFilesSearchListener(AlbumsJTable ajt, ContentNature contentNature) {
-		this.albumsJTable = ajt;
-		this.contentNature = contentNature;
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		
-		Album selectedAlbum = albumsJTable.getSelectedAlbum();
-		
-		if (selectedAlbum != null) {
-			selectedAlbum.searchPotentialMediaFilesPaths(contentNature);
-		}
-	}
-
+	MKV,
+	MP4,
+	M4V,
+	VOB,
+	M2TS;
 }

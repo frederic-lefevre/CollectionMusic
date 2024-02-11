@@ -31,26 +31,24 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.fl.collectionAlbum.Format.SupportPhysique;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory.DiscogsAlbumRelease;
+import org.fl.collectionAlbum.format.MediaSupportCategories;
 import org.fl.discogsInterface.inventory.InventoryCsvAlbum;
 
 public class DiscogsAlbumReleaseMatcher {
 
-	private static final EnumMap<SupportPhysique,String> formatMatchMap = new EnumMap<>(Map.ofEntries( 
-			new AbstractMap.SimpleEntry<SupportPhysique,String>(SupportPhysique.CD, "CD"), 
-			new AbstractMap.SimpleEntry<SupportPhysique,String>(SupportPhysique.K7, "Cass"),
-			new AbstractMap.SimpleEntry<SupportPhysique,String>(SupportPhysique.Vinyl33T, "LP"),
-			new AbstractMap.SimpleEntry<SupportPhysique,String>(SupportPhysique.Vinyl45T, "Single"),
-			new AbstractMap.SimpleEntry<SupportPhysique,String>(SupportPhysique.MiniCD, "CD"),
-			new AbstractMap.SimpleEntry<SupportPhysique,String>(SupportPhysique.MiniDVD, "DVD"),
-			new AbstractMap.SimpleEntry<SupportPhysique,String>(SupportPhysique.Mini33T, ""),
-			new AbstractMap.SimpleEntry<SupportPhysique,String>(SupportPhysique.Maxi45T, "Maxi"),
-			new AbstractMap.SimpleEntry<SupportPhysique,String>(SupportPhysique.VHS, "VHS"),
-			new AbstractMap.SimpleEntry<SupportPhysique,String>(SupportPhysique.DVD, "DVD"),
-			new AbstractMap.SimpleEntry<SupportPhysique,String>(SupportPhysique.BluRay, "Blu-ray")));
+	private static final EnumMap<MediaSupportCategories,String> formatMatchMap = new EnumMap<>(Map.ofEntries( 
+			new AbstractMap.SimpleEntry<MediaSupportCategories,String>(MediaSupportCategories.CD, "CD"), 
+			new AbstractMap.SimpleEntry<MediaSupportCategories,String>(MediaSupportCategories.K7, "Cass"),
+			new AbstractMap.SimpleEntry<MediaSupportCategories,String>(MediaSupportCategories.VinylLP, "LP"),
+			new AbstractMap.SimpleEntry<MediaSupportCategories,String>(MediaSupportCategories.MiniVinyl, "Single"),
+			new AbstractMap.SimpleEntry<MediaSupportCategories,String>(MediaSupportCategories.MiniCD, "CD"),
+			new AbstractMap.SimpleEntry<MediaSupportCategories,String>(MediaSupportCategories.MiniDVD, "DVD"),
+			new AbstractMap.SimpleEntry<MediaSupportCategories,String>(MediaSupportCategories.VHS, "VHS"),
+			new AbstractMap.SimpleEntry<MediaSupportCategories,String>(MediaSupportCategories.DVD, "DVD"),
+			new AbstractMap.SimpleEntry<MediaSupportCategories,String>(MediaSupportCategories.BluRay, "Blu-ray")));
 	
 	public static enum MatchResultType {
 		NO_MATCH,
@@ -94,7 +92,7 @@ public class DiscogsAlbumReleaseMatcher {
 		} else {
 			// At least one match on auteurs and title : match on support physique
 			
-			Set<SupportPhysique> supportPhysiques = album.getFormatAlbum().getSupportsPhysiques();
+			Set<MediaSupportCategories> supportPhysiques = album.getFormatAlbum().getSupportsPhysiques();
 			Set<DiscogsAlbumRelease> compatibleReleaseSet =  compatibleAuteurAndTitleSet.stream()
 					.filter(release -> isAlbumFormatMatching(supportPhysiques, release.getInventoryCsvAlbum()))
 					.collect(Collectors.toSet());
@@ -114,16 +112,20 @@ public class DiscogsAlbumReleaseMatcher {
 
 	}
 
-	private static boolean isAlbumFormatMatching(Set<SupportPhysique> supportPhysiques, InventoryCsvAlbum inventoryCsvAlbum) {
+	private static boolean isAlbumFormatMatching(Set<MediaSupportCategories> supportPhysiques, InventoryCsvAlbum inventoryCsvAlbum) {
 		
 		return supportPhysiques.stream()
 				.allMatch(supportPhysique -> isSupportPhysiquePresent(supportPhysique, inventoryCsvAlbum));
 
 	}
 	
-	private static boolean isSupportPhysiquePresent(SupportPhysique supportPhysique, InventoryCsvAlbum inventoryCsvAlbum) {
+	private static boolean isSupportPhysiquePresent(MediaSupportCategories supportPhysique, InventoryCsvAlbum inventoryCsvAlbum) {
 		
 		return inventoryCsvAlbum.getFormats().stream()
-			.anyMatch(inventoryCsvAlbumFormat -> inventoryCsvAlbumFormat.contains(formatMatchMap.get(supportPhysique)));
+			.anyMatch(inventoryCsvAlbumFormat -> inventoryCsvAlbumFormat.contains(getFormatMatch(supportPhysique)));
+	}
+	
+	public static String getFormatMatch(MediaSupportCategories supportPhysique) {
+		return formatMatchMap.get(supportPhysique);
 	}
 }

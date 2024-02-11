@@ -31,11 +31,11 @@ import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.stream.Stream;
 
-import org.fl.collectionAlbum.AbstractMediaFile;
-import org.fl.collectionAlbum.Format;
-import org.fl.collectionAlbum.Format.ContentNature;
-import org.fl.collectionAlbum.Format.RangementSupportPhysique;
 import org.fl.collectionAlbum.albums.Album;
+import org.fl.collectionAlbum.format.AbstractMediaFile;
+import org.fl.collectionAlbum.format.ContentNature;
+import org.fl.collectionAlbum.format.Format;
+import org.fl.collectionAlbum.format.Format.RangementSupportPhysique;
 import org.fl.collectionAlbum.utils.TemporalUtils;
 
 public class RapportAlbum extends RapportMusicArtefact {
@@ -90,7 +90,7 @@ public class RapportAlbum extends RapportMusicArtefact {
 		
 		
 		write("  <p>Rangement: ");
-		write(Optional.ofNullable(format.getRangement()).map(RangementSupportPhysique::getDescription).orElse("NON DEFINI"));
+		write(Optional.ofNullable(format.inferRangement()).map(RangementSupportPhysique::getDescription).orElse("NON DEFINI"));
 		write("</p>\n");
 		
 		write("  <h3>Fichiers media</h3>\n");

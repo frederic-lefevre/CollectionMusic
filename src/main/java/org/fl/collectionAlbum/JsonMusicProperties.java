@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -35,13 +35,16 @@ public class JsonMusicProperties {
 	public final static String MINI_DVD 	  = "minidvd" ;
 	public final static String K7 			  = "k7" ;
 	public final static String _33T 		  = "33t" ;
+	public final static String _33T_EP 		  = "33tEP" ;
 	public final static String _45T 		  = "45t" ;
+	public final static String _45T_LP 		  = "45tLP" ;
 	public final static String MINI_33T		  = "mini33t" ;
 	public final static String MAXI_45T		  = "maxi45t" ;
 	public final static String VHS			  = "vhs" ;
 	public final static String DVD			  = "dvd" ;
 	public final static String BLURAY		  = "blueray" ;
 	public final static String BLURAY_AUDIO   = "bluerayAudio" ;
+	public final static String BLURAY_MIXED   = "bluerayMixed" ;
 	public final static String NOM			  = "nom" ;
 	public final static String PRENOM		  = "prenom" ;
 	public final static String NAISSANCE	  = "naissance" ;

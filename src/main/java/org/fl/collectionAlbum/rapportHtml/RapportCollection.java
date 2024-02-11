@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -25,9 +25,12 @@ SOFTWARE.
 package org.fl.collectionAlbum.rapportHtml;
 
 import java.nio.file.Path;
+import java.util.Arrays;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
-import org.fl.collectionAlbum.Format;
+import org.fl.collectionAlbum.format.ContentNature;
+import org.fl.collectionAlbum.format.Format;
+import org.fl.collectionAlbum.format.MediaSupports;
 
 public class RapportCollection extends RapportHtml {
 
@@ -49,7 +52,7 @@ public class RapportCollection extends RapportHtml {
 	@Override
 	 protected void corpsRapport() {
 		   	
-		write("<table>\n<tr>\n<td class=\"mainpage\">\n<h3>Classement des auteurs, interpretes et chefs d'orchestre</h3>\n<ul>\n");
+		write("<table>\n<tr>\n<td class=\"mainpage\">\n<h3>Classements des auteurs, interpretes et chefs d'orchestre</h3>\n<ul>\n");
 		
 		RapportListeArtistesAlbum rapportArtistesAlbumsAlpha = new RapportListeArtistesAlbum(albumsContainer.getCollectionArtistes().sortArtistesAlpha(),  "Classement alphabethique");
 		rapportArtistesAlbumsAlpha.withBalises(new Balises(Balises.BalisesType.ALPHA));
@@ -66,7 +69,7 @@ public class RapportCollection extends RapportHtml {
 		RapportCalendrier rapportCalendrier = new RapportCalendrier(albumsContainer.getCalendrierArtistes(), "Calendrier");
 		write(rapportCalendrier.printReport(getNextRapportFile(), CssStyles.stylesCalendrier));
 		
-		write("</ul>\n</td>\n<td class=\"mainpage\">\n<h3>Classement des albums</h3>\n<ul>\n");
+		write("</ul>\n</td>\n<td class=\"mainpage\">\n<h3>Classements chronologiques des albums</h3>\n<ul>\n");
 		RapportListeAlbums rapportAlbumsEnregistrement = new RapportListeAlbums(albumsContainer.getCollectionAlbumsMusiques().sortChronoEnregistrement(), "Classement chronologique (enregistrement)");
 		rapportAlbumsEnregistrement.withBalises(new Balises(Balises.BalisesType.TEMPORAL));
 		write(rapportAlbumsEnregistrement.printReport(getNextRapportFile(), CssStyles.stylesTableauAvecBalise));
@@ -100,6 +103,22 @@ public class RapportCollection extends RapportHtml {
 		RapportListeAlbums rapportAlbumsWithoutVideoFile = new RapportListeAlbums(albumsContainer.getAlbumsMissingVideoFile().sortRangementAlbum(), "Albums manquant de fichier video");
 		write(rapportAlbumsWithoutVideoFile.printReport(getNextRapportFile(), CssStyles.stylesTableauAvecBalise));
 		
+		write("</ul>\n</td>\n</tr>\n<tr>\n<td class=\"mainpage\">\n<h3>Albums par support media</h3>\n<ul>\n");
+		Arrays.stream(MediaSupports.values()).forEach(mediaSupport -> {
+			RapportListeAlbums mediaSupportAlbum = new RapportListeAlbums(albumsContainer.getAlbumsWithMediaSupport(mediaSupport).sortRangementAlbum(), "Albums avec " + mediaSupport.getDescription());
+			write(mediaSupportAlbum.printReport(getNextRapportFile(), CssStyles.stylesTableauMusicArtefact));
+		});
+		
+		write("</ul>\n</td>\n<td class=\"mainpage\">\n<h3>Albums par nature de contenu</h3>\n<ul>\n");
+		Arrays.stream(ContentNature.values()).forEach(contentNature -> {
+			RapportListeAlbums contentNatureAlbums = 
+					new RapportListeAlbums(albumsContainer.getAlbumsWithOnlyContentNature(contentNature).sortRangementAlbum(), "Albums avec seulement du contenu " + contentNature.getNom());
+			write(contentNatureAlbums.printReport(getNextRapportFile(),CssStyles.stylesTableauMusicArtefact));
+		});
+		RapportListeAlbums mixedContentNatureAlbums = 
+				new RapportListeAlbums(albumsContainer.getAlbumsWithMixedContentNature().sortRangementAlbum(), "Albums avec plusieurs types de contenus");
+		write(mixedContentNatureAlbums.printReport(getNextRapportFile(),CssStyles.stylesTableauMusicArtefact));
+
 		write("</ul>\n</td>\n</tr>\n<tr>\n<td class=\"mainpage\">\n<h3>Statistiques</h3>\n<ul>\n");
 		RapportStat rapportStat1 = new RapportStat(albumsContainer.getStatChronoEnregistrement(), "Statistiques par année d'enregistrement");
 		write(rapportStat1.printReport(getNextRapportFile(), CssStyles.stylesStat));
@@ -140,6 +159,14 @@ public class RapportCollection extends RapportHtml {
 				write("</td><td class=\"albumstat\">");
 				write(albumsContainer.getRangementAlbums(rangement).getNombreAlbums());
 			}
+			write("</td></tr>\n  </table>\n  <table>\n  <tr><td>\n");
+			Arrays.stream(MediaSupports.values()).forEach(mediaSupport -> {
+				write("</td></tr>\n    <tr><td class=\"albumstatTitle\">");
+				write("Albums avec " + mediaSupport.getDescription());
+				write("</td><td class=\"albumstat\">");
+				write(albumsContainer.getAlbumsWithMediaSupport(mediaSupport).getNombreAlbums());
+			});
+			
 			write("</td></tr>\n  </table>\n  </li>\n</ul>\n");
 	 }
 }

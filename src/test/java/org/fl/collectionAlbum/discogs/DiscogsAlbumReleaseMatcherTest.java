@@ -28,6 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.fl.collectionAlbum.albums.Album;
@@ -35,6 +36,7 @@ import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.MatchResultType;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.ReleaseMatchResult;
+import org.fl.collectionAlbum.format.MediaSupportCategories;
 import org.junit.jupiter.api.Test;
 
 import com.google.gson.JsonObject;
@@ -224,6 +226,14 @@ class DiscogsAlbumReleaseMatcherTest {
 			.isNotNull().isEmpty();
 	}
 
+	@Test
+	void shouldCoverAllSupportCategories() {
+		
+		Arrays.stream(MediaSupportCategories.values()).forEach(supportCategory ->
+				assertThat(DiscogsAlbumReleaseMatcher.getFormatMatch(supportCategory)).isNotNull()
+				);
+	}
+	
 	private static Album getAlbumFromJson(String albumStr) {
 		
 		JsonObject jAlbum = JsonParser.parseString(albumStr).getAsJsonObject();

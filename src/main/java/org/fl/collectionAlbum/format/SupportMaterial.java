@@ -1,7 +1,7 @@
 /*
- * MIT License
+ MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -20,15 +20,14 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-*/
+ */
 
-package org.fl.collectionAlbum;
+package org.fl.collectionAlbum.format;
 
-public enum VideoFileType {
+public enum SupportMaterial {
 
-	MKV,
-	MP4,
-	M4V,
-	VOB,
-	M2TS;
+	VINYL,
+	OPTICAL_DISC,
+	MAGNETIC_TAPE
+
 }

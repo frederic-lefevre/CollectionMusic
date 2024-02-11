@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -30,10 +30,10 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.Control;
-import org.fl.collectionAlbum.Format.ContentNature;
 import org.fl.collectionAlbum.JsonMusicProperties;
-import org.fl.collectionAlbum.VideoFile;
-import org.fl.collectionAlbum.VideoFileType;
+import org.fl.collectionAlbum.format.ContentNature;
+import org.fl.collectionAlbum.format.VideoFile;
+import org.fl.collectionAlbum.format.VideoFileType;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
 import com.google.gson.JsonElement;
