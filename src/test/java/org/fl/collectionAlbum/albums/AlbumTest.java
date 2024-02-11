@@ -77,6 +77,8 @@ class AlbumTest {
 		assertThat(album.getAllMediaFiles()).isEmpty();
 		
 		assertMediaSupports(album, Collections.emptySet());
+		
+		assertThat(album.getContentNatures()).isEmpty();
 	}
 
 	private static final String albumStr1 = """
@@ -299,6 +301,8 @@ class AlbumTest {
 
 		assertThat(potentialPaths).isNotNull().singleElement()
 			.satisfies(mediaFilePath -> assertThat(mediaFilePath.getPath()).hasToString("E:\\Musique\\e\\Bill Evans\\Portrait In Jazz"));
+		
+		assertThat(album.getContentNatures()).containsExactly(ContentNature.AUDIO);
 	}
 	
 	private static final String albumStr3 = """
@@ -355,6 +359,8 @@ class AlbumTest {
 			});
 		
 		assertMediaSupports(album, Set.of(MediaSupports.CD));
+		
+		assertThat(album.getContentNatures()).containsExactly(ContentNature.AUDIO);
 	}
 	
 	private static final String albumStr2 = """
@@ -400,6 +406,8 @@ class AlbumTest {
 		.satisfies(mediaFilePath -> assertThat(mediaFilePath.getPath()).hasToString("E:\\Musique\\v\\Van Halen\\Van Halen [24 - 192]"));
 		
 		assertMediaSupports(album, Set.of(MediaSupports.CD));
+		
+		assertThat(album.getContentNatures()).containsExactly(ContentNature.AUDIO);
 	}
 	
 	private void testAlbumProperties(Album album, ListeArtiste la) {
@@ -444,6 +452,8 @@ class AlbumTest {
 			.isEqualTo(album);
 		
 		assertMediaSupports(album, Set.of(MediaSupports.CD));
+		
+		assertThat(album.getContentNatures()).containsExactly(ContentNature.AUDIO);
 	}
 	
 	private void assertMediaSupports(Album album, Set<MediaSupports> mediaSupports) {

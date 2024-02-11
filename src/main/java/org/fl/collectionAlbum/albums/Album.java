@@ -190,6 +190,10 @@ public class Album extends MusicArtefact {
 		return formatAlbum.hasMediaFilePathNotFound(contentNature);
 	}
 	
+	public Set<ContentNature> getContentNatures() {
+		return formatAlbum.getContentNatures();
+	}
+	
 	public boolean hasProblem() {
 		return missesAudioFile() ||
 				missesVideoFile() ||
