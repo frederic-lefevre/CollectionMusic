@@ -324,13 +324,17 @@ public class Format {
 	private final static String AUDIO_FILE_OK_CLASS = "audiook";
 	private final static String AUDIO_FILE_DETAIL_CLASS = "audiodetail";
 	
+	private final static String SUPPORT_CLASS = "support";
+	private final static String INFO_SUPPORT_CLASS = "infosupport";
+	
 	public static void enteteFormat(StringBuilder rapport, String cssTotal, int rows, boolean putAudioFile) {
 		
 		if (cssTotal != null) {
-			rapport.append(F_ROW1).append(rows).append(F_ROW3).append(cssTotal).append(F_ROW2) ;
+			rapport.append(F_ROW1).append(rows).append(F_ROW3).append(cssTotal).append(F_ROW2);
 		}
 		for (MediaSupportCategories sPhys : MediaSupportCategories.values()) {
-			rapport.append(F_ROW1).append(rows).append(F_ROW3).append(sPhys.getCssClass()).append(F_ROW4).append(sPhys.getNom()).append(F_ROW5) ;
+			rapport.append(F_ROW1).append(rows).append(F_ROW3).append(sPhys.getCssClass()).append(" ").append(SUPPORT_CLASS).append(F_ROW4).append(sPhys.getNom())
+			.append(F_ROW8).append(INFO_SUPPORT_CLASS).append(F_ROW4).append(sPhys.getDescription()).append(F_ROW7) ;
 		}
 		
 		if (putAudioFile) {
