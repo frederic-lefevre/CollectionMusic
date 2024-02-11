@@ -48,6 +48,7 @@ class FormatTest {
 		assertThat(format1.getPoids()).isZero();
 		assertMediaSupports(format1, Collections.emptySet());
 
+		assertThat(format1.getContentNatures()).isEmpty();
 	}
 
 	@Test
@@ -62,6 +63,9 @@ class FormatTest {
 		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isFalse();
 		
 		assertMediaSupports(format1, Set.of(MediaSupports.CD));
+		
+		assertThat(format1.getContentNatures()).singleElement()
+			.matches(contentNature -> contentNature.equals(ContentNature.AUDIO));
 	}
 	
 	@Test
@@ -81,6 +85,9 @@ class FormatTest {
 		assertThat(format1.hasContentNature(ContentNature.VIDEO)).isFalse();
 		
 		assertMediaSupports(format1, Set.of(MediaSupports.CD, MediaSupports.Vinyl45T));
+		
+		assertThat(format1.getContentNatures()).singleElement()
+			.matches(contentNature -> contentNature.equals(ContentNature.AUDIO));
 	}
 	
 	@Test
@@ -100,6 +107,8 @@ class FormatTest {
 		assertThat(format1.hasContentNature(ContentNature.VIDEO)).isTrue();
 		
 		assertMediaSupports(format1, Set.of(MediaSupports.CD, MediaSupports.DVD));
+		
+		assertThat(format1.getContentNatures()).containsExactlyInAnyOrder(ContentNature.AUDIO, ContentNature.VIDEO);
 	}
 	
 	@Test
@@ -134,6 +143,9 @@ class FormatTest {
 		assertMediaSupports(format1, Set.of(MediaSupports.Vinyl33T, MediaSupports.Vinyl45T));
 		assertMediaSupports(format2, Set.of(MediaSupports.CD, MediaSupports.Vinyl45T));
 		assertMediaSupports(format3, Set.of(MediaSupports.CD, MediaSupports.Vinyl45T, MediaSupports.Vinyl33T));
+		
+		assertThat(format3.getContentNatures()).singleElement()
+			.matches(contentNature -> contentNature.equals(ContentNature.AUDIO));
 	}
 	
 	@Test
@@ -172,6 +184,9 @@ class FormatTest {
 		assertThat(format1.getAllMediaFiles()).hasSameElementsAs(format1.getMediaFiles(ContentNature.AUDIO));
 		
 		assertMediaSupports(format1, Set.of(MediaSupports.CD, MediaSupports.Vinyl45T));
+		
+		assertThat(format1.getContentNatures()).singleElement()
+			.matches(contentNature -> contentNature.equals(ContentNature.AUDIO));
 	}
 	
 	@Test
@@ -210,6 +225,9 @@ class FormatTest {
 		assertThat(format1.getAllMediaFiles()).hasSameElementsAs(format1.getMediaFiles(ContentNature.AUDIO));
 		
 		assertMediaSupports(format1, Set.of(MediaSupports.CD, MediaSupports.Vinyl45T));
+		
+		assertThat(format1.getContentNatures()).singleElement()
+			.matches(contentNature -> contentNature.equals(ContentNature.AUDIO));
 	}
 	
 	@Test
@@ -272,6 +290,9 @@ class FormatTest {
 		assertThat(format1.getAllMediaFiles()).hasSameElementsAs(format1.getMediaFiles(ContentNature.AUDIO));
 		
 		assertMediaSupports(format1, Set.of(MediaSupports.CD, MediaSupports.Vinyl45T));
+		
+		assertThat(format1.getContentNatures()).singleElement()
+			.matches(contentNature -> contentNature.equals(ContentNature.AUDIO));
 	}
 	
 	@Test
@@ -327,6 +348,9 @@ class FormatTest {
 			.containsAll(format1.getMediaFiles(ContentNature.AUDIO));
 		
 		assertMediaSupports(format1, Set.of(MediaSupports.CD, MediaSupports.Vinyl45T));
+		
+		assertThat(format1.getContentNatures()).singleElement()
+			.matches(contentNature -> contentNature.equals(ContentNature.AUDIO));
 	}
 	
 	@Test
@@ -379,6 +403,9 @@ class FormatTest {
 		assertThat(format1.hasContentNature(ContentNature.AUDIO)).isFalse();
 		
 		assertMediaSupports(format1, Set.of(MediaSupports.DVD));
+		
+		assertThat(format1.getContentNatures()).singleElement()
+			.matches(contentNature -> contentNature.equals(ContentNature.VIDEO));
 	}
 	
 	@Test
@@ -393,6 +420,8 @@ class FormatTest {
 		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isFalse();
 		
 		assertMediaSupports(format1, Collections.emptySet());
+		
+		assertThat(format1.getContentNatures()).isEmpty();
 	}
 	
 	@Test
@@ -409,6 +438,9 @@ class FormatTest {
 		assertThat(format1.hasContentNature(ContentNature.VIDEO)).isTrue();
 		
 		assertMediaSupports(format1, Set.of(MediaSupports.BluRay));
+		
+		assertThat(format1.getContentNatures()).singleElement()
+			.matches(contentNature -> contentNature.equals(ContentNature.VIDEO));
 	}
 	
 	@Test
@@ -425,6 +457,9 @@ class FormatTest {
 		assertThat(format1.hasContentNature(ContentNature.VIDEO)).isFalse();
 		
 		assertMediaSupports(format1, Set.of(MediaSupports.BluRayAudio));
+		
+		assertThat(format1.getContentNatures()).singleElement()
+			.matches(contentNature -> contentNature.equals(ContentNature.AUDIO));
 	}
 	
 	@Test
@@ -441,6 +476,9 @@ class FormatTest {
 		assertThat(format1.hasContentNature(ContentNature.VIDEO)).isTrue();
 		
 		assertMediaSupports(format1, Set.of(MediaSupports.BluRayMixed));
+		
+		assertThat(format1.getContentNatures()).containsExactlyInAnyOrder(ContentNature.AUDIO, ContentNature.VIDEO);
+
 	}
 	
 	private void assertMediaSupports(Format format, Set<MediaSupports> mediaSupports) {

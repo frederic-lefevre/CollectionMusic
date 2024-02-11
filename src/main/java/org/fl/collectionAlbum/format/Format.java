@@ -287,6 +287,14 @@ public class Format {
 				.anyMatch(p -> p > 0);
 	}
 	
+	public Set<ContentNature> getContentNatures() {
+		return tableFormat.entrySet()
+			.stream()
+			.filter(entry -> Objects.nonNull(entry.getValue()) && entry.getValue() > 0)
+			.flatMap(entry -> entry.getKey().getContentNatures().stream())
+			.collect(Collectors.toSet());			
+	}
+	
 	public boolean hasError() {
 		return hasError;
 	}
