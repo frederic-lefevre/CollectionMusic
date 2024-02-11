@@ -28,9 +28,9 @@ package org.fl.collectionAlbum.format;
 public enum MediaSupportCategories {
 	CD(		  "CD",  	 	"xnbcd", 		"CD",		 						1),
 	K7(		  "K7",  	 	"xnbk7", 		"Cassette audio",		 			1),
-	VinylLP(  "Vinyl LP", 	"xnbVinyl", 	"Vinyle de plus de 30 minutes", 	1),
-	MiniVinyl("Mini Vinyl", "xnbMiniVinyl", "Vinyle de moins de 30 minutes",  0.5),
-	MiniCD(	  "Mini CD",  	"xnbminicd",    "CD court, monins de 30 minutes", 0.5),
+	VinylLP(  "Vinyl LP", 	"xnbVinyl", 	"Vinyle de plus de 25 minutes", 	1),
+	MiniVinyl("Mini Vinyl", "xnbMiniVinyl", "Vinyle de moins de 25 minutes",  0.5),
+	MiniCD(	  "Mini CD",  	"xnbminicd",    "CD court, monins de 25 minutes", 0.5),
 	MiniDVD(  "Mini DVD", 	"xnbminidvd",   "DVD court", 					  0.5),
 	VHS(	  "VHS",		"xnbvhs", 	  	"Casssette video HS", 	 			1),
 	DVD(	  "DVD",		"xnbdvd", 	  	"DVD",	 	 						1),
