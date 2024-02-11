@@ -146,7 +146,7 @@ public enum MediaSupports {
 		return supportMaterial;
 	}
 
-	String getDescription() {
+	public String getDescription() {
 		return description;
 	}
 }
