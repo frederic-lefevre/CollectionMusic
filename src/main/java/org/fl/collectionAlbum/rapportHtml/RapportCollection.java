@@ -159,6 +159,14 @@ public class RapportCollection extends RapportHtml {
 				write("</td><td class=\"albumstat\">");
 				write(albumsContainer.getRangementAlbums(rangement).getNombreAlbums());
 			}
+			write("</td></tr>\n  </table>\n  <table>\n  <tr><td>\n");
+			Arrays.stream(MediaSupports.values()).forEach(mediaSupport -> {
+				write("</td></tr>\n    <tr><td class=\"albumstatTitle\">");
+				write("Albums avec " + mediaSupport.getDescription());
+				write("</td><td class=\"albumstat\">");
+				write(albumsContainer.getAlbumsWithMediaSupport(mediaSupport).getNombreAlbums());
+			});
+			
 			write("</td></tr>\n  </table>\n  </li>\n</ul>\n");
 	 }
 }
