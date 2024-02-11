@@ -78,7 +78,13 @@ public enum MediaSupports {
 			JsonMusicProperties.MINI_33T, 	
 			Set.of(ContentNature.AUDIO), 					  
 			SupportMaterial.VINYL,
-			"Vinyle 33 tours, 30 cm moins de 25 minutes ou 18 cm"),
+			"Vinyle 33 tours, 18 cm"),
+	Vinyl33TEP(	
+			MediaSupportCategories.MiniVinyl, 
+			JsonMusicProperties._33T_EP, 	
+			Set.of(ContentNature.AUDIO), 					  
+			SupportMaterial.VINYL,
+			"Vinyle 33 tours, 30 cm, moins de 25 minutes"),
 	Maxi45T(	
 			MediaSupportCategories.MiniVinyl, 
 			JsonMusicProperties.MAXI_45T, 	
