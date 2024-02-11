@@ -271,6 +271,10 @@ public class Format {
 					.anyMatch(mediaFile -> mediaFile.hasMissingOrInvalidMediaFilePath()));
 	}
 	
+	public boolean hasMediaSupport(MediaSupports mediaSupport) {
+		return (getNb(mediaSupport) > 0);
+	}
+	
 	private <T extends AbstractMediaFile> boolean hasMediaFile(List<T> mediaFiles) {
 		return (mediaFiles != null) && (!mediaFiles.isEmpty());
 	}
