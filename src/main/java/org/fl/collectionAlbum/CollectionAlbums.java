@@ -78,8 +78,8 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 
 		progressPanel.setStepInformation("");
 
-		MediaFilesInventories.rebuildInventories();
-		DiscogsInventory.rebuildDiscogsInventory();
+		MediaFilesInventories.buildInventories();
+		DiscogsInventory.buildDiscogsInventory();
 		
 		albumsContainer = CollectionAlbumContainer.getEmptyInstance() ;
 		progressPanel.setStepPrefixInformation(EN_EXAMEN);

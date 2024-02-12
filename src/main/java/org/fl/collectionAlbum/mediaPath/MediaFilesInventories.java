@@ -54,7 +54,7 @@ public class MediaFilesInventories {
 		return instance.mediaFilesInventories.get(contentNature);
 	}
 
-	public static void rebuildInventories() {
+	public static void buildInventories() {
 		if (instance != null) {
 			instance.mediaFilesInventories.values().forEach(MediaFileInventory::buildInventory);
 		}
