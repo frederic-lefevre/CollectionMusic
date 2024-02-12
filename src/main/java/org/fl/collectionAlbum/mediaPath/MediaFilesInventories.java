@@ -48,15 +48,17 @@ public class MediaFilesInventories {
 	}
 
 	public static MediaFileInventory getMediaFileInventory(ContentNature contentNature) {
+		return getInstance().mediaFilesInventories.get(contentNature);
+	}
+
+	public static void buildInventories() {
+		getInstance().mediaFilesInventories.values().forEach(MediaFileInventory::buildInventory);
+	}
+	
+	private static MediaFilesInventories getInstance() {
 		if (instance == null) {
 			instance = new MediaFilesInventories();
 		}
-		return instance.mediaFilesInventories.get(contentNature);
-	}
-
-	public static void rebuildInventories() {
-		if (instance != null) {
-			instance.mediaFilesInventories.values().forEach(MediaFileInventory::buildInventory);
-		}
+		return instance;
 	}
 }

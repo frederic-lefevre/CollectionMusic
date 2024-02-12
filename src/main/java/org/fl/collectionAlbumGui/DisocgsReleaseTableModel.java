@@ -24,11 +24,11 @@ SOFTWARE.
 
 package org.fl.collectionAlbumGui;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.swing.table.AbstractTableModel;
 
-import org.fl.collectionAlbum.disocgs.DiscogsInventory;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory.DiscogsAlbumRelease;
 
 public class DisocgsReleaseTableModel extends AbstractTableModel {
@@ -43,13 +43,16 @@ public class DisocgsReleaseTableModel extends AbstractTableModel {
 			
 	private final static String[] entetes = {"Id", "Auteurs", "Titre de l'album", "Formats", "Lié à un album"};
 	
-	public DisocgsReleaseTableModel() {
+	private final List<DiscogsAlbumRelease> discogsAlbumReleases;
+	
+	public DisocgsReleaseTableModel(List<DiscogsAlbumRelease> discogsAlbumReleases) {
 		super();
+		this.discogsAlbumReleases = discogsAlbumReleases;
 	}
 
 	@Override
 	public int getRowCount() {
-		return DiscogsInventory.getDiscogsInventory().size();
+		return discogsAlbumReleases.size();
 	}
 
 	@Override
@@ -71,17 +74,17 @@ public class DisocgsReleaseTableModel extends AbstractTableModel {
 	public Object getValueAt(int rowIndex, int columnIndex) {
 
 		return switch(columnIndex){
-			case ID_COL_IDX -> DiscogsInventory.getDiscogsInventory().get(rowIndex).getInventoryCsvAlbum().getReleaseId();
-			case ARTISTS_COL_IDX -> DiscogsInventory.getDiscogsInventory().get(rowIndex).getInventoryCsvAlbum().getArtists().stream().collect(Collectors.joining(","));
-			case TITLE_COL_IDX -> DiscogsInventory.getDiscogsInventory().get(rowIndex).getInventoryCsvAlbum().getTitle();
-			case FORMAT_COL_IDX -> DiscogsInventory.getDiscogsInventory().get(rowIndex).getInventoryCsvAlbum().getFormats().stream().collect(Collectors.joining(","));
-			case ALBUM_LINK_COL_IDX -> DiscogsInventory.getDiscogsInventory().get(rowIndex).isLinkedToAlbum();
+			case ID_COL_IDX -> discogsAlbumReleases.get(rowIndex).getInventoryCsvAlbum().getReleaseId();
+			case ARTISTS_COL_IDX -> discogsAlbumReleases.get(rowIndex).getInventoryCsvAlbum().getArtists().stream().collect(Collectors.joining(","));
+			case TITLE_COL_IDX -> discogsAlbumReleases.get(rowIndex).getInventoryCsvAlbum().getTitle();
+			case FORMAT_COL_IDX -> discogsAlbumReleases.get(rowIndex).getInventoryCsvAlbum().getFormats().stream().collect(Collectors.joining(","));
+			case ALBUM_LINK_COL_IDX -> discogsAlbumReleases.get(rowIndex).isLinkedToAlbum();
 			default -> null;
 		};
 
 	}
 
 	public DiscogsAlbumRelease getDiscogsReleaseAt(int rowIndex) {
-		return DiscogsInventory.getDiscogsInventory().get(rowIndex);
+		return discogsAlbumReleases.get(rowIndex);
 	}
 }

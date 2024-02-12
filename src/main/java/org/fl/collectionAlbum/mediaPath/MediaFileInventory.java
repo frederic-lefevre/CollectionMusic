@@ -68,8 +68,6 @@ public class MediaFileInventory {
 		this.logWarnings = logWarnings;
 		mediaFilePathInventory = new LinkedHashMap<>();
 		mediaFilePathList = new ArrayList<>();
-		
-		buildInventory();
 	}
 
 	public void buildInventory() {

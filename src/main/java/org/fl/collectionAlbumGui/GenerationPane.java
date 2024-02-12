@@ -31,9 +31,9 @@ import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
-import javax.swing.ScrollPaneConstants;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
+import org.fl.collectionAlbum.disocgs.DiscogsInventory;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 
@@ -69,8 +69,9 @@ public class GenerationPane extends JPanel {
 
 		StartControl[] stCtrl = new StartControl[] { startButton, genButton };
 
-		StartReadCollection sm = new StartReadCollection(albumsTableModel, startButton.getPip(), startButton, stCtrl);
+		StartReadCollection sm = new StartReadCollection(startButton.getPip(), startButton, stCtrl);
 		sm.setCollectionProcWaiter(new CollectionProcessWaiter(stCtrl));
+		sm.addTableModel(albumsTableModel);
 		startButton.getStartButton().addActionListener(sm);
 
 		StartGenerationSite sg = new StartGenerationSite(genButton.getPip(), genButton, stCtrl);
@@ -96,6 +97,7 @@ public class GenerationPane extends JPanel {
 		Stream.of(ContentNature.values()).forEach(contentNature -> {
 			
 			MediaFilesTableModel tm = new MediaFilesTableModel(MediaFilesInventories.getMediaFileInventory(contentNature));
+			sm.addTableModel(tm);
 			
 			MediaFilesJTable mediaFilesJTable = new MediaFilesJTable(tm);
 			
@@ -104,14 +106,14 @@ public class GenerationPane extends JPanel {
 			// Scroll pane to contain the media path table
 			JScrollPane mediaFilesScrollTable = new JScrollPane(mediaFilesJTable);
 			mediaFilesScrollTable.setPreferredSize(new Dimension(1800,700));
-			mediaFilesScrollTable.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 			mediaFilesPane.add(mediaFilesScrollTable);
 			
 			collectionTabPanes.add(mediaFilesPane, "Chemins des fichiers " + contentNature.getNom());
 		});
 		
 		// Discogs releases pane
-		DisocgsReleaseTableModel dtm = new DisocgsReleaseTableModel();
+		DisocgsReleaseTableModel dtm = new DisocgsReleaseTableModel(DiscogsInventory.getDiscogsInventory());
+		sm.addTableModel(dtm);
 		
 		DiscogsReleaseJTable discogsReleaseJTable = new DiscogsReleaseJTable(dtm);
 		
@@ -121,9 +123,8 @@ public class GenerationPane extends JPanel {
 		JScrollPane discogsReleasesScrollPane = new JScrollPane(discogsReleaseJTable);
 		discogsReleasesScrollPane.setPreferredSize(new Dimension(1800,700));
 		discogsReleasesPane.add(discogsReleasesScrollPane);
-		
+
 		collectionTabPanes.add(discogsReleasesPane, "Discogs releases");
-		
 		
 		add(collectionTabPanes);
 	}

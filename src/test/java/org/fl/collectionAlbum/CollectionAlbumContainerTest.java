@@ -31,8 +31,10 @@ import java.nio.file.Paths;
 
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.Artiste;
+import org.fl.collectionAlbum.disocgs.DiscogsInventory;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.format.Format.RangementSupportPhysique;
+import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 import org.fl.collectionAlbum.format.MediaSupports;
 import org.fl.collectionAlbum.rapportHtml.RapportStructuresAndNames;
 import org.junit.jupiter.api.Test;
@@ -102,6 +104,9 @@ class CollectionAlbumContainerTest {
 		
 		RapportStructuresAndNames.init();
 
+		MediaFilesInventories.buildInventories();
+		DiscogsInventory.buildDiscogsInventory();
+		
 		CollectionAlbumContainer albumsContainer = CollectionAlbumContainer.getEmptyInstance();
 
 		JsonObject jAlbum = JsonParser.parseString(albumStr1).getAsJsonObject();

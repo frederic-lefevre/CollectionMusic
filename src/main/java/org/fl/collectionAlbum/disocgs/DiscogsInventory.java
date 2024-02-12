@@ -25,13 +25,13 @@ SOFTWARE.
 package org.fl.collectionAlbum.disocgs;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
@@ -127,15 +127,12 @@ public class DiscogsInventory {
 		
 		disocgsInventoryCsvPath = Control.getDiscogsCollectionCsvExportPath();
 		
-		discogsAlbumReleases = Inventory.parseCsvFile(disocgsInventoryCsvPath, albumLog).stream()
-				.map(DiscogsAlbumRelease::new).collect(Collectors.toList());
-		
+		discogsAlbumReleases = new ArrayList<>();		
 		discogsAlbumReleaseMap = new LinkedHashMap<>();
-		discogsAlbumReleases.forEach(release -> discogsAlbumReleaseMap.put(release.getInventoryCsvAlbum().getReleaseId(), release));
 	}
 
-	public static void rebuildDiscogsInventory() {
-		getInstance().rebuildDiscogsReleasesInventory();
+	public static void buildDiscogsInventory() {
+		getInstance().buildDiscogsReleasesInventory();
 	}
 	
 	public static List<DiscogsAlbumRelease> getDiscogsInventory() {
@@ -147,7 +144,7 @@ public class DiscogsInventory {
 		return discogsAlbumReleaseMap.get(discogsReleaseId);
 	}
 	
-	private void rebuildDiscogsReleasesInventory() {
+	private void buildDiscogsReleasesInventory() {
 		
 		discogsAlbumReleases.clear();
 		Inventory.parseCsvFile(disocgsInventoryCsvPath, albumLog).forEach(csvRelease -> discogsAlbumReleases.add(new DiscogsAlbumRelease(csvRelease)));

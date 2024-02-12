@@ -36,13 +36,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.SwingWorker;
+import javax.swing.table.AbstractTableModel;
 
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory;
 import org.fl.collectionAlbum.json.migrator.MusicArtefactMigrator;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
-import org.fl.collectionAlbumGui.AlbumsTableModel;
 import org.fl.collectionAlbumGui.ProgressInformation;
 import org.fl.collectionAlbumGui.ProgressInformationPanel;
 import org.fl.util.json.JsonUtils;
@@ -55,7 +55,7 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 	
 	private CollectionAlbumContainer albumsContainer ;
 	private final ProgressInformationPanel progressPanel;
-	private final AlbumsTableModel albumsTableModel;
+	private final List<AbstractTableModel> tableModels;
 	
 	// Information prefix
 	private final static String ARRET 			= "Arreté" ;
@@ -67,19 +67,22 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 	private final static String CALENDARS 		= "Construction des calendriers" ;
 	private final static String FIN_LECTURE		= "Collection chargée" ;
 	
-	public CollectionAlbums(AlbumsTableModel albumsTableModel, ProgressInformationPanel pip) {
+	public CollectionAlbums(List<AbstractTableModel> tableModels, ProgressInformationPanel pip) {
 
 		progressPanel = pip;
-		this.albumsTableModel = albumsTableModel;
+		this.tableModels = tableModels;
 	}
-   	
+	
 	@Override 
 	public CollectionAlbumContainer doInBackground() {
 
 		progressPanel.setStepInformation("");
+		progressPanel.setStepPrefixInformation("");
 
-		MediaFilesInventories.rebuildInventories();
-		DiscogsInventory.rebuildDiscogsInventory();
+		publish(new ProgressInformation("Inventaire des fichiers media en cours"));
+		MediaFilesInventories.buildInventories();
+		publish(new ProgressInformation("Inventaire des release discogs en cours"));
+		DiscogsInventory.buildDiscogsInventory();
 		
 		albumsContainer = CollectionAlbumContainer.getEmptyInstance() ;
 		progressPanel.setStepPrefixInformation(EN_EXAMEN);
@@ -205,7 +208,7 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
     	progressPanel.setStepInformation("");
     	progressPanel.setStepPrefixInformation(ARRET);
     	progressPanel.setProcessStatus(FIN_LECTURE);
-    	albumsTableModel.fireTableDataChanged();
+    	tableModels.forEach(AbstractTableModel::fireTableDataChanged);
     }
 
     @Override

@@ -327,6 +327,11 @@ public class Format {
 	private final static String SUPPORT_CLASS = "support";
 	private final static String INFO_SUPPORT_CLASS = "infosupport";
 	
+	private final static String UL_BEGIN = "  <ul>\n";
+	private final static String UL_END = "  </ul>\n";
+	private final static String LI_BEGIN = "    <li>";
+	private final static String LI_END = "</li>\n";
+	
 	public static void enteteFormat(StringBuilder rapport, String cssTotal, int rows, boolean putAudioFile) {
 		
 		if (cssTotal != null) {
@@ -342,14 +347,23 @@ public class Format {
 		}
 	}
 	
-	public String csvEnteteAudioFormat(String csvSeparator) {
+	public String mediaSupportsHtmlList() {
 		
-		StringBuilder csvRapport = new StringBuilder();
-		for (MediaSupportCategories sPhys : MediaSupportCategories.values()) {
-			csvRapport.append(sPhys.getNom()).append(csvSeparator);
-		}
-		csvRapport.append(LosslessAudioFile.getAudioFilePropertyTitles(csvSeparator)).append(csvSeparator);
-		return csvRapport.toString();
+		StringBuilder mediaSupportList = new StringBuilder();
+		mediaSupportList.append(UL_BEGIN);
+		tableFormat.forEach((mediaSupport, number) -> {
+			
+			if ((number != null) && (number > 0)) {
+				mediaSupportList.append(LI_BEGIN)
+					.append(displayPoids(number))
+					.append(" ")
+					.append(mediaSupport.getDescription())
+					.append(LI_END);
+			}
+		});
+		mediaSupportList.append(UL_END);
+
+		return mediaSupportList.toString();
 	}
 	
 	public void rowFormat(StringBuilder rapport, String cssTotal, boolean putMediaFile) {

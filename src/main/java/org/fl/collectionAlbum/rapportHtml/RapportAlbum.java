@@ -93,6 +93,9 @@ public class RapportAlbum extends RapportMusicArtefact {
 		write(Optional.ofNullable(format.inferRangement()).map(RangementSupportPhysique::getDescription).orElse("NON DEFINI"));
 		write("</p>\n");
 		
+		write("  <p>Support media:\n");
+		write(format.mediaSupportsHtmlList());
+
 		write("  <h3>Fichiers media</h3>\n");
 		
 
