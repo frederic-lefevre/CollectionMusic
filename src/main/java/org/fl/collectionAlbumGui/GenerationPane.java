@@ -69,8 +69,9 @@ public class GenerationPane extends JPanel {
 
 		StartControl[] stCtrl = new StartControl[] { startButton, genButton };
 
-		StartReadCollection sm = new StartReadCollection(albumsTableModel, startButton.getPip(), startButton, stCtrl);
+		StartReadCollection sm = new StartReadCollection(startButton.getPip(), startButton, stCtrl);
 		sm.setCollectionProcWaiter(new CollectionProcessWaiter(stCtrl));
+		sm.addTableModel(albumsTableModel);
 		startButton.getStartButton().addActionListener(sm);
 
 		StartGenerationSite sg = new StartGenerationSite(genButton.getPip(), genButton, stCtrl);
@@ -96,6 +97,7 @@ public class GenerationPane extends JPanel {
 		Stream.of(ContentNature.values()).forEach(contentNature -> {
 			
 			MediaFilesTableModel tm = new MediaFilesTableModel(MediaFilesInventories.getMediaFileInventory(contentNature));
+			sm.addTableModel(tm);
 			
 			MediaFilesJTable mediaFilesJTable = new MediaFilesJTable(tm);
 			
@@ -111,6 +113,7 @@ public class GenerationPane extends JPanel {
 		
 		// Discogs releases pane
 		DisocgsReleaseTableModel dtm = new DisocgsReleaseTableModel(DiscogsInventory.getDiscogsInventory());
+		sm.addTableModel(dtm);
 		
 		DiscogsReleaseJTable discogsReleaseJTable = new DiscogsReleaseJTable(dtm);
 		

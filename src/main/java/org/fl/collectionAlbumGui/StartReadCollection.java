@@ -27,21 +27,24 @@ package org.fl.collectionAlbumGui;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.table.AbstractTableModel;
 
 import org.fl.collectionAlbum.CollectionAlbums;
 
 public class StartReadCollection implements ActionListener {
 
-	private final AlbumsTableModel albumsTableModel;
+	private final List<AbstractTableModel> tableModels;
 	private final ProgressInformationPanel pip;
 	private CollectionProcessWaiter collectionProcWaiter;
 	private final StartControl startCtrl;
 	private final StartControl[] startCtrlTab;
 
-	public StartReadCollection(AlbumsTableModel albumsTableModel, ProgressInformationPanel progInfoPanel,
-			StartControl stCtrl, StartControl[] stList) {
+	public StartReadCollection(ProgressInformationPanel progInfoPanel, StartControl stCtrl, StartControl[] stList) {
 
-		this.albumsTableModel = albumsTableModel;
+		this.tableModels = new ArrayList<>();
 		pip = progInfoPanel;
 		startCtrl = stCtrl;
 		startCtrlTab = stList;
@@ -51,6 +54,10 @@ public class StartReadCollection implements ActionListener {
 		this.collectionProcWaiter = collectionProcWaiter;
 	}
 
+	public void addTableModel(AbstractTableModel tableModel) {
+		tableModels.add(tableModel);
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 
@@ -59,7 +66,7 @@ public class StartReadCollection implements ActionListener {
 		for (StartControl st : startCtrlTab) {
 			st.getStartButton().setEnabled(false);
 		}
-		CollectionAlbums ca = new CollectionAlbums(albumsTableModel, pip);
+		CollectionAlbums ca = new CollectionAlbums(tableModels, pip);
 		ca.addPropertyChangeListener(collectionProcWaiter);
 		ca.execute();
 	}
