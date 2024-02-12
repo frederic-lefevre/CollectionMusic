@@ -31,7 +31,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.format.ContentNature;
@@ -49,11 +48,9 @@ class MediaFileInventoryTest {
 	@BeforeAll
 	static void readInventory() {
 		
-		Path audioFileRootPath = Control.getMediaFileRootPath(ContentNature.AUDIO);
-		audioFileInventory = new MediaFileInventory(audioFileRootPath, ContentNature.AUDIO, ContentNature.AUDIO.strictCheckings());
-		
-		Path videoFileRootPath = Control.getMediaFileRootPath(ContentNature.VIDEO);
-		videoFileInventory = new MediaFileInventory(videoFileRootPath, ContentNature.VIDEO, ContentNature.VIDEO.strictCheckings());
+		MediaFilesInventories.buildInventories();
+		audioFileInventory = MediaFilesInventories.getMediaFileInventory(ContentNature.AUDIO);
+		videoFileInventory = MediaFilesInventories.getMediaFileInventory(ContentNature.VIDEO);
 	}
 	
 	@Test

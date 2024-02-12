@@ -41,6 +41,7 @@ import org.assertj.core.api.InstanceOfAssertFactories;
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
+import org.fl.collectionAlbum.disocgs.DiscogsInventory;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.MatchResultType;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.ReleaseMatchResult;
 import org.fl.collectionAlbum.format.AbstractAudioFile;
@@ -49,8 +50,10 @@ import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.format.LosslessAudioFile;
 import org.fl.collectionAlbum.format.MediaSupports;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
+import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 import org.fl.discogsInterface.inventory.InventoryCsvAlbum;
 import org.fl.util.json.JsonUtils;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import com.google.gson.JsonObject;
@@ -59,6 +62,12 @@ import com.google.gson.JsonParser;
 class AlbumTest {
 
 	protected final static Logger albumLog = Control.getAlbumLog();
+	
+	@BeforeAll
+	static void initInventory() {
+		MediaFilesInventories.buildInventories();
+		DiscogsInventory.buildDiscogsInventory();
+	}
 	
 	@Test
 	void testEmptyAlbum() {
