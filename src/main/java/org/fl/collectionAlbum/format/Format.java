@@ -449,4 +449,16 @@ public class Format {
 		}
 	}
 	
+	public List<String> printAudioFilesCsvTitles(String csvSeparator, Predicate<AbstractAudioFile> audioFileFilter) {
+		if (hasMediaFiles(ContentNature.AUDIO)) {
+			return getMediaFiles(ContentNature.AUDIO).stream()
+					.map(mediaFile -> (AbstractAudioFile)mediaFile)
+					.filter(audioFileFilter)
+					.map(af -> af.displayMediaFileDetailTitles(csvSeparator))
+					.distinct()
+					.collect(Collectors.toList());
+		} else {
+			return Collections.emptyList();
+		}
+	}
 }

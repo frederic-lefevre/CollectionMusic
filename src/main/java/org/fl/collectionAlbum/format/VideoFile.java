@@ -37,6 +37,10 @@ public class VideoFile extends AbstractMediaFile {
 	private final int height;
 	private final VideoFileType type;
 	
+	private static final String TYPE_TITLE = "Type";
+	private static final String WIDTH_TITLE = "Width";
+	private static final String HEIGHT_TITLE = "Height";
+	
 	public VideoFile(JsonObject videoJson, VideoFileType type, String source, int width, int height, String note, Set<MediaFilePath> mediaFilePaths) {
 		super(videoJson, source, note, mediaFilePaths);
 		this.type = type;
@@ -80,4 +84,13 @@ public class VideoFile extends AbstractMediaFile {
 		return getHeight() + "p";	
 	}
 
+	@Override
+	public String displayMediaFileDetailTitles(String separator) {
+		StringBuilder videoFilesDetailTitles = new StringBuilder();
+		videoFilesDetailTitles.append(WIDTH_TITLE).append(separator);
+		videoFilesDetailTitles.append(HEIGHT_TITLE).append(separator);
+		videoFilesDetailTitles.append(TYPE_TITLE).append(separator);
+		appendCommonMediaFileDetailTitles(videoFilesDetailTitles, separator);
+		return videoFilesDetailTitles.toString();
+	}
 }

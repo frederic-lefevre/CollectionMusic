@@ -293,6 +293,11 @@ class FormatTest {
 		
 		assertThat(format1.getContentNatures()).singleElement()
 			.matches(contentNature -> contentNature.equals(ContentNature.AUDIO));
+		
+		assertThat(format1.printAudioFilesCsvTitles(";", v -> true)).hasSize(2)
+			.satisfiesExactlyInAnyOrder(
+					e -> assertThat(e).isEqualTo("Bit depth;Sampling Rate;Type;Source;Note"),
+					e -> assertThat(e).isEqualTo("Bit rate;Sampling Rate;Type;Source;Note"));
 	}
 	
 	@Test
@@ -351,6 +356,9 @@ class FormatTest {
 		
 		assertThat(format1.getContentNatures()).singleElement()
 			.matches(contentNature -> contentNature.equals(ContentNature.AUDIO));
+		
+		assertThat(format1.printAudioFilesCsvTitles(";", v -> true)).singleElement()
+			.satisfies(e -> assertThat(e).isEqualTo("Bit depth;Sampling Rate;Type;Source;Note"));
 	}
 	
 	@Test
@@ -406,6 +414,8 @@ class FormatTest {
 		
 		assertThat(format1.getContentNatures()).singleElement()
 			.matches(contentNature -> contentNature.equals(ContentNature.VIDEO));
+		
+		assertThat(format1.printAudioFilesCsvTitles(";", v -> true)).isEmpty();
 	}
 	
 	@Test

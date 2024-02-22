@@ -63,6 +63,7 @@ public abstract class AbstractMediaFile {
 	
 	public abstract String displayMediaFileDetail(String separator);
 	public abstract String displayMediaFileDetailWithFileLink(String separator);
+	public abstract String displayMediaFileDetailTitles(String separator);
 	
 	public abstract String displayMediaFileSummary();
 	
@@ -155,6 +156,10 @@ public abstract class AbstractMediaFile {
 		}
 	}
 	
+	protected void appendCommonMediaFileDetailTitles(StringBuilder mediaFilesDetails,String separator) {
+		mediaFilesDetails.append(SOURCE_TITLE).append(separator).append(NOTE_TITLE);
+	}
+	
 	protected String fileDetail(
 			String separator, 
 			BiConsumer<StringBuilder, String> particularDetailBuilder, 
@@ -164,8 +169,5 @@ public abstract class AbstractMediaFile {
 		commonDetailBuilder.accept(audioFilesDetails, separator);
 		return audioFilesDetails.toString();
 	}
-	
-	protected static String getMediaFilePropertyTitles(String separator) {
-		return SOURCE_TITLE + separator + NOTE_TITLE;
-	}
+
 }

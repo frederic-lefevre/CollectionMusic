@@ -81,8 +81,12 @@ public class LosslessAudioFile extends AbstractAudioFile {
 		return audioFilesSummary.toString();
 	}
 
-	public static String getAudioFilePropertyTitles(String separator) {
-		return BIT_DEPTH_TITLE + separator + AbstractAudioFile.getAudioFilePropertyTitles(separator);
+	@Override
+	public String displayMediaFileDetailTitles(String separator) {
+		StringBuilder audioFilesDetailTitles = new StringBuilder();
+		audioFilesDetailTitles.append(BIT_DEPTH_TITLE).append(separator);
+		appendCommonAudioFileDetailTitles(audioFilesDetailTitles, separator);
+		return audioFilesDetailTitles.toString();
 	}
 
 }
