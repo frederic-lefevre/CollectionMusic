@@ -90,8 +90,5 @@ public abstract class AbstractAudioFile extends AbstractMediaFile {
 	
 	public abstract boolean isHighRes();
 	public abstract boolean isLossLess();
-	
-	protected static String getAudioFilePropertyTitles(String separator) {
-		return SAMPLING_RATE_TITLE + separator + TYPE_TITLE + separator + AbstractMediaFile.getMediaFilePropertyTitles(separator);
-	}
+
 }

@@ -169,8 +169,5 @@ public abstract class AbstractMediaFile {
 		commonDetailBuilder.accept(audioFilesDetails, separator);
 		return audioFilesDetails.toString();
 	}
-	
-	protected static String getMediaFilePropertyTitles(String separator) {
-		return SOURCE_TITLE + separator + NOTE_TITLE;
-	}
+
 }

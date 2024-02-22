@@ -40,7 +40,6 @@ import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.albums.ListeAlbum;
 import org.fl.collectionAlbum.format.AbstractAudioFile;
-import org.fl.collectionAlbum.format.LosslessAudioFile;
 
 public class RapportCsv {
 
@@ -68,8 +67,10 @@ public class RapportCsv {
 		
 		try (BufferedWriter outputStream = Files.newBufferedWriter(filePath, StandardCharsets.UTF_8)) {
 			
-			outputStream.write(getLosslessAudioFileEntete(CSV_SEPARATOR));
-			outputStream.write("\n");
+			for (String titles : csvTitlesForListeAlbum(listeAlbum, audioFileFilter)) {
+				outputStream.write(titles);
+				outputStream.write("\n");				
+			}
 			
 			listeAlbum.getAlbums().stream()
 				.flatMap(album ->  csvForOneAlbum(album, audioFileFilter).stream())
@@ -88,9 +89,7 @@ public class RapportCsv {
 		}
 	}
 	
-	private static String getLosslessAudioFileEntete(String csvSeparator) {
-		return "Auteurs" + CSV_SEPARATOR + "Titres" + CSV_SEPARATOR + LosslessAudioFile.getAudioFilePropertyTitles(CSV_SEPARATOR);
-	}
+	private static final String AUTEURS_ALBUM_TITLES = "Auteurs" + CSV_SEPARATOR + "Titres" + CSV_SEPARATOR;
 	
 	private static List<String> csvForOneAlbum(Album album, Predicate<AbstractAudioFile> audioFileFilter) {
 		
@@ -111,5 +110,15 @@ public class RapportCsv {
 	
 	private static String doubleQuoteEnclose(String s) {
 		return "\"" + s.replace("\"", "\"\"") + "\"";
+	}
+	
+	private static List<String> csvTitlesForListeAlbum(ListeAlbum listeAlbum, Predicate<AbstractAudioFile> audioFileFilter) {
+		
+		return listeAlbum.getAlbums().stream()
+			.map(Album::getFormatAlbum)
+			.flatMap(format -> format.printAudioFilesCsvTitles(CSV_SEPARATOR, audioFileFilter).stream())
+			.distinct()
+			.map(titles -> AUTEURS_ALBUM_TITLES + titles)
+		    .toList();
 	}
 }
