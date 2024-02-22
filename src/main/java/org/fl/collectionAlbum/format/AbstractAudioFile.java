@@ -74,6 +74,11 @@ public abstract class AbstractAudioFile extends AbstractMediaFile {
 		appendCommonMediaFileDetailWithLink(audioFilesDetails, separator);
 	}
 	
+	protected void appendCommonAudioFileDetailTitles(StringBuilder audioFilesDetails, String separator) {
+		audioFilesDetails.append(SAMPLING_RATE_TITLE).append(separator).append(TYPE_TITLE).append(separator);
+		appendCommonMediaFileDetailTitles(audioFilesDetails, separator);
+	}
+	
 	private void appendCommonAudioSpecs(StringBuilder audioFilesDetails, String separator) {
 		audioFilesDetails
 			.append(getSamplingRate())

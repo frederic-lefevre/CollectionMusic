@@ -109,5 +109,7 @@ public class VideoFileTest {
 		assertThat(videoFile.getSource()).isEqualTo("DVD");
 		assertThat(videoFile.getType()).isEqualTo(VideoFileType.MKV);
 		assertThat(videoFile.getNote()).isEqualTo("version noir et blanc");
+		
+		assertThat(videoFile.displayMediaFileDetailTitles(";")).isEqualTo("Width;Height;Type;Source;Note");
 	}
 }

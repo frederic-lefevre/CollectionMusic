@@ -35,6 +35,8 @@ public class LossyAudioFile extends AbstractAudioFile {
 	
 	private final double bitRate;
 
+	private static final String BIT_RATE_TITLE = "Bit rate";
+	
 	public LossyAudioFile(JsonObject audioJson, AudioFileType type, String source, double bitRate, double samplingRate, String note, Set<MediaFilePath> mediaFilePaths) {
 		
 		super(audioJson, type, source, samplingRate, note, mediaFilePaths);
@@ -75,4 +77,11 @@ public class LossyAudioFile extends AbstractAudioFile {
 	
 	BiConsumer<StringBuilder, String> particularDetail = (sb, s) -> sb.append(getBitRate()).append(" kbit/s").append(s);
 
+	@Override
+	public String displayMediaFileDetailTitles(String separator) {
+		StringBuilder audioFilesDetailTitles = new StringBuilder();
+		audioFilesDetailTitles.append(BIT_RATE_TITLE).append(separator);
+		appendCommonAudioFileDetailTitles(audioFilesDetailTitles, separator);
+		return audioFilesDetailTitles.toString();
+	}
 }

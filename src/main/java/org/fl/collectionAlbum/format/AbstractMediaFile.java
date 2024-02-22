@@ -63,6 +63,7 @@ public abstract class AbstractMediaFile {
 	
 	public abstract String displayMediaFileDetail(String separator);
 	public abstract String displayMediaFileDetailWithFileLink(String separator);
+	public abstract String displayMediaFileDetailTitles(String separator);
 	
 	public abstract String displayMediaFileSummary();
 	
@@ -153,6 +154,10 @@ public abstract class AbstractMediaFile {
 				.append(FILE_LINK3);
 			});
 		}
+	}
+	
+	protected void appendCommonMediaFileDetailTitles(StringBuilder mediaFilesDetails,String separator) {
+		mediaFilesDetails.append(SOURCE_TITLE).append(separator).append(NOTE_TITLE);
 	}
 	
 	protected String fileDetail(

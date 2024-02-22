@@ -112,6 +112,8 @@ class AudioFileTest {
 			.isNotNull()
 			.singleElement()
 			.satisfies(audioPath -> assertThat(audioPath.getPath()).hasToString("E:\\Musique\\a\\John Abercrombie\\M [24-96]"));
+		
+		assertThat(losslessAudio.displayMediaFileDetailTitles(";")).isEqualTo("Bit depth;Sampling Rate;Type;Source;Note");
 	}
 	
 	@Test
