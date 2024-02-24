@@ -60,6 +60,9 @@ public abstract class RapportHtml {
 	private final static String L_LIST4 = "</div>\n" ;
 	private final static String END		= "</body>\n</html>" ;
 	
+	private final static String LIST_BEGIN = "  <li><a href=\"";
+	private final static String LIST_END = "</a></li>\n";
+	
 	// Initialize a default charset
 	private static String htmlBegin = ENTETE1 + StandardCharsets.UTF_8.name() + ENTETE6;
 	
@@ -102,7 +105,7 @@ public abstract class RapportHtml {
 			corpsRapport();
 			finalizeRapport(rapportFile);
 		}
-		return "  <li><a href=\"" + rapportFile.getFileName() + "\">" + titreRapport + "</a></li>\n";
+		return LIST_BEGIN + rapportFile.getFileName() + "\">" + titreRapport + LIST_END;
 	}
 	
 	private static String dateFrancePattern = "EEEE dd MMMM uuuu à HH:mm" ;
