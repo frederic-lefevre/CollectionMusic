@@ -79,11 +79,22 @@ public class RapportCollection extends RapportHtml {
 		rapportAlbumsComposition.withBalises(new Balises(Balises.BalisesType.TEMPORAL_COMPOSITION));
 		write(rapportAlbumsComposition.printReport(getNextRapportFile(), CssStyles.stylesTableauAvecBalise));
 
-		write("</ul>\n</td>\n</tr>\n<tr>\n<td class=\"mainpage\">\n<h3>Rangement des albums</h3>\n<table>\n");
+		write("</ul>\n</td>\n<td class=\"mainpage\">\n<h3>Albums par nature de contenu</h3>\n<table>\n");
+		Arrays.stream(ContentNature.values()).forEach(contentNature -> {
+			writeListeAlbumsRow(albumsContainer.getAlbumsWithOnlyContentNature(contentNature).sortRangementAlbum(), "Albums avec seulement du contenu " + contentNature.getNom());
+		});
+		writeListeAlbumsRow(albumsContainer.getAlbumsWithMixedContentNature().sortRangementAlbum(), "Albums avec plusieurs types de contenus");
+		
+		write("</table>\n</td>\n</tr>\n<tr>\n<td rowspan=2 class=\"mainpage\">\n<h3>Albums par support media</h3>\n<table>\n");
+		Arrays.stream(MediaSupports.values()).forEach(mediaSupport -> {
+			writeListeAlbumsRow(albumsContainer.getAlbumsWithMediaSupport(mediaSupport).sortRangementAlbum(), "Albums avec " + mediaSupport.getDescription());
+		});
+		
+		write("</table>\n</td>\n<td class=\"mainpage\">\n<h3>Rangement des albums</h3>\n<table>\n");
 		for (Format.RangementSupportPhysique rangement : Format.RangementSupportPhysique.values()) {
 			writeListeAlbumsRow(albumsContainer.getRangementAlbums(rangement).sortRangementAlbum(), rangement.getOrdreDescription());
 		}
-
+		
 		write("</table>\n</td>\n<td class=\"mainpage\">\n<h3>Albums avec et sans fichier audio ou video</h3>\n<table>\n");
 		
 		writeListeAlbumsRow(albumsContainer.getAlbumsWithAudioFile().sortRangementAlbum(), "Albums avec fichier audio");
@@ -91,18 +102,7 @@ public class RapportCollection extends RapportHtml {
 		writeListeAlbumsRow(albumsContainer.getAlbumsWithLowResAudio().sortRangementAlbum(), "Albums avec fichier audio avec perte (basse qualité)");
 		writeListeAlbumsRow(albumsContainer.getAlbumsMissingAudioFile().sortRangementAlbum(), "Albums manquant de fichier audio");
 		writeListeAlbumsRow(albumsContainer.getAlbumsWithVideoFile().sortRangementAlbum(), "Albums avec fichier video");
-		writeListeAlbumsRow(albumsContainer.getAlbumsMissingVideoFile().sortRangementAlbum(), "Albums manquant de fichier video");
-		
-		write("</table>\n</td>\n</tr>\n<tr>\n<td class=\"mainpage\">\n<h3>Albums par support media</h3>\n<table>\n");
-		Arrays.stream(MediaSupports.values()).forEach(mediaSupport -> {
-			writeListeAlbumsRow(albumsContainer.getAlbumsWithMediaSupport(mediaSupport).sortRangementAlbum(), "Albums avec " + mediaSupport.getDescription());
-		});
-		
-		write("</table>\n</td>\n<td class=\"mainpage\">\n<h3>Albums par nature de contenu</h3>\n<table>\n");
-		Arrays.stream(ContentNature.values()).forEach(contentNature -> {
-			writeListeAlbumsRow(albumsContainer.getAlbumsWithOnlyContentNature(contentNature).sortRangementAlbum(), "Albums avec seulement du contenu " + contentNature.getNom());
-		});
-		writeListeAlbumsRow(albumsContainer.getAlbumsWithMixedContentNature().sortRangementAlbum(), "Albums avec plusieurs types de contenus");
+		writeListeAlbumsRow(albumsContainer.getAlbumsMissingVideoFile().sortRangementAlbum(), "Albums manquant de fichier video");	
 
 		write("</table>\n</td>\n</tr>\n<tr>\n<td class=\"mainpage\">\n<h3>Statistiques</h3>\n<ul>\n");
 		RapportStat rapportStat1 = new RapportStat(albumsContainer.getStatChronoEnregistrement(), "Statistiques par année d'enregistrement", LinkType.LIST);
@@ -120,8 +120,7 @@ public class RapportCollection extends RapportHtml {
 		write("  </tr>\n  <tr>\n");
 		albumsContainer.getCollectionAlbumsMusiques().getFormatListeAlbum().rowFormat(rBuilder, "total", DONT_APPEND_AUDIO_FILE);
 		
-		write("  </tr>\n</table>\n</li>\n</ul>\n</td>\n<td class=\"mainpage\">\n");
-		write("</td>\n</tr>\n</table>\n");	
+		write("  </tr>\n</table>\n</li>\n</ul>\n</td>\n</tr>\n</table>\n");
 	}
 	
 	private void writeListeAlbumsRow(ListeAlbum listeAlbum, String title) {
