@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -35,7 +35,7 @@ public class RapportDesConcerts extends RapportHtml {
 	private final Path rapportCollectionDir ;
 	
 	public RapportDesConcerts(CollectionAlbumContainer ac, Path rFile, String titre) {
-		super(titre) ;
+		super(titre, null) ;
 		withTitleDisplayed();
 		withHtmlLinkList(RapportStructuresAndNames.getAccueils());
 		albumsContainer 	 = ac ;
@@ -48,18 +48,18 @@ public class RapportDesConcerts extends RapportHtml {
 		
 		 write("<h3>Classement des auteurs, interpretes et chefs d'orchestre (artistes, groupes, ensembles)</h3>\n<ul>\n") ;
 		 
-		 RapportListeArtistesConcert artistesAlpha = new RapportListeArtistesConcert(albumsContainer.getConcertsArtistes().sortArtistesAlpha(), "Classement alphabethique") ;
+		 RapportListeArtistesConcert artistesAlpha = new RapportListeArtistesConcert(albumsContainer.getConcertsArtistes().sortArtistesAlpha(), "Classement alphabethique", LinkType.LIST) ;
 		 artistesAlpha.withBalises(new Balises(Balises.BalisesType.ALPHA)) ;
 		 write(artistesAlpha.printReport(getNextRapportFile(), CssStyles.stylesTableauAvecBalise)) ;
 
-		 RapportListeArtistesConcert artistesPoids = new RapportListeArtistesConcert(albumsContainer.getConcertsArtistes().sortArtistesPoidsConcerts(), "Classement par nombre de concerts") ;
+		 RapportListeArtistesConcert artistesPoids = new RapportListeArtistesConcert(albumsContainer.getConcertsArtistes().sortArtistesPoidsConcerts(), "Classement par nombre de concerts", LinkType.LIST) ;
 		 write(artistesPoids.printReport( getNextRapportFile(), CssStyles.stylesTableauAvecBalise)) ;
 
 		 write("</ul>\n<h3>Classement des concerts</h3>\n<ul>\n") ;
-		 RapportListeConcerts rapportDesConcerts = new RapportListeConcerts(albumsContainer.getConcerts().sortChrono(), "Classement chronologique") ;
+		 RapportListeConcerts rapportDesConcerts = new RapportListeConcerts(albumsContainer.getConcerts().sortChrono(), "Classement chronologique", LinkType.LIST) ;
 		 write(rapportDesConcerts.printReport(getNextRapportFile(), CssStyles.stylesTableauMusicArtefact)) ;
 		 
-		 RapportLieuxConcerts lieuxConcert = new RapportLieuxConcerts(albumsContainer.getLieuxDesConcerts(), "Classement par lieu") ;
+		 RapportLieuxConcerts lieuxConcert = new RapportLieuxConcerts(albumsContainer.getLieuxDesConcerts(), "Classement par lieu", LinkType.LIST) ;
 		 write(lieuxConcert.printReport(getNextRapportFile(), CssStyles.stylesTableauMusicArtefact)) ;
 		 
 		 write("  <li>Nombre de concerts: " + albumsContainer.getConcerts().getNombreConcerts());

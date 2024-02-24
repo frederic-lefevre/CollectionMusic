@@ -49,6 +49,7 @@ import org.fl.collectionAlbum.rapportHtml.RapportDesConcerts;
 import org.fl.collectionAlbum.rapportHtml.RapportHtml;
 import org.fl.collectionAlbum.rapportHtml.RapportListeConcerts;
 import org.fl.collectionAlbum.rapportHtml.RapportStructuresAndNames;
+import org.fl.collectionAlbum.rapportHtml.RapportHtml.LinkType;
 import org.fl.collectionAlbum.rapportHtml.CssStyles;
 import org.fl.collectionAlbum.rapportHtml.RapportAlbum;
 import org.fl.collectionAlbum.rapportHtml.RapportAlbumsDunArtiste;
@@ -228,7 +229,7 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 			 Path absolutePath = RapportStructuresAndNames.getLieuRapportAbsolutePath(lieuConcert);
 			 if (! Files.exists(absolutePath)) {
 				 String offSet = getOffset(rapportPath, absolutePath.getParent()) ;
-				 RapportListeConcerts concertDeCeLieu = new RapportListeConcerts(lieuConcert.getConcerts().sortChrono(), lieuConcert.getLieu()) ;
+				 RapportListeConcerts concertDeCeLieu = new RapportListeConcerts(lieuConcert.getConcerts().sortChrono(), lieuConcert.getLieu(), LinkType.LIST) ;
 				 concertDeCeLieu.withOffset(offSet);
 				 concertDeCeLieu.printReport(absolutePath, CssStyles.stylesTableauMusicArtefact) ;
 			 }

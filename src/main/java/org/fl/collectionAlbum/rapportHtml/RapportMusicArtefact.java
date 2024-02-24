@@ -40,7 +40,7 @@ public class RapportMusicArtefact extends RapportHtml {
 	private final MusicArtefact musicArtefact;
 	
 	protected RapportMusicArtefact(MusicArtefact m) {
-		super("");
+		super("", null);
 		musicArtefact = m;
 	}
 
