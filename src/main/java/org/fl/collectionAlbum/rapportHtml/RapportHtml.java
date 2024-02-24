@@ -60,9 +60,12 @@ public abstract class RapportHtml {
 	private final static String L_LIST4 = "</div>\n" ;
 	private final static String END		= "</body>\n</html>" ;
 	
-	private final static String LIST_BEGIN = "  <li><a href=\"";
+	private final static String LIST_BEGIN = "  <li";	
+	private final static String CELL_BEGIN = "<td";
+	private final static String CLASS_PART1 = " class=\"";
+	private final static String HREF_PART = "><a href=\"";
+	private final static String CSS_END_HREF_PART = "\"" + HREF_PART;
 	private final static String LIST_END = "</a></li>\n";
-	private final static String CELL_BEGIN = "<td><a href=\"";
 	private final static String CELL_END = "</a></td>";
 	
 	public enum LinkType {
@@ -76,11 +79,15 @@ public abstract class RapportHtml {
 			endTag = e;
 		}
 		
-		public String getBeginTag() {
-			return beginTag;
+		private String getBeginTag(String cssClass) {
+			if ((cssClass == null) || cssClass.isEmpty()) {
+				return beginTag + HREF_PART;
+			} else {
+				return beginTag + CLASS_PART1 + cssClass + CSS_END_HREF_PART;
+			}
 		}
 		
-		public String getEndTag() {
+		private String getEndTag() {
 			return endTag;
 		}
 	}
@@ -126,14 +133,18 @@ public abstract class RapportHtml {
 
 	protected abstract void corpsRapport() ;
 	
-	public String printReport(Path rapportFile, String styleList[]) {
+	public String printReport(Path rapportFile, String styleList[], String linkTypeClass) {
 
 		if (! Files.exists(rapportFile)) {	
 			enteteRapport(styleList);
 			corpsRapport();
 			finalizeRapport(rapportFile);
 		}
-		return linkType.getBeginTag() + rapportFile.getFileName() + "\">" + titreRapport + linkType.getEndTag();
+		return linkType.getBeginTag(linkTypeClass) + rapportFile.getFileName() + "\">" + titreRapport + linkType.getEndTag();
+	}
+	
+	public String printReport(Path rapportFile, String styleList[]) {
+		return printReport(rapportFile, styleList, null);
 	}
 	
 	private static String dateFrancePattern = "EEEE dd MMMM uuuu à HH:mm" ;

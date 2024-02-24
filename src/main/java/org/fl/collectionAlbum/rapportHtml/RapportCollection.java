@@ -128,8 +128,8 @@ public class RapportCollection extends RapportHtml {
 		
 		write("  <tr>");
 		RapportListeAlbums rapportAlbums = new RapportListeAlbums(listeAlbum, title, LinkType.CELL);
-		write(rapportAlbums.printReport(getNextRapportFile(), CssStyles.stylesTableauMusicArtefact));
-		write("<td>");
+		write(rapportAlbums.printReport(getNextRapportFile(), CssStyles.stylesTableauMusicArtefact, "albumListTitle"));
+		write("<td class=\"albumListStat\">");
 		write(listeAlbum.getNombreAlbums());
 		write("</td></tr>\n");
 		
