@@ -28,6 +28,7 @@ import java.nio.file.Path;
 import java.util.Arrays;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
+import org.fl.collectionAlbum.albums.ListeAlbum;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.format.Format;
 import org.fl.collectionAlbum.format.MediaSupports;
@@ -84,31 +85,16 @@ public class RapportCollection extends RapportHtml {
 			write(rapportAlbumsRangement.printReport(getNextRapportFile(), CssStyles.stylesTableauMusicArtefact));
 		}
 
-		write("</ul>\n</td>\n<td class=\"mainpage\">\n<h3>Albums avec et sans fichier audio ou video</h3>\n<table>\n  <tr>");
-		RapportListeAlbums rapportAlbumsWithAudioFile = new RapportListeAlbums(albumsContainer.getAlbumsWithAudioFile().sortRangementAlbum(), "Albums avec fichier audio", LinkType.CELL);
-		write(rapportAlbumsWithAudioFile.printReport(getNextRapportFile(), CssStyles.stylesTableauAvecBalise));
-		write("</tr>\n  <tr>");
+		write("</ul>\n</td>\n<td class=\"mainpage\">\n<h3>Albums avec et sans fichier audio ou video</h3>\n<table>\n");
 		
-		RapportListeAlbums rapportAlbumsWithHighResAudioFile = new RapportListeAlbums(albumsContainer.getAlbumsWithHighResAudio().sortRangementAlbum(), "Albums avec fichier audio haute résolution", LinkType.CELL);
-		write(rapportAlbumsWithHighResAudioFile.printReport(getNextRapportFile(), CssStyles.stylesTableauAvecBalise));
-		write("</tr>\n  <tr>");
+		writeListeAlbumsRow(albumsContainer.getAlbumsWithAudioFile().sortRangementAlbum(), "Albums avec fichier audio");
+		writeListeAlbumsRow(albumsContainer.getAlbumsWithHighResAudio().sortRangementAlbum(), "Albums avec fichier audio haute résolution");
+		writeListeAlbumsRow(albumsContainer.getAlbumsWithLowResAudio().sortRangementAlbum(), "Albums avec fichier audio avec perte (basse qualité)");
+		writeListeAlbumsRow(albumsContainer.getAlbumsMissingAudioFile().sortRangementAlbum(), "Albums manquant de fichier audio");
+		writeListeAlbumsRow(albumsContainer.getAlbumsWithVideoFile().sortRangementAlbum(), "Albums avec fichier video");
+		writeListeAlbumsRow(albumsContainer.getAlbumsMissingVideoFile().sortRangementAlbum(), "Albums manquant de fichier video");
 		
-		RapportListeAlbums rapportAlbumsWithLowResAudioFile = new RapportListeAlbums(albumsContainer.getAlbumsWithLowResAudio().sortRangementAlbum(), "Albums avec fichier audio avec perte (basse qualité)", LinkType.CELL);
-		write(rapportAlbumsWithLowResAudioFile.printReport(getNextRapportFile(), CssStyles.stylesTableauAvecBalise));
-		write("</tr>\n  <tr>");
-		
-		RapportListeAlbums rapportAlbumsWithoutAudioFile = new RapportListeAlbums(albumsContainer.getAlbumsMissingAudioFile().sortRangementAlbum(), "Albums manquant de fichier audio", LinkType.CELL);
-		write(rapportAlbumsWithoutAudioFile.printReport(getNextRapportFile(), CssStyles.stylesTableauAvecBalise));
-		write("</tr>\n  <tr>");
-		
-		RapportListeAlbums rapportAlbumsWithVideoFile = new RapportListeAlbums(albumsContainer.getAlbumsWithVideoFile().sortRangementAlbum(), "Albums avec fichier video", LinkType.CELL);
-		write(rapportAlbumsWithVideoFile.printReport(getNextRapportFile(), CssStyles.stylesTableauAvecBalise));
-		write("</tr>\n  <tr>");
-		
-		RapportListeAlbums rapportAlbumsWithoutVideoFile = new RapportListeAlbums(albumsContainer.getAlbumsMissingVideoFile().sortRangementAlbum(), "Albums manquant de fichier video", LinkType.CELL);
-		write(rapportAlbumsWithoutVideoFile.printReport(getNextRapportFile(), CssStyles.stylesTableauAvecBalise));
-		
-		write("</tr>\n</table>\n</td>\n</tr>\n<tr>\n<td class=\"mainpage\">\n<h3>Albums par support media</h3>\n<ul>\n");
+		write("</table>\n</td>\n</tr>\n<tr>\n<td class=\"mainpage\">\n<h3>Albums par support media</h3>\n<ul>\n");
 		Arrays.stream(MediaSupports.values()).forEach(mediaSupport -> {
 			RapportListeAlbums mediaSupportAlbum = new RapportListeAlbums(albumsContainer.getAlbumsWithMediaSupport(mediaSupport).sortRangementAlbum(), "Albums avec " + mediaSupport.getDescription(), LinkType.LIST);
 			write(mediaSupportAlbum.printReport(getNextRapportFile(), CssStyles.stylesTableauMusicArtefact));
@@ -142,6 +128,16 @@ public class RapportCollection extends RapportHtml {
 		write("</td>\n</tr>\n</table>\n");	
 	}
 	
+	private void writeListeAlbumsRow(ListeAlbum listeAlbum, String title) {
+		
+		write("  <tr>");
+		RapportListeAlbums rapportAlbums = new RapportListeAlbums(listeAlbum, title, LinkType.CELL);
+		write(rapportAlbums.printReport(getNextRapportFile(), CssStyles.stylesTableauMusicArtefact));
+		write("<td>");
+		write(listeAlbum.getNombreAlbums());
+		write("</td></tr>\n");
+		
+	}
 	 private Path getNextRapportFile() {
 		 rapportIndex++;
 		 return rapportCollectionDir.resolve("albums" + rapportIndex + ".html");
