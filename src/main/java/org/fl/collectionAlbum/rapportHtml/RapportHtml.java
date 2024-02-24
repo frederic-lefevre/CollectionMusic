@@ -60,6 +60,38 @@ public abstract class RapportHtml {
 	private final static String L_LIST4 = "</div>\n" ;
 	private final static String END		= "</body>\n</html>" ;
 	
+	private final static String LIST_BEGIN = "  <li";	
+	private final static String CELL_BEGIN = "<td";
+	private final static String CLASS_PART1 = " class=\"";
+	private final static String HREF_PART = "><a href=\"";
+	private final static String CSS_END_HREF_PART = "\"" + HREF_PART;
+	private final static String LIST_END = "</a></li>\n";
+	private final static String CELL_END = "</a></td>";
+	
+	public enum LinkType {
+		LIST(LIST_BEGIN, LIST_END), CELL(CELL_BEGIN, CELL_END);
+		
+		private final String beginTag;
+		private final String endTag;
+		
+		private LinkType(String b, String e) {
+			beginTag = b;
+			endTag = e;
+		}
+		
+		private String getBeginTag(String cssClass) {
+			if ((cssClass == null) || cssClass.isEmpty()) {
+				return beginTag + HREF_PART;
+			} else {
+				return beginTag + CLASS_PART1 + cssClass + CSS_END_HREF_PART;
+			}
+		}
+		
+		private String getEndTag() {
+			return endTag;
+		}
+	}
+	
 	// Initialize a default charset
 	private static String htmlBegin = ENTETE1 + StandardCharsets.UTF_8.name() + ENTETE6;
 	
@@ -78,13 +110,19 @@ public abstract class RapportHtml {
 	private final static String CSSOFFSET = "../css/";
 	
 	protected String urlOffset;
+	private LinkType linkType;
 	private boolean displayTitle;
 	protected Balises balises;
 	
-	protected RapportHtml(String titre) {
+	protected RapportHtml(String titre, LinkType linkType) {
 		
 		super();
 		titreRapport = titre;
+		if (linkType == null) {
+			this.linkType = LinkType.LIST;
+		} else {
+			this.linkType = linkType;
+		}
 		urlOffset = "";
 		rBuilder = new StringBuilder(TAILLE_INITIALE);
 		indexes = null;
@@ -95,14 +133,18 @@ public abstract class RapportHtml {
 
 	protected abstract void corpsRapport() ;
 	
-	public String printReport(Path rapportFile, String styleList[]) {
+	public String printReport(Path rapportFile, String styleList[], String linkTypeClass) {
 
 		if (! Files.exists(rapportFile)) {	
 			enteteRapport(styleList);
 			corpsRapport();
 			finalizeRapport(rapportFile);
 		}
-		return "  <li><a href=\"" + rapportFile.getFileName() + "\">" + titreRapport + "</a></li>\n";
+		return linkType.getBeginTag(linkTypeClass) + rapportFile.getFileName() + "\">" + titreRapport + linkType.getEndTag();
+	}
+	
+	public String printReport(Path rapportFile, String styleList[]) {
+		return printReport(rapportFile, styleList, null);
 	}
 	
 	private static String dateFrancePattern = "EEEE dd MMMM uuuu à HH:mm" ;
@@ -190,6 +232,11 @@ public abstract class RapportHtml {
 
 	protected RapportHtml withImageUri(String iUri) {
 		imageUri = iUri;
+		return this;
+	}
+	
+	public RapportHtml withLinkType(LinkType linkType) {
+		this.linkType = linkType;
 		return this;
 	}
 	

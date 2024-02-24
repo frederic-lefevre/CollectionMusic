@@ -38,7 +38,7 @@ public class RapportAlbumsDunArtiste extends RapportHtml {
 	private static final boolean DONT_APPEND_AUDIO_FILE = false;
 	
 	public RapportAlbumsDunArtiste(Artiste a, String offset) {
-		super("");
+		super("", null);
 		withOffset(offset) ;
 		artiste = a ;
 		
