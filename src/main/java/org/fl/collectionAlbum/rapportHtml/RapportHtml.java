@@ -62,16 +62,26 @@ public abstract class RapportHtml {
 	
 	private final static String LIST_BEGIN = "  <li><a href=\"";
 	private final static String LIST_END = "</a></li>\n";
+	private final static String CELL_BEGIN = "<td><a href=\"";
+	private final static String CELL_END = "</a></td>";
 	
 	public enum LinkType {
-		LIST;
+		LIST(LIST_BEGIN, LIST_END), CELL(CELL_BEGIN, CELL_END);
+		
+		private final String beginTag;
+		private final String endTag;
+		
+		private LinkType(String b, String e) {
+			beginTag = b;
+			endTag = e;
+		}
 		
 		public String getBeginTag() {
-			return LIST_BEGIN;
+			return beginTag;
 		}
 		
 		public String getEndTag() {
-			return LIST_END;
+			return endTag;
 		}
 	}
 	
