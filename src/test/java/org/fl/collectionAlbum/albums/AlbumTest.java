@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.assertj.core.api.InstanceOfAssertFactories;
@@ -52,6 +53,7 @@ import org.fl.collectionAlbum.format.MediaSupports;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 import org.fl.discogsInterface.inventory.InventoryCsvAlbum;
+import org.fl.util.FilterCounter;
 import org.fl.util.json.JsonUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -61,7 +63,7 @@ import com.google.gson.JsonParser;
 
 class AlbumTest {
 
-	protected final static Logger albumLog = Logger.getLogger(AlbumTest.class.getName());
+	private final static Logger albumLog = Logger.getLogger(AlbumTest.class.getName());
 	
 	@BeforeAll
 	static void initInventory() {
@@ -72,6 +74,15 @@ class AlbumTest {
 	@Test
 	void testEmptyAlbum() {
 
+		Logger albumParserLogger = Logger.getLogger("org.fl.collectionAlbum.json.AlbumParser");
+		FilterCounter albumParserFilterCounter = FilterCounter.setFilterCounter(albumParserLogger);
+		Logger albumLogger = Logger.getLogger("org.fl.collectionAlbum.albums.Album");
+		FilterCounter albumFilterCounter = FilterCounter.setFilterCounter(albumLogger);
+		Logger formatLogger = Logger.getLogger("org.fl.collectionAlbum.format.Format");
+		FilterCounter formatFilterCounter = FilterCounter.setFilterCounter(formatLogger);
+		Logger parserHelpersLogger = Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers");
+		FilterCounter parserHelpersFilterCounter = FilterCounter.setFilterCounter(parserHelpersLogger);
+		
 		ListeArtiste la = new ListeArtiste();
 		List<ListeArtiste> lla = new ArrayList<ListeArtiste>();
 		lla.add(la);
@@ -88,6 +99,18 @@ class AlbumTest {
 		assertMediaSupports(album, Collections.emptySet());
 		
 		assertThat(album.getContentNatures()).isEmpty();
+		
+		assertThat(albumParserFilterCounter.getLogRecordCount()).isEqualTo(2);
+		assertThat(albumParserFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(2);
+		
+		assertThat(albumFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(albumFilterCounter.getLogRecordCount(Level.SEVERE)).isEqualTo(1);
+		
+		assertThat(formatFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(formatFilterCounter.getLogRecordCount(Level.SEVERE)).isEqualTo(1);
+		
+		assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.SEVERE)).isEqualTo(1);
 	}
 
 	private static final String albumStr1 = """
