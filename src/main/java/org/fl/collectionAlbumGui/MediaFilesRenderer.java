@@ -32,7 +32,6 @@ import java.util.logging.Logger;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 
-import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.format.ContentNature;
 
@@ -40,7 +39,7 @@ public class MediaFilesRenderer extends MediaFilesPane implements TableCellRende
 
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger mLog = Control.getAlbumLog();
+	private static final Logger mLog = Logger.getLogger(MediaFilesRenderer.class.getName());
 	
 	public MediaFilesRenderer(
 			Map<ContentNature, MediaFilesSearchListener>  mediaFilesSearchListeners, 

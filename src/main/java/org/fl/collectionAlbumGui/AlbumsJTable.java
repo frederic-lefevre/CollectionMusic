@@ -42,7 +42,7 @@ public class AlbumsJTable extends JTable {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger tLog = Control.getAlbumLog();
+	private static final Logger tLog = Logger.getLogger(AlbumsJTable.class.getName());
 	
 	public AlbumsJTable(AlbumsTableModel dm) {
 		super(dm);

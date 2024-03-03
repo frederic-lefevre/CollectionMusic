@@ -32,7 +32,7 @@ import java.util.logging.Logger;
 
 public class OsAction<T> {
 
-	private static final Logger oLog = Control.getAlbumLog();
+	private static final Logger oLog = Logger.getLogger(OsAction.class.getName());
 	
 	private final String actionTitle;
 	private final String actionCommand;

@@ -35,7 +35,6 @@ import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
 import javax.swing.table.TableCellEditor;
 
-import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.format.ContentNature;
 
@@ -43,7 +42,7 @@ public class MediaFilesCellEditor extends MediaFilesPane implements TableCellEdi
 
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger mLog = Control.getAlbumLog();
+	private static final Logger mLog = Logger.getLogger(MediaFilesCellEditor.class.getName());
 	
 	private final AlbumsJTable albumsTable;
 	

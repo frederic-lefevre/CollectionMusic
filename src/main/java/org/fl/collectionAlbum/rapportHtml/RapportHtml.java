@@ -22,7 +22,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-
 package org.fl.collectionAlbum.rapportHtml;
 
 import java.io.BufferedWriter;
@@ -36,11 +35,9 @@ import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.fl.collectionAlbum.Control;
-
 public abstract class RapportHtml {
 
-	protected final static Logger rapportLog = Control.getAlbumLog();
+	protected final static Logger rapportLog = Logger.getLogger(RapportHtml.class.getName());
 	
 	// Useful HTML fragment
 	private final static String ENTETE1 = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN_\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">\n" +

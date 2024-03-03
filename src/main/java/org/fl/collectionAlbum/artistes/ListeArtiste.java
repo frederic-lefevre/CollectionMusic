@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -30,7 +30,6 @@ import java.util.Optional;
 import java.util.Collections;
 import java.util.logging.Logger;
 
-import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.MusicArtefact;
 import org.fl.collectionAlbum.PoidsComparator;
 import org.fl.collectionAlbum.concerts.ConcertPoidsComparator;
@@ -39,7 +38,7 @@ import com.google.gson.JsonObject;
 
 public class ListeArtiste {
 	
-	private final static Logger albumLog = Control.getAlbumLog();
+	private final static Logger albumLog = Logger.getLogger(ListeArtiste.class.getName());
 	
 	private List<Artiste> artistes;
 

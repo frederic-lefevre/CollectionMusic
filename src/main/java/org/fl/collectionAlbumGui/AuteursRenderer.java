@@ -32,7 +32,6 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 
-import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.Artiste;
 
@@ -40,7 +39,7 @@ public class AuteursRenderer extends JLabel implements TableCellRenderer {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger mLog = Control.getAlbumLog();
+	private static final Logger mLog = Logger.getLogger(AuteursRenderer.class.getName());
 	
 	private final static String AUTEURS_SEPARATOR = ", ";
 	

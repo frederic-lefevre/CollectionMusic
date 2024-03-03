@@ -32,12 +32,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
-import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory.DiscogsAlbumRelease;
 
 public class DiscogsReleaseCustomActionListener implements java.awt.event.ActionListener {
 
-	private static final Logger aLog = Control.getAlbumLog();
+	private static final Logger aLog = Logger.getLogger(DiscogsReleaseCustomActionListener.class.getName());
 	
 	public enum CustomAction { SHOW_INFO };
 	

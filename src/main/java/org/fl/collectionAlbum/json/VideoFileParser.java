@@ -29,7 +29,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.format.VideoFile;
@@ -41,7 +40,7 @@ import com.google.gson.JsonObject;
 
 public class VideoFileParser extends AbstractMediaFileParser {
 
-	private final static Logger rapportLog = Control.getAlbumLog();
+	private final static Logger rapportLog = Logger.getLogger(VideoFileParser.class.getName());
 	
 	public VideoFileParser() {
 		super();

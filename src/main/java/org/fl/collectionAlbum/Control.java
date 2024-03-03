@@ -52,9 +52,10 @@ public class Control {
 	
 	private static final String MUSIC_FILE_EXTENSION = "json";
 	
+	private static final Logger albumLog = Logger.getLogger(Control.class.getName());
+	
 	private static Control controlInstance;
 	
-	private Logger albumLog;	
 	private Charset charset;
 	private RunningContext musicRunningContext;	  
    	private AdvancedProperties collectionProperties;
@@ -71,10 +72,9 @@ public class Control {
 		
 		try {
 			// access to properties and logger
-			musicRunningContext = new RunningContext("CollectionMusique", null, new URI(DEFAULT_PROP_FILE));
+			musicRunningContext = new RunningContext("org.fl.collectionAlbum", null, new URI(DEFAULT_PROP_FILE));
 		
 			collectionProperties = musicRunningContext.getProps();
-		    albumLog = musicRunningContext.getpLog();
 		    albumLog.info("Properties taken from " + musicRunningContext.getPropertiesLocation());
 				
 			// Get CharSet to read music files and write rapport
@@ -116,11 +116,6 @@ public class Control {
 			controlInstance = new Control();
 		}
 		return controlInstance;
-	}
-	
-
-	public static Logger getAlbumLog() {
-		return getInstance().albumLog; 
 	}
 	
 	public static String getMusicfileExtension() {

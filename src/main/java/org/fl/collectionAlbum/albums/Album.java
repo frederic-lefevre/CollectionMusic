@@ -37,7 +37,6 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.MusicArtefact;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher;
@@ -56,7 +55,7 @@ import com.google.gson.JsonObject;
 
 public class Album extends MusicArtefact {
 	
-	protected final static Logger albumLog = Control.getAlbumLog();
+	protected final static Logger albumLog = Logger.getLogger(Album.class.getName());
 	
     private final String titre;
     

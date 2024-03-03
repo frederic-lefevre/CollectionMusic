@@ -105,7 +105,7 @@ public class DiscogsInventory {
 		}
 	}
 	
-	private final static Logger albumLog = Control.getAlbumLog();
+	private final static Logger albumLog = Logger.getLogger(DiscogsInventory.class.getName());
 	
 	private static DiscogsInventory discogsInventoryInstance;
 	

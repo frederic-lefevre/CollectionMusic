@@ -50,7 +50,7 @@ import com.google.gson.JsonObject;
 
 public class CollectionAlbumContainer {
 
-	private final static Logger albumLog = Control.getAlbumLog();
+	private final static Logger albumLog = Logger.getLogger(CollectionAlbumContainer.class.getName());
 	
 	// Liste d'artistes pour les albums
 	private ListeArtiste collectionArtistes;

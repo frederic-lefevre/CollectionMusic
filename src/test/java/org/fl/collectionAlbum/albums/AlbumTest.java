@@ -61,7 +61,7 @@ import com.google.gson.JsonParser;
 
 class AlbumTest {
 
-	protected final static Logger albumLog = Control.getAlbumLog();
+	protected final static Logger albumLog = Logger.getLogger(AlbumTest.class.getName());
 	
 	@BeforeAll
 	static void initInventory() {

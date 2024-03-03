@@ -30,13 +30,12 @@ import java.util.logging.Logger;
 
 import javax.swing.JPanel;
 
-import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory.DiscogsAlbumRelease;
 
 public class ReleaseValidationListener implements ActionListener {
 
-	private static final Logger aLog = Control.getAlbumLog();
+	private static final Logger aLog = Logger.getLogger(ReleaseValidationListener.class.getName());
 	
 	private final DiscogsAlbumRelease release;
 	private final Album album;

@@ -35,13 +35,12 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.format.ContentNature;
 
 public class MediaFilePath {
 
-	private static final Logger mLog = Control.getAlbumLog();
+	private static final Logger mLog = Logger.getLogger(MediaFilePath.class.getName());
 	
 	private static final Set<String> coverExtensions = Set.of("jpg", "png");
 	

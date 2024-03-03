@@ -51,7 +51,7 @@ import com.google.gson.JsonObject;
 
 public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,ProgressInformation>{
 	
-	private final static Logger albumLog = Control.getAlbumLog();
+	private final static Logger albumLog = Logger.getLogger(CollectionAlbums.class.getName());
 	
 	private CollectionAlbumContainer albumsContainer ;
 	private final ProgressInformationPanel progressPanel;
