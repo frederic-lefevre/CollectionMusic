@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -27,9 +27,13 @@ package org.fl.collectionAlbum.json.migrator;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.nio.file.Path;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.json.MusicArtefactParser;
+import org.fl.util.FilterCounter;
+import org.fl.util.FilterCounter.LogRecordCounter;
 import org.junit.jupiter.api.Test;
 
 import com.google.gson.JsonObject;
@@ -63,6 +67,8 @@ class MusicArtefactMigratorTest {
 	@Test
 	void shouldMigrateAlbum() {
 		
+		LogRecordCounter migratorFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.migrator.MusicArtefactMigrator"));
+		
 		MusicArtefactMigrator migrator = MusicArtefactMigrator.getMigrator();
 		
 		JsonObject albumJson = JsonParser.parseString(albumStr1).getAsJsonObject();
@@ -81,6 +87,9 @@ class MusicArtefactMigratorTest {
 			.isEqualTo(MusicArtefactParser.getVersion(migratedAlbum))
 			.isEqualTo(MusicArtefactParser.getVersion(albumJson))
 			.isEqualTo(migrator.albumVersionMigrators.size());
+		
+		assertThat(migratorFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(migratorFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
 	}
 
 }

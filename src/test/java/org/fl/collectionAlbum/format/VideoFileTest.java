@@ -26,7 +26,12 @@ package org.fl.collectionAlbum.format;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.fl.collectionAlbum.json.VideoFileParser;
+import org.fl.util.FilterCounter;
+import org.fl.util.FilterCounter.LogRecordCounter;
 import org.junit.jupiter.api.Test;
 
 import com.google.gson.JsonObject;
@@ -37,24 +42,46 @@ public class VideoFileTest {
 	@Test
 	void shouldHaveAllValues() {
 		
+		LogRecordCounter videoFileParserFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.VideoFileParser"));
+		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
+		
 		String videoFileStr1 = "{}" ;
 		JsonObject jf1 = JsonParser.parseString(videoFileStr1).getAsJsonObject();
 		
 		VideoFileParser videoFileParser = new VideoFileParser();
 		VideoFile videoFile = videoFileParser.parseMediaFile(jf1);
 		assertThat(videoFile).isNull();
+		
+		assertThat(videoFileParserFilterCounter.getLogRecordCount()).isEqualTo(3);
+		assertThat(videoFileParserFilterCounter.getLogRecordCount(Level.SEVERE)).isEqualTo(3);
+		
+		if (parserHelpersFilterCounter.isLoggable(Level.INFO)) {
+			assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(2);
+			assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.INFO)).isEqualTo(1);
+		} else {
+			assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(1);
+		}
+		assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.SEVERE)).isEqualTo(1);
 	}
 
 	@Test
 	void shouldAcceptNullWithError() {
 		
+		LogRecordCounter videoFileParserFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.VideoFileParser"));
+		
 		VideoFileParser videoFileParser = new VideoFileParser();
 		VideoFile videoFile = videoFileParser.parseMediaFile(null);
 		assertThat(videoFile).isNull();
+		
+		assertThat(videoFileParserFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(videoFileParserFilterCounter.getLogRecordCount(Level.SEVERE)).isEqualTo(1);
 	}
 	
 	@Test
 	void shouldNotDeserializeToVideoFile() {
+		
+		LogRecordCounter videoFileParserFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.VideoFileParser"));
+		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
 		
 		String videoFileStr1 = """
 			{"width": 720, 
@@ -66,10 +93,22 @@ public class VideoFileTest {
 		VideoFileParser videoFileParser = new VideoFileParser();
 		VideoFile videoFile = videoFileParser.parseMediaFile(jf1);
 		assertThat(videoFile).isNull();
+		
+		assertThat(videoFileParserFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(videoFileParserFilterCounter.getLogRecordCount(Level.SEVERE)).isEqualTo(1);
+		
+		if (parserHelpersFilterCounter.isLoggable(Level.INFO)) {
+			assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(1);
+			assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.INFO)).isEqualTo(1);
+		} else {
+			assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(0);
+		}
 	}
 	
 	@Test
 	void shouldDeserializeToVideoFileWithoutNote() {
+		
+		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
 		
 		String videoFileStr1 = """
 			{"width": 720, 
@@ -87,10 +126,19 @@ public class VideoFileTest {
 		assertThat(videoFile.getSource()).isEqualTo("DVD");
 		assertThat(videoFile.getType()).isEqualTo(VideoFileType.MKV);
 		assertThat(videoFile.getNote()).isNull();
+		
+		if (parserHelpersFilterCounter.isLoggable(Level.INFO)) {
+			assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(1);
+			assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.INFO)).isEqualTo(1);
+		} else {
+			assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(0);
+		}
 	}
 	
 	@Test
 	void shouldDeserializeToVideoFile() {
+		
+		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
 		
 		String videoFileStr1 = """
 			{"width": 720, 
@@ -111,5 +159,12 @@ public class VideoFileTest {
 		assertThat(videoFile.getNote()).isEqualTo("version noir et blanc");
 		
 		assertThat(videoFile.displayMediaFileDetailTitles(";")).isEqualTo("Width;Height;Type;Source;Note");
+		
+		if (parserHelpersFilterCounter.isLoggable(Level.INFO)) {
+			assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(1);
+			assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.INFO)).isEqualTo(1);
+		} else {
+			assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(0);
+		}
 	}
 }

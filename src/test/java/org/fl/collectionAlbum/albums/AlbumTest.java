@@ -54,6 +54,7 @@ import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 import org.fl.discogsInterface.inventory.InventoryCsvAlbum;
 import org.fl.util.FilterCounter;
+import org.fl.util.FilterCounter.LogRecordCounter;
 import org.fl.util.json.JsonUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -74,14 +75,11 @@ class AlbumTest {
 	@Test
 	void testEmptyAlbum() {
 
-		Logger albumParserLogger = Logger.getLogger("org.fl.collectionAlbum.json.AlbumParser");
-		FilterCounter albumParserFilterCounter = FilterCounter.setFilterCounter(albumParserLogger);
-		Logger albumLogger = Logger.getLogger("org.fl.collectionAlbum.albums.Album");
-		FilterCounter albumFilterCounter = FilterCounter.setFilterCounter(albumLogger);
-		Logger formatLogger = Logger.getLogger("org.fl.collectionAlbum.format.Format");
-		FilterCounter formatFilterCounter = FilterCounter.setFilterCounter(formatLogger);
-		Logger parserHelpersLogger = Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers");
-		FilterCounter parserHelpersFilterCounter = FilterCounter.setFilterCounter(parserHelpersLogger);
+		LogRecordCounter albumParserFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.AlbumParser"));		
+		LogRecordCounter albumFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.albums.Album"));	
+		LogRecordCounter formatFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.format.Format"));	
+		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
+
 		
 		ListeArtiste la = new ListeArtiste();
 		List<ListeArtiste> lla = new ArrayList<ListeArtiste>();
