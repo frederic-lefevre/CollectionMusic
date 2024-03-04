@@ -29,7 +29,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.format.AbstractAudioFile;
 import org.fl.collectionAlbum.format.AudioFileType;
@@ -43,7 +42,7 @@ import com.google.gson.JsonObject;
 
 public class AudioFileParser extends AbstractMediaFileParser {
 
-	private final static Logger albumLog = Control.getAlbumLog();
+	private final static Logger albumLog = Logger.getLogger(AudioFileParser.class.getName());
 	
 	public AudioFileParser() {
 		super();

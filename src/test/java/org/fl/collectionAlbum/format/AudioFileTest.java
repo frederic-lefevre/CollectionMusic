@@ -27,9 +27,13 @@ package org.fl.collectionAlbum.format;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.nio.file.Paths;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.json.AudioFileParser;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
+import org.fl.util.FilterCounter;
+import org.fl.util.FilterCounter.LogRecordCounter;
 import org.junit.jupiter.api.Test;
 
 import com.google.gson.JsonObject;
@@ -40,24 +44,46 @@ class AudioFileTest {
 	@Test
 	void shouldHaveAllValues() {
 		
+		LogRecordCounter audioFileParserFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.AudioFileParser"));
+		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
+		
 		String audioFileStr1 = "{}" ;
 		JsonObject jf1 = JsonParser.parseString(audioFileStr1).getAsJsonObject();
 		
 		AudioFileParser audioFileParser = new AudioFileParser();
 		AbstractAudioFile audio = audioFileParser.parseMediaFile(jf1);
 		assertThat(audio).isNull();
+		
+		assertThat(audioFileParserFilterCounter.getLogRecordCount()).isEqualTo(2);
+		assertThat(audioFileParserFilterCounter.getLogRecordCount(Level.SEVERE)).isEqualTo(2);
+		
+		if (parserHelpersFilterCounter.isLoggable(Level.INFO)) {
+			assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(2);
+			assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.INFO)).isEqualTo(1);
+		} else {
+			assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(1);
+		}
+		assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.SEVERE)).isEqualTo(1);
 	}
 	
 	@Test
 	void shouldAcceptNullWithError() {
 		
+		LogRecordCounter filterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.AudioFileParser"));
+		
 		AudioFileParser audioFileParser = new AudioFileParser();
 		AbstractAudioFile audio = audioFileParser.parseMediaFile(null);
 		assertThat(audio).isNull();
+		
+		assertThat(filterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(filterCounter.getLogRecordCount(Level.SEVERE)).isEqualTo(1);
 	}
 	
 	@Test
 	void shouldNotDeserializeToAudioFile() {
+		
+		LogRecordCounter audioFileParserFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.AudioFileParser"));
+		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
 		
 		String audioFileStr1 = """
 			{"bitDepth": 24 , 
@@ -70,10 +96,21 @@ class AudioFileTest {
 		AbstractAudioFile audio = audioFileParser.parseMediaFile(jf1);
 		assertThat(audio).isNull();
 
+		assertThat(audioFileParserFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(audioFileParserFilterCounter.getLogRecordCount(Level.SEVERE)).isEqualTo(1);
+		
+		if (parserHelpersFilterCounter.isLoggable(Level.INFO)) {
+			assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(1);
+			assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.INFO)).isEqualTo(1);
+		} else {
+			assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(0);
+		}
 	}
 	
 	@Test
 	void shouldDeserializeToAudioFile2() {
+		
+		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
 		
 		String audioFileStr1 = """
 				{"bitDepth": 32 , 
@@ -114,10 +151,17 @@ class AudioFileTest {
 			.satisfies(audioPath -> assertThat(audioPath.getPath()).hasToString("E:\\Musique\\a\\John Abercrombie\\M [24-96]"));
 		
 		assertThat(losslessAudio.displayMediaFileDetailTitles(";")).isEqualTo("Bit depth;Sampling Rate;Type;Source;Note");
+		
+		if (parserHelpersFilterCounter.isLoggable(Level.INFO)) {
+			assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(1);
+			assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.INFO)).isEqualTo(1);
+		}
 	}
 	
 	@Test
 	void shouldDeserializeToAudioFileWithInvalidPath() {
+		
+		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
 		
 		String audioFileStr1 = """
 				{"bitDepth": 32 , 
@@ -147,10 +191,16 @@ class AudioFileTest {
 		assertThat(losslessAudio.hasMediaFilePathNotFound()).isTrue();
 		
 		assertThat(losslessAudio.getMediaFilePaths()).isNull();
+		
+		assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
 	}
 	
 	@Test
 	void shouldDeserializeToAudioFileWithPathNotFound() {
+		
+		LogRecordCounter filterCounter1 = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.AbstractMediaFileParser"));
+		LogRecordCounter filterCounter2 = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.mediaPath.MediaFileInventory"));
 		
 		String audioFileStr1 = """
 				{"bitDepth": 32 , 
@@ -182,5 +232,10 @@ class AudioFileTest {
 		assertThat(losslessAudio.getMediaFilePaths())
 			.isNotNull()
 			.isEmpty();
+		
+		assertThat(filterCounter1.getLogRecordCount()).isEqualTo(1);
+		assertThat(filterCounter1.getLogRecordCount(Level.WARNING)).isEqualTo(1);
+		assertThat(filterCounter2.getLogRecordCount()).isEqualTo(1);
+		assertThat(filterCounter2.getLogRecordCount(Level.SEVERE)).isEqualTo(1);
 	}
 }

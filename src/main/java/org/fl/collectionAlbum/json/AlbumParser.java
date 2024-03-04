@@ -27,7 +27,6 @@ package org.fl.collectionAlbum.json;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.format.Format;
 import org.fl.collectionAlbum.format.Format.RangementSupportPhysique;
@@ -40,7 +39,7 @@ import com.google.gson.JsonObject;
 
 public class AlbumParser {
 
-	private final static Logger albumLog = Control.getAlbumLog();
+	private final static Logger albumLog =  Logger.getLogger(AlbumParser.class.getName());
 	
 	public static String getAlbumTitre(JsonObject jAlbum) {
 		

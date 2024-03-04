@@ -40,7 +40,7 @@ import com.google.gson.JsonObject;
 
 public abstract class MusicArtefact {
 
-	protected final static Logger mLog = Control.getAlbumLog();
+	protected final static Logger mLog = Logger.getLogger(MusicArtefact.class.getName());
 	
 	// liste des auteurs (artiste ou groupe)
 	private final List<Artiste> auteurs;

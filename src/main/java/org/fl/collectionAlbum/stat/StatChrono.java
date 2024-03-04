@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -32,11 +32,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.fl.collectionAlbum.Control;
-
 public class StatChrono {
 	
-	private final static Logger statLogger = Control.getAlbumLog();
+	private final static Logger statLogger = Logger.getLogger(StatChrono.class.getName());
 	
 	private List<StatAnnee>  statAnnuelle ; 
 	private List<StatAnnee>  statDecennale ;

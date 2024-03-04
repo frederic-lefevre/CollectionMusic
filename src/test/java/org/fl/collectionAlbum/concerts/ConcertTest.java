@@ -29,9 +29,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
+import org.fl.util.FilterCounter;
+import org.fl.util.FilterCounter.LogRecordCounter;
 import org.junit.jupiter.api.Test;
 
 import com.google.gson.JsonObject;
@@ -42,6 +46,9 @@ class ConcertTest {
 	@Test
 	void test() {
 		
+		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
+		LogRecordCounter concertParserFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ConcertParser"));
+		
 		ListeArtiste la = new ListeArtiste() ;
 		List<ListeArtiste> lla = new ArrayList<ListeArtiste>() ;
 		lla.add(la) ;
@@ -50,6 +57,17 @@ class ConcertTest {
 		Concert concert = new Concert(new JsonObject(), lla, lieuxDesConcerts, Path.of("dummyPath")) ;
 		
 		assertThat(concert).isNotNull();
+		
+		if (parserHelpersFilterCounter.isLoggable(Level.INFO)) {
+			assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(5);
+			assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.INFO)).isEqualTo(4);
+		} else {
+			assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(1);
+		}
+		assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.SEVERE)).isEqualTo(1);
+		
+		assertThat(concertParserFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(concertParserFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
 	}
 	
 	private static final String concertStr1 = """
@@ -68,6 +86,8 @@ class ConcertTest {
 	@Test
 	void testConcert1() {
 
+		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
+		
 		JsonObject jConcert = JsonParser.parseString(concertStr1).getAsJsonObject();
 
 		ListeArtiste la = new ListeArtiste();
@@ -107,6 +127,13 @@ class ConcertTest {
 					.singleElement()
 					.isEqualTo(concert);
 			});
+		
+		if (parserHelpersFilterCounter.isLoggable(Level.INFO)) {
+			assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(3);
+			assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.INFO)).isEqualTo(3);
+		} else {
+			assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(0);
+		}
 
 	}
 }

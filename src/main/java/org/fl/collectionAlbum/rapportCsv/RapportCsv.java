@@ -36,14 +36,13 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.albums.ListeAlbum;
 import org.fl.collectionAlbum.format.AbstractAudioFile;
 
 public class RapportCsv {
 
-	private final static Logger rapportLog = Control.getAlbumLog();
+	private final static Logger rapportLog = Logger.getLogger(RapportCsv.class.getName());
 	
 	private static final String CSV_SEPARATOR = ";";
 	

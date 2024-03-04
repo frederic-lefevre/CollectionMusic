@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,12 +28,11 @@ import java.time.temporal.TemporalAccessor;
 import java.util.Comparator;
 import java.util.logging.Logger;
 
-import org.fl.collectionAlbum.Control;
 import org.fl.util.date.TemporalUtils;
 
 public class AlbumEnregistrementComparator  implements Comparator<Album> {
 
-	private final static Logger albumLog = Control.getAlbumLog();
+	private final static Logger albumLog = Logger.getLogger(AlbumEnregistrementComparator.class.getName());
 	
 	public AlbumEnregistrementComparator() {
 	}

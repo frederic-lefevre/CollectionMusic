@@ -40,8 +40,6 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.fl.collectionAlbum.Control;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -57,7 +55,7 @@ import com.google.gson.JsonObject;
  */
 public class Format {
 
-	private final static Logger albumLog = Control.getAlbumLog();
+	private final static Logger albumLog = Logger.getLogger(Format.class.getName());
 	
 	private static final String ORDRE_PREFIX = "Ordre de rangement des ";
 	

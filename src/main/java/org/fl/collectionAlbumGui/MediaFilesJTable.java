@@ -40,7 +40,7 @@ public class MediaFilesJTable extends JTable {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger tLog = Control.getAlbumLog();
+	private static final Logger tLog = Logger.getLogger(MediaFilesJTable.class.getName());
 	
 	public MediaFilesJTable(MediaFilesTableModel dm) {
 		super(dm);

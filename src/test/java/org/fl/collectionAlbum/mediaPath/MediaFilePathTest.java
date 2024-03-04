@@ -49,7 +49,8 @@ class MediaFilePathTest {
 		assertThat(MediaFilePath.isMediaFileName(Paths.get("toto.flac"), ContentNature.VIDEO)).isFalse();
 		assertThat(MediaFilePath.isMediaFileName(Paths.get("toto.mkv"), ContentNature.VIDEO)).isTrue();
 		
-		MediaFilePath.extensionSet.forEach(extension -> System.out.println(extension));
+		//To print all encountered extension
+		//MediaFilePath.extensionSet.forEach(extension -> System.out.println(extension));
 	}
 
 }

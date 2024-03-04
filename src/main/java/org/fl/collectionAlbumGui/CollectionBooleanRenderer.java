@@ -33,13 +33,11 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 
-import org.fl.collectionAlbum.Control;
-
 public class CollectionBooleanRenderer extends DefaultTableCellRenderer {
 
 	private static final long serialVersionUID = 1L;
 	
-	private static final Logger mLog = Control.getAlbumLog();
+	private static final Logger mLog = Logger.getLogger(CollectionBooleanRenderer.class.getName());
 	
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,

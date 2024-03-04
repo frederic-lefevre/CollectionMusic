@@ -32,7 +32,6 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 
-import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
@@ -40,7 +39,7 @@ public class AlbumsRenderer extends JLabel implements TableCellRenderer {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger mLog = Control.getAlbumLog();
+	private static final Logger mLog = Logger.getLogger(AlbumsRenderer.class.getName());
 	
 	private final static String ALBUMS_SEPARATOR = ", ";
 	

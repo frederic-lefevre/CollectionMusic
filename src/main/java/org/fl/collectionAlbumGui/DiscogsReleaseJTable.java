@@ -39,7 +39,7 @@ public class DiscogsReleaseJTable extends JTable {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger tLog = Control.getAlbumLog();
+	private static final Logger tLog = Logger.getLogger(DiscogsReleaseJTable.class.getName());
 	
 	public DiscogsReleaseJTable(DisocgsReleaseTableModel dm) {
 		super(dm);

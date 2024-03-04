@@ -59,7 +59,7 @@ import org.fl.util.file.FilesUtils;
 
 public class GenerationSiteCollection  extends SwingWorker<String,ProgressInformation> {
 
-	private final static Logger albumLog = Control.getAlbumLog();
+	private final static Logger albumLog = Logger.getLogger(GenerationSiteCollection.class.getName());
 	
 	private CollectionAlbumContainer collectionAlbumContainer ;
 	private final ProgressInformationPanel progressPanel;

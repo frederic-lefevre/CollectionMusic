@@ -32,7 +32,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.format.AbstractMediaFile;
 import org.fl.collectionAlbum.format.ContentNature;
@@ -43,11 +42,11 @@ import com.google.gson.JsonObject;
 
 public abstract class AbstractMediaFileParser {
 
+	private final static Logger albumLog = Logger.getLogger(AbstractMediaFileParser.class.getName());
+	
 	public AbstractMediaFileParser() {
 		super();
 	}
-
-	private final static Logger albumLog = Control.getAlbumLog();
 	
 	protected String parseNote(JsonObject mediaFileJson) {
 		return ParserHelpers.parseStringProperty(mediaFileJson, JsonMusicProperties.NOTE, false);

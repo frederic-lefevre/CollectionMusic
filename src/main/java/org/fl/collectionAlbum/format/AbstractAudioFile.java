@@ -27,14 +27,13 @@ package org.fl.collectionAlbum.format;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
 import com.google.gson.JsonObject;
 
 public abstract class AbstractAudioFile extends AbstractMediaFile {
 
-	private final static Logger albumLog = Control.getAlbumLog();
+	private final static Logger albumLog = Logger.getLogger(AbstractAudioFile.class.getName());
 	
 	private final AudioFileType type;
 	private final double samplingRate;

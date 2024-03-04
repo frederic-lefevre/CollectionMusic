@@ -30,7 +30,6 @@ import java.util.List;
 import java.time.temporal.TemporalAccessor;
 import java.util.logging.Logger;
 
-import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.MusicArtefact;
 import org.fl.collectionAlbum.albums.Album;
@@ -55,7 +54,7 @@ public class Artiste {
 	protected ListeAlbum 	   albums ;
 	protected ListeConcert 	   concerts ;
 	
-	private final static Logger albumLog = Control.getAlbumLog();
+	private final static Logger albumLog = Logger.getLogger(Artiste.class.getName());
 
 	public Artiste(JsonObject jArtiste) {
 		
