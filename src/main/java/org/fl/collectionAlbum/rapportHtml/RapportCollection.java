@@ -120,7 +120,10 @@ public class RapportCollection extends RapportHtml {
 		write("  </tr>\n  <tr>\n");
 		albumsContainer.getCollectionAlbumsMusiques().getFormatListeAlbum().rowFormat(rBuilder, "total", DONT_APPEND_AUDIO_FILE);
 		
-		write("  </tr>\n</table>\n</li>\n</ul>\n</td>\n</tr>\n</table>\n");
+		write("  </tr>\n</table>\n</li>\n</ul>\n</td>\n<td class=\"mainpage\">\n<h3>Albums avec et sans release discogs</h3>\n<table>\n");
+		writeListeAlbumsRow(albumsContainer.getAlbumsWithDiscogsRelease().sortRangementAlbum(), "Albums avec release discogs");
+		writeListeAlbumsRow(albumsContainer.getAlbumsMissingDiscogsRelease().sortRangementAlbum(), "Albums sans release discogs");
+		write("</table>\n</td>\n</tr>\n</table>\n");
 	}
 	
 	private void writeListeAlbumsRow(ListeAlbum listeAlbum, String title) {
