@@ -78,7 +78,7 @@ public abstract class MusicArtefact {
 		hasAdditionalInfo = 
 				((notes != null) && (! notes.isEmpty())) ||
 				((urlLinks != null) && (! urlLinks.isEmpty()))  ||
-				((discogsLink != null) && (! discogsLink.isEmpty()));
+				hasDiscogsRelease();
 	}
 
 	public void addMusicArtfactArtistesToList(ListeArtiste artistes) {
@@ -121,6 +121,10 @@ public abstract class MusicArtefact {
 		return arteFactJson;
 	}
 
+	public boolean hasDiscogsRelease() {
+		return (discogsLink != null) && (! discogsLink.isEmpty());
+	}
+	
 	public void setDiscogsLink(String discogsLink) {
 		this.discogsLink = discogsLink;
 		hasAdditionalInfo = hasAdditionalInfo || ((discogsLink != null) && !discogsLink.isEmpty());

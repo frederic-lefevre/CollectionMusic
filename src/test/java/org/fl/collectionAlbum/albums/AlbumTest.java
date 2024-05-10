@@ -459,6 +459,8 @@ class AlbumTest {
 		assertThat(album.hasOnlyLossLessAudio()).isTrue();
 		assertThat(album.hasIntervenant()).isFalse();
 		
+		assertThat(album.hasDiscogsRelease()).isFalse();
+		
 		assertThat(album.hasContentNature(ContentNature.AUDIO)).isTrue();
 		assertThat(album.hasContentNature(ContentNature.VIDEO)).isFalse();
 		
