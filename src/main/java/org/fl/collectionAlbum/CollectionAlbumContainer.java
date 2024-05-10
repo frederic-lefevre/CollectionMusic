@@ -126,12 +126,6 @@ public class CollectionAlbumContainer {
 			.filter(Objects::nonNull)
 			.flatMap(mediaFileList -> mediaFileList.stream())
 			.forEach(mediaFile -> mediaFile.addAlbum(album));
-			
-		// Add the album to the discogs inventory if a discogs release is referenced
-		String discogsReleaseId = album.getDiscogsLink();
-		if (discogsReleaseId != null) {
-			DiscogsInventory.linkToAlbum(discogsReleaseId, album);
-		}
 		
 		collectionAlbumsMusiques.addAlbum(album);
 				
@@ -174,7 +168,9 @@ public class CollectionAlbumContainer {
 			albumWithLowResAudio.addAlbum(album);
 		}
 		
+		// Add the album to the discogs inventory if a discogs release is referenced
 		if (album.hasDiscogsRelease()) {
+			DiscogsInventory.linkToAlbum(album.getDiscogsLink(), album);
 			albumWithDiscogsRelease.addAlbum(album);
 		} else {
 			albumMissingDiscogsRelease.addAlbum(album);
