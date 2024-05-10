@@ -71,6 +71,9 @@ class CollectionAlbumContainerTest {
 			.allSatisfy(rangement -> assertThat(albumsContainer.getRangementAlbums(rangement).getAlbums()).isEmpty());
 		
 		assertThat(albumsContainer.getAlbumsWithMixedContentNature().getAlbums()).isEmpty();
+		assertThat(albumsContainer.getAlbumsMissingDiscogsRelease().getAlbums()).isEmpty();
+		assertThat(albumsContainer.getAlbumsWithDiscogsRelease().getAlbums()).isEmpty();
+		
 		assertThat(ContentNature.values())
 			.allSatisfy(contentNature -> assertThat(albumsContainer.getAlbumsWithOnlyContentNature(contentNature).getAlbums()).isEmpty());
 	}
@@ -156,6 +159,10 @@ class CollectionAlbumContainerTest {
 			});
 		
 		assertThat(albumsContainer.getAlbumsWithMixedContentNature().getAlbums()).isEmpty();
+		assertThat(albumsContainer.getAlbumsMissingDiscogsRelease().getAlbums()).isNotEmpty().singleElement()
+			.satisfies(album1 -> assertThat(album1).isEqualTo(album));
+		assertThat(albumsContainer.getAlbumsWithDiscogsRelease().getAlbums()).isEmpty();
+		
 		assertThat(ContentNature.values())
 			.allSatisfy(contentNature -> {
 				if (contentNature == ContentNature.AUDIO) {

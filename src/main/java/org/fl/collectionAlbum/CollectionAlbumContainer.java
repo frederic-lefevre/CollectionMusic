@@ -80,6 +80,9 @@ public class CollectionAlbumContainer {
 	private ListeAlbum albumWithHighResAudio;
 	private ListeAlbum albumWithLowResAudio;
 	
+	private ListeAlbum albumWithDiscogsRelease;
+	private ListeAlbum albumMissingDiscogsRelease;
+	
 	private ListeConcert concerts;	
 	private ChronoArtistes calendrierArtistes;
 	
@@ -171,6 +174,12 @@ public class CollectionAlbumContainer {
 			albumWithLowResAudio.addAlbum(album);
 		}
 		
+		if (album.hasDiscogsRelease()) {
+			albumWithDiscogsRelease.addAlbum(album);
+		} else {
+			albumMissingDiscogsRelease.addAlbum(album);
+		}
+		
 		statChronoEnregistrement.AddAlbum(album.getDebutEnregistrement(), album.getFormatAlbum().getPoids());
 	    statChronoComposition.AddAlbum(album.getDebutComposition(), album.getFormatAlbum().getPoids());
 	}
@@ -212,6 +221,8 @@ public class CollectionAlbumContainer {
 	public ListeAlbum 	  	getAlbumsWithHighResAudio()   	  { return albumWithHighResAudio 		; }
 	public ListeAlbum 	  	getAlbumsWithLowResAudio() 	  	  { return albumWithLowResAudio 		; }
 	public ListeAlbum 	  	getAlbumsWithMixedContentNature() { return albumsWithMixedContentNature	; }
+	public ListeAlbum 	  	getAlbumsWithDiscogsRelease() 	  { return albumWithDiscogsRelease 		; }
+	public ListeAlbum 	  	getAlbumsMissingDiscogsRelease()  { return albumMissingDiscogsRelease 	; }
 
 	private void reset() {
 		
@@ -231,6 +242,8 @@ public class CollectionAlbumContainer {
    		albumWithHighResAudio	 	 = new ListeAlbum();
    		albumWithLowResAudio	 	 = new ListeAlbum();
    		albumsWithMixedContentNature = new ListeAlbum();
+   		albumWithDiscogsRelease	 	 = new ListeAlbum();
+   		albumMissingDiscogsRelease   = new ListeAlbum();
    		rangementsAlbums 		 	 = new EnumMap<Format.RangementSupportPhysique, ListeAlbum>(Format.RangementSupportPhysique.class);
    		albumsPerMediaSupports	 	 = new EnumMap<MediaSupports, ListeAlbum>(MediaSupports.class);
    		albumsWithOnlyContentNature  = new EnumMap<ContentNature, ListeAlbum>(ContentNature.class);
