@@ -124,11 +124,31 @@ public class DiscogsAlbumReleaseMatcher {
 		}
 	}
 
-	/*
+
 	public static AlbumMatchResult getPotentialAlbumMatch(DiscogsAlbumRelease discogsRelease, List<Album> albums) {
 		
+		Set<Album> compatibleAuteurAndTitleSet = albums.stream()
+				.filter(album -> isAlbumAuteursAndTitleMatching(album, discogsRelease.getInventoryCsvAlbum()))
+				.collect(Collectors.toSet());
+			
+		if (compatibleAuteurAndTitleSet.isEmpty()) {
+			// No match on auteurs and title
+			
+			return new AlbumMatchResult(MatchResultType.NO_MATCH, compatibleAuteurAndTitleSet);
+		} else {
+			
+			Set<Album> compatibleAlbumSet = compatibleAuteurAndTitleSet.stream()
+				.filter(album -> isAlbumFormatMatching(album.getFormatAlbum().getSupportsPhysiques(), discogsRelease.getInventoryCsvAlbum()))
+						.collect(Collectors.toSet());
+			
+			if (compatibleAlbumSet.isEmpty()) {
+				return new AlbumMatchResult(MatchResultType.NO_FORMAT_MATCH, compatibleAuteurAndTitleSet);
+			} else {
+				return new AlbumMatchResult(MatchResultType.MATCH, compatibleAlbumSet);
+			}
+		}		
 	}
-	*/
+
 	
 	private static boolean isAlbumAuteursAndTitleMatching(Album album, InventoryCsvAlbum inventoryCsvAlbum) {
 		
