@@ -76,12 +76,31 @@ public class DiscogsAlbumReleaseMatcher {
 		}
 	}
 	
+	public static class AlbumMatchResult {
+		
+		private final MatchResultType matchResultType;
+		private final Set<Album> matchingAlbums;
+		
+		public AlbumMatchResult(MatchResultType matchResultType, Set<Album> matchingAlbums) {
+			super();
+			this.matchResultType = matchResultType;
+			this.matchingAlbums = matchingAlbums;
+		}
+
+		public MatchResultType getMatchResultType() {
+			return matchResultType;
+		}
+
+		public Set<Album> getMatchingAlbums() {
+			return matchingAlbums;
+		}
+		
+	}
+	
 	public static ReleaseMatchResult getPotentialReleaseMatch(Album album) {
 		
-		List<String> artists = album.getAuteurs().stream().map(Artiste::getNomComplet).collect(Collectors.toList());
-		
 		Set<DiscogsAlbumRelease> compatibleAuteurAndTitleSet =  DiscogsInventory.getDiscogsInventory().stream()
-			.filter(albumRelease -> isAlbumAuteursAndTitleMatching(album, artists, albumRelease.getInventoryCsvAlbum()))
+			.filter(albumRelease -> isAlbumAuteursAndTitleMatching(album, albumRelease.getInventoryCsvAlbum()))
 			.collect(Collectors.toSet());
 		
 		if (compatibleAuteurAndTitleSet.isEmpty()) {
@@ -104,11 +123,19 @@ public class DiscogsAlbumReleaseMatcher {
 			}
 		}
 	}
+
+	/*
+	public static AlbumMatchResult getPotentialAlbumMatch(DiscogsAlbumRelease discogsRelease, List<Album> albums) {
+		
+	}
+	*/
 	
-	private static boolean isAlbumAuteursAndTitleMatching(Album album, List<String> artists, InventoryCsvAlbum inventoryCsvAlbum) {
+	private static boolean isAlbumAuteursAndTitleMatching(Album album, InventoryCsvAlbum inventoryCsvAlbum) {
 		
 		return (inventoryCsvAlbum.getTitle().toLowerCase().contains(album.getTitre().toLowerCase()) &&
-				inventoryCsvAlbum.getArtists().stream().anyMatch(artist -> artists.stream().anyMatch(albumArtist -> artist.contains(albumArtist))));
+				inventoryCsvAlbum.getArtists().stream()
+					.anyMatch(artist -> album.getAuteurs().stream().map(Artiste::getNomComplet)
+							.anyMatch(albumArtist -> artist.contains(albumArtist))));
 
 	}
 
