@@ -37,7 +37,6 @@ import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.discogsInterface.inventory.Inventory;
 import org.fl.discogsInterface.inventory.InventoryCsvAlbum;
-import org.fl.util.json.JsonUtils;
 
 public class DiscogsInventory {
 
@@ -92,7 +91,7 @@ public class DiscogsInventory {
 				info.append("\n-------------------------------------\n  Albums de la collection liés\n");
 				
 				collectionAlbums.forEach(collectionAlbum -> 
-					info.append(JsonUtils.jsonPrettyPrint(collectionAlbum.getJson()))
+					info.append(collectionAlbum.getJsonString())
 						.append("\n-------------------------------------\n")
 					);
 			}
