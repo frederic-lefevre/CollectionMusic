@@ -125,20 +125,13 @@ public class AlbumCustomActionListener implements java.awt.event.ActionListener 
 					
 					Set<DiscogsAlbumRelease> potentialReleases = releaseMatchResult.getMatchingReleases();
 					
-					switch (releaseMatchResult.getMatchResultType()) {
-					case MATCH:
-						infoPotentialRelease.setText("Releases discogs potentielles trouvées:\n\n");
-						break;
-						
-					case NO_FORMAT_MATCH:
-						infoPotentialRelease.setText("Pas de release discogs potentielle trouvée\nRelease potentielle avec le même titre et des auteurs communs:\n\n");
-						break;
-						
-					case NO_MATCH:
-						infoPotentialRelease.setText("Pas de release discogs potentielle trouvée");
-						break;
-						
-					}
+					infoPotentialRelease.setText(
+							switch (releaseMatchResult.getMatchResultType()) {
+							case MATCH -> "Releases discogs potentielles trouvées:\n\n";
+							case NO_FORMAT_MATCH -> "Pas de release discogs potentielle trouvée\nRelease potentielle avec le même titre et des auteurs communs:\n\n";
+							case NO_MATCH -> "Pas de release discogs potentielle trouvée";
+							});
+					
 					infoPotentialRelease.setFont(new Font("monospaced", Font.BOLD, 14));
 					potentialReleasesPane.add(infoPotentialRelease);
 					potentialReleases.forEach(release -> potentialReleasesPane.add(discogsPotentialReleasePane(release, selectedAlbum, potentialReleasesPane)));
