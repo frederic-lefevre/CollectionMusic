@@ -24,15 +24,23 @@ SOFTWARE.
 
 package org.fl.collectionAlbumGui;
 
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
+import java.util.Set;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
+import javax.swing.BoxLayout;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import org.fl.collectionAlbum.CollectionAlbumContainer;
+import org.fl.collectionAlbum.albums.Album;
+import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher;
+import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.AlbumMatchResult;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory.DiscogsAlbumRelease;
 
 public class DiscogsReleaseCustomActionListener implements java.awt.event.ActionListener {
@@ -66,11 +74,13 @@ public class DiscogsReleaseCustomActionListener implements java.awt.event.Action
 	
 	private final DiscogsReleaseJTable discogsReleaseJTable;
 	private final CustomAction customAction;
+	private final CollectionAlbumContainer albumsContainer;
 	
-	public DiscogsReleaseCustomActionListener(DiscogsReleaseJTable discogsReleaseJTable, CustomAction customAction) {
+	public DiscogsReleaseCustomActionListener(DiscogsReleaseJTable discogsReleaseJTable, CustomAction customAction, CollectionAlbumContainer albumsContainer) {
 		
 		this.discogsReleaseJTable = discogsReleaseJTable;
 		this.customAction = customAction;
+		this.albumsContainer = albumsContainer;
 	}
 
 	@Override
@@ -96,12 +106,28 @@ public class DiscogsReleaseCustomActionListener implements java.awt.event.Action
 					break;
 					
 				case ALBUM_SEARCH:
-					JTextArea searchResult = new JTextArea(40, 200);
-					searchResult.setEditable(false);
 					
-					searchResult.setText("TO Do");
-					searchResult.setFont(new Font("monospaced", Font.BOLD, 14));
-					JScrollPane searchResultScroll = new JScrollPane(searchResult);
+					JPanel potentialAlbumsPane = new JPanel();
+					potentialAlbumsPane.setLayout(new BoxLayout(potentialAlbumsPane, BoxLayout.Y_AXIS));
+					
+					JTextArea infoPotentialAlbums = new JTextArea(0, 200);
+					infoPotentialAlbums.setPreferredSize(new Dimension(1600,50));
+					infoPotentialAlbums.setMaximumSize(new Dimension(1600,50));
+					infoPotentialAlbums.setEditable(false);
+					
+					AlbumMatchResult albumMatchResult = DiscogsAlbumReleaseMatcher.getPotentialAlbumMatch(release, albumsContainer.getAlbumsMissingDiscogsRelease().getAlbums());
+					
+					Set<Album> potentialAlbums = albumMatchResult.getMatchingAlbums();
+					
+					infoPotentialAlbums.setText(
+						switch (albumMatchResult.getMatchResultType()) {
+						case MATCH -> "Albums potentiels trouvés:\n\n";
+						case NO_FORMAT_MATCH -> "Pas d'album potentiel trouvé\nAlbum potentiel avec le même titre et des auteurs communs:\n\n";
+						case NO_MATCH -> "Pas d'album potentiel trouvé";
+						});
+
+					infoPotentialAlbums.setFont(new Font("monospaced", Font.BOLD, 14));
+					JScrollPane searchResultScroll = new JScrollPane(infoPotentialAlbums);
 					JOptionPane.showMessageDialog(null, searchResultScroll, "Recherche d'albums", JOptionPane.INFORMATION_MESSAGE);
 					
 					break;

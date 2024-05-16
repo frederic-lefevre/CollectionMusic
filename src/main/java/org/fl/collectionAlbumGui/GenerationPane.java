@@ -115,7 +115,7 @@ public class GenerationPane extends JPanel {
 		DisocgsReleaseTableModel dtm = new DisocgsReleaseTableModel(DiscogsInventory.getDiscogsInventory());
 		sm.addTableModel(dtm);
 		
-		DiscogsReleaseJTable discogsReleaseJTable = new DiscogsReleaseJTable(dtm);
+		DiscogsReleaseJTable discogsReleaseJTable = new DiscogsReleaseJTable(dtm, CollectionAlbumContainer.getInstance());
 		
 		JPanel discogsReleasesPane = new JPanel();
 		

@@ -31,6 +31,7 @@ import java.util.List;
 import javax.swing.JPopupMenu;
 
 import org.apache.commons.lang3.stream.Streams;
+import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.OsAction;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory.DiscogsAlbumRelease;
 import org.fl.collectionAlbumGui.DiscogsReleaseCustomActionListener.CustomAction;
@@ -42,7 +43,7 @@ public class DiscogsInventoryMouseAdapter extends MouseAdapter {
 	
 	private final CollectionMenuItems<DiscogsAlbumRelease> discogsReleaseMenuItems;
 	
-	public DiscogsInventoryMouseAdapter(DiscogsReleaseJTable discogsReleaseJTable, List<OsAction<DiscogsAlbumRelease>> osActions) {
+	public DiscogsInventoryMouseAdapter(DiscogsReleaseJTable discogsReleaseJTable, List<OsAction<DiscogsAlbumRelease>> osActions, CollectionAlbumContainer albumsContainer) {
 		
 		super();
 		this.discogsReleaseJTable = discogsReleaseJTable;
@@ -61,7 +62,7 @@ public class DiscogsInventoryMouseAdapter extends MouseAdapter {
 		Streams.of(CustomAction.values()).forEach(customAction -> 
 			discogsReleaseMenuItems.addMenuItem(
 					customAction.getActionTitle(), 
-					new DiscogsReleaseCustomActionListener(discogsReleaseJTable, customAction), 
+					new DiscogsReleaseCustomActionListener(discogsReleaseJTable, customAction, albumsContainer), 
 					customAction.getDisplayable(), 
 					localJPopupMenu));
 	}
