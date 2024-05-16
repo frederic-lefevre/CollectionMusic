@@ -181,6 +181,13 @@ class DiscogsAlbumReleaseMatcherTest {
 	}
 	
 	@Test
+	void shouldThrowNPEWhenAlbumIsNull() {
+		
+		assertThatNullPointerException().isThrownBy(() -> DiscogsAlbumReleaseMatcher.getPotentialReleaseMatch(null));
+	}
+	
+	
+	@Test
 	void shouldGetPotentialReleaseMatch() {
 		
 		ReleaseMatchResult releaseMatchResult = DiscogsAlbumReleaseMatcher.getPotentialReleaseMatch(getAlbumFromJson(softMachineThird));
