@@ -25,6 +25,7 @@ SOFTWARE.
 package org.fl.collectionAlbum.discogs;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatNullPointerException;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -38,6 +39,7 @@ import org.fl.collectionAlbum.disocgs.DiscogsInventory;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.MatchResultType;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.ReleaseMatchResult;
 import org.fl.collectionAlbum.format.MediaSupportCategories;
+import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -174,6 +176,7 @@ class DiscogsAlbumReleaseMatcherTest {
 	
 	@BeforeAll
 	static void initInventory() {
+		MediaFilesInventories.buildInventories();
 		DiscogsInventory.buildDiscogsInventory();
 	}
 	
@@ -241,6 +244,29 @@ class DiscogsAlbumReleaseMatcherTest {
 				);
 	}
 	
+	@Test
+	void shouldThrowNPE1() {
+		
+		assertThatNullPointerException().isThrownBy(() -> DiscogsAlbumReleaseMatcher.getPotentialAlbumMatch(null, null));
+	}
+	
+	@Test
+	void shouldThrowNPE2() {
+		
+		assertThatNullPointerException().isThrownBy(() -> DiscogsAlbumReleaseMatcher.getPotentialAlbumMatch(null, List.of(getAlbumFromJson(softMachineThird))));
+	}
+	
+	@Test
+	void shouldThrowNPE3() {
+		
+		assertThat(DiscogsInventory.getDiscogsInventory()).isNotEmpty();
+		assertThatNullPointerException().isThrownBy(() -> DiscogsAlbumReleaseMatcher.getPotentialAlbumMatch(DiscogsInventory.getDiscogsInventory().get(0), null));
+	}
+	
+	@Test
+	void shouldGetPotentialAlbumMatch() {
+		
+	}
 	private static Album getAlbumFromJson(String albumStr) {
 		
 		JsonObject jAlbum = JsonParser.parseString(albumStr).getAsJsonObject();
