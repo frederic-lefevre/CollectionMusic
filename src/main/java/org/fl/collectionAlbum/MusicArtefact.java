@@ -121,6 +121,10 @@ public abstract class MusicArtefact {
 		return arteFactJson;
 	}
 
+	public String getJsonString() {
+		return JsonUtils.jsonPrettyPrint(arteFactJson);
+	}
+	
 	public boolean hasDiscogsRelease() {
 		return (discogsLink != null) && (! discogsLink.isEmpty());
 	}

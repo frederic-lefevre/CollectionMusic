@@ -24,6 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbumGui;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -31,7 +32,9 @@ import java.util.Set;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -127,14 +130,40 @@ public class DiscogsReleaseCustomActionListener implements java.awt.event.Action
 						});
 
 					infoPotentialAlbums.setFont(new Font("monospaced", Font.BOLD, 14));
-					JScrollPane searchResultScroll = new JScrollPane(infoPotentialAlbums);
-					JOptionPane.showMessageDialog(null, searchResultScroll, "Recherche d'albums", JOptionPane.INFORMATION_MESSAGE);
+					potentialAlbumsPane.add(infoPotentialAlbums);
+					potentialAlbums.forEach(album -> potentialAlbumsPane.add(potentialAlbumPane(release, album, potentialAlbumsPane)));
+					
+					JScrollPane infoAlbumsScroll = new JScrollPane(potentialAlbumsPane);
+					infoAlbumsScroll.setPreferredSize(new Dimension(1650,850));
+					JOptionPane.showMessageDialog(null, infoAlbumsScroll, "Recherche d'albums", JOptionPane.INFORMATION_MESSAGE);
 					
 					break;
 				default:
 					aLog.severe("Unkown custom action triggered for discogs release: " + customAction);
 			}
 		}
+	}
+	
+	private JPanel potentialAlbumPane(DiscogsAlbumRelease release, Album album, JPanel potentialAlbumsPane) {
+		
+		JPanel potentialAlbumPane = new JPanel();
+		potentialAlbumPane.setLayout(new BoxLayout(potentialAlbumPane, BoxLayout.X_AXIS));
+		potentialAlbumPane.setBorder(BorderFactory.createLineBorder(Color.BLACK,2,true)) ;
+	
+		JTextArea infoPotentialAlbum = new JTextArea(0, 150);
+		infoPotentialAlbum.setEditable(false);
+		infoPotentialAlbum.setText(album.getJsonString());
+		infoPotentialAlbum.setFont(new Font("monospaced", Font.BOLD, 14));
+		potentialAlbumPane.add(infoPotentialAlbum);
+		
+		JButton albumValidate = new JButton("Valider cet album");
+		albumValidate.setBackground(Color.GREEN);
+		Font buttonFont = new Font("Verdana", Font.BOLD, 12);
+		albumValidate.setFont(buttonFont);
+		albumValidate.addActionListener(new ReleaseValidationListener(release, album, potentialAlbumsPane));
+		potentialAlbumPane.add(albumValidate);
+		
+		return potentialAlbumPane;
 	}
 
 }
