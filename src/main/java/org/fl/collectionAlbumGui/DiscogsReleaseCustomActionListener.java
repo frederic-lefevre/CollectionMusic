@@ -39,9 +39,12 @@ public class DiscogsReleaseCustomActionListener implements java.awt.event.Action
 
 	private static final Logger aLog = Logger.getLogger(DiscogsReleaseCustomActionListener.class.getName());
 	
+	private static final Predicate<DiscogsAlbumRelease> isNotLinkedToAlbum = (release) -> (release != null) && !release.isLinkedToAlbum();
+	
 	public enum CustomAction {
 		
-		SHOW_INFO("Afficher les informations", (release) -> release != null) ;
+		SHOW_INFO("Afficher les informations", (release) -> release != null),
+		ALBUM_SEARCH("Chercher les albums", isNotLinkedToAlbum);
 		
 		private final String actionTitle;
 		private final Predicate<DiscogsAlbumRelease> displayable;
@@ -92,6 +95,16 @@ public class DiscogsReleaseCustomActionListener implements java.awt.event.Action
 				
 					break;
 					
+				case ALBUM_SEARCH:
+					JTextArea searchResult = new JTextArea(40, 200);
+					searchResult.setEditable(false);
+					
+					searchResult.setText("TO Do");
+					searchResult.setFont(new Font("monospaced", Font.BOLD, 14));
+					JScrollPane searchResultScroll = new JScrollPane(searchResult);
+					JOptionPane.showMessageDialog(null, searchResultScroll, "Recherche d'albums", JOptionPane.INFORMATION_MESSAGE);
+					
+					break;
 				default:
 					aLog.severe("Unkown custom action triggered for discogs release: " + customAction);
 			}
