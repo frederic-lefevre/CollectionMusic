@@ -32,6 +32,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
+import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory.DiscogsAlbumRelease;
 
@@ -41,7 +42,7 @@ public class DiscogsReleaseJTable extends JTable {
 
 	private static final Logger tLog = Logger.getLogger(DiscogsReleaseJTable.class.getName());
 	
-	public DiscogsReleaseJTable(DisocgsReleaseTableModel dm) {
+	public DiscogsReleaseJTable(DisocgsReleaseTableModel dm, CollectionAlbumContainer albumsContainer) {
 		super(dm);
 		
 		setFillsViewportHeight(true);
@@ -67,7 +68,7 @@ public class DiscogsReleaseJTable extends JTable {
 		
 		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		
-		addMouseListener(new DiscogsInventoryMouseAdapter(this, Control.getOsActionOnDiscogsRelease()));
+		addMouseListener(new DiscogsInventoryMouseAdapter(this, Control.getOsActionOnDiscogsRelease(), albumsContainer));
 	}
 
 	public DiscogsAlbumRelease getSelectedDisocgsRelease(){

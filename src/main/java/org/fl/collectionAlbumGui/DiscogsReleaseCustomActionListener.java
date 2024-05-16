@@ -24,29 +24,66 @@ SOFTWARE.
 
 package org.fl.collectionAlbumGui;
 
+import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
+import java.util.Set;
+import java.util.function.Predicate;
 import java.util.logging.Logger;
 
+import javax.swing.BorderFactory;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import org.fl.collectionAlbum.CollectionAlbumContainer;
+import org.fl.collectionAlbum.albums.Album;
+import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher;
+import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.AlbumMatchResult;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory.DiscogsAlbumRelease;
 
 public class DiscogsReleaseCustomActionListener implements java.awt.event.ActionListener {
 
 	private static final Logger aLog = Logger.getLogger(DiscogsReleaseCustomActionListener.class.getName());
 	
-	public enum CustomAction { SHOW_INFO };
+	private static final Predicate<DiscogsAlbumRelease> isNotLinkedToAlbum = (release) -> (release != null) && !release.isLinkedToAlbum();
+	
+	public enum CustomAction {
+		
+		SHOW_INFO("Afficher les informations", (release) -> release != null),
+		ALBUM_SEARCH("Chercher les albums", isNotLinkedToAlbum);
+		
+		private final String actionTitle;
+		private final Predicate<DiscogsAlbumRelease> displayable;
+		
+		private CustomAction(String actionTitle, Predicate<DiscogsAlbumRelease> displayable) {
+			this.actionTitle = actionTitle;
+			this.displayable = displayable;
+		}
+
+		public String getActionTitle() {
+			return actionTitle;
+		}
+
+		public Predicate<DiscogsAlbumRelease> getDisplayable() {
+			return displayable;
+		}
+		
+	};
 	
 	private final DiscogsReleaseJTable discogsReleaseJTable;
 	private final CustomAction customAction;
+	private final CollectionAlbumContainer albumsContainer;
 	
-	public DiscogsReleaseCustomActionListener(DiscogsReleaseJTable discogsReleaseJTable, CustomAction customAction) {
+	public DiscogsReleaseCustomActionListener(DiscogsReleaseJTable discogsReleaseJTable, CustomAction customAction, CollectionAlbumContainer albumsContainer) {
 		
 		this.discogsReleaseJTable = discogsReleaseJTable;
 		this.customAction = customAction;
+		this.albumsContainer = albumsContainer;
 	}
 
 	@Override
@@ -71,10 +108,62 @@ public class DiscogsReleaseCustomActionListener implements java.awt.event.Action
 				
 					break;
 					
+				case ALBUM_SEARCH:
+					
+					JPanel potentialAlbumsPane = new JPanel();
+					potentialAlbumsPane.setLayout(new BoxLayout(potentialAlbumsPane, BoxLayout.Y_AXIS));
+					
+					JTextArea infoPotentialAlbums = new JTextArea(0, 200);
+					infoPotentialAlbums.setPreferredSize(new Dimension(1600,50));
+					infoPotentialAlbums.setMaximumSize(new Dimension(1600,50));
+					infoPotentialAlbums.setEditable(false);
+					
+					AlbumMatchResult albumMatchResult = DiscogsAlbumReleaseMatcher.getPotentialAlbumMatch(release, albumsContainer.getAlbumsMissingDiscogsRelease().getAlbums());
+					
+					Set<Album> potentialAlbums = albumMatchResult.getMatchingAlbums();
+					
+					infoPotentialAlbums.setText(
+						switch (albumMatchResult.getMatchResultType()) {
+						case MATCH -> "Albums potentiels trouvés:\n\n";
+						case NO_FORMAT_MATCH -> "Pas d'album potentiel trouvé\nAlbum potentiel avec le même titre et des auteurs communs:\n\n";
+						case NO_MATCH -> "Pas d'album potentiel trouvé";
+						});
+
+					infoPotentialAlbums.setFont(new Font("monospaced", Font.BOLD, 14));
+					potentialAlbumsPane.add(infoPotentialAlbums);
+					potentialAlbums.forEach(album -> potentialAlbumsPane.add(potentialAlbumPane(release, album, potentialAlbumsPane)));
+					
+					JScrollPane infoAlbumsScroll = new JScrollPane(potentialAlbumsPane);
+					infoAlbumsScroll.setPreferredSize(new Dimension(1650,850));
+					JOptionPane.showMessageDialog(null, infoAlbumsScroll, "Recherche d'albums", JOptionPane.INFORMATION_MESSAGE);
+					
+					break;
 				default:
 					aLog.severe("Unkown custom action triggered for discogs release: " + customAction);
 			}
 		}
+	}
+	
+	private JPanel potentialAlbumPane(DiscogsAlbumRelease release, Album album, JPanel potentialAlbumsPane) {
+		
+		JPanel potentialAlbumPane = new JPanel();
+		potentialAlbumPane.setLayout(new BoxLayout(potentialAlbumPane, BoxLayout.X_AXIS));
+		potentialAlbumPane.setBorder(BorderFactory.createLineBorder(Color.BLACK,2,true)) ;
+	
+		JTextArea infoPotentialAlbum = new JTextArea(0, 150);
+		infoPotentialAlbum.setEditable(false);
+		infoPotentialAlbum.setText(album.getJsonString());
+		infoPotentialAlbum.setFont(new Font("monospaced", Font.BOLD, 14));
+		potentialAlbumPane.add(infoPotentialAlbum);
+		
+		JButton albumValidate = new JButton("Valider cet album");
+		albumValidate.setBackground(Color.GREEN);
+		Font buttonFont = new Font("Verdana", Font.BOLD, 12);
+		albumValidate.setFont(buttonFont);
+		albumValidate.addActionListener(new ReleaseValidationListener(release, album, potentialAlbumsPane));
+		potentialAlbumPane.add(albumValidate);
+		
+		return potentialAlbumPane;
 	}
 
 }
