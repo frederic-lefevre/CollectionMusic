@@ -26,6 +26,7 @@ package org.fl.collectionAlbumGui;
 
 import java.awt.Font;
 import java.awt.event.ActionEvent;
+import java.util.function.Predicate;
 import java.util.logging.Logger;
 
 import javax.swing.JOptionPane;
@@ -38,7 +39,27 @@ public class DiscogsReleaseCustomActionListener implements java.awt.event.Action
 
 	private static final Logger aLog = Logger.getLogger(DiscogsReleaseCustomActionListener.class.getName());
 	
-	public enum CustomAction { SHOW_INFO };
+	public enum CustomAction {
+		
+		SHOW_INFO("Afficher les informations", (release) -> release != null) ;
+		
+		private final String actionTitle;
+		private final Predicate<DiscogsAlbumRelease> displayable;
+		
+		private CustomAction(String actionTitle, Predicate<DiscogsAlbumRelease> displayable) {
+			this.actionTitle = actionTitle;
+			this.displayable = displayable;
+		}
+
+		public String getActionTitle() {
+			return actionTitle;
+		}
+
+		public Predicate<DiscogsAlbumRelease> getDisplayable() {
+			return displayable;
+		}
+		
+	};
 	
 	private final DiscogsReleaseJTable discogsReleaseJTable;
 	private final CustomAction customAction;

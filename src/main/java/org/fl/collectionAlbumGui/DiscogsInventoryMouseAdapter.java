@@ -24,13 +24,13 @@ SOFTWARE.
 
 package org.fl.collectionAlbumGui;
 
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
 import javax.swing.JPopupMenu;
 
+import org.apache.commons.lang3.stream.Streams;
 import org.fl.collectionAlbum.OsAction;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory.DiscogsAlbumRelease;
 import org.fl.collectionAlbumGui.DiscogsReleaseCustomActionListener.CustomAction;
@@ -44,6 +44,7 @@ public class DiscogsInventoryMouseAdapter extends MouseAdapter {
 	
 	public DiscogsInventoryMouseAdapter(DiscogsReleaseJTable discogsReleaseJTable, List<OsAction<DiscogsAlbumRelease>> osActions) {
 		
+		super();
 		this.discogsReleaseJTable = discogsReleaseJTable;
 		localJPopupMenu = new JPopupMenu();
 		
@@ -57,8 +58,12 @@ public class DiscogsInventoryMouseAdapter extends MouseAdapter {
 				localJPopupMenu
 		));
 		
-		ActionListener infoListener = new DiscogsReleaseCustomActionListener(discogsReleaseJTable, CustomAction.SHOW_INFO);
-		discogsReleaseMenuItems.addMenuItem("Afficher les informations", infoListener, (release) -> release != null, localJPopupMenu);
+		Streams.of(CustomAction.values()).forEach(customAction -> 
+			discogsReleaseMenuItems.addMenuItem(
+					customAction.getActionTitle(), 
+					new DiscogsReleaseCustomActionListener(discogsReleaseJTable, customAction), 
+					customAction.getDisplayable(), 
+					localJPopupMenu));
 	}
 
 	@Override
