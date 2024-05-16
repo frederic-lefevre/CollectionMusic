@@ -34,9 +34,11 @@ import java.util.List;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher;
+import org.fl.collectionAlbum.disocgs.DiscogsInventory;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.MatchResultType;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.ReleaseMatchResult;
 import org.fl.collectionAlbum.format.MediaSupportCategories;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import com.google.gson.JsonObject;
@@ -169,6 +171,11 @@ class DiscogsAlbumReleaseMatcherTest {
 "jsonVersion": 2
 }
 			""" ;
+	
+	@BeforeAll
+	static void initInventory() {
+		DiscogsInventory.buildDiscogsInventory();
+	}
 	
 	@Test
 	void shouldGetPotentialReleaseMatch() {
