@@ -302,10 +302,6 @@ class DiscogsAlbumReleaseMatcherTest {
 		assertThatNullPointerException().isThrownBy(() -> DiscogsAlbumReleaseMatcher.getPotentialAlbumMatch(DiscogsInventory.getDiscogsInventory().get(0), null));
 	}
 	
-	@Test
-	void shouldGetPotentialAlbumMatch() {
-		
-	}
 	private static Album getAlbumFromJson(String albumStr) {
 		
 		JsonObject jAlbum = JsonParser.parseString(albumStr).getAsJsonObject();
