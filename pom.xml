@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>CollectionMusic</groupId>
 	<artifactId>CollectionMusic</artifactId>
-	<version>6.6.0</version>
+	<version>6.7.0</version>
 	<name>CollectionMusic</name>
 
 	<dependencies>
