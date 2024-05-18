@@ -98,7 +98,7 @@ public class Control {
 				.forEach(contentNature -> 
 					mediaFileRootPaths.put(
 							contentNature, 
-							collectionProperties.getPathFromURI("album." + contentNature.getNom() + "File.rootPath")));
+							collectionProperties.getPathFromURI("album." + contentNature.name() + "File.rootPath")));
 				
 			osActionsOnAlbum = getOsActionsOnAlbum("album.command.");
 			osActionsOnDiscogsRelease = getOsActionsOnDiscogsRelease("album.discogs.command.");
