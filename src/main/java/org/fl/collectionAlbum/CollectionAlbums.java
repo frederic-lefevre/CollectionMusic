@@ -58,7 +58,7 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 	private final List<AbstractTableModel> tableModels;
 	
 	// Information prefix
-	private final static String ARRET 			= "Arreté" ;
+	private final static String ARRET 			= "Arrêté" ;
 	private final static String EN_EXAMEN		= "Dossier examiné: " ;
 	
 	// Status
