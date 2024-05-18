@@ -107,7 +107,7 @@ class CollectionAlbumContainerTest {
 		
 		RapportStructuresAndNames.init();
 
-		MediaFilesInventories.buildInventories();
+		MediaFilesInventories.scanMediaFilePaths();
 		DiscogsInventory.buildDiscogsInventory();
 		
 		CollectionAlbumContainer albumsContainer = CollectionAlbumContainer.getEmptyInstance();

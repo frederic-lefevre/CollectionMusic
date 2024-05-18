@@ -51,8 +51,12 @@ public class MediaFilesInventories {
 		return getInstance().mediaFilesInventories.get(contentNature);
 	}
 
-	public static void buildInventories() {
-		getInstance().mediaFilesInventories.values().forEach(MediaFileInventory::buildInventory);
+	public static void scanMediaFilePaths() {
+		getInstance().mediaFilesInventories.values().forEach(MediaFileInventory::scanMediaFilePaths);
+	}
+	
+	public static void clearInventories() {
+		getInstance().mediaFilesInventories.values().forEach(MediaFileInventory::clearInventory);
 	}
 	
 	private static MediaFilesInventories getInstance() {

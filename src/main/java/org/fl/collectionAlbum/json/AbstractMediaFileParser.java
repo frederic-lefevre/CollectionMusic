@@ -66,7 +66,7 @@ public abstract class AbstractMediaFileParser {
 								if (!Files.exists(locationPath)) {
 									albumLog.warning("Media file location does not exists: " + mediaFileJson);
 								}
-								return MediaFilesInventories.getMediaFileInventory(contentNature).searchMediaFilePath(locationPath);
+								return MediaFilesInventories.getMediaFileInventory(contentNature).validateMediaFilePath(locationPath);
 							} else {
 								albumLog.severe("Media file location is not absolute: " + mediaFileJson);
 								return null;
