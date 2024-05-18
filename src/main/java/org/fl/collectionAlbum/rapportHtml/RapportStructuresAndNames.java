@@ -34,6 +34,9 @@ import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -67,6 +70,11 @@ public class RapportStructuresAndNames {
 	private static RapportMap<Concert>  	concertRapportPaths;
 	private static RapportMap<LieuConcert> 	lieuRapportPaths;
 	
+	private static String dateFrancePattern = "EEEE dd MMMM uuuu à HH:mm";
+	
+	private final static String L_LIST2 = "  <span  class=\"dategen\">Généré ";
+	private final static String L_LIST3 = "</span><br/>\n";
+	
 	public static void init() {
 
 		AdvancedProperties collectionProperties = Control.getCollectionProperties();
@@ -74,9 +82,12 @@ public class RapportStructuresAndNames {
 		rapportPath = collectionProperties.getPathFromURI("album.rapportDirectory.name");
 		oldRapportPath = collectionProperties.getPathFromURI("album.oldRapportDirectory.name");
 
+		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(dateFrancePattern, Locale.FRANCE);
+
 		accueils = new HtmlLinkList();
 		accueils.addLink("Accueil Collection", homeCollectionFile);
 		accueils.addLink("Accueil Concert", homeConcertFile);
+		accueils.addLink(L_LIST2 + dateTimeFormatter.format(LocalDateTime.now()) + L_LIST3, buildInfoFile);
 
 		// get the concert ticket image path
 		concertTicketImgUri = collectionProperties.getProperty("concert.ticketImgDir.name") ;	
