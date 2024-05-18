@@ -53,9 +53,9 @@ public class RapportCollection extends RapportHtml {
 	@Override
 	 protected void corpsRapport() {
 		
-		write("<table>\n<tr>\n<td class=\"mainpage\">\n<h3>Classements des auteurs, interpretes et chefs d'orchestre</h3>\n<ul>\n");
+		write("<table>\n<tr>\n<td class=\"mainpage\">\n<h3>Classements des auteurs, interprètes et chefs d'orchestre</h3>\n<ul>\n");
 		
-		RapportListeArtistesAlbum rapportArtistesAlbumsAlpha = new RapportListeArtistesAlbum(albumsContainer.getCollectionArtistes().sortArtistesAlpha(),  "Classement alphabethique", LinkType.LIST);
+		RapportListeArtistesAlbum rapportArtistesAlbumsAlpha = new RapportListeArtistesAlbum(albumsContainer.getCollectionArtistes().sortArtistesAlpha(),  "Classement alphabéthique", LinkType.LIST);
 		rapportArtistesAlbumsAlpha.withBalises(new Balises(Balises.BalisesType.ALPHA));
 		write(rapportArtistesAlbumsAlpha.printReport(getNextRapportFile(), CssStyles.stylesTableauAvecBalise));
 		
@@ -95,14 +95,14 @@ public class RapportCollection extends RapportHtml {
 			writeListeAlbumsRow(albumsContainer.getRangementAlbums(rangement).sortRangementAlbum(), rangement.getOrdreDescription());
 		}
 		
-		write("</table>\n</td>\n<td class=\"mainpage\">\n<h3>Albums avec et sans fichier audio ou video</h3>\n<table>\n");
+		write("</table>\n</td>\n<td class=\"mainpage\">\n<h3>Albums avec et sans fichier audio ou vidéo</h3>\n<table>\n");
 		
 		writeListeAlbumsRow(albumsContainer.getAlbumsWithAudioFile().sortRangementAlbum(), "Albums avec fichier audio");
 		writeListeAlbumsRow(albumsContainer.getAlbumsWithHighResAudio().sortRangementAlbum(), "Albums avec fichier audio haute résolution");
 		writeListeAlbumsRow(albumsContainer.getAlbumsWithLowResAudio().sortRangementAlbum(), "Albums avec fichier audio avec perte (basse qualité)");
 		writeListeAlbumsRow(albumsContainer.getAlbumsMissingAudioFile().sortRangementAlbum(), "Albums manquant de fichier audio");
-		writeListeAlbumsRow(albumsContainer.getAlbumsWithVideoFile().sortRangementAlbum(), "Albums avec fichier video");
-		writeListeAlbumsRow(albumsContainer.getAlbumsMissingVideoFile().sortRangementAlbum(), "Albums manquant de fichier video");	
+		writeListeAlbumsRow(albumsContainer.getAlbumsWithVideoFile().sortRangementAlbum(), "Albums avec fichier vidéo");
+		writeListeAlbumsRow(albumsContainer.getAlbumsMissingVideoFile().sortRangementAlbum(), "Albums manquant de fichier vidéo");	
 
 		write("</table>\n</td>\n</tr>\n<tr>\n<td class=\"mainpage\">\n<h3>Statistiques</h3>\n<ul>\n");
 		RapportStat rapportStat1 = new RapportStat(albumsContainer.getStatChronoEnregistrement(), "Statistiques par année d'enregistrement", LinkType.LIST);
