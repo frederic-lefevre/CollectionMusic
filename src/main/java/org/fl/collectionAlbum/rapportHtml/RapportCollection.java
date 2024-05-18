@@ -28,6 +28,7 @@ import java.nio.file.Path;
 import java.util.Arrays;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
+import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.ListeAlbum;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.format.Format;
@@ -53,6 +54,9 @@ public class RapportCollection extends RapportHtml {
 	@Override
 	 protected void corpsRapport() {
 		   	
+		RapportBuildInfo rapportBuildInfo = new RapportBuildInfo(Control.getMusicRunningContext().getBuildInformation(), "Informations sur l'executable de génération", LinkType.LIST);
+		rapportBuildInfo.printReport(getNextRapportFile(), CssStyles.main);
+		
 		write("<table>\n<tr>\n<td class=\"mainpage\">\n<h3>Classements des auteurs, interpretes et chefs d'orchestre</h3>\n<ul>\n");
 		
 		RapportListeArtistesAlbum rapportArtistesAlbumsAlpha = new RapportListeArtistesAlbum(albumsContainer.getCollectionArtistes().sortArtistesAlpha(),  "Classement alphabethique", LinkType.LIST);
