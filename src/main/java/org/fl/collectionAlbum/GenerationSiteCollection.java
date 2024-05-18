@@ -53,6 +53,7 @@ import org.fl.collectionAlbum.rapportHtml.RapportHtml.LinkType;
 import org.fl.collectionAlbum.rapportHtml.CssStyles;
 import org.fl.collectionAlbum.rapportHtml.RapportAlbum;
 import org.fl.collectionAlbum.rapportHtml.RapportAlbumsDunArtiste;
+import org.fl.collectionAlbum.rapportHtml.RapportBuildInfo;
 import org.fl.collectionAlbumGui.ProgressInformation;
 import org.fl.collectionAlbumGui.ProgressInformationPanel;
 import org.fl.util.file.FilesUtils;
@@ -109,8 +110,8 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 	 private void cleanRapport() {
 
 		 try {
-			 Path rDir  = RapportStructuresAndNames.getRapportPath() ;
-			 Path roDir = RapportStructuresAndNames.getOldRapportPath() ;
+			 Path rDir  = RapportStructuresAndNames.getRapportPath();
+			 Path roDir = RapportStructuresAndNames.getOldRapportPath();
 			 albumLog.info("Rapport path=" + rDir);
 			 albumLog.info("Rapport od path=" + roDir);
 
@@ -130,10 +131,10 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 			 if (Files.exists(rDir)) {
 				 albumLog.finest("Deplacement de la directorie des rapports " + roDir );
 				 try {
-					 Files.move(rDir, roDir) ;
+					 Files.move(rDir, roDir);
 				 } catch (Exception e1) {
 
-					 albumLog.log(Level.SEVERE, "Impossible de renommer la directorie des rapports: " + rDir + " Essai de delete", e1) ;
+					 albumLog.log(Level.SEVERE, "Impossible de renommer la directorie des rapports: " + rDir + " Essai de delete", e1);
 					 try {
 						 FilesUtils.deleteDirectoryTree(roDir, false, albumLog);
 					 } catch (Exception e) {
@@ -145,14 +146,14 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 			 }
 
 			 if (! Files.exists(rDir)) {
-				 Files.createDirectories(rDir) ;
+				 Files.createDirectories(rDir);
 			 }
 
-			Files.createDirectories(RapportStructuresAndNames.getAbsoluteAlbumDir()) ;
-			Files.createDirectories(RapportStructuresAndNames.getAbsoluteConcertDir()) ;
-			Files.createDirectories(RapportStructuresAndNames.getAbsoluteArtisteAlbumDir()) ;
-			Files.createDirectories(RapportStructuresAndNames.getAbsoluteArtisteConcertDir()) ;
-			Files.createDirectories(RapportStructuresAndNames.getAbsoluteLieuDir()) ;
+			Files.createDirectories(RapportStructuresAndNames.getAbsoluteAlbumDir());
+			Files.createDirectories(RapportStructuresAndNames.getAbsoluteConcertDir());
+			Files.createDirectories(RapportStructuresAndNames.getAbsoluteArtisteAlbumDir());
+			Files.createDirectories(RapportStructuresAndNames.getAbsoluteArtisteConcertDir());
+			Files.createDirectories(RapportStructuresAndNames.getAbsoluteLieuDir());
 			 
 			 albumLog.fine("Ancien rapport effacé");
 		 } catch (Exception e) {
@@ -171,8 +172,9 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 				 collectionAlbumContainer.getLieuxDesConcerts());
 		 
 		 
-		 rapportsHtml(rapportDir) ;
-		 rapportsConcertHtml(rapportDir) ;
+		 rapportsHtml(rapportDir);
+		 rapportsConcertHtml(rapportDir);
+		 rapportBuildInfo();
 		 
 		 RapportCsv.writeCsvAudioFile(collectionAlbumContainer.getAlbumsWithAudioFile(), (audioFile) -> true, RapportStructuresAndNames.getAbsoluteCsvAudioFiles());
 		 RapportCsv.writeCsvAudioFile(collectionAlbumContainer.getAlbumsWithHighResAudio(), (audioFile) -> audioFile.isHighRes(), RapportStructuresAndNames.getAbsoluteCsvHdAudioFiles());
@@ -250,7 +252,7 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 
 	 private void rapportsHtml(Path rapportDir) {	
 	   	
-		Path rapportFile = RapportStructuresAndNames.getAbsoluteHomeCollectionFile() ;
+		Path rapportFile = RapportStructuresAndNames.getAbsoluteHomeCollectionFile();
 		RapportCollection rapportCollection = new RapportCollection(collectionAlbumContainer, rapportDir, "Collections d'albums") ;
 		rapportCollection.printReport(rapportFile, CssStyles.mainFormat) ;				
 	}
@@ -261,7 +263,14 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 		 RapportDesConcerts rapportConcerts = new RapportDesConcerts(collectionAlbumContainer, rapportDir, "Concerts");
 		 rapportConcerts.printReport(rapportFile, CssStyles.main) ;
 	 }
+	
+	private void rapportBuildInfo() {
 		
+		Path rapportBuildInfoFile = RapportStructuresAndNames.getAbsoluteBuildInfoFile();
+		RapportBuildInfo rapportBuildInfo = new RapportBuildInfo(Control.getMusicRunningContext().getBuildInformation(), "Informations sur l'executable de génération", LinkType.LIST);
+		rapportBuildInfo.printReport(rapportBuildInfoFile, CssStyles.main);
+	}
+	
 	@Override
 	public void done() {
 
