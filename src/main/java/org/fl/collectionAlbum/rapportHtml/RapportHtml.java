@@ -29,9 +29,6 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -51,8 +48,6 @@ public abstract class RapportHtml {
 	private final static String H2_B 	= "<h2>" ;
 	private final static String H2_E 	= "</h2>\n" ;
 	private final static String L_LIST1 = "<div class=\"home\">\n" ;
-	private final static String L_LIST2 = "  <span  class=\"dategen\">Généré " ;
-	private final static String L_LIST3 = "</span><br/>\n" ;
 	private final static String IMG_1   = "  <img  class=\"cover\" src=\"";
 	private final static String L_LIST4 = "</div>\n" ;
 	private final static String END		= "</body>\n</html>" ;
@@ -143,8 +138,6 @@ public abstract class RapportHtml {
 	public String printReport(Path rapportFile, String styleList[]) {
 		return printReport(rapportFile, styleList, null);
 	}
-	
-	private static String dateFrancePattern = "EEEE dd MMMM uuuu à HH:mm" ;
 
 	private void enteteRapport (String styleList[]) {
 			
@@ -167,9 +160,6 @@ public abstract class RapportHtml {
 			if (indexes != null) {
 				indexes.writeLinkList(rBuilder);
 			}
-
-			DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(dateFrancePattern, Locale.FRANCE) ;
-			rBuilder.append(L_LIST2).append(dateTimeFormatter.format(LocalDateTime.now())).append(L_LIST3) ;
 
 			if (imageUri != null) {
 				rBuilder.append(IMG_1).append(imageUri).append("\">\n");

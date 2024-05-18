@@ -37,12 +37,18 @@ import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory.DiscogsAlbumRelease;
 import org.fl.discogsInterface.inventory.InventoryCsvAlbum;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class DiscogsInventoryTest {
 
-	private static final String JACO_RELEASE_ID = "10131632";  // must exist in discogs
+	private static final String JACO_RELEASE_ID = "25261330";  // must exist in discogs
 	private static final String JACO_ALBUM_TITLE = "Truth, Liberty & Soul - Live In NYC The Complete 1982 NPR Jazz Alive! Recordings";
+	
+	@BeforeAll
+	static void initInventory() {
+		DiscogsInventory.buildDiscogsInventory();
+	}
 	
 	@Test
 	void shouldGetDiscogsCsvInventory() throws IOException {
@@ -64,27 +70,27 @@ class DiscogsInventoryTest {
 				assertThat(csvAlbum.getArtists()).isNotNull().singleElement()
 					.satisfies(artist -> assertThat(artist).isEqualTo("Jaco Pastorius"));
 				assertThat(csvAlbum.getCatalogNumbers()).isNotNull().singleElement()
-					.satisfies(catalogNb -> assertThat(catalogNb).isEqualTo("HLP-9027"));
+					.satisfies(catalogNb -> assertThat(catalogNb).isEqualTo("HLP-9027B"));
 				assertThat(csvAlbum.getTitle()).isEqualTo(JACO_ALBUM_TITLE);
 				assertThat(csvAlbum.getLabels()).isNotNull().singleElement()
 					.satisfies(label -> assertThat(label).isEqualTo("Resonance Records"));
-				assertThat(csvAlbum.getFormats()).isNotNull().hasSize(6)
+				assertThat(csvAlbum.getFormats()).isNotNull().hasSize(8)
 					.satisfiesExactlyInAnyOrder(
 							format -> assertThat(format).isEqualTo("3xLP"),
 							format -> assertThat(format).isEqualTo("Album"),
 							format -> assertThat(format).isEqualTo("Ltd"),
-							format -> assertThat(format).isEqualTo("180 + Box"),
+							format -> assertThat(format).isEqualTo("180"),
 							format -> assertThat(format).isEqualTo("RSD"),
+							format -> assertThat(format).isEqualTo("RM"),
+							format -> assertThat(format).isEqualTo("RE"),
 							format -> assertThat(format).isEqualTo("Num"));
 				assertThat(csvAlbum.getRating()).isNull();
-				assertThat(csvAlbum.getReleased()).isEqualTo(Year.of(2017));
+				assertThat(csvAlbum.getReleased()).isEqualTo(Year.of(2022));
 				assertThat(csvAlbum.getReleaseId()).isEqualTo(JACO_RELEASE_ID);
 				assertThat(csvAlbum.getCollectionFolder()).isEqualTo("Jaco Pastorius");
 				assertThat(csvAlbum.getDateAdded())
-					.hasYear(2023).hasMonth(Month.SEPTEMBER).hasDayOfMonth(24)
-					.hasHour(23).hasMinute(39).hasSecond(34);
-				assertThat(csvAlbum.getCollectionMediaCondition()).isEqualTo("Near Mint (NM or M-)");
-				assertThat(csvAlbum.getCollectionSleeveCondition()).isEqualTo("Near Mint (NM or M-)");
+					.hasYear(2024).hasMonth(Month.MAY).hasDayOfMonth(16)
+					.hasHour(12).hasMinute(56).hasSecond(05);
 				assertThat(csvAlbum.getCollectionNotes()).isEqualTo("Limited Edition 2nd pressing of 5000. Number 3801");
 		});
 	}

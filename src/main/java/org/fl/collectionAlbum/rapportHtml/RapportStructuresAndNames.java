@@ -34,6 +34,9 @@ import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -43,39 +46,48 @@ public class RapportStructuresAndNames {
 
 	private final static Logger rapportLog = Logger.getLogger(RapportStructuresAndNames.class.getName());
 	
-	private final static String albumDir 		   = "albums" ;
-	private final static String concertDir 		   = "concerts" ;
-	private final static String artisteAlbumsDir   = "artistes/albums" ;
-	private final static String artisteConcertsDir = "artistes/concerts" ;
-	private final static String lieuDir 		   = "lieux" ;
-   	private final static String homeCollectionFile = "index.html" ;
-   	private final static String homeConcertFile    = "indexConcert.html" ;
+	private final static String albumDir 		   = "albums";
+	private final static String concertDir 		   = "concerts";
+	private final static String artisteAlbumsDir   = "artistes/albums";
+	private final static String artisteConcertsDir = "artistes/concerts";
+	private final static String lieuDir 		   = "lieux";
+   	private final static String homeCollectionFile = "index.html";
+   	private final static String homeConcertFile    = "indexConcert.html";
    	private final static String homeCsvDir		   = "rapportCsv";
    	private final static String csvAudioFiles      = homeCsvDir + "/audioFiles.csv";
    	private final static String csvHdAudioFiles    = homeCsvDir + "/highResAudioFiles.csv";
+   	private final static String buildInfoFile	   = "buildInfo.html";
 
-	private static Path 		rapportPath ;
-	private static Path 		oldRapportPath ;
-	private static HtmlLinkList accueils ;
-	private static String 		concertTicketImgUri ;
-	private static String 		musicartefactInfosUri ;
+	private static Path 		rapportPath;
+	private static Path 		oldRapportPath;
+	private static HtmlLinkList accueils;
+	private static String 		concertTicketImgUri;
+	private static String 		musicartefactInfosUri;
 
-	private static RapportMap<Album> 		albumRapportPaths ;
-	private static RapportMap<Artiste> 		artisteAlbumRapportPaths ;
-	private static RapportMap<Artiste> 		artisteConcertRapportPaths ;
-	private static RapportMap<Concert>  	concertRapportPaths ;
-	private static RapportMap<LieuConcert> 	lieuRapportPaths ;
+	private static RapportMap<Album> 		albumRapportPaths;
+	private static RapportMap<Artiste> 		artisteAlbumRapportPaths;
+	private static RapportMap<Artiste> 		artisteConcertRapportPaths;
+	private static RapportMap<Concert>  	concertRapportPaths;
+	private static RapportMap<LieuConcert> 	lieuRapportPaths;
+	
+	private static String dateFrancePattern = "EEEE dd MMMM uuuu à HH:mm";
+	
+	private final static String L_LIST2 = "  <span  class=\"dategen\">Généré ";
+	private final static String L_LIST3 = "</span><br/>\n";
 	
 	public static void init() {
 
-		AdvancedProperties collectionProperties = Control.getCollectionProperties() ;
+		AdvancedProperties collectionProperties = Control.getCollectionProperties();
 		
-		rapportPath 		 = collectionProperties.getPathFromURI("album.rapportDirectory.name") ;
-		oldRapportPath		 = collectionProperties.getPathFromURI("album.oldRapportDirectory.name") ;
+		rapportPath = collectionProperties.getPathFromURI("album.rapportDirectory.name");
+		oldRapportPath = collectionProperties.getPathFromURI("album.oldRapportDirectory.name");
 
-		accueils = new HtmlLinkList() ;
-		accueils.addLink("Accueil Collection", homeCollectionFile) ;
-		accueils.addLink("Accueil Concert",    homeConcertFile) ;
+		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(dateFrancePattern, Locale.FRANCE);
+
+		accueils = new HtmlLinkList();
+		accueils.addLink("Accueil Collection", homeCollectionFile);
+		accueils.addLink("Accueil Concert", homeConcertFile);
+		accueils.addLink(L_LIST2 + dateTimeFormatter.format(LocalDateTime.now()) + L_LIST3, buildInfoFile);
 
 		// get the concert ticket image path
 		concertTicketImgUri = collectionProperties.getProperty("concert.ticketImgDir.name") ;	
@@ -90,20 +102,21 @@ public class RapportStructuresAndNames {
 		lieuRapportPaths		   = new RapportMap<>(rapportPath, getAbsoluteLieuDir()) ;
 	}
 
-	public static Path 	  getRapportPath() 				  {	return rapportPath;								}
-	public static Path 	  getOldRapportPath() 			  {	return oldRapportPath;							}
-	public static Path 	  getAbsoluteAlbumDir() 		  {	return rapportPath.resolve(albumDir) ;			}	
-	public static Path 	  getAbsoluteConcertDir() 		  {	return rapportPath.resolve(concertDir) ;		}	
-	public static Path    getAbsoluteArtisteAlbumDir() 	  {	return rapportPath.resolve(artisteAlbumsDir) ;	}
-	public static Path    getAbsoluteArtisteConcertDir()  {	return rapportPath.resolve(artisteConcertsDir) ;}
-	public static Path 	  getAbsoluteLieuDir() 		  	  {	return rapportPath.resolve(lieuDir) ;			}
-	public static Path 	  getAbsoluteHomeCollectionFile() { return rapportPath.resolve(homeCollectionFile) ;}	
-	public static Path 	  getAbsoluteHomeConcertFile() 	  {	return rapportPath.resolve(homeConcertFile) ;	}
-	public static Path 	  getAbsoluteCsvAudioFiles() 	  {	return rapportPath.resolve(csvAudioFiles);		}
-	public static Path 	  getAbsoluteCsvHdAudioFiles() 	  {	return rapportPath.resolve(csvHdAudioFiles);	}
+	public static Path 	  getRapportPath() 				  {	return rapportPath;							   }
+	public static Path 	  getOldRapportPath() 			  {	return oldRapportPath;						   }
+	public static Path 	  getAbsoluteAlbumDir() 		  {	return rapportPath.resolve(albumDir);		   }	
+	public static Path 	  getAbsoluteConcertDir() 		  {	return rapportPath.resolve(concertDir);		   }	
+	public static Path    getAbsoluteArtisteAlbumDir() 	  {	return rapportPath.resolve(artisteAlbumsDir);  }
+	public static Path    getAbsoluteArtisteConcertDir()  {	return rapportPath.resolve(artisteConcertsDir);}
+	public static Path 	  getAbsoluteLieuDir() 		  	  {	return rapportPath.resolve(lieuDir);		   }
+	public static Path 	  getAbsoluteHomeCollectionFile() { return rapportPath.resolve(homeCollectionFile);}	
+	public static Path 	  getAbsoluteHomeConcertFile() 	  {	return rapportPath.resolve(homeConcertFile);   }
+	public static Path 	  getAbsoluteCsvAudioFiles() 	  {	return rapportPath.resolve(csvAudioFiles);	   }
+	public static Path 	  getAbsoluteCsvHdAudioFiles() 	  {	return rapportPath.resolve(csvHdAudioFiles);   }
+	public static Path 	  getAbsoluteBuildInfoFile() 	  { return rapportPath.resolve(buildInfoFile);	   }
 	
-	private static String  getMusicartefactInfosUri() 	  { return musicartefactInfosUri;					}	
-	private static String  getConcertTicketImgUri() 	  { return concertTicketImgUri;						}
+	private static String  getMusicartefactInfosUri() 	  { return musicartefactInfosUri;}	
+	private static String  getConcertTicketImgUri() 	  { return concertTicketImgUri;	 }
 	
 	public static HtmlLinkList getAccueils() {		return accueils;	}	
 	

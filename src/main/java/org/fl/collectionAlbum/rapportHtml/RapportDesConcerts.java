@@ -46,9 +46,9 @@ public class RapportDesConcerts extends RapportHtml {
 	@Override
 	protected void corpsRapport() {
 		
-		 write("<h3>Classement des auteurs, interpretes et chefs d'orchestre (artistes, groupes, ensembles)</h3>\n<ul>\n") ;
+		 write("<h3>Classement des auteurs, interprètes et chefs d'orchestre (artistes, groupes, ensembles)</h3>\n<ul>\n") ;
 		 
-		 RapportListeArtistesConcert artistesAlpha = new RapportListeArtistesConcert(albumsContainer.getConcertsArtistes().sortArtistesAlpha(), "Classement alphabethique", LinkType.LIST) ;
+		 RapportListeArtistesConcert artistesAlpha = new RapportListeArtistesConcert(albumsContainer.getConcertsArtistes().sortArtistesAlpha(), "Classement alphabéthique", LinkType.LIST) ;
 		 artistesAlpha.withBalises(new Balises(Balises.BalisesType.ALPHA)) ;
 		 write(artistesAlpha.printReport(getNextRapportFile(), CssStyles.stylesTableauAvecBalise)) ;
 
