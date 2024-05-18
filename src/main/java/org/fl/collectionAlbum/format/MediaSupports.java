@@ -96,7 +96,7 @@ public enum MediaSupports {
 			JsonMusicProperties.VHS, 			
 			Set.of(ContentNature.VIDEO), 					  
 			SupportMaterial.MAGNETIC_TAPE,
-			"Cassette video VHS"),
+			"Cassette vidéo VHS"),
 	DVD(		
 			MediaSupportCategories.DVD,   	  
 			JsonMusicProperties.DVD, 			
@@ -108,7 +108,7 @@ public enum MediaSupports {
 			JsonMusicProperties.BLURAY, 		
 			Set.of(ContentNature.VIDEO), 					  
 			SupportMaterial.OPTICAL_DISC,
-			"Blu-ray video"),
+			"Blu-ray vidéo"),
 	BluRayAudio(
 			MediaSupportCategories.BluRay, 	  
 			JsonMusicProperties.BLURAY_AUDIO, 
@@ -120,7 +120,7 @@ public enum MediaSupports {
 			JsonMusicProperties.BLURAY_MIXED, 
 			Set.of(ContentNature.AUDIO, ContentNature.VIDEO), 
 			SupportMaterial.OPTICAL_DISC,
-			"Blu-ray contenant de l'audio et de la video");
+			"Blu-ray contenant de l'audio et de la vidéo");
 	
 	private final MediaSupportCategories supportPhysique ;
 	private final String jsonPropertyName ;

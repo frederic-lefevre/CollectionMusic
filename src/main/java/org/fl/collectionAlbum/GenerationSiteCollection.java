@@ -267,7 +267,7 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 	private void rapportBuildInfo() {
 		
 		Path rapportBuildInfoFile = RapportStructuresAndNames.getAbsoluteBuildInfoFile();
-		RapportBuildInfo rapportBuildInfo = new RapportBuildInfo(Control.getMusicRunningContext().getBuildInformation(), "Informations sur l'executable de génération", LinkType.LIST);
+		RapportBuildInfo rapportBuildInfo = new RapportBuildInfo(Control.getMusicRunningContext().getBuildInformation(), "Informations sur le programme de génération", LinkType.LIST);
 		rapportBuildInfo.printReport(rapportBuildInfoFile, CssStyles.main);
 	}
 	
