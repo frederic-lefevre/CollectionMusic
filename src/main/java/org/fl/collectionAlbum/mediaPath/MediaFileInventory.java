@@ -24,6 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.mediaPath;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
@@ -34,11 +35,9 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.Artiste;
@@ -48,11 +47,11 @@ public class MediaFileInventory {
 
 	private final static Logger albumLog = Logger.getLogger(MediaFileInventory.class.getName());
 	
-	private static final String SEPARATOR = " / ";
+	private static final String SEPARATOR = File.separator;
 	
 	private final Path rootPath;
 	
-	private final LinkedHashMap<String,MediaFilePath> mediaFilePathInventory;
+	private final LinkedHashMap<Path,MediaFilePath> mediaFilePathInventory;
 	
 	// MediaFilePath values maintained as List to be displayed in a JTable
 	private final List<MediaFilePath> mediaFilePathList;
@@ -69,10 +68,8 @@ public class MediaFileInventory {
 		mediaFilePathList = new ArrayList<>();
 	}
 
-	public void buildInventory() {
+	public void scanMediaFilePaths() {
 		try {
-			mediaFilePathList.clear();
-			mediaFilePathInventory.clear();
 			MediaFileVisitor mediaFileVisitor = new MediaFileVisitor();
 			Files.walkFileTree(rootPath, mediaFileVisitor);
 		} catch (Exception e) {
@@ -80,7 +77,25 @@ public class MediaFileInventory {
 		}
 	}
 	
+	public void clearInventory() {
+		mediaFilePathList.clear();
+		mediaFilePathInventory.clear();
+	}
+	
 	private class MediaFileVisitor extends SimpleFileVisitor<Path> {
+		
+		
+		@Override
+		public FileVisitResult preVisitDirectory(Path file, BasicFileAttributes attr) {
+			if (mediaFilePathInventory.containsKey(file)) {
+    			// already in inventory
+    			
+    			return FileVisitResult.SKIP_SUBTREE;
+    			
+    		} else {
+    			return FileVisitResult.CONTINUE;
+    		}
+		}
 		
     	@Override
 		public FileVisitResult visitFile(Path file, BasicFileAttributes attr) {
@@ -90,57 +105,49 @@ public class MediaFileInventory {
     			// It should be a media file, part of an album
     			
     			addMediaFilePathToInventory(file.getParent());
-    			
-    			return FileVisitResult.SKIP_SUBTREE;
-    		} else {
-    			return FileVisitResult.CONTINUE;
-    		}
+    		 	
+    		} 
+    		return FileVisitResult.CONTINUE;
     	}
 	}
 	
 	private MediaFilePath addMediaFilePathToInventory(Path albumAbsolutePath) {
 		
-		String inventoryKey = getInventoryKey(albumAbsolutePath);
-		
-		if (! mediaFilePathInventory.containsKey(inventoryKey)) {
+		if (! mediaFilePathInventory.containsKey(albumAbsolutePath)) {
 			MediaFilePath newMediaFilePath = new MediaFilePath(albumAbsolutePath, contentNature, logWarnings);
-			mediaFilePathInventory.put(inventoryKey, newMediaFilePath);
+			mediaFilePathInventory.put(albumAbsolutePath, newMediaFilePath);
 			mediaFilePathList.add(newMediaFilePath);
 		}
-		return mediaFilePathInventory.get(inventoryKey);
+		return mediaFilePathInventory.get(albumAbsolutePath);
 	}
 	
-	private String getInventoryKey(Path albumAbsolutePath) {
-		
-		String artistFolder = albumAbsolutePath.getParent().getFileName().toString();
-		String albumFolder = albumAbsolutePath.getFileName().toString();
-		
-		return getInventoryKey(artistFolder, albumFolder);
+	private boolean checkInventoryKey(Path inventoryKey, String artist, String albumTitle) {
+		return inventoryKey.toString().toLowerCase().contains((artist + SEPARATOR + albumTitle).toLowerCase());
 	}
 	
-	private String getInventoryKey(String artist, String albumTitle) {
-		return (artist + SEPARATOR + albumTitle).toLowerCase();
+	private boolean checkInventoryKey(Path inventoryKey, String pathPart) {
+		return inventoryKey.toString().toLowerCase().contains(pathPart.toLowerCase());
 	}
 	
 	public List<MediaFilePath> getPotentialMediaPath(Album album) {
 		
-		String title = album.getTitre().toLowerCase();
+		String title = album.getTitre();
 		List<Artiste> auteurs = album.getAuteurs();
 		
-		Map<String,MediaFilePath> potentialMediaPath = mediaFilePathInventory.entrySet().stream()
-			.filter(inventoryEntry -> inventoryEntry.getKey().contains(title))
+		Map<Path,MediaFilePath> potentialMediaPath = mediaFilePathInventory.entrySet().stream()
+			.filter(inventoryEntry -> checkInventoryKey(inventoryEntry.getKey(), title))
 			.filter(inventoryEntry -> 
 				(auteurs.isEmpty() ||
 				(auteurs.stream()
-						.map(auteur -> auteur.getNomComplet().toLowerCase())
-						.anyMatch(auteurName -> inventoryEntry.getKey().contains(auteurName)))))
+						.map(auteur -> auteur.getNomComplet())
+						.anyMatch(auteurName -> checkInventoryKey(inventoryEntry.getKey(), auteurName)))))
 			.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
 		if (potentialMediaPath.size() > 1) {
 			List<MediaFilePath> potentialMediaPath2 = potentialMediaPath.entrySet().stream()
 				.filter(inventoryEntry -> auteurs.stream()
 						.map(auteur -> auteur.getNomComplet())
-						.anyMatch(auteurName -> inventoryEntry.getKey().contains(getInventoryKey(auteurName, title))))
+						.anyMatch(auteurName -> checkInventoryKey(inventoryEntry.getKey(), auteurName, title)))
 				.map(inventoryEntry -> inventoryEntry.getValue())
 				.collect(Collectors.toList());
 			
@@ -162,32 +169,59 @@ public class MediaFileInventory {
 		return mediaFilePathList;
 	}
 	
-	public MediaFilePath searchMediaFilePath(Path path) {
+	public MediaFilePath validateMediaFilePath(Path path) {
 		
-		Optional<MediaFilePath> firstLevelMediaFile = findFirstMediaFilePath(path);
-		
-		if (firstLevelMediaFile.isEmpty()) {
-			// Search sub folders
-			try (Stream<Path> stream = Files.list(path)) {
-				if (stream.anyMatch(subPath -> findFirstMediaFilePath(subPath).isPresent())) {
+		if (Files.exists(path)) {
+			
+			MediaPathValidatorVisitor mediaPathValidatorVisitor = new MediaPathValidatorVisitor();
+			
+			try {
+				Files.walkFileTree(path, mediaPathValidatorVisitor);
+				
+				if (mediaPathValidatorVisitor.isMediaFilePresent()) {
 					return addMediaFilePathToInventory(path);
 				} else {
-					albumLog.warning("Media file path not found : " + path);
+					albumLog.severe("No media file found inside: " + path);
 					return null;
 				}
 			} catch (IOException e) {
 				albumLog.log(Level.SEVERE, "IOException listing media file inside " + path, e);
 				return null;
 			}
+			
 		} else {
-			return firstLevelMediaFile.get();
-		}	
+			albumLog.severe("Media file path not found : " + path);
+			return null;
+		}
+	
 	}
 	
-	private Optional<MediaFilePath> findFirstMediaFilePath(Path path) {
-		return mediaFilePathInventory.values().stream()
-				.filter(mediaFilePath -> path.equals(mediaFilePath.getPath()))
-				.findFirst();
+	private class MediaPathValidatorVisitor extends SimpleFileVisitor<Path> {
+		
+		private boolean mediaFilePresent;
+		
+		MediaPathValidatorVisitor() {
+			super();
+			mediaFilePresent = false;
+		}
+		
+		boolean isMediaFilePresent() {
+			return mediaFilePresent;
+		}
+		
+    	@Override
+		public FileVisitResult visitFile(Path file, BasicFileAttributes attr) {
+    		
+    		if ((Files.isRegularFile(file)) &&
+    				MediaFilePath.isMediaFileName(file, contentNature)) {
+    			// It should be a media file, part of an album
+    			
+    			mediaFilePresent = true;
+    			return FileVisitResult.TERMINATE;
+    		} else {
+    			return FileVisitResult.CONTINUE;
+    		}
+    	}
 	}
 	
 }

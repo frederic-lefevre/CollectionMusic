@@ -79,9 +79,9 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 		progressPanel.setStepInformation("");
 		progressPanel.setStepPrefixInformation("");
 
-		publish(new ProgressInformation("Inventaire des fichiers media en cours"));
-		MediaFilesInventories.buildInventories();
-		publish(new ProgressInformation("Inventaire des release discogs en cours"));
+		publish(new ProgressInformation("Initialisation des inventaires des fichiers media en cours"));
+		MediaFilesInventories.clearInventories();
+		publish(new ProgressInformation("Inventaire des releases discogs en cours"));
 		DiscogsInventory.buildDiscogsInventory();
 		
 		albumsContainer = CollectionAlbumContainer.getEmptyInstance() ;
@@ -98,6 +98,9 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 		albumLog.info("Construction du calendrier") ;
 		progressPanel.setProcessStatus(CALENDARS);
 		buildCalendrier() ;
+		
+		publish(new ProgressInformation("Inventaire des fichiers media en cours"));
+		MediaFilesInventories.scanMediaFilePaths();
 		
 		// Sort for display when scanning the collection
 		albumsContainer.getCollectionAlbumsMusiques().sortRangementAlbum();

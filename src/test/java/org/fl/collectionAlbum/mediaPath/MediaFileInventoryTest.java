@@ -48,7 +48,8 @@ class MediaFileInventoryTest {
 	@BeforeAll
 	static void readInventory() {
 		
-		MediaFilesInventories.buildInventories();
+		MediaFilesInventories.clearInventories();
+		MediaFilesInventories.scanMediaFilePaths();
 		audioFileInventory = MediaFilesInventories.getMediaFileInventory(ContentNature.AUDIO);
 		videoFileInventory = MediaFilesInventories.getMediaFileInventory(ContentNature.VIDEO);
 	}
@@ -163,12 +164,12 @@ class MediaFileInventoryTest {
 	@Test
 	void shouldNotFindVideoPath() {
 		
-		assertThat(videoFileInventory.searchMediaFilePath(Path.of("G:\\Video\\Pratique"))).isNull();
+		assertThat(videoFileInventory.validateMediaFilePath(Paths.get("E:\\Musique\\e\\Bill Evans\\Portrait In Jazz"))).isNull();
 	}
 	
 	@Test
 	void shouldFindVideoPath() {
 		
-		assertThat(videoFileInventory.searchMediaFilePath(Path.of("G:\\Video\\Musique\\u\\u2\\The Joshua Tree (Super Deluxe Edition Bonus DVD)"))).isNotNull();
+		assertThat(videoFileInventory.validateMediaFilePath(Path.of("G:\\Video\\Musique\\u\\u2\\The Joshua Tree (Super Deluxe Edition Bonus DVD)"))).isNotNull();
 	}
 }

@@ -178,7 +178,8 @@ class DiscogsAlbumReleaseMatcherTest {
 	
 	@BeforeAll
 	static void initInventory() {
-		MediaFilesInventories.buildInventories();
+		MediaFilesInventories.clearInventories();
+		MediaFilesInventories.scanMediaFilePaths();
 		DiscogsInventory.buildDiscogsInventory();
 	}
 	
