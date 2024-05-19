@@ -24,6 +24,8 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.json;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -46,6 +48,27 @@ public class AlbumParser {
 		String titre =  ParserHelpers.parseStringProperty(jAlbum, JsonMusicProperties.TITRE, true);
 		albumLog.finest(() -> "Titre: " + titre);
 		return titre ;
+	}
+	
+	public static Path getAlbumSleevePath(JsonObject jAlbum) {
+		
+		String sleeveImg =  ParserHelpers.parseStringProperty(jAlbum, JsonMusicProperties.SLEEVE_IMG, false);
+		if (sleeveImg == null) {
+			return null;
+		} else {
+			Path sleevePath = Path.of(sleeveImg);
+			if (sleevePath.isAbsolute()) {
+				if (Files.exists(sleevePath)) {
+					return sleevePath;
+				} else {
+					albumLog.warning("Le path de la pochette n'existe pas pour l'album " + jAlbum);
+					return null;					
+				}
+			} else {
+				albumLog.warning("Le path de la pochette n'est pas absolu pour l'album " + jAlbum);
+				return null;
+			}
+		}
 	}
 	
 	public static Format getFormatAlbum(JsonObject jAlbum) {
