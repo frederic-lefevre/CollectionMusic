@@ -79,5 +79,6 @@ public class JsonMusicProperties {
 	public final static String LOCATION	  	  = "location" ;
 	public final static String DISCOGS	  	  = "discogs" ;
 	public final static String JSON_VERSION	  = "jsonVersion" ;
+	public final static String SLEEVE_IMG	  = "sleeveImg" ;
 
 }
