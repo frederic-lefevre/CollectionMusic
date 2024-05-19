@@ -67,6 +67,8 @@ public class Album extends MusicArtefact {
     
     private final boolean specificCompositionDates;
     
+    private final Path sleevePath;
+    
     private final Map<ContentNature, List<MediaFilePath>> potentialMediaFilesPath;
     
 	public Album(JsonObject albumJson, List<ListeArtiste> knownArtistes, Path jsonFilePath) {
@@ -91,6 +93,8 @@ public class Album extends MusicArtefact {
 		if (rangement == null) {
 			albumLog.severe("Pas de rangement trouvé pour l'album " + getTitre());
 		}
+		
+		sleevePath = AlbumParser.getAlbumSleevePath(albumJson);
 	}
     
     public String getTitre() {
@@ -277,7 +281,9 @@ public class Album extends MusicArtefact {
 	
 	public Path getCoverImage() {
 
-		if (hasMediaFiles()) {
+		if (sleevePath != null) {
+			return sleevePath;
+		} else if (hasMediaFiles()) {
 			return getAllMediaFiles().stream()
 					.map(mediaFile -> mediaFile.getMediaFilePaths())
 					.filter(Objects::nonNull)
