@@ -75,11 +75,13 @@ public class AlbumCustomActionListener implements java.awt.event.ActionListener 
 	
 	private final AlbumsJTable albumsJTable;
 	private final CustomAction customAction;
+	private final GenerationPane generationPane;
 	
-	public AlbumCustomActionListener(AlbumsJTable ajt, CustomAction ca) {
+	public AlbumCustomActionListener(AlbumsJTable ajt, CustomAction ca, GenerationPane generationPane) {
 		
 		albumsJTable = ajt;
 		customAction = ca;
+		this.generationPane = generationPane;
 	}
 
 	@Override
@@ -164,7 +166,7 @@ public class AlbumCustomActionListener implements java.awt.event.ActionListener 
 		releaseValidate.setBackground(Color.GREEN);
 		Font buttonFont = new Font("Verdana", Font.BOLD, 12);
 		releaseValidate.setFont(buttonFont);
-		releaseValidate.addActionListener(new ReleaseValidationListener(release, album, potentialReleasesPane));
+		releaseValidate.addActionListener(new ReleaseValidationListener(release, album, potentialReleasesPane, generationPane));
 		potentialReleasePane.add(releaseValidate);
 		
 		return potentialReleasePane;

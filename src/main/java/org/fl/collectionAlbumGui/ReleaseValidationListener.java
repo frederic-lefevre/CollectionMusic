@@ -40,12 +40,14 @@ public class ReleaseValidationListener implements ActionListener {
 	private final DiscogsAlbumRelease release;
 	private final Album album;
 	private final JPanel potentialReleasesPane;
+	private final GenerationPane generationPane;
 	
-	public ReleaseValidationListener(DiscogsAlbumRelease release, Album album, JPanel potentialReleasesPane) {
+	public ReleaseValidationListener(DiscogsAlbumRelease release, Album album, JPanel potentialReleasesPane,  GenerationPane generationPane) {
 		super();
 		this.release = release;
 		this.album = album;
 		this.potentialReleasesPane = potentialReleasesPane;
+		this.generationPane = generationPane;
 	}
 
 	@Override
@@ -59,6 +61,7 @@ public class ReleaseValidationListener implements ActionListener {
 			album.writeJson();
 			potentialReleasesPane.removeAll();
 			potentialReleasesPane.updateUI();
+			generationPane.rescanNeeded();
 			
 		} else {
 			
