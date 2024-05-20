@@ -42,7 +42,7 @@ public class ReleaseValidationListener implements ActionListener {
 	private final JPanel potentialReleasesPane;
 	private final GenerationPane generationPane;
 	
-	public ReleaseValidationListener(DiscogsAlbumRelease release, Album album, JPanel potentialReleasesPane,  GenerationPane generationPane) {
+	public ReleaseValidationListener(DiscogsAlbumRelease release, Album album, JPanel potentialReleasesPane, GenerationPane generationPane) {
 		super();
 		this.release = release;
 		this.album = album;

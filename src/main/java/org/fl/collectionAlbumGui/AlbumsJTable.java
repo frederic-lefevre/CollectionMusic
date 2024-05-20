@@ -58,8 +58,8 @@ public class AlbumsJTable extends JTable {
 
 		Map<ContentNature, MediaFileValidationListener> mediaFilesValidationListeners = 
 				Map.of(
-					ContentNature.AUDIO, new MediaFileValidationListener(this, ContentNature.AUDIO),
-					ContentNature.VIDEO, new MediaFileValidationListener(this, ContentNature.VIDEO
+					ContentNature.AUDIO, new MediaFileValidationListener(this, ContentNature.AUDIO, generationPane),
+					ContentNature.VIDEO, new MediaFileValidationListener(this, ContentNature.VIDEO, generationPane
 				));
 		
 		getColumnModel().getColumn(AlbumsTableModel.AUTEUR_COL_IDX)
