@@ -44,12 +44,8 @@ public class AlbumsJTable extends JTable {
 
 	private static final Logger tLog = Logger.getLogger(AlbumsJTable.class.getName());
 	
-	public AlbumsJTable(AlbumsTableModel dm) {
+	public AlbumsJTable(AlbumsTableModel dm, GenerationPane generationPane) {
 		super(dm);
-		init();
-	}
-
-	private void init() {
 		
 		setFillsViewportHeight(true);
 		setAutoCreateRowSorter(true);
@@ -62,8 +58,8 @@ public class AlbumsJTable extends JTable {
 
 		Map<ContentNature, MediaFileValidationListener> mediaFilesValidationListeners = 
 				Map.of(
-					ContentNature.AUDIO, new MediaFileValidationListener(this, ContentNature.AUDIO),
-					ContentNature.VIDEO, new MediaFileValidationListener(this, ContentNature.VIDEO
+					ContentNature.AUDIO, new MediaFileValidationListener(this, ContentNature.AUDIO, generationPane),
+					ContentNature.VIDEO, new MediaFileValidationListener(this, ContentNature.VIDEO, generationPane
 				));
 		
 		getColumnModel().getColumn(AlbumsTableModel.AUTEUR_COL_IDX)
@@ -96,7 +92,7 @@ public class AlbumsJTable extends JTable {
 		
 		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		
-		addMouseListener(new AlbumMouseAdapter(this, Control.getOsActionsOnAlbum()));
+		addMouseListener(new AlbumMouseAdapter(this, Control.getOsActionsOnAlbum(), generationPane));
 
 	}
 

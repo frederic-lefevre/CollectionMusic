@@ -42,7 +42,7 @@ public class AlbumMouseAdapter extends MouseAdapter {
 	
 	private final CollectionMenuItems<Album> albumMenuItems;
 	
-	public AlbumMouseAdapter(AlbumsJTable ajt, List<OsAction<Album>> osActions) {
+	public AlbumMouseAdapter(AlbumsJTable ajt, List<OsAction<Album>> osActions, GenerationPane generationPane) {
 		
 		super();
 		this.albumsJTable = ajt;
@@ -62,7 +62,7 @@ public class AlbumMouseAdapter extends MouseAdapter {
 		Stream.of(CustomAction.values()).forEach(customAction -> 
 				albumMenuItems.addMenuItem(
 						customAction.getActionTitle(), 
-						new AlbumCustomActionListener(albumsJTable, customAction), 
+						new AlbumCustomActionListener(albumsJTable, customAction, generationPane), 
 						customAction.getDisplayable(),
 						localJPopupMenu));
 

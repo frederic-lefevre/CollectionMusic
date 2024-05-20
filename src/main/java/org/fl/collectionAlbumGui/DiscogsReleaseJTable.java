@@ -42,7 +42,7 @@ public class DiscogsReleaseJTable extends JTable {
 
 	private static final Logger tLog = Logger.getLogger(DiscogsReleaseJTable.class.getName());
 	
-	public DiscogsReleaseJTable(DisocgsReleaseTableModel dm, CollectionAlbumContainer albumsContainer) {
+	public DiscogsReleaseJTable(DisocgsReleaseTableModel dm, CollectionAlbumContainer albumsContainer, GenerationPane generationPane) {
 		super(dm);
 		
 		setFillsViewportHeight(true);
@@ -68,7 +68,7 @@ public class DiscogsReleaseJTable extends JTable {
 		
 		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		
-		addMouseListener(new DiscogsInventoryMouseAdapter(this, Control.getOsActionOnDiscogsRelease(), albumsContainer));
+		addMouseListener(new DiscogsInventoryMouseAdapter(this, Control.getOsActionOnDiscogsRelease(), albumsContainer, generationPane));
 	}
 
 	public DiscogsAlbumRelease getSelectedDisocgsRelease(){

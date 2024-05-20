@@ -78,12 +78,14 @@ public class DiscogsReleaseCustomActionListener implements java.awt.event.Action
 	private final DiscogsReleaseJTable discogsReleaseJTable;
 	private final CustomAction customAction;
 	private final CollectionAlbumContainer albumsContainer;
+	private final GenerationPane generationPane;
 	
-	public DiscogsReleaseCustomActionListener(DiscogsReleaseJTable discogsReleaseJTable, CustomAction customAction, CollectionAlbumContainer albumsContainer) {
+	public DiscogsReleaseCustomActionListener(DiscogsReleaseJTable discogsReleaseJTable, CustomAction customAction, CollectionAlbumContainer albumsContainer, GenerationPane generationPane) {
 		
 		this.discogsReleaseJTable = discogsReleaseJTable;
 		this.customAction = customAction;
 		this.albumsContainer = albumsContainer;
+		this.generationPane = generationPane;
 	}
 
 	@Override
@@ -160,7 +162,7 @@ public class DiscogsReleaseCustomActionListener implements java.awt.event.Action
 		albumValidate.setBackground(Color.GREEN);
 		Font buttonFont = new Font("Verdana", Font.BOLD, 12);
 		albumValidate.setFont(buttonFont);
-		albumValidate.addActionListener(new ReleaseValidationListener(release, album, potentialAlbumsPane));
+		albumValidate.addActionListener(new ReleaseValidationListener(release, album, potentialAlbumsPane, generationPane));
 		potentialAlbumPane.add(albumValidate);
 		
 		return potentialAlbumPane;

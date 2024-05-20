@@ -34,10 +34,12 @@ public class MediaFileValidationListener implements ActionListener {
 
 	private final AlbumsJTable albumsJTable;
 	private final ContentNature contentNature;
+	private final GenerationPane generationPane;
 	
-	public MediaFileValidationListener(AlbumsJTable ajt, ContentNature contentNature) {
+	public MediaFileValidationListener(AlbumsJTable ajt, ContentNature contentNature, GenerationPane generationPane) {
 		this.albumsJTable = ajt;
 		this.contentNature = contentNature;
+		this.generationPane = generationPane;
 	}
 
 	@Override
@@ -50,6 +52,7 @@ public class MediaFileValidationListener implements ActionListener {
 			if (success) {
 				// Wirte json into file
 				selectedAlbum.writeJson();
+				generationPane.rescanNeeded();
 			}
 		}		
 	}

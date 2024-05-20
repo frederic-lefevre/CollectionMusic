@@ -43,7 +43,7 @@ public class DiscogsInventoryMouseAdapter extends MouseAdapter {
 	
 	private final CollectionMenuItems<DiscogsAlbumRelease> discogsReleaseMenuItems;
 	
-	public DiscogsInventoryMouseAdapter(DiscogsReleaseJTable discogsReleaseJTable, List<OsAction<DiscogsAlbumRelease>> osActions, CollectionAlbumContainer albumsContainer) {
+	public DiscogsInventoryMouseAdapter(DiscogsReleaseJTable discogsReleaseJTable, List<OsAction<DiscogsAlbumRelease>> osActions, CollectionAlbumContainer albumsContainer, GenerationPane generationPane) {
 		
 		super();
 		this.discogsReleaseJTable = discogsReleaseJTable;
@@ -62,7 +62,7 @@ public class DiscogsInventoryMouseAdapter extends MouseAdapter {
 		Streams.of(CustomAction.values()).forEach(customAction -> 
 			discogsReleaseMenuItems.addMenuItem(
 					customAction.getActionTitle(), 
-					new DiscogsReleaseCustomActionListener(discogsReleaseJTable, customAction, albumsContainer), 
+					new DiscogsReleaseCustomActionListener(discogsReleaseJTable, customAction, albumsContainer, generationPane), 
 					customAction.getDisplayable(), 
 					localJPopupMenu));
 	}

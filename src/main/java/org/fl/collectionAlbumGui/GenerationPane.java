@@ -47,6 +47,9 @@ public class GenerationPane extends JPanel {
 	private final static String sText = "Aucune collection lue";
 	private final static String s1Text = "Aucun site généré";
 
+	private final StartControl startButton;
+	private final StartControl genButton;
+	
 	public GenerationPane() {
 
 		super();
@@ -54,16 +57,16 @@ public class GenerationPane extends JPanel {
 
 		AlbumsTableModel albumsTableModel = new AlbumsTableModel(CollectionAlbumContainer.getInstance());
 		
-		AlbumsJTable albumsJTable = new AlbumsJTable(albumsTableModel);
+		AlbumsJTable albumsJTable = new AlbumsJTable(albumsTableModel, this);
 		
 		// Control buttons panel
 		JPanel controlPanel = new JPanel();
 		controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.X_AXIS));
 		
-		StartControl startButton = new StartControl(rText, iText, sText);
+		startButton = new StartControl(rText, iText, sText);
 		controlPanel.add(startButton.getProcCtrl());
 
-		StartControl genButton = new StartControl(gText, iText, s1Text);
+		genButton = new StartControl(gText, iText, s1Text);
 		genButton.deactivate();
 		controlPanel.add(genButton.getProcCtrl());
 
@@ -115,7 +118,7 @@ public class GenerationPane extends JPanel {
 		DisocgsReleaseTableModel dtm = new DisocgsReleaseTableModel(DiscogsInventory.getDiscogsInventory());
 		sm.addTableModel(dtm);
 		
-		DiscogsReleaseJTable discogsReleaseJTable = new DiscogsReleaseJTable(dtm, CollectionAlbumContainer.getInstance());
+		DiscogsReleaseJTable discogsReleaseJTable = new DiscogsReleaseJTable(dtm, CollectionAlbumContainer.getInstance(), this);
 		
 		JPanel discogsReleasesPane = new JPanel();
 		
@@ -129,4 +132,9 @@ public class GenerationPane extends JPanel {
 		add(collectionTabPanes);
 	}
 
+	public void rescanNeeded() {
+		
+		genButton.deactivate();
+		startButton.getPip().setProcessStatus("Relecture nécessaire");
+	}
 }
