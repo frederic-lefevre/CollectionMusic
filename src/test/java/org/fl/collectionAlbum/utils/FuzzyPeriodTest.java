@@ -27,7 +27,11 @@ package org.fl.collectionAlbum.utils;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import java.time.temporal.TemporalAccessor;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import org.fl.util.FilterCounter;
+import org.fl.util.FilterCounter.LogRecordCounter;
 import org.junit.jupiter.api.Test;
 
 class FuzzyPeriodTest {
@@ -63,6 +67,8 @@ class FuzzyPeriodTest {
 	@Test
 	void invalidFuzzyPeriod() {
 		
+		LogRecordCounter fuzzyPeriodFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.utils.FuzzyPeriod"));		
+		
 		String d1 = "2019-06-16";
 		TemporalAccessor ta1 = TemporalUtils.parseDate(d1);
 		
@@ -74,6 +80,9 @@ class FuzzyPeriodTest {
 		assertThat(fp.isValid()).isFalse();
 		assertThat(fp.getDebut()).isEqualTo(ta2);
 		assertThat(fp.getFin()).isEqualTo(ta1);
+		
+		assertThat(fuzzyPeriodFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(fuzzyPeriodFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
 	}
 	
 	@Test
