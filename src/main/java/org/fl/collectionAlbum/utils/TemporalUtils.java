@@ -103,7 +103,7 @@ public class TemporalUtils {
 		}
 	}
 	
-	public static LocalDateTime getRoundedLocalDateTime(TemporalAccessor t) {
+	private static LocalDateTime getRoundedLocalDateTime(TemporalAccessor t) {
 		
 		if (t instanceof LocalDateTime) {
 			return (LocalDateTime)t;
