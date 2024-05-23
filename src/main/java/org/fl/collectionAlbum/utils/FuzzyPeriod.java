@@ -27,8 +27,6 @@ package org.fl.collectionAlbum.utils;
 import java.time.temporal.TemporalAccessor;
 import java.util.logging.Logger;
 
-import org.fl.util.date.TemporalUtils;
-
 public class FuzzyPeriod {
 
 	private static final Logger logger =  Logger.getLogger(FuzzyPeriod.class.getName());
