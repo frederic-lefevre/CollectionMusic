@@ -33,7 +33,7 @@ import java.util.Map;
 
 public class AnniversaryCalendar<T> {
 
-	private Map<MonthDay, List<T>> anniversaires;
+	private final Map<MonthDay, List<T>> anniversaires;
 
 	public AnniversaryCalendar() {
 		anniversaires = new HashMap<>();
