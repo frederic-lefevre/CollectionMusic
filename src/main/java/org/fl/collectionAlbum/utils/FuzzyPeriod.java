@@ -29,27 +29,27 @@ import java.util.logging.Logger;
 
 public class FuzzyPeriod {
 
-	private static final Logger logger =  Logger.getLogger(FuzzyPeriod.class.getName());
+	private static final Logger logger = Logger.getLogger(FuzzyPeriod.class.getName());
 	
-	private final TemporalAccessor debut ;
-   	private final TemporalAccessor fin ;
-   	
-   	private boolean isValid ;
-	
+	private final TemporalAccessor debut;
+	private final TemporalAccessor fin;
+
+	private boolean isValid;
+
 	public FuzzyPeriod(TemporalAccessor d, TemporalAccessor f) {
-		
-		debut 	= d ;
-		fin   	= f ;
-		isValid = true ;
-		
+
+		debut = d;
+		fin = f;
+		isValid = true;
+
 		if ((debut != null) && (fin != null)) {
 			if (TemporalUtils.compareTemporal(debut, fin, logger) > 0) {
-				isValid = false ;
-				logger.warning("Période de dates invalides (début après fin)") ;
+				isValid = false;
+				logger.warning("Période de dates invalides (début après fin)");
 			}
 		} else {
-			isValid = false ;
-			logger.warning("Période de dates invalides (début ou fin invalides)") ;
+			isValid = false;
+			logger.warning("Période de dates invalides (début ou fin invalides)");
 		}
 	}
 
@@ -62,7 +62,7 @@ public class FuzzyPeriod {
 	}
 
 	public boolean isValid() {
-		return isValid ;
+		return isValid;
 	}
 
 }
