@@ -34,18 +34,19 @@ public class FuzzyPeriod {
 	private final TemporalAccessor debut;
 	private final TemporalAccessor fin;
 
-	private boolean isValid;
+	private final boolean isValid;
 
 	public FuzzyPeriod(TemporalAccessor d, TemporalAccessor f) {
 
 		debut = d;
 		fin = f;
-		isValid = true;
 
 		if ((debut != null) && (fin != null)) {
 			if (TemporalUtils.compareTemporal(debut, fin) > 0) {
 				isValid = false;
 				logger.warning("Période de dates invalides (début après fin)");
+			} else {
+				isValid = true;
 			}
 		} else {
 			isValid = false;
