@@ -26,13 +26,10 @@ package org.fl.collectionAlbum.albums;
 
 import java.time.temporal.TemporalAccessor;
 import java.util.Comparator;
-import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.utils.TemporalUtils;
 
 public class AlbumCompositionComparator  implements Comparator<Album> {
-	
-	private final static Logger albumLog = Logger.getLogger(AlbumCompositionComparator.class.getName());
 	
 	public AlbumCompositionComparator() {
 	}
@@ -42,12 +39,12 @@ public class AlbumCompositionComparator  implements Comparator<Album> {
 		TemporalAccessor d0 = arg0.getDebutComposition();
 		TemporalAccessor d1 = arg1.getDebutComposition();
 
-		int comp = TemporalUtils.compareTemporal(d0, d1, albumLog);
+		int comp = TemporalUtils.compareTemporal(d0, d1);
 
 		if (comp == 0) {
 			TemporalAccessor d2 = arg0.getFinComposition();
 			TemporalAccessor d3 = arg1.getFinComposition();
-			comp = TemporalUtils.compareTemporal(d2, d3, albumLog);
+			comp = TemporalUtils.compareTemporal(d2, d3);
 		}
 
 		if (comp == 0) {

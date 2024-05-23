@@ -24,6 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.utils;
 
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Year;
@@ -33,8 +34,6 @@ import java.time.format.ResolverStyle;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
 import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class TemporalUtils {
 
@@ -76,7 +75,7 @@ public class TemporalUtils {
     }
    
 	// (Try to) compare 2 TemporalAccessors
-	public static int compareTemporal(TemporalAccessor t1, TemporalAccessor t2, Logger log) {
+	public static int compareTemporal(TemporalAccessor t1, TemporalAccessor t2) {
 		
 		if (t1 == null) {
 			if (t2 == null) return 0 ;
@@ -84,22 +83,16 @@ public class TemporalUtils {
 		} else if (t2 == null) {
 			return -1 ;
 		} else {
-			try {
-				
-				LocalDateTime d1 = getRoundedLocalDateTime(t1);
-				LocalDateTime d2 = getRoundedLocalDateTime(t2);
-				
-				if ((d1 != null) && (d2 != null)) {
-					return d1.compareTo(d2) ;
-				} else {
-					log.severe("Cannot convert to LocalDate comparing 2 TemporalAccessor ");
-					return 0 ;
-				}
-				
-			} catch (Exception e) {
-				log.log(Level.SEVERE, "Exception comparing 2 TemporalAccessor ", e);
-				return 0;
+
+			LocalDateTime d1 = getRoundedLocalDateTime(t1);
+			LocalDateTime d2 = getRoundedLocalDateTime(t2);
+
+			if ((d1 != null) && (d2 != null)) {
+				return d1.compareTo(d2);
+			} else {
+				throw new DateTimeException("Cannot convert to LocalDate comparing 2 TemporalAccessor");
 			}
+
 		}
 	}
 	
