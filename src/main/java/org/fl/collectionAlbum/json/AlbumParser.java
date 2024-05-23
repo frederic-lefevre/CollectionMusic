@@ -32,8 +32,8 @@ import java.util.logging.Logger;
 import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.format.Format;
 import org.fl.collectionAlbum.format.Format.RangementSupportPhysique;
+import org.fl.collectionAlbum.utils.FuzzyPeriod;
 import org.fl.collectionAlbum.utils.TemporalUtils;
-import org.fl.util.date.FuzzyPeriod;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -132,7 +132,7 @@ public class AlbumParser {
 						String debut = jDates.get(0).getAsString();
 						String fin = jDates.get(1).getAsString();
 
-						period = new FuzzyPeriod(TemporalUtils.parseDate(debut), TemporalUtils.parseDate(fin), albumLog) ;
+						period = new FuzzyPeriod(TemporalUtils.parseDate(debut), TemporalUtils.parseDate(fin)) ;
 						
 						if (! period.isValid()) {
 							albumLog.warning(periodProp + " : Erreur dans les dates de l'album " + albumJson);

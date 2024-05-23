@@ -26,20 +26,17 @@ package org.fl.collectionAlbum.artistes;
 
 import java.time.temporal.TemporalAccessor;
 import java.util.Comparator;
-import java.util.logging.Logger;
 
-import org.fl.util.date.TemporalUtils;
+import org.fl.collectionAlbum.utils.TemporalUtils;
 
 public class AuteurDateComparator  implements Comparator<Artiste> {
-	
-	private final static Logger albumLog = Logger.getLogger(AuteurDateComparator.class.getName());
 	
 	public AuteurDateComparator() {
 	}
 	
 	public int compare(Artiste arg0, Artiste arg1) {
-		TemporalAccessor d0 = arg0.getNaissance() ;
-		TemporalAccessor d1 = arg1.getNaissance() ;
-		return TemporalUtils.compareTemporal(d0, d1, albumLog) ;
+		TemporalAccessor d0 = arg0.getNaissance();
+		TemporalAccessor d1 = arg1.getNaissance();
+		return TemporalUtils.compareTemporal(d0, d1);
 	}
 }

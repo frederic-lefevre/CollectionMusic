@@ -49,7 +49,7 @@ import org.fl.collectionAlbum.format.Format.RangementSupportPhysique;
 import org.fl.collectionAlbum.json.AlbumParser;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
-import org.fl.util.date.FuzzyPeriod;
+import org.fl.collectionAlbum.utils.FuzzyPeriod;
 
 import com.google.gson.JsonObject;
 
