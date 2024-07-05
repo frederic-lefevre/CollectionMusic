@@ -24,8 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.discogs;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatNullPointerException;
+import static org.assertj.core.api.Assertions.*;
 
 import java.nio.file.Path;
 import java.util.ArrayList;

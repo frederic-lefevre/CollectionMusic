@@ -24,7 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.utils;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 import java.time.temporal.TemporalAccessor;
 import java.util.logging.Level;

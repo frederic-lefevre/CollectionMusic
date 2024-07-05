@@ -24,7 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.format;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
