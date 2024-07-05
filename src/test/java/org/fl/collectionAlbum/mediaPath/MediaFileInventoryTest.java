@@ -24,7 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.mediaPath;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;

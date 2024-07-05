@@ -24,7 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 import java.net.URI;
 import java.nio.file.Paths;

@@ -24,8 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.albums;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.fail;
+import static org.assertj.core.api.Assertions.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
