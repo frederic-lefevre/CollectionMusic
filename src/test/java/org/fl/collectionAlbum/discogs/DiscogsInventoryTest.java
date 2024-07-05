@@ -24,12 +24,12 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.discogs;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.time.Month;
-import java.time.Year;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -85,7 +85,7 @@ class DiscogsInventoryTest {
 							format -> assertThat(format).isEqualTo("RE"),
 							format -> assertThat(format).isEqualTo("Num"));
 				assertThat(csvAlbum.getRating()).isNull();
-				assertThat(csvAlbum.getReleased()).isEqualTo(Year.of(2022));
+				assertThat(csvAlbum.getReleased().atMonth(1)).isEqualTo(YearMonth.of(2022, 1));
 				assertThat(csvAlbum.getReleaseId()).isEqualTo(JACO_RELEASE_ID);
 				assertThat(csvAlbum.getCollectionFolder()).isEqualTo("Jaco Pastorius");
 				assertThat(csvAlbum.getDateAdded())
