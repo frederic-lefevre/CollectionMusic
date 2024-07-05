@@ -4,14 +4,14 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>CollectionMusic</groupId>
 	<artifactId>CollectionMusic</artifactId>
-	<version>6.9.2</version>
+	<version>6.10.0</version>
 	<name>CollectionMusic</name>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.fl.FlUtils</groupId>
 			<artifactId>FlUtils</artifactId>
-			<version>5.0.0</version>
+			<version>5.1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.fl</groupId>
@@ -21,26 +21,25 @@
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
-			<version>5.10.2</version>
+			<version>5.10.3</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
     		<groupId>org.junit.jupiter</groupId>
     		<artifactId>junit-jupiter-params</artifactId>
-    		<version>5.10.2</version>
+    		<version>5.10.3</version>
     		<scope>test</scope>
 		</dependency>
 		<dependency>
         	<groupId>org.assertj</groupId>
         	<artifactId>assertj-core</artifactId>
-        	<version>3.25.3</version>
+        	<version>3.26.0</version>
         	<scope>test</scope>
       	</dependency>
 	</dependencies>
 
 	<properties>
-		<maven.compiler.source>17</maven.compiler.source>
-		<maven.compiler.target>17</maven.compiler.target>
+		<maven.compiler.release>21</maven.compiler.release>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<timestamp>${maven.build.timestamp}</timestamp>
 		<maven.build.timestamp.format>yyyy-MM-dd HH:mm:ss z</maven.build.timestamp.format>
@@ -62,7 +61,7 @@
 		<plugins>
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.12.1</version>
+				<version>3.13.0</version>
 			</plugin>
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
@@ -94,7 +93,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>3.2.5</version>
+				<version>3.3.0</version>
 			</plugin>
 			<plugin>
                 <groupId>io.github.git-commit-id</groupId>
