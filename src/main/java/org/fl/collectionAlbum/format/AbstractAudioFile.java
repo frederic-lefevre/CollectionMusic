@@ -47,12 +47,11 @@ public abstract class AbstractAudioFile extends AbstractMediaFile {
 		this.samplingRate = samplingRate;
 		
 		// Check type versus media file paths extensions
-		if (mediaFilePaths != null) {
+		if ((mediaFilePaths != null) && !mediaFilePaths.isEmpty()) {
 			mediaFilePaths.stream()
 				.filter(mediaFilePath -> !type.getExtensions().contains(mediaFilePath.getMediaFileExtension()))
 				.forEach(mediaFilePath -> albumLog.warning("Extension mismatch for " + audioJson + "\n Waited extension " + mediaFilePath.getMediaFileExtension()));
-		}
-
+		} 
 	}
 	
 	public AudioFileType getType() {
