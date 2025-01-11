@@ -188,9 +188,9 @@ class FormatTest {
 		assertThat(format1.getContentNatures()).singleElement()
 			.matches(contentNature -> contentNature.equals(ContentNature.AUDIO));
 		
-		assertThat(format1.getSupportsPhysiques()).isNotNull().containsExactly(MediaSupportCategories.CD, MediaSupportCategories.MiniVinyl);
+		assertThat(format1.getSupportsPhysiques()).isNotNull().containsOnly(MediaSupportCategories.CD, MediaSupportCategories.MiniVinyl);
 		assertThat(format1.getSupportsPhysiquesNumbers()).isNotNull()
-			.containsExactly(entry(MediaSupportCategories.CD, 2.0), entry(MediaSupportCategories.MiniVinyl, 1.0));
+			.containsOnly(entry(MediaSupportCategories.CD, 2.0), entry(MediaSupportCategories.MiniVinyl, 1.0));
 	}
 	
 	@Test
@@ -361,9 +361,9 @@ class FormatTest {
 		assertThat(format1.getContentNatures()).singleElement()
 			.matches(contentNature -> contentNature.equals(ContentNature.AUDIO));
 		
-		assertThat(format1.getSupportsPhysiques()).isNotNull().containsExactly(MediaSupportCategories.CD, MediaSupportCategories.MiniVinyl);
+		assertThat(format1.getSupportsPhysiques()).isNotNull().containsOnly(MediaSupportCategories.CD, MediaSupportCategories.MiniVinyl);
 		assertThat(format1.getSupportsPhysiquesNumbers()).isNotNull()
-			.containsExactly(entry(MediaSupportCategories.CD, 2.0), entry(MediaSupportCategories.MiniVinyl, 1.0));
+			.containsOnly(entry(MediaSupportCategories.CD, 2.0), entry(MediaSupportCategories.MiniVinyl, 1.0));
 		
 		assertThat(format1.printAudioFilesCsvTitles(";", v -> true)).singleElement()
 			.satisfies(e -> assertThat(e).isEqualTo("Bit depth;Sampling Rate;Type;Source;Note"));
