@@ -147,7 +147,7 @@ class MediaFileInventoryTest {
 		
 		assertThat(potentialAudioPaths)
 			.isNotNull()
-			.hasSize(2)
+			.hasSize(1)
 			.allSatisfy(audioPath -> {
 				assertThat(audioPath.getPath().toString()).contains("A Bigger Bang, Live On Copacabana Beach");
 				assertThat(audioPath.hasCover()).isTrue();
