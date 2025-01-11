@@ -34,6 +34,7 @@ import java.util.stream.Collectors;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory.DiscogsAlbumRelease;
+import org.fl.collectionAlbum.format.Format;
 import org.fl.collectionAlbum.format.MediaSupportCategories;
 import org.fl.discogsInterface.inventory.InventoryCsvAlbum;
 
@@ -111,9 +112,8 @@ public class DiscogsAlbumReleaseMatcher {
 		} else {
 			// At least one match on auteurs and title : match on support physique
 			
-			Set<MediaSupportCategories> supportPhysiques = album.getFormatAlbum().getSupportsPhysiques();
 			Set<DiscogsAlbumRelease> compatibleReleaseSet =  compatibleAuteurAndTitleSet.stream()
-					.filter(release -> isAlbumFormatMatching(supportPhysiques, release.getInventoryCsvAlbum()))
+					.filter(release -> isAlbumFormatSupportPhysiquesMatching(album.getFormatAlbum(), release.getInventoryCsvAlbum()))
 					.collect(Collectors.toSet());
 			
 			if (compatibleReleaseSet.isEmpty()) {
@@ -124,7 +124,7 @@ public class DiscogsAlbumReleaseMatcher {
 		}
 	}
 
-
+	
 	public static AlbumMatchResult getPotentialAlbumMatch(DiscogsAlbumRelease discogsRelease, List<Album> albums) {
 		
 		Set<Album> compatibleAuteurAndTitleSet = albums.stream()
@@ -138,7 +138,7 @@ public class DiscogsAlbumReleaseMatcher {
 		} else {
 			
 			Set<Album> compatibleAlbumSet = compatibleAuteurAndTitleSet.stream()
-				.filter(album -> isAlbumFormatMatching(album.getFormatAlbum().getSupportsPhysiques(), discogsRelease.getInventoryCsvAlbum()))
+				.filter(album -> isAlbumFormatSupportPhysiquesMatching(album.getFormatAlbum(), discogsRelease.getInventoryCsvAlbum()))
 						.collect(Collectors.toSet());
 			
 			if (compatibleAlbumSet.isEmpty()) {
@@ -159,9 +159,9 @@ public class DiscogsAlbumReleaseMatcher {
 
 	}
 
-	private static boolean isAlbumFormatMatching(Set<MediaSupportCategories> supportPhysiques, InventoryCsvAlbum inventoryCsvAlbum) {
+	private static boolean isAlbumFormatSupportPhysiquesMatching(Format albumFormat, InventoryCsvAlbum inventoryCsvAlbum) {
 		
-		return supportPhysiques.stream()
+		return albumFormat.getSupportsPhysiques().stream()
 				.allMatch(supportPhysique -> isSupportPhysiquePresent(supportPhysique, inventoryCsvAlbum));
 
 	}
@@ -172,6 +172,7 @@ public class DiscogsAlbumReleaseMatcher {
 			.anyMatch(inventoryCsvAlbumFormat -> inventoryCsvAlbumFormat.contains(getFormatMatch(supportPhysique)));
 	}
 	
+
 	public static String getFormatMatch(MediaSupportCategories supportPhysique) {
 		return formatMatchMap.get(supportPhysique);
 	}
