@@ -190,6 +190,14 @@ public class Format {
     			.collect(Collectors.toSet());
     }
     
+    public EnumMap<MediaSupportCategories, Double> getSupportsPhysiquesNumbers() {
+    	
+    	EnumMap<MediaSupportCategories, Double> supportPhysiquesNumbers = new EnumMap<MediaSupportCategories, Double>(MediaSupportCategories.class);
+    	getSupportsPhysiques().stream()
+    		.forEach(support -> supportPhysiquesNumbers.put(support, getNbSupportPhysique(support)));
+    	return supportPhysiquesNumbers;
+    }
+    
 	private double getNb(MediaSupports support) {
 		Double nb = tableFormat.get(support) ;
 		if (nb == null) {
