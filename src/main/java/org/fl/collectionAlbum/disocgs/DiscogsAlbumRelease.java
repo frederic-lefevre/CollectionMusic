@@ -24,14 +24,35 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.disocgs;
 
+import java.util.AbstractMap;
+import java.util.EnumMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.fl.collectionAlbum.albums.Album;
+import org.fl.collectionAlbum.artistes.Artiste;
+import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.AlbumMatchResult;
+import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.MatchResultType;
+import org.fl.collectionAlbum.format.Format;
+import org.fl.collectionAlbum.format.MediaSupportCategories;
 import org.fl.discogsInterface.inventory.InventoryCsvAlbum;
 
 public class DiscogsAlbumRelease {
+	
+	private static final EnumMap<MediaSupportCategories,String> formatMatchMap = new EnumMap<>(Map.ofEntries( 
+			new AbstractMap.SimpleEntry<MediaSupportCategories,String>(MediaSupportCategories.CD, "CD"), 
+			new AbstractMap.SimpleEntry<MediaSupportCategories,String>(MediaSupportCategories.K7, "Cass"),
+			new AbstractMap.SimpleEntry<MediaSupportCategories,String>(MediaSupportCategories.VinylLP, "LP"),
+			new AbstractMap.SimpleEntry<MediaSupportCategories,String>(MediaSupportCategories.MiniVinyl, "Single"),
+			new AbstractMap.SimpleEntry<MediaSupportCategories,String>(MediaSupportCategories.MiniCD, "CD"),
+			new AbstractMap.SimpleEntry<MediaSupportCategories,String>(MediaSupportCategories.MiniDVD, "DVD"),
+			new AbstractMap.SimpleEntry<MediaSupportCategories,String>(MediaSupportCategories.VHS, "VHS"),
+			new AbstractMap.SimpleEntry<MediaSupportCategories,String>(MediaSupportCategories.DVD, "DVD"),
+			new AbstractMap.SimpleEntry<MediaSupportCategories,String>(MediaSupportCategories.BluRay, "Blu-ray")));
 	
 	private InventoryCsvAlbum inventoryCsvAlbum;
 	private Set<Album> collectionAlbums;
@@ -55,6 +76,58 @@ public class DiscogsAlbumRelease {
 
 	public InventoryCsvAlbum getInventoryCsvAlbum() {
 		return inventoryCsvAlbum;
+	}
+	
+	public AlbumMatchResult getPotentialAlbumMatch(List<Album> albums) {
+		
+		Set<Album> compatibleAuteurAndTitleSet = albums.stream()
+				.filter(album -> isAlbumAuteursAndTitleMatching(album))
+				.collect(Collectors.toSet());
+			
+		if (compatibleAuteurAndTitleSet.isEmpty()) {
+			// No match on auteurs and title
+			
+			return new AlbumMatchResult(MatchResultType.NO_MATCH, compatibleAuteurAndTitleSet);
+		} else {
+			
+			Set<Album> compatibleAlbumSet = compatibleAuteurAndTitleSet.stream()
+				.filter(album -> isAlbumFormatSupportPhysiquesMatching(album.getFormatAlbum()))
+						.collect(Collectors.toSet());
+			
+			if (compatibleAlbumSet.isEmpty()) {
+				return new AlbumMatchResult(MatchResultType.NO_FORMAT_MATCH, compatibleAuteurAndTitleSet);
+			} else {
+				return new AlbumMatchResult(MatchResultType.MATCH, compatibleAlbumSet);
+			}
+		}		
+	}
+
+	
+	public boolean isAlbumAuteursAndTitleMatching(Album album) {
+		
+		return (getInventoryCsvAlbum().getTitle().toLowerCase().contains(album.getTitre().toLowerCase()) &&
+				getInventoryCsvAlbum().getArtists().stream()
+					.anyMatch(artist -> album.getAuteurs().stream().map(Artiste::getNomComplet)
+							.anyMatch(albumArtist -> artist.contains(albumArtist))));
+
+	}
+
+	public boolean isAlbumFormatSupportPhysiquesMatching(Format albumFormat) {
+		
+		return albumFormat.getSupportsPhysiques().stream()
+				.allMatch(supportPhysique -> isSupportPhysiquePresent(supportPhysique));
+
+	}
+	
+	private boolean isSupportPhysiquePresent(MediaSupportCategories supportPhysique) {
+		
+		return getInventoryCsvAlbum().getFormats().stream()
+			.anyMatch(inventoryCsvAlbumFormat -> inventoryCsvAlbumFormat.contains(getFormatMatch(supportPhysique)));
+	}
+	
+
+	public static String getFormatMatch(MediaSupportCategories supportPhysique) {
+		return formatMatchMap.get(supportPhysique);
 	}
 	
 	public String getInfo() {

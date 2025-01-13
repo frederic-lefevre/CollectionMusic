@@ -43,7 +43,6 @@ import javax.swing.JTextArea;
 import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
-import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.AlbumMatchResult;
 
 public class DiscogsReleaseCustomActionListener implements java.awt.event.ActionListener {
@@ -120,7 +119,7 @@ public class DiscogsReleaseCustomActionListener implements java.awt.event.Action
 					infoPotentialAlbums.setMaximumSize(new Dimension(1600,50));
 					infoPotentialAlbums.setEditable(false);
 					
-					AlbumMatchResult albumMatchResult = DiscogsAlbumReleaseMatcher.getPotentialAlbumMatch(release, albumsContainer.getAlbumsMissingDiscogsRelease().getAlbums());
+					AlbumMatchResult albumMatchResult = release.getPotentialAlbumMatch(albumsContainer.getAlbumsMissingDiscogsRelease().getAlbums());
 					
 					Set<Album> potentialAlbums = albumMatchResult.getMatchingAlbums();
 					

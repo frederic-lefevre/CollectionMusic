@@ -207,7 +207,7 @@ class DiscogsAlbumReleaseMatcherTest {
 		
 		List<Album> albums = List.of(getAlbumFromJson(softMachineThird), getAlbumFromJson(electricLadylandDoubleCD));
 		
-		AlbumMatchResult albumMatchResult = DiscogsAlbumReleaseMatcher.getPotentialAlbumMatch(thirdRelease, albums);
+		AlbumMatchResult albumMatchResult = thirdRelease.getPotentialAlbumMatch(albums);
 		
 		assertThat(albumMatchResult.getMatchResultType()).isEqualTo(MatchResultType.MATCH);
 		assertThat(albumMatchResult.getMatchingAlbums())
@@ -218,7 +218,7 @@ class DiscogsAlbumReleaseMatcherTest {
 		
 		List<Album> albums2 = List.of(getAlbumFromJson(softMachineThirdK7), getAlbumFromJson(electricLadylandDoubleCD));
 		
-		AlbumMatchResult albumMatchResult2 = DiscogsAlbumReleaseMatcher.getPotentialAlbumMatch(thirdRelease, albums2);
+		AlbumMatchResult albumMatchResult2 = thirdRelease.getPotentialAlbumMatch(albums2);
 		
 		assertThat(albumMatchResult2.getMatchResultType()).isEqualTo(MatchResultType.NO_FORMAT_MATCH);
 		assertThat(albumMatchResult2.getMatchingAlbums())
@@ -229,7 +229,7 @@ class DiscogsAlbumReleaseMatcherTest {
 		
 		List<Album> albums3 = List.of(getAlbumFromJson(electricLadylandDoubleCD));
 		
-		AlbumMatchResult albumMatchResult3 = DiscogsAlbumReleaseMatcher.getPotentialAlbumMatch(thirdRelease, albums3);
+		AlbumMatchResult albumMatchResult3 = thirdRelease.getPotentialAlbumMatch(albums3);
 		
 		assertThat(albumMatchResult3.getMatchResultType()).isEqualTo(MatchResultType.NO_MATCH);
 	}
@@ -279,27 +279,15 @@ class DiscogsAlbumReleaseMatcherTest {
 	void shouldCoverAllSupportCategories() {
 		
 		Arrays.stream(MediaSupportCategories.values()).forEach(supportCategory ->
-				assertThat(DiscogsAlbumReleaseMatcher.getFormatMatch(supportCategory)).isNotNull()
+				assertThat(DiscogsAlbumRelease.getFormatMatch(supportCategory)).isNotNull()
 				);
-	}
-	
-	@Test
-	void shouldThrowNPE1() {
-		
-		assertThatNullPointerException().isThrownBy(() -> DiscogsAlbumReleaseMatcher.getPotentialAlbumMatch(null, null));
-	}
-	
-	@Test
-	void shouldThrowNPE2() {
-		
-		assertThatNullPointerException().isThrownBy(() -> DiscogsAlbumReleaseMatcher.getPotentialAlbumMatch(null, List.of(getAlbumFromJson(softMachineThird))));
 	}
 	
 	@Test
 	void shouldThrowNPE3() {
 		
 		assertThat(DiscogsInventory.getDiscogsInventory()).isNotEmpty();
-		assertThatNullPointerException().isThrownBy(() -> DiscogsAlbumReleaseMatcher.getPotentialAlbumMatch(DiscogsInventory.getDiscogsInventory().get(0), null));
+		assertThatNullPointerException().isThrownBy(() -> DiscogsInventory.getDiscogsInventory().get(0).getPotentialAlbumMatch(null));
 	}
 	
 	private static Album getAlbumFromJson(String albumStr) {
