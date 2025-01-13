@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,84 +26,16 @@ package org.fl.collectionAlbum.disocgs;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Optional;
-import java.util.Set;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.discogsInterface.inventory.Inventory;
-import org.fl.discogsInterface.inventory.InventoryCsvAlbum;
 
 public class DiscogsInventory {
 
-	public static class DiscogsAlbumRelease {
-		
-		private InventoryCsvAlbum inventoryCsvAlbum;
-		private Set<Album> collectionAlbums;
-		
-		protected DiscogsAlbumRelease(InventoryCsvAlbum inventoryCsvAlbum) {
-			this.inventoryCsvAlbum = inventoryCsvAlbum;
-			collectionAlbums = new HashSet<>();
-		}
-
-		public Set<Album> getCollectionAlbums() {
-			return collectionAlbums;
-		}
-
-		public boolean isLinkedToAlbum() {
-			return (collectionAlbums != null) && !collectionAlbums.isEmpty();
-		}
-		
-		public void addCollectionAlbums(Album collectionAlbum) {
-			this.collectionAlbums.add(collectionAlbum);
-		}
-
-		public InventoryCsvAlbum getInventoryCsvAlbum() {
-			return inventoryCsvAlbum;
-		}
-		
-		public String getInfo() {
-			
-			StringBuilder info = new StringBuilder();
-			
-			addPropertyInfo(info, "releaseId", inventoryCsvAlbum.getReleaseId());
-			addPropertyInfo(info, "Titre", inventoryCsvAlbum.getTitle());
-			addPropertyInfo(info, "Artistes", inventoryCsvAlbum.getArtists());
-			addPropertyInfo(info, "Formats", inventoryCsvAlbum.getFormats());
-			addPropertyInfo(info, "Labels", inventoryCsvAlbum.getLabels());
-			addPropertyInfo(info, "Numéros de catalogues", inventoryCsvAlbum.getCatalogNumbers());
-			addPropertyInfo(info, "Notation", inventoryCsvAlbum.getRating());
-			addPropertyInfo(info, "Année de sortie", inventoryCsvAlbum.getReleased());
-			addPropertyInfo(info, "Dossier de collection", inventoryCsvAlbum.getCollectionFolder());
-			addPropertyInfo(info, "Date d'ajout", inventoryCsvAlbum.getDateAdded());
-			addPropertyInfo(info, "Etat du media", inventoryCsvAlbum.getCollectionMediaCondition());
-			addPropertyInfo(info, "Etat de la pochette", inventoryCsvAlbum.getCollectionSleeveCondition());
-			addPropertyInfo(info, "Notes", inventoryCsvAlbum.getCollectionNotes());
-			
-			if (collectionAlbums.isEmpty()) {
-				info.append("\n-------------------------------------\n  Non lié à un album de la collection\n");
-				
-			} else {
-				info.append("\n-------------------------------------\n  Albums de la collection liés\n");
-				
-				collectionAlbums.forEach(collectionAlbum -> 
-					info.append(collectionAlbum.getJsonString())
-						.append("\n-------------------------------------\n")
-					);
-			}
-			
-			return info.toString();
-		}
-		
-		private static void addPropertyInfo(StringBuilder info, String name, Object value) {
-			info.append(name).append(": ").append(Optional.ofNullable(value).map(v -> v.toString()).orElse("valeur null")).append("\n");
-		}
-	}
-	
 	private final static Logger albumLog = Logger.getLogger(DiscogsInventory.class.getName());
 	
 	private static DiscogsInventory discogsInventoryInstance;
