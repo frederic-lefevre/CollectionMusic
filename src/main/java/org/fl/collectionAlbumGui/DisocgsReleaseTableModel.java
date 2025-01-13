@@ -40,8 +40,9 @@ public class DisocgsReleaseTableModel extends AbstractTableModel {
 	public final static int TITLE_COL_IDX = 2;
 	public final static int FORMAT_COL_IDX = 3;
 	public final static int ALBUM_LINK_COL_IDX = 4;
+	public final static int FORMAT_MATCH_COL_IDX = 5;
 			
-	private final static String[] entetes = {"Id", "Auteurs", "Titre de l'album", "Formats", "Lié à un album"};
+	private final static String[] entetes = {"Id", "Auteurs", "Titre de l'album", "Formats", "Lié à un album", "Format Ok"};
 	
 	private final List<DiscogsAlbumRelease> discogsAlbumReleases;
 	
@@ -79,6 +80,7 @@ public class DisocgsReleaseTableModel extends AbstractTableModel {
 			case TITLE_COL_IDX -> discogsAlbumReleases.get(rowIndex).getInventoryCsvAlbum().getTitle();
 			case FORMAT_COL_IDX -> discogsAlbumReleases.get(rowIndex).getInventoryCsvAlbum().getFormats().stream().collect(Collectors.joining(","));
 			case ALBUM_LINK_COL_IDX -> discogsAlbumReleases.get(rowIndex).isLinkedToAlbum();
+			case FORMAT_MATCH_COL_IDX -> discogsAlbumReleases.get(rowIndex).checkAllAlbumsFormatQuantityMatch();
 			default -> null;
 		};
 

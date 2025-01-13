@@ -50,11 +50,14 @@ public class DiscogsReleaseJTable extends JTable {
 		
 		getColumnModel().getColumn(DisocgsReleaseTableModel.ALBUM_LINK_COL_IDX)
 			.setCellRenderer(new CollectionBooleanRenderer());
+		getColumnModel().getColumn(DisocgsReleaseTableModel.FORMAT_MATCH_COL_IDX)
+		.setCellRenderer(new CollectionBooleanRenderer());
 		getColumnModel().getColumn(DisocgsReleaseTableModel.ID_COL_IDX).setPreferredWidth(70);
-		getColumnModel().getColumn(DisocgsReleaseTableModel.ARTISTS_COL_IDX).setPreferredWidth(750);
-		getColumnModel().getColumn(DisocgsReleaseTableModel.TITLE_COL_IDX).setPreferredWidth(600);
+		getColumnModel().getColumn(DisocgsReleaseTableModel.ARTISTS_COL_IDX).setPreferredWidth(720);
+		getColumnModel().getColumn(DisocgsReleaseTableModel.TITLE_COL_IDX).setPreferredWidth(580);
 		getColumnModel().getColumn(DisocgsReleaseTableModel.FORMAT_COL_IDX).setPreferredWidth(200);
-		getColumnModel().getColumn(DisocgsReleaseTableModel.ALBUM_LINK_COL_IDX).setPreferredWidth(160);
+		getColumnModel().getColumn(DisocgsReleaseTableModel.ALBUM_LINK_COL_IDX).setPreferredWidth(100);
+		getColumnModel().getColumn(DisocgsReleaseTableModel.FORMAT_MATCH_COL_IDX).setPreferredWidth(100);
 		
 		// Row sorter
 		TableRowSorter<TableModel> sorter = new TableRowSorter<>(getModel());
