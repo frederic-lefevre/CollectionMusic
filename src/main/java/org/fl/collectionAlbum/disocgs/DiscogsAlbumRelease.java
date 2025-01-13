@@ -83,7 +83,7 @@ public class DiscogsAlbumRelease {
 	}
 	
 	public boolean checkOneAlbumFormatQuantityMatch(Album album) {
-		return true;
+		return isAlbumFormatSupportPhysiquesMatching(album.getFormatAlbum());
 	}
 	
 	public AlbumMatchResult getPotentialAlbumMatch(List<Album> albums) {

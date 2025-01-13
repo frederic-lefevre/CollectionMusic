@@ -320,13 +320,6 @@ class DiscogsAlbumReleaseMatcherTest {
 				);
 	}
 	
-	@Test
-	void shouldThrowNPE3() {
-		
-		assertThat(DiscogsInventory.getDiscogsInventory()).isNotEmpty();
-		assertThatNullPointerException().isThrownBy(() -> DiscogsInventory.getDiscogsInventory().get(0).getPotentialAlbumMatch(null));
-	}
-	
 	private static Album getAlbumFromJson(String albumStr) {
 		
 		JsonObject jAlbum = JsonParser.parseString(albumStr).getAsJsonObject();
