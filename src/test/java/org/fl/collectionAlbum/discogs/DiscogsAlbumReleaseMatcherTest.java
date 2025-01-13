@@ -115,6 +115,43 @@ class DiscogsAlbumReleaseMatcherTest {
 }			
 			""";
 	
+	private final static String electricLadylandSingleCD = """
+{
+  "titre": "Electric ladyland",
+  "format": {
+    "cd": 1,
+    "audioFiles": [
+      {
+        "bitDepth": 16,
+        "samplingRate": 44.1,
+        "source": "CD",
+        "type": "FLAC",
+        "note": "Remaster Ocean view",
+        "location": [
+          "E:\\\\Musique\\\\h\\\\Jimi Hendrix\\\\Electric Ladyland\\\\Electric Ladyland [847 233-2, Polygram 1993]"
+        ]
+      }
+    ]
+  },
+  "notes": [
+    "Release Polydor LC O309, 847 233-2, bar code 7 31484 72332 0, 1993",
+    "Son compressé, qualité inférieure",
+    "Remaster Ocean view"
+  ],
+  "auteurCompositeurs": [
+    {
+      "nom": "Hendrix",
+      "prenom": "Jimi"
+    }
+  ],
+  "enregistrement": [
+    "1967-05-06",
+    "1968-08-30"
+  ],
+  "jsonVersion": 2
+}			
+			""";
+	
 	private final static String softMachineThirdK7 = """
 {
 "titre": "Third",
@@ -237,7 +274,7 @@ class DiscogsAlbumReleaseMatcherTest {
 	@Test
 	void shouldGetSeveralPotentialReleaseMatch() {
 		
-		ReleaseMatchResult releaseMatchResult = DiscogsAlbumReleaseMatcher.getPotentialReleaseMatch(getAlbumFromJson(electricLadylandDoubleCD));
+		ReleaseMatchResult releaseMatchResult = DiscogsAlbumReleaseMatcher.getPotentialReleaseMatch(getAlbumFromJson(electricLadylandSingleCD));
 		
 		assertThat(releaseMatchResult.getMatchResultType()).isEqualTo(MatchResultType.MATCH);
 		assertThat(releaseMatchResult.getMatchingReleases())

@@ -78,6 +78,14 @@ public class DiscogsAlbumRelease {
 		return inventoryCsvAlbum;
 	}
 	
+	public boolean checkAllAlbumsFormatQuantityMatch() {
+		return collectionAlbums.stream().allMatch(this::checkOneAlbumFormatQuantityMatch);
+	}
+	
+	public boolean checkOneAlbumFormatQuantityMatch(Album album) {
+		return true;
+	}
+	
 	public AlbumMatchResult getPotentialAlbumMatch(List<Album> albums) {
 		
 		Set<Album> compatibleAuteurAndTitleSet = albums.stream()
@@ -111,21 +119,30 @@ public class DiscogsAlbumRelease {
 							.anyMatch(albumArtist -> artist.contains(albumArtist))));
 
 	}
-
+	
 	public boolean isAlbumFormatSupportPhysiquesMatching(Format albumFormat) {
 		
-		return albumFormat.getSupportsPhysiques().stream()
-				.allMatch(supportPhysique -> isSupportPhysiquePresent(supportPhysique));
+		return albumFormat.getSupportsPhysiquesNumbers().entrySet().stream()
+				.allMatch(supportPhysiquesEntry -> isSupportPhysiquePresent(supportPhysiquesEntry.getKey(), supportPhysiquesEntry.getValue()));
 
 	}
 	
-	private boolean isSupportPhysiquePresent(MediaSupportCategories supportPhysique) {
+	private boolean isSupportPhysiquePresent(MediaSupportCategories supportPhysique, Double quantity) {
 		
 		return getInventoryCsvAlbum().getFormats().stream()
-			.anyMatch(inventoryCsvAlbumFormat -> inventoryCsvAlbumFormat.contains(getFormatMatch(supportPhysique)));
+			.anyMatch(inventoryCsvAlbumFormat -> isSupportPhysiquePresent(inventoryCsvAlbumFormat, supportPhysique, quantity));
 	}
 	
 
+	private static boolean isSupportPhysiquePresent(String inventoryCsvAlbumFormat, MediaSupportCategories supportPhysique, Double quantity) {
+		if (quantity == 1) {
+			return inventoryCsvAlbumFormat.contains(formatMatchMap.get(supportPhysique));
+		} else {
+			return inventoryCsvAlbumFormat.contains(formatMatchMap.get(supportPhysique)) &&
+					inventoryCsvAlbumFormat.contains(Format.poidsToString(quantity));
+		}
+	}
+	
 	public static String getFormatMatch(MediaSupportCategories supportPhysique) {
 		return formatMatchMap.get(supportPhysique);
 	}
