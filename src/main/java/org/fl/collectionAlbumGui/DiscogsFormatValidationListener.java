@@ -29,6 +29,8 @@ import java.awt.event.ActionListener;
 import java.util.Set;
 import java.util.logging.Logger;
 
+import javax.swing.JPanel;
+
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
 
@@ -37,11 +39,13 @@ public class DiscogsFormatValidationListener implements ActionListener {
 	private static final Logger aLog = Logger.getLogger(DiscogsFormatValidationListener.class.getName());
 	
 	private final DiscogsAlbumRelease release;
+	private final JPanel formatValidationPane;
 	private final GenerationPane generationPane;
 	
-	public DiscogsFormatValidationListener(DiscogsAlbumRelease release, GenerationPane generationPane) {
+	public DiscogsFormatValidationListener(DiscogsAlbumRelease release, JPanel formatValidationPane, GenerationPane generationPane) {
 		
 		this.release = release;
+		this.formatValidationPane = formatValidationPane;
 		this.generationPane = generationPane;
 	}
 
@@ -52,7 +56,10 @@ public class DiscogsFormatValidationListener implements ActionListener {
 		if ((albums != null) && !albums.isEmpty()) {
 			
 			albums.forEach(album -> setDiscogsFormatValidation(album));
+			formatValidationPane.removeAll();
+			formatValidationPane.updateUI();
 			generationPane.rescanNeeded();
+			
 		} else {
 			aLog.severe("Trying to set discogs format validation for a discogs release that is not linked to an album or that has no format mismatch problem. Release id=" + release.getInventoryCsvAlbum().getReleaseId());
 		}

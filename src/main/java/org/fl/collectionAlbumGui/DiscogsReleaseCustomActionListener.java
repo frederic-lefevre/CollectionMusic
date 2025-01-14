@@ -159,7 +159,7 @@ public class DiscogsReleaseCustomActionListener implements java.awt.event.Action
 					formatsValidate.setBackground(Color.GREEN);
 					Font buttonFont = new Font("Verdana", Font.BOLD, 12);
 					formatsValidate.setFont(buttonFont);
-					formatsValidate.addActionListener(new DiscogsFormatValidationListener(release, generationPane));
+					formatsValidate.addActionListener(new DiscogsFormatValidationListener(release, formatValidationPane, generationPane));
 					formatValidationPane.add(formatsValidate);
 					
 					JScrollPane formatValidationScroll = new JScrollPane(formatValidationPane);
