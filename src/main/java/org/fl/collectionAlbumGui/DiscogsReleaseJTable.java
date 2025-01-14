@@ -51,7 +51,7 @@ public class DiscogsReleaseJTable extends JTable {
 		getColumnModel().getColumn(DisocgsReleaseTableModel.ALBUM_LINK_COL_IDX)
 			.setCellRenderer(new CollectionBooleanRenderer());
 		getColumnModel().getColumn(DisocgsReleaseTableModel.FORMAT_MATCH_COL_IDX)
-		.setCellRenderer(new CollectionBooleanRenderer());
+			.setCellRenderer(new FormatCompatibilityRenderer());
 		getColumnModel().getColumn(DisocgsReleaseTableModel.ID_COL_IDX).setPreferredWidth(70);
 		getColumnModel().getColumn(DisocgsReleaseTableModel.ARTISTS_COL_IDX).setPreferredWidth(720);
 		getColumnModel().getColumn(DisocgsReleaseTableModel.TITLE_COL_IDX).setPreferredWidth(580);

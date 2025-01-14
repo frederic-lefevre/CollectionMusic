@@ -78,12 +78,35 @@ public class DiscogsAlbumRelease {
 		return inventoryCsvAlbum;
 	}
 	
-	public boolean checkAllAlbumsFormatQuantityMatch() {
-		return collectionAlbums.stream().allMatch(this::checkOneAlbumFormatQuantityMatch);
+	public enum FormatCompatibilityResult {OK, ACCEPTED, KO};
+	
+	public FormatCompatibilityResult formatCompatibility() {
+	
+		FormatCompatibilityResult result = FormatCompatibilityResult.OK;
+		
+		for (Album album : collectionAlbums) {
+			if (album.getDiscogsFormatValidation()) {
+				result = FormatCompatibilityResult.ACCEPTED;
+			} else if (!checkOneAlbumFormatQuantityMatch(album)) {
+				return FormatCompatibilityResult.KO;
+			}
+			
+		}
+		return result;
 	}
 	
-	public boolean checkOneAlbumFormatQuantityMatch(Album album) {
+	private boolean checkOneAlbumFormatQuantityMatch(Album album) {
 		return isAlbumFormatSupportPhysiquesMatching(album.getFormatAlbum());
+	}
+	
+	public Set<Album> getAlbumsWithFormatMismatch() {
+		if ((collectionAlbums == null) || collectionAlbums.isEmpty()) {
+			return collectionAlbums;
+		} else {
+			return collectionAlbums.stream()
+					.filter(album -> !album.getDiscogsFormatValidation() && !isAlbumFormatSupportPhysiquesMatching(album.getFormatAlbum()))
+					.collect(Collectors.toSet());
+		}
 	}
 	
 	public AlbumMatchResult getPotentialAlbumMatch(List<Album> albums) {
@@ -165,7 +188,7 @@ public class DiscogsAlbumRelease {
 		addPropertyInfo(info, "Etat de la pochette", inventoryCsvAlbum.getCollectionSleeveCondition());
 		addPropertyInfo(info, "Notes", inventoryCsvAlbum.getCollectionNotes());
 		
-		if (collectionAlbums.isEmpty()) {
+		if ((collectionAlbums == null) || collectionAlbums.isEmpty()) {
 			info.append("\n-------------------------------------\n  Non lié à un album de la collection\n");
 			
 		} else {
@@ -177,6 +200,25 @@ public class DiscogsAlbumRelease {
 				);
 		}
 		
+		return info.toString();
+	}
+	
+	public String getFormatsInfo() {
+		
+		StringBuilder info = new StringBuilder();
+		addPropertyInfo(info, "Discogs release formats", inventoryCsvAlbum.getFormats());
+		
+		if ((collectionAlbums == null) || collectionAlbums.isEmpty()) {
+			info.append("\n-------------------------------------\n  Non lié à un album de la collection\n");
+			
+		} else {
+			info.append("\n-------------------------------------\n  Albums de la collection liés\n");
+			
+			collectionAlbums.forEach(collectionAlbum -> 
+				info.append(collectionAlbum.getTitre()).append(": ").append(collectionAlbum.getFormatAlbum().displaySupportPhysiquesNumbers())
+					.append("\n")
+				);
+		}
 		return info.toString();
 	}
 	

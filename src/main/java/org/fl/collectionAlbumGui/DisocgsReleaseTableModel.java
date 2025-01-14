@@ -80,7 +80,7 @@ public class DisocgsReleaseTableModel extends AbstractTableModel {
 			case TITLE_COL_IDX -> discogsAlbumReleases.get(rowIndex).getInventoryCsvAlbum().getTitle();
 			case FORMAT_COL_IDX -> discogsAlbumReleases.get(rowIndex).getInventoryCsvAlbum().getFormats().stream().collect(Collectors.joining(","));
 			case ALBUM_LINK_COL_IDX -> discogsAlbumReleases.get(rowIndex).isLinkedToAlbum();
-			case FORMAT_MATCH_COL_IDX -> discogsAlbumReleases.get(rowIndex).checkAllAlbumsFormatQuantityMatch();
+			case FORMAT_MATCH_COL_IDX -> discogsAlbumReleases.get(rowIndex).formatCompatibility();
 			default -> null;
 		};
 

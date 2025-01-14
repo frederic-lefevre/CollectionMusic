@@ -198,6 +198,14 @@ public class Format {
     	return supportPhysiquesNumbers;
     }
     
+    public String displaySupportPhysiquesNumbers() {
+    	
+    	return getSupportsPhysiques().stream()
+    		.map(support -> support.getNom() + ": " + getNbSupportPhysique(support))
+    		.collect(Collectors.joining("; "));
+    	
+    }
+    
 	private double getNb(MediaSupports support) {
 		Double nb = tableFormat.get(support) ;
 		if (nb == null) {

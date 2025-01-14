@@ -43,6 +43,7 @@ import javax.swing.JTextArea;
 import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
+import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease.FormatCompatibilityResult;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.AlbumMatchResult;
 
 public class DiscogsReleaseCustomActionListener implements java.awt.event.ActionListener {
@@ -50,11 +51,14 @@ public class DiscogsReleaseCustomActionListener implements java.awt.event.Action
 	private static final Logger aLog = Logger.getLogger(DiscogsReleaseCustomActionListener.class.getName());
 	
 	private static final Predicate<DiscogsAlbumRelease> isNotLinkedToAlbum = (release) -> (release != null) && !release.isLinkedToAlbum();
+	private static final Predicate<DiscogsAlbumRelease> isLinkedToAlbumWithFormatProblem = 
+			(release) -> (release != null) && release.isLinkedToAlbum() && (release.formatCompatibility() == FormatCompatibilityResult.KO);
 	
 	public enum CustomAction {
 		
 		SHOW_INFO("Afficher les informations", (release) -> release != null),
-		ALBUM_SEARCH("Chercher les albums", isNotLinkedToAlbum);
+		ALBUM_SEARCH("Chercher les albums", isNotLinkedToAlbum),
+		FORMAT_VALIDATION("Valider le format discogs", isLinkedToAlbumWithFormatProblem);
 		
 		private final String actionTitle;
 		private final Predicate<DiscogsAlbumRelease> displayable;
@@ -139,6 +143,30 @@ public class DiscogsReleaseCustomActionListener implements java.awt.event.Action
 					JOptionPane.showMessageDialog(null, infoAlbumsScroll, "Recherche d'albums", JOptionPane.INFORMATION_MESSAGE);
 					
 					break;
+					
+				case FORMAT_VALIDATION:
+					
+					JPanel formatValidationPane = new JPanel();
+					formatValidationPane.setLayout(new BoxLayout(formatValidationPane, BoxLayout.Y_AXIS));
+					
+					JTextArea infoFormats = new JTextArea(40, 200);
+					infoFormats.setEditable(false);					
+					infoFormats.setText(release.getFormatsInfo());
+					infoFormats.setFont(new Font("monospaced", Font.BOLD, 14));
+					formatValidationPane.add(infoFormats);
+					
+					JButton formatsValidate = new JButton("Valider les formats");
+					formatsValidate.setBackground(Color.GREEN);
+					Font buttonFont = new Font("Verdana", Font.BOLD, 12);
+					formatsValidate.setFont(buttonFont);
+					formatsValidate.addActionListener(new DiscogsFormatValidationListener(release, generationPane));
+					formatValidationPane.add(formatsValidate);
+					
+					JScrollPane formatValidationScroll = new JScrollPane(formatValidationPane);
+					JOptionPane.showMessageDialog(null, formatValidationScroll, "Validation des formats", JOptionPane.INFORMATION_MESSAGE);
+					
+					break;
+					
 				default:
 					aLog.severe("Unkown custom action triggered for discogs release: " + customAction);
 			}
