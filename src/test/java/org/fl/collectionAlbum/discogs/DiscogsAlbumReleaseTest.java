@@ -22,31 +22,47 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbumGui;
+package org.fl.collectionAlbum.discogs;
 
-import java.awt.event.ActionEvent;
+import static org.assertj.core.api.Assertions.*;
 
-import org.fl.collectionAlbum.OsAction;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
+import org.fl.collectionAlbum.disocgs.DiscogsInventory;
+import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
-public class DiscogsReleaseCommandListener implements java.awt.event.ActionListener {
+class DiscogsAlbumReleaseTest {
 
-	private final DiscogsReleaseJTable discogsReleaseJTable;
-	private final OsAction<DiscogsAlbumRelease> osAction;
+	@BeforeAll
+	static void initInventory() {
+		MediaFilesInventories.clearInventories();
+		MediaFilesInventories.scanMediaFilePaths();
+		DiscogsInventory.buildDiscogsInventory();
+	}
 	
-	public DiscogsReleaseCommandListener(DiscogsReleaseJTable discogsReleaseJTable, OsAction<DiscogsAlbumRelease> osAction) {
-		this.discogsReleaseJTable = discogsReleaseJTable;
-		this.osAction = osAction;
+	
+	@Test
+	void shouldThrowNPE() {
+		
+		assertThat(DiscogsInventory.getDiscogsInventory()).isNotEmpty();
+		assertThatNullPointerException().isThrownBy(() -> DiscogsInventory.getDiscogsInventory().get(0).getPotentialAlbumMatch(null));
+	}
+	
+	@Test
+	void shouldGetAlbumRelease() {
+		
+		DiscogsAlbumRelease discogsAlbum = getDiscogsAlbumRelease("Symphonies Nos. 25/28/29/35/36/38/40/41");
+		
+		assertThat(discogsAlbum).isNotNull();
+		
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
+	private static DiscogsAlbumRelease getDiscogsAlbumRelease(String titre) {
 		
-		DiscogsAlbumRelease release = discogsReleaseJTable.getSelectedDisocgsRelease();
-		
-		if (release != null) {
-			osAction.runOsAction(release);
-		}		
+		return DiscogsInventory.getDiscogsInventory().stream()
+			.filter(i -> i.getInventoryCsvAlbum().getTitle().equals(titre))
+			.findFirst().get();
 	}
 
 }

@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -54,6 +54,17 @@ public class ParserHelpers {
 				});
 	}
 	
+	public static boolean parseBooleanProperty(JsonObject json, String property, boolean mandatory) {
+		
+		return Optional.ofNullable(json.get(property))
+				.map(JsonElement::getAsBoolean)
+				.orElseGet(() -> {
+					if (mandatory) {
+						albumLog.severe("Mandatory property " + property + " not found in " + json);
+					}
+					return false;
+				});
+	}
 	
 	public static List<String> getArrayAttribute(JsonObject json, String jsonMusicProperty) {
 

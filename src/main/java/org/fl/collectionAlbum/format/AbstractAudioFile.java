@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -47,12 +47,11 @@ public abstract class AbstractAudioFile extends AbstractMediaFile {
 		this.samplingRate = samplingRate;
 		
 		// Check type versus media file paths extensions
-		if (mediaFilePaths != null) {
+		if ((mediaFilePaths != null) && !mediaFilePaths.isEmpty()) {
 			mediaFilePaths.stream()
 				.filter(mediaFilePath -> !type.getExtensions().contains(mediaFilePath.getMediaFileExtension()))
 				.forEach(mediaFilePath -> albumLog.warning("Extension mismatch for " + audioJson + "\n Waited extension " + mediaFilePath.getMediaFileExtension()));
-		}
-
+		} 
 	}
 	
 	public AudioFileType getType() {

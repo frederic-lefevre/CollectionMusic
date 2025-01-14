@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -42,20 +42,23 @@ import javax.swing.JTextArea;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.albums.Album;
-import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher;
+import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
+import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease.FormatCompatibilityResult;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.AlbumMatchResult;
-import org.fl.collectionAlbum.disocgs.DiscogsInventory.DiscogsAlbumRelease;
 
 public class DiscogsReleaseCustomActionListener implements java.awt.event.ActionListener {
 
 	private static final Logger aLog = Logger.getLogger(DiscogsReleaseCustomActionListener.class.getName());
 	
 	private static final Predicate<DiscogsAlbumRelease> isNotLinkedToAlbum = (release) -> (release != null) && !release.isLinkedToAlbum();
+	private static final Predicate<DiscogsAlbumRelease> isLinkedToAlbumWithFormatProblem = 
+			(release) -> (release != null) && release.isLinkedToAlbum() && (release.formatCompatibility() == FormatCompatibilityResult.KO);
 	
 	public enum CustomAction {
 		
 		SHOW_INFO("Afficher les informations", (release) -> release != null),
-		ALBUM_SEARCH("Chercher les albums", isNotLinkedToAlbum);
+		ALBUM_SEARCH("Chercher les albums", isNotLinkedToAlbum),
+		FORMAT_VALIDATION("Valider le format discogs", isLinkedToAlbumWithFormatProblem);
 		
 		private final String actionTitle;
 		private final Predicate<DiscogsAlbumRelease> displayable;
@@ -120,7 +123,7 @@ public class DiscogsReleaseCustomActionListener implements java.awt.event.Action
 					infoPotentialAlbums.setMaximumSize(new Dimension(1600,50));
 					infoPotentialAlbums.setEditable(false);
 					
-					AlbumMatchResult albumMatchResult = DiscogsAlbumReleaseMatcher.getPotentialAlbumMatch(release, albumsContainer.getAlbumsMissingDiscogsRelease().getAlbums());
+					AlbumMatchResult albumMatchResult = release.getPotentialAlbumMatch(albumsContainer.getAlbumsMissingDiscogsRelease().getAlbums());
 					
 					Set<Album> potentialAlbums = albumMatchResult.getMatchingAlbums();
 					
@@ -140,6 +143,30 @@ public class DiscogsReleaseCustomActionListener implements java.awt.event.Action
 					JOptionPane.showMessageDialog(null, infoAlbumsScroll, "Recherche d'albums", JOptionPane.INFORMATION_MESSAGE);
 					
 					break;
+					
+				case FORMAT_VALIDATION:
+					
+					JPanel formatValidationPane = new JPanel();
+					formatValidationPane.setLayout(new BoxLayout(formatValidationPane, BoxLayout.Y_AXIS));
+					
+					JTextArea infoFormats = new JTextArea(40, 200);
+					infoFormats.setEditable(false);					
+					infoFormats.setText(release.getFormatsInfo());
+					infoFormats.setFont(new Font("monospaced", Font.BOLD, 14));
+					formatValidationPane.add(infoFormats);
+					
+					JButton formatsValidate = new JButton("Valider les formats");
+					formatsValidate.setBackground(Color.GREEN);
+					Font buttonFont = new Font("Verdana", Font.BOLD, 12);
+					formatsValidate.setFont(buttonFont);
+					formatsValidate.addActionListener(new DiscogsFormatValidationListener(release, formatValidationPane, generationPane));
+					formatValidationPane.add(formatsValidate);
+					
+					JScrollPane formatValidationScroll = new JScrollPane(formatValidationPane);
+					JOptionPane.showMessageDialog(null, formatValidationScroll, "Validation des formats", JOptionPane.INFORMATION_MESSAGE);
+					
+					break;
+					
 				default:
 					aLog.severe("Unkown custom action triggered for discogs release: " + customAction);
 			}

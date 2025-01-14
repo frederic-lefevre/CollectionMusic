@@ -1,7 +1,7 @@
 /*
  MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -190,6 +190,22 @@ public class Format {
     			.collect(Collectors.toSet());
     }
     
+    public EnumMap<MediaSupportCategories, Double> getSupportsPhysiquesNumbers() {
+    	
+    	EnumMap<MediaSupportCategories, Double> supportPhysiquesNumbers = new EnumMap<MediaSupportCategories, Double>(MediaSupportCategories.class);
+    	getSupportsPhysiques().stream()
+    		.forEach(support -> supportPhysiquesNumbers.put(support, getNbSupportPhysique(support)));
+    	return supportPhysiquesNumbers;
+    }
+    
+    public String displaySupportPhysiquesNumbers() {
+    	
+    	return getSupportsPhysiques().stream()
+    		.map(support -> support.getNom() + ": " + getNbSupportPhysique(support))
+    		.collect(Collectors.joining("; "));
+    	
+    }
+    
 	private double getNb(MediaSupports support) {
 		Double nb = tableFormat.get(support) ;
 		if (nb == null) {
@@ -353,7 +369,7 @@ public class Format {
 			
 			if ((number != null) && (number > 0)) {
 				mediaSupportList.append(LI_BEGIN)
-					.append(displayPoids(number))
+					.append(poidsToString(number))
 					.append(" ")
 					.append(mediaSupport.getDescription())
 					.append(LI_END);
@@ -367,10 +383,10 @@ public class Format {
 	public void rowFormat(StringBuilder rapport, String cssTotal, boolean putMediaFile) {
 		
 		if (cssTotal != null) {
-			rapport.append(F_ROW0).append(cssTotal).append(F_ROW6).append(cssTotal).append(F_ROW4).append(displayPoids(getPoids())).append(F_ROW7) ;
+			rapport.append(F_ROW0).append(cssTotal).append(F_ROW6).append(cssTotal).append(F_ROW4).append(poidsToString(getPoids())).append(F_ROW7) ;
 		}
 		for (MediaSupportCategories sPhys : MediaSupportCategories.values()) {
-			rapport.append(F_ROW0).append(sPhys.getCssClass()).append(F_ROW4).append(displayPoids(getNbSupportPhysique(sPhys))).append(F_ROW5) ;			 
+			rapport.append(F_ROW0).append(sPhys.getCssClass()).append(F_ROW4).append(poidsToString(getNbSupportPhysique(sPhys))).append(F_ROW5) ;			 
 		}
 
 		if (putMediaFile) {
@@ -383,7 +399,7 @@ public class Format {
 		}
 	}
 	
-	private String displayPoids(double d) {
+	public static String poidsToString(double d) {
 		if (d == 0) {
 			return "" ;
 		} else {
@@ -398,7 +414,7 @@ public class Format {
 	}
 	
 	public String displayPoidsTotal() {
-		return displayPoids(getPoids()) ;
+		return poidsToString(getPoids()) ;
 	}
 	
 	private <T extends AbstractMediaFile> String displayMediaFileInformation(

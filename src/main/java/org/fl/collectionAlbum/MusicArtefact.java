@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -53,6 +53,7 @@ public abstract class MusicArtefact {
 	private final List<String> urlLinks;
 	private String discogsLink;
 	private boolean hasAdditionalInfo;
+	private boolean discogsFormatValidation;
 
 	protected final JsonObject arteFactJson;
 	private final Path jsonFilePath;
@@ -74,6 +75,7 @@ public abstract class MusicArtefact {
 		notes = musicParser.getNotes();
 		urlLinks = musicParser.getUrlLinks();
 		discogsLink = musicParser.getDisocgs();
+		discogsFormatValidation = musicParser.getDisocgsFormatValidation();
 		
 		hasAdditionalInfo = 
 				((notes != null) && (! notes.isEmpty())) ||
@@ -117,6 +119,10 @@ public abstract class MusicArtefact {
 		return discogsLink;
 	}
 
+	public boolean getDiscogsFormatValidation() {
+		return discogsFormatValidation;
+	}
+
 	public JsonObject getJson() {
 		return arteFactJson;
 	}
@@ -133,6 +139,11 @@ public abstract class MusicArtefact {
 		this.discogsLink = discogsLink;
 		hasAdditionalInfo = hasAdditionalInfo || ((discogsLink != null) && !discogsLink.isEmpty());
 		arteFactJson.addProperty(JsonMusicProperties.DISCOGS, discogsLink);
+	}
+	
+	public void setDiscogsFormatValid(boolean valid) {
+		this.discogsFormatValidation = valid;
+		arteFactJson.addProperty(JsonMusicProperties.DISCOGS_VALID, valid);
 	}
 	
 	public boolean additionnalInfo() {

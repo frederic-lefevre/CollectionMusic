@@ -1,7 +1,7 @@
 /*
  MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -187,6 +187,10 @@ class FormatTest {
 		
 		assertThat(format1.getContentNatures()).singleElement()
 			.matches(contentNature -> contentNature.equals(ContentNature.AUDIO));
+		
+		assertThat(format1.getSupportsPhysiques()).isNotNull().containsOnly(MediaSupportCategories.CD, MediaSupportCategories.MiniVinyl);
+		assertThat(format1.getSupportsPhysiquesNumbers()).isNotNull()
+			.containsOnly(entry(MediaSupportCategories.CD, 2.0), entry(MediaSupportCategories.MiniVinyl, 1.0));
 	}
 	
 	@Test
@@ -357,6 +361,10 @@ class FormatTest {
 		assertThat(format1.getContentNatures()).singleElement()
 			.matches(contentNature -> contentNature.equals(ContentNature.AUDIO));
 		
+		assertThat(format1.getSupportsPhysiques()).isNotNull().containsOnly(MediaSupportCategories.CD, MediaSupportCategories.MiniVinyl);
+		assertThat(format1.getSupportsPhysiquesNumbers()).isNotNull()
+			.containsOnly(entry(MediaSupportCategories.CD, 2.0), entry(MediaSupportCategories.MiniVinyl, 1.0));
+		
 		assertThat(format1.printAudioFilesCsvTitles(";", v -> true)).singleElement()
 			.satisfies(e -> assertThat(e).isEqualTo("Bit depth;Sampling Rate;Type;Source;Note"));
 	}
@@ -451,6 +459,11 @@ class FormatTest {
 		
 		assertThat(format1.getContentNatures()).singleElement()
 			.matches(contentNature -> contentNature.equals(ContentNature.VIDEO));
+		
+		assertThat(format1.getSupportsPhysiques()).isNotNull().containsExactly(MediaSupportCategories.BluRay);
+		assertThat(format1.getSupportsPhysiquesNumbers()).isNotNull()
+			.containsOnlyKeys(MediaSupportCategories.BluRay)
+			.containsValue(3.0);
 	}
 	
 	@Test
@@ -470,6 +483,11 @@ class FormatTest {
 		
 		assertThat(format1.getContentNatures()).singleElement()
 			.matches(contentNature -> contentNature.equals(ContentNature.AUDIO));
+		
+		assertThat(format1.getSupportsPhysiques()).isNotNull().containsExactly(MediaSupportCategories.BluRay);
+		assertThat(format1.getSupportsPhysiquesNumbers()).isNotNull()
+			.containsOnlyKeys(MediaSupportCategories.BluRay)
+			.containsValue(3.0);
 	}
 	
 	@Test
@@ -489,6 +507,10 @@ class FormatTest {
 		
 		assertThat(format1.getContentNatures()).containsExactlyInAnyOrder(ContentNature.AUDIO, ContentNature.VIDEO);
 
+		assertThat(format1.getSupportsPhysiques()).isNotNull().containsExactly(MediaSupportCategories.BluRay);
+		assertThat(format1.getSupportsPhysiquesNumbers()).isNotNull()
+			.containsOnlyKeys(MediaSupportCategories.BluRay)
+			.containsValue(3.0);
 	}
 	
 	private void assertMediaSupports(Format format, Set<MediaSupports> mediaSupports) {

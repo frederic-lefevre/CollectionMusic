@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -33,9 +33,9 @@ import java.util.List;
 
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
+import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory;
-import org.fl.collectionAlbum.disocgs.DiscogsInventory.DiscogsAlbumRelease;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.AlbumMatchResult;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.MatchResultType;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.ReleaseMatchResult;
@@ -100,6 +100,43 @@ class DiscogsAlbumReleaseMatcherTest {
     "Release Polydor LC O309, 823 359-2, bar code 0 42282 33592 0, 1984",
     "Pas de compression, pas de réduction de bruit, meilleure qualité",
     "Erreur dans l'ordre des titre: face 1, 4, 2 puis 3"
+  ],
+  "auteurCompositeurs": [
+    {
+      "nom": "Hendrix",
+      "prenom": "Jimi"
+    }
+  ],
+  "enregistrement": [
+    "1967-05-06",
+    "1968-08-30"
+  ],
+  "jsonVersion": 2
+}			
+			""";
+	
+	private final static String electricLadylandSingleCD = """
+{
+  "titre": "Electric ladyland",
+  "format": {
+    "cd": 1,
+    "audioFiles": [
+      {
+        "bitDepth": 16,
+        "samplingRate": 44.1,
+        "source": "CD",
+        "type": "FLAC",
+        "note": "Remaster Ocean view",
+        "location": [
+          "E:\\\\Musique\\\\h\\\\Jimi Hendrix\\\\Electric Ladyland\\\\Electric Ladyland [847 233-2, Polygram 1993]"
+        ]
+      }
+    ]
+  },
+  "notes": [
+    "Release Polydor LC O309, 847 233-2, bar code 7 31484 72332 0, 1993",
+    "Son compressé, qualité inférieure",
+    "Remaster Ocean view"
   ],
   "auteurCompositeurs": [
     {
@@ -207,7 +244,7 @@ class DiscogsAlbumReleaseMatcherTest {
 		
 		List<Album> albums = List.of(getAlbumFromJson(softMachineThird), getAlbumFromJson(electricLadylandDoubleCD));
 		
-		AlbumMatchResult albumMatchResult = DiscogsAlbumReleaseMatcher.getPotentialAlbumMatch(thirdRelease, albums);
+		AlbumMatchResult albumMatchResult = thirdRelease.getPotentialAlbumMatch(albums);
 		
 		assertThat(albumMatchResult.getMatchResultType()).isEqualTo(MatchResultType.MATCH);
 		assertThat(albumMatchResult.getMatchingAlbums())
@@ -218,7 +255,7 @@ class DiscogsAlbumReleaseMatcherTest {
 		
 		List<Album> albums2 = List.of(getAlbumFromJson(softMachineThirdK7), getAlbumFromJson(electricLadylandDoubleCD));
 		
-		AlbumMatchResult albumMatchResult2 = DiscogsAlbumReleaseMatcher.getPotentialAlbumMatch(thirdRelease, albums2);
+		AlbumMatchResult albumMatchResult2 = thirdRelease.getPotentialAlbumMatch(albums2);
 		
 		assertThat(albumMatchResult2.getMatchResultType()).isEqualTo(MatchResultType.NO_FORMAT_MATCH);
 		assertThat(albumMatchResult2.getMatchingAlbums())
@@ -229,7 +266,7 @@ class DiscogsAlbumReleaseMatcherTest {
 		
 		List<Album> albums3 = List.of(getAlbumFromJson(electricLadylandDoubleCD));
 		
-		AlbumMatchResult albumMatchResult3 = DiscogsAlbumReleaseMatcher.getPotentialAlbumMatch(thirdRelease, albums3);
+		AlbumMatchResult albumMatchResult3 = thirdRelease.getPotentialAlbumMatch(albums3);
 		
 		assertThat(albumMatchResult3.getMatchResultType()).isEqualTo(MatchResultType.NO_MATCH);
 	}
@@ -237,7 +274,7 @@ class DiscogsAlbumReleaseMatcherTest {
 	@Test
 	void shouldGetSeveralPotentialReleaseMatch() {
 		
-		ReleaseMatchResult releaseMatchResult = DiscogsAlbumReleaseMatcher.getPotentialReleaseMatch(getAlbumFromJson(electricLadylandDoubleCD));
+		ReleaseMatchResult releaseMatchResult = DiscogsAlbumReleaseMatcher.getPotentialReleaseMatch(getAlbumFromJson(electricLadylandSingleCD));
 		
 		assertThat(releaseMatchResult.getMatchResultType()).isEqualTo(MatchResultType.MATCH);
 		assertThat(releaseMatchResult.getMatchingReleases())
@@ -279,27 +316,8 @@ class DiscogsAlbumReleaseMatcherTest {
 	void shouldCoverAllSupportCategories() {
 		
 		Arrays.stream(MediaSupportCategories.values()).forEach(supportCategory ->
-				assertThat(DiscogsAlbumReleaseMatcher.getFormatMatch(supportCategory)).isNotNull()
+				assertThat(DiscogsAlbumRelease.getFormatMatch(supportCategory)).isNotNull()
 				);
-	}
-	
-	@Test
-	void shouldThrowNPE1() {
-		
-		assertThatNullPointerException().isThrownBy(() -> DiscogsAlbumReleaseMatcher.getPotentialAlbumMatch(null, null));
-	}
-	
-	@Test
-	void shouldThrowNPE2() {
-		
-		assertThatNullPointerException().isThrownBy(() -> DiscogsAlbumReleaseMatcher.getPotentialAlbumMatch(null, List.of(getAlbumFromJson(softMachineThird))));
-	}
-	
-	@Test
-	void shouldThrowNPE3() {
-		
-		assertThat(DiscogsInventory.getDiscogsInventory()).isNotEmpty();
-		assertThatNullPointerException().isThrownBy(() -> DiscogsAlbumReleaseMatcher.getPotentialAlbumMatch(DiscogsInventory.getDiscogsInventory().get(0), null));
 	}
 	
 	private static Album getAlbumFromJson(String albumStr) {
