@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -80,5 +80,7 @@ public class JsonMusicProperties {
 	public final static String DISCOGS	  	  = "discogs" ;
 	public final static String JSON_VERSION	  = "jsonVersion" ;
 	public final static String SLEEVE_IMG	  = "sleeveImg" ;
+	public final static String DISCOGS_VALID  = "discogsFormatValidation" ;
+	
 
 }

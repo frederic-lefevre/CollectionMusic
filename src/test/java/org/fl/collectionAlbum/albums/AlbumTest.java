@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -39,6 +39,7 @@ import java.util.logging.Logger;
 
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.fl.collectionAlbum.Control;
+import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory;
@@ -440,6 +441,39 @@ class AlbumTest {
 		assertThat(album.getContentNatures()).containsExactly(ContentNature.AUDIO);
 	}
 	
+	@Test
+	void testDiscogsProperties() {
+		
+		JsonObject jAlbum = JsonParser.parseString(albumStr2).getAsJsonObject();
+
+		ListeArtiste la = new ListeArtiste();
+		List<ListeArtiste> lla = new ArrayList<ListeArtiste>();
+		lla.add(la);
+
+		Album album = new Album(jAlbum, lla, Path.of("dummyPath"));
+		
+		assertThat(album.getDiscogsLink()).isNull();
+		assertThat(album.getDiscogsFormatValidation()).isFalse();
+		
+		assertThat(album.getJson().get(JsonMusicProperties.DISCOGS)).isNull();
+		assertThat(album.getJson().get(JsonMusicProperties.DISCOGS_VALID)).isNull();
+		
+		String discogsLink ="123456";
+		album.setDiscogsLink(discogsLink);
+		
+		assertThat(album.getDiscogsLink()).isNotNull().isEqualTo(discogsLink);
+		assertThat(album.getDiscogsFormatValidation()).isFalse();
+		
+		assertThat(album.getJson().get(JsonMusicProperties.DISCOGS)).isNotNull();
+		assertThat(album.getJson().get(JsonMusicProperties.DISCOGS_VALID)).isNull();
+		
+		album.setDiscogsFormatValid(true);
+		assertThat(album.getDiscogsFormatValidation()).isTrue();
+		
+		assertThat(album.getJson().get(JsonMusicProperties.DISCOGS)).isNotNull();
+		assertThat(album.getJson().get(JsonMusicProperties.DISCOGS_VALID)).isNotNull();
+	}
+	
 	private void testAlbumProperties(Album album, ListeArtiste la) {
 		
 		assertThat(album.getTitre()).isEqualTo("Portrait in jazz");
@@ -460,6 +494,7 @@ class AlbumTest {
 		assertThat(album.hasIntervenant()).isFalse();
 		
 		assertThat(album.hasDiscogsRelease()).isFalse();
+		assertThat(album.getDiscogsFormatValidation()).isFalse();
 		
 		assertThat(album.hasContentNature(ContentNature.AUDIO)).isTrue();
 		assertThat(album.hasContentNature(ContentNature.VIDEO)).isFalse();
