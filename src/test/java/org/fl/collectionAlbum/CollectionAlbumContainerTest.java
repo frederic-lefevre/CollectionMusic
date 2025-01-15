@@ -49,7 +49,7 @@ class CollectionAlbumContainerTest {
 		
 		CollectionAlbumContainer albumsContainer = CollectionAlbumContainer.getEmptyInstance();
 		
-		assertEmptyCollection(albumsContainer);
+		TestUtils.assertEmptyCollection(albumsContainer);
 
 		assertThat(albumsContainer.getArtisteKnown("Toto", "Titi")).isNull();
 		
@@ -69,23 +69,7 @@ class CollectionAlbumContainerTest {
 		// This is a singleton and it should be reset to empty
 		CollectionAlbumContainer albumsContainer2 = CollectionAlbumContainer.getEmptyInstance();
 		assertThat(albumsContainer2).isEqualTo(albumsContainer);
-		assertEmptyCollection(albumsContainer);
-	}
-
-	private void assertEmptyCollection(CollectionAlbumContainer albumsContainer) {
-		
-		assertThat(albumsContainer.getCollectionAlbumsMusiques()).isNotNull();
-		assertThat(albumsContainer.getConcerts()).isNotNull();
-		assertThat(albumsContainer.getCollectionArtistes()).isNotNull();
-		assertThat(albumsContainer.getConcertsArtistes()).isNotNull();
-		assertThat(albumsContainer.getCalendrierArtistes()).isNotNull();
-		assertThat(albumsContainer.getStatChronoComposition()).isNotNull();
-		assertThat(albumsContainer.getStatChronoEnregistrement()).isNotNull();
-		
-		assertThat(albumsContainer.getCollectionAlbumsMusiques().getNombreAlbums()).isZero();
-		assertThat(albumsContainer.getConcerts().getNombreConcerts()).isZero();
-		assertThat(albumsContainer.getCollectionArtistes().getNombreArtistes()).isZero();
-		assertThat(albumsContainer.getConcertsArtistes().getNombreArtistes()).isZero();
+		TestUtils.assertEmptyCollection(albumsContainer);
 	}
 	
 	private static final String albumStr1 = """
