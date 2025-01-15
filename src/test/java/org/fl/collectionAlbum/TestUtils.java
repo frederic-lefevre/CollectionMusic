@@ -1,4 +1,5 @@
-MIT License
+/*
+ * MIT License
 
 Copyright (c) 2017, 2025 Frederic Lefevre
 
@@ -19,3 +20,27 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+*/
+
+package org.fl.collectionAlbum;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class TestUtils {
+
+	public static void assertEmptyCollection(CollectionAlbumContainer albumsContainer) {
+		
+		assertThat(albumsContainer.getCollectionAlbumsMusiques()).isNotNull();
+		assertThat(albumsContainer.getConcerts()).isNotNull();
+		assertThat(albumsContainer.getCollectionArtistes()).isNotNull();
+		assertThat(albumsContainer.getConcertsArtistes()).isNotNull();
+		assertThat(albumsContainer.getCalendrierArtistes()).isNotNull();
+		assertThat(albumsContainer.getStatChronoComposition()).isNotNull();
+		assertThat(albumsContainer.getStatChronoEnregistrement()).isNotNull();
+		
+		assertThat(albumsContainer.getCollectionAlbumsMusiques().getNombreAlbums()).isZero();
+		assertThat(albumsContainer.getConcerts().getNombreConcerts()).isZero();
+		assertThat(albumsContainer.getCollectionArtistes().getNombreArtistes()).isZero();
+		assertThat(albumsContainer.getConcertsArtistes().getNombreArtistes()).isZero();
+	}
+}

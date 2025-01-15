@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -47,20 +47,9 @@ class CollectionAlbumContainerTest {
 	@Test
 	void testEmptyContainer() {
 		
-		CollectionAlbumContainer albumsContainer = CollectionAlbumContainer.getEmptyInstance() ;
+		CollectionAlbumContainer albumsContainer = CollectionAlbumContainer.getEmptyInstance();
 		
-		assertThat(albumsContainer.getCollectionAlbumsMusiques()).isNotNull();
-		assertThat(albumsContainer.getConcerts()).isNotNull();
-		assertThat(albumsContainer.getCollectionArtistes()).isNotNull();
-		assertThat(albumsContainer.getConcertsArtistes()).isNotNull();
-		assertThat(albumsContainer.getCalendrierArtistes()).isNotNull();
-		assertThat(albumsContainer.getStatChronoComposition()).isNotNull();
-		assertThat(albumsContainer.getStatChronoEnregistrement()).isNotNull();
-		
-		assertThat(albumsContainer.getCollectionAlbumsMusiques().getNombreAlbums()).isZero();
-		assertThat(albumsContainer.getConcerts().getNombreConcerts()).isZero();
-		assertThat(albumsContainer.getCollectionArtistes().getNombreArtistes()).isZero();
-		assertThat(albumsContainer.getConcertsArtistes().getNombreArtistes()).isZero();
+		TestUtils.assertEmptyCollection(albumsContainer);
 
 		assertThat(albumsContainer.getArtisteKnown("Toto", "Titi")).isNull();
 		
@@ -76,8 +65,13 @@ class CollectionAlbumContainerTest {
 		
 		assertThat(ContentNature.values())
 			.allSatisfy(contentNature -> assertThat(albumsContainer.getAlbumsWithOnlyContentNature(contentNature).getAlbums()).isEmpty());
+		
+		// This is a singleton and it should be reset to empty
+		CollectionAlbumContainer albumsContainer2 = CollectionAlbumContainer.getEmptyInstance();
+		assertThat(albumsContainer2).isEqualTo(albumsContainer);
+		TestUtils.assertEmptyCollection(albumsContainer);
 	}
-
+	
 	private static final String albumStr1 = """
 			{ 
 			  "titre": "Portrait in jazz",
