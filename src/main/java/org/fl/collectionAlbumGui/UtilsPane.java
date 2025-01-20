@@ -26,11 +26,15 @@ package org.fl.collectionAlbumGui;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.util.List;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+
+import org.fl.collectionAlbum.OsAction;
+import org.fl.collectionAlbum.ListOfStringCommandParameter;
 
 public class UtilsPane extends JPanel {
 
@@ -43,12 +47,23 @@ public class UtilsPane extends JPanel {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.setBorder(BorderFactory.createMatteBorder(10,0,10,0,Color.BLACK));
 		
-		JButton showCollection = new JButton("Montrer la collection");
+		JButton showCollectionButton = new JButton("Montrer la collection");
 		Font font = new Font("Verdana", Font.BOLD, 14);
-		showCollection.setFont(font);
-		showCollection.setBackground(Color.GREEN);
+		showCollectionButton.setFont(font);
+		showCollectionButton.setBackground(Color.GREEN);
 		
-		add(showCollection);
+		add(showCollectionButton);
+		
+		OsAction<List<String>> showCollectionAction = new OsAction<List<String>>(
+				"Show collection", 
+				"C:\\FredericPersonnel\\Program\\PortableApps\\FirefoxPortable\\App\\firefox64\\firefox.exe", 
+				List.of("-profile", "C:\\FredericPersonnel\\Program\\PortableApps\\FirefoxPortable\\Data\\profile", "-url"),
+				new ListOfStringCommandParameter());
+		
+		OsActionListener<List<String>> showCollectionListener = new OsActionListener<>(List.of("file:///C:/FredericPersonnel/Loisirs/musique/RapportCollection/rapport/index.html"), showCollectionAction);
+		
+		showCollectionButton.addActionListener(showCollectionListener);
+		
 	}
 
 
