@@ -121,9 +121,9 @@ public class Control {
 			osActionsOnMediaFilePath = getOsActionOnMediaFilePath("album.mediaFile.command.");
 			
 			displayUrlAction = new OsAction<List<String>>(
-					"Show collection", 
-					"C:\\FredericPersonnel\\Program\\PortableApps\\FirefoxPortable\\App\\firefox64\\firefox.exe", 
-					List.of("-profile", "C:\\FredericPersonnel\\Program\\PortableApps\\FirefoxPortable\\Data\\profile", "-url"),
+					collectionProperties.getProperty("album.showUrl.command.title"), 
+					collectionProperties.getProperty("album.showUrl.command.cmd"),
+					collectionProperties.getListOfString("album.showUrl.command.options", ","),
 					new ListOfStringCommandParameter());
 			
 		} catch (URISyntaxException e) {
