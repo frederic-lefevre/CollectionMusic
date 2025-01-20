@@ -157,6 +157,10 @@ public class RapportStructuresAndNames {
 		return getInstance().rapportPath.resolve(homeCollectionFile);
 	}
 
+	public static String getAbsoluteHomeCollectionUrl() {
+		return getAbsoluteHomeCollectionFile().toUri().toString();
+	}
+	
 	public static Path getAbsoluteHomeConcertFile() {
 		return getInstance().rapportPath.resolve(homeConcertFile);
 	}

@@ -55,7 +55,7 @@ public class UtilsPane extends JPanel {
 		add(showCollectionButton);
 		
 		OsActionListener<List<String>> showCollectionListener = 
-				new OsActionListener<>(List.of(RapportStructuresAndNames.getAbsoluteHomeCollectionFile().toUri().toString()), Control.getDisplayUrlAction());
+				new OsActionListener<>(List.of(RapportStructuresAndNames.getAbsoluteHomeCollectionUrl()), Control.getDisplayUrlAction());
 		
 		showCollectionButton.addActionListener(showCollectionListener);
 		
