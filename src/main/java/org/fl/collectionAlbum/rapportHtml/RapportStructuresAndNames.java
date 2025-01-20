@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,7 +28,6 @@ import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.concerts.Concert;
 import org.fl.collectionAlbum.concerts.LieuConcert;
-import org.fl.util.AdvancedProperties;
 
 import java.net.URI;
 import java.nio.file.Files;
@@ -76,11 +75,9 @@ public class RapportStructuresAndNames {
 	private final static String L_LIST3 = "</span><br/>\n";
 	
 	public static void init() {
-
-		AdvancedProperties collectionProperties = Control.getCollectionProperties();
 		
-		rapportPath = collectionProperties.getPathFromURI("album.rapportDirectory.name");
-		oldRapportPath = collectionProperties.getPathFromURI("album.oldRapportDirectory.name");
+		rapportPath = Control.getRapportPath();
+		oldRapportPath = Control.getOldRapportPath();
 
 		DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(dateFrancePattern, Locale.FRANCE);
 
@@ -90,10 +87,10 @@ public class RapportStructuresAndNames {
 		accueils.addLink(L_LIST2 + dateTimeFormatter.format(LocalDateTime.now()) + L_LIST3, buildInfoFile);
 
 		// get the concert ticket image path
-		concertTicketImgUri = collectionProperties.getProperty("concert.ticketImgDir.name") ;	
+		concertTicketImgUri = Control.getConcertTicketImgUri();
 
 		// get the path of additional information for concerts and albums
-		musicartefactInfosUri = collectionProperties.getProperty("musicArtefact.information.rootDir.name") ;
+		musicartefactInfosUri = Control.getMusicartefactInfosUri();
 
 		albumRapportPaths   	   = new RapportMap<>(rapportPath, getAbsoluteAlbumDir()) ;
 		artisteAlbumRapportPaths   = new RapportMap<>(rapportPath, getAbsoluteArtisteAlbumDir()) ;

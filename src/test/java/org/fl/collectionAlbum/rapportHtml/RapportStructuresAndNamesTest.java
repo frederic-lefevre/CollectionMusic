@@ -181,6 +181,6 @@ class RapportStructuresAndNamesTest {
 		assertThat(uriConcert).hasToString("concerts/i0.html");
 		
 		URI uriTicket = RapportStructuresAndNames.getTicketImageAbsoluteUri(concert.getTicketImages().get(0));
-		assertThat(uriTicket).hasToString(Control.getCollectionProperties().getProperty("concert.ticketImgDir.name") + "/Annees1990/1990/07_Juillet/RayCharles01.jpg");
+		assertThat(uriTicket).hasToString(Control.getConcertTicketImgUri() + "/Annees1990/1990/07_Juillet/RayCharles01.jpg");
 	}
 }
