@@ -98,9 +98,9 @@ class CollectionAlbumContainerTest {
 	
 	@Test
 	void testAlbumContainer() {
-		
-		RapportStructuresAndNames.init();
 
+		RapportStructuresAndNames.renew();
+		
 		MediaFilesInventories.scanMediaFilePaths();
 		DiscogsInventory.buildDiscogsInventory();
 		

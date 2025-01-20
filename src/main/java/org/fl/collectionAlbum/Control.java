@@ -61,10 +61,15 @@ public class Control {
    	private AdvancedProperties collectionProperties;
 	private Path collectionDirectoryName;
 	private Path concertDirectoryName;
+	private Path rapportPath;
+	private Path oldRapportPath;
+	private String concertTicketImgUri;
+	private String musicartefactInfosUri;
 	private Map<ContentNature,Path> mediaFileRootPaths;
 	private List<OsAction<Album>> osActionsOnAlbum;
 	private List<OsAction<DiscogsAlbumRelease>> osActionsOnDiscogsRelease;
 	private List<OsAction<MediaFilePath>> osActionsOnMediaFilePath;
+	private OsAction<List<String>> displayUrlAction;
 	private Path discogsCollectionCsvExportPath;
 	private String discogsBaseUrlForRelease;
    	
@@ -90,6 +95,17 @@ public class Control {
 			collectionDirectoryName = collectionProperties.getPathFromURI("album.rootDir.name");
 			concertDirectoryName = collectionProperties.getPathFromURI("concert.rootDir.name");
 			
+			// Get path and URI for the rapport
+			rapportPath = collectionProperties.getPathFromURI("album.rapportDirectory.name");
+			oldRapportPath = collectionProperties.getPathFromURI("album.oldRapportDirectory.name");
+			
+			// get the concert ticket image path
+			concertTicketImgUri = collectionProperties.getProperty("concert.ticketImgDir.name");	
+
+			// get the path of additional information for concerts and albums
+			musicartefactInfosUri = collectionProperties.getProperty("musicArtefact.information.rootDir.name");
+			
+			
 			discogsCollectionCsvExportPath = collectionProperties.getPathFromURI("album.discogs.collection.csvExport");
 			discogsBaseUrlForRelease = collectionProperties.getProperty("album.discogs.baseUrl.release");
 			
@@ -103,6 +119,12 @@ public class Control {
 			osActionsOnAlbum = getOsActionsOnAlbum("album.command.");
 			osActionsOnDiscogsRelease = getOsActionsOnDiscogsRelease("album.discogs.command.");
 			osActionsOnMediaFilePath = getOsActionOnMediaFilePath("album.mediaFile.command.");
+			
+			displayUrlAction = new OsAction<List<String>>(
+					collectionProperties.getProperty("album.showUrl.command.title"), 
+					collectionProperties.getProperty("album.showUrl.command.cmd"),
+					collectionProperties.getListOfString("album.showUrl.command.options", ","),
+					new ListOfStringCommandParameter());
 			
 		} catch (URISyntaxException e) {
 			System.out.println("URI syntax exception for property file: " + DEFAULT_PROP_FILE);
@@ -122,10 +144,6 @@ public class Control {
 		return MUSIC_FILE_EXTENSION;
 	}
 	
-	public static AdvancedProperties getCollectionProperties() { 
-		return getInstance().collectionProperties; 
-	}
-	
 	public static Charset getCharset() {
 		return getInstance().charset; 
 	}
@@ -142,6 +160,22 @@ public class Control {
 		return getInstance().concertDirectoryName;
 	}
 	
+	public static Path getRapportPath() {
+		return getInstance().rapportPath;
+	}
+	
+	public static Path getOldRapportPath() {
+		return getInstance().oldRapportPath;
+	}
+	
+	public static String getConcertTicketImgUri() {
+		return getInstance().concertTicketImgUri;
+	}
+	
+	public static String getMusicartefactInfosUri() {
+		return getInstance(). musicartefactInfosUri;
+	}
+	
 	public static Path getMediaFileRootPath(ContentNature contentNature) {
 		return getInstance().mediaFileRootPaths.get(contentNature);
 	}
@@ -156,6 +190,10 @@ public class Control {
 	
 	public static List<OsAction<MediaFilePath>> getOsActionOnMediaFilePath() {
 		return getInstance().osActionsOnMediaFilePath;
+	}
+	
+	public static OsAction<List<String>> getDisplayUrlAction() {
+		return getInstance().displayUrlAction;
 	}
 	
 	public static Path getDiscogsCollectionCsvExportPath() {

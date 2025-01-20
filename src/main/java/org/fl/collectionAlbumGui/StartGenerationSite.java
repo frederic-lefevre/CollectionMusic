@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -32,16 +32,16 @@ import org.fl.collectionAlbum.GenerationSiteCollection;
 
 public class StartGenerationSite implements ActionListener {
 	
-	private ProgressInformationPanel pip;
+	private final ProgressInformationPanel pip;	
+	private final StartControl  startCtrl;
+	private final StartControl[]  startCtrlTab;
 	private CollectionProcessWaiter collectionProcWaiter;
-	private StartControl  startCtrl;
-	private StartControl[]  startCtrlTab;
 
 	public StartGenerationSite(ProgressInformationPanel progInfoPanel, StartControl stCtrl, StartControl[] stList) {
 		
-		pip = progInfoPanel ;
-		startCtrl = stCtrl ;
-		startCtrlTab = stList ;
+		pip = progInfoPanel;
+		startCtrl = stCtrl;
+		startCtrlTab = stList;
 	}
 	
 
@@ -53,14 +53,14 @@ public class StartGenerationSite implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		
-		startCtrl.setTriggered(true) ;
-		startCtrl.getStartButton().setBackground(new Color(27,224,211)) ;
+		startCtrl.setTriggered(true);
+		startCtrl.getStartButton().setBackground(new Color(27,224,211));
 		for (StartControl st : startCtrlTab ) {
-			st.getStartButton().setEnabled(false) ;
+			st.getStartButton().setEnabled(false);
 		}
-		GenerationSiteCollection gc = new GenerationSiteCollection(pip) ;
+		GenerationSiteCollection gc = new GenerationSiteCollection(pip);
 		gc.addPropertyChangeListener(collectionProcWaiter);
-		gc.execute() ;
+		gc.execute();
 	}
 
 
