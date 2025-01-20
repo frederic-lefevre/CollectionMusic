@@ -33,8 +33,8 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import org.fl.collectionAlbum.OsAction;
-import org.fl.collectionAlbum.ListOfStringCommandParameter;
+import org.fl.collectionAlbum.Control;
+import org.fl.collectionAlbum.rapportHtml.RapportStructuresAndNames;
 
 public class UtilsPane extends JPanel {
 
@@ -54,17 +54,11 @@ public class UtilsPane extends JPanel {
 		
 		add(showCollectionButton);
 		
-		OsAction<List<String>> showCollectionAction = new OsAction<List<String>>(
-				"Show collection", 
-				"C:\\FredericPersonnel\\Program\\PortableApps\\FirefoxPortable\\App\\firefox64\\firefox.exe", 
-				List.of("-profile", "C:\\FredericPersonnel\\Program\\PortableApps\\FirefoxPortable\\Data\\profile", "-url"),
-				new ListOfStringCommandParameter());
-		
-		OsActionListener<List<String>> showCollectionListener = new OsActionListener<>(List.of("file:///C:/FredericPersonnel/Loisirs/musique/RapportCollection/rapport/index.html"), showCollectionAction);
+		OsActionListener<List<String>> showCollectionListener = 
+				new OsActionListener<>(List.of(RapportStructuresAndNames.getAbsoluteHomeCollectionFile().toUri().toString()), Control.getDisplayUrlAction());
 		
 		showCollectionButton.addActionListener(showCollectionListener);
 		
 	}
-
 
 }

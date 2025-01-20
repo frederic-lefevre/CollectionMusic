@@ -41,16 +41,21 @@ import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.concerts.Concert;
 import org.fl.collectionAlbum.concerts.LieuxDesConcerts;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class RapportStructuresAndNamesTest {
 
 	private static final String MUSIQUE_DIRECTORY_URI = "file:///C:/FredericPersonnel/Loisirs/musique/";
 	
+	@BeforeEach
+	void initRapoortStructuresAndNames() {
+		RapportStructuresAndNames.renew();
+	}
+	
 	@Test
 	void test() {
-		
-		RapportStructuresAndNames.init();
+
 		assertThat(RapportStructuresAndNames.getRapportPath().toUri()).hasToString(MUSIQUE_DIRECTORY_URI + "RapportCollection/rapport/");
 		assertThat(RapportStructuresAndNames.getOldRapportPath().toUri()).hasToString(MUSIQUE_DIRECTORY_URI + "RapportCollection/rapport_old/");
 		assertThat(RapportStructuresAndNames.getAbsoluteAlbumDir().toUri()).hasToString(MUSIQUE_DIRECTORY_URI + "RapportCollection/rapport/albums/");
@@ -61,8 +66,6 @@ class RapportStructuresAndNamesTest {
 
 	@Test
 	void test2() {
-
-		RapportStructuresAndNames.init() ;
 	
 		JsonObject jArt = new JsonObject() ;
 		jArt.addProperty("nom", "Evans") ;
@@ -111,8 +114,6 @@ class RapportStructuresAndNamesTest {
 
 	@Test
 	void test3() {
-		
-		RapportStructuresAndNames.init();
 
 		JsonObject jAlbum = JsonParser.parseString(albumStr1).getAsJsonObject();
 
@@ -159,8 +160,6 @@ class RapportStructuresAndNamesTest {
 			 """;
 	@Test
 	void test4() {
-
-		RapportStructuresAndNames.init();
 		
 		JsonObject jConcert = JsonParser.parseString(concertStr1).getAsJsonObject();
 		
