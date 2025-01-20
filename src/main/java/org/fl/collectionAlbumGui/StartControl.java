@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -34,10 +34,10 @@ import javax.swing.JPanel;
 
 public class StartControl {
 
-	private JPanel procCtrl ;
-	private JButton pStart ;
+	private final JPanel procCtrl;
+	private final JButton pStart;
 
-	private boolean triggered ;
+	private boolean triggered;
 
 	private ProgressInformationPanel pip;
 	
@@ -45,48 +45,56 @@ public class StartControl {
 		
 		String buttonText = "<html><p>" + bText + "</p></html>";
 		
-		triggered = false ;
+		triggered = false;
 		
 		procCtrl = new JPanel();
 		procCtrl.setLayout(new BoxLayout(procCtrl, BoxLayout.Y_AXIS));
 		procCtrl.setBorder(BorderFactory.createMatteBorder(10,10,10,10,Color.BLACK));
 		
-		pStart = new JButton(buttonText) ;
+		pStart = new JButton(buttonText);
 		
 		Font font = new Font("Verdana", Font.BOLD, 14);
-		pStart.setFont(font) ;
-		pStart.setBackground(Color.GREEN) ;		
+		pStart.setFont(font);
+		pStart.setBackground(Color.GREEN);		
 		
-		procCtrl.add(pStart) ;
+		procCtrl.add(pStart);
 		
-		pip = new ProgressInformationPanel() ;
-		pip.setProcessStatus(sText) ;
+		pip = new ProgressInformationPanel();
+		pip.setProcessStatus(sText);
 		pip.setStepPrefixInformation(iText);
 		pip.setStepInformation("");
 			
-		procCtrl.add(pip.getProcInfos()) ;		
+		procCtrl.add(pip.getProcInfos());		
 	}
 
-	public JPanel 					getProcCtrl() 	 { return procCtrl ; }
-	public JButton 					getStartButton() { return pStart   ; }	
-	public ProgressInformationPanel getPip() 		 { return pip 	   ; }
+	public JPanel getProcCtrl() {
+		return procCtrl;
+	}
+
+	public JButton getStartButton() {
+		return pStart;
+	}
+
+	public ProgressInformationPanel getPip() {
+		return pip;
+	}
 
 	public boolean isTriggered() {
 		return triggered;
 	}
 	
 	public boolean isActive() {
-		return pStart.isEnabled() ;
+		return pStart.isEnabled();
 	}
 	
 	public void activate() {
 		triggered = false ;
-		pStart.setBackground(new Color(27,224,211)) ;
-		pStart.setEnabled(true) ;
+		pStart.setBackground(new Color(27,224,211));
+		pStart.setEnabled(true);
 	}
 	
 	public void deactivate() {
-		pStart.setEnabled(false) ;
+		pStart.setEnabled(false);
 	}
 
 	public void setTriggered(boolean triggered) {
