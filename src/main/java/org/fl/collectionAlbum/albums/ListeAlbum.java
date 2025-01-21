@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -33,9 +33,9 @@ import org.fl.collectionAlbum.format.Format;
 
 public class ListeAlbum {
 	
-	private List<Album> albums ;
+	private final List<Album> albums ;
 	
-	private Format formatListeAlbum ;
+	private final Format formatListeAlbum ;
 	
 	public ListeAlbum() {
 		

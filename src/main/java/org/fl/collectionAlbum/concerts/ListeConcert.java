@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -30,7 +30,7 @@ import java.util.List;
 
 public class ListeConcert {
 
-	private List<Concert> concerts ;
+	private final List<Concert> concerts ;
 	
 	public ListeConcert() {
 		concerts = new ArrayList<Concert>() ;
