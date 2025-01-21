@@ -44,6 +44,8 @@ class ListUtilsTest {
 		List<Integer> aList = new ArrayList<>();		
 		IntStream.range(valueMin,valueMax).forEach(aList::add);
 		
+		assertThat(aList).hasSize(valueMax);
+		
 		Stream.generate(() -> ListUtils.pickRandomElement(aList))
 			.limit(numrberOfTests)
 			.forEach(elem -> assertThat(elem).isBetween(valueMin, valueMax));
