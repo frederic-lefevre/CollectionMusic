@@ -26,17 +26,41 @@ package org.fl.collectionAlbum;
 
 import java.util.List;
 import java.util.SplittableRandom;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class ListUtils {
 
 	private static final SplittableRandom random = new SplittableRandom();
 	
+	// Randomly return one element of a list
 	public static <T> T pickRandomElement(List<T> l) {
 		
 		if (l.size() == 1) {
 			return l.get(0);
 		} else {
 			return l.get(random.nextInt(l.size() - 1));
+		}
+	}
+	
+	// Randomly return nbPick distinct element of a list
+	public static <T> List<T> pickRandomDistinctElements(List<T> l, int nbPick) {
+
+		if (l.isEmpty()) {
+			throw new IllegalArgumentException("Empty list");
+		} else if (nbPick < 1) {
+			throw new IllegalArgumentException("Invalid number of elements requested: " + nbPick);
+		} 
+		
+		List<T> lWithDistinctElements = l.stream().distinct().collect(Collectors.toList());
+		
+		if (lWithDistinctElements.size() <= nbPick) {
+			return lWithDistinctElements;
+		} else {
+			return Stream.generate(() -> pickRandomElement(lWithDistinctElements))
+					.distinct()
+					.limit(nbPick)
+					.collect(Collectors.toList());
 		}
 	}
 }

@@ -26,6 +26,7 @@ package org.fl.collectionAlbum;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -53,6 +54,30 @@ class ListUtilsTest {
 	}
 	
 	@Test
+	void testRandomListPick2() {
+		
+		int valueMin = 0;
+		int valueMax = 2500;
+		int numrberOfTests = 1000;
+		
+		// List of even int from valueMin to valueMax, each int being repeated twice
+		List<Integer> aList = new ArrayList<>();		
+		IntStream.range(valueMin,valueMax).map(i -> { if (i % 2 == 0) return i; else return i-1;}).forEach(aList::add);
+		
+		assertThat(aList).hasSize(valueMax);
+		assertThat(aList.stream().distinct().collect(Collectors.toList())).hasSize(valueMax/2);
+		
+		Stream.generate(() -> ListUtils.pickRandomDistinctElements(aList, 3))
+			.limit(numrberOfTests)
+			.forEach(pickList -> 
+				// All pickList are composed of 3 distinct element, each between valueMin and valueMax
+				assertThat(pickList.stream().distinct().collect(Collectors.toList()))
+					.hasSize(3)
+					.allSatisfy(elem -> assertThat(elem).isBetween(valueMin, valueMax)));
+
+	}
+	
+	@Test
 	void nullListShouldRaiseNullPointException() {
 		assertThatNullPointerException().isThrownBy(() -> ListUtils.pickRandomElement(null));
 	}
@@ -67,5 +92,66 @@ class ListUtilsTest {
 		
 		String value = "une valeur";
 		assertThat(ListUtils.pickRandomElement(List.of(value))).isEqualTo(value);
+	}
+	
+	@Test
+	void nullListShouldRaiseNullPointException2() {
+		assertThatNullPointerException().isThrownBy(() -> ListUtils.pickRandomDistinctElements(null, 5));
+	}
+	
+	@Test
+	void emptyListShouldRaiseIllegalArgumentException2() {
+		assertThatIllegalArgumentException().isThrownBy(() -> ListUtils.pickRandomDistinctElements(List.of(), 3));
+	}
+	
+	@Test
+	void zeroRequestedShouldRaiseIllegalArgumentException() {
+		assertThatIllegalArgumentException().isThrownBy(() -> ListUtils.pickRandomDistinctElements(List.of("une string"), 0));
+	}
+	
+	@Test
+	void testSingleElement2() {
+		
+		String value = "une valeur";
+		assertThat(ListUtils.pickRandomDistinctElements(List.of(value), 2)).singleElement().isEqualTo(value);
+	}
+	
+	@Test
+	void testSingleElement3() {
+		
+		String value = "une valeur";
+		assertThat(ListUtils.pickRandomDistinctElements(List.of(value), 1)).singleElement().isEqualTo(value);
+	}
+	
+	@Test
+	void testListOfTwoIdenticElements() {
+		
+		String value = "une valeur";
+		assertThat(ListUtils.pickRandomDistinctElements(List.of(value, value), 3)).singleElement().isEqualTo(value);
+	}
+	
+	@Test
+	void testListOfTwoIdenticElements2() {
+		
+		String value = "une valeur";
+		assertThat(ListUtils.pickRandomDistinctElements(List.of(value, value), 2)).singleElement().isEqualTo(value);
+	}
+	
+	@Test
+	void testListOfTwoElements() {
+		
+		String v1 = "v1";
+		String v2 = "v2";
+
+		assertThat(ListUtils.pickRandomDistinctElements(List.of(v1, v2), 2)).hasSize(2).containsExactlyInAnyOrder(v1, v2);
+	}
+	
+	@Test
+	void testListOfThreeElements() {
+		
+		String v1 = "v1";
+		String v2 = "v2";
+		String v3 = "v3";
+		assertThat(ListUtils.pickRandomDistinctElements(List.of(v1, v2, v3), 2)).hasSize(2);
 	}
 }
