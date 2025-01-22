@@ -25,6 +25,7 @@ SOFTWARE.
 package org.fl.collectionAlbumGui;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.util.List;
 
@@ -35,6 +36,7 @@ import javax.swing.JPanel;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.rapportHtml.RapportStructuresAndNames;
+import org.fl.collectionAlbumGui.listener.RandomAlbumsPickListener;
 
 public class UtilsPane extends JPanel {
 
@@ -47,10 +49,13 @@ public class UtilsPane extends JPanel {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.setBorder(BorderFactory.createMatteBorder(10,0,10,0,Color.BLACK));
 		
-		JButton showCollectionButton = new JButton("Montrer la collection");
 		Font font = new Font("Verdana", Font.BOLD, 14);
+		
+		JButton showCollectionButton = new JButton("Montrer la collection");
+		
 		showCollectionButton.setFont(font);
 		showCollectionButton.setBackground(Color.GREEN);
+		showCollectionButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		add(showCollectionButton);
 		
@@ -59,6 +64,15 @@ public class UtilsPane extends JPanel {
 		
 		showCollectionButton.addActionListener(showCollectionListener);
 		
+		JButton pickRandomAlbumsButton = new JButton("Albums aléatoires");
+		pickRandomAlbumsButton.setFont(font);
+		pickRandomAlbumsButton.setBackground(Color.GREEN);
+		pickRandomAlbumsButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		add(pickRandomAlbumsButton);
+		
+		RandomAlbumsPickListener pickRandomAlbumsListener = new RandomAlbumsPickListener();
+		pickRandomAlbumsButton.addActionListener(pickRandomAlbumsListener);
 	}
 
 }
