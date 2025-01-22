@@ -36,6 +36,8 @@ import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.fl.collectionAlbum.mediaPath.MediaFilePathAlbumComparator;
 import org.fl.collectionAlbumGui.adapter.MediaFileMouseAdapter;
+import org.fl.collectionAlbumGui.renderer.AlbumsRenderer;
+import org.fl.collectionAlbumGui.renderer.CollectionBooleanRenderer;
 
 public class MediaFilesJTable extends JTable {
 

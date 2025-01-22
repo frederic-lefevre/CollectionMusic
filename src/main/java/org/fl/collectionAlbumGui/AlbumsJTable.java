@@ -40,6 +40,9 @@ import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbumGui.adapter.AlbumMouseAdapter;
 import org.fl.collectionAlbumGui.listener.MediaFileValidationListener;
 import org.fl.collectionAlbumGui.listener.MediaFilesSearchListener;
+import org.fl.collectionAlbumGui.renderer.AuteursRenderer;
+import org.fl.collectionAlbumGui.renderer.CollectionBooleanRenderer;
+import org.fl.collectionAlbumGui.renderer.MediaFilesRenderer;
 
 public class AlbumsJTable extends JTable {
 
