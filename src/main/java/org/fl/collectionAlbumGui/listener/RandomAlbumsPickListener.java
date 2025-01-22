@@ -25,18 +25,27 @@ SOFTWARE.
 package org.fl.collectionAlbumGui.listener;
 
 import java.awt.event.ActionEvent;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+
+import org.fl.collectionAlbum.CollectionAlbumContainer;
+import org.fl.collectionAlbum.albums.Album;
 
 public class RandomAlbumsPickListener implements java.awt.event.ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
-		JTextArea txt = new JTextArea(40, 200);
-		txt.setText("Random album pick");
+		List<Album> randomAlbums = CollectionAlbumContainer.getInstance().pickRandomAlbums(5);
+		
+		String albums = randomAlbums.stream().map(album -> album.getTitre()).collect(Collectors.joining(", "));
+		
+		JTextArea txt = new JTextArea();
+		txt.setText("Random album pick: \n" + albums);
 		
 		JScrollPane infoFilesScroll = new JScrollPane(txt);
 		JOptionPane.showMessageDialog(null, infoFilesScroll, "Informations", JOptionPane.INFORMATION_MESSAGE);
