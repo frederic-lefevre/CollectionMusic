@@ -22,51 +22,55 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbumGui;
+package org.fl.collectionAlbumGui.adapter;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
+import java.util.stream.Stream;
 
 import javax.swing.JPopupMenu;
 
-import org.apache.commons.lang3.stream.Streams;
-import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.OsAction;
-import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
-import org.fl.collectionAlbumGui.listener.DiscogsReleaseCommandListener;
-import org.fl.collectionAlbumGui.listener.DiscogsReleaseCustomActionListener;
-import org.fl.collectionAlbumGui.listener.DiscogsReleaseCustomActionListener.CustomAction;
+import org.fl.collectionAlbum.albums.Album;
+import org.fl.collectionAlbumGui.AlbumsJTable;
+import org.fl.collectionAlbumGui.CollectionMenuItems;
+import org.fl.collectionAlbumGui.GenerationPane;
+import org.fl.collectionAlbumGui.listener.AlbumCommandListener;
+import org.fl.collectionAlbumGui.listener.AlbumCustomActionListener;
+import org.fl.collectionAlbumGui.listener.AlbumCustomActionListener.CustomAction;
 
-public class DiscogsInventoryMouseAdapter extends MouseAdapter {
+public class AlbumMouseAdapter extends MouseAdapter {
 
-	private final DiscogsReleaseJTable discogsReleaseJTable;
+	private final AlbumsJTable albumsJTable;
 	private final JPopupMenu localJPopupMenu;
 	
-	private final CollectionMenuItems<DiscogsAlbumRelease> discogsReleaseMenuItems;
+	private final CollectionMenuItems<Album> albumMenuItems;
 	
-	public DiscogsInventoryMouseAdapter(DiscogsReleaseJTable discogsReleaseJTable, List<OsAction<DiscogsAlbumRelease>> osActions, CollectionAlbumContainer albumsContainer, GenerationPane generationPane) {
+	public AlbumMouseAdapter(AlbumsJTable ajt, List<OsAction<Album>> osActions, GenerationPane generationPane) {
 		
 		super();
-		this.discogsReleaseJTable = discogsReleaseJTable;
+		this.albumsJTable = ajt;
 		localJPopupMenu = new JPopupMenu();
 		
-		discogsReleaseMenuItems = new CollectionMenuItems<>();
+		albumMenuItems = new CollectionMenuItems<>();
 		
-		osActions.forEach(osAction -> 
-			discogsReleaseMenuItems.addMenuItem(
-				osAction.getActionTitle(),
-				new DiscogsReleaseCommandListener(discogsReleaseJTable, osAction), 
-				osAction.getCommandParameter().getActionValidityPredicate(),
-				localJPopupMenu
-		));
+		osActions.forEach(osAction ->
+			albumMenuItems.addMenuItem(
+					osAction.getActionTitle(), 
+					new AlbumCommandListener(albumsJTable, osAction), 
+					osAction.getCommandParameter().getActionValidityPredicate(),
+					localJPopupMenu
+			)
+		);
 		
-		Streams.of(CustomAction.values()).forEach(customAction -> 
-			discogsReleaseMenuItems.addMenuItem(
-					customAction.getActionTitle(), 
-					new DiscogsReleaseCustomActionListener(discogsReleaseJTable, customAction, albumsContainer, generationPane), 
-					customAction.getDisplayable(), 
-					localJPopupMenu));
+		Stream.of(CustomAction.values()).forEach(customAction -> 
+				albumMenuItems.addMenuItem(
+						customAction.getActionTitle(), 
+						new AlbumCustomActionListener(albumsJTable, customAction, generationPane), 
+						customAction.getDisplayable(),
+						localJPopupMenu));
+
 	}
 
 	@Override
@@ -84,9 +88,9 @@ public class DiscogsInventoryMouseAdapter extends MouseAdapter {
 			localJPopupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
 		}
 	}
-	
+
 	private void enableMenuItems() {
-		discogsReleaseMenuItems.enableMenuItems(discogsReleaseJTable.getSelectedDisocgsRelease());
+		albumMenuItems.enableMenuItems(albumsJTable.getSelectedAlbum());
 	}
 
 }

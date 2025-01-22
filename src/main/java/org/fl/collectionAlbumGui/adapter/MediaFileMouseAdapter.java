@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbumGui;
+package org.fl.collectionAlbumGui.adapter;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -32,6 +32,8 @@ import javax.swing.JPopupMenu;
 
 import org.fl.collectionAlbum.OsAction;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
+import org.fl.collectionAlbumGui.CollectionMenuItems;
+import org.fl.collectionAlbumGui.MediaFilesJTable;
 import org.fl.collectionAlbumGui.listener.MediaFileCommandListener;
 
 public class MediaFileMouseAdapter extends MouseAdapter {

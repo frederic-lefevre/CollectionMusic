@@ -37,6 +37,7 @@ import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.RangementComparator;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.format.ContentNature;
+import org.fl.collectionAlbumGui.adapter.AlbumMouseAdapter;
 import org.fl.collectionAlbumGui.listener.MediaFileValidationListener;
 import org.fl.collectionAlbumGui.listener.MediaFilesSearchListener;
 
