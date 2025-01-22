@@ -67,7 +67,7 @@ public class GenerationPane extends JPanel {
 		readCollectionControl = new StartControl(rText, iText, sText);
 		controlPanel.add(readCollectionControl.getProcCtrl());
 
-		UtilsPane utilsPane = new UtilsPane();
+		UtilsPane utilsPane = new UtilsPane(this);
 		utilsPane.deactivate();
 		controlPanel.add(utilsPane);
 		

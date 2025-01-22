@@ -45,7 +45,7 @@ public class UtilsPane extends JPanel implements ActivableElement {
 	
 	private final JButton pickRandomAlbumsButton;
 	
-	public UtilsPane() {
+	public UtilsPane(GenerationPane generationPane) {
 		
 		super();
 
@@ -74,7 +74,7 @@ public class UtilsPane extends JPanel implements ActivableElement {
 		
 		add(pickRandomAlbumsButton);
 		
-		RandomAlbumsPickListener pickRandomAlbumsListener = new RandomAlbumsPickListener();
+		RandomAlbumsPickListener pickRandomAlbumsListener = new RandomAlbumsPickListener(generationPane);
 		pickRandomAlbumsButton.addActionListener(pickRandomAlbumsListener);
 	}
 

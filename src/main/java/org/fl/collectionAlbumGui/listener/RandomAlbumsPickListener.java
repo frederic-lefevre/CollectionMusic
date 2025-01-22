@@ -24,31 +24,40 @@ SOFTWARE.
 
 package org.fl.collectionAlbumGui.listener;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.albums.Album;
+import org.fl.collectionAlbumGui.AlbumsJTable;
+import org.fl.collectionAlbumGui.AlbumsTableModel;
+import org.fl.collectionAlbumGui.GenerationPane;
 
 public class RandomAlbumsPickListener implements java.awt.event.ActionListener {
 
+	private final GenerationPane generationPane;
+	
+	public RandomAlbumsPickListener(GenerationPane generationPane) {
+		this.generationPane = generationPane;
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
 		List<Album> randomAlbums = CollectionAlbumContainer.getInstance().pickRandomAlbums(5);
 		
-		String albums = randomAlbums.stream().map(album -> album.getTitre()).collect(Collectors.joining(", "));
+		// Table to display the chosen albums
+		AlbumsTableModel albumsTableModel = new AlbumsTableModel(randomAlbums);
+		AlbumsJTable albumsJTable = new AlbumsJTable(albumsTableModel, generationPane);
 		
-		JTextArea txt = new JTextArea();
-		txt.setText("Random album pick: \n" + albums);
+		JScrollPane albumsScrollTable = new JScrollPane(albumsJTable);
+		albumsScrollTable.setPreferredSize(new Dimension(1800,700));
 		
-		JScrollPane infoFilesScroll = new JScrollPane(txt);
-		JOptionPane.showMessageDialog(null, infoFilesScroll, "Informations", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(null, albumsScrollTable, "Informations", JOptionPane.INFORMATION_MESSAGE);
 	}
 	
 
