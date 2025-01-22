@@ -32,7 +32,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-public class StartControl implements ActivableButton {
+public class StartControl implements ActivableElement {
 
 	private final JPanel procCtrl;
 	private final JButton pStart;

@@ -24,7 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbumGui;
 
-public interface ActivableButton {
+public interface ActivableElement {
 	
 	public void activate();
 	public void deactivate();

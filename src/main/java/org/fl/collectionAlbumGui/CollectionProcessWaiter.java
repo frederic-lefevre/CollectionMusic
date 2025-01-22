@@ -32,10 +32,10 @@ import javax.swing.SwingWorker;
 
 public class CollectionProcessWaiter implements PropertyChangeListener {
 
-	private final List<ActivableButton>  activableButtons;
+	private final List<ActivableElement>  activableElements;
 	
-	public CollectionProcessWaiter(List<ActivableButton>  stList) {
-		activableButtons = stList ;
+	public CollectionProcessWaiter(List<ActivableElement>  stList) {
+		activableElements = stList ;
 	}
 
 	@Override
@@ -43,8 +43,8 @@ public class CollectionProcessWaiter implements PropertyChangeListener {
 		
 		 if ("state".equals(event.getPropertyName())
                  && SwingWorker.StateValue.DONE == event.getNewValue()) {
-			 for (ActivableButton activavleButton : activableButtons) {
-				 activavleButton.activate() ;
+			 for (ActivableElement activavleElement : activableElements) {
+				 activavleElement.activate() ;
 			 }
 		 }
 	}

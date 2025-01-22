@@ -33,10 +33,10 @@ import org.fl.collectionAlbum.GenerationSiteCollection;
 public class StartGenerationSite implements ActionListener {
 	
 	private final ProgressInformationPanel pip;	
-	private final List<ActivableButton>  activableButtons;
+	private final List<ActivableElement>  activableButtons;
 	private CollectionProcessWaiter collectionProcWaiter;
 
-	public StartGenerationSite(ProgressInformationPanel progInfoPanel, List<ActivableButton> stList) {
+	public StartGenerationSite(ProgressInformationPanel progInfoPanel, List<ActivableElement> stList) {
 		
 		pip = progInfoPanel;
 		activableButtons = stList;
@@ -51,7 +51,7 @@ public class StartGenerationSite implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		
-		for (ActivableButton st : activableButtons ) {
+		for (ActivableElement st : activableButtons ) {
 			st.deactivate();
 		}
 		GenerationSiteCollection gc = new GenerationSiteCollection(pip);

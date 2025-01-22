@@ -38,9 +38,9 @@ public class StartReadCollection implements ActionListener {
 	private final List<AbstractTableModel> tableModels;
 	private final ProgressInformationPanel pip;
 	private CollectionProcessWaiter collectionProcWaiter;
-	private final List<ActivableButton> activableButtons;
+	private final List<ActivableElement> activableButtons;
 
-	public StartReadCollection(ProgressInformationPanel progInfoPanel, List<ActivableButton> stList) {
+	public StartReadCollection(ProgressInformationPanel progInfoPanel, List<ActivableElement> stList) {
 
 		this.tableModels = new ArrayList<>();
 		pip = progInfoPanel;
@@ -58,7 +58,7 @@ public class StartReadCollection implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 
-		for (ActivableButton st : activableButtons) {
+		for (ActivableElement st : activableButtons) {
 			st.deactivate();;
 		}
 		CollectionAlbums ca = new CollectionAlbums(tableModels, pip);
