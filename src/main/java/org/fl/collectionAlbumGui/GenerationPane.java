@@ -68,13 +68,14 @@ public class GenerationPane extends JPanel {
 		controlPanel.add(readCollectionControl.getProcCtrl());
 
 		UtilsPane utilsPane = new UtilsPane();
+		utilsPane.deactivate();
 		controlPanel.add(utilsPane);
 		
 		generateSiteControl = new StartControl(gText, iText, s1Text);
 		generateSiteControl.deactivate();
 		controlPanel.add(generateSiteControl.getProcCtrl());
 
-		List<ActivableElement> activableElements = List.of(readCollectionControl, generateSiteControl);
+		List<ActivableElement> activableElements = List.of(readCollectionControl, utilsPane, generateSiteControl);
 
 		StartReadCollection sm = new StartReadCollection(readCollectionControl.getPip(), activableElements);
 		sm.setCollectionProcWaiter(new CollectionProcessWaiter(activableElements));

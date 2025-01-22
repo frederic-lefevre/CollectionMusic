@@ -39,9 +39,11 @@ import org.fl.collectionAlbum.rapportHtml.RapportStructuresAndNames;
 import org.fl.collectionAlbumGui.listener.OsActionListener;
 import org.fl.collectionAlbumGui.listener.RandomAlbumsPickListener;
 
-public class UtilsPane extends JPanel {
+public class UtilsPane extends JPanel implements ActivableElement {
 
 	private static final long serialVersionUID = 1L;
+	
+	private final JButton pickRandomAlbumsButton;
 	
 	public UtilsPane() {
 		
@@ -65,7 +67,7 @@ public class UtilsPane extends JPanel {
 		
 		showCollectionButton.addActionListener(showCollectionListener);
 		
-		JButton pickRandomAlbumsButton = new JButton("Albums aléatoires");
+		pickRandomAlbumsButton = new JButton("Albums aléatoires");
 		pickRandomAlbumsButton.setFont(font);
 		pickRandomAlbumsButton.setBackground(Color.GREEN);
 		pickRandomAlbumsButton.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -74,6 +76,16 @@ public class UtilsPane extends JPanel {
 		
 		RandomAlbumsPickListener pickRandomAlbumsListener = new RandomAlbumsPickListener();
 		pickRandomAlbumsButton.addActionListener(pickRandomAlbumsListener);
+	}
+
+	@Override
+	public void activate() {
+		pickRandomAlbumsButton.setEnabled(true);
+	}
+
+	@Override
+	public void deactivate() {
+		pickRandomAlbumsButton.setEnabled(false);	
 	}
 
 }
