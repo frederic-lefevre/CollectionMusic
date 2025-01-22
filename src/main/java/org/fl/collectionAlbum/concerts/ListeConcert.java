@@ -36,6 +36,10 @@ public class ListeConcert {
 		concerts = new ArrayList<Concert>() ;
 	}
 	
+	public void reset() {
+		concerts.clear();
+	}
+	
 	public void addConcert(Concert a) {
 		concerts.add(a) ;
 	}

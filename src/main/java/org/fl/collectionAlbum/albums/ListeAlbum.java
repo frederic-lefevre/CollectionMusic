@@ -36,7 +36,7 @@ public class ListeAlbum {
 	
 	private final List<Album> albums;
 
-	private final Format formatListeAlbum;
+	private Format formatListeAlbum;
 
 	public ListeAlbum() {
 
@@ -51,6 +51,11 @@ public class ListeAlbum {
 		}
 	}
 
+	public void reset() {
+		albums.clear();
+		formatListeAlbum = new Format(null);
+	}
+	
 	public ListeAlbum sortChronoEnregistrement() {
 		AlbumEnregistrementComparator compAlbum = new AlbumEnregistrementComparator();
 		Collections.sort(albums, compAlbum);

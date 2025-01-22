@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -32,10 +32,14 @@ import org.fl.collectionAlbum.utils.AnniversaryCalendar;
 
 public class ChronoArtistes {
 
-	private AnniversaryCalendar<Artiste> anniversaires ;
+	private final AnniversaryCalendar<Artiste> anniversaires ;
 
 	public ChronoArtistes() {
 		anniversaires = new AnniversaryCalendar<Artiste>() ;
+	}
+	
+	public void reset() {
+		anniversaires.reset();
 	}
 	
 	public void add(Artiste a) {

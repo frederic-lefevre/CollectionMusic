@@ -47,6 +47,10 @@ public class ListeArtiste {
 		artistes = new ArrayList<Artiste>();
 	}
 
+	public void reset() {
+		artistes.clear();
+	}
+	
 	public void addArtiste(Artiste a) {
 		
 		if (! artistes.contains(a)) {

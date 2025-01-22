@@ -56,7 +56,7 @@ public class GenerationPane extends JPanel {
 		super();
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-		AlbumsTableModel albumsTableModel = new AlbumsTableModel(CollectionAlbumContainer.getInstance());
+		AlbumsTableModel albumsTableModel = new AlbumsTableModel(CollectionAlbumContainer.getInstance().getCollectionAlbumsMusiques().getAlbums());
 		
 		AlbumsJTable albumsJTable = new AlbumsJTable(albumsTableModel, this);
 		

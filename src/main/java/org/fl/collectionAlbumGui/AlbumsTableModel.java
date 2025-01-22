@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,14 +24,13 @@ SOFTWARE.
 
 package org.fl.collectionAlbumGui;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.swing.table.AbstractTableModel;
 
-import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.albums.Album;
-import org.fl.collectionAlbum.albums.ListeAlbum;
 
 public class AlbumsTableModel extends AbstractTableModel {
 
@@ -46,16 +45,16 @@ public class AlbumsTableModel extends AbstractTableModel {
 	
 	private final static String[] entetes = {"Titres", "Auteurs", "Formats", "Chemins des fichiers media", "Problème", "Discogs release"};
 	
-	private final CollectionAlbumContainer albumsContainer;
+	private final List<Album> albumsList;
 	
-	public AlbumsTableModel(CollectionAlbumContainer albumsContainer) {
+	public AlbumsTableModel(List<Album> albumsList) {
 		super();
-		this.albumsContainer = albumsContainer;
+		this.albumsList = albumsList;
 	}
 
 	@Override
 	public int getRowCount() {
-		return getAlbumsList().getNombreAlbums();
+		return albumsList.size();
 	}
 
 	@Override
@@ -75,7 +74,7 @@ public class AlbumsTableModel extends AbstractTableModel {
     
     @Override
     public Class<?> getColumnClass(int columnIndex) {
-        if (getAlbumsList().getAlbums().isEmpty()) {
+        if (albumsList.isEmpty()) {
             return Object.class;
         } else {
         	return switch(columnIndex){
@@ -88,31 +87,28 @@ public class AlbumsTableModel extends AbstractTableModel {
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		
-		if (getAlbumsList().getNombreAlbums() < rowIndex + 1) {
+		if (albumsList.size() < rowIndex + 1) {
 			// This may happen when triggering a rescan of the collection
 			return null;
 		} else {
 			return switch(columnIndex){
-				case TITRE_COL_IDX -> getAlbumsList().getAlbums().get(rowIndex).getTitre();
-				case AUTEUR_COL_IDX -> getAlbumsList().getAlbums().get(rowIndex);
-				case FORMAT_COL_IDX -> getAlbumsList().getAlbums().get(rowIndex)
+				case TITRE_COL_IDX -> albumsList.get(rowIndex).getTitre();
+				case AUTEUR_COL_IDX -> albumsList.get(rowIndex);
+				case FORMAT_COL_IDX -> albumsList.get(rowIndex)
 					.getFormatAlbum()
 					.getSupportsPhysiques().stream()
 					.map(f -> f.getNom())
 					.collect(Collectors.joining(","));
-				case MEDIA_FILES_COL_IDX -> getAlbumsList().getAlbums().get(rowIndex);
-				case PROBLEM_COL_IDX -> getAlbumsList().getAlbums().get(rowIndex).hasProblem();
-				case DISCOGS_COL_IDX -> Optional.ofNullable(getAlbumsList().getAlbums().get(rowIndex).getDiscogsLink()).orElse("");
+				case MEDIA_FILES_COL_IDX -> albumsList.get(rowIndex);
+				case PROBLEM_COL_IDX -> albumsList.get(rowIndex).hasProblem();
+				case DISCOGS_COL_IDX -> Optional.ofNullable(albumsList.get(rowIndex).getDiscogsLink()).orElse("");
 				default -> null;
 			};
 		}
 	}
 
 	public Album getAlbumAt(int rowIndex) {
-		return getAlbumsList().getAlbums().get(rowIndex);
+		return albumsList.get(rowIndex);
 	}
-	
-	private ListeAlbum getAlbumsList() {
-		return albumsContainer.getCollectionAlbumsMusiques();
-	}
+
 }
