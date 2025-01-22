@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,7 +24,6 @@ SOFTWARE.
 
 package org.fl.collectionAlbumGui;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -39,15 +38,13 @@ public class StartReadCollection implements ActionListener {
 	private final List<AbstractTableModel> tableModels;
 	private final ProgressInformationPanel pip;
 	private CollectionProcessWaiter collectionProcWaiter;
-	private final StartControl startCtrl;
-	private final StartControl[] startCtrlTab;
+	private final List<ActivableButton> activableButtons;
 
-	public StartReadCollection(ProgressInformationPanel progInfoPanel, StartControl stCtrl, StartControl[] stList) {
+	public StartReadCollection(ProgressInformationPanel progInfoPanel, List<ActivableButton> stList) {
 
 		this.tableModels = new ArrayList<>();
 		pip = progInfoPanel;
-		startCtrl = stCtrl;
-		startCtrlTab = stList;
+		activableButtons = stList;
 	}
 
 	public void setCollectionProcWaiter(CollectionProcessWaiter collectionProcWaiter) {
@@ -61,10 +58,8 @@ public class StartReadCollection implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 
-		startCtrl.setTriggered(true);
-		startCtrl.getStartButton().setBackground(new Color(27, 224, 211));
-		for (StartControl st : startCtrlTab) {
-			st.getStartButton().setEnabled(false);
+		for (ActivableButton st : activableButtons) {
+			st.deactivate();;
 		}
 		CollectionAlbums ca = new CollectionAlbums(tableModels, pip);
 		ca.addPropertyChangeListener(collectionProcWaiter);

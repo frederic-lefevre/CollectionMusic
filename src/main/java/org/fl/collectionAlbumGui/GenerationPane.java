@@ -25,6 +25,7 @@ SOFTWARE.
 package org.fl.collectionAlbumGui;
 
 import java.awt.Dimension;
+import java.util.List;
 import java.util.stream.Stream;
 
 import javax.swing.BoxLayout;
@@ -73,15 +74,15 @@ public class GenerationPane extends JPanel {
 		genButton.deactivate();
 		controlPanel.add(genButton.getProcCtrl());
 
-		StartControl[] stCtrl = new StartControl[] { startButton, genButton };
+		List<ActivableButton> activableButton = List.of(startButton, genButton);
 
-		StartReadCollection sm = new StartReadCollection(startButton.getPip(), startButton, stCtrl);
-		sm.setCollectionProcWaiter(new CollectionProcessWaiter(stCtrl));
+		StartReadCollection sm = new StartReadCollection(startButton.getPip(), activableButton);
+		sm.setCollectionProcWaiter(new CollectionProcessWaiter(activableButton));
 		sm.addTableModel(albumsTableModel);
 		startButton.getStartButton().addActionListener(sm);
 
-		StartGenerationSite sg = new StartGenerationSite(genButton.getPip(), genButton, stCtrl);
-		sg.setCollectionProcWaiter(new CollectionProcessWaiter(stCtrl));
+		StartGenerationSite sg = new StartGenerationSite(genButton.getPip(), activableButton);
+		sg.setCollectionProcWaiter(new CollectionProcessWaiter(activableButton));
 		genButton.getStartButton().addActionListener(sg);
 		
 		add(controlPanel);
