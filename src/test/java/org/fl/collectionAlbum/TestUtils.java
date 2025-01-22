@@ -24,7 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 public class TestUtils {
 
@@ -42,5 +42,7 @@ public class TestUtils {
 		assertThat(albumsContainer.getConcerts().getNombreConcerts()).isZero();
 		assertThat(albumsContainer.getCollectionArtistes().getNombreArtistes()).isZero();
 		assertThat(albumsContainer.getConcertsArtistes().getNombreArtistes()).isZero();
+		
+		assertThatIllegalArgumentException().isThrownBy(() -> albumsContainer.pickRandomAlbums(1));
 	}
 }
