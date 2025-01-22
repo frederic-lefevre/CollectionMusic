@@ -36,6 +36,7 @@ import javax.swing.JPanel;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.rapportHtml.RapportStructuresAndNames;
+import org.fl.collectionAlbumGui.listener.OsActionListener;
 import org.fl.collectionAlbumGui.listener.RandomAlbumsPickListener;
 
 public class UtilsPane extends JPanel {
