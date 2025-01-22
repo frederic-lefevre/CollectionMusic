@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,38 +22,33 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbumGui;
+package org.fl.collectionAlbumGui.listener;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
+import org.fl.collectionAlbum.OsAction;
 import org.fl.collectionAlbum.albums.Album;
-import org.fl.collectionAlbum.format.ContentNature;
+import org.fl.collectionAlbumGui.AlbumsJTable;
 
-public class MediaFileValidationListener implements ActionListener {
-
-	private final AlbumsJTable albumsJTable;
-	private final ContentNature contentNature;
-	private final GenerationPane generationPane;
+public class AlbumCommandListener implements java.awt.event.ActionListener {
 	
-	public MediaFileValidationListener(AlbumsJTable ajt, ContentNature contentNature, GenerationPane generationPane) {
+	private final AlbumsJTable albumsJTable;
+	private final OsAction<Album> osAction;
+	
+	public AlbumCommandListener(AlbumsJTable ajt, OsAction<Album> osAction) {
+		
 		this.albumsJTable = ajt;
-		this.contentNature = contentNature;
-		this.generationPane = generationPane;
+		this.osAction = osAction;
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
 		Album selectedAlbum = albumsJTable.getSelectedAlbum();
-		if (selectedAlbum != null) {
-			
-			boolean success = selectedAlbum.validatePotentialMediaFilePath(contentNature);
-			if (success) {
-				// Wirte json into file
-				selectedAlbum.writeJson();
-				generationPane.rescanNeeded();
-			}
+		
+		if (selectedAlbum != null) {		
+			osAction.runOsAction(selectedAlbum);
 		}		
 	}
+
 }

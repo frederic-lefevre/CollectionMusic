@@ -34,7 +34,9 @@ import org.apache.commons.lang3.stream.Streams;
 import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.OsAction;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
-import org.fl.collectionAlbumGui.DiscogsReleaseCustomActionListener.CustomAction;
+import org.fl.collectionAlbumGui.listener.DiscogsReleaseCommandListener;
+import org.fl.collectionAlbumGui.listener.DiscogsReleaseCustomActionListener;
+import org.fl.collectionAlbumGui.listener.DiscogsReleaseCustomActionListener.CustomAction;
 
 public class DiscogsInventoryMouseAdapter extends MouseAdapter {
 

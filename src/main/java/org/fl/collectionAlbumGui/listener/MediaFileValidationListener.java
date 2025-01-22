@@ -1,5 +1,5 @@
 /*
- MIT License
+ * MIT License
 
 Copyright (c) 2017, 2025 Frederic Lefevre
 
@@ -20,55 +20,42 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
- */
+*/
 
-package org.fl.collectionAlbumGui;
+package org.fl.collectionAlbumGui.listener;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.Set;
-import java.util.logging.Logger;
-
-import javax.swing.JPanel;
 
 import org.fl.collectionAlbum.albums.Album;
-import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
+import org.fl.collectionAlbum.format.ContentNature;
+import org.fl.collectionAlbumGui.AlbumsJTable;
+import org.fl.collectionAlbumGui.GenerationPane;
 
-public class DiscogsFormatValidationListener implements ActionListener {
+public class MediaFileValidationListener implements ActionListener {
 
-	private static final Logger aLog = Logger.getLogger(DiscogsFormatValidationListener.class.getName());
-	
-	private final DiscogsAlbumRelease release;
-	private final JPanel formatValidationPane;
+	private final AlbumsJTable albumsJTable;
+	private final ContentNature contentNature;
 	private final GenerationPane generationPane;
 	
-	public DiscogsFormatValidationListener(DiscogsAlbumRelease release, JPanel formatValidationPane, GenerationPane generationPane) {
-		
-		this.release = release;
-		this.formatValidationPane = formatValidationPane;
+	public MediaFileValidationListener(AlbumsJTable ajt, ContentNature contentNature, GenerationPane generationPane) {
+		this.albumsJTable = ajt;
+		this.contentNature = contentNature;
 		this.generationPane = generationPane;
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
-		Set<Album> albums = release.getAlbumsWithFormatMismatch();
-		if ((albums != null) && !albums.isEmpty()) {
+		Album selectedAlbum = albumsJTable.getSelectedAlbum();
+		if (selectedAlbum != null) {
 			
-			albums.forEach(album -> setDiscogsFormatValidation(album));
-			formatValidationPane.removeAll();
-			formatValidationPane.updateUI();
-			generationPane.rescanNeeded();
-			
-		} else {
-			aLog.severe("Trying to set discogs format validation for a discogs release that is not linked to an album or that has no format mismatch problem. Release id=" + release.getInventoryCsvAlbum().getReleaseId());
-		}
-		
-	}
-
-	private void setDiscogsFormatValidation(Album album) {
-		
-		album.setDiscogsFormatValid(true);
-		album.writeJson();
+			boolean success = selectedAlbum.validatePotentialMediaFilePath(contentNature);
+			if (success) {
+				// Wirte json into file
+				selectedAlbum.writeJson();
+				generationPane.rescanNeeded();
+			}
+		}		
 	}
 }

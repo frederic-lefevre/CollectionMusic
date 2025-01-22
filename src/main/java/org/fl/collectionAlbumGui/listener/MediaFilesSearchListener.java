@@ -22,31 +22,33 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbumGui;
+package org.fl.collectionAlbumGui.listener;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import org.fl.collectionAlbum.OsAction;
-import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
+import org.fl.collectionAlbum.albums.Album;
+import org.fl.collectionAlbum.format.ContentNature;
+import org.fl.collectionAlbumGui.AlbumsJTable;
 
-public class DiscogsReleaseCommandListener implements java.awt.event.ActionListener {
+public class MediaFilesSearchListener implements ActionListener {
 
-	private final DiscogsReleaseJTable discogsReleaseJTable;
-	private final OsAction<DiscogsAlbumRelease> osAction;
+	private final AlbumsJTable albumsJTable;
+	private final ContentNature contentNature;
 	
-	public DiscogsReleaseCommandListener(DiscogsReleaseJTable discogsReleaseJTable, OsAction<DiscogsAlbumRelease> osAction) {
-		this.discogsReleaseJTable = discogsReleaseJTable;
-		this.osAction = osAction;
+	public MediaFilesSearchListener(AlbumsJTable ajt, ContentNature contentNature) {
+		this.albumsJTable = ajt;
+		this.contentNature = contentNature;
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
-		DiscogsAlbumRelease release = discogsReleaseJTable.getSelectedDisocgsRelease();
+		Album selectedAlbum = albumsJTable.getSelectedAlbum();
 		
-		if (release != null) {
-			osAction.runOsAction(release);
-		}		
+		if (selectedAlbum != null) {
+			selectedAlbum.searchPotentialMediaFilesPaths(contentNature);
+		}
 	}
 
 }
