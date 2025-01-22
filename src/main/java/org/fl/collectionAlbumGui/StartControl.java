@@ -37,7 +37,6 @@ public class StartControl implements ActivableButton {
 	private final JPanel procCtrl;
 	private final JButton pStart;
 
-
 	private ProgressInformationPanel pip;
 	
 	public StartControl(String bText, String iText, String sText) {
@@ -74,11 +73,6 @@ public class StartControl implements ActivableButton {
 
 	public ProgressInformationPanel getPip() {
 		return pip;
-	}
-	
-	@Override
-	public boolean isActive() {
-		return pStart.isEnabled();
 	}
 	
 	@Override

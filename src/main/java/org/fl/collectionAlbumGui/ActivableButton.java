@@ -26,7 +26,6 @@ package org.fl.collectionAlbumGui;
 
 public interface ActivableButton {
 	
-	public boolean isActive();
 	public void activate();
 	public void deactivate();
 
