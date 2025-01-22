@@ -30,54 +30,59 @@ import java.util.List;
 
 import org.fl.collectionAlbum.RangementComparator;
 import org.fl.collectionAlbum.format.Format;
+import org.fl.collectionAlbum.ListUtils;
 
 public class ListeAlbum {
 	
-	private final List<Album> albums ;
-	
-	private final Format formatListeAlbum ;
-	
+	private final List<Album> albums;
+
+	private final Format formatListeAlbum;
+
 	public ListeAlbum() {
-		
-		formatListeAlbum = new Format(null) ;
-		albums  = new ArrayList<Album>() ;
+
+		formatListeAlbum = new Format(null);
+		albums = new ArrayList<Album>();
 	}
-	
+
 	public void addAlbum(Album a) {
-		if (! albums.contains(a)) {
-			albums.add(a) ;
-			formatListeAlbum.incrementFormat(a.getFormatAlbum()) ;
+		if (!albums.contains(a)) {
+			albums.add(a);
+			formatListeAlbum.incrementFormat(a.getFormatAlbum());
 		}
 	}
-	
+
 	public ListeAlbum sortChronoEnregistrement() {
 		AlbumEnregistrementComparator compAlbum = new AlbumEnregistrementComparator();
-		Collections.sort(albums, compAlbum) ;
-		return this ;
+		Collections.sort(albums, compAlbum);
+		return this;
 	}
-	
+
 	public ListeAlbum sortChronoComposition() {
 		AlbumCompositionComparator compAlbum = new AlbumCompositionComparator();
-		Collections.sort(albums, compAlbum) ;
-		return this ;
+		Collections.sort(albums, compAlbum);
+		return this;
 	}
-	
+
 	public ListeAlbum sortRangementAlbum() {
 		RangementComparator compAlbum = new RangementComparator();
-		Collections.sort(albums, compAlbum) ;
-		return this ;
+		Collections.sort(albums, compAlbum);
+		return this;
 	}
-	
+
 	public Format getFormatListeAlbum() {
 		return formatListeAlbum;
 	}
-	
+
 	public int getNombreAlbums() {
-		return albums.size() ;
+		return albums.size();
 	}
-	
+
 	public List<Album> getAlbums() {
 		return albums;
+	}
+	
+	public List<Album> pickRandomAlbums(int nbAlbum) {
+		return ListUtils.pickRandomDistinctElements(albums, nbAlbum);
 	}
 
 }
