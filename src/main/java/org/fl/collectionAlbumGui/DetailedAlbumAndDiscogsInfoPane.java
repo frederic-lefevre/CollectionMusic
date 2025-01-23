@@ -24,6 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbumGui;
 
+import java.awt.Dimension;
 import java.awt.Font;
 import java.util.Set;
 
@@ -36,60 +37,68 @@ import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory;
 
-public class DetailedAlbumAndDiscogsInfoPane extends JPanel {
+public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 
 	private static final long serialVersionUID = 1L;
 	
 	public DetailedAlbumAndDiscogsInfoPane(DiscogsAlbumRelease release) {
 		
 		super();
-		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		setPreferredSize(new Dimension(1650,850));
+		JPanel infosPane = new JPanel();
+		infosPane.setLayout(new BoxLayout(infosPane, BoxLayout.Y_AXIS));
 		
-		releaseInfos(release);
-		albumsInfos(release.getCollectionAlbums());
+		infosPane.add(releaseInfos(release));
+		infosPane.add(albumsInfos(release.getCollectionAlbums()));
+		setViewportView(infosPane);
+
 	}
 
 	public DetailedAlbumAndDiscogsInfoPane(Album album) {
 		
 		super();
-		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		setPreferredSize(new Dimension(1650,850));
+		JPanel infosPane = new JPanel();
+		infosPane.setLayout(new BoxLayout(infosPane, BoxLayout.Y_AXIS));
 		
-		albumsInfos(Set.of(album));
+		infosPane.add(albumsInfos(Set.of(album)));
 		
 		String discogsReleaseId = album.getDiscogsLink();					
 		if (discogsReleaseId != null) {
 			
 			DiscogsAlbumRelease release = DiscogsInventory.getDiscogsAlbumRelease(discogsReleaseId);
 			if (release != null) {
-				releaseInfos(release);
+				infosPane.add(releaseInfos(release));
 			}
 		}
+		setViewportView(infosPane);
 	}
 	
-	private void releaseInfos(DiscogsAlbumRelease release) {
+	private JTextArea releaseInfos(DiscogsAlbumRelease release) {
 		
 		JTextArea infoRelease = new JTextArea(release.getInfo(false));
 		infoRelease.setEditable(false);
 		infoRelease.setFont(new Font("monospaced", Font.BOLD, 14));
 		
-		JScrollPane infoFilesScroll = new JScrollPane(infoRelease);
-		add(infoFilesScroll);
+		return infoRelease;
 	}
 	
-	private void albumsInfos(Set<Album> albums) {
+	private JPanel albumsInfos(Set<Album> albums) {
 		
-		StringBuilder info = new StringBuilder();
-		JTextArea infoAlbums = new JTextArea(20, 200);
-		infoAlbums.setEditable(false);
-				
-		albums.forEach(album -> 
-			info.append(album.getJsonString())
-				.append("\n-------------------------------------\n"));
-			
-		infoAlbums.setText(info.toString());
-		infoAlbums.setFont(new Font("monospaced", Font.BOLD, 14));
-		JScrollPane infoFilesScroll = new JScrollPane(infoAlbums);
+		JPanel albumsPane = new JPanel();
+		albumsPane.setLayout(new BoxLayout(albumsPane, BoxLayout.Y_AXIS));
+		albums.forEach(album -> albumsPane.add(albumInfo(album)));
 		
-		add(infoFilesScroll);
+		return albumsPane;
+	}
+	
+	private JTextArea albumInfo(Album album) {
+		
+		JTextArea infoAlbum = new JTextArea(20, 200);
+		infoAlbum.setEditable(false);
+
+		infoAlbum.setText(album.getJsonString());
+		infoAlbum.setFont(new Font("monospaced", Font.BOLD, 14));
+		return infoAlbum;
 	}
 }
