@@ -24,10 +24,12 @@ SOFTWARE.
 
 package org.fl.collectionAlbumGui;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.util.Set;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -79,6 +81,7 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 		JTextArea infoRelease = new JTextArea(release.getInfo(false));
 		infoRelease.setEditable(false);
 		infoRelease.setFont(new Font("monospaced", Font.BOLD, 14));
+		infoRelease.setBorder(BorderFactory.createMatteBorder(1,1,1,1,Color.BLACK));
 		
 		return infoRelease;
 	}
