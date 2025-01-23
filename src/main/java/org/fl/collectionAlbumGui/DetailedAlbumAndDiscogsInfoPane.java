@@ -31,6 +31,7 @@ import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.JEditorPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -53,7 +54,6 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 		infosPane.add(releaseInfos(release));
 		infosPane.add(albumsInfos(release.getCollectionAlbums()));
 		setViewportView(infosPane);
-
 	}
 
 	public DetailedAlbumAndDiscogsInfoPane(Album album) {
@@ -95,12 +95,11 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 		return albumsPane;
 	}
 	
-	private JTextArea albumInfo(Album album) {
+	private JEditorPane albumInfo(Album album) {
 		
-		JTextArea infoAlbum = new JTextArea(20, 200);
-		infoAlbum.setEditable(false);
-
+		JEditorPane infoAlbum = new JEditorPane();
 		infoAlbum.setText(album.getJsonString());
+		infoAlbum.setEditable(false);
 		infoAlbum.setFont(new Font("monospaced", Font.BOLD, 14));
 		return infoAlbum;
 	}
