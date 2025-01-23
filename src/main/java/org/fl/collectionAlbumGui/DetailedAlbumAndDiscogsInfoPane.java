@@ -68,11 +68,10 @@ public class DetailedAlbumAndDiscogsInfoPane extends JPanel {
 	
 	private void releaseInfos(DiscogsAlbumRelease release) {
 		
-		JTextArea infoRelease = new JTextArea(20, 200);
+		JTextArea infoRelease = new JTextArea(release.getInfo(false));
 		infoRelease.setEditable(false);
-		
-		infoRelease.setText(release.getInfo(false));
 		infoRelease.setFont(new Font("monospaced", Font.BOLD, 14));
+		
 		JScrollPane infoFilesScroll = new JScrollPane(infoRelease);
 		add(infoFilesScroll);
 	}
