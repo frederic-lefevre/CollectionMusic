@@ -27,6 +27,7 @@ package org.fl.collectionAlbumGui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Image;
 import java.io.IOException;
 import java.util.Set;
 
@@ -120,6 +121,9 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 		return infoAlbum;
 	}
 	
+	private static final int MAX_COVER_WIDTH = 400;
+	private static final int MAX_COVER_HEIGHT = 400;
+	
 	private JPanel albumOtherInfo(Album album) {
 		
 		JPanel albumPane = new JPanel();
@@ -127,7 +131,21 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 		
 		if (album.getCoverImage() != null) {
 			try {
-				 albumPane.add(new JLabel(new ImageIcon(ImageIO.read(album.getCoverImage().toFile()))));
+				ImageIcon cover = new ImageIcon(ImageIO.read(album.getCoverImage().toFile()));
+				final int coverWidth = cover.getIconWidth();
+				final int coverHeight = cover.getIconHeight();
+				int adjustedCoverWidth;
+				int adjustedCoverHeight;
+				if (coverWidth > coverHeight) {
+					adjustedCoverWidth = MAX_COVER_WIDTH;
+					adjustedCoverHeight = (coverHeight * MAX_COVER_WIDTH)/coverWidth;
+				} else {
+					adjustedCoverHeight = MAX_COVER_HEIGHT;
+					adjustedCoverWidth = (coverWidth* MAX_COVER_HEIGHT)/coverHeight;
+				}
+				ImageIcon adjusteCover = new ImageIcon(cover.getImage().getScaledInstance(adjustedCoverWidth, adjustedCoverHeight, Image.SCALE_SMOOTH));
+
+				albumPane.add(new JLabel(adjusteCover));
 			} catch (IOException e) {
 				albumPane.add(new JLabel("Fichier couverture non trouvé: " + album.getCoverImage().toString()));
 			}
