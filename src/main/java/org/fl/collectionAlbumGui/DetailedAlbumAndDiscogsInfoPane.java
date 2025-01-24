@@ -37,6 +37,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import org.fl.collectionAlbum.albums.Album;
+import org.fl.collectionAlbum.albums.AlbumUtils;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory;
 
@@ -99,7 +100,7 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 		
 		JEditorPane infoAlbum = new JEditorPane();
 		infoAlbum.setContentType("text/html");
-		infoAlbum.setText(album.getSimpleHtml());
+		infoAlbum.setText(AlbumUtils.getSimpleHtml(album));
 		infoAlbum.setEditable(false);
 		infoAlbum.setFont(new Font("monospaced", Font.BOLD, 14));
 		return infoAlbum;
