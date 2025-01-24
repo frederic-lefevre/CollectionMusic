@@ -129,6 +129,13 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 		JPanel albumPane = new JPanel();
 		albumPane.setLayout(new BoxLayout(albumPane, BoxLayout.Y_AXIS));
 		
+		albumPane.add(getCoverImage(album));
+		
+		return albumPane;
+	}
+	
+	private JLabel getCoverImage(Album album) {
+		
 		if (album.getCoverImage() != null) {
 			try {
 				ImageIcon cover = new ImageIcon(ImageIO.read(album.getCoverImage().toFile()));
@@ -145,14 +152,12 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 				}
 				ImageIcon adjusteCover = new ImageIcon(cover.getImage().getScaledInstance(adjustedCoverWidth, adjustedCoverHeight, Image.SCALE_SMOOTH));
 
-				albumPane.add(new JLabel(adjusteCover));
+				return new JLabel(adjusteCover);
 			} catch (IOException e) {
-				albumPane.add(new JLabel("Fichier couverture non trouvé: " + album.getCoverImage().toString()));
+				return new JLabel("Fichier couverture non trouvé: " + album.getCoverImage().toString());
 			}
 		} else {
-			albumPane.add(new JLabel("Album sans fichier couverture"));
+			return new  JLabel("Album sans fichier couverture");
 		}
-		
-		return albumPane;
 	}
 }
