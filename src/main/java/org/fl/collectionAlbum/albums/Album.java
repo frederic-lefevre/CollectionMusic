@@ -1,7 +1,7 @@
 /*
  MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -38,6 +38,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.fl.collectionAlbum.MusicArtefact;
+import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.ReleaseMatchResult;
@@ -50,6 +51,7 @@ import org.fl.collectionAlbum.json.AlbumParser;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 import org.fl.collectionAlbum.utils.FuzzyPeriod;
+import org.fl.collectionAlbum.utils.TemporalUtils;
 
 import com.google.gson.JsonObject;
 
@@ -296,6 +298,90 @@ public class Album extends MusicArtefact {
 			return null;
 		}
 	}
+	
+	public String getSimpleHtml() {
+		
+		StringBuffer buf = new StringBuffer();	
+		
+		buf.append("<html><body>");
+		buf.append("<h2>").append(getTitre()).append("</h2");
+		
+		List<Artiste> artistes = getAuteurs();
+		if (artistes != null) {
+			buf.append("<h3>Artistes</h3>");
+			
+			artistes.forEach(artiste ->
+				buf.append(artiste.getPrenoms()).append(" ").append(artiste.getNom()).append("<br/>")
+			);
+			
+			if (hasIntervenant()) {
+				buf.append("Interprètes:");
+				buf.append("<ul>");
+				getChefsOrchestre().forEach(chefOrchestre ->
+					buf.append("<li>Direction:").append(chefOrchestre.getPrenoms()).append(" ").append(chefOrchestre.getNom()).append("</li>")
+						);
+				getInterpretes().forEach(interprete ->
+					buf.append("<li>Interprète:").append(interprete.getPrenoms()).append(" ").append(interprete.getNom()).append("</li>")
+				);
+				getEnsembles().forEach(ensemble ->
+					buf.append("<li>Ensemble:").append(ensemble.getPrenoms()).append(" ").append(ensemble.getNom()).append("</li>")
+				);
+				buf.append("</ul>");
+			}
+		}
+		
+		buf.append("<h3>Dates de composition / Dates d'enregistrement</h3>");
+		buf.append("<ul><li>");
+		buf.append(TemporalUtils.formatDate(getDebutComposition()));
+		buf.append(" - ");
+		buf.append(TemporalUtils.formatDate(getFinComposition()));
+		buf.append("</li>");
+		if (hasSpecificCompositionDates()) {
+			buf.append("<li>");
+			buf.append(TemporalUtils.formatDate(getDebutEnregistrement()));
+			buf.append(" - ");
+			buf.append(TemporalUtils.formatDate(getFinEnregistrement()));
+			buf.append("</li>");
+		}
+		buf.append("</ul>");
+		buf.append("<h3>Format</h3>");
+		buf.append(getFormatAlbum().mediaSupportsHtmlList());
+		buf.append("<h3>Fichiers media</h3>");
+		if (hasMediaFiles()) {
+			Stream.of(ContentNature.values()).forEach(contentNature -> {
+				if (getFormatAlbum().hasMediaFiles(contentNature)) {
+					buf.append("  <h4>Fichiers " + contentNature.getNom() + "</h4>\n");
+					buf.append("  <table>\n");
+					getFormatAlbum().getMediaFiles(contentNature).forEach(mediaFile -> {
+						buf.append("    <tr><td class=\"mediadetail\">\n");
+						buf.append(mediaFile.displayMediaFileDetailWithFileLink("<br/>\n"));
+						buf.append("    </td></tr>\n");							
+					});
+					buf.append("  </table>\n");
+				}
+			});
+		} else {
+			buf.append("<p>Aucun fichier media.</p>");
+		}
+		
+		if (hasDiscogsRelease()) {
+			buf.append("<h3>Release id Discogs: ").append(getDiscogsLink()).append("</h3>");
+		}
+		
+		if (hasNotes()) {
+			buf.append("<h3>Notes</h3>");
+			getNotes().forEach(note -> buf.append("<p>").append(note).append("</p>"));
+		}
+		
+		if (hasUrlLinks()) {
+			getUrlLinks().forEach(urlLink -> buf.append(" <li><h3><a href=\"").append(urlLink.toString()).append(""));
+		}
+
+		buf.append("</body></html>");
+		return buf.toString();
+		
+	}
+
 	
     @Override
     public boolean additionnalInfo() {

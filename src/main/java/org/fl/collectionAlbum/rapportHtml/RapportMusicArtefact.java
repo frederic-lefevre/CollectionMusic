@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -58,9 +58,8 @@ public class RapportMusicArtefact extends RapportHtml {
 			}
 		}
 		
-		String discogsLink = musicArtefact.getDiscogsLink();
-		if ((discogsLink != null) && !discogsLink.isEmpty()) {
-			String discogsReleaseUrl = Control.getDiscogsBaseUrlForRelease() + discogsLink;
+		if (musicArtefact.hasDiscogsRelease()) {
+			String discogsReleaseUrl = Control.getDiscogsBaseUrlForRelease() + musicArtefact.getDiscogsLink();
 			write("  <h3>Discogs link</h3>\n");
 			write(DISCOGS_LINK1);
 			write(discogsReleaseUrl);
@@ -69,18 +68,16 @@ public class RapportMusicArtefact extends RapportHtml {
 			write(DISCOGS_LINK3);
 		}
 		
-		List<String> notes = musicArtefact.getNotes();
-		if ((notes != null) && !notes.isEmpty()) {
+		if ( musicArtefact.hasNotes()) {
 			write("  <h3>Notes</h3>\n");
-			for (String note : notes) {
+			for (String note : musicArtefact.getNotes()) {
 				write("<p>").write(note).write("</p>\n");
 			}
 		}
 		
-		List<String> urlInfos = musicArtefact.getUrlLinks();
-		if ((urlInfos != null) && !urlInfos.isEmpty()) {
+		if (musicArtefact.hasUrlLinks()) {
 			write("<ul>\n");
-			for (String url : urlInfos) {
+			for (String url : musicArtefact.getUrlLinks()) {
 				URI infosUri = RapportStructuresAndNames.getArtefactInfosAbsoluteUri(url) ;
 				write("  <li><h3><a href=\"").write(infosUri.toString()).write("\">").write(url).write("</a></h3></li>\n") ;
 			}

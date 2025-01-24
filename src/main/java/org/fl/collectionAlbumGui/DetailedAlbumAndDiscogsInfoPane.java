@@ -98,7 +98,8 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 	private JEditorPane albumInfo(Album album) {
 		
 		JEditorPane infoAlbum = new JEditorPane();
-		infoAlbum.setText(album.getJsonString());
+		infoAlbum.setContentType("text/html");
+		infoAlbum.setText(album.getSimpleHtml());
 		infoAlbum.setEditable(false);
 		infoAlbum.setFont(new Font("monospaced", Font.BOLD, 14));
 		return infoAlbum;
