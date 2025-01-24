@@ -27,11 +27,15 @@ package org.fl.collectionAlbumGui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.io.IOException;
 import java.util.Set;
 
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JEditorPane;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
@@ -96,7 +100,17 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 		return albumsPane;
 	}
 	
-	private JEditorPane albumInfo(Album album) {
+	private JPanel albumInfo(Album album) {
+		
+		JPanel albumPane = new JPanel();
+		albumPane.setLayout(new BoxLayout(albumPane, BoxLayout.X_AXIS));
+		
+		albumPane.add(albumTextInfo(album));
+		albumPane.add(albumOtherInfo(album));
+		return albumPane;
+	}
+	
+	private JEditorPane albumTextInfo(Album album) {
 		
 		JEditorPane infoAlbum = new JEditorPane();
 		infoAlbum.setContentType("text/html");
@@ -104,5 +118,23 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 		infoAlbum.setEditable(false);
 		infoAlbum.setFont(new Font("monospaced", Font.BOLD, 14));
 		return infoAlbum;
+	}
+	
+	private JPanel albumOtherInfo(Album album) {
+		
+		JPanel albumPane = new JPanel();
+		albumPane.setLayout(new BoxLayout(albumPane, BoxLayout.Y_AXIS));
+		
+		if (album.getCoverImage() != null) {
+			try {
+				 albumPane.add(new JLabel(new ImageIcon(ImageIO.read(album.getCoverImage().toFile()))));
+			} catch (IOException e) {
+				albumPane.add(new JLabel("Fichier couverture non trouvé: " + album.getCoverImage().toString()));
+			}
+		} else {
+			albumPane.add(new JLabel("Album sans fichier couverture"));
+		}
+		
+		return albumPane;
 	}
 }
