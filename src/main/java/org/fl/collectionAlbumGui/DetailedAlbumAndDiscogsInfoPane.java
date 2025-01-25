@@ -25,26 +25,31 @@ SOFTWARE.
 package org.fl.collectionAlbumGui;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
 import java.io.IOException;
+import java.util.List;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.albums.AlbumUtils;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory;
+import org.fl.collectionAlbumGui.listener.OsActionListener;
 
 public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 
@@ -73,23 +78,45 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 		
 		String discogsReleaseId = album.getDiscogsLink();					
 		if (discogsReleaseId != null) {
-			
-			DiscogsAlbumRelease release = DiscogsInventory.getDiscogsAlbumRelease(discogsReleaseId);
-			if (release != null) {
-				infosPane.add(releaseInfos(release));
-			}
+			infosPane.add(releaseInfos(DiscogsInventory.getDiscogsAlbumRelease(discogsReleaseId)));			
 		}
 		setViewportView(infosPane);
 	}
 	
-	private JTextArea releaseInfos(DiscogsAlbumRelease release) {
+	private JPanel releaseInfos(DiscogsAlbumRelease release) {
 		
-		JTextArea infoRelease = new JTextArea(release.getInfo(false));
+		String releaseInfo;
+		if (release == null) {
+			releaseInfo = "Release inconnue dans l'inventaire des releases Discogs";
+		} else {
+			releaseInfo = release.getInfo(false);
+		}
+		
+		JPanel releasePane = new JPanel();
+		releasePane.setLayout(new BoxLayout(releasePane, BoxLayout.X_AXIS));
+		
+		JTextArea infoRelease = new JTextArea(releaseInfo);
 		infoRelease.setEditable(false);
 		infoRelease.setFont(new Font("monospaced", Font.BOLD, 14));
 		infoRelease.setBorder(BorderFactory.createMatteBorder(1,1,1,1,Color.BLACK));
 		
-		return infoRelease;
+		releasePane.add(infoRelease);
+		
+		Font font = new Font("Verdana", Font.BOLD, 14);
+		
+		JButton showDiscogsRelease = new JButton("Montrer la release sur le site Discogs"); 
+		showDiscogsRelease.setFont(font);
+		showDiscogsRelease.setBackground(Color.GREEN);
+		showDiscogsRelease.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		OsActionListener<List<String>> showDiscogsReleasenListener = 
+				new OsActionListener<>(List.of(Control.getDiscogsBaseUrlForRelease() + release.getInventoryCsvAlbum().getReleaseId()), Control.getDisplayUrlAction());
+		
+		showDiscogsRelease.addActionListener(showDiscogsReleasenListener);
+		
+		releasePane.add(showDiscogsRelease);
+		
+		return releasePane;
 	}
 	
 	private JPanel albumsInfos(Set<Album> albums) {
