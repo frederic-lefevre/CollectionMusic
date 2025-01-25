@@ -79,6 +79,7 @@ public class Control {
 	private OsAction<String> displayFolderAction;
 	private Path discogsCollectionCsvExportPath;
 	private String discogsBaseUrlForRelease;
+	private String cssForGui;
    	
 	private Control() {
 		
@@ -138,6 +139,9 @@ public class Control {
 					collectionProperties.getProperty("album.showFolder.command.title"), 
 					getOsCommandAndOption(collectionProperties.getProperty("album.showFolder.command.cmd")),
 					new StringCommandParameter());
+			
+			cssForGui = collectionProperties.getFileContentFromURI("album.cssForGui", Charset.defaultCharset());
+			
 			
 		} catch (URISyntaxException e) {
 			System.out.println("URI syntax exception for property file: " + DEFAULT_PROP_FILE);
@@ -219,6 +223,10 @@ public class Control {
 
 	public static String getDiscogsBaseUrlForRelease() {
 		return getInstance().discogsBaseUrlForRelease;
+	}
+	
+	public static String getCssForGui() {
+		return getInstance().cssForGui;
 	}
 	
 	private Map<String, OsCommandAndOption> getMapOfOsCommandsAndOptions(String osCmdPropBase) {

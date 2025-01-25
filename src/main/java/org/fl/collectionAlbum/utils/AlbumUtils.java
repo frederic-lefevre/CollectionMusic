@@ -27,6 +27,7 @@ package org.fl.collectionAlbum.utils;
 import java.util.List;
 import java.util.stream.Stream;
 
+import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.format.ContentNature;
@@ -37,7 +38,10 @@ public class AlbumUtils {
 		
 		StringBuilder buf = new StringBuilder();	
 		
-		buf.append("<html><body>");
+		buf.append("<html><head><style>");
+		buf.append(Control.getCssForGui());
+		buf.append("</style></head><body>");
+		
 		buf.append("<h2>").append(album.getTitre()).append("</h2");
 		
 		List<Artiste> artistes = album.getAuteurs();
@@ -45,20 +49,20 @@ public class AlbumUtils {
 			buf.append("<h3>Artistes</h3>");
 			
 			artistes.forEach(artiste ->
-				buf.append(artiste.getPrenoms()).append(" ").append(artiste.getNom()).append("<br/>")
+				buf.append("<span class=\"artiste\">").append(artiste.getPrenoms()).append(" ").append(artiste.getNom()).append("</span><br/>")
 			);
 			
 			if (album.hasIntervenant()) {
 				buf.append("Interprètes:");
 				buf.append("<ul>");
 				album.getChefsOrchestre().forEach(chefOrchestre ->
-					buf.append("<li>Direction:").append(chefOrchestre.getPrenoms()).append(" ").append(chefOrchestre.getNom()).append("</li>")
+					buf.append("<li>Direction: ").append(chefOrchestre.getPrenoms()).append(" ").append(chefOrchestre.getNom()).append("</li>")
 						);
 				album.getInterpretes().forEach(interprete ->
-					buf.append("<li>Interprète:").append(interprete.getPrenoms()).append(" ").append(interprete.getNom()).append("</li>")
+					buf.append("<li>Interprète: ").append(interprete.getPrenoms()).append(" ").append(interprete.getNom()).append("</li>")
 				);
 				album.getEnsembles().forEach(ensemble ->
-					buf.append("<li>Ensemble:").append(ensemble.getPrenoms()).append(" ").append(ensemble.getNom()).append("</li>")
+					buf.append("<li>Ensemble: ").append(ensemble.getPrenoms()).append(" ").append(ensemble.getNom()).append("</li>")
 				);
 				buf.append("</ul>");
 			}

@@ -44,6 +44,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.border.EmptyBorder;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
@@ -133,6 +134,7 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 		
 		JPanel albumPane = new JPanel();
 		albumPane.setLayout(new BoxLayout(albumPane, BoxLayout.X_AXIS));
+		albumPane.setBorder(BorderFactory.createMatteBorder(1,1,1,1,Color.BLACK));
 		
 		albumPane.add(albumTextInfo(album));
 		albumPane.add(albumOtherInfo(album));
@@ -161,6 +163,11 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 		
 		if (album.hasMediaFiles()) {
 			
+			JLabel titreMedia = new JLabel("Folders contenant les medias:");
+			titreMedia.setBorder(new EmptyBorder(20, 0, 20, 0));
+			titreMedia.setFont(new Font("Verdana", Font.BOLD, 14));
+			albumPane.add(titreMedia);
+			
 			album.getAllMediaFiles().stream()
 					.map(mediaFile -> mediaFile.getMediaFilePaths())
 					.flatMap(Collection::stream)
@@ -168,6 +175,7 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 					.distinct()
 					.forEach(mediaFolder -> {
 						JButton showMediaFolderButton = new JButton(mediaFolder);
+						showMediaFolderButton.setBorder(new EmptyBorder(20, 0, 20, 0));
 						
 						OsActionListener<String> showMediaFolderListener = new OsActionListener<>(mediaFolder, Control.getDisplayFolderAction());
 						showMediaFolderButton.addActionListener(showMediaFolderListener);
