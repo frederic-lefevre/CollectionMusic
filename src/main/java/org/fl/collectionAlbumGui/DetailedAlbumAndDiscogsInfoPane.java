@@ -47,9 +47,9 @@ import javax.swing.JTextArea;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
-import org.fl.collectionAlbum.albums.AlbumUtils;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory;
+import org.fl.collectionAlbum.utils.AlbumUtils;
 import org.fl.collectionAlbumGui.listener.OsActionListener;
 
 public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {

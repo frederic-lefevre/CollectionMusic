@@ -22,14 +22,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.albums;
+package org.fl.collectionAlbum.utils;
 
 import java.util.List;
 import java.util.stream.Stream;
 
+import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.format.ContentNature;
-import org.fl.collectionAlbum.utils.TemporalUtils;
 
 public class AlbumUtils {
 	
