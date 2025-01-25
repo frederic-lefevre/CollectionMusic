@@ -26,8 +26,8 @@ package org.fl.collectionAlbumGui.listener;
 
 import java.awt.event.ActionEvent;
 
-import org.fl.collectionAlbum.OsAction;
 import org.fl.collectionAlbum.albums.Album;
+import org.fl.collectionAlbum.osAction.OsAction;
 import org.fl.collectionAlbumGui.AlbumsJTable;
 
 public class AlbumCommandListener implements java.awt.event.ActionListener {

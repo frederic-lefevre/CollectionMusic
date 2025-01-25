@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,15 +22,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum;
+package org.fl.collectionAlbum.osAction;
 
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-public interface OsActionCommandParameter<T> {
+public class ListOfStringCommandParameter implements OsActionCommandParameter<List<String>> {
 
-	public Function<T, List<String>> getParametersGetter();
-	
-	public Predicate<T> getActionValidityPredicate();
+	@Override
+	public Function<List<String>, List<String>> getParametersGetter() {		
+		return Function.identity();
+	}
+
+	@Override
+	public Predicate<List<String>> getActionValidityPredicate() {		
+		return (o) -> o != null;
+	}
+
 }

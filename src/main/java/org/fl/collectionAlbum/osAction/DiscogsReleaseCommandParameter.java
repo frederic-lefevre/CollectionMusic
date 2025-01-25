@@ -1,7 +1,7 @@
 /*
  MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,39 +22,44 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-package org.fl.collectionAlbum.albums;
+package org.fl.collectionAlbum.osAction;
 
 import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.fl.collectionAlbum.Control;
-import org.fl.collectionAlbum.OsActionCommandParameter;
+import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
 
-public enum AlbumCommandParameter implements OsActionCommandParameter<Album> {
+public enum DiscogsReleaseCommandParameter implements OsActionCommandParameter<DiscogsAlbumRelease> {
 
-	JSON(
-			(album) -> List.of(album.getJsonFilePath().toAbsolutePath().toString()), 
-			(album) -> true),
-	DISCOGS_RELEASE_INFO(
-			(album) -> List.of(Control.getDiscogsBaseUrlForRelease() + album.getDiscogsLink()), 
-			(album) -> (album.getDiscogsLink() != null) && !album.getDiscogsLink().isEmpty());
+	DISCOGS_RELEASE_INFO( 
+			(release) -> List.of(Control.getDiscogsBaseUrlForRelease() + release.getInventoryCsvAlbum().getReleaseId()),
+			(release) -> release.getInventoryCsvAlbum().getReleaseId() != null
+			),
+	ALBUMS_JSON(
+			(release) -> release.getCollectionAlbums().stream()
+				.map(album -> album.getJsonFilePath().toAbsolutePath().toString())
+				.collect(Collectors.toList()),
+			(release) -> ((release.getCollectionAlbums() != null) && !release.getCollectionAlbums().isEmpty())
+			);
 	
-	private final Function<Album,List<String>> parametersGetter;
-	private final Predicate<Album> actionValidityPredicate;
+	private final Function<DiscogsAlbumRelease,List<String>> parametersGetter;
+	private final Predicate<DiscogsAlbumRelease> actionValidityPredicate;
 	
-	private AlbumCommandParameter(Function<Album,List<String>> gp, Predicate<Album> vp) {
-		parametersGetter = gp;
+	private DiscogsReleaseCommandParameter(Function<DiscogsAlbumRelease,List<String>> pg, Predicate<DiscogsAlbumRelease> vp) {
+		parametersGetter = pg;
 		actionValidityPredicate = vp;
 	}
 
 	@Override
-	public Function<Album, List<String>> getParametersGetter() {
+	public Function<DiscogsAlbumRelease, List<String>> getParametersGetter() {
 		return parametersGetter;
 	}
 
 	@Override
-	public Predicate<Album> getActionValidityPredicate() {
+	public Predicate<DiscogsAlbumRelease> getActionValidityPredicate() {
 		return actionValidityPredicate;
 	}
 

@@ -27,7 +27,7 @@ package org.fl.collectionAlbumGui.listener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import org.fl.collectionAlbum.OsAction;
+import org.fl.collectionAlbum.osAction.OsAction;
 
 public class OsActionListener<T> implements ActionListener {
 

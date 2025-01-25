@@ -30,8 +30,8 @@ import java.util.List;
 
 import javax.swing.JPopupMenu;
 
-import org.fl.collectionAlbum.OsAction;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
+import org.fl.collectionAlbum.osAction.OsAction;
 import org.fl.collectionAlbumGui.CollectionMenuItems;
 import org.fl.collectionAlbumGui.MediaFilesJTable;
 import org.fl.collectionAlbumGui.listener.MediaFileCommandListener;

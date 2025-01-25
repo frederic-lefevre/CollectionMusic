@@ -36,12 +36,14 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.fl.collectionAlbum.albums.Album;
-import org.fl.collectionAlbum.albums.AlbumCommandParameter;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
-import org.fl.collectionAlbum.disocgs.DiscogsReleaseCommandParameter;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
-import org.fl.collectionAlbum.mediaPath.MediaFilePathCommandParameter;
+import org.fl.collectionAlbum.osAction.AlbumCommandParameter;
+import org.fl.collectionAlbum.osAction.DiscogsReleaseCommandParameter;
+import org.fl.collectionAlbum.osAction.ListOfStringCommandParameter;
+import org.fl.collectionAlbum.osAction.MediaFilePathCommandParameter;
+import org.fl.collectionAlbum.osAction.OsAction;
 import org.fl.util.AdvancedProperties;
 import org.fl.util.RunningContext;
 

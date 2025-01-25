@@ -22,32 +22,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbumGui.listener;
+package org.fl.collectionAlbum.osAction;
 
-import java.awt.event.ActionEvent;
+import java.util.List;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
-import org.fl.collectionAlbum.mediaPath.MediaFilePath;
-import org.fl.collectionAlbum.osAction.OsAction;
-import org.fl.collectionAlbumGui.MediaFilesJTable;
+public interface OsActionCommandParameter<T> {
 
-public class MediaFileCommandListener implements java.awt.event.ActionListener {
-
-	private final MediaFilesJTable mediaFileJTable;
-	private final OsAction<MediaFilePath> osAction;
+	public Function<T, List<String>> getParametersGetter();
 	
-	public MediaFileCommandListener(MediaFilesJTable mediaFileJTable, OsAction<MediaFilePath> osAction) {
-		this.mediaFileJTable = mediaFileJTable;
-		this.osAction = osAction;
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		
-		MediaFilePath mediaFilePath = mediaFileJTable.getSelectedMediaFile();
-		
-		if (mediaFilePath != null) {
-			osAction.runOsAction(mediaFilePath);
-		}
-	}
-
+	public Predicate<T> getActionValidityPredicate();
 }
