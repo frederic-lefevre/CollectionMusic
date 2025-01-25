@@ -62,14 +62,14 @@ public abstract class AbstractAudioFile extends AbstractMediaFile {
 		return samplingRate;
 	}
 	
-	protected void appendCommonAudioFileDetail(StringBuilder audioFilesDetails, String separator) {
+	protected void appendCommonAudioFileDetail(StringBuilder audioFilesDetails, String separator, boolean withPrefix) {
 		appendCommonAudioSpecs(audioFilesDetails, separator);
-		appendCommonMediaFileDetail(audioFilesDetails, separator);
+		appendCommonMediaFileDetail(audioFilesDetails, separator, withPrefix);
 	}
 	
-	protected void appendCommonAudioFileDetailWithLink(StringBuilder audioFilesDetails, String separator) {
+	protected void appendCommonAudioFileDetailWithLink(StringBuilder audioFilesDetails, String separator, boolean withPrefix) {
 		appendCommonAudioSpecs(audioFilesDetails, separator);
-		appendCommonMediaFileDetailWithLink(audioFilesDetails, separator);
+		appendCommonMediaFileDetailWithLink(audioFilesDetails, separator, withPrefix);
 	}
 	
 	protected void appendCommonAudioFileDetailTitles(StringBuilder audioFilesDetails, String separator) {

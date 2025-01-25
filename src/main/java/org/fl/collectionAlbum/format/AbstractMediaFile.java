@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -61,8 +61,8 @@ public abstract class AbstractMediaFile {
 		checkMediaFilePaths();
 	}
 	
-	public abstract String displayMediaFileDetail(String separator);
-	public abstract String displayMediaFileDetailWithFileLink(String separator);
+	public abstract String displayMediaFileDetail(String separator, boolean withPrefix);
+	public abstract String displayMediaFileDetailWithFileLink(String separator, boolean withPrefix);
 	public abstract String displayMediaFileDetailTitles(String separator);
 	
 	public abstract String displayMediaFileSummary();
@@ -134,7 +134,10 @@ public abstract class AbstractMediaFile {
 		}
 	}
 	
-	protected void appendCommonMediaFileDetail(StringBuilder mediaFilesDetails, String separator) {
+	protected void appendCommonMediaFileDetail(StringBuilder mediaFilesDetails, String separator, boolean withPrefix) {
+		if (withPrefix) {
+			mediaFilesDetails.append("Source: ");
+		}
 		mediaFilesDetails.append(getSource());
 		String note = getNote();
 		if ((note != null) && (!note.isEmpty())) {
@@ -142,8 +145,8 @@ public abstract class AbstractMediaFile {
 		}
 	}
 	
-	protected void appendCommonMediaFileDetailWithLink(StringBuilder mediaFilesDetails, String separator) {
-		appendCommonMediaFileDetail(mediaFilesDetails, separator);
+	protected void appendCommonMediaFileDetailWithLink(StringBuilder mediaFilesDetails, String separator, boolean withPrefix) {
+		appendCommonMediaFileDetail(mediaFilesDetails, separator, withPrefix);
 		if (mediaFilePaths != null) {
 			mediaFilePaths.forEach(mediaFilePath -> {
 				mediaFilesDetails.append(separator)

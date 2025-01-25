@@ -80,15 +80,14 @@ public class AlbumUtils {
 		buf.append("</ul>");
 		buf.append("<h3>Format</h3>");
 		buf.append(album.getFormatAlbum().mediaSupportsHtmlList());
-		buf.append("<h3>Fichiers media</h3>");
 		if (album.hasMediaFiles()) {
 			Stream.of(ContentNature.values()).forEach(contentNature -> {
 				if (album.getFormatAlbum().hasMediaFiles(contentNature)) {
-					buf.append("  <h4>Fichiers " + contentNature.getNom() + "</h4>\n");
+					buf.append("  <h3>Fichiers " + contentNature.getNom() + "</h3>\n");
 					buf.append("  <table>\n");
 					album.getFormatAlbum().getMediaFiles(contentNature).forEach(mediaFile -> {
 						buf.append("    <tr><td class=\"mediadetail\">\n");
-						buf.append(mediaFile.displayMediaFileDetailWithFileLink("<br/>\n"));
+						buf.append(mediaFile.displayMediaFileDetailWithFileLink("<br/>\n", true));
 						buf.append("    </td></tr>\n");							
 					});
 					buf.append("  </table>\n");
