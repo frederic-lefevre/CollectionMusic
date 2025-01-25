@@ -30,6 +30,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -158,6 +159,23 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 		
 		albumPane.add(getCoverImage(album));
 		
+		if (album.hasMediaFiles()) {
+			
+			album.getAllMediaFiles().stream()
+					.map(mediaFile -> mediaFile.getMediaFilePaths())
+					.flatMap(Collection::stream)
+					.map(mediaFilePath -> mediaFilePath.getPath().toString())
+					.distinct()
+					.forEach(mediaFolder -> {
+						JButton showMediaFolderButton = new JButton(mediaFolder);
+						
+						OsActionListener<String> showMediaFolderListener = new OsActionListener<>(mediaFolder, Control.getDisplayFolderAction());
+						showMediaFolderButton.addActionListener(showMediaFolderListener);
+						
+						albumPane.add(showMediaFolderButton);
+					});						
+		}
+			
 		return albumPane;
 	}
 	

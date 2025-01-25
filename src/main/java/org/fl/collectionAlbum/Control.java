@@ -43,6 +43,7 @@ import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.fl.collectionAlbum.osAction.AlbumCommandParameter;
 import org.fl.collectionAlbum.osAction.DiscogsReleaseCommandParameter;
 import org.fl.collectionAlbum.osAction.ListOfStringCommandParameter;
+import org.fl.collectionAlbum.osAction.StringCommandParameter;
 import org.fl.collectionAlbum.osAction.MediaFilePathCommandParameter;
 import org.fl.collectionAlbum.osAction.OsAction;
 import org.fl.collectionAlbum.osAction.OsCommandAndOption;
@@ -75,6 +76,7 @@ public class Control {
 	private List<OsAction<DiscogsAlbumRelease>> osActionsOnDiscogsRelease;
 	private List<OsAction<MediaFilePath>> osActionsOnMediaFilePath;
 	private OsAction<List<String>> displayUrlAction;
+	private OsAction<String> displayFolderAction;
 	private Path discogsCollectionCsvExportPath;
 	private String discogsBaseUrlForRelease;
    	
@@ -131,6 +133,11 @@ public class Control {
 					collectionProperties.getProperty("album.showUrl.command.title"), 
 					getOsCommandAndOption(collectionProperties.getProperty("album.showUrl.command.cmd")),
 					new ListOfStringCommandParameter());
+			
+			displayFolderAction = new OsAction<String>(
+					collectionProperties.getProperty("album.showFolder.command.title"), 
+					getOsCommandAndOption(collectionProperties.getProperty("album.showFolder.command.cmd")),
+					new StringCommandParameter());
 			
 		} catch (URISyntaxException e) {
 			System.out.println("URI syntax exception for property file: " + DEFAULT_PROP_FILE);
@@ -200,6 +207,10 @@ public class Control {
 	
 	public static OsAction<List<String>> getDisplayUrlAction() {
 		return getInstance().displayUrlAction;
+	}
+	
+	public static OsAction<String> getDisplayFolderAction() {
+		return getInstance().displayFolderAction;
 	}
 	
 	public static Path getDiscogsCollectionCsvExportPath() {
