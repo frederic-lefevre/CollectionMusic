@@ -35,7 +35,7 @@ public class AlbumUtils {
 	
 	public static String getSimpleHtml(Album album) {
 		
-		StringBuffer buf = new StringBuffer();	
+		StringBuilder buf = new StringBuilder();	
 		
 		buf.append("<html><body>");
 		buf.append("<h2>").append(album.getTitre()).append("</h2");

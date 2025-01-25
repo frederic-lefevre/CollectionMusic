@@ -25,7 +25,6 @@ SOFTWARE.
 package org.fl.collectionAlbum.format;
 
 import java.util.Set;
-import java.util.function.BiConsumer;
 
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
@@ -62,22 +61,21 @@ public class VideoFile extends AbstractMediaFile {
 
 	@Override
 	public String displayMediaFileDetail(String separator, boolean withPrefix) {		
-		return fileDetail(separator, particularDetail, (sb, s) -> appendCommonMediaFileDetail(sb, s, withPrefix));
+		return fileDetail(separator, (sb, s) -> appendParticularDetail(sb, s, withPrefix), (sb, s) -> appendCommonMediaFileDetail(sb, s, withPrefix));
 	}
 
 	@Override
 	public String displayMediaFileDetailWithFileLink(String separator, boolean withPrefix) {
-		return fileDetail(separator, particularDetail, (sb, s) -> appendCommonMediaFileDetailWithLink(sb, s, withPrefix));
+		return fileDetail(separator, (sb, s) -> appendParticularDetail(sb, s, withPrefix), (sb, s) -> appendCommonMediaFileDetailWithLink(sb, s, withPrefix));
 	}
 	
-	BiConsumer<StringBuilder, String> particularDetail = (sb, s) ->
-		sb.append(getWidth())
-			.append("x")
-			.append(getHeight())
-			.append(" px")
-			.append(s)
-			.append(getType())
-			.append(s);
+	private void appendParticularDetail(StringBuilder sb, String s, boolean withPrefix) {
+		sb.append(getWidth()).append("x").append(getHeight()).append(" px").append(s);
+		if (withPrefix) {
+			sb.append(TYPE_TITLE).append(": ");
+		}
+		sb.append(getType()).append(s);
+	}
 	
 	@Override
 	public String displayMediaFileSummary() {
