@@ -24,6 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.format;
 
+
 import java.nio.file.Files;
 import java.util.HashSet;
 import java.util.Set;
@@ -136,7 +137,7 @@ public abstract class AbstractMediaFile {
 	
 	protected void appendCommonMediaFileDetail(StringBuilder mediaFilesDetails, String separator, boolean withPrefix) {
 		if (withPrefix) {
-			mediaFilesDetails.append("Source: ");
+			mediaFilesDetails.append(SOURCE_TITLE).append(": ");
 		}
 		mediaFilesDetails.append(getSource());
 		String note = getNote();
