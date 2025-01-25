@@ -28,6 +28,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
+import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -44,6 +45,7 @@ import org.fl.collectionAlbum.osAction.DiscogsReleaseCommandParameter;
 import org.fl.collectionAlbum.osAction.ListOfStringCommandParameter;
 import org.fl.collectionAlbum.osAction.MediaFilePathCommandParameter;
 import org.fl.collectionAlbum.osAction.OsAction;
+import org.fl.collectionAlbum.osAction.OsCommandAndOption;
 import org.fl.util.AdvancedProperties;
 import org.fl.util.RunningContext;
 
@@ -68,6 +70,7 @@ public class Control {
 	private String concertTicketImgUri;
 	private String musicartefactInfosUri;
 	private Map<ContentNature,Path> mediaFileRootPaths;
+	private Map<String, OsCommandAndOption> mapOfOsCommandsAndOptions;
 	private List<OsAction<Album>> osActionsOnAlbum;
 	private List<OsAction<DiscogsAlbumRelease>> osActionsOnDiscogsRelease;
 	private List<OsAction<MediaFilePath>> osActionsOnMediaFilePath;
@@ -118,14 +121,15 @@ public class Control {
 							contentNature, 
 							collectionProperties.getPathFromURI("album." + contentNature.name() + "File.rootPath")));
 				
+			mapOfOsCommandsAndOptions = getMapOfOsCommandsAndOptions("osCommandAndOptions.");
+			
 			osActionsOnAlbum = getOsActionsOnAlbum("album.command.");
 			osActionsOnDiscogsRelease = getOsActionsOnDiscogsRelease("album.discogs.command.");
 			osActionsOnMediaFilePath = getOsActionOnMediaFilePath("album.mediaFile.command.");
 			
 			displayUrlAction = new OsAction<List<String>>(
 					collectionProperties.getProperty("album.showUrl.command.title"), 
-					collectionProperties.getProperty("album.showUrl.command.cmd"),
-					collectionProperties.getListOfString("album.showUrl.command.options", ","),
+					getOsCommandAndOption(collectionProperties.getProperty("album.showUrl.command.cmd")),
 					new ListOfStringCommandParameter());
 			
 		} catch (URISyntaxException e) {
@@ -206,12 +210,33 @@ public class Control {
 		return getInstance().discogsBaseUrlForRelease;
 	}
 	
+	private Map<String, OsCommandAndOption> getMapOfOsCommandsAndOptions(String osCmdPropBase) {
+
+		return collectionProperties.getKeysElements(osCmdPropBase).stream()
+				.map(prop -> new AbstractMap.SimpleEntry<String, OsCommandAndOption>(
+						collectionProperties.getProperty(osCmdPropBase + prop + ".title"),
+						new OsCommandAndOption(
+								collectionProperties.getProperty(osCmdPropBase + prop + ".cmd"),
+								collectionProperties.getListOfString(osCmdPropBase + prop + ".options", ","))))
+				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+	}
+	
+	private OsCommandAndOption getOsCommandAndOption(String cmdTitle) {
+		
+		OsCommandAndOption osCommandAndOption = mapOfOsCommandsAndOptions.get(cmdTitle);
+		if (osCommandAndOption != null) {
+			return osCommandAndOption;
+		} else {
+			albumLog.severe("Missing OsCommandAndOption definition in property file: " + cmdTitle);
+			return null;
+		}
+	}
+	
 	private List<OsAction<Album>> getOsActionsOnAlbum(String osCmdPropBase) {
 
 		return collectionProperties.getKeysElements(osCmdPropBase).stream()
 				.map(prop -> new OsAction<Album>(collectionProperties.getProperty(osCmdPropBase + prop + ".title"),
-						collectionProperties.getProperty(osCmdPropBase + prop + ".cmd"),
-						collectionProperties.getListOfString(osCmdPropBase + prop + ".options", ","),
+						getOsCommandAndOption(collectionProperties.getProperty(osCmdPropBase + prop + ".cmd")),
 						AlbumCommandParameter.valueOf(collectionProperties.getProperty(osCmdPropBase + prop + ".param"))))
 				.collect(Collectors.toList());
 	}
@@ -220,8 +245,7 @@ public class Control {
 
 		return collectionProperties.getKeysElements(osCmdPropBase).stream()
 				.map(prop -> new OsAction<DiscogsAlbumRelease>(collectionProperties.getProperty(osCmdPropBase + prop + ".title"),
-						collectionProperties.getProperty(osCmdPropBase + prop + ".cmd"),
-						collectionProperties.getListOfString(osCmdPropBase + prop + ".options", ","),
+						getOsCommandAndOption(collectionProperties.getProperty(osCmdPropBase + prop + ".cmd")),
 						DiscogsReleaseCommandParameter.valueOf(collectionProperties.getProperty(osCmdPropBase + prop + ".param"))))
 				.collect(Collectors.toList());
 	}
@@ -230,8 +254,7 @@ public class Control {
 		
 		return collectionProperties.getKeysElements(osCmdPropBase).stream()
 				.map(prop -> new OsAction<MediaFilePath>(collectionProperties.getProperty(osCmdPropBase + prop + ".title"),
-						collectionProperties.getProperty(osCmdPropBase + prop + ".cmd"),
-						collectionProperties.getListOfString(osCmdPropBase + prop + ".options", ","),
+						getOsCommandAndOption(collectionProperties.getProperty(osCmdPropBase + prop + ".cmd")),
 						MediaFilePathCommandParameter.valueOf(collectionProperties.getProperty(osCmdPropBase + prop + ".param"))))
 				.collect(Collectors.toList());
 	}

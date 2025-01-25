@@ -35,23 +35,17 @@ public class OsAction<T> {
 	private static final Logger oLog = Logger.getLogger(OsAction.class.getName());
 	
 	private final String actionTitle;
-	private final String actionCommand;
-	private final List<String> actionOptions;
+	private final OsCommandAndOption osCommandAndOption;
 	private final OsActionCommandParameter<T> commandParameter;
 	
-	public OsAction(String t, String c, List<String> o, OsActionCommandParameter<T> a) {
+	public OsAction(String t, OsCommandAndOption osCommandAndOption, OsActionCommandParameter<T> a) {
 		actionTitle   = t;
-		actionCommand = c;
-		actionOptions = o;
+		this.osCommandAndOption = osCommandAndOption;
 		commandParameter = a;
 	}
 
 	public String getActionTitle() {
 		return actionTitle;
-	}
-
-	public String getActionCommand() {
-		return actionCommand;
 	}
 
 	public OsActionCommandParameter<T> getCommandParameter() {
@@ -61,9 +55,9 @@ public class OsAction<T> {
 	public void runOsAction(T o) {
 		
 		List<String> cmdAndParams = new ArrayList<>();
-		cmdAndParams.add(getActionCommand());
-		if ((actionOptions != null) && !actionOptions.isEmpty()) {
-			cmdAndParams.addAll(actionOptions);
+		cmdAndParams.add(osCommandAndOption.getActionCommand());
+		if (osCommandAndOption.hasOptions()) {
+			cmdAndParams.addAll(osCommandAndOption.getActionOptions());
 		}
 		cmdAndParams.addAll(getCommandParameter().getParametersGetter().apply(o));
 		
