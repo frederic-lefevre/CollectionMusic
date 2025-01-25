@@ -42,11 +42,11 @@ public class AlbumUtils {
 		buf.append(Control.getCssForGui());
 		buf.append("</style></head><body>");
 		
-		buf.append("<h2>").append(album.getTitre()).append("</h2");
+		buf.append("<h1>").append(album.getTitre()).append("</h1");
 		
 		List<Artiste> artistes = album.getAuteurs();
 		if (artistes != null) {
-			buf.append("<h3>Artistes</h3>");
+			buf.append("<h3>Artistes:</h3>");
 			
 			artistes.forEach(artiste ->
 				buf.append("<span class=\"artiste\">").append(artiste.getPrenoms()).append(" ").append(artiste.getNom()).append("</span><br/>")
@@ -68,7 +68,7 @@ public class AlbumUtils {
 			}
 		}
 		
-		buf.append("<h3>Dates de composition / Dates d'enregistrement</h3>");
+		buf.append("<h3>Dates de composition / Dates d'enregistrement:</h3>");
 		buf.append("<ul><li>");
 		buf.append(TemporalUtils.formatDate(album.getDebutComposition()));
 		buf.append(" - ");
@@ -82,12 +82,12 @@ public class AlbumUtils {
 			buf.append("</li>");
 		}
 		buf.append("</ul>");
-		buf.append("<h3>Format</h3>");
+		buf.append("<h3>Format:</h3>");
 		buf.append(album.getFormatAlbum().mediaSupportsHtmlList());
 		if (album.hasMediaFiles()) {
 			Stream.of(ContentNature.values()).forEach(contentNature -> {
 				if (album.getFormatAlbum().hasMediaFiles(contentNature)) {
-					buf.append("  <h3>Fichiers " + contentNature.getNom() + "</h3>\n");
+					buf.append("  <h3>Fichiers " + contentNature.getNom() + ":</h3>\n");
 					buf.append("  <table>\n");
 					album.getFormatAlbum().getMediaFiles(contentNature).forEach(mediaFile -> {
 						buf.append("    <tr><td class=\"mediadetail\">\n");
@@ -106,7 +106,7 @@ public class AlbumUtils {
 		}
 		
 		if (album.hasNotes()) {
-			buf.append("<h3>Notes</h3>");
+			buf.append("<h3>Notes:</h3>");
 			album.getNotes().forEach(note -> buf.append("<p>").append(note).append("</p>"));
 		}
 		
