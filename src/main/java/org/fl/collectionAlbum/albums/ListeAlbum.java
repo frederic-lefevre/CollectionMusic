@@ -30,7 +30,7 @@ import java.util.List;
 
 import org.fl.collectionAlbum.RangementComparator;
 import org.fl.collectionAlbum.format.Format;
-import org.fl.collectionAlbum.ListUtils;
+import org.fl.collectionAlbum.utils.ListUtils;
 
 public class ListeAlbum {
 	
