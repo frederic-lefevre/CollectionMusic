@@ -26,6 +26,7 @@ package org.fl.collectionAlbumGui;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.util.List;
 
@@ -34,7 +35,9 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.ListCellRenderer;
 import javax.swing.border.EmptyBorder;
 
 import org.fl.collectionAlbum.Control;
@@ -49,6 +52,7 @@ public class UtilsPane extends JPanel implements ActivableElement {
 	private final JButton pickRandomAlbumsButton;
 	private final JComboBox<Integer> numberOfAlbumBox;
 	
+	private static final int DEFAULT_NUMBER_OF_RANDOM_ALBUMS = 5;
 	private static final Integer[] numberOfAlbumsChoice = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 	
 	public UtilsPane(GenerationPane generationPane) {
@@ -72,16 +76,20 @@ public class UtilsPane extends JPanel implements ActivableElement {
 				new OsActionListener<>(List.of(RapportStructuresAndNames.getAbsoluteHomeCollectionUrl()), Control.getDisplayUrlAction());
 		
 		showCollectionButton.addActionListener(showCollectionListener);
-		
+
 		JPanel choixAleatoirePane = new JPanel();
 		choixAleatoirePane.setLayout(new BoxLayout(choixAleatoirePane, BoxLayout.X_AXIS));
+		choixAleatoirePane.setBorder(new EmptyBorder(60, 0, 20, 60));
 		
 		JLabel titreAlbumsAleatoire = new JLabel("Choisir");
 		titreAlbumsAleatoire.setBorder(new EmptyBorder(0, 5, 0, 5));
 		choixAleatoirePane.add(titreAlbumsAleatoire);
 		
 		numberOfAlbumBox = new JComboBox<>(numberOfAlbumsChoice);
-		numberOfAlbumBox.setSelectedIndex(4);
+		numberOfAlbumBox.setSelectedIndex(DEFAULT_NUMBER_OF_RANDOM_ALBUMS-1);
+		ComboBoxRenderer renderer = new ComboBoxRenderer();
+		renderer.setPreferredSize(new Dimension(50, 15));
+		numberOfAlbumBox.setRenderer(renderer);
 		
 		choixAleatoirePane.add(numberOfAlbumBox);
 		
@@ -100,7 +108,11 @@ public class UtilsPane extends JPanel implements ActivableElement {
 
 	public int getNumberOfAlbums() {
 		int idx = numberOfAlbumBox.getSelectedIndex();
-		return numberOfAlbumsChoice[idx];
+		if ((idx >= 0) && (idx < numberOfAlbumsChoice.length)) {
+			return numberOfAlbumsChoice[idx];
+		} else {
+			return DEFAULT_NUMBER_OF_RANDOM_ALBUMS;
+		}
 	}
 	
 	@Override
@@ -111,6 +123,26 @@ public class UtilsPane extends JPanel implements ActivableElement {
 	@Override
 	public void deactivate() {
 		pickRandomAlbumsButton.setEnabled(false);	
+	}
+	
+	private class  ComboBoxRenderer extends JLabel implements ListCellRenderer<Object> {
+
+		private static final long serialVersionUID = 1L;
+
+		public ComboBoxRenderer() {
+	        setOpaque(true);
+	        setHorizontalAlignment(CENTER);
+	        setVerticalAlignment(CENTER);
+	    }
+	    
+		@Override
+		public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
+				boolean cellHasFocus) {
+
+			setText(((Integer)value).toString());
+			return this;
+		}
+		
 	}
 
 }
