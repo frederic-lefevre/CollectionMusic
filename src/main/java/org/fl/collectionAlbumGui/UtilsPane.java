@@ -32,7 +32,10 @@ import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.rapportHtml.RapportStructuresAndNames;
@@ -44,6 +47,9 @@ public class UtilsPane extends JPanel implements ActivableElement {
 	private static final long serialVersionUID = 1L;
 	
 	private final JButton pickRandomAlbumsButton;
+	private final JComboBox<Integer> numberOfAlbumBox;
+	
+	private static final Integer[] numberOfAlbumsChoice = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 	
 	public UtilsPane(GenerationPane generationPane) {
 		
@@ -67,6 +73,20 @@ public class UtilsPane extends JPanel implements ActivableElement {
 		
 		showCollectionButton.addActionListener(showCollectionListener);
 		
+		JPanel choixAleatoirePane = new JPanel();
+		choixAleatoirePane.setLayout(new BoxLayout(choixAleatoirePane, BoxLayout.X_AXIS));
+		
+		JLabel titreAlbumsAleatoire = new JLabel("Choisir");
+		titreAlbumsAleatoire.setBorder(new EmptyBorder(0, 5, 0, 5));
+		choixAleatoirePane.add(titreAlbumsAleatoire);
+		
+		numberOfAlbumBox = new JComboBox<>(numberOfAlbumsChoice);
+		numberOfAlbumBox.setSelectedIndex(4);
+		
+		choixAleatoirePane.add(numberOfAlbumBox);
+		
+		add(choixAleatoirePane);
+		
 		pickRandomAlbumsButton = new JButton("Albums aléatoires");
 		pickRandomAlbumsButton.setFont(font);
 		pickRandomAlbumsButton.setBackground(Color.GREEN);
@@ -74,10 +94,15 @@ public class UtilsPane extends JPanel implements ActivableElement {
 		
 		add(pickRandomAlbumsButton);
 		
-		RandomAlbumsPickListener pickRandomAlbumsListener = new RandomAlbumsPickListener(generationPane);
+		RandomAlbumsPickListener pickRandomAlbumsListener = new RandomAlbumsPickListener(this, generationPane);
 		pickRandomAlbumsButton.addActionListener(pickRandomAlbumsListener);
 	}
 
+	public int getNumberOfAlbums() {
+		int idx = numberOfAlbumBox.getSelectedIndex();
+		return numberOfAlbumsChoice[idx];
+	}
+	
 	@Override
 	public void activate() {
 		pickRandomAlbumsButton.setEnabled(true);

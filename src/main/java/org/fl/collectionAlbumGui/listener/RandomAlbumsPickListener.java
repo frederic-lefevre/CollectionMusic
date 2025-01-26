@@ -36,19 +36,22 @@ import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbumGui.AlbumsJTable;
 import org.fl.collectionAlbumGui.AlbumsTableModel;
 import org.fl.collectionAlbumGui.GenerationPane;
+import org.fl.collectionAlbumGui.UtilsPane;
 
 public class RandomAlbumsPickListener implements java.awt.event.ActionListener {
 
 	private final GenerationPane generationPane;
+	private final UtilsPane utilsPane;
 	
-	public RandomAlbumsPickListener(GenerationPane generationPane) {
+	public RandomAlbumsPickListener(UtilsPane utilsPane, GenerationPane generationPane) {
 		this.generationPane = generationPane;
+		this.utilsPane = utilsPane;
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
-		List<Album> randomAlbums = CollectionAlbumContainer.getInstance().pickRandomAlbums(5);
+		List<Album> randomAlbums = CollectionAlbumContainer.getInstance().pickRandomAlbums(utilsPane.getNumberOfAlbums());
 		
 		// Table to display the chosen albums
 		AlbumsTableModel albumsTableModel = new AlbumsTableModel(randomAlbums);
