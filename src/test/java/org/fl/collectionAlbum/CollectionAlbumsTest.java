@@ -72,6 +72,9 @@ class CollectionAlbumsTest {
 		assertThat(albumsContainer.pickRandomAlbums(3)).isNotNull()
 			.hasSize(3);
 		
+		assertThat(albumsContainer.pickRandomAlbumsViaArtiste(4)).isNotNull()
+			.hasSize(4);
+		
 		// This is a singleton and it should be reset to empty
 		CollectionAlbumContainer albumsContainer2 = CollectionAlbumContainer.getEmptyInstance();
 		assertThat(albumsContainer2).isEqualTo(albumsContainer);

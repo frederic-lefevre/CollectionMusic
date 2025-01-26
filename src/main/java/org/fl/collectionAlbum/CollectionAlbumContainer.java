@@ -27,11 +27,13 @@ package org.fl.collectionAlbum;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.albums.ListeAlbum;
@@ -349,5 +351,13 @@ public class CollectionAlbumContainer {
 	
 	public List<Album> pickRandomAlbums(int nbAlbum) {
 		return collectionAlbumsMusiques.pickRandomAlbums(nbAlbum);
+	}
+	
+	public List<Album> pickRandomAlbumsViaArtiste(int nbAlbum) {
+		
+		return collectionArtistes.pickRandomArtistes(nbAlbum).stream()
+				.map(artiste -> artiste.getAlbums().pickRandomAlbums(1))
+				.flatMap(Collection::stream)
+				.collect(Collectors.toList());
 	}
 }

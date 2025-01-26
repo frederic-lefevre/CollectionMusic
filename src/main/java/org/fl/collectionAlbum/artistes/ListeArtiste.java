@@ -33,6 +33,7 @@ import java.util.logging.Logger;
 import org.fl.collectionAlbum.MusicArtefact;
 import org.fl.collectionAlbum.PoidsComparator;
 import org.fl.collectionAlbum.concerts.ConcertPoidsComparator;
+import org.fl.collectionAlbum.utils.ListUtils;
 
 import com.google.gson.JsonObject;
 
@@ -132,5 +133,9 @@ public class ListeArtiste {
 
 	public List<Artiste> getArtistes() {
 		return artistes;
-	}	
+	}
+	
+	public List<Artiste> pickRandomArtistes(int nbArtiste) {
+		return ListUtils.pickRandomDistinctElements(artistes, nbArtiste);
+	}
 }
