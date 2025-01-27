@@ -27,6 +27,8 @@ package org.fl.collectionAlbum.albums;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import org.fl.collectionAlbum.RangementComparator;
 import org.fl.collectionAlbum.format.Format;
@@ -38,7 +40,7 @@ public class ListeAlbum {
 
 	private Format formatListeAlbum;
 
-	public ListeAlbum() {
+	private ListeAlbum() {
 
 		formatListeAlbum = new Format(null);
 		albums = new ArrayList<Album>();
@@ -56,21 +58,23 @@ public class ListeAlbum {
 		formatListeAlbum = new Format(null);
 	}
 	
+	public ListeAlbum sortAlphaOnTitle() {
+		Collections.sort(albums, new AlbumAlphaComparator());
+		return this;
+	}
+	
 	public ListeAlbum sortChronoEnregistrement() {
-		AlbumEnregistrementComparator compAlbum = new AlbumEnregistrementComparator();
-		Collections.sort(albums, compAlbum);
+		Collections.sort(albums, new AlbumEnregistrementComparator());
 		return this;
 	}
 
 	public ListeAlbum sortChronoComposition() {
-		AlbumCompositionComparator compAlbum = new AlbumCompositionComparator();
-		Collections.sort(albums, compAlbum);
+		Collections.sort(albums, new AlbumCompositionComparator());
 		return this;
 	}
 
 	public ListeAlbum sortRangementAlbum() {
-		RangementComparator compAlbum = new RangementComparator();
-		Collections.sort(albums, compAlbum);
+		Collections.sort(albums, new RangementComparator());
 		return this;
 	}
 
@@ -90,4 +94,35 @@ public class ListeAlbum {
 		return ListUtils.pickRandomDistinctElements(albums, nbAlbum);
 	}
 
+	public static class Builder {
+		
+		private final ListeAlbum listeAlbum;
+		
+		private Builder() {
+			listeAlbum = new ListeAlbum();
+		}
+		
+		public static Builder getBuilder() {
+			return new Builder();
+		}
+		
+		public Builder from(List<Album> la) {
+			listeAlbum.reset();
+			if (la != null) {
+				la.forEach(album -> listeAlbum.addAlbum(album));
+			}
+			return this;
+		}
+		
+		public Builder withAlbumSatisfying(Predicate<Album> albumPredicate) {
+			
+			return from(listeAlbum.getAlbums().stream()
+					.filter(albumPredicate)
+					.collect(Collectors.toList()));
+		}
+		
+		public ListeAlbum build() {
+			return listeAlbum;
+		}
+	}
 }

@@ -298,7 +298,7 @@ public class Album extends MusicArtefact {
 	}
 	
     @Override
-    public boolean additionnalInfo() {
-    	return hasAudioFiles() || hasVideoFiles() || super.additionnalInfo();
+    public boolean hasAdditionnalInfo() {
+    	return hasAudioFiles() || hasVideoFiles() || super.hasAdditionnalInfo();
     }
 }

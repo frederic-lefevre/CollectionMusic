@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -70,7 +70,7 @@ public class RapportCollection extends RapportHtml {
 		RapportCalendrier rapportCalendrier = new RapportCalendrier(albumsContainer.getCalendrierArtistes(), "Calendrier", LinkType.LIST);
 		write(rapportCalendrier.printReport(getNextRapportFile(), CssStyles.stylesCalendrier));
 		
-		write("</ul>\n</td>\n<td class=\"mainpage\">\n<h3>Classements chronologiques des albums</h3>\n<ul>\n");
+		write("</ul>\n</td>\n<td class=\"mainpage\">\n<h3>Listes des albums</h3>\n<ul>\n");
 		RapportListeAlbums rapportAlbumsEnregistrement = new RapportListeAlbums(albumsContainer.getCollectionAlbumsMusiques().sortChronoEnregistrement(), "Classement chronologique (enregistrement)", LinkType.LIST);
 		rapportAlbumsEnregistrement.withBalises(new Balises(Balises.BalisesType.TEMPORAL));
 		write(rapportAlbumsEnregistrement.printReport(getNextRapportFile(), CssStyles.stylesTableauAvecBalise));
@@ -79,6 +79,9 @@ public class RapportCollection extends RapportHtml {
 		rapportAlbumsComposition.withBalises(new Balises(Balises.BalisesType.TEMPORAL_COMPOSITION));
 		write(rapportAlbumsComposition.printReport(getNextRapportFile(), CssStyles.stylesTableauAvecBalise));
 
+		RapportListeAlbums rapportAlbumWithNoArtiste = new RapportListeAlbums(albumsContainer.getAlbumsWithNoArtiste().sortAlphaOnTitle(), "Albums sans artiste", LinkType.LIST);
+		write(rapportAlbumWithNoArtiste.printReport(getNextRapportFile(), CssStyles.stylesTableauMusicArtefact));
+		
 		write("</ul>\n</td>\n<td class=\"mainpage\">\n<h3>Albums par nature de contenu</h3>\n<table>\n");
 		Arrays.stream(ContentNature.values()).forEach(contentNature -> {
 			writeListeAlbumsRow(albumsContainer.getAlbumsWithOnlyContentNature(contentNature).sortRangementAlbum(), "Albums avec seulement du contenu " + contentNature.getNom());

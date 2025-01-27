@@ -52,6 +52,22 @@ class FormatTest {
 	}
 
 	@Test
+	void testPoidsNul() {
+		
+		String formatStr1 = "{\"cd\": 0 }" ;
+		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
+		Format format1 = new Format(jf1) ;
+
+		assertThat(format1.getPoids()).isZero();
+		assertMediaSupports(format1, Collections.emptySet());
+
+		assertThat(format1.getContentNatures()).isEmpty();
+
+		assertThat(format1.hasMediaFiles(ContentNature.AUDIO)).isFalse();
+		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isFalse();
+	}
+	
+	@Test
 	void test2() {
 		
 		String formatStr1 = "{\"cd\": 3 }" ;

@@ -206,7 +206,7 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 		 }
 
 		 for (Album album : listeAlbum.getAlbums()) {
-			 if (album.additionnalInfo()) {
+			 if (album.hasAdditionnalInfo()) {
 				 Path absolutePath = RapportStructuresAndNames.getAlbumRapportAbsolutePath(album);
 				 if (! Files.exists(absolutePath)) {
 					 RapportAlbum.createRapportAlbum(album)
@@ -217,7 +217,7 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 		 }
 		 
 		 for (Concert concert : listeConcert.getConcerts()) {
-			 if (concert.additionnalInfo()) {
+			 if (concert.hasAdditionnalInfo()) {
 				 Path absolutePath = RapportStructuresAndNames.getConcertRapportAbsolutePath(concert);
 				 if (! Files.exists(absolutePath)) {
 					 RapportConcert.createRapportConcert(concert)

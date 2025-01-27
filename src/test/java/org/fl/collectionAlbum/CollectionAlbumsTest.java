@@ -61,11 +61,16 @@ class CollectionAlbumsTest {
 		assertThat(albumsContainer.getAlbumsWithMixedContentNature().getAlbums()).hasSizeGreaterThan(10);
 		assertThat(albumsContainer.getAlbumsWithDiscogsRelease().getAlbums()).hasSizeGreaterThan(1600);
 		assertThat(albumsContainer.getAlbumsWithAudioFile().getAlbums()).hasSizeGreaterThan(1680);
+		assertThat(albumsContainer.getAlbumsWithNoArtiste().getAlbums())
+			.hasSizeGreaterThan(10)
+			.allSatisfy(album -> assertThat(album.hasArtiste()).isFalse());
 		
 		Artiste bobDylan = albumsContainer.getArtisteKnown("Dylan", "Bob");
 		
 		assertThat(bobDylan).isNotNull();
-		assertThat(bobDylan.getAlbums().getAlbums()).hasSizeGreaterThan(80);
+		assertThat(bobDylan.getAlbums().getAlbums())
+			.hasSizeGreaterThan(80)
+			.allSatisfy(album -> assertThat(album.hasArtiste()).isTrue());
 		assertThat(bobDylan.getConcerts().getConcerts()).hasSizeGreaterThan(5);
 		assertThat(bobDylan.getDateNaissance()).isEqualTo("24 mai 1941");
 		

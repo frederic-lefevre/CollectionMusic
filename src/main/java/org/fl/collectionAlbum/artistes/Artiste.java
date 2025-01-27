@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -105,7 +105,7 @@ public class Artiste {
     
     protected void setArtiste(String aNom, String aPrenoms, String n, String m) {
 		
-    	albums = new ListeAlbum();
+    	albums = ListeAlbum.Builder.getBuilder().build();
     	concerts = new ListeConcert();
 		if (aNom == null) {
 			albumLog.warning("Nom d'artiste null") ;
