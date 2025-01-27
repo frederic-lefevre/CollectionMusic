@@ -58,21 +58,23 @@ public class ListeAlbum {
 		formatListeAlbum = new Format(null);
 	}
 	
+	public ListeAlbum sortAlphaOnTitle() {
+		Collections.sort(albums, new AlbumAlphaComparator());
+		return this;
+	}
+	
 	public ListeAlbum sortChronoEnregistrement() {
-		AlbumEnregistrementComparator compAlbum = new AlbumEnregistrementComparator();
-		Collections.sort(albums, compAlbum);
+		Collections.sort(albums, new AlbumEnregistrementComparator());
 		return this;
 	}
 
 	public ListeAlbum sortChronoComposition() {
-		AlbumCompositionComparator compAlbum = new AlbumCompositionComparator();
-		Collections.sort(albums, compAlbum);
+		Collections.sort(albums, new AlbumCompositionComparator());
 		return this;
 	}
 
 	public ListeAlbum sortRangementAlbum() {
-		RangementComparator compAlbum = new RangementComparator();
-		Collections.sort(albums, compAlbum);
+		Collections.sort(albums, new RangementComparator());
 		return this;
 	}
 

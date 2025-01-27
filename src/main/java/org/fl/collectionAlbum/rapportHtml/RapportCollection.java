@@ -79,6 +79,9 @@ public class RapportCollection extends RapportHtml {
 		rapportAlbumsComposition.withBalises(new Balises(Balises.BalisesType.TEMPORAL_COMPOSITION));
 		write(rapportAlbumsComposition.printReport(getNextRapportFile(), CssStyles.stylesTableauAvecBalise));
 
+		RapportListeAlbums rapportAlbumWithNoArtiste = new RapportListeAlbums(albumsContainer.getAlbumsWithNoArtiste().sortAlphaOnTitle(), "Albums sans artiste", LinkType.LIST);
+		write(rapportAlbumWithNoArtiste.printReport(getNextRapportFile(), CssStyles.stylesTableauMusicArtefact));
+		
 		write("</ul>\n</td>\n<td class=\"mainpage\">\n<h3>Albums par nature de contenu</h3>\n<table>\n");
 		Arrays.stream(ContentNature.values()).forEach(contentNature -> {
 			writeListeAlbumsRow(albumsContainer.getAlbumsWithOnlyContentNature(contentNature).sortRangementAlbum(), "Albums avec seulement du contenu " + contentNature.getNom());
