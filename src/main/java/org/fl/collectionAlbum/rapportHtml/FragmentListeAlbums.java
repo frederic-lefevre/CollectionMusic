@@ -64,7 +64,9 @@ public class FragmentListeAlbums {
 					balises.addCheckBaliseTemporal(fragment, debutEnr) ;
 				} else if (balises.getBalisesType() == Balises.BalisesType.TEMPORAL_COMPOSITION) {
 					balises.addCheckBaliseTemporal(fragment, debutComp) ;
-				} 
+				} else if (balises.getBalisesType() == Balises.BalisesType.ALPHA) {
+					balises.addCheckBaliseString(fragment, unAlbum.getTitre()) ;
+				}
 			}
 			fragment.append(TemporalUtils.formatDate(debutComp)) ;
 			if (displayDateEnregistrement) {
