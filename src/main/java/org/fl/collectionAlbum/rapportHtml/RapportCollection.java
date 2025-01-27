@@ -79,6 +79,10 @@ public class RapportCollection extends RapportHtml {
 		rapportAlbumsComposition.withBalises(new Balises(Balises.BalisesType.TEMPORAL_COMPOSITION));
 		write(rapportAlbumsComposition.printReport(getNextRapportFile(), CssStyles.stylesTableauAvecBalise));
 
+		RapportListeAlbums rapportAlbumsAlpha = new RapportListeAlbums(albumsContainer.getCollectionAlbumsMusiques().sortAlphaOnTitle(), "Classement par titre", LinkType.LIST);
+		rapportAlbumsAlpha.withBalises(new Balises(Balises.BalisesType.ALPHA));
+		write(rapportAlbumsAlpha.printReport(getNextRapportFile(), CssStyles.stylesTableauAvecBalise));
+		
 		RapportListeAlbums rapportAlbumWithNoArtiste = new RapportListeAlbums(albumsContainer.getAlbumsWithNoArtiste().sortAlphaOnTitle(), "Albums sans artiste", LinkType.LIST);
 		write(rapportAlbumWithNoArtiste.printReport(getNextRapportFile(), CssStyles.stylesTableauMusicArtefact));
 		
