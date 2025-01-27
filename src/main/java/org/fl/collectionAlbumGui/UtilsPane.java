@@ -29,6 +29,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.util.List;
+import java.util.Optional;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -51,9 +52,14 @@ public class UtilsPane extends JPanel implements ActivableElement {
 	
 	private final JButton pickRandomAlbumsButton;
 	private final JComboBox<Integer> numberOfAlbumBox;
+	private final JComboBox<String> methodOfChoiceBox;
 	
 	private static final int DEFAULT_NUMBER_OF_RANDOM_ALBUMS = 5;
+	public static final String EQUI_REPARTI_PAR_ARTISTE = "artiste";
+	public static final String EQUI_REPARTI_PAR_ALBUM = "album";
+	
 	private static final Integer[] numberOfAlbumsChoice = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+	private static final String[] albumChoiceMethod = {EQUI_REPARTI_PAR_ARTISTE, EQUI_REPARTI_PAR_ALBUM};
 	
 	public UtilsPane(GenerationPane generationPane) {
 		
@@ -62,11 +68,12 @@ public class UtilsPane extends JPanel implements ActivableElement {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.setBorder(BorderFactory.createMatteBorder(10,0,10,0,Color.BLACK));
 		
-		Font font = new Font("Verdana", Font.BOLD, 14);
+		Font buttonFont = new Font("Verdana", Font.BOLD, 14);
+		Font textFont = new Font("Verdana", Font.BOLD, 12);
 		
 		JButton showCollectionButton = new JButton("Montrer la collection");
 		
-		showCollectionButton.setFont(font);
+		showCollectionButton.setFont(buttonFont);
 		showCollectionButton.setBackground(Color.GREEN);
 		showCollectionButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
@@ -78,32 +85,53 @@ public class UtilsPane extends JPanel implements ActivableElement {
 		showCollectionButton.addActionListener(showCollectionListener);
 
 		JPanel choixAleatoirePane = new JPanel();
-		choixAleatoirePane.setLayout(new BoxLayout(choixAleatoirePane, BoxLayout.X_AXIS));
-		choixAleatoirePane.setBorder(new EmptyBorder(60, 0, 20, 60));
+		choixAleatoirePane.setLayout(new BoxLayout(choixAleatoirePane, BoxLayout.Y_AXIS));
+		choixAleatoirePane.setBorder(new EmptyBorder(60, 0, 20, 40));
+		
+		JPanel choixNombreAlbumPane = new JPanel();
+		choixNombreAlbumPane.setLayout(new BoxLayout(choixNombreAlbumPane, BoxLayout.X_AXIS));
+		choixNombreAlbumPane.setBorder(new EmptyBorder(0, 5, 5, 5));
 		
 		JLabel titreAlbumsAleatoire = new JLabel("Choisir");
-		titreAlbumsAleatoire.setBorder(new EmptyBorder(0, 5, 0, 5));
-		choixAleatoirePane.add(titreAlbumsAleatoire);
+		titreAlbumsAleatoire.setFont(textFont);
+		titreAlbumsAleatoire.setBorder(new EmptyBorder(0, 0, 0, 5));
+		choixNombreAlbumPane.add(titreAlbumsAleatoire);
 		
 		numberOfAlbumBox = new JComboBox<>(numberOfAlbumsChoice);
 		numberOfAlbumBox.setSelectedIndex(DEFAULT_NUMBER_OF_RANDOM_ALBUMS-1);
 		ComboBoxRenderer renderer = new ComboBoxRenderer();
-		renderer.setPreferredSize(new Dimension(50, 15));
-		numberOfAlbumBox.setRenderer(renderer);
+		renderer.setPreferredSize(new Dimension(25, 10));
+		numberOfAlbumBox.setRenderer(renderer);		
+		choixNombreAlbumPane.add(numberOfAlbumBox);
 		
-		choixAleatoirePane.add(numberOfAlbumBox);
-		
-		add(choixAleatoirePane);
+		choixAleatoirePane.add(choixNombreAlbumPane);
 		
 		pickRandomAlbumsButton = new JButton("Albums aléatoires");
-		pickRandomAlbumsButton.setFont(font);
+		pickRandomAlbumsButton.setFont(buttonFont);
 		pickRandomAlbumsButton.setBackground(Color.GREEN);
 		pickRandomAlbumsButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
-		add(pickRandomAlbumsButton);
+		choixAleatoirePane.add(pickRandomAlbumsButton);
+		
+		JPanel choixMethodPane = new JPanel();
+		choixMethodPane.setLayout(new BoxLayout(choixMethodPane, BoxLayout.X_AXIS));
+		choixMethodPane.setBorder(new EmptyBorder(5, 5, 5, 0));
+		
+		JLabel methodeAleatoire = new JLabel("équi-réparti par");
+		methodeAleatoire.setFont(textFont);
+		methodeAleatoire.setBorder(new EmptyBorder(0, 0, 0, 5));
+		methodOfChoiceBox  = new JComboBox<>(albumChoiceMethod);
+		methodOfChoiceBox.setSelectedItem(EQUI_REPARTI_PAR_ARTISTE);
+		
+		choixMethodPane.add(methodeAleatoire);
+		choixMethodPane.add(methodOfChoiceBox);
+		
+		choixAleatoirePane.add(choixMethodPane);
 		
 		RandomAlbumsPickListener pickRandomAlbumsListener = new RandomAlbumsPickListener(this, generationPane);
 		pickRandomAlbumsButton.addActionListener(pickRandomAlbumsListener);
+		
+		add(choixAleatoirePane);
 	}
 
 	public int getNumberOfAlbums() {
@@ -113,6 +141,19 @@ public class UtilsPane extends JPanel implements ActivableElement {
 		} else {
 			return DEFAULT_NUMBER_OF_RANDOM_ALBUMS;
 		}
+	}
+	
+	public String getMethodForRandomAlbum( ) {
+		
+		return Optional.ofNullable((String)methodOfChoiceBox.getSelectedItem())
+				.map(choiceMethod -> {
+					if (choiceMethod.equals(EQUI_REPARTI_PAR_ALBUM) || choiceMethod.equals(EQUI_REPARTI_PAR_ARTISTE)) {
+						return choiceMethod;
+					} else {
+						return EQUI_REPARTI_PAR_ARTISTE;
+					}
+				})
+				.orElse(EQUI_REPARTI_PAR_ARTISTE);
 	}
 	
 	@Override
