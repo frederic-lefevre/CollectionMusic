@@ -230,6 +230,10 @@ public class CollectionAlbumContainer {
 		return getAlbumsSastisfying(Predicate.not(Album::hasDiscogsRelease));
 	}
 
+	public ListeAlbum getAlbumsWithNoArtiste() {
+		return getAlbumsSastisfying(Predicate.not(Album::hasArtiste));
+	}
+	
 	private void reset() {
 		
    		collectionAlbumsMusiques.reset();

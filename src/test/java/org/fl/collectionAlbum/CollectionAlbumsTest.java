@@ -61,6 +61,9 @@ class CollectionAlbumsTest {
 		assertThat(albumsContainer.getAlbumsWithMixedContentNature().getAlbums()).hasSizeGreaterThan(10);
 		assertThat(albumsContainer.getAlbumsWithDiscogsRelease().getAlbums()).hasSizeGreaterThan(1600);
 		assertThat(albumsContainer.getAlbumsWithAudioFile().getAlbums()).hasSizeGreaterThan(1680);
+		assertThat(albumsContainer.getAlbumsWithNoArtiste().getAlbums())
+			.hasSizeGreaterThan(10)
+			.allSatisfy(album -> assertThat(album.hasArtiste()).isFalse());
 		
 		Artiste bobDylan = albumsContainer.getArtisteKnown("Dylan", "Bob");
 		

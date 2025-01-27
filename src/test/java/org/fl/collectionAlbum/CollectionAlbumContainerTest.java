@@ -167,6 +167,8 @@ class CollectionAlbumContainerTest {
 				}			
 		});
 		
+		assertThat(albumsContainer.getAlbumsWithNoArtiste().getAlbums()).isEmpty();
+		
 		assertThat(albumsContainer.pickRandomAlbums(3)).isNotNull()
 			.singleElement()
 			.satisfies(alb -> assertThat(alb.getTitre()).isEqualTo("Portrait in jazz"));
