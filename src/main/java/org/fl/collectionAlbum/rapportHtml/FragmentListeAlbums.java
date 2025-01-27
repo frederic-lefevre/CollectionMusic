@@ -26,9 +26,13 @@ package org.fl.collectionAlbum.rapportHtml;
 
 import java.net.URI;
 import java.time.temporal.TemporalAccessor;
+import java.util.Collections;
+import java.util.List;
 
+import org.fl.collectionAlbum.PoidsComparator;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.albums.ListeAlbum;
+import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.format.Format;
 import org.fl.collectionAlbum.utils.TemporalUtils;
 
@@ -40,6 +44,8 @@ public class FragmentListeAlbums {
 	private static final String TABLE3 = "  </tr>\n  <tr class=\"head\">\n    <td class=\"an\">Début</td>\n    <td class=\"an\">Fin</td>\n  </tr>\n" ;
 
 	private static final boolean APPEND_AUDIO_FILE = true;
+	
+	private static final PoidsComparator compPoids = new PoidsComparator();
 	
 	public static void buildTable(ListeAlbum listeAlbums, StringBuilder fragment, String urlOffSet, Balises balises) {
 		
@@ -56,16 +62,22 @@ public class FragmentListeAlbums {
 			TemporalAccessor debutEnr  = unAlbum.getDebutEnregistrement() ;
 			TemporalAccessor finEnr    = unAlbum.getFinEnregistrement() ;
 			
-			boolean displayDateEnregistrement =  unAlbum.hasSpecificCompositionDates() ;
+			boolean displayDateEnregistrement =  unAlbum.hasSpecificCompositionDates();
 			
 			fragment.append("    <td class=\"an\">") ;
 			if (balises != null) {
 				if (balises.getBalisesType() == Balises.BalisesType.TEMPORAL) {
-					balises.addCheckBaliseTemporal(fragment, debutEnr) ;
+					balises.addCheckBaliseTemporal(fragment, debutEnr);
 				} else if (balises.getBalisesType() == Balises.BalisesType.TEMPORAL_COMPOSITION) {
 					balises.addCheckBaliseTemporal(fragment, debutComp) ;
 				} else if (balises.getBalisesType() == Balises.BalisesType.ALPHA) {
 					balises.addCheckBaliseString(fragment, unAlbum.getTitre()) ;
+				} else if (balises.getBalisesType() == Balises.BalisesType.ALPHA_ARTIST) {
+					if (unAlbum.hasArtiste()) {
+						List<Artiste> artists = unAlbum.getAuteurs();					
+						Collections.sort(artists, compPoids);					
+						balises.addCheckBaliseString(fragment, artists.get(0).getNom());
+					}
 				}
 			}
 			fragment.append(TemporalUtils.formatDate(debutComp)) ;
