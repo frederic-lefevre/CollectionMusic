@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -81,7 +81,7 @@ public class FragmentListeAlbums {
 			FragmentIntervenants.printAuteurs(unAlbum, fragment, urlOffSet);
 			fragment.append("    </td>\n    <td class=\"album\">") ; 
 			
-			if (unAlbum.additionnalInfo()) {
+			if (unAlbum.hasAdditionnalInfo()) {
 				URI aPath = RapportStructuresAndNames.getAlbumRapportRelativeUri(unAlbum) ;			
 				fragment.append("<a href=\"").append(urlOffSet).append(aPath.toString()).append("\">") ;
 				fragment.append(unAlbum.getTitre()) ;			

@@ -190,7 +190,7 @@ public class RapportStructuresAndNames {
 	}
 
 	public static URI getAlbumRapportRelativeUri(Album album) {
-		if (album.additionnalInfo()) {
+		if (album.hasAdditionnalInfo()) {
 			return getInstance().albumRapportPaths.getUri(album);
 		} else {
 			return null;
@@ -198,7 +198,7 @@ public class RapportStructuresAndNames {
 	}
 
 	public static Path getAlbumRapportAbsolutePath(Album album) {
-		if (album.additionnalInfo()) {
+		if (album.hasAdditionnalInfo()) {
 			return getInstance().rapportPath.resolve(getAlbumRapportRelativeUri(album).getPath());
 		} else {
 			return null;
@@ -206,7 +206,7 @@ public class RapportStructuresAndNames {
 	}
 
 	public static URI getConcertRapportRelativeUri(Concert concert) {
-		if (concert.additionnalInfo()) {
+		if (concert.hasAdditionnalInfo()) {
 			return getInstance().concertRapportPaths.getUri(concert);
 		} else {
 			return null;
@@ -214,7 +214,7 @@ public class RapportStructuresAndNames {
 	}
 
 	public static Path getConcertRapportAbsolutePath(Concert concert) {
-		if (concert.additionnalInfo()) {
+		if (concert.hasAdditionnalInfo()) {
 			return getInstance().rapportPath.resolve(getConcertRapportRelativeUri(concert).getPath());
 		} else {
 			return null;

@@ -127,6 +127,10 @@ public abstract class MusicArtefact {
 		return arteFactJson;
 	}
 
+	public Path getJsonFilePath() {
+		return jsonFilePath;
+	}
+	
 	public String getJsonString() {
 		return JsonUtils.jsonPrettyPrint(arteFactJson);
 	}
@@ -143,18 +147,7 @@ public abstract class MusicArtefact {
 		return ((urlLinks != null) && (! urlLinks.isEmpty()));
 	}
 	
-	public void setDiscogsLink(String discogsLink) {
-		this.discogsLink = discogsLink;
-		hasAdditionalInfo = hasAdditionalInfo || ((discogsLink != null) && !discogsLink.isEmpty());
-		arteFactJson.addProperty(JsonMusicProperties.DISCOGS, discogsLink);
-	}
-	
-	public void setDiscogsFormatValid(boolean valid) {
-		this.discogsFormatValidation = valid;
-		arteFactJson.addProperty(JsonMusicProperties.DISCOGS_VALID, valid);
-	}
-	
-	public boolean additionnalInfo() {
+	public boolean hasAdditionnalInfo() {
 		return hasAdditionalInfo;
 	}
 	
@@ -164,8 +157,20 @@ public abstract class MusicArtefact {
 			   (notEmpty(getEnsembles()));
 	}
 	
-	public Path getJsonFilePath() {
-		return jsonFilePath;
+	public boolean hasArtiste() {
+		return (notEmpty(getAuteurs())) ||
+				hasIntervenant();
+	}
+	
+	public void setDiscogsLink(String discogsLink) {
+		this.discogsLink = discogsLink;
+		hasAdditionalInfo = hasAdditionalInfo || ((discogsLink != null) && !discogsLink.isEmpty());
+		arteFactJson.addProperty(JsonMusicProperties.DISCOGS, discogsLink);
+	}
+	
+	public void setDiscogsFormatValid(boolean valid) {
+		this.discogsFormatValidation = valid;
+		arteFactJson.addProperty(JsonMusicProperties.DISCOGS_VALID, valid);
 	}
 	
 	private static boolean notEmpty(List<?> l) {

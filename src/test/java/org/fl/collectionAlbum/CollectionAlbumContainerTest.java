@@ -121,6 +121,7 @@ class CollectionAlbumContainerTest {
 		
 		Artiste artiste = albumsContainer.getCollectionArtistes().getArtistes().get(0);
 		
+		assertThat(album.hasArtiste()).isTrue();
 		assertThat(artiste.getNom()).isEqualTo("Evans");
 		assertThat(artiste.getPrenoms()).isEqualTo("Bill");
 		

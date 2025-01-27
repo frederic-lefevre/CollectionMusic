@@ -92,6 +92,15 @@ class AlbumTest {
 		assertThat(album.hasAudioFiles()).isFalse();
 		assertThat(album.hasVideoFiles()).isFalse();
 		assertThat(album.hasMediaFiles()).isFalse();
+		assertThat(album.hasDiscogsRelease()).isFalse();
+		assertThat(album.hasArtiste()).isFalse();
+		assertThat(album.hasIntervenant()).isFalse();
+		assertThat(album.hasHighResAudio()).isFalse();
+		assertThat(album.hasNotes()).isFalse();
+		assertThat(album.hasOnlyLossLessAudio()).isFalse();
+		assertThat(album.hasProblem()).isFalse();
+		assertThat(album.hasSpecificCompositionDates()).isFalse();
+		assertThat(album.hasUrlLinks()).isFalse();
 		
 		assertThat(album.getAllMediaFiles()).isEmpty();
 		
@@ -491,6 +500,7 @@ class AlbumTest {
 		assertThat(album.hasHighResAudio()).isFalse();
 		assertThat(album.hasSpecificCompositionDates()).isFalse();
 		assertThat(album.hasOnlyLossLessAudio()).isTrue();
+		assertThat(album.hasArtiste()).isTrue();
 		assertThat(album.hasIntervenant()).isFalse();
 		
 		assertThat(album.hasDiscogsRelease()).isFalse();
