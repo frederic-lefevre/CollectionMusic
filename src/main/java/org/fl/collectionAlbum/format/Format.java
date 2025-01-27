@@ -116,6 +116,11 @@ public class Format {
 				for (MediaSupports support : MediaSupports.values()) {
 					JsonElement elemFormat = formatJson.get(support.getJsonPropertyName());
 					if (elemFormat != null) {
+						double doubleValue = elemFormat.getAsDouble();
+						if (doubleValue <= 0) {
+							hasError = true;
+							albumLog.warning("Poids négatif ou nul pour le format " + formatJson.toString());
+						}
 						tableFormat.put(support, Double.valueOf(elemFormat.getAsDouble()));
 					}
 				}
