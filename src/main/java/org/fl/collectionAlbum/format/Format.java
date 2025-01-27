@@ -433,7 +433,7 @@ public class Format {
 	}
 	
 	private String displayAudioFilesDetail() {
-		return displayMediaFileInformation(getAllMediaFiles(), (af) -> af.displayMediaFileDetail("<br/>"), "<br/>---<br/>");
+		return displayMediaFileInformation(getAllMediaFiles(), (af) -> af.displayMediaFileDetail("<br/>", true), "<br/>---<br/>");
 	}
 	
 	private String displayMediaFilesSummary() {
@@ -456,7 +456,7 @@ public class Format {
 			return getMediaFiles(ContentNature.AUDIO).stream()
 					.map(mediaFile -> (AbstractAudioFile)mediaFile)
 					.filter(audioFileFilter)
-					.map(af -> af.displayMediaFileDetail(csvSeparator))
+					.map(af -> af.displayMediaFileDetail(csvSeparator, false))
 					.collect(Collectors.toList());
 		} else {
 			return Collections.emptyList();

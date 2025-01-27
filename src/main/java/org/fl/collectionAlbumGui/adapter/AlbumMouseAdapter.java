@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbumGui;
+package org.fl.collectionAlbumGui.adapter;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -31,9 +31,14 @@ import java.util.stream.Stream;
 
 import javax.swing.JPopupMenu;
 
-import org.fl.collectionAlbum.OsAction;
 import org.fl.collectionAlbum.albums.Album;
-import org.fl.collectionAlbumGui.AlbumCustomActionListener.CustomAction;
+import org.fl.collectionAlbum.osAction.OsAction;
+import org.fl.collectionAlbumGui.AlbumsJTable;
+import org.fl.collectionAlbumGui.CollectionMenuItems;
+import org.fl.collectionAlbumGui.GenerationPane;
+import org.fl.collectionAlbumGui.listener.AlbumCommandListener;
+import org.fl.collectionAlbumGui.listener.AlbumCustomActionListener;
+import org.fl.collectionAlbumGui.listener.AlbumCustomActionListener.CustomAction;
 
 public class AlbumMouseAdapter extends MouseAdapter {
 

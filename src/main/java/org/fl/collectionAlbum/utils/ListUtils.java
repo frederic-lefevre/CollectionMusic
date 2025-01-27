@@ -22,22 +22,45 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum;
+package org.fl.collectionAlbum.utils;
 
 import java.util.List;
-import java.util.function.Function;
-import java.util.function.Predicate;
+import java.util.SplittableRandom;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-public class ListOfStringCommandParameter implements OsActionCommandParameter<List<String>> {
+public class ListUtils {
 
-	@Override
-	public Function<List<String>, List<String>> getParametersGetter() {		
-		return Function.identity();
+	private static final SplittableRandom random = new SplittableRandom();
+	
+	// Randomly return one element of a list
+	public static <T> T pickRandomElement(List<T> l) {
+		
+		if (l.size() == 1) {
+			return l.get(0);
+		} else {
+			return l.get(random.nextInt(l.size() - 1));
+		}
 	}
+	
+	// Randomly return nbPick distinct element of a list
+	public static <T> List<T> pickRandomDistinctElements(List<T> l, int nbPick) {
 
-	@Override
-	public Predicate<List<String>> getActionValidityPredicate() {		
-		return (o) -> o != null;
+		if (l.isEmpty()) {
+			throw new IllegalArgumentException("Empty list");
+		} else if (nbPick < 1) {
+			throw new IllegalArgumentException("Invalid number of elements requested: " + nbPick);
+		} 
+		
+		List<T> lWithDistinctElements = l.stream().distinct().collect(Collectors.toList());
+		
+		if (lWithDistinctElements.size() <= nbPick) {
+			return lWithDistinctElements;
+		} else {
+			return Stream.generate(() -> pickRandomElement(lWithDistinctElements))
+					.distinct()
+					.limit(nbPick)
+					.collect(Collectors.toList());
+		}
 	}
-
 }

@@ -22,27 +22,23 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbumGui;
+package org.fl.collectionAlbum.osAction;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.List;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
-import org.fl.collectionAlbum.OsAction;
+public class StringCommandParameter implements OsActionCommandParameter<String>{
 
-public class OsActionListener<T> implements ActionListener {
-
-	private final OsAction<T> osAction;
-	private final T o;
-	
-	public OsActionListener(T o, OsAction<T> osAction) {
-		this.osAction = osAction;
-		this.o = o;
-	}
-	
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public Function<String, List<String>> getParametersGetter() {
 		
-		osAction.runOsAction(o);	
+		return s -> List.of(s);
+	}
+
+	@Override
+	public Predicate<String> getActionValidityPredicate() {
+		return (s) -> s != null;
 	}
 
 }

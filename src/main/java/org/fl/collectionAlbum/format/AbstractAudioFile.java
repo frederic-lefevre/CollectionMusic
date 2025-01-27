@@ -62,14 +62,14 @@ public abstract class AbstractAudioFile extends AbstractMediaFile {
 		return samplingRate;
 	}
 	
-	protected void appendCommonAudioFileDetail(StringBuilder audioFilesDetails, String separator) {
-		appendCommonAudioSpecs(audioFilesDetails, separator);
-		appendCommonMediaFileDetail(audioFilesDetails, separator);
+	protected void appendCommonAudioFileDetail(StringBuilder audioFilesDetails, String separator, boolean withPrefix) {
+		appendCommonAudioSpecs(audioFilesDetails, separator, withPrefix);
+		appendCommonMediaFileDetail(audioFilesDetails, separator, withPrefix);
 	}
 	
-	protected void appendCommonAudioFileDetailWithLink(StringBuilder audioFilesDetails, String separator) {
-		appendCommonAudioSpecs(audioFilesDetails, separator);
-		appendCommonMediaFileDetailWithLink(audioFilesDetails, separator);
+	protected void appendCommonAudioFileDetailWithLink(StringBuilder audioFilesDetails, String separator, boolean withPrefix) {
+		appendCommonAudioSpecs(audioFilesDetails, separator, withPrefix);
+		appendCommonMediaFileDetailWithLink(audioFilesDetails, separator, withPrefix);
 	}
 	
 	protected void appendCommonAudioFileDetailTitles(StringBuilder audioFilesDetails, String separator) {
@@ -77,11 +77,15 @@ public abstract class AbstractAudioFile extends AbstractMediaFile {
 		appendCommonMediaFileDetailTitles(audioFilesDetails, separator);
 	}
 	
-	private void appendCommonAudioSpecs(StringBuilder audioFilesDetails, String separator) {
+	private void appendCommonAudioSpecs(StringBuilder audioFilesDetails, String separator, boolean withPrefix) {
 		audioFilesDetails
 			.append(getSamplingRate())
 			.append(" KHz")
-			.append(separator)
+			.append(separator);
+		if (withPrefix) {
+			audioFilesDetails.append(TYPE_TITLE).append(": ");
+		}
+		audioFilesDetails
 			.append(getType())
 			.append(separator);
 	}

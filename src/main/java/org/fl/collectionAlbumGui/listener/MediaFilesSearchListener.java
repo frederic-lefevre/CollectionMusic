@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,22 +22,23 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbumGui;
+package org.fl.collectionAlbumGui.listener;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import org.fl.collectionAlbum.OsAction;
 import org.fl.collectionAlbum.albums.Album;
+import org.fl.collectionAlbum.format.ContentNature;
+import org.fl.collectionAlbumGui.AlbumsJTable;
 
-public class AlbumCommandListener implements java.awt.event.ActionListener {
-	
+public class MediaFilesSearchListener implements ActionListener {
+
 	private final AlbumsJTable albumsJTable;
-	private final OsAction<Album> osAction;
+	private final ContentNature contentNature;
 	
-	public AlbumCommandListener(AlbumsJTable ajt, OsAction<Album> osAction) {
-		
+	public MediaFilesSearchListener(AlbumsJTable ajt, ContentNature contentNature) {
 		this.albumsJTable = ajt;
-		this.osAction = osAction;
+		this.contentNature = contentNature;
 	}
 
 	@Override
@@ -45,9 +46,9 @@ public class AlbumCommandListener implements java.awt.event.ActionListener {
 		
 		Album selectedAlbum = albumsJTable.getSelectedAlbum();
 		
-		if (selectedAlbum != null) {		
-			osAction.runOsAction(selectedAlbum);
-		}		
+		if (selectedAlbum != null) {
+			selectedAlbum.searchPotentialMediaFilesPaths(contentNature);
+		}
 	}
 
 }

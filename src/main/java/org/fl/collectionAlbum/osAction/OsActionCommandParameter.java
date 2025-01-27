@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,31 +22,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbumGui;
+package org.fl.collectionAlbum.osAction;
 
-import java.awt.event.ActionEvent;
+import java.util.List;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
-import org.fl.collectionAlbum.OsAction;
-import org.fl.collectionAlbum.mediaPath.MediaFilePath;
+public interface OsActionCommandParameter<T> {
 
-public class MediaFileCommandListener implements java.awt.event.ActionListener {
-
-	private final MediaFilesJTable mediaFileJTable;
-	private final OsAction<MediaFilePath> osAction;
+	public Function<T, List<String>> getParametersGetter();
 	
-	public MediaFileCommandListener(MediaFilesJTable mediaFileJTable, OsAction<MediaFilePath> osAction) {
-		this.mediaFileJTable = mediaFileJTable;
-		this.osAction = osAction;
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		
-		MediaFilePath mediaFilePath = mediaFileJTable.getSelectedMediaFile();
-		
-		if (mediaFilePath != null) {
-			osAction.runOsAction(mediaFilePath);
-		}
-	}
-
+	public Predicate<T> getActionValidityPredicate();
 }

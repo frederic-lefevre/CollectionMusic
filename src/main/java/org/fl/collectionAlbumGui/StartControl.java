@@ -32,20 +32,16 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-public class StartControl {
+public class StartControl implements ActivableElement {
 
 	private final JPanel procCtrl;
 	private final JButton pStart;
-
-	private boolean triggered;
 
 	private ProgressInformationPanel pip;
 	
 	public StartControl(String bText, String iText, String sText) {
 		
 		String buttonText = "<html><p>" + bText + "</p></html>";
-		
-		triggered = false;
 		
 		procCtrl = new JPanel();
 		procCtrl.setLayout(new BoxLayout(procCtrl, BoxLayout.Y_AXIS));
@@ -78,26 +74,15 @@ public class StartControl {
 	public ProgressInformationPanel getPip() {
 		return pip;
 	}
-
-	public boolean isTriggered() {
-		return triggered;
-	}
 	
-	public boolean isActive() {
-		return pStart.isEnabled();
-	}
-	
+	@Override
 	public void activate() {
-		triggered = false ;
-		pStart.setBackground(new Color(27,224,211));
 		pStart.setEnabled(true);
 	}
 	
+	@Override
 	public void deactivate() {
 		pStart.setEnabled(false);
 	}
 
-	public void setTriggered(boolean triggered) {
-		this.triggered = triggered;
-	}
 }

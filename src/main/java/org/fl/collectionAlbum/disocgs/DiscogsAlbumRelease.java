@@ -170,10 +170,11 @@ public class DiscogsAlbumRelease {
 		return formatMatchMap.get(supportPhysique);
 	}
 	
-	public String getInfo() {
+	public String getInfo(boolean displayLinkedAlbums) {
 		
 		StringBuilder info = new StringBuilder();
 		
+		info.append("Release Discogs:\n");
 		addPropertyInfo(info, "releaseId", inventoryCsvAlbum.getReleaseId());
 		addPropertyInfo(info, "Titre", inventoryCsvAlbum.getTitle());
 		addPropertyInfo(info, "Artistes", inventoryCsvAlbum.getArtists());
@@ -191,7 +192,7 @@ public class DiscogsAlbumRelease {
 		if ((collectionAlbums == null) || collectionAlbums.isEmpty()) {
 			info.append("\n-------------------------------------\n  Non lié à un album de la collection\n");
 			
-		} else {
+		} else if (displayLinkedAlbums){
 			info.append("\n-------------------------------------\n  Albums de la collection liés\n");
 			
 			collectionAlbums.forEach(collectionAlbum -> 
@@ -223,6 +224,6 @@ public class DiscogsAlbumRelease {
 	}
 	
 	private static void addPropertyInfo(StringBuilder info, String name, Object value) {
-		info.append(name).append(": ").append(Optional.ofNullable(value).map(v -> v.toString()).orElse("valeur null")).append("\n");
+		info.append("  ").append(name).append(": ").append(Optional.ofNullable(value).map(v -> v.toString()).orElse("valeur null")).append("\n");
 	}
 }

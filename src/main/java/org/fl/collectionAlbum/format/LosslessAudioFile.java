@@ -1,7 +1,7 @@
 /*
  MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -62,13 +62,13 @@ public class LosslessAudioFile extends AbstractAudioFile {
 	}
 	
 	@Override
-	public String displayMediaFileDetail(String separator) {		
-		return fileDetail(separator, particularDetail, (sb, s) -> appendCommonAudioFileDetail(sb, s));
+	public String displayMediaFileDetail(String separator, boolean withPrefix) {		
+		return fileDetail(separator, particularDetail, (sb, s) -> appendCommonAudioFileDetail(sb, s, withPrefix));
 	}
 
 	@Override
-	public String displayMediaFileDetailWithFileLink(String separator) {
-		return fileDetail(separator, particularDetail, (sb, s) -> appendCommonAudioFileDetailWithLink(sb, s));
+	public String displayMediaFileDetailWithFileLink(String separator, boolean withPrefix) {
+		return fileDetail(separator, particularDetail, (sb, s) -> appendCommonAudioFileDetailWithLink(sb, s, withPrefix));
 	}
 	
 	BiConsumer<StringBuilder, String> particularDetail = (sb, s) -> sb.append(getBitDepth()).append(" bits").append(s);

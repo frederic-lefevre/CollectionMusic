@@ -22,39 +22,29 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.concerts;
+package org.fl.collectionAlbum.osAction;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class LieuxDesConcerts {
+public class OsCommandAndOption {
+	
+	private final String actionCommand;
+	private final List<String> actionOptions;
+	
+	public OsCommandAndOption(String c, List<String> o) {
+		actionCommand = c;
+		actionOptions = o;
+	}
 
-	private static Map<String, LieuConcert> lieuxConcerts ;
-	
-	public LieuxDesConcerts() {
-		lieuxConcerts = new HashMap<String, LieuConcert>() ;
+	public String getActionCommand() {
+		return actionCommand;
 	}
-	
-	public void reset() {
-		lieuxConcerts.clear();
+
+	public List<String> getActionOptions() {
+		return actionOptions;
 	}
-	
-	public LieuConcert addLieuDunConcert(String lieu) {
-		LieuConcert lieuConcert = lieuxConcerts.get(lieu) ;
-		if (lieuConcert == null) {
-			lieuConcert = new LieuConcert(lieu) ;
-			lieuxConcerts.put(lieu, lieuConcert) ;
-		}
-		return lieuConcert ;
-	}
-	
-	public List<LieuConcert> getLieuxConcerts() {
-		LieuxPoidsComparator lieuxComparator = new LieuxPoidsComparator() ;
-		List<LieuConcert> lieux = new ArrayList<LieuConcert>(lieuxConcerts.values()) ;
-		Collections.sort(lieux, lieuxComparator) ;
-		return lieux ;
+
+	public boolean hasOptions() {
+		return (actionOptions != null) && !actionOptions.isEmpty();
 	}
 }

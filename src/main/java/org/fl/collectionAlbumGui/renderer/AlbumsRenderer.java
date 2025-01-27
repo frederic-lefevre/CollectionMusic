@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,48 +22,46 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbumGui;
+package org.fl.collectionAlbumGui.renderer;
 
-import java.awt.Color;
 import java.awt.Component;
-import java.util.Map;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
+import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 
 import org.fl.collectionAlbum.albums.Album;
-import org.fl.collectionAlbum.format.ContentNature;
+import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
-public class MediaFilesRenderer extends MediaFilesPane implements TableCellRenderer {
+public class AlbumsRenderer extends JLabel implements TableCellRenderer {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger mLog = Logger.getLogger(MediaFilesRenderer.class.getName());
+	private static final Logger mLog = Logger.getLogger(AlbumsRenderer.class.getName());
 	
-	public MediaFilesRenderer(
-			Map<ContentNature, MediaFilesSearchListener>  mediaFilesSearchListeners, 
-			Map<ContentNature, MediaFileValidationListener> mediaFilesValidationListeners) {
-		super(mediaFilesSearchListeners, mediaFilesValidationListeners);
+	private final static String ALBUMS_SEPARATOR = ", ";
+	
+	public AlbumsRenderer() {
+		super();
 	}
 
-	@Override 
-	public Component getTableCellRendererComponent(
-		      JTable table, Object value, boolean isSelected, boolean hasFocus,
-		      int row, int column) {
+	@Override
+	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
+			int row, int column) {
 		if (value == null) {
 			// This may happen when rescanning the album collection
-			mLog.fine("Null value in MediaFiles cell. Should be an Album");
-			setBackground(Color.RED);
-		} else if (value instanceof Album) {
-			int rowHeight = updateValue((Album)value);
-			table.setRowHeight(row, rowHeight);
-			if (isSelected) {
-				setBackground(Color.LIGHT_GRAY);
-			}
+			mLog.fine("Null value in MediaFiles cell. Should be an MediaFilePath");
+			setText("Valeur null");
+		} else if (value instanceof MediaFilePath) {
+			setText(((MediaFilePath)value).getAlbumSet().stream()
+					.map(Album::getTitre)
+					.collect(Collectors.joining(ALBUMS_SEPARATOR)));
 		} else {
-			mLog.severe("Invalid value type in MediaFiles cell. Should be Album but is " + value.getClass().getName());
+			mLog.severe("Invalid value type in Auteurs cell. Should be Album but is " + value.getClass().getName());
 		}
 		return this;
 	}
+
 }

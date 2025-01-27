@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbumGui;
+package org.fl.collectionAlbumGui.adapter;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -30,41 +30,33 @@ import java.util.List;
 
 import javax.swing.JPopupMenu;
 
-import org.apache.commons.lang3.stream.Streams;
-import org.fl.collectionAlbum.CollectionAlbumContainer;
-import org.fl.collectionAlbum.OsAction;
-import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
-import org.fl.collectionAlbumGui.DiscogsReleaseCustomActionListener.CustomAction;
+import org.fl.collectionAlbum.mediaPath.MediaFilePath;
+import org.fl.collectionAlbum.osAction.OsAction;
+import org.fl.collectionAlbumGui.CollectionMenuItems;
+import org.fl.collectionAlbumGui.MediaFilesJTable;
+import org.fl.collectionAlbumGui.listener.MediaFileCommandListener;
 
-public class DiscogsInventoryMouseAdapter extends MouseAdapter {
+public class MediaFileMouseAdapter extends MouseAdapter {
 
-	private final DiscogsReleaseJTable discogsReleaseJTable;
+	private final MediaFilesJTable mediaFileTable;
 	private final JPopupMenu localJPopupMenu;
+	private final CollectionMenuItems<MediaFilePath> mediaFileMenuItems;
 	
-	private final CollectionMenuItems<DiscogsAlbumRelease> discogsReleaseMenuItems;
-	
-	public DiscogsInventoryMouseAdapter(DiscogsReleaseJTable discogsReleaseJTable, List<OsAction<DiscogsAlbumRelease>> osActions, CollectionAlbumContainer albumsContainer, GenerationPane generationPane) {
-		
+	public MediaFileMouseAdapter(MediaFilesJTable mediaFileTable, List<OsAction<MediaFilePath>> osActions) {
 		super();
-		this.discogsReleaseJTable = discogsReleaseJTable;
-		localJPopupMenu = new JPopupMenu();
 		
-		discogsReleaseMenuItems = new CollectionMenuItems<>();
+		this.mediaFileTable = mediaFileTable;
+		localJPopupMenu = new JPopupMenu();
+		mediaFileMenuItems = new CollectionMenuItems<>();
 		
 		osActions.forEach(osAction -> 
-			discogsReleaseMenuItems.addMenuItem(
+			mediaFileMenuItems.addMenuItem(
 				osAction.getActionTitle(),
-				new DiscogsReleaseCommandListener(discogsReleaseJTable, osAction), 
+				new MediaFileCommandListener(mediaFileTable, osAction),
 				osAction.getCommandParameter().getActionValidityPredicate(),
 				localJPopupMenu
-		));
-		
-		Streams.of(CustomAction.values()).forEach(customAction -> 
-			discogsReleaseMenuItems.addMenuItem(
-					customAction.getActionTitle(), 
-					new DiscogsReleaseCustomActionListener(discogsReleaseJTable, customAction, albumsContainer, generationPane), 
-					customAction.getDisplayable(), 
-					localJPopupMenu));
+			)
+		);
 	}
 
 	@Override
@@ -84,7 +76,7 @@ public class DiscogsInventoryMouseAdapter extends MouseAdapter {
 	}
 	
 	private void enableMenuItems() {
-		discogsReleaseMenuItems.enableMenuItems(discogsReleaseJTable.getSelectedDisocgsRelease());
+		mediaFileMenuItems.enableMenuItems(mediaFileTable.getSelectedMediaFile());
 	}
 
 }

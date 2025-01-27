@@ -25,6 +25,7 @@ SOFTWARE.
 package org.fl.collectionAlbumGui;
 
 import java.awt.Dimension;
+import java.util.List;
 import java.util.stream.Stream;
 
 import javax.swing.BoxLayout;
@@ -47,15 +48,15 @@ public class GenerationPane extends JPanel {
 	private final static String sText = "Aucune collection lue";
 	private final static String s1Text = "Aucun site généré";
 
-	private final StartControl startButton;
-	private final StartControl genButton;
+	private final StartControl readCollectionControl;
+	private final StartControl generateSiteControl;
 	
 	public GenerationPane() {
 
 		super();
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-		AlbumsTableModel albumsTableModel = new AlbumsTableModel(CollectionAlbumContainer.getInstance());
+		AlbumsTableModel albumsTableModel = new AlbumsTableModel(CollectionAlbumContainer.getInstance().getCollectionAlbumsMusiques().getAlbums());
 		
 		AlbumsJTable albumsJTable = new AlbumsJTable(albumsTableModel, this);
 		
@@ -63,26 +64,27 @@ public class GenerationPane extends JPanel {
 		JPanel controlPanel = new JPanel();
 		controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.X_AXIS));
 		
-		startButton = new StartControl(rText, iText, sText);
-		controlPanel.add(startButton.getProcCtrl());
+		readCollectionControl = new StartControl(rText, iText, sText);
+		controlPanel.add(readCollectionControl.getProcCtrl());
 
-		UtilsPane utilsPane = new UtilsPane();
+		UtilsPane utilsPane = new UtilsPane(this);
+		utilsPane.deactivate();
 		controlPanel.add(utilsPane);
 		
-		genButton = new StartControl(gText, iText, s1Text);
-		genButton.deactivate();
-		controlPanel.add(genButton.getProcCtrl());
+		generateSiteControl = new StartControl(gText, iText, s1Text);
+		generateSiteControl.deactivate();
+		controlPanel.add(generateSiteControl.getProcCtrl());
 
-		StartControl[] stCtrl = new StartControl[] { startButton, genButton };
+		List<ActivableElement> activableElements = List.of(readCollectionControl, utilsPane, generateSiteControl);
 
-		StartReadCollection sm = new StartReadCollection(startButton.getPip(), startButton, stCtrl);
-		sm.setCollectionProcWaiter(new CollectionProcessWaiter(stCtrl));
+		StartReadCollection sm = new StartReadCollection(readCollectionControl.getPip(), activableElements);
+		sm.setCollectionProcWaiter(new CollectionProcessWaiter(activableElements));
 		sm.addTableModel(albumsTableModel);
-		startButton.getStartButton().addActionListener(sm);
+		readCollectionControl.getStartButton().addActionListener(sm);
 
-		StartGenerationSite sg = new StartGenerationSite(genButton.getPip(), genButton, stCtrl);
-		sg.setCollectionProcWaiter(new CollectionProcessWaiter(stCtrl));
-		genButton.getStartButton().addActionListener(sg);
+		StartGenerationSite sg = new StartGenerationSite(generateSiteControl.getPip(), activableElements);
+		sg.setCollectionProcWaiter(new CollectionProcessWaiter(activableElements));
+		generateSiteControl.getStartButton().addActionListener(sg);
 		
 		add(controlPanel);
 		
@@ -137,7 +139,7 @@ public class GenerationPane extends JPanel {
 
 	public void rescanNeeded() {
 		
-		genButton.deactivate();
-		startButton.getPip().setProcessStatus("Relecture nécessaire");
+		generateSiteControl.deactivate();
+		readCollectionControl.getPip().setProcessStatus("Relecture nécessaire");
 	}
 }

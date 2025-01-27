@@ -22,39 +22,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.concerts;
+package org.fl.collectionAlbumGui;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+public interface ActivableElement {
+	
+	public void activate();
+	public void deactivate();
 
-public class LieuxDesConcerts {
-
-	private static Map<String, LieuConcert> lieuxConcerts ;
-	
-	public LieuxDesConcerts() {
-		lieuxConcerts = new HashMap<String, LieuConcert>() ;
-	}
-	
-	public void reset() {
-		lieuxConcerts.clear();
-	}
-	
-	public LieuConcert addLieuDunConcert(String lieu) {
-		LieuConcert lieuConcert = lieuxConcerts.get(lieu) ;
-		if (lieuConcert == null) {
-			lieuConcert = new LieuConcert(lieu) ;
-			lieuxConcerts.put(lieu, lieuConcert) ;
-		}
-		return lieuConcert ;
-	}
-	
-	public List<LieuConcert> getLieuxConcerts() {
-		LieuxPoidsComparator lieuxComparator = new LieuxPoidsComparator() ;
-		List<LieuConcert> lieux = new ArrayList<LieuConcert>(lieuxConcerts.values()) ;
-		Collections.sort(lieux, lieuxComparator) ;
-		return lieux ;
-	}
 }

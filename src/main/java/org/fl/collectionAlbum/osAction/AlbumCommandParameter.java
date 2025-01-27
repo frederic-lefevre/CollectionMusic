@@ -1,7 +1,7 @@
 /*
- * MIT License
+ MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -20,34 +20,42 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-*/
+ */
 
-package org.fl.collectionAlbumGui;
+package org.fl.collectionAlbum.osAction;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.util.List;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
+import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
-import org.fl.collectionAlbum.format.ContentNature;
 
-public class MediaFilesSearchListener implements ActionListener {
+public enum AlbumCommandParameter implements OsActionCommandParameter<Album> {
 
-	private final AlbumsJTable albumsJTable;
-	private final ContentNature contentNature;
+	JSON(
+			(album) -> List.of(album.getJsonFilePath().toAbsolutePath().toString()), 
+			(album) -> true),
+	DISCOGS_RELEASE_INFO(
+			(album) -> List.of(Control.getDiscogsBaseUrlForRelease() + album.getDiscogsLink()), 
+			(album) -> (album.getDiscogsLink() != null) && !album.getDiscogsLink().isEmpty());
 	
-	public MediaFilesSearchListener(AlbumsJTable ajt, ContentNature contentNature) {
-		this.albumsJTable = ajt;
-		this.contentNature = contentNature;
+	private final Function<Album,List<String>> parametersGetter;
+	private final Predicate<Album> actionValidityPredicate;
+	
+	private AlbumCommandParameter(Function<Album,List<String>> gp, Predicate<Album> vp) {
+		parametersGetter = gp;
+		actionValidityPredicate = vp;
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		
-		Album selectedAlbum = albumsJTable.getSelectedAlbum();
-		
-		if (selectedAlbum != null) {
-			selectedAlbum.searchPotentialMediaFilesPaths(contentNature);
-		}
+	public Function<Album, List<String>> getParametersGetter() {
+		return parametersGetter;
+	}
+
+	@Override
+	public Predicate<Album> getActionValidityPredicate() {
+		return actionValidityPredicate;
 	}
 
 }

@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum;
+package org.fl.collectionAlbum.osAction;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -35,23 +35,17 @@ public class OsAction<T> {
 	private static final Logger oLog = Logger.getLogger(OsAction.class.getName());
 	
 	private final String actionTitle;
-	private final String actionCommand;
-	private final List<String> actionOptions;
+	private final OsCommandAndOption osCommandAndOption;
 	private final OsActionCommandParameter<T> commandParameter;
 	
-	public OsAction(String t, String c, List<String> o, OsActionCommandParameter<T> a) {
+	public OsAction(String t, OsCommandAndOption osCommandAndOption, OsActionCommandParameter<T> a) {
 		actionTitle   = t;
-		actionCommand = c;
-		actionOptions = o;
+		this.osCommandAndOption = osCommandAndOption;
 		commandParameter = a;
 	}
 
 	public String getActionTitle() {
 		return actionTitle;
-	}
-
-	public String getActionCommand() {
-		return actionCommand;
 	}
 
 	public OsActionCommandParameter<T> getCommandParameter() {
@@ -61,9 +55,9 @@ public class OsAction<T> {
 	public void runOsAction(T o) {
 		
 		List<String> cmdAndParams = new ArrayList<>();
-		cmdAndParams.add(getActionCommand());
-		if ((actionOptions != null) && !actionOptions.isEmpty()) {
-			cmdAndParams.addAll(actionOptions);
+		cmdAndParams.add(osCommandAndOption.getActionCommand());
+		if (osCommandAndOption.hasOptions()) {
+			cmdAndParams.addAll(osCommandAndOption.getActionOptions());
 		}
 		cmdAndParams.addAll(getCommandParameter().getParametersGetter().apply(o));
 		

@@ -22,12 +22,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbumGui;
+package org.fl.collectionAlbumGui.listener;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
@@ -45,6 +46,9 @@ import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease.FormatCompatibilityResult;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.AlbumMatchResult;
+import org.fl.collectionAlbumGui.DetailedAlbumAndDiscogsInfoPane;
+import org.fl.collectionAlbumGui.DiscogsReleaseJTable;
+import org.fl.collectionAlbumGui.GenerationPane;
 
 public class DiscogsReleaseCustomActionListener implements java.awt.event.ActionListener {
 
@@ -56,7 +60,7 @@ public class DiscogsReleaseCustomActionListener implements java.awt.event.Action
 	
 	public enum CustomAction {
 		
-		SHOW_INFO("Afficher les informations", (release) -> release != null),
+		SHOW_INFO("Informations détaillées", Objects::nonNull),
 		ALBUM_SEARCH("Chercher les albums", isNotLinkedToAlbum),
 		FORMAT_VALIDATION("Valider le format discogs", isLinkedToAlbumWithFormatProblem);
 		
@@ -103,13 +107,7 @@ public class DiscogsReleaseCustomActionListener implements java.awt.event.Action
 				case SHOW_INFO:
 					
 					// Show informations in popup message
-					JTextArea infoRelease = new JTextArea(40, 200);
-					infoRelease.setEditable(false);
-					
-					infoRelease.setText(release.getInfo());
-					infoRelease.setFont(new Font("monospaced", Font.BOLD, 14));
-					JScrollPane infoFilesScroll = new JScrollPane(infoRelease) ;
-					JOptionPane.showMessageDialog(null, infoFilesScroll, "Informations", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, new DetailedAlbumAndDiscogsInfoPane(release), "Informations", JOptionPane.INFORMATION_MESSAGE);
 				
 					break;
 					

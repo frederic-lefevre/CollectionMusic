@@ -78,7 +78,7 @@ public abstract class MusicArtefact {
 		discogsFormatValidation = musicParser.getDisocgsFormatValidation();
 		
 		hasAdditionalInfo = 
-				((notes != null) && (! notes.isEmpty())) ||
+				hasNotes() ||
 				((urlLinks != null) && (! urlLinks.isEmpty()))  ||
 				hasDiscogsRelease();
 	}
@@ -133,6 +133,14 @@ public abstract class MusicArtefact {
 	
 	public boolean hasDiscogsRelease() {
 		return (discogsLink != null) && (! discogsLink.isEmpty());
+	}
+	
+	public boolean hasNotes() {
+		return ((notes != null) && (! notes.isEmpty()));
+	}
+	
+	public boolean hasUrlLinks() {
+		return ((urlLinks != null) && (! urlLinks.isEmpty()));
 	}
 	
 	public void setDiscogsLink(String discogsLink) {

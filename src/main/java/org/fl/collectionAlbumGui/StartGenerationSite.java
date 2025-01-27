@@ -24,24 +24,22 @@ SOFTWARE.
 
 package org.fl.collectionAlbumGui;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import org.fl.collectionAlbum.GenerationSiteCollection;
 
 public class StartGenerationSite implements ActionListener {
 	
 	private final ProgressInformationPanel pip;	
-	private final StartControl  startCtrl;
-	private final StartControl[]  startCtrlTab;
+	private final List<ActivableElement>  activableButtons;
 	private CollectionProcessWaiter collectionProcWaiter;
 
-	public StartGenerationSite(ProgressInformationPanel progInfoPanel, StartControl stCtrl, StartControl[] stList) {
+	public StartGenerationSite(ProgressInformationPanel progInfoPanel, List<ActivableElement> stList) {
 		
 		pip = progInfoPanel;
-		startCtrl = stCtrl;
-		startCtrlTab = stList;
+		activableButtons = stList;
 	}
 	
 
@@ -53,10 +51,8 @@ public class StartGenerationSite implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		
-		startCtrl.setTriggered(true);
-		startCtrl.getStartButton().setBackground(new Color(27,224,211));
-		for (StartControl st : startCtrlTab ) {
-			st.getStartButton().setEnabled(false);
+		for (ActivableElement st : activableButtons ) {
+			st.deactivate();
 		}
 		GenerationSiteCollection gc = new GenerationSiteCollection(pip);
 		gc.addPropertyChangeListener(collectionProcWaiter);

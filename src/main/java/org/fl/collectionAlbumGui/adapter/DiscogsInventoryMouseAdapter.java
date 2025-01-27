@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbumGui;
+package org.fl.collectionAlbumGui.adapter;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -30,30 +30,46 @@ import java.util.List;
 
 import javax.swing.JPopupMenu;
 
-import org.fl.collectionAlbum.OsAction;
-import org.fl.collectionAlbum.mediaPath.MediaFilePath;
+import org.apache.commons.lang3.stream.Streams;
+import org.fl.collectionAlbum.CollectionAlbumContainer;
+import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
+import org.fl.collectionAlbum.osAction.OsAction;
+import org.fl.collectionAlbumGui.CollectionMenuItems;
+import org.fl.collectionAlbumGui.DiscogsReleaseJTable;
+import org.fl.collectionAlbumGui.GenerationPane;
+import org.fl.collectionAlbumGui.listener.DiscogsReleaseCommandListener;
+import org.fl.collectionAlbumGui.listener.DiscogsReleaseCustomActionListener;
+import org.fl.collectionAlbumGui.listener.DiscogsReleaseCustomActionListener.CustomAction;
 
-public class MediaFileMouseAdapter extends MouseAdapter {
+public class DiscogsInventoryMouseAdapter extends MouseAdapter {
 
-	private final MediaFilesJTable mediaFileTable;
+	private final DiscogsReleaseJTable discogsReleaseJTable;
 	private final JPopupMenu localJPopupMenu;
-	private final CollectionMenuItems<MediaFilePath> mediaFileMenuItems;
 	
-	public MediaFileMouseAdapter(MediaFilesJTable mediaFileTable, List<OsAction<MediaFilePath>> osActions) {
-		super();
+	private final CollectionMenuItems<DiscogsAlbumRelease> discogsReleaseMenuItems;
+	
+	public DiscogsInventoryMouseAdapter(DiscogsReleaseJTable discogsReleaseJTable, List<OsAction<DiscogsAlbumRelease>> osActions, CollectionAlbumContainer albumsContainer, GenerationPane generationPane) {
 		
-		this.mediaFileTable = mediaFileTable;
+		super();
+		this.discogsReleaseJTable = discogsReleaseJTable;
 		localJPopupMenu = new JPopupMenu();
-		mediaFileMenuItems = new CollectionMenuItems<>();
+		
+		discogsReleaseMenuItems = new CollectionMenuItems<>();
 		
 		osActions.forEach(osAction -> 
-			mediaFileMenuItems.addMenuItem(
+			discogsReleaseMenuItems.addMenuItem(
 				osAction.getActionTitle(),
-				new MediaFileCommandListener(mediaFileTable, osAction),
+				new DiscogsReleaseCommandListener(discogsReleaseJTable, osAction), 
 				osAction.getCommandParameter().getActionValidityPredicate(),
 				localJPopupMenu
-			)
-		);
+		));
+		
+		Streams.of(CustomAction.values()).forEach(customAction -> 
+			discogsReleaseMenuItems.addMenuItem(
+					customAction.getActionTitle(), 
+					new DiscogsReleaseCustomActionListener(discogsReleaseJTable, customAction, albumsContainer, generationPane), 
+					customAction.getDisplayable(), 
+					localJPopupMenu));
 	}
 
 	@Override
@@ -73,7 +89,7 @@ public class MediaFileMouseAdapter extends MouseAdapter {
 	}
 	
 	private void enableMenuItems() {
-		mediaFileMenuItems.enableMenuItems(mediaFileTable.getSelectedMediaFile());
+		discogsReleaseMenuItems.enableMenuItems(discogsReleaseJTable.getSelectedDisocgsRelease());
 	}
 
 }

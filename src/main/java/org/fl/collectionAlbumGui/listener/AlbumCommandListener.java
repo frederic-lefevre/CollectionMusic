@@ -22,27 +22,33 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum;
+package org.fl.collectionAlbumGui.listener;
 
-import static org.assertj.core.api.Assertions.*;
+import java.awt.event.ActionEvent;
 
-public class TestUtils {
+import org.fl.collectionAlbum.albums.Album;
+import org.fl.collectionAlbum.osAction.OsAction;
+import org.fl.collectionAlbumGui.AlbumsJTable;
 
-	public static void assertEmptyCollection(CollectionAlbumContainer albumsContainer) {
+public class AlbumCommandListener implements java.awt.event.ActionListener {
+	
+	private final AlbumsJTable albumsJTable;
+	private final OsAction<Album> osAction;
+	
+	public AlbumCommandListener(AlbumsJTable ajt, OsAction<Album> osAction) {
 		
-		assertThat(albumsContainer.getCollectionAlbumsMusiques()).isNotNull();
-		assertThat(albumsContainer.getConcerts()).isNotNull();
-		assertThat(albumsContainer.getCollectionArtistes()).isNotNull();
-		assertThat(albumsContainer.getConcertsArtistes()).isNotNull();
-		assertThat(albumsContainer.getCalendrierArtistes()).isNotNull();
-		assertThat(albumsContainer.getStatChronoComposition()).isNotNull();
-		assertThat(albumsContainer.getStatChronoEnregistrement()).isNotNull();
-		
-		assertThat(albumsContainer.getCollectionAlbumsMusiques().getNombreAlbums()).isZero();
-		assertThat(albumsContainer.getConcerts().getNombreConcerts()).isZero();
-		assertThat(albumsContainer.getCollectionArtistes().getNombreArtistes()).isZero();
-		assertThat(albumsContainer.getConcertsArtistes().getNombreArtistes()).isZero();
-		
-		assertThatIllegalArgumentException().isThrownBy(() -> albumsContainer.pickRandomAlbums(1));
+		this.albumsJTable = ajt;
+		this.osAction = osAction;
 	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		
+		Album selectedAlbum = albumsJTable.getSelectedAlbum();
+		
+		if (selectedAlbum != null) {		
+			osAction.runOsAction(selectedAlbum);
+		}		
+	}
+
 }

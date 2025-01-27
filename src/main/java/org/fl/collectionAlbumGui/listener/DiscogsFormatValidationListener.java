@@ -22,51 +22,54 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
  */
 
-package org.fl.collectionAlbumGui;
+package org.fl.collectionAlbumGui.listener;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Set;
 import java.util.logging.Logger;
 
 import javax.swing.JPanel;
 
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
+import org.fl.collectionAlbumGui.GenerationPane;
 
-public class ReleaseValidationListener implements ActionListener {
+public class DiscogsFormatValidationListener implements ActionListener {
 
-	private static final Logger aLog = Logger.getLogger(ReleaseValidationListener.class.getName());
+	private static final Logger aLog = Logger.getLogger(DiscogsFormatValidationListener.class.getName());
 	
 	private final DiscogsAlbumRelease release;
-	private final Album album;
-	private final JPanel potentialReleasesPane;
+	private final JPanel formatValidationPane;
 	private final GenerationPane generationPane;
 	
-	public ReleaseValidationListener(DiscogsAlbumRelease release, Album album, JPanel potentialReleasesPane, GenerationPane generationPane) {
-		super();
+	public DiscogsFormatValidationListener(DiscogsAlbumRelease release, JPanel formatValidationPane, GenerationPane generationPane) {
+		
 		this.release = release;
-		this.album = album;
-		this.potentialReleasesPane = potentialReleasesPane;
+		this.formatValidationPane = formatValidationPane;
 		this.generationPane = generationPane;
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-
-		String presentDiscogsLink = album.getDiscogsLink();
-		if ((presentDiscogsLink == null) || (presentDiscogsLink.isEmpty())) {
+		
+		Set<Album> albums = release.getAlbumsWithFormatMismatch();
+		if ((albums != null) && !albums.isEmpty()) {
 			
-			album.setDiscogsLink(release.getInventoryCsvAlbum().getReleaseId());
-			release.addCollectionAlbums(album);
-			album.writeJson();
-			potentialReleasesPane.removeAll();
-			potentialReleasesPane.updateUI();
+			albums.forEach(album -> setDiscogsFormatValidation(album));
+			formatValidationPane.removeAll();
+			formatValidationPane.updateUI();
 			generationPane.rescanNeeded();
 			
 		} else {
-			
-			aLog.severe("Trying to set a discogs link that is already set. Release=" + release.getInventoryCsvAlbum().getReleaseId() + " Album=" + album.getTitre());
+			aLog.severe("Trying to set discogs format validation for a discogs release that is not linked to an album or that has no format mismatch problem. Release id=" + release.getInventoryCsvAlbum().getReleaseId());
 		}
+		
 	}
 
+	private void setDiscogsFormatValidation(Album album) {
+		
+		album.setDiscogsFormatValid(true);
+		album.writeJson();
+	}
 }

@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -30,54 +30,64 @@ import java.util.List;
 
 import org.fl.collectionAlbum.RangementComparator;
 import org.fl.collectionAlbum.format.Format;
+import org.fl.collectionAlbum.utils.ListUtils;
 
 public class ListeAlbum {
 	
-	private List<Album> albums ;
-	
-	private Format formatListeAlbum ;
-	
+	private final List<Album> albums;
+
+	private Format formatListeAlbum;
+
 	public ListeAlbum() {
-		
-		formatListeAlbum = new Format(null) ;
-		albums  = new ArrayList<Album>() ;
+
+		formatListeAlbum = new Format(null);
+		albums = new ArrayList<Album>();
 	}
-	
+
 	public void addAlbum(Album a) {
-		if (! albums.contains(a)) {
-			albums.add(a) ;
-			formatListeAlbum.incrementFormat(a.getFormatAlbum()) ;
+		if (!albums.contains(a)) {
+			albums.add(a);
+			formatListeAlbum.incrementFormat(a.getFormatAlbum());
 		}
+	}
+
+	public void reset() {
+		albums.clear();
+		formatListeAlbum = new Format(null);
 	}
 	
 	public ListeAlbum sortChronoEnregistrement() {
 		AlbumEnregistrementComparator compAlbum = new AlbumEnregistrementComparator();
-		Collections.sort(albums, compAlbum) ;
-		return this ;
+		Collections.sort(albums, compAlbum);
+		return this;
 	}
-	
+
 	public ListeAlbum sortChronoComposition() {
 		AlbumCompositionComparator compAlbum = new AlbumCompositionComparator();
-		Collections.sort(albums, compAlbum) ;
-		return this ;
+		Collections.sort(albums, compAlbum);
+		return this;
 	}
-	
+
 	public ListeAlbum sortRangementAlbum() {
 		RangementComparator compAlbum = new RangementComparator();
-		Collections.sort(albums, compAlbum) ;
-		return this ;
+		Collections.sort(albums, compAlbum);
+		return this;
 	}
-	
+
 	public Format getFormatListeAlbum() {
 		return formatListeAlbum;
 	}
-	
+
 	public int getNombreAlbums() {
-		return albums.size() ;
+		return albums.size();
 	}
-	
+
 	public List<Album> getAlbums() {
 		return albums;
+	}
+	
+	public List<Album> pickRandomAlbums(int nbAlbum) {
+		return ListUtils.pickRandomDistinctElements(albums, nbAlbum);
 	}
 
 }

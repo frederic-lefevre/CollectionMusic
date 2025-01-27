@@ -22,27 +22,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum;
+package org.fl.collectionAlbumGui.listener;
 
-import static org.assertj.core.api.Assertions.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-public class TestUtils {
+import org.fl.collectionAlbum.osAction.OsAction;
 
-	public static void assertEmptyCollection(CollectionAlbumContainer albumsContainer) {
-		
-		assertThat(albumsContainer.getCollectionAlbumsMusiques()).isNotNull();
-		assertThat(albumsContainer.getConcerts()).isNotNull();
-		assertThat(albumsContainer.getCollectionArtistes()).isNotNull();
-		assertThat(albumsContainer.getConcertsArtistes()).isNotNull();
-		assertThat(albumsContainer.getCalendrierArtistes()).isNotNull();
-		assertThat(albumsContainer.getStatChronoComposition()).isNotNull();
-		assertThat(albumsContainer.getStatChronoEnregistrement()).isNotNull();
-		
-		assertThat(albumsContainer.getCollectionAlbumsMusiques().getNombreAlbums()).isZero();
-		assertThat(albumsContainer.getConcerts().getNombreConcerts()).isZero();
-		assertThat(albumsContainer.getCollectionArtistes().getNombreArtistes()).isZero();
-		assertThat(albumsContainer.getConcertsArtistes().getNombreArtistes()).isZero();
-		
-		assertThatIllegalArgumentException().isThrownBy(() -> albumsContainer.pickRandomAlbums(1));
+public class OsActionListener<T> implements ActionListener {
+
+	private final OsAction<T> osAction;
+	private final T o;
+	
+	public OsActionListener(T o, OsAction<T> osAction) {
+		this.osAction = osAction;
+		this.o = o;
 	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		
+		osAction.runOsAction(o);	
+	}
+
 }

@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,15 +22,32 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum;
+package org.fl.collectionAlbumGui.listener;
 
-import java.util.List;
-import java.util.function.Function;
-import java.util.function.Predicate;
+import java.awt.event.ActionEvent;
 
-public interface OsActionCommandParameter<T> {
+import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
+import org.fl.collectionAlbum.osAction.OsAction;
+import org.fl.collectionAlbumGui.DiscogsReleaseJTable;
 
-	public Function<T, List<String>> getParametersGetter();
+public class DiscogsReleaseCommandListener implements java.awt.event.ActionListener {
+
+	private final DiscogsReleaseJTable discogsReleaseJTable;
+	private final OsAction<DiscogsAlbumRelease> osAction;
 	
-	public Predicate<T> getActionValidityPredicate();
+	public DiscogsReleaseCommandListener(DiscogsReleaseJTable discogsReleaseJTable, OsAction<DiscogsAlbumRelease> osAction) {
+		this.discogsReleaseJTable = discogsReleaseJTable;
+		this.osAction = osAction;
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		
+		DiscogsAlbumRelease release = discogsReleaseJTable.getSelectedDisocgsRelease();
+		
+		if (release != null) {
+			osAction.runOsAction(release);
+		}		
+	}
+
 }

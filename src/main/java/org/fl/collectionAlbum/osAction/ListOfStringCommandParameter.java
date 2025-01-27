@@ -22,31 +22,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbumGui;
+package org.fl.collectionAlbum.osAction;
 
-import java.awt.event.ActionEvent;
+import java.util.List;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
-import org.fl.collectionAlbum.OsAction;
-import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
+public class ListOfStringCommandParameter implements OsActionCommandParameter<List<String>> {
 
-public class DiscogsReleaseCommandListener implements java.awt.event.ActionListener {
-
-	private final DiscogsReleaseJTable discogsReleaseJTable;
-	private final OsAction<DiscogsAlbumRelease> osAction;
-	
-	public DiscogsReleaseCommandListener(DiscogsReleaseJTable discogsReleaseJTable, OsAction<DiscogsAlbumRelease> osAction) {
-		this.discogsReleaseJTable = discogsReleaseJTable;
-		this.osAction = osAction;
+	@Override
+	public Function<List<String>, List<String>> getParametersGetter() {		
+		return Function.identity();
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		
-		DiscogsAlbumRelease release = discogsReleaseJTable.getSelectedDisocgsRelease();
-		
-		if (release != null) {
-			osAction.runOsAction(release);
-		}		
+	public Predicate<List<String>> getActionValidityPredicate() {		
+		return (o) -> o != null;
 	}
 
 }

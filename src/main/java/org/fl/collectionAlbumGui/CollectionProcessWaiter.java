@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,15 +26,16 @@ package org.fl.collectionAlbumGui;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.List;
 
 import javax.swing.SwingWorker;
 
 public class CollectionProcessWaiter implements PropertyChangeListener {
 
-	private StartControl[] startCtrlList;
+	private final List<ActivableElement>  activableElements;
 	
-	public CollectionProcessWaiter(StartControl[] stList) {
-		startCtrlList = stList ;
+	public CollectionProcessWaiter(List<ActivableElement>  stList) {
+		activableElements = stList ;
 	}
 
 	@Override
@@ -42,8 +43,8 @@ public class CollectionProcessWaiter implements PropertyChangeListener {
 		
 		 if ("state".equals(event.getPropertyName())
                  && SwingWorker.StateValue.DONE == event.getNewValue()) {
-			 for (StartControl startCtrl : startCtrlList) {
-				 startCtrl.activate() ;
+			 for (ActivableElement activavleElement : activableElements) {
+				 activavleElement.activate() ;
 			 }
 		 }
 	}

@@ -35,6 +35,9 @@ import javax.swing.table.TableRowSorter;
 import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
+import org.fl.collectionAlbumGui.adapter.DiscogsInventoryMouseAdapter;
+import org.fl.collectionAlbumGui.renderer.CollectionBooleanRenderer;
+import org.fl.collectionAlbumGui.renderer.FormatCompatibilityRenderer;
 
 public class DiscogsReleaseJTable extends JTable {
 

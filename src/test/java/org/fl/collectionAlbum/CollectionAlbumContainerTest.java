@@ -165,5 +165,13 @@ class CollectionAlbumContainerTest {
 					assertThat(albumsContainer.getAlbumsWithOnlyContentNature(contentNature).getAlbums()).isEmpty(); 
 				}			
 		});
+		
+		assertThat(albumsContainer.pickRandomAlbums(3)).isNotNull()
+			.singleElement()
+			.satisfies(alb -> assertThat(alb.getTitre()).isEqualTo("Portrait in jazz"));
+		
+		assertThat(albumsContainer.pickRandomAlbumsViaArtiste(3)).isNotNull()
+			.singleElement()
+			.satisfies(alb -> assertThat(alb.getTitre()).isEqualTo("Portrait in jazz"));
 	}
 }

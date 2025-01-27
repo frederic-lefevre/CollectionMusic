@@ -22,12 +22,13 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbumGui;
+package org.fl.collectionAlbumGui.listener;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
@@ -43,7 +44,9 @@ import javax.swing.JTextArea;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.ReleaseMatchResult;
-import org.fl.collectionAlbum.disocgs.DiscogsInventory;
+import org.fl.collectionAlbumGui.AlbumsJTable;
+import org.fl.collectionAlbumGui.DetailedAlbumAndDiscogsInfoPane;
+import org.fl.collectionAlbumGui.GenerationPane;
 
 public class AlbumCustomActionListener implements java.awt.event.ActionListener {
 
@@ -53,7 +56,7 @@ public class AlbumCustomActionListener implements java.awt.event.ActionListener 
 	
 	public enum CustomAction {
 		
-		DISCOGS_RELEASE_DISPLAY("Afficher la release discogs", isLinkedToDiscogsRelease), 
+		DETAILED_INFO_DISPLAY("Informations détaillées", Objects::nonNull), 
 		DISCOGS_RELEASE_SEARCH("Chercher la release discogs", isLinkedToDiscogsRelease.negate()) ;
 		
 		private final String actionTitle;
@@ -93,23 +96,9 @@ public class AlbumCustomActionListener implements java.awt.event.ActionListener 
 			
 			switch (customAction) {
 			
-				case DISCOGS_RELEASE_DISPLAY:
+				case DETAILED_INFO_DISPLAY:
 					
-					String discogsReleaseId = selectedAlbum.getDiscogsLink();					
-					if (discogsReleaseId != null) {
-						
-						DiscogsAlbumRelease release = DiscogsInventory.getDiscogsAlbumRelease(discogsReleaseId);
-						if (release != null) {
-							
-							// Show informations in popup message
-							JTextArea infoRelease = new JTextArea(40, 200);	
-							infoRelease.setEditable(false);
-							infoRelease.setText(release.getInfo());
-							infoRelease.setFont(new Font("monospaced", Font.BOLD, 14));
-							JScrollPane infoFilesScroll = new JScrollPane(infoRelease) ;
-							JOptionPane.showMessageDialog(null, infoFilesScroll, "Informations de la release discogs", JOptionPane.INFORMATION_MESSAGE);
-						}
-					}
+					JOptionPane.showMessageDialog(null, new DetailedAlbumAndDiscogsInfoPane(selectedAlbum), "Informations détaillées", JOptionPane.INFORMATION_MESSAGE);
 					break;
 					
 				case DISCOGS_RELEASE_SEARCH:
@@ -158,7 +147,7 @@ public class AlbumCustomActionListener implements java.awt.event.ActionListener 
 	
 		JTextArea infoPotentialRelease = new JTextArea(0, 150);
 		infoPotentialRelease.setEditable(false);
-		infoPotentialRelease.setText(release.getInfo());
+		infoPotentialRelease.setText(release.getInfo(true));
 		infoPotentialRelease.setFont(new Font("monospaced", Font.BOLD, 14));
 		potentialReleasePane.add(infoPotentialRelease);
 		

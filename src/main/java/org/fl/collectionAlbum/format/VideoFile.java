@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -25,7 +25,6 @@ SOFTWARE.
 package org.fl.collectionAlbum.format;
 
 import java.util.Set;
-import java.util.function.BiConsumer;
 
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
@@ -61,23 +60,22 @@ public class VideoFile extends AbstractMediaFile {
 	}
 
 	@Override
-	public String displayMediaFileDetail(String separator) {		
-		return fileDetail(separator, particularDetail, (sb, s) -> appendCommonMediaFileDetail(sb, s));
+	public String displayMediaFileDetail(String separator, boolean withPrefix) {		
+		return fileDetail(separator, (sb, s) -> appendParticularDetail(sb, s, withPrefix), (sb, s) -> appendCommonMediaFileDetail(sb, s, withPrefix));
 	}
 
 	@Override
-	public String displayMediaFileDetailWithFileLink(String separator) {
-		return fileDetail(separator, particularDetail, (sb, s) -> appendCommonMediaFileDetailWithLink(sb, s));
+	public String displayMediaFileDetailWithFileLink(String separator, boolean withPrefix) {
+		return fileDetail(separator, (sb, s) -> appendParticularDetail(sb, s, withPrefix), (sb, s) -> appendCommonMediaFileDetailWithLink(sb, s, withPrefix));
 	}
 	
-	BiConsumer<StringBuilder, String> particularDetail = (sb, s) ->
-		sb.append(getWidth())
-			.append("x")
-			.append(getHeight())
-			.append(" px")
-			.append(s)
-			.append(getType())
-			.append(s);
+	private void appendParticularDetail(StringBuilder sb, String s, boolean withPrefix) {
+		sb.append(getWidth()).append("x").append(getHeight()).append(" px").append(s);
+		if (withPrefix) {
+			sb.append(TYPE_TITLE).append(": ");
+		}
+		sb.append(getType()).append(s);
+	}
 	
 	@Override
 	public String displayMediaFileSummary() {

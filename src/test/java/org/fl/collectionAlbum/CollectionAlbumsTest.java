@@ -69,6 +69,12 @@ class CollectionAlbumsTest {
 		assertThat(bobDylan.getConcerts().getConcerts()).hasSizeGreaterThan(5);
 		assertThat(bobDylan.getDateNaissance()).isEqualTo("24 mai 1941");
 		
+		assertThat(albumsContainer.pickRandomAlbums(3)).isNotNull()
+			.hasSize(3);
+		
+		assertThat(albumsContainer.pickRandomAlbumsViaArtiste(4)).isNotNull()
+			.hasSize(4);
+		
 		// This is a singleton and it should be reset to empty
 		CollectionAlbumContainer albumsContainer2 = CollectionAlbumContainer.getEmptyInstance();
 		assertThat(albumsContainer2).isEqualTo(albumsContainer);
