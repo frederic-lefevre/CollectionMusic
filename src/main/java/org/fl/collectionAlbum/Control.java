@@ -66,6 +66,7 @@ public class Control {
    	private AdvancedProperties collectionProperties;
 	private Path collectionDirectoryName;
 	private Path concertDirectoryName;
+	private Path historyFolderPath;
 	private Path rapportPath;
 	private Path oldRapportPath;
 	private String concertTicketImgUri;
@@ -106,6 +107,9 @@ public class Control {
 			// Get path and URI for the rapport
 			rapportPath = collectionProperties.getPathFromURI("album.rapportDirectory.name");
 			oldRapportPath = collectionProperties.getPathFromURI("album.oldRapportDirectory.name");
+			
+			// Get history folder path
+			historyFolderPath = collectionProperties.getPathFromURI("album.historyFolder.name");
 			
 			// get the concert ticket image path
 			concertTicketImgUri = collectionProperties.getProperty("concert.ticketImgDir.name");	
@@ -183,6 +187,10 @@ public class Control {
 	
 	public static Path getOldRapportPath() {
 		return getInstance().oldRapportPath;
+	}
+	
+	public static Path getHistoryFolderPath() {
+		return getInstance().historyFolderPath;
 	}
 	
 	public static String getConcertTicketImgUri() {
