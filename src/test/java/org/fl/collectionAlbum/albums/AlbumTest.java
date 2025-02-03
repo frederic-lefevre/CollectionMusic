@@ -164,6 +164,7 @@ class AlbumTest {
 		
 		assertThat(album.hasMissingOrInvalidMediaFilePath(ContentNature.AUDIO)).isTrue();
 		assertThat(album.hasMediaFilePathNotFound(ContentNature.AUDIO)).isTrue();
+		assertThat(album.hasProblem()).isTrue();
 		
 		List<? extends AbstractMediaFile> audioFiles = album.getFormatAlbum().getMediaFiles(ContentNature.AUDIO);
 		assertThat(audioFiles).isNotNull()
@@ -217,6 +218,7 @@ class AlbumTest {
 		// The album has now a valid media file path
 		assertThat(album2.hasMissingOrInvalidMediaFilePath(ContentNature.AUDIO)).isFalse();
 		assertThat(album2.hasMediaFilePathNotFound(ContentNature.AUDIO)).isFalse();
+		assertThat(album2.hasProblem()).isFalse();
 		
 		assertThat(album2.getFormatAlbum().getMediaFiles(ContentNature.AUDIO)).isNotNull()
 			.singleElement()
@@ -266,6 +268,7 @@ class AlbumTest {
 		// The album has now a fixed media file path
 		assertThat(album3.hasMissingOrInvalidMediaFilePath(ContentNature.AUDIO)).isFalse();
 		assertThat(album3.hasMediaFilePathNotFound(ContentNature.AUDIO)).isFalse();
+		assertThat(album3.hasProblem()).isFalse();
 		
 		assertThat(album3.getFormatAlbum().getMediaFiles(ContentNature.AUDIO)).isNotNull()
 			.singleElement()
@@ -308,6 +311,7 @@ class AlbumTest {
 		
 		assertThat(album4.hasMissingOrInvalidMediaFilePath(ContentNature.AUDIO)).isFalse();
 		assertThat(album4.hasMediaFilePathNotFound(ContentNature.AUDIO)).isFalse();
+		assertThat(album4.hasProblem()).isFalse();
 		
 		assertThat(album4.getFormatAlbum().getMediaFiles(ContentNature.AUDIO)).isNotNull()
 			.singleElement()
@@ -346,6 +350,8 @@ class AlbumTest {
 
 		assertThat(potentialPaths).isNotNull().singleElement()
 			.satisfies(mediaFilePath -> assertThat(mediaFilePath.getPath()).hasToString("E:\\Musique\\e\\Bill Evans\\Portrait In Jazz"));
+		
+		assertThat(album.hasProblem()).isTrue();
 		
 		assertThat(album.getContentNatures()).containsExactly(ContentNature.AUDIO);
 	}
@@ -403,6 +409,7 @@ class AlbumTest {
 				assertThat(csvRelease.getReleaseId()).isEqualTo("2519903");
 			});
 		
+		assertThat(album.hasProblem()).isFalse();
 		assertMediaSupports(album, Set.of(MediaSupports.CD));
 		
 		assertThat(album.getContentNatures()).containsExactly(ContentNature.AUDIO);
@@ -453,6 +460,7 @@ class AlbumTest {
 		assertMediaSupports(album, Set.of(MediaSupports.CD));
 		
 		assertThat(album.getContentNatures()).containsExactly(ContentNature.AUDIO);
+		assertThat(album.hasProblem()).isTrue();
 	}
 	
 	@Test
@@ -465,6 +473,8 @@ class AlbumTest {
 		lla.add(la);
 
 		Album album = new Album(jAlbum, lla, Path.of("dummyPath"));
+		
+		assertThat(album.hasProblem()).isTrue();
 		
 		assertThat(album.getDiscogsLink()).isNull();
 		assertThat(album.getDiscogsFormatValidation()).isFalse();
