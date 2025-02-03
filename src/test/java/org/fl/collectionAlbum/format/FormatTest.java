@@ -93,6 +93,9 @@ class FormatTest {
 			.matches(contentNature -> contentNature.equals(ContentNature.AUDIO));
 		
 		assertThat(format1.hasError()).isFalse();
+		
+		assertThat(format1.hasMissingOrInvalidMediaFilePath(ContentNature.AUDIO)).isFalse();
+		assertThat(format1.hasMissingOrInvalidMediaFilePath(ContentNature.VIDEO)).isFalse();
 	}
 	
 	@Test
@@ -110,6 +113,8 @@ class FormatTest {
 		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isFalse();
 		assertThat(format1.hasContentNature(ContentNature.AUDIO)).isTrue();
 		assertThat(format1.hasContentNature(ContentNature.VIDEO)).isFalse();
+		assertThat(format1.hasMissingOrInvalidMediaFilePath(ContentNature.AUDIO)).isFalse();
+		assertThat(format1.hasMissingOrInvalidMediaFilePath(ContentNature.VIDEO)).isFalse();
 		
 		assertMediaSupports(format1, Set.of(MediaSupports.CD, MediaSupports.Vinyl45T));
 		
