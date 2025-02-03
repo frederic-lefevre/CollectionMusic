@@ -32,7 +32,7 @@ import org.fl.collectionAlbum.MusicArtefact;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.json.ConcertParser;
 
-import com.google.gson.JsonObject;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class Concert extends MusicArtefact {
 
@@ -41,7 +41,7 @@ public class Concert extends MusicArtefact {
     private List<String> titres;    
     private List<String> ticketImages;
     
-	public Concert(JsonObject concertJson, List<ListeArtiste> knownArtistes, LieuxDesConcerts lieuxDesConcerts,
+	public Concert(ObjectNode concertJson, List<ListeArtiste> knownArtistes, LieuxDesConcerts lieuxDesConcerts,
 			Path jsonFilePath) {
 
 		super(concertJson, knownArtistes, jsonFilePath);

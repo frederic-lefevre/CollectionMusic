@@ -35,16 +35,14 @@ import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.Groupe;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.fasterxml.jackson.databind.JsonNode;
 
 public class MusicArtefactParser {
 	
 	private final static Logger albumLog = Logger.getLogger(MusicArtefactParser.class.getName());
 	
 	private List<ListeArtiste> knownArtistes ;
-	private JsonObject arteFactJson ;
+	private JsonNode arteFactJson ;
 	
 	private ListeArtiste auteurs ;
 	private ListeArtiste interpretes ;
@@ -52,7 +50,7 @@ public class MusicArtefactParser {
 	private ListeArtiste ensembles ;
 	private ListeArtiste groupes ;
 	
-	public MusicArtefactParser(JsonObject j, List<ListeArtiste> currentKnownArtistes) {
+	public MusicArtefactParser(JsonNode j, List<ListeArtiste> currentKnownArtistes) {
 		super();
 
 		arteFactJson = j;
@@ -94,15 +92,14 @@ public class MusicArtefactParser {
 	private ListeArtiste processListeArtistes(Class<? extends Artiste> cls, String artistesJprop) {
 		
 		ListeArtiste artistes = new ListeArtiste() ;
-		JsonElement jElem = arteFactJson.get(artistesJprop) ;
+		JsonNode jElem = arteFactJson.get(artistesJprop) ;
 		if (jElem != null) {
-			if (jElem.isJsonArray()) {
-				JsonArray jArtistes = jElem.getAsJsonArray() ;
+			if (jElem.isArray()) {
 				
-				for (JsonElement jArtiste : jArtistes) {
+				for (JsonNode jArtiste : jElem) {
 
 					try {
-						artistes.addArtiste(createGetOrUpdateArtiste(cls, jArtiste.getAsJsonObject())) ;
+						artistes.addArtiste(createGetOrUpdateArtiste(cls, jArtiste)) ;
 					} catch (IllegalStateException e) {
 						albumLog.log(Level.WARNING, "un artiste n'est pas un objet json pour l'arteFact " + arteFactJson, e) ;
 					}
@@ -116,7 +113,7 @@ public class MusicArtefactParser {
 	
 	// Get an artiste, if it exists, return the existing one eventually updated
 	// if it does not exists, create it
-	private Artiste createGetOrUpdateArtiste(Class<? extends Artiste> cls, JsonObject jArtiste) {
+	private Artiste createGetOrUpdateArtiste(Class<? extends Artiste> cls, JsonNode jArtiste) {
 		
 		Artiste artiste;
 		Optional<Artiste> eventualArtiste =	knownArtistes.stream()
@@ -155,10 +152,10 @@ public class MusicArtefactParser {
 		return ParserHelpers.getArrayAttribute(arteFactJson, JsonMusicProperties.LIENS);
 	}
 
-	public static int getVersion(JsonObject json) {
+	public static int getVersion(JsonNode json) {
 		
 		return Optional.ofNullable(json.get(JsonMusicProperties.JSON_VERSION))
-				.map(JsonElement::getAsInt)
+				.map(JsonNode::asInt)
 				.orElse(0);
 
 	}

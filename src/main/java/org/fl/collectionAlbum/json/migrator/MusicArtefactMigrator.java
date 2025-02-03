@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -34,7 +34,9 @@ import java.util.logging.Logger;
 import org.fl.collectionAlbum.Control;
 import org.fl.util.json.JsonUtils;
 
-import com.google.gson.JsonObject;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class MusicArtefactMigrator {
 
@@ -59,12 +61,12 @@ public class MusicArtefactMigrator {
 		return instance;
 	}
 	
-	public JsonObject migrateAlbum(JsonObject album, Path jsonFilePath) {
+	public ObjectNode migrateAlbum(ObjectNode album, Path jsonFilePath) {
 		
 		return migrateMusicArtefact(album, jsonFilePath, albumVersionMigrators);
 	}
 	
-	private JsonObject migrateMusicArtefact(JsonObject artefactJson, Path jsonFilePath, List<VersionMigrator> migrators) {
+	private ObjectNode migrateMusicArtefact(ObjectNode artefactJson, Path jsonFilePath, List<VersionMigrator> migrators) {
 		
 		boolean modifiedByMigration = false;
 		
@@ -83,7 +85,11 @@ public class MusicArtefactMigrator {
 				modifiedByMigration = true;
 			}
 		} catch (Exception e) {
-			albumLog.log(Level.SEVERE, "Exception dans la migration de l'artefact " + JsonUtils.jsonPrettyPrint(artefactJson), e);
+			try {
+				albumLog.log(Level.SEVERE, "Exception dans la migration de l'artefact " + JsonUtils.jsonPrettyPrint(artefactJson), e);
+			} catch (JsonProcessingException e1) {
+				albumLog.log(Level.SEVERE, "Exception dans la migration de l'artefact, puis dans le logging de l'erreur (json erroné)", e);
+			}
 		}
 
 		if (modifiedByMigration) {
@@ -93,7 +99,7 @@ public class MusicArtefactMigrator {
 		return artefactJson;	
 	}
 	
-	private void writeJson(JsonObject musicArtefact, Path jsonFilePath) {
+	private void writeJson(JsonNode musicArtefact, Path jsonFilePath) {
 		
 		try (BufferedWriter buff = Files.newBufferedWriter(jsonFilePath, Control.getCharset())) {
 			

@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,18 +28,18 @@ import static org.assertj.core.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
-import com.google.gson.JsonObject;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 class ArtisteTest {
 	
 	@Test
 	void test() {
 
-		JsonObject jArt = new JsonObject();
-		jArt.addProperty("nom", "Evans");
-		jArt.addProperty("prenom", "Bill");
-		jArt.addProperty("naissance", "1929-08-16");
-		jArt.addProperty("mort", "1980-09-15");
+		ObjectNode jArt = JsonNodeFactory.instance.objectNode();
+		jArt.put("nom", "Evans");
+		jArt.put("prenom", "Bill");
+		jArt.put("mort", "1980-09-15");
 
 		Artiste artiste = new Artiste(jArt);
 

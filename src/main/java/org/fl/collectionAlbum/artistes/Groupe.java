@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -27,37 +27,27 @@ package org.fl.collectionAlbum.artistes;
 import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.util.json.JsonUtils;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.fasterxml.jackson.databind.JsonNode;
 
 public class Groupe extends Artiste {
-	
-	public Groupe(JsonObject jArtiste) {
-		super() ;
-		
-		JsonElement jNom    	= jArtiste.get(JsonMusicProperties.NOM) ;
-		JsonElement jArticle 	= jArtiste.get(JsonMusicProperties.ARTICLE) ;
-		JsonElement jDebut	 	= jArtiste.get(JsonMusicProperties.DEBUT) ;
-		JsonElement jFin      	= jArtiste.get(JsonMusicProperties.FIN) ;
-		
-		String name  	 = JsonUtils.getAsStringOrNull(jNom) ;
-		String article 	 = JsonUtils.getAsStringOrNull(jArticle) ;
-		String begin 	 = JsonUtils.getAsStringOrNull(jDebut) ;
-		String end		 = JsonUtils.getAsStringOrNull(jFin) ;
-		
-		setArtiste(name, article, begin, end) ;
+
+	public Groupe(JsonNode jArtiste) {
+		super();
+
+		setArtiste(
+				JsonUtils.getAsStringOrNull(jArtiste.get(JsonMusicProperties.NOM)), 
+				JsonUtils.getAsStringOrNull(jArtiste.get(JsonMusicProperties.ARTICLE)), 
+				JsonUtils.getAsStringOrNull(jArtiste.get(JsonMusicProperties.DEBUT)), 
+				JsonUtils.getAsStringOrNull( jArtiste.get(JsonMusicProperties.FIN)));
 	}
-	
+
 	@Override
-	public boolean isSameArtiste(JsonObject jArtiste) {
-		
-		JsonElement jNom    	= jArtiste.get(JsonMusicProperties.NOM) ;
-		JsonElement jArticle 	= jArtiste.get(JsonMusicProperties.ARTICLE) ;
-		
-		String lastName  = JsonUtils.getAsStringOrBlank(jNom) ;
-		String firstName = JsonUtils.getAsStringOrBlank(jArticle) ;
-		
-		return (nom.equals(lastName) && prenoms.equals(firstName)) ;
+	public boolean isSameArtiste(JsonNode jArtiste) {
+
+		String lastName = JsonUtils.getAsStringOrBlank(jArtiste.get(JsonMusicProperties.NOM));
+		String firstName = JsonUtils.getAsStringOrBlank(jArtiste.get(JsonMusicProperties.ARTICLE));
+
+		return (nom.equals(lastName) && prenoms.equals(firstName));
 	}
-	
+
 }

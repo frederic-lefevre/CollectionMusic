@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -32,22 +32,21 @@ import java.util.logging.Logger;
 import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.utils.TemporalUtils;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.fasterxml.jackson.databind.JsonNode;
 
 public class ConcertParser {
 
 	private final static Logger albumLog = Logger.getLogger(ConcertParser.class.getName());
 	
-	public static TemporalAccessor getConcertDate(JsonObject arteFactJson) {
+	public static TemporalAccessor getConcertDate(JsonNode arteFactJson) {
 
 		TemporalAccessor dateConcert = null ;
-		JsonElement jElem = arteFactJson.get(JsonMusicProperties.DATE) ;
+		JsonNode jElem = arteFactJson.get(JsonMusicProperties.DATE) ;
 		if (jElem == null) {
 			albumLog.warning("Pas de date dans le concert " + arteFactJson);
 		} else {
 			try {
-				dateConcert = TemporalUtils.parseDate(jElem.getAsString()) ;
+				dateConcert = TemporalUtils.parseDate(jElem.asText()) ;
 			} catch (Exception e) {
 				albumLog.log(Level.SEVERE, "Erreur dans les dates du concert " + arteFactJson, e) ;
 			}
@@ -55,15 +54,15 @@ public class ConcertParser {
 		return dateConcert ;
 	}
 	
-	public static String getConcertLieu(JsonObject arteFactJson) {		
+	public static String getConcertLieu(JsonNode arteFactJson) {		
 		return ParserHelpers.parseStringProperty(arteFactJson, JsonMusicProperties.LIEU, true);
 	}
 	
-	public static List<String> getConcertMorceaux(JsonObject arteFactJson) {	
+	public static List<String> getConcertMorceaux(JsonNode arteFactJson) {	
 		return ParserHelpers.getArrayAttribute(arteFactJson, JsonMusicProperties.MORCEAUX);
 	}
 	
-	public static List<String> getConcertTickets(JsonObject arteFactJson) {
+	public static List<String> getConcertTickets(JsonNode arteFactJson) {
 		return ParserHelpers.getArrayAttribute(arteFactJson, JsonMusicProperties.TICKET_IMG);
 	}
 

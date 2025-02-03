@@ -39,10 +39,14 @@ import org.fl.collectionAlbum.format.MediaSupports;
 import org.fl.collectionAlbum.rapportHtml.RapportStructuresAndNames;
 import org.junit.jupiter.api.Test;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 class CollectionAlbumContainerTest {
+	
+	private static final ObjectMapper mapper = new ObjectMapper();
 	
 	@Test
 	void testEmptyContainer() {
@@ -97,7 +101,7 @@ class CollectionAlbumContainerTest {
 			""";
 	
 	@Test
-	void testAlbumContainer() {
+	void testAlbumContainer() throws JsonMappingException, JsonProcessingException {
 
 		RapportStructuresAndNames.renew();
 		
@@ -106,7 +110,7 @@ class CollectionAlbumContainerTest {
 		
 		CollectionAlbumContainer albumsContainer = CollectionAlbumContainer.getEmptyInstance();
 
-		JsonObject jAlbum = JsonParser.parseString(albumStr1).getAsJsonObject();
+		ObjectNode jAlbum = (ObjectNode)mapper.readTree(albumStr1);
 		
 		albumsContainer.addAlbum(jAlbum, Paths.get("dummyPath"));
 		

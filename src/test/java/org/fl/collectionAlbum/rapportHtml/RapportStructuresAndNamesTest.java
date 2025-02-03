@@ -32,9 +32,6 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.Artiste;
@@ -44,9 +41,17 @@ import org.fl.collectionAlbum.concerts.LieuxDesConcerts;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 class RapportStructuresAndNamesTest {
 
 	private static final String MUSIQUE_DIRECTORY_URI = "file:///C:/FredericPersonnel/Loisirs/musique/";
+	
+	private static final ObjectMapper mapper = new ObjectMapper();
 	
 	@BeforeEach
 	void initRapoortStructuresAndNames() {
@@ -67,11 +72,12 @@ class RapportStructuresAndNamesTest {
 	@Test
 	void test2() {
 	
-		JsonObject jArt = new JsonObject() ;
-		jArt.addProperty("nom", "Evans") ;
-		jArt.addProperty("prenom", "Bill") ;
-		jArt.addProperty("naissance", "1929-08-16") ;
-		jArt.addProperty("mort",  "1980-09-15") ;
+		
+		ObjectNode jArt = JsonNodeFactory.instance.objectNode();
+		jArt.put("nom", "Evans") ;
+		jArt.put("prenom", "Bill") ;
+		jArt.put("naissance", "1929-08-16") ;
+		jArt.put("mort",  "1980-09-15") ;
 		
 		Artiste artiste= new Artiste(jArt);
 		
@@ -113,9 +119,9 @@ class RapportStructuresAndNamesTest {
 			""";
 
 	@Test
-	void test3() {
+	void test3() throws JsonMappingException, JsonProcessingException {
 
-		JsonObject jAlbum = JsonParser.parseString(albumStr1).getAsJsonObject();
+		ObjectNode jAlbum = (ObjectNode)mapper.readTree(albumStr1);
 
 		ListeArtiste la = new ListeArtiste();
 		List<ListeArtiste> lla = new ArrayList<ListeArtiste>();
@@ -131,7 +137,7 @@ class RapportStructuresAndNamesTest {
 		URI pInfoAlbum = RapportStructuresAndNames.getAlbumRapportRelativeUri(album);
 		assertThat(pInfoAlbum).isNull();
 		
-		JsonObject jAlbum2 = JsonParser.parseString(albumStr2).getAsJsonObject();
+		ObjectNode jAlbum2 = (ObjectNode)mapper.readTree(albumStr2);
 		Album album2 = new Album(jAlbum2, lla, Path.of("dummyPath"));
 		album2.addMusicArtfactArtistesToList(la);
 		Artiste fake = album2.getAuteurs().get(0);
@@ -159,9 +165,9 @@ class RapportStructuresAndNamesTest {
 			 } 
 			 """;
 	@Test
-	void test4() {
+	void test4() throws JsonMappingException, JsonProcessingException {
 		
-		JsonObject jConcert = JsonParser.parseString(concertStr1).getAsJsonObject();
+		ObjectNode jConcert = (ObjectNode)mapper.readTree(concertStr1);
 		
 		ListeArtiste la = new ListeArtiste();
 		List<ListeArtiste> lla = new ArrayList<ListeArtiste>();

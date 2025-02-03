@@ -59,12 +59,17 @@ import org.fl.util.json.JsonUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 class AlbumTest {
 
 	private final static Logger albumLog = Logger.getLogger(AlbumTest.class.getName());
+	
+	private static final ObjectMapper mapper = new ObjectMapper();
 	
 	@BeforeAll
 	static void initInventory() {
@@ -86,7 +91,7 @@ class AlbumTest {
 		List<ListeArtiste> lla = new ArrayList<ListeArtiste>();
 		lla.add(la);
 
-		Album album = new Album(new JsonObject(), lla, Path.of("dummyPath"));
+		Album album = new Album(JsonNodeFactory.instance.objectNode(), lla, Path.of("dummyPath"));
 
 		assertThat(album).isNotNull();
 		assertThat(album.hasAudioFiles()).isFalse();
@@ -145,9 +150,9 @@ class AlbumTest {
 			""" ;
 			  
 	@Test
-	void testAlbum1() {
+	void testAlbum1() throws JsonMappingException, JsonProcessingException {
 		
-		JsonObject jAlbum = JsonParser.parseString(albumStr1).getAsJsonObject();
+		ObjectNode jAlbum = (ObjectNode)mapper.readTree(albumStr1);
 
 		ListeArtiste la = new ListeArtiste();
 		List<ListeArtiste> lla = new ArrayList<ListeArtiste>();
@@ -199,7 +204,7 @@ class AlbumTest {
 			.hasToString("E:\\Musique\\e\\Bill Evans\\Waltz for Debby\\cover.jpg");
 		
 		// Get the json from the album (should be modified with the path)
-		JsonObject modifiedJson = album.getJson();
+		ObjectNode modifiedJson = album.getJson();
 		
 		// Recreate an album from this json
 		ListeArtiste la2 = new ListeArtiste();
@@ -246,7 +251,7 @@ class AlbumTest {
 		});
 		
 		// Get the json from the album (should be modified with the fixed path)
-		JsonObject modifiedJson2 = album2.getJson();
+		ObjectNode modifiedJson2 = album2.getJson();
 		
 		// Recreate an album from this json
 		Path jsonFilePath = Path.of("C:\\ForTests\\CollectionMusique\\PortraitInJazz.json");
@@ -292,7 +297,7 @@ class AlbumTest {
 		album3.writeJson();
 		
 		// Read back json and check album
-		JsonObject readBackJson = JsonUtils.getJsonObjectFromPath(jsonFilePath, Control.getCharset(), albumLog);
+		ObjectNode readBackJson = (ObjectNode)JsonUtils.getJsonObjectFromPath(jsonFilePath, Control.getCharset(), albumLog);
 		
 		ListeArtiste la4 = new ListeArtiste();
 		List<ListeArtiste> lla4 = new ArrayList<ListeArtiste>();
@@ -327,9 +332,9 @@ class AlbumTest {
 	}
 	
 	@Test
-	void testAlbumPotentialMediaFilesSearch() {
+	void testAlbumPotentialMediaFilesSearch() throws JsonMappingException, JsonProcessingException {
 
-		JsonObject jAlbum = JsonParser.parseString(albumStr1).getAsJsonObject();
+		ObjectNode jAlbum = (ObjectNode)mapper.readTree(albumStr1);
 
 		ListeArtiste la = new ListeArtiste();
 		List<ListeArtiste> lla = new ArrayList<ListeArtiste>();
@@ -377,9 +382,9 @@ class AlbumTest {
 			""";
 	
 	@Test
-	void testAlbumPotentialDiscogsReleaseSearch() {
+	void testAlbumPotentialDiscogsReleaseSearch() throws JsonMappingException, JsonProcessingException {
 		
-		JsonObject jAlbum = JsonParser.parseString(albumStr3).getAsJsonObject();
+		ObjectNode jAlbum = (ObjectNode)mapper.readTree(albumStr3);
 
 		ListeArtiste la = new ListeArtiste();
 		List<ListeArtiste> lla = new ArrayList<ListeArtiste>();
@@ -430,9 +435,9 @@ class AlbumTest {
 			""" ;
 	
 	@Test
-	void testAlbumPotentialMediaFilesSearch2() {
+	void testAlbumPotentialMediaFilesSearch2() throws JsonMappingException, JsonProcessingException {
 
-		JsonObject jAlbum = JsonParser.parseString(albumStr2).getAsJsonObject();
+		ObjectNode jAlbum = (ObjectNode)mapper.readTree(albumStr2);
 
 		ListeArtiste la = new ListeArtiste();
 		List<ListeArtiste> lla = new ArrayList<ListeArtiste>();
@@ -451,9 +456,9 @@ class AlbumTest {
 	}
 	
 	@Test
-	void testDiscogsProperties() {
-		
-		JsonObject jAlbum = JsonParser.parseString(albumStr2).getAsJsonObject();
+	void testDiscogsProperties() throws JsonMappingException, JsonProcessingException {
+
+		ObjectNode jAlbum = (ObjectNode)mapper.readTree(albumStr2);
 
 		ListeArtiste la = new ListeArtiste();
 		List<ListeArtiste> lla = new ArrayList<ListeArtiste>();

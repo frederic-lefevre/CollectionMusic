@@ -29,7 +29,7 @@ import java.util.function.BiConsumer;
 
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
-import com.google.gson.JsonObject;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class LosslessAudioFile extends AbstractAudioFile {
 
@@ -40,7 +40,7 @@ public class LosslessAudioFile extends AbstractAudioFile {
 	private static final int HIGH_RES_BIT_DEPTH_THRESHOLD = 16;
 	private static final double HIGH_RES_SAMPLING_RATE_THRESHOLD = 48;
 	
-	public LosslessAudioFile(JsonObject audioJson, AudioFileType type, String source, int bitDepth, double samplingRate, String note, Set<MediaFilePath> mediaFilePaths) {
+	public LosslessAudioFile(ObjectNode audioJson, AudioFileType type, String source, int bitDepth, double samplingRate, String note, Set<MediaFilePath> mediaFilePaths) {
 		
 		super(audioJson, type, source, samplingRate, note, mediaFilePaths);
 

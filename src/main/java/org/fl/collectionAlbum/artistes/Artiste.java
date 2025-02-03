@@ -40,9 +40,7 @@ import org.fl.collectionAlbum.format.Format;
 import org.fl.collectionAlbum.utils.TemporalUtils;
 import org.fl.util.json.JsonUtils;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.fasterxml.jackson.databind.JsonNode;
 
 public class Artiste {
 	
@@ -56,78 +54,72 @@ public class Artiste {
 	
 	private final static Logger albumLog = Logger.getLogger(Artiste.class.getName());
 
-	public Artiste(JsonObject jArtiste) {
-		
+	public Artiste(JsonNode jArtiste) {
+
 		super();
-    	
-		JsonElement jNom    	= jArtiste.get(JsonMusicProperties.NOM) ;
-		JsonElement jPrenom 	= jArtiste.get(JsonMusicProperties.PRENOM) ;
-		JsonElement jNaissance 	= jArtiste.get(JsonMusicProperties.NAISSANCE) ;
-		JsonElement jMort      	= jArtiste.get(JsonMusicProperties.MORT) ;
-		
-		String lastName  = JsonUtils.getAsStringOrNull(jNom) ;
-		String firstName = JsonUtils.getAsStringOrNull(jPrenom) ;
-		String birth 	 = JsonUtils.getAsStringOrNull(jNaissance) ;
-		String death	 = JsonUtils.getAsStringOrNull(jMort) ;
-		
-		setArtiste(lastName, firstName, birth, death) ;
-		
-		JsonElement jElem = jArtiste.get(JsonMusicProperties.INSTRUMENTS) ;
+
+		String lastName = JsonUtils.getAsStringOrNull(jArtiste.get(JsonMusicProperties.NOM));
+		String firstName = JsonUtils.getAsStringOrNull(jArtiste.get(JsonMusicProperties.PRENOM));
+		String birth = JsonUtils.getAsStringOrNull(jArtiste.get(JsonMusicProperties.NAISSANCE));
+		String death = JsonUtils.getAsStringOrNull(jArtiste.get(JsonMusicProperties.MORT));
+
+		setArtiste(lastName, firstName, birth, death);
+
+		JsonNode jElem = jArtiste.get(JsonMusicProperties.INSTRUMENTS);
 		if (jElem != null) {
-			if (jElem.isJsonArray()) {
-				instruments = new ArrayList<String>() ;
-				JsonArray jInstruments = jElem.getAsJsonArray() ; 
-				for (JsonElement jInstrument : jInstruments) {
-					instruments.add(jInstrument.getAsString()) ;
+			if (jElem.isArray()) {
+				instruments = new ArrayList<String>();
+
+				for (JsonNode jInstrument : jElem) {
+					instruments.add(jInstrument.asText());
 				}
 			} else {
-				albumLog.warning(JsonMusicProperties.INSTRUMENTS + " n'est pas un JsonArray pour l'artiste " + jArtiste) ;
+				albumLog.warning(
+						JsonMusicProperties.INSTRUMENTS + " n'est pas un JsonArray pour l'artiste " + jArtiste);
 			}
-		}	
-		
+		}
+
 	}
 	
-	public boolean isSameArtiste(JsonObject jArtiste) {
-		
-		JsonElement jNom    = jArtiste.get(JsonMusicProperties.NOM) ;
-		JsonElement jPrenom = jArtiste.get(JsonMusicProperties.PRENOM) ;
-		
-		String lastName  = JsonUtils.getAsStringOrBlank(jNom) ;
-		String firstName = JsonUtils.getAsStringOrBlank(jPrenom) ;
-		
-		return (nom.equals(lastName) && prenoms.equals(firstName)) ;
+	public boolean isSameArtiste(JsonNode jArtiste) {
+
+		String lastName = JsonUtils.getAsStringOrBlank(jArtiste.get(JsonMusicProperties.NOM));
+		String firstName = JsonUtils.getAsStringOrBlank(jArtiste.get(JsonMusicProperties.PRENOM));
+
+		return (nom.equals(lastName) && prenoms.equals(firstName));
 	}
-	
-    public Artiste() {
+
+	public Artiste() {
 		super();
-		setArtiste("", "", null, null) ;
-    }
+		setArtiste("", "", null, null);
+	}
     
-    protected void setArtiste(String aNom, String aPrenoms, String n, String m) {
-		
-    	albums = ListeAlbum.Builder.getBuilder().build();
-    	concerts = new ListeConcert();
+	protected void setArtiste(String aNom, String aPrenoms, String n, String m) {
+
+		albums = ListeAlbum.Builder.getBuilder().build();
+		concerts = new ListeConcert();
 		if (aNom == null) {
-			albumLog.warning("Nom d'artiste null") ;
-			aNom = "" ;
+			albumLog.warning("Nom d'artiste null");
+			aNom = "";
 		}
-		
+
 		if (aPrenoms == null) {
-			albumLog.info("Prénoms d'artiste null pour le nom " + aNom) ;
-			aPrenoms = "" ;
+			albumLog.info("Prénoms d'artiste null pour le nom " + aNom);
+			aPrenoms = "";
 		}
 
-		nom 	= aNom ;
-		prenoms = aPrenoms ;
-		
-		try {
-            naissance = TemporalUtils.parseDate(n) ;
-            mort 	  = TemporalUtils.parseDate(m) ;
-        } catch (Exception e) {
-        	albumLog.severe("Erreur dans les dates de " + aPrenoms + " " + aNom);
-        }
+		nom = aNom;
+		prenoms = aPrenoms;
 
-		albumLog.finest(() -> "Nouvel artiste: " + nom + " " + prenoms + " (" + getDateNaissance() + " - " + getDateMort() + ")") ;
+		try {
+			naissance = TemporalUtils.parseDate(n);
+			mort = TemporalUtils.parseDate(m);
+		} catch (Exception e) {
+			albumLog.severe("Erreur dans les dates de " + aPrenoms + " " + aNom);
+		}
+
+		albumLog.finest(() -> "Nouvel artiste: " + nom + " " + prenoms + " (" + getDateNaissance() + " - "
+				+ getDateMort() + ")");
 	}
     
     public void update(String n, String m) {
@@ -155,39 +147,71 @@ public class Artiste {
     	}
     }
     
-    public void update(JsonObject jArtiste) {
-    	
-		JsonElement jNaissance 	= jArtiste.get(JsonMusicProperties.NAISSANCE) ;
-		JsonElement jMort      	= jArtiste.get(JsonMusicProperties.MORT) ;
+	public void update(JsonNode jArtiste) {
 
-		String birth = JsonUtils.getAsStringOrNull(jNaissance) ;
-		String death = JsonUtils.getAsStringOrNull(jMort) ;
-		update(birth, death) ;
-    }
-        
-    public void addArteFact(MusicArtefact musicArtefact) {
-    	if (musicArtefact instanceof Album) {
-    		albums.addAlbum((Album)musicArtefact) ;
-    	} else if (musicArtefact instanceof Concert) {
-    		concerts.addConcert((Concert)musicArtefact) ;
-    	} else {
-    		albumLog.severe("MusicArteFact n'est ni un Album, ni un concert: " + musicArtefact.getClass().getName());
-    	}
-    }
-    
-    public Format 			getAlbumsFormat()		 { return albums.getFormatListeAlbum() 		  ; }
-    public int 	  			getNbConcert() 	 		 { return concerts.getNombreConcerts() 		  ; }
-    public int 	  			getNbAlbum() 		 	 { return albums.getNombreAlbums() 			  ; }
-    public String 			getDateNaissance() 		 { return TemporalUtils.formatDate(naissance) ; }
-	public String 			getDateMort() 	 		 { return TemporalUtils.formatDate(mort) 	  ;	}
-	public ListeAlbum 		getAlbums() 			 { return albums.sortChronoComposition()	  ; }	
-	public TemporalAccessor getNaissance() 	 		 { return naissance   						  ; }   
-	public TemporalAccessor getMort() 	   	 		 { return mort		  						  ; }
-	public String 			getNom() 	   	 		 { return nom		  						  ; }
-	public String 			getPrenoms()   	 		 { return prenoms	  						  ; }
-	public List<String> 	getInstruments() 		 { return instruments 						  ; }
-	public ListeConcert 	getConcerts() 	 		 { return concerts	  						  ;	}
-	
+		String birth = JsonUtils.getAsStringOrNull(jArtiste.get(JsonMusicProperties.NAISSANCE));
+		String death = JsonUtils.getAsStringOrNull(jArtiste.get(JsonMusicProperties.MORT));
+		update(birth, death);
+	}
+
+	public void addArteFact(MusicArtefact musicArtefact) {
+		if (musicArtefact instanceof Album) {
+			albums.addAlbum((Album) musicArtefact);
+		} else if (musicArtefact instanceof Concert) {
+			concerts.addConcert((Concert) musicArtefact);
+		} else {
+			albumLog.severe("MusicArteFact n'est ni un Album, ni un concert: " + musicArtefact.getClass().getName());
+		}
+	}
+
+	public Format getAlbumsFormat() {
+		return albums.getFormatListeAlbum();
+	}
+
+	public int getNbConcert() {
+		return concerts.getNombreConcerts();
+	}
+
+	public int getNbAlbum() {
+		return albums.getNombreAlbums();
+	}
+
+	public String getDateNaissance() {
+		return TemporalUtils.formatDate(naissance);
+	}
+
+	public String getDateMort() {
+		return TemporalUtils.formatDate(mort);
+	}
+
+	public ListeAlbum getAlbums() {
+		return albums.sortChronoComposition();
+	}
+
+	public TemporalAccessor getNaissance() {
+		return naissance;
+	}
+
+	public TemporalAccessor getMort() {
+		return mort;
+	}
+
+	public String getNom() {
+		return nom;
+	}
+
+	public String getPrenoms() {
+		return prenoms;
+	}
+
+	public List<String> getInstruments() {
+		return instruments;
+	}
+
+	public ListeConcert getConcerts() {
+		return concerts;
+	}
+
 	public String getNomComplet() {
 		if ((getPrenoms() == null) || (getPrenoms().isEmpty())) {
 			return getNom();

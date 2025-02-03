@@ -58,6 +58,8 @@ import org.fl.collectionAlbumGui.ProgressInformation;
 import org.fl.collectionAlbumGui.ProgressInformationPanel;
 import org.fl.util.file.FilesUtils;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
 public class GenerationSiteCollection  extends SwingWorker<String,ProgressInformation> {
 
 	private final static Logger albumLog = Logger.getLogger(GenerationSiteCollection.class.getName());
@@ -267,7 +269,15 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 	private void rapportBuildInfo() {
 		
 		Path rapportBuildInfoFile = RapportStructuresAndNames.getAbsoluteBuildInfoFile();
-		RapportBuildInfo rapportBuildInfo = new RapportBuildInfo(Control.getMusicRunningContext().getBuildInformation(), "Informations sur le programme de génération", LinkType.LIST);
+		String buildInfo;
+		try {
+			buildInfo = Control.getMusicRunningContext().getBuildInformation();
+		} catch (JsonProcessingException e) {
+			albumLog.log(Level.SEVERE, "Exception getting build information", e);
+			buildInfo = e.getMessage();
+			
+		}
+		RapportBuildInfo rapportBuildInfo = new RapportBuildInfo(buildInfo, "Informations sur le programme de génération", LinkType.LIST);
 		rapportBuildInfo.printReport(rapportBuildInfoFile, CssStyles.main);
 	}
 	

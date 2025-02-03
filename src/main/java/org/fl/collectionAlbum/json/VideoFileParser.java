@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -35,8 +35,8 @@ import org.fl.collectionAlbum.format.VideoFile;
 import org.fl.collectionAlbum.format.VideoFileType;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class VideoFileParser extends AbstractMediaFileParser {
 
@@ -48,12 +48,12 @@ public class VideoFileParser extends AbstractMediaFileParser {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public VideoFile parseMediaFile(JsonObject videoFileJson) {
+	public VideoFile parseMediaFile(ObjectNode videoFileJson) {
 		
 		if (videoFileJson != null) {
 		
 			VideoFileType type = Optional.ofNullable(videoFileJson.get(JsonMusicProperties.TYPE))
-					.map(JsonElement::getAsString)
+					.map(JsonNode::asText)
 					.map(s -> findType(s))
 					.orElseGet(() -> {
 						rapportLog.severe("Json VideoFile null type parameter: " + videoFileJson);
@@ -65,14 +65,14 @@ public class VideoFileParser extends AbstractMediaFileParser {
 			Set<MediaFilePath> videoFileLocations = parseMediaFileLocation(videoFileJson, ContentNature.VIDEO);
 			
 			Integer width = Optional.ofNullable(videoFileJson.get(JsonMusicProperties.VIDEO_WIDTH))
-					.map(JsonElement::getAsInt)
+					.map(JsonNode::asInt)
 					.orElseGet(() -> {
 						rapportLog.severe("Json VideoFile null width parameter" + videoFileJson);
 						return null;
 					});
 			
 			Integer height = Optional.ofNullable(videoFileJson.get(JsonMusicProperties.VIDEO_HEIGHT))
-					.map(JsonElement::getAsInt)
+					.map(JsonNode::asInt)
 					.orElseGet(() -> {
 						rapportLog.severe("Json VideoFile null height parameter" + videoFileJson);
 						return null;

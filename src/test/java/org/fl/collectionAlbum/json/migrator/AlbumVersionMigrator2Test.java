@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -36,13 +36,16 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 class AlbumVersionMigrator2Test {
 
+	private static final ObjectMapper mapper = new ObjectMapper();
+	
 	private static final String albumStr1 = """
 			{ 
 			  "titre": "Portrait in jazz\",
@@ -75,11 +78,11 @@ class AlbumVersionMigrator2Test {
 	}
 	
 	@Test
-	void albumVersionShouldBeKo() {
+	void albumVersionShouldBeKo() throws JsonMappingException, JsonProcessingException {
 		
 		AlbumVersionMigrator2 migrator = AlbumVersionMigrator2.getInstance();
 		
-		JsonObject albumJson = JsonParser.parseString(albumStr1).getAsJsonObject();
+		ObjectNode albumJson = (ObjectNode)mapper.readTree(albumStr1);
 		
 		assertThat(migrator.checkVersion(albumJson)).isFalse();
 	}
@@ -216,11 +219,11 @@ class AlbumVersionMigrator2Test {
 			""";
 	
 	@Test
-	void albumVersionShouldBeOk() {
+	void albumVersionShouldBeOk() throws JsonMappingException, JsonProcessingException {
 		
 		AlbumVersionMigrator2 migrator = AlbumVersionMigrator2.getInstance();
 		
-		JsonObject albumJson = JsonParser.parseString(albumStr2).getAsJsonObject();
+		ObjectNode albumJson = (ObjectNode)mapper.readTree(albumStr2);
 		
 		assertThat(migrator.checkVersion(albumJson)).isTrue();
 	}
@@ -228,24 +231,24 @@ class AlbumVersionMigrator2Test {
 	
 	@ParameterizedTest
 	@ValueSource(strings = {albumStr2, albumStr3, albumStr4, albumStr5})
-	void shouldMigrateAlbum(String albumStr) {
+	void shouldMigrateAlbum(String albumStr) throws JsonMappingException, JsonProcessingException {
 		
 		AlbumVersionMigrator2 migrator = AlbumVersionMigrator2.getInstance();
 		
-		JsonObject albumJson = JsonParser.parseString(albumStr).getAsJsonObject();
+		ObjectNode albumJson = (ObjectNode)mapper.readTree(albumStr);
 		
 		assertThat(albumJson.get(JsonMusicProperties.JSON_VERSION)).isNotNull();
 		
-		assertThat(albumJson.get(JsonMusicProperties.JSON_VERSION).getAsInt()).isEqualTo(1);
+		assertThat(albumJson.get(JsonMusicProperties.JSON_VERSION).asInt()).isEqualTo(1);
 		
 		List<String> audioFilesLocation = getMediaFilePathString(albumJson, JsonMusicProperties.AUDIO_FILE);
 		List<String> videoFilesLocation = getMediaFilePathString(albumJson, JsonMusicProperties.VIDEO_FILE);
 		
-		JsonObject migratedAlbum = migrator.migrate(albumJson);
+		ObjectNode migratedAlbum = migrator.migrate(albumJson);
 		
-		assertThat(migratedAlbum.get(JsonMusicProperties.JSON_VERSION).getAsInt())
+		assertThat(migratedAlbum.get(JsonMusicProperties.JSON_VERSION).asInt())
 			.isEqualTo(migrator.targetVersion())
-			.isEqualTo(albumJson.get(JsonMusicProperties.JSON_VERSION).getAsInt())
+			.isEqualTo(albumJson.get(JsonMusicProperties.JSON_VERSION).asInt())
 			.isEqualTo(MusicArtefactParser.getVersion(migratedAlbum))
 			.isEqualTo(MusicArtefactParser.getVersion(albumJson));
 		
@@ -264,27 +267,26 @@ class AlbumVersionMigrator2Test {
 		}
 	}
 	
-	private List<JsonElement> getMediaFilePathJsonElement(JsonObject albumJson, String mediaFileProperty) {
+	private List<JsonNode> getMediaFilePathJsonElement(ObjectNode albumJson, String mediaFileProperty) {
 		
-		JsonArray mediafiles = albumJson.get(JsonMusicProperties.FORMAT).getAsJsonObject()
-				.getAsJsonArray(mediaFileProperty);
+		JsonNode mediafiles = albumJson.get(JsonMusicProperties.FORMAT).get(mediaFileProperty);
 		
 		if (mediafiles == null) {
 			return null;
 		} else {
-			List<JsonElement> locations = new ArrayList<>();
+			List<JsonNode> locations = new ArrayList<>();
 			
 			mediafiles.forEach(mediafile -> {
-				locations.add(mediafile.getAsJsonObject().get(JsonMusicProperties.LOCATION));
+				locations.add(mediafile.get(JsonMusicProperties.LOCATION));
 			});
 			return locations;
 		}
 
 	}
 	
-	private List<String> getMediaFilePathString(JsonObject albumJson, String mediaFileProperty) {
+	private List<String> getMediaFilePathString(ObjectNode albumJson, String mediaFileProperty) {
 		
-		List<JsonElement>  mediaList = getMediaFilePathJsonElement(albumJson, mediaFileProperty);
+		List<JsonNode>  mediaList = getMediaFilePathJsonElement(albumJson, mediaFileProperty);
 		if (mediaList == null) {
 			return null;
 		} else {
@@ -293,17 +295,17 @@ class AlbumVersionMigrator2Test {
 					if (jElem  == null) {
 						return null;
 					} else {
-						assertThat(jElem.isJsonPrimitive()).isTrue();
-						return jElem.getAsString();
+						assertThat(jElem.isTextual()).isTrue();
+						return jElem.asText();
 					}		
 				})
 				.collect(Collectors.toList());
 		}
 	}
 	
-	private List<String> getMigratedMediaFilePathString(JsonObject albumJson, String mediaFileProperty) {
+	private List<String> getMigratedMediaFilePathString(ObjectNode albumJson, String mediaFileProperty) {
 		
-		List<JsonElement>  mediaList = getMediaFilePathJsonElement(albumJson, mediaFileProperty);
+		List<JsonNode>  mediaList = getMediaFilePathJsonElement(albumJson, mediaFileProperty);
 		if (mediaList == null) {
 			return null;
 		} else {
@@ -312,10 +314,11 @@ class AlbumVersionMigrator2Test {
 					if (jElem  == null) {
 						return null;
 					} else {
-						assertThat(jElem.isJsonArray()).isTrue();
-						assertThat(jElem.getAsJsonArray().size()).isEqualTo(1);
-						assertThat(jElem.getAsJsonArray().get(0).isJsonPrimitive()).isTrue();
-						return jElem.getAsJsonArray().get(0).getAsString();
+						assertThat(jElem.isArray()).isTrue();
+						assertThat(jElem).singleElement().satisfies(mediaPath -> 
+							assertThat(mediaPath.isTextual()).isTrue()
+						);
+						return jElem.get(0).asText();
 					}		
 				})
 				.collect(Collectors.toList());

@@ -29,7 +29,7 @@ import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
-import com.google.gson.JsonObject;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public abstract class AbstractAudioFile extends AbstractMediaFile {
 
@@ -41,7 +41,7 @@ public abstract class AbstractAudioFile extends AbstractMediaFile {
 	private static final String TYPE_TITLE = "Type";
 	private static final String SAMPLING_RATE_TITLE = "Sampling Rate";
 	
-	protected AbstractAudioFile(JsonObject audioJson, AudioFileType type, String source, double samplingRate, String note, Set<MediaFilePath> mediaFilePaths) {
+	protected AbstractAudioFile(ObjectNode audioJson, AudioFileType type, String source, double samplingRate, String note, Set<MediaFilePath> mediaFilePaths) {
 		super(audioJson, source, note, mediaFilePaths);
 		this.type = type;
 		this.samplingRate = samplingRate;

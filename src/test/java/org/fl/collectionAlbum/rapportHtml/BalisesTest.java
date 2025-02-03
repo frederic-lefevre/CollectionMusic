@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -37,10 +37,15 @@ import java.util.Locale;
 import org.fl.collectionAlbum.format.Format;
 import org.junit.jupiter.api.Test;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 class BalisesTest {
+	
+	private static final ObjectMapper mapper = new ObjectMapper();
 	
 	@Test
 	void testAlpha() {
@@ -66,11 +71,11 @@ class BalisesTest {
 	}
 
 	@Test
-	void testFormat() {
+	void testFormat() throws JsonMappingException, JsonProcessingException {
 
 		String formatStr1 = "{\"cd\": 3 }";
-		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
-		Format format1 = new Format(jf1);
+		JsonNode jf1 = mapper.readTree(formatStr1);
+		Format format1 = new Format((ObjectNode) jf1);
 
 		Balises formatBalises = new Balises(Balises.BalisesType.POIDS);
 
@@ -82,8 +87,8 @@ class BalisesTest {
 		assertThat(fragment).isNotEmpty();
 
 		String formatStr2 = "{\"33t\": 3 }";
-		JsonObject jf2 = JsonParser.parseString(formatStr2).getAsJsonObject();
-		Format format2 = new Format(jf2);
+		JsonNode jf2 = mapper.readTree(formatStr2);
+		Format format2 = new Format((ObjectNode) jf2);
 
 		formatBalises.addCheckBalisePoids(fragment, format2);
 
@@ -91,8 +96,8 @@ class BalisesTest {
 		assertThat(fLength1).isEqualTo(fLength2);
 
 		String formatStr3 = "{\"33t\": 4 }";
-		JsonObject jf3 = JsonParser.parseString(formatStr3).getAsJsonObject();
-		Format format3 = new Format(jf3);
+		JsonNode jf3 = mapper.readTree(formatStr3);
+		Format format3 = new Format((ObjectNode) jf3);
 
 		formatBalises.addCheckBalisePoids(fragment, format3);
 

@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -30,11 +30,15 @@ import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.json.MusicArtefactParser;
 import org.junit.jupiter.api.Test;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 class AlbumVersionMigrator1Test {
 
+	private static final ObjectMapper mapper = new ObjectMapper();
+	
 	private static final String albumStr1 = """
 			{ 
 			  "titre": "Portrait in jazz\",
@@ -67,11 +71,11 @@ class AlbumVersionMigrator1Test {
 	}
 	
 	@Test
-	void albumVersionShouldBeOk() {
+	void albumVersionShouldBeOk() throws JsonMappingException, JsonProcessingException {
 		
 		AlbumVersionMigrator1 migrator = AlbumVersionMigrator1.getInstance();
 		
-		JsonObject albumJson = JsonParser.parseString(albumStr1).getAsJsonObject();
+		ObjectNode albumJson = (ObjectNode)mapper.readTree(albumStr1);
 		
 		assertThat(migrator.checkVersion(albumJson)).isTrue();
 	}
@@ -104,29 +108,29 @@ class AlbumVersionMigrator1Test {
 			""" ;
 	
 	@Test
-	void albumVersionShouldBeKo() {
+	void albumVersionShouldBeKo() throws JsonMappingException, JsonProcessingException {
 		
 		AlbumVersionMigrator1 migrator = AlbumVersionMigrator1.getInstance();
 		
-		JsonObject albumJson = JsonParser.parseString(albumStr2).getAsJsonObject();
+		ObjectNode albumJson = (ObjectNode)mapper.readTree(albumStr2);
 		
 		assertThat(migrator.checkVersion(albumJson)).isFalse();
 	}
 	
 	@Test
-	void shouldMigrateAlbum() {
+	void shouldMigrateAlbum() throws JsonMappingException, JsonProcessingException {
 		
 		AlbumVersionMigrator1 migrator = AlbumVersionMigrator1.getInstance();
 		
-		JsonObject albumJson = JsonParser.parseString(albumStr1).getAsJsonObject();
+		ObjectNode albumJson = (ObjectNode)mapper.readTree(albumStr1);
 		
 		assertThat(albumJson.get(JsonMusicProperties.JSON_VERSION)).isNull();
 		
-		JsonObject migratedAlbum = migrator.migrate(albumJson);
+		ObjectNode migratedAlbum = migrator.migrate(albumJson);
 		
-		assertThat(migratedAlbum.get(JsonMusicProperties.JSON_VERSION).getAsInt())
+		assertThat(migratedAlbum.get(JsonMusicProperties.JSON_VERSION).asInt())
 			.isEqualTo(migrator.targetVersion())
-			.isEqualTo(albumJson.get(JsonMusicProperties.JSON_VERSION).getAsInt())
+			.isEqualTo(albumJson.get(JsonMusicProperties.JSON_VERSION).asInt())
 			.isEqualTo(MusicArtefactParser.getVersion(migratedAlbum))
 			.isEqualTo(MusicArtefactParser.getVersion(albumJson));
 
@@ -160,17 +164,17 @@ class AlbumVersionMigrator1Test {
 			""" ;
 	
 	@Test
-	void shouldNotMigrateAlbum() {
+	void shouldNotMigrateAlbum() throws JsonMappingException, JsonProcessingException {
 		
 		AlbumVersionMigrator1 migrator = AlbumVersionMigrator1.getInstance();
 		
-		JsonObject albumJson = JsonParser.parseString(albumStr3).getAsJsonObject();
+		ObjectNode albumJson = (ObjectNode)mapper.readTree(albumStr3);
 		
 		int initialVersion = MusicArtefactParser.getVersion(albumJson);
 		assertThat(initialVersion)
 			.isGreaterThanOrEqualTo(migrator.targetVersion());
 		
-		JsonObject migratedAlbum = migrator.migrate(albumJson);
+		ObjectNode migratedAlbum = migrator.migrate(albumJson);
 		
 		assertThat(MusicArtefactParser.getVersion(migratedAlbum))
 			.isEqualTo(initialVersion)

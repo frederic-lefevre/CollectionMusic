@@ -35,7 +35,7 @@ import org.fl.collectionAlbum.PoidsComparator;
 import org.fl.collectionAlbum.concerts.ConcertPoidsComparator;
 import org.fl.collectionAlbum.utils.ListUtils;
 
-import com.google.gson.JsonObject;
+import com.fasterxml.jackson.databind.JsonNode;
 
 public class ListeArtiste {
 	
@@ -81,7 +81,7 @@ public class ListeArtiste {
 		return null ;
 	}
 	
-	public Optional<Artiste> getArtisteKnown(JsonObject jArtiste) {
+	public Optional<Artiste> getArtisteKnown(JsonNode jArtiste) {
 		return artistes.stream().filter(a -> a.isSameArtiste(jArtiste)).findFirst() ;
 	}
 		
