@@ -53,6 +53,9 @@ class FormatTest {
 		assertMediaSupports(format1, Collections.emptySet());
 
 		assertThat(format1.getContentNatures()).isEmpty();
+		assertThat(format1.hasContentNature(ContentNature.AUDIO)).isFalse();
+		
+		assertThat(format1.hasError()).isTrue();
 	}
 
 	@Test
@@ -69,6 +72,8 @@ class FormatTest {
 
 		assertThat(format1.hasMediaFiles(ContentNature.AUDIO)).isFalse();
 		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isFalse();
+		
+		assertThat(format1.hasError()).isTrue();
 	}
 	
 	@Test
@@ -86,6 +91,8 @@ class FormatTest {
 		
 		assertThat(format1.getContentNatures()).singleElement()
 			.matches(contentNature -> contentNature.equals(ContentNature.AUDIO));
+		
+		assertThat(format1.hasError()).isFalse();
 	}
 	
 	@Test
@@ -108,6 +115,8 @@ class FormatTest {
 		
 		assertThat(format1.getContentNatures()).singleElement()
 			.matches(contentNature -> contentNature.equals(ContentNature.AUDIO));
+		
+		assertThat(format1.hasError()).isFalse();
 	}
 	
 	@Test
@@ -129,6 +138,8 @@ class FormatTest {
 		assertMediaSupports(format1, Set.of(MediaSupports.CD, MediaSupports.DVD));
 		
 		assertThat(format1.getContentNatures()).containsExactlyInAnyOrder(ContentNature.AUDIO, ContentNature.VIDEO);
+		
+		assertThat(format1.hasError()).isFalse();
 	}
 	
 	@Test
@@ -166,6 +177,8 @@ class FormatTest {
 		
 		assertThat(format3.getContentNatures()).singleElement()
 			.matches(contentNature -> contentNature.equals(ContentNature.AUDIO));
+		
+		assertThat(format1.hasError()).isFalse();
 	}
 	
 	@Test
@@ -211,6 +224,8 @@ class FormatTest {
 		assertThat(format1.getSupportsPhysiques()).isNotNull().containsOnly(MediaSupportCategories.CD, MediaSupportCategories.MiniVinyl);
 		assertThat(format1.getSupportsPhysiquesNumbers()).isNotNull()
 			.containsOnly(entry(MediaSupportCategories.CD, 2.0), entry(MediaSupportCategories.MiniVinyl, 1.0));
+		
+		assertThat(format1.hasError()).isFalse();
 	}
 	
 	@Test
@@ -252,6 +267,8 @@ class FormatTest {
 		
 		assertThat(format1.getContentNatures()).singleElement()
 			.matches(contentNature -> contentNature.equals(ContentNature.AUDIO));
+		
+		assertThat(format1.hasError()).isFalse();
 	}
 	
 	@Test
@@ -322,6 +339,8 @@ class FormatTest {
 			.satisfiesExactlyInAnyOrder(
 					e -> assertThat(e).isEqualTo("Bit depth;Sampling Rate;Type;Source;Note"),
 					e -> assertThat(e).isEqualTo("Bit rate;Sampling Rate;Type;Source;Note"));
+		
+		assertThat(format1.hasError()).isFalse();
 	}
 	
 	@Test
@@ -387,6 +406,8 @@ class FormatTest {
 		
 		assertThat(format1.printAudioFilesCsvTitles(";", v -> true)).singleElement()
 			.satisfies(e -> assertThat(e).isEqualTo("Bit depth;Sampling Rate;Type;Source;Note"));
+		
+		assertThat(format1.hasError()).isFalse();
 	}
 	
 	@Test
@@ -444,6 +465,8 @@ class FormatTest {
 			.matches(contentNature -> contentNature.equals(ContentNature.VIDEO));
 		
 		assertThat(format1.printAudioFilesCsvTitles(";", v -> true)).isEmpty();
+		
+		assertThat(format1.hasError()).isFalse();
 	}
 	
 	@Test
@@ -460,6 +483,8 @@ class FormatTest {
 		assertMediaSupports(format1, Collections.emptySet());
 		
 		assertThat(format1.getContentNatures()).isEmpty();
+		
+		assertThat(format1.hasError()).isTrue();
 	}
 	
 	@Test
@@ -508,6 +533,8 @@ class FormatTest {
 		assertThat(format1.getSupportsPhysiquesNumbers()).isNotNull()
 			.containsOnlyKeys(MediaSupportCategories.BluRay)
 			.containsValue(3.0);
+		
+		assertThat(format1.hasError()).isFalse();
 	}
 	
 	@Test
@@ -531,6 +558,8 @@ class FormatTest {
 		assertThat(format1.getSupportsPhysiquesNumbers()).isNotNull()
 			.containsOnlyKeys(MediaSupportCategories.BluRay)
 			.containsValue(3.0);
+		
+		assertThat(format1.hasError()).isFalse();
 	}
 	
 	private void assertMediaSupports(Format format, Set<MediaSupports> mediaSupports) {
