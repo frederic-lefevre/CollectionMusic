@@ -24,33 +24,37 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.metrics;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Metrics {
 
-	private final LocalDateTime metricDate;	
+	private final long metricTimeStamp;	
 	private final Map<String, Double> metrics;
 	
-	protected Metrics(LocalDateTime metricDate, Map<String,Double> metrics) {
+	@JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+	public Metrics(@JsonProperty("metricTimeStamp")long metricTimeStamp, @JsonProperty("metrics")Map<String,Double> metrics) {
 		
-		if (metricDate == null) {
-			throw new IllegalArgumentException("Illegal argument metrics date null");
-		}
 		if (metrics == null) {
 			throw new IllegalArgumentException("Illegal argument metrics map null");
 		}
 		
-		this.metricDate = metricDate;
+		this.metricTimeStamp = metricTimeStamp;
 		this.metrics = new HashMap<>();
 		this.metrics.putAll(metrics);
 	}
 	
-	public LocalDateTime getMetricDate() {
-		return metricDate;
+	public long getMetricTimeStamp() {
+		return metricTimeStamp;
 	}
 	
+	public Map<String, Double> getMetrics() {
+		return metrics;
+	}
+
 	protected boolean hasSameMetricsAs(Metrics m) {
 		
 		if (m == null) {

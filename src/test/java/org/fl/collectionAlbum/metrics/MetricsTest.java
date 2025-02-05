@@ -26,22 +26,26 @@ package org.fl.collectionAlbum.metrics;
 
 import static org.assertj.core.api.Assertions.*;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 class MetricsTest {
 
+	private static final ObjectMapper mapper = new ObjectMapper();
+	private static final long now = System.currentTimeMillis();
+	private static final long yesterday = System.currentTimeMillis() - 24*3600*1000;
+	
 	@Test
 	void testEmptyMetric() {
 		
-		LocalDateTime now = LocalDateTime.now();
 		Metrics metrics = new Metrics(now, new HashMap<>());	
-		assertThat(metrics.getMetricDate()).isEqualTo(now);
+		assertThat(metrics.getMetricTimeStamp()).isEqualTo(now);
 		
-		LocalDateTime yesterday = now.minusDays(1);
 		Metrics metrics2 = new Metrics(yesterday, new HashMap<>());
 		
 		assertThat(metrics.hasSameMetricsAs(metrics2)).isTrue();
@@ -50,11 +54,9 @@ class MetricsTest {
 	@Test
 	void testEqualMetrics() {
 		
-		LocalDateTime now = LocalDateTime.now();
 		Metrics metrics = new Metrics(now, Map.of("albums", 10.0, "Artiste", 5.0));
-		assertThat(metrics.getMetricDate()).isEqualTo(now);
+		assertThat(metrics.getMetricTimeStamp()).isEqualTo(now);
 		
-		LocalDateTime yesterday = now.minusDays(1);
 		Metrics metrics2 = new Metrics(yesterday,  Map.of("Artiste", 5.0, "albums", 10.0));
 		
 		assertThat(metrics.hasSameMetricsAs(metrics2)).isTrue();
@@ -63,11 +65,9 @@ class MetricsTest {
 	@Test
 	void testNotEqualMetrics() {
 		
-		LocalDateTime now = LocalDateTime.now();
 		Metrics metrics = new Metrics(now, Map.of("albums", 10.0, "Artiste", 5.0));
-		assertThat(metrics.getMetricDate()).isEqualTo(now);
+		assertThat(metrics.getMetricTimeStamp()).isEqualTo(now);
 		
-		LocalDateTime yesterday = now.minusDays(1);
 		Metrics metrics2 = new Metrics(yesterday,  Map.of("Artiste", 5.0, "albums", 11.0));
 		
 		assertThat(metrics.hasSameMetricsAs(metrics2)).isFalse();
@@ -76,11 +76,9 @@ class MetricsTest {
 	@Test
 	void testNotEqualMetrics2() {
 		
-		LocalDateTime now = LocalDateTime.now();
 		Metrics metrics = new Metrics(now, Map.of("albums", 10.0, "Artiste", 5.0));
-		assertThat(metrics.getMetricDate()).isEqualTo(now);
+		assertThat(metrics.getMetricTimeStamp()).isEqualTo(now);
 		
-		LocalDateTime yesterday = now.minusDays(1);
 		Metrics metrics2 = new Metrics(yesterday,  Map.of("Artiste", 5.0, "albums", 10.0, "cd", 1.0));
 		
 		assertThat(metrics.hasSameMetricsAs(metrics2)).isFalse();
@@ -89,13 +87,24 @@ class MetricsTest {
 	@Test
 	void testNotEqualMetrics3() {
 		
-		LocalDateTime now = LocalDateTime.now();
 		Metrics metrics = new Metrics(now, Map.of("albums", 10.0, "Artiste", 5.0, "cd", 1.0));
-		assertThat(metrics.getMetricDate()).isEqualTo(now);
+		assertThat(metrics.getMetricTimeStamp()).isEqualTo(now);
 		
-		LocalDateTime yesterday = now.minusDays(1);
 		Metrics metrics2 = new Metrics(yesterday,  Map.of("Artiste", 5.0, "albums", 10.0));
 		
 		assertThat(metrics.hasSameMetricsAs(metrics2)).isFalse();
+	}
+	
+	@Test
+	void testMetricsSerialization() throws JsonProcessingException {
+		
+		Metrics metrics = new Metrics(now, Map.of("albums", 10.0, "Artiste", 5.0, "cd", 1.0));
+		assertThat(metrics.getMetricTimeStamp()).isEqualTo(now);
+		
+		String s = mapper.writeValueAsString(metrics);
+		
+		Metrics metrics2 = mapper.readValue(s, Metrics.class);
+		assertThat(metrics.hasSameMetricsAs(metrics2)).isTrue();
+		
 	}
 }
