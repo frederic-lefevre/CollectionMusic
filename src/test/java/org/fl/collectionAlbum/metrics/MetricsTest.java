@@ -27,6 +27,8 @@ package org.fl.collectionAlbum.metrics;
 import static org.assertj.core.api.Assertions.*;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
@@ -36,8 +38,64 @@ class MetricsTest {
 	void testEmptyMetric() {
 		
 		LocalDateTime now = LocalDateTime.now();
-		Metrics metrics = new Metrics(now);
-		
+		Metrics metrics = new Metrics(now, new HashMap<>());	
 		assertThat(metrics.getMetricDate()).isEqualTo(now);
+		
+		LocalDateTime yesterday = now.minusDays(1);
+		Metrics metrics2 = new Metrics(yesterday, new HashMap<>());
+		
+		assertThat(metrics.hasSameMetricsAs(metrics2)).isTrue();
+	}
+	
+	@Test
+	void testEqualMetrics() {
+		
+		LocalDateTime now = LocalDateTime.now();
+		Metrics metrics = new Metrics(now, Map.of("albums", 10.0, "Artiste", 5.0));
+		assertThat(metrics.getMetricDate()).isEqualTo(now);
+		
+		LocalDateTime yesterday = now.minusDays(1);
+		Metrics metrics2 = new Metrics(yesterday,  Map.of("Artiste", 5.0, "albums", 10.0));
+		
+		assertThat(metrics.hasSameMetricsAs(metrics2)).isTrue();
+	}
+	
+	@Test
+	void testNotEqualMetrics() {
+		
+		LocalDateTime now = LocalDateTime.now();
+		Metrics metrics = new Metrics(now, Map.of("albums", 10.0, "Artiste", 5.0));
+		assertThat(metrics.getMetricDate()).isEqualTo(now);
+		
+		LocalDateTime yesterday = now.minusDays(1);
+		Metrics metrics2 = new Metrics(yesterday,  Map.of("Artiste", 5.0, "albums", 11.0));
+		
+		assertThat(metrics.hasSameMetricsAs(metrics2)).isFalse();
+	}
+	
+	@Test
+	void testNotEqualMetrics2() {
+		
+		LocalDateTime now = LocalDateTime.now();
+		Metrics metrics = new Metrics(now, Map.of("albums", 10.0, "Artiste", 5.0));
+		assertThat(metrics.getMetricDate()).isEqualTo(now);
+		
+		LocalDateTime yesterday = now.minusDays(1);
+		Metrics metrics2 = new Metrics(yesterday,  Map.of("Artiste", 5.0, "albums", 10.0, "cd", 1.0));
+		
+		assertThat(metrics.hasSameMetricsAs(metrics2)).isFalse();
+	}
+	
+	@Test
+	void testNotEqualMetrics3() {
+		
+		LocalDateTime now = LocalDateTime.now();
+		Metrics metrics = new Metrics(now, Map.of("albums", 10.0, "Artiste", 5.0, "cd", 1.0));
+		assertThat(metrics.getMetricDate()).isEqualTo(now);
+		
+		LocalDateTime yesterday = now.minusDays(1);
+		Metrics metrics2 = new Metrics(yesterday,  Map.of("Artiste", 5.0, "albums", 10.0));
+		
+		assertThat(metrics.hasSameMetricsAs(metrics2)).isFalse();
 	}
 }

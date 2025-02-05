@@ -33,17 +33,34 @@ public class Metrics {
 	private final LocalDateTime metricDate;	
 	private final Map<String, Double> metrics;
 	
-	public Metrics(LocalDateTime metricDate) {
+	protected Metrics(LocalDateTime metricDate, Map<String,Double> metrics) {
+		
+		if (metricDate == null) {
+			throw new IllegalArgumentException("Illegal argument metrics date null");
+		}
+		if (metrics == null) {
+			throw new IllegalArgumentException("Illegal argument metrics map null");
+		}
+		
 		this.metricDate = metricDate;
-		metrics = new HashMap<>();
+		this.metrics = new HashMap<>();
+		this.metrics.putAll(metrics);
 	}
 	
-	public Metrics addMetric(String metricName, Double metric) {
-		metrics.put(metricName, metric);
-		return this;
-	}
-
 	public LocalDateTime getMetricDate() {
 		return metricDate;
+	}
+	
+	protected boolean hasSameMetricsAs(Metrics m) {
+		
+		if (m == null) {
+			throw new IllegalArgumentException("Illegal argument null");
+		} else {			
+			return ((m.metrics.size() == metrics.size()) &&
+					metrics.entrySet().stream()
+						.allMatch(entry -> 
+							(m.metrics.containsKey(entry.getKey()) && 
+							(m.metrics.get(entry.getKey()).equals(metrics.get(entry.getKey()))))));
+		}
 	}
 }
