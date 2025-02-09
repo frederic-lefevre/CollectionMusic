@@ -25,15 +25,23 @@ SOFTWARE.
 package org.fl.collectionAlbum.metrics;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Map;
+import java.util.logging.Logger;
 
 import static org.assertj.core.api.Assertions.*;
 
+import org.fl.util.file.FilesUtils;
 import org.junit.jupiter.api.Test;
 
 class MetricsHistoryTest {
 
-	private static final Path historyFolder = Path.of("C:\\ForTests\\CollectionMusiqueHistory");
+	private final static Logger mLog = Logger.getLogger(MetricsHistoryTest.class.getName());
+	
+	private static final Path historyFolderBase = Path.of("C:\\ForTests\\CollectionMusiqueHistory");
+	private static final long now = System.currentTimeMillis();
+	private static final long yesterday = System.currentTimeMillis() - 24*3600*1000;
 	
 	@Test
 	void testNullStoragePath() {
@@ -61,9 +69,29 @@ class MetricsHistoryTest {
 	@Test
 	void testHistoryDirectoryPath() throws IOException {
 		
-		MetricsHistory metricsHistory = new MetricsHistory(historyFolder);
+		Path historyPath = historyFolderBase.resolve("testHistoryDirectoryPath");
+		Files.createDirectory(historyPath);
 		
-		assertThat(metricsHistory).isNotNull();
+		assertThat(historyPath).isEmptyDirectory();
 		
+		MetricsHistory metricsHistory = new MetricsHistory(historyPath);
+		
+		assertThat(metricsHistory).isNotNull();	
+		assertThat(metricsHistory.getMetricsHistory()).isEmpty();
+		assertThat(historyPath).isEmptyDirectory();
+		
+		metricsHistory.addNewMetrics(new Metrics(now, Map.of("albums", 10.0, "Artiste", 5.0)));
+		
+		assertThat(historyPath).isNotEmptyDirectory();
+		assertThat(metricsHistory.getMetricsHistory()).singleElement()
+			.satisfies(metrics -> {
+					assertThat(metrics.getMetricTimeStamp()).isEqualTo(now);
+					assertThat(metrics.getMetrics()).containsExactlyInAnyOrderEntriesOf(
+							Map.of("albums", 10.0, "Artiste", 5.0)
+							);
+				});
+		
+		FilesUtils.deleteDirectoryTree(historyPath, true, mLog);
+		assertThat(historyPath).doesNotExist();
 	}
 }

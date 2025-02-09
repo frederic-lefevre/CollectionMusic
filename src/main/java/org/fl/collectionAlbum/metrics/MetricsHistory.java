@@ -29,6 +29,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
@@ -42,6 +44,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class MetricsHistory {
 
+	private static final MetricsDateComparator metricsDateComparator = new MetricsDateComparator();
 	private static final ObjectMapper mapper = new ObjectMapper();
 	private final static Logger mLog = Logger.getLogger(MetricsHistory.class.getName());
 			
@@ -93,6 +96,21 @@ public class MetricsHistory {
 		} else {
 			return false;
 		}
+	}
+	
+	public List<Metrics> getMetricsHistory() {
+		Collections.sort(metricsHistory, metricsDateComparator);
+		return metricsHistory;
+	}
+	
+	private static class MetricsDateComparator implements Comparator<Metrics> {
+
+		@Override
+		public int compare(Metrics o1, Metrics o2) {
+			
+			return (int)(o1.getMetricTimeStamp() - o2.getMetricTimeStamp());
+		}
+		
 	}
 	
 	private boolean writeJson(Metrics metrics) {
