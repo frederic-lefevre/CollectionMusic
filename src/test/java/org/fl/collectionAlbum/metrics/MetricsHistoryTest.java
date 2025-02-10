@@ -94,4 +94,34 @@ class MetricsHistoryTest {
 		FilesUtils.deleteDirectoryTree(historyPath, true, mLog);
 		assertThat(historyPath).doesNotExist();
 	}
+	
+	@Test
+	void testMetricsHistoryOrder() throws IOException {
+		
+		Metrics todayMetrics = new Metrics(now, Map.of("albums", 10.0, "Artiste", 5.0));
+		Metrics yesterdayyMetrics = new Metrics(yesterday, Map.of("albums", 8.0, "Artiste", 5.0));
+		
+		Path historyPath = historyFolderBase.resolve("testMetricsHistoryOrder");
+		Files.createDirectory(historyPath);
+		
+		MetricsHistory metricsHistory = new MetricsHistory(historyPath);
+		
+		metricsHistory.addNewMetrics(todayMetrics);
+		metricsHistory.addNewMetrics(yesterdayyMetrics);
+		
+		assertThat(metricsHistory.getMetricsHistory()).hasSize(2)
+			.satisfiesExactly(
+					metric1 -> { 
+						assertThat(metric1.getMetricTimeStamp()).isEqualTo(yesterday);
+						assertThat(metric1.hasSameMetricsAs(new Metrics(0, Map.of("albums", 8.0, "Artiste", 5.0))));
+					},
+					metric2 -> { 
+						assertThat(metric2.getMetricTimeStamp()).isEqualTo(now);
+						assertThat(metric2.hasSameMetricsAs(new Metrics(0, Map.of("albums", 10.0, "Artiste", 5.0))));
+					}
+					);
+		
+		FilesUtils.deleteDirectoryTree(historyPath, true, mLog);
+		assertThat(historyPath).doesNotExist();
+	}
 }
