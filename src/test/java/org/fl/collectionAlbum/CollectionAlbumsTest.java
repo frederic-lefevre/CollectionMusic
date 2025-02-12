@@ -86,8 +86,9 @@ class CollectionAlbumsTest {
 		Metrics collectionMetrics = CollectionMetrics.buildCollectionMetrics(0, albumsContainer);
 		
 		assertThat(collectionMetrics.getMetricTimeStamp()).isZero();
-		assertThat(collectionMetrics.getMetrics()).hasSize(11);
+		assertThat(collectionMetrics.getMetrics()).hasSize(12);
 		
+		assertThat(collectionMetrics.getMetrics().get("totalPhysique")).isNotNull().isGreaterThan(2155);
 		assertThat(collectionMetrics.getMetrics().get("xnbcd")).isNotNull().isGreaterThan(1280);
 		assertThat(collectionMetrics.getMetrics().get("xnbk7")).isNotNull().isGreaterThan(57);
 		assertThat(collectionMetrics.getMetrics().get("xnbVinyl")).isNotNull().isGreaterThan(775);

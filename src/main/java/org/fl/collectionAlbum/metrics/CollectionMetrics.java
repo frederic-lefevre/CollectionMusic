@@ -31,6 +31,7 @@ import org.fl.collectionAlbum.CollectionAlbumContainer;
 
 public class CollectionMetrics {
 
+	private static final String TOTAL = "totalPhysique";
 	private static final String NB_ARTISTE = "nombreArtiste";
 	private static final String NB_ALBUM = "nombreAlbum";
 	
@@ -38,6 +39,7 @@ public class CollectionMetrics {
 		
 		Map<String, Double> collectionMetrics = new HashMap<>();
 		
+		collectionMetrics.put(TOTAL, (double)collectionAlbumContainer.getCollectionAlbumsMusiques().getFormatListeAlbum().getPoids());
 		collectionMetrics.put(NB_ARTISTE, (double)collectionAlbumContainer.getCollectionArtistes().getNombreArtistes());
 		collectionMetrics.put(NB_ALBUM, (double)collectionAlbumContainer.getCollectionAlbumsMusiques().getNombreAlbums());
 		

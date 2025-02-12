@@ -81,7 +81,7 @@ class CollectionAlbumContainerTest {
 		Metrics collectionMetrics = CollectionMetrics.buildCollectionMetrics(0, albumsContainer);
 		
 		assertThat(collectionMetrics.getMetricTimeStamp()).isZero();
-		assertThat(collectionMetrics.getMetrics()).hasSize(2)
+		assertThat(collectionMetrics.getMetrics()).hasSize(3)
 			.contains(new SimpleEntry<>("nombreAlbum", (double)0), new SimpleEntry<>("nombreArtiste", (double)0));
 		
 	}
@@ -194,8 +194,9 @@ class CollectionAlbumContainerTest {
 		Metrics collectionMetrics = CollectionMetrics.buildCollectionMetrics(0, albumsContainer);
 		
 		assertThat(collectionMetrics.getMetricTimeStamp()).isZero();
-		assertThat(collectionMetrics.getMetrics()).hasSize(11)
+		assertThat(collectionMetrics.getMetrics()).hasSize(12)
 			.contains(
+					new SimpleEntry<>("totalPhysique", (double)1),
 					new SimpleEntry<>("nombreAlbum", (double)1), 
 					new SimpleEntry<>("nombreArtiste", (double)1),
 					new SimpleEntry<>("xnbcd", (double)1),
