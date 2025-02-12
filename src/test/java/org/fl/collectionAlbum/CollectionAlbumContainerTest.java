@@ -28,6 +28,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.net.URI;
 import java.nio.file.Paths;
+import java.util.AbstractMap.SimpleEntry;
 
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.Artiste;
@@ -35,6 +36,8 @@ import org.fl.collectionAlbum.disocgs.DiscogsInventory;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.format.Format.RangementSupportPhysique;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
+import org.fl.collectionAlbum.metrics.CollectionMetrics;
+import org.fl.collectionAlbum.metrics.Metrics;
 import org.fl.collectionAlbum.format.MediaSupports;
 import org.fl.collectionAlbum.rapportHtml.RapportStructuresAndNames;
 import org.junit.jupiter.api.Test;
@@ -74,6 +77,13 @@ class CollectionAlbumContainerTest {
 		CollectionAlbumContainer albumsContainer2 = CollectionAlbumContainer.getEmptyInstance();
 		assertThat(albumsContainer2).isEqualTo(albumsContainer);
 		TestUtils.assertEmptyCollection(albumsContainer);
+		
+		Metrics collectionMetrics = CollectionMetrics.buildCollectionMetrics(0, albumsContainer);
+		
+		assertThat(collectionMetrics.getMetricTimeStamp()).isZero();
+		assertThat(collectionMetrics.getMetrics()).hasSize(2)
+			.contains(new SimpleEntry<>("nombreAlbum", (double)0), new SimpleEntry<>("nombreArtiste", (double)0));
+		
 	}
 	
 	private static final String albumStr1 = """
@@ -180,5 +190,18 @@ class CollectionAlbumContainerTest {
 		assertThat(albumsContainer.pickRandomAlbumsViaArtiste(3)).isNotNull()
 			.singleElement()
 			.satisfies(alb -> assertThat(alb.getTitre()).isEqualTo("Portrait in jazz"));
+		
+		Metrics collectionMetrics = CollectionMetrics.buildCollectionMetrics(0, albumsContainer);
+		
+		assertThat(collectionMetrics.getMetricTimeStamp()).isZero();
+		assertThat(collectionMetrics.getMetrics()).hasSize(11)
+			.contains(
+					new SimpleEntry<>("nombreAlbum", (double)1), 
+					new SimpleEntry<>("nombreArtiste", (double)1),
+					new SimpleEntry<>("xnbcd", (double)1),
+					new SimpleEntry<>("xnbk7", (double)0),
+					new SimpleEntry<>("xnbVinyl", (double)0),
+					new SimpleEntry<>("xnbdvd", (double)0)
+					);
 	}
 }

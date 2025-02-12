@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import static org.assertj.core.api.Assertions.*;
 
 import org.fl.collectionAlbum.artistes.Artiste;
+import org.fl.collectionAlbum.metrics.CollectionMetrics;
+import org.fl.collectionAlbum.metrics.Metrics;
 import org.fl.collectionAlbumGui.ProgressInformationPanel;
 import org.junit.jupiter.api.Test;
 
@@ -79,6 +81,24 @@ class CollectionAlbumsTest {
 		
 		assertThat(albumsContainer.pickRandomAlbumsViaArtiste(4)).isNotNull()
 			.hasSize(4);
+		
+		// Test metrics
+		Metrics collectionMetrics = CollectionMetrics.buildCollectionMetrics(0, albumsContainer);
+		
+		assertThat(collectionMetrics.getMetricTimeStamp()).isZero();
+		assertThat(collectionMetrics.getMetrics()).hasSize(11);
+		
+		assertThat(collectionMetrics.getMetrics().get("xnbcd")).isNotNull().isGreaterThan(1280);
+		assertThat(collectionMetrics.getMetrics().get("xnbk7")).isNotNull().isGreaterThan(57);
+		assertThat(collectionMetrics.getMetrics().get("xnbVinyl")).isNotNull().isGreaterThan(775);
+		assertThat(collectionMetrics.getMetrics().get("xnbMiniVinyl")).isNotNull().isGreaterThan(10);
+		assertThat(collectionMetrics.getMetrics().get("xnbminicd")).isNotNull().isGreaterThan(4);
+		assertThat(collectionMetrics.getMetrics().get("xnbminidvd")).isNotNull().isGreaterThan(1);
+		assertThat(collectionMetrics.getMetrics().get("xnbvhs")).isNotNull().isGreaterThan(7);
+		assertThat(collectionMetrics.getMetrics().get("xnbdvd")).isNotNull().isGreaterThan(16);
+		assertThat(collectionMetrics.getMetrics().get("xnbblueray")).isNotNull().isGreaterThan(5);
+		assertThat(collectionMetrics.getMetrics().get("nombreAlbum")).isNotNull().isGreaterThan(1710);
+		assertThat(collectionMetrics.getMetrics().get("nombreArtiste")).isNotNull().isGreaterThan(738);
 		
 		// This is a singleton and it should be reset to empty
 		CollectionAlbumContainer albumsContainer2 = CollectionAlbumContainer.getEmptyInstance();

@@ -1,7 +1,7 @@
 /*
  MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -37,13 +37,13 @@ public enum MediaSupportCategories {
 	BluRay(   "Blu- ray", 	"xnbblueray", 	"Blu-ray",  						1);
 	
 	private final String nom;
-	private final String cssClass;
+	private final String id;
 	private final String description;
 	private final double poidsSupport;
 	
-	private MediaSupportCategories(String n, String cssCl, String desc, double ps) {
+	private MediaSupportCategories(String n, String id, String desc, double ps) {
 		nom = n;
-		cssClass = cssCl;
+		this.id = id;
 		description = desc;
 		poidsSupport = ps;
 	}
@@ -52,8 +52,8 @@ public enum MediaSupportCategories {
 		return nom;
 	}
 	
-	String getCssClass() {
-		return cssClass;
+	public String getId() {
+		return id;
 	}
 
 	public String getDescription() {
