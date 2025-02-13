@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,15 +24,18 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.json.migrator;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.json.ParserHelpers;
 import org.fl.util.json.JsonUtils;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class AlbumVersionMigrator2 implements VersionMigrator {
 
@@ -59,35 +62,38 @@ public class AlbumVersionMigrator2 implements VersionMigrator {
 	}
 
 	@Override
-	public JsonObject migrate(JsonObject albumJson) {
+	public ObjectNode migrate(ObjectNode albumJson) {
 
 		if (checkVersion(albumJson)) {
-			JsonElement jElem = albumJson.get(JsonMusicProperties.FORMAT);
+			ObjectNode jElem = (ObjectNode)albumJson.get(JsonMusicProperties.FORMAT);
 			if (jElem == null) {
-				albumLog.severe("Format d'album null pour l'album " + JsonUtils.jsonPrettyPrint(albumJson));
+				try {
+					albumLog.severe("Format d'album null pour l'album " + JsonUtils.jsonPrettyPrint(albumJson));
+				} catch (JsonProcessingException e) {
+					albumLog.log(Level.SEVERE, "Exception en loggant l'erreur de migration et imprimant le json", e);
+				}
 			} else {
 				
 				migrateMediaFiles(jElem, JsonMusicProperties.AUDIO_FILE);
 				migrateMediaFiles(jElem, JsonMusicProperties.VIDEO_FILE);
 				
-				albumJson.addProperty(JsonMusicProperties.JSON_VERSION, TARGET_VERSION);
+				albumJson.put(JsonMusicProperties.JSON_VERSION, TARGET_VERSION);
 			}
 		}
 		return albumJson;
 	}
 	
-	private void migrateMediaFiles(JsonElement formatJson, String mediaFileProperty)  {
+	private void migrateMediaFiles(ObjectNode formatJson, String mediaFileProperty)  {
 		
-		JsonArray jsonAudioFiles = formatJson.getAsJsonObject().getAsJsonArray(mediaFileProperty);
+		JsonNode jsonAudioFiles = formatJson.get(mediaFileProperty);
 		if (jsonAudioFiles != null) {
 			jsonAudioFiles.forEach(jsonAudioFile -> {
-
-				JsonObject audioFileJsonObject = jsonAudioFile.getAsJsonObject();						
-				String location = ParserHelpers.parseStringProperty(audioFileJsonObject, JsonMusicProperties.LOCATION, false);
+					
+				String location = ParserHelpers.parseStringProperty(jsonAudioFile, JsonMusicProperties.LOCATION, false);
 				if (location != null) {
-					JsonArray locationArray = new JsonArray();
+					ArrayNode locationArray = JsonNodeFactory.instance.arrayNode();
 					locationArray.add(location);
-					audioFileJsonObject.add(JsonMusicProperties.LOCATION, locationArray);
+					((ObjectNode) jsonAudioFile).set(JsonMusicProperties.LOCATION, locationArray);
 				}
 			});
 		}

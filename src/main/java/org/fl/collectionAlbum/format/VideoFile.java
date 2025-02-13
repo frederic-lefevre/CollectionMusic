@@ -28,7 +28,7 @@ import java.util.Set;
 
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
-import com.google.gson.JsonObject;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class VideoFile extends AbstractMediaFile {
 
@@ -40,7 +40,7 @@ public class VideoFile extends AbstractMediaFile {
 	private static final String WIDTH_TITLE = "Width";
 	private static final String HEIGHT_TITLE = "Height";
 	
-	public VideoFile(JsonObject videoJson, VideoFileType type, String source, int width, int height, String note, Set<MediaFilePath> mediaFilePaths) {
+	public VideoFile(ObjectNode videoJson, VideoFileType type, String source, int width, int height, String note, Set<MediaFilePath> mediaFilePaths) {
 		super(videoJson, source, note, mediaFilePaths);
 		this.type = type;
 		this.width = width;

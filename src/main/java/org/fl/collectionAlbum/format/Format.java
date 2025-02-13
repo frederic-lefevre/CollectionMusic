@@ -40,9 +40,8 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 /**
  * @author Frédéric Lefèvre
@@ -104,7 +103,7 @@ public class Format {
 	private boolean hasError;
 
 	// Create a format
-	public Format(JsonObject formatJson) {
+	public Format(ObjectNode formatJson) {
 		
 		tableFormat = new EnumMap<MediaSupports, Double>(MediaSupports.class);
 		
@@ -114,34 +113,43 @@ public class Format {
 					
 				hasError = false;
 				for (MediaSupports support : MediaSupports.values()) {
-					JsonElement elemFormat = formatJson.get(support.getJsonPropertyName());
+					JsonNode elemFormat = formatJson.get(support.getJsonPropertyName());
 					if (elemFormat != null) {
-						double doubleValue = elemFormat.getAsDouble();
+						double doubleValue = elemFormat.asDouble();
 						if (doubleValue <= 0) {
 							hasError = true;
-							albumLog.warning("Poids négatif ou nul pour le format " + formatJson.toString());
+							albumLog.warning("Poids négatif ou nul pour le format\n" + formatJson.toString());
 						}
-						tableFormat.put(support, Double.valueOf(elemFormat.getAsDouble()));
+						tableFormat.put(support, Double.valueOf(elemFormat.asDouble()));
 					}
 				}
 				if (tableFormat.isEmpty()) {
 					hasError = true;
-					albumLog.warning("Pas de support media connu pour le format " + formatJson.toString());
+					albumLog.warning("Pas de support media connu pour le format\n" + formatJson.toString());
 				}
 	
 				Stream.of(ContentNature.values()).forEach(contentNature -> {
 					
-					JsonArray mediaFileArray = formatJson.getAsJsonArray(contentNature.getJsonProperty());
+					JsonNode mediaFileArray = formatJson.get(contentNature.getJsonProperty());
 					List<AbstractMediaFile> mediaFileList = new ArrayList<>();
-					if (mediaFileArray != null) {
-						mediaFileArray.forEach(mediaFileJson -> {
-							AbstractMediaFile mediaFile = contentNature.getMediaFileParser().parseMediaFile(mediaFileJson.getAsJsonObject());
-							if (mediaFile != null) {
-								mediaFileList.add(mediaFile);
-							} else {
-								hasError = true ;
-							}
-						});
+					if (mediaFileArray != null ) {
+						
+						if (mediaFileArray.isArray()) {
+
+							mediaFileArray.forEach(mediaFileJson -> {
+								AbstractMediaFile mediaFile = contentNature.getMediaFileParser().parseMediaFile((ObjectNode) mediaFileJson);
+								if (mediaFile != null) {
+									mediaFileList.add(mediaFile);
+								} else {
+									hasError = true;
+									albumLog.severe("Erreur dans le parsing d'un media file pour le format\n" + formatJson.toString());
+								}
+							});
+							
+						} else {
+							hasError = true;
+							albumLog.severe("La propriété des fichiers media n'est pas un tableau pour le format\n" + formatJson.toString());
+						}	
 					}
 					mediaFiles.put(contentNature, mediaFileList);
 				});
@@ -149,8 +157,7 @@ public class Format {
 			} catch (Exception e) {
 				hasError = true;
 				albumLog.log(Level.SEVERE, "Exception when parsing album format", e);
-			}
-			
+			}			
 		} else {
 			hasError = true;
 			Stream.of(ContentNature.values()).forEach(contentNature -> {
@@ -357,7 +364,7 @@ public class Format {
 			rapport.append(F_ROW1).append(rows).append(F_ROW3).append(cssTotal).append(F_ROW2);
 		}
 		for (MediaSupportCategories sPhys : MediaSupportCategories.values()) {
-			rapport.append(F_ROW1).append(rows).append(F_ROW3).append(sPhys.getCssClass()).append(" ").append(SUPPORT_CLASS).append(F_ROW4).append(sPhys.getNom())
+			rapport.append(F_ROW1).append(rows).append(F_ROW3).append(sPhys.getId()).append(" ").append(SUPPORT_CLASS).append(F_ROW4).append(sPhys.getNom())
 			.append(F_ROW8).append(INFO_SUPPORT_CLASS).append(F_ROW4).append(sPhys.getDescription()).append(F_ROW7) ;
 		}
 		
@@ -391,7 +398,7 @@ public class Format {
 			rapport.append(F_ROW0).append(cssTotal).append(F_ROW6).append(cssTotal).append(F_ROW4).append(poidsToString(getPoids())).append(F_ROW7) ;
 		}
 		for (MediaSupportCategories sPhys : MediaSupportCategories.values()) {
-			rapport.append(F_ROW0).append(sPhys.getCssClass()).append(F_ROW4).append(poidsToString(getNbSupportPhysique(sPhys))).append(F_ROW5) ;			 
+			rapport.append(F_ROW0).append(sPhys.getId()).append(F_ROW4).append(poidsToString(getNbSupportPhysique(sPhys))).append(F_ROW5) ;			 
 		}
 
 		if (putMediaFile) {

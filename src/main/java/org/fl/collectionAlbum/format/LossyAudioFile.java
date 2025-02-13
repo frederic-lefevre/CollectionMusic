@@ -29,7 +29,7 @@ import java.util.function.BiConsumer;
 
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
-import com.google.gson.JsonObject;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class LossyAudioFile extends AbstractAudioFile {
 	
@@ -37,7 +37,7 @@ public class LossyAudioFile extends AbstractAudioFile {
 
 	private static final String BIT_RATE_TITLE = "Bit rate";
 	
-	public LossyAudioFile(JsonObject audioJson, AudioFileType type, String source, double bitRate, double samplingRate, String note, Set<MediaFilePath> mediaFilePaths) {
+	public LossyAudioFile(ObjectNode audioJson, AudioFileType type, String source, double bitRate, double samplingRate, String note, Set<MediaFilePath> mediaFilePaths) {
 		
 		super(audioJson, type, source, samplingRate, note, mediaFilePaths);
 		this.bitRate = bitRate;

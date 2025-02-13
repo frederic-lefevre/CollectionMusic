@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -37,8 +37,8 @@ import org.fl.collectionAlbum.format.LosslessAudioFile;
 import org.fl.collectionAlbum.format.LossyAudioFile;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class AudioFileParser extends AbstractMediaFileParser {
 
@@ -58,12 +58,12 @@ public class AudioFileParser extends AbstractMediaFileParser {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public AbstractAudioFile parseMediaFile(JsonObject audioFileJson) {
+	public AbstractAudioFile parseMediaFile(ObjectNode audioFileJson) {
 
 		if (audioFileJson != null) {
 			
 			AudioFileType type = Optional.ofNullable(audioFileJson.get(JsonMusicProperties.TYPE))
-					.map(JsonElement::getAsString)
+					.map(JsonNode::asText)
 					.map(s -> findType(s))
 					.orElseGet(() -> {
 						albumLog.severe("Json AudioFile null type parameter: " + audioFileJson);
@@ -71,7 +71,7 @@ public class AudioFileParser extends AbstractMediaFileParser {
 					});
 			
 			Double samplingRate = Optional.ofNullable(audioFileJson.get(JsonMusicProperties.SAMPLING_RATE))
-					.map(JsonElement::getAsDouble)
+					.map(JsonNode::asDouble)
 					.orElseGet(() -> {
 						albumLog.severe("Json AudioFile null samplingRate parameter" + audioFileJson);
 						return null;
@@ -88,7 +88,7 @@ public class AudioFileParser extends AbstractMediaFileParser {
 			} else if (type.isLossLess()) {
 				
 				Integer bitDepth = Optional.ofNullable(audioFileJson.get(JsonMusicProperties.BIT_DEPTH))
-						.map(JsonElement::getAsInt)
+						.map(JsonNode::asInt)
 						.orElseGet(() -> {
 							albumLog.severe("Json AudioFile null bitDepth parameter" + audioFileJson);
 							return null;
@@ -103,7 +103,7 @@ public class AudioFileParser extends AbstractMediaFileParser {
 			} else {
 				
 				Double bitRate = Optional.ofNullable(audioFileJson.get(JsonMusicProperties.BIT_RATE))
-						.map(JsonElement::getAsDouble)
+						.map(JsonNode::asDouble)
 						.orElseGet(() -> {
 							albumLog.severe("Json AudioFile null bitRate parameter" + audioFileJson);
 							return null;

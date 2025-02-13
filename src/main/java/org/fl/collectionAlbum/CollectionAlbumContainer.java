@@ -45,7 +45,7 @@ import org.fl.collectionAlbum.format.Format;
 import org.fl.collectionAlbum.format.MediaSupports;
 import org.fl.collectionAlbum.stat.StatChrono;
 
-import com.google.gson.JsonObject;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class CollectionAlbumContainer {
 	
@@ -104,7 +104,7 @@ public class CollectionAlbumContainer {
    		allArtistes.add(concertsArtistes);
 	}
 
-	public void addAlbum(JsonObject arteFactJson, Path jsonFile) {
+	public void addAlbum(ObjectNode arteFactJson, Path jsonFile) {
 		
 		Album album = new Album(arteFactJson, allArtistes, jsonFile);
 		
@@ -128,7 +128,7 @@ public class CollectionAlbumContainer {
 	    statChronoComposition.AddAlbum(album.getDebutComposition(), album.getFormatAlbum().getPoids());
 	}
 	
-	public void addConcert(JsonObject arteFactJson, Path jsonFile) { 
+	public void addConcert(ObjectNode arteFactJson, Path jsonFile) { 
 		
 		Concert concert = new Concert(arteFactJson, allArtistes, lieuxDesConcerts, jsonFile);
 		

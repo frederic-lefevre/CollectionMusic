@@ -36,7 +36,8 @@ import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.json.MusicArtefactParser;
 import org.fl.util.json.JsonUtils;
 
-import com.google.gson.JsonObject;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public abstract class MusicArtefact {
 
@@ -55,10 +56,10 @@ public abstract class MusicArtefact {
 	private boolean hasAdditionalInfo;
 	private boolean discogsFormatValidation;
 
-	protected final JsonObject arteFactJson;
+	protected final ObjectNode arteFactJson;
 	private final Path jsonFilePath;
 
-	protected MusicArtefact(JsonObject afj, List<ListeArtiste> knownArtistes, Path jsonFilePath) {
+	protected MusicArtefact(ObjectNode afj, List<ListeArtiste> knownArtistes, Path jsonFilePath) {
 		
 		arteFactJson = afj;
 		this.jsonFilePath = jsonFilePath;
@@ -123,7 +124,7 @@ public abstract class MusicArtefact {
 		return discogsFormatValidation;
 	}
 
-	public JsonObject getJson() {
+	public ObjectNode getJson() {
 		return arteFactJson;
 	}
 
@@ -132,7 +133,12 @@ public abstract class MusicArtefact {
 	}
 	
 	public String getJsonString() {
-		return JsonUtils.jsonPrettyPrint(arteFactJson);
+		try {
+			return JsonUtils.jsonPrettyPrint(arteFactJson);
+		} catch (JsonProcessingException e) {
+			mLog.log(Level.SEVERE, "Exception pretty printing json for music artefact", e);
+			return null;
+		}
 	}
 	
 	public boolean hasDiscogsRelease() {
@@ -165,12 +171,12 @@ public abstract class MusicArtefact {
 	public void setDiscogsLink(String discogsLink) {
 		this.discogsLink = discogsLink;
 		hasAdditionalInfo = hasAdditionalInfo || ((discogsLink != null) && !discogsLink.isEmpty());
-		arteFactJson.addProperty(JsonMusicProperties.DISCOGS, discogsLink);
+		arteFactJson.put(JsonMusicProperties.DISCOGS, discogsLink);
 	}
 	
 	public void setDiscogsFormatValid(boolean valid) {
 		this.discogsFormatValidation = valid;
-		arteFactJson.addProperty(JsonMusicProperties.DISCOGS_VALID, valid);
+		arteFactJson.put(JsonMusicProperties.DISCOGS_VALID, valid);
 	}
 	
 	private static boolean notEmpty(List<?> l) {

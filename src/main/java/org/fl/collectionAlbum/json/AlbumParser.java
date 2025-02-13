@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -35,22 +35,22 @@ import org.fl.collectionAlbum.format.Format.RangementSupportPhysique;
 import org.fl.collectionAlbum.utils.FuzzyPeriod;
 import org.fl.collectionAlbum.utils.TemporalUtils;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 
 public class AlbumParser {
 
 	private final static Logger albumLog =  Logger.getLogger(AlbumParser.class.getName());
 	
-	public static String getAlbumTitre(JsonObject jAlbum) {
+	public static String getAlbumTitre(JsonNode jAlbum) {
 		
 		String titre =  ParserHelpers.parseStringProperty(jAlbum, JsonMusicProperties.TITRE, true);
 		albumLog.finest(() -> "Titre: " + titre);
 		return titre ;
 	}
 	
-	public static Path getAlbumSleevePath(JsonObject jAlbum) {
+	public static Path getAlbumSleevePath(JsonNode jAlbum) {
 		
 		String sleeveImg =  ParserHelpers.parseStringProperty(jAlbum, JsonMusicProperties.SLEEVE_IMG, false);
 		if (sleeveImg == null) {
@@ -71,15 +71,15 @@ public class AlbumParser {
 		}
 	}
 	
-	public static Format getFormatAlbum(JsonObject jAlbum) {
+	public static Format getFormatAlbum(ObjectNode jAlbum) {
 
         Format formatAlbum;
-		JsonElement jElem = jAlbum.get(JsonMusicProperties.FORMAT) ;
+        JsonNode jElem = jAlbum.get(JsonMusicProperties.FORMAT) ;
         if (jElem == null) {
         	albumLog.warning("Format d'album null pour l'album " + jAlbum) ;
             formatAlbum = new Format(null) ;
         } else {
-        	formatAlbum = new Format(jElem.getAsJsonObject()) ;
+        	formatAlbum = new Format((ObjectNode)jElem) ;
         	if (formatAlbum.hasError()) {
         		albumLog.warning("Format d'album en erreur pour l'album " + jAlbum) ;
         	}
@@ -87,12 +87,12 @@ public class AlbumParser {
         return formatAlbum;
     }
 	
-	public static RangementSupportPhysique getRangementAlbum(JsonObject jAlbum) {
+	public static RangementSupportPhysique getRangementAlbum(JsonNode jAlbum) {
 		
 		RangementSupportPhysique rangementAlbum;
-		JsonElement jElem = jAlbum.get(JsonMusicProperties.RANGEMENT) ;
+		JsonNode jElem = jAlbum.get(JsonMusicProperties.RANGEMENT) ;
 		if (jElem != null) {
-			String jsonProp = jElem.getAsString();
+			String jsonProp = jElem.asText();
 			rangementAlbum = RangementSupportPhysique.getRangement(jsonProp);
 			if (rangementAlbum == null) {
 				albumLog.warning("Rangement d'album " + jsonProp + "inconnu pour l'album " + jAlbum) ;
@@ -103,7 +103,7 @@ public class AlbumParser {
 		return rangementAlbum;
 	}
 	
-	public static FuzzyPeriod processPeriodEnregistrement(JsonObject albumJson) {
+	public static FuzzyPeriod processPeriodEnregistrement(JsonNode albumJson) {
 		FuzzyPeriod periodeEnregistrement = processPeriod(albumJson, JsonMusicProperties.ENREGISTREMENT) ;
 		if (periodeEnregistrement == null) {
 			albumLog.warning(" Pas de dates d'enregistrement pour l'album " + albumJson);
@@ -111,26 +111,25 @@ public class AlbumParser {
 		return periodeEnregistrement ;
 	}
 	
-	public static FuzzyPeriod processPeriodComposition(JsonObject albumJson) {
+	public static FuzzyPeriod processPeriodComposition(JsonNode albumJson) {
 		return processPeriod(albumJson, JsonMusicProperties.COMPOSITION) ;
 	}
 	
-	private static FuzzyPeriod processPeriod(JsonObject albumJson, String periodProp) {
+	private static FuzzyPeriod processPeriod(JsonNode albumJson, String periodProp) {
 		
 		FuzzyPeriod period = null ;
-		JsonElement jElem = albumJson.get(periodProp) ;
-		if (jElem != null) {
-			if (!jElem.isJsonArray()) {
+		JsonNode jDates = albumJson.get(periodProp) ;
+		if (jDates != null) {
+			if (!jDates.isArray()) {
 				albumLog.warning(periodProp + " n'est pas un JsonArray pour l'album " + albumJson);
 			} else {
-				JsonArray jDates = jElem.getAsJsonArray();
 				if (jDates.size() != 2) {
 					albumLog.warning(periodProp + " ne contient pas 2 éléments pour l'album " + albumJson);
 				} else {
 
 					try {
-						String debut = jDates.get(0).getAsString();
-						String fin = jDates.get(1).getAsString();
+						String debut = jDates.get(0).asText();
+						String fin = jDates.get(1).asText();
 
 						period = new FuzzyPeriod(TemporalUtils.parseDate(debut), TemporalUtils.parseDate(fin)) ;
 						

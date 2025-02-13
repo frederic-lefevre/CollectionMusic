@@ -33,14 +33,15 @@ import java.util.function.BiConsumer;
 import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public abstract class AbstractMediaFile {
 
 	private final String source;
 	private final String note;
-	private final JsonObject mediaJson;
+	private final ObjectNode mediaJson;
 	
 	private Set<MediaFilePath> mediaFilePaths;
 	private boolean missingOrInvalidMediaFilePath;
@@ -52,7 +53,7 @@ public abstract class AbstractMediaFile {
 	private static final String FILE_LINK2 = "\">";
 	private static final String FILE_LINK3 = "</a>";
 	
-	protected AbstractMediaFile(JsonObject mediaJson, String source, String note, Set<MediaFilePath> mediaFilePaths) {
+	protected AbstractMediaFile(ObjectNode mediaJson, String source, String note, Set<MediaFilePath> mediaFilePaths) {
 		super();
 		this.mediaJson = mediaJson;
 		this.source = source;
@@ -118,10 +119,10 @@ public abstract class AbstractMediaFile {
 	}
 
 	private void modifiyJson() {
-		JsonArray mediaPathsJson = new JsonArray();
+		ArrayNode mediaPathsJson = JsonNodeFactory.instance.arrayNode();
 		mediaFilePaths.forEach(mediaFilePath -> mediaPathsJson.add(mediaFilePath.getPath().toString()));
 		
-		mediaJson.add(JsonMusicProperties.LOCATION, mediaPathsJson);
+		mediaJson.set(JsonMusicProperties.LOCATION, mediaPathsJson);
 	}
 	
 	private void checkMediaFilePaths() {

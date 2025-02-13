@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -38,10 +38,15 @@ import org.fl.util.FilterCounter;
 import org.fl.util.FilterCounter.LogRecordCounter;
 import org.junit.jupiter.api.Test;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 class ConcertTest {
+	
+	private static final ObjectMapper mapper = new ObjectMapper();
 	
 	@Test
 	void test() {
@@ -54,7 +59,7 @@ class ConcertTest {
 		lla.add(la) ;
 		
 		LieuxDesConcerts lieuxDesConcerts = new LieuxDesConcerts() ;
-		Concert concert = new Concert(new JsonObject(), lla, lieuxDesConcerts, Path.of("dummyPath")) ;
+		Concert concert = new Concert(JsonNodeFactory.instance.objectNode(), lla, lieuxDesConcerts, Path.of("dummyPath")) ;
 		
 		assertThat(concert).isNotNull();
 		
@@ -84,11 +89,11 @@ class ConcertTest {
 		""" ;
 
 	@Test
-	void testConcert1() {
+	void testConcert1() throws JsonMappingException, JsonProcessingException {
 
 		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
 		
-		JsonObject jConcert = JsonParser.parseString(concertStr1).getAsJsonObject();
+		ObjectNode jConcert = (ObjectNode)mapper.readTree(concertStr1);
 
 		ListeArtiste la = new ListeArtiste();
 		List<ListeArtiste> lla = new ArrayList<ListeArtiste>();

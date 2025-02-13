@@ -41,6 +41,8 @@ import org.fl.collectionAlbum.concerts.Concert;
 import org.fl.collectionAlbum.concerts.LieuConcert;
 import org.fl.collectionAlbum.concerts.LieuxDesConcerts;
 import org.fl.collectionAlbum.concerts.ListeConcert;
+import org.fl.collectionAlbum.metrics.CollectionMetrics;
+import org.fl.collectionAlbum.metrics.Metrics;
 import org.fl.collectionAlbum.rapportCsv.RapportCsv;
 import org.fl.collectionAlbum.rapportHtml.RapportCollection;
 import org.fl.collectionAlbum.rapportHtml.RapportConcert;
@@ -57,6 +59,8 @@ import org.fl.collectionAlbum.rapportHtml.RapportBuildInfo;
 import org.fl.collectionAlbumGui.ProgressInformation;
 import org.fl.collectionAlbumGui.ProgressInformationPanel;
 import org.fl.util.file.FilesUtils;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 public class GenerationSiteCollection  extends SwingWorker<String,ProgressInformation> {
 
@@ -99,6 +103,11 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 			// Sort for display when scanning the collection
 			collectionAlbumContainer.getCollectionAlbumsMusiques().sortRangementAlbum();
 
+			// Update collection metrics history
+			Metrics collectionMetrics = 
+					CollectionMetrics.buildCollectionMetrics(System.currentTimeMillis(), collectionAlbumContainer);
+			Control.getCollectionMetricsHsitory().addNewMetrics(collectionMetrics);
+			
 			albumLog.info("Fin de la génération");
 
 		} catch (Exception e) {
@@ -267,7 +276,15 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 	private void rapportBuildInfo() {
 		
 		Path rapportBuildInfoFile = RapportStructuresAndNames.getAbsoluteBuildInfoFile();
-		RapportBuildInfo rapportBuildInfo = new RapportBuildInfo(Control.getMusicRunningContext().getBuildInformation(), "Informations sur le programme de génération", LinkType.LIST);
+		String buildInfo;
+		try {
+			buildInfo = Control.getMusicRunningContext().getBuildInformation();
+		} catch (JsonProcessingException e) {
+			albumLog.log(Level.SEVERE, "Exception getting build information", e);
+			buildInfo = e.getMessage();
+			
+		}
+		RapportBuildInfo rapportBuildInfo = new RapportBuildInfo(buildInfo, "Informations sur le programme de génération", LinkType.LIST);
 		rapportBuildInfo.printReport(rapportBuildInfoFile, CssStyles.main);
 	}
 	

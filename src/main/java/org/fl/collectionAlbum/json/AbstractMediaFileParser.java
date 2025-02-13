@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -38,7 +38,8 @@ import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 
-import com.google.gson.JsonObject;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public abstract class AbstractMediaFileParser {
 
@@ -48,11 +49,11 @@ public abstract class AbstractMediaFileParser {
 		super();
 	}
 	
-	protected String parseNote(JsonObject mediaFileJson) {
+	protected String parseNote(JsonNode mediaFileJson) {
 		return ParserHelpers.parseStringProperty(mediaFileJson, JsonMusicProperties.NOTE, false);
 	}
 
-	protected Set<MediaFilePath> parseMediaFileLocation(JsonObject mediaFileJson, ContentNature contentNature) {
+	protected Set<MediaFilePath> parseMediaFileLocation(JsonNode mediaFileJson, ContentNature contentNature) {
 
 		Set<String> locations = ParserHelpers.getArrayAttributeAsSet(mediaFileJson,  JsonMusicProperties.LOCATION);
 		if (locations == null) {
@@ -81,9 +82,9 @@ public abstract class AbstractMediaFileParser {
 		}
 	}
 	
-	protected String parseSource(JsonObject mediaFileJson) {		
+	protected String parseSource(JsonNode mediaFileJson) {		
 		return ParserHelpers.parseStringProperty(mediaFileJson, JsonMusicProperties.SOURCE, true);
 	}
 
-	public abstract <T extends AbstractMediaFile> T parseMediaFile(JsonObject mediaFileJson);
+	public abstract <T extends AbstractMediaFile> T parseMediaFile(ObjectNode mediaFileJson);
 }

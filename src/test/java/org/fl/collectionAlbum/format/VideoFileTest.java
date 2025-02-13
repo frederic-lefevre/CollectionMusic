@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -34,19 +34,23 @@ import org.fl.util.FilterCounter;
 import org.fl.util.FilterCounter.LogRecordCounter;
 import org.junit.jupiter.api.Test;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class VideoFileTest {
 	
+	private static final ObjectMapper mapper = new ObjectMapper();
+	
 	@Test
-	void shouldHaveAllValues() {
+	void shouldHaveAllValues() throws JsonMappingException, JsonProcessingException {
 		
 		LogRecordCounter videoFileParserFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.VideoFileParser"));
 		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
 		
 		String videoFileStr1 = "{}" ;
-		JsonObject jf1 = JsonParser.parseString(videoFileStr1).getAsJsonObject();
+		ObjectNode jf1 = (ObjectNode)mapper.readTree(videoFileStr1);
 		
 		VideoFileParser videoFileParser = new VideoFileParser();
 		VideoFile videoFile = videoFileParser.parseMediaFile(jf1);
@@ -78,7 +82,7 @@ public class VideoFileTest {
 	}
 	
 	@Test
-	void shouldNotDeserializeToVideoFile() {
+	void shouldNotDeserializeToVideoFile() throws JsonMappingException, JsonProcessingException {
 		
 		LogRecordCounter videoFileParserFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.VideoFileParser"));
 		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
@@ -88,7 +92,7 @@ public class VideoFileTest {
 			 "height" : 480, 
 			 "source" : "DVD" }
 				""" ;
-		JsonObject jf1 = JsonParser.parseString(videoFileStr1).getAsJsonObject();
+		ObjectNode jf1 = (ObjectNode)mapper.readTree(videoFileStr1);
 		
 		VideoFileParser videoFileParser = new VideoFileParser();
 		VideoFile videoFile = videoFileParser.parseMediaFile(jf1);
@@ -106,7 +110,7 @@ public class VideoFileTest {
 	}
 	
 	@Test
-	void shouldDeserializeToVideoFileWithoutNote() {
+	void shouldDeserializeToVideoFileWithoutNote() throws JsonMappingException, JsonProcessingException {
 		
 		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
 		
@@ -116,7 +120,7 @@ public class VideoFileTest {
 			 "type" : "MKV", 
 			 "source" : "DVD" }
 				""" ;
-		JsonObject jf1 = JsonParser.parseString(videoFileStr1).getAsJsonObject();
+		ObjectNode jf1 = (ObjectNode)mapper.readTree(videoFileStr1);
 		
 		VideoFileParser videoFileParser = new VideoFileParser();
 		VideoFile videoFile = videoFileParser.parseMediaFile(jf1);
@@ -136,7 +140,7 @@ public class VideoFileTest {
 	}
 	
 	@Test
-	void shouldDeserializeToVideoFile() {
+	void shouldDeserializeToVideoFile() throws JsonMappingException, JsonProcessingException {
 		
 		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
 		
@@ -147,7 +151,7 @@ public class VideoFileTest {
 			 "source" : "DVD",
 			 "note" : "version noir et blanc" }
 				""" ;
-		JsonObject jf1 = JsonParser.parseString(videoFileStr1).getAsJsonObject();
+		ObjectNode jf1 = (ObjectNode)mapper.readTree(videoFileStr1);
 		
 		VideoFileParser videoFileParser = new VideoFileParser();
 		VideoFile videoFile = videoFileParser.parseMediaFile(jf1);

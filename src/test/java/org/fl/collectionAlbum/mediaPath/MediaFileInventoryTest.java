@@ -37,11 +37,15 @@ import org.fl.collectionAlbum.format.ContentNature;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 class MediaFileInventoryTest {
 
+	private static final ObjectMapper mapper = new ObjectMapper();
+	
 	private static MediaFileInventory audioFileInventory;
 	private static MediaFileInventory videoFileInventory;
 	
@@ -55,7 +59,7 @@ class MediaFileInventoryTest {
 	}
 	
 	@Test
-	void shouldFindAudioPath() {
+	void shouldFindAudioPath() throws JsonMappingException, JsonProcessingException {
 		
 		String albumStr1 = """
 				{ 
@@ -80,7 +84,7 @@ class MediaFileInventoryTest {
 				 } 
 				""" ;
 		
-		JsonObject jAlbum = JsonParser.parseString(albumStr1).getAsJsonObject();
+		ObjectNode jAlbum = (ObjectNode)mapper.readTree(albumStr1);
 
 		ListeArtiste la = new ListeArtiste();
 		List<ListeArtiste> lla = new ArrayList<ListeArtiste>();
@@ -102,7 +106,7 @@ class MediaFileInventoryTest {
 	}
 
 	@Test
-	void shouldFindMediaPath() {
+	void shouldFindMediaPath() throws JsonMappingException, JsonProcessingException {
 		
 		String albumStr1 = """
 				{
@@ -135,7 +139,7 @@ class MediaFileInventoryTest {
 }
 				""" ;
 		
-		JsonObject jAlbum = JsonParser.parseString(albumStr1).getAsJsonObject();
+		ObjectNode jAlbum = (ObjectNode)mapper.readTree(albumStr1);
 
 		ListeArtiste la = new ListeArtiste();
 		List<ListeArtiste> lla = new ArrayList<ListeArtiste>();

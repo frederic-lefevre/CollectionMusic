@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -36,10 +36,14 @@ import org.fl.util.FilterCounter;
 import org.fl.util.FilterCounter.LogRecordCounter;
 import org.junit.jupiter.api.Test;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 class MusicArtefactMigratorTest {
+	
+	private static final ObjectMapper mapper = new ObjectMapper();
 	
 	private static final String albumStr1 = """
 			{ 
@@ -65,13 +69,13 @@ class MusicArtefactMigratorTest {
 			""" ;
 	
 	@Test
-	void shouldMigrateAlbum() {
+	void shouldMigrateAlbum() throws JsonMappingException, JsonProcessingException {
 		
 		LogRecordCounter migratorFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.migrator.MusicArtefactMigrator"));
 		
 		MusicArtefactMigrator migrator = MusicArtefactMigrator.getMigrator();
 		
-		JsonObject albumJson = JsonParser.parseString(albumStr1).getAsJsonObject();
+		ObjectNode albumJson = (ObjectNode)mapper.readTree(albumStr1);
 		
 		int initialVersion = MusicArtefactParser.getVersion(albumJson);
 		assertThat(initialVersion).isZero();
@@ -80,10 +84,10 @@ class MusicArtefactMigratorTest {
 		
 		Path jsonFilePath = Path.of("C:\\ForTests\\CollectionMusique\\PortraitInJazz2.json");
 		
-		JsonObject migratedAlbum = migrator.migrateAlbum(albumJson, jsonFilePath);
+		ObjectNode migratedAlbum = migrator.migrateAlbum(albumJson, jsonFilePath);
 		
-		assertThat(migratedAlbum.get(JsonMusicProperties.JSON_VERSION).getAsInt())
-			.isEqualTo(albumJson.get(JsonMusicProperties.JSON_VERSION).getAsInt())
+		assertThat(migratedAlbum.get(JsonMusicProperties.JSON_VERSION).asInt())
+			.isEqualTo(albumJson.get(JsonMusicProperties.JSON_VERSION).asInt())
 			.isEqualTo(MusicArtefactParser.getVersion(migratedAlbum))
 			.isEqualTo(MusicArtefactParser.getVersion(albumJson))
 			.isEqualTo(migrator.albumVersionMigrators.size());

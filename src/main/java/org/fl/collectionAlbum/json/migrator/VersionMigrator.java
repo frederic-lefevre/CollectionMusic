@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2024 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,16 +26,17 @@ package org.fl.collectionAlbum.json.migrator;
 
 import org.fl.collectionAlbum.json.MusicArtefactParser;
 
-import com.google.gson.JsonObject;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public interface VersionMigrator {
 
-	JsonObject migrate(JsonObject json);
+	ObjectNode migrate(ObjectNode json);
 	
 	int targetVersion();
 	
 	// return true is the json need the to migrated
-	default boolean checkVersion(JsonObject json) {
+	default boolean checkVersion(JsonNode json) {
 		return (json != null) &&  (targetVersion() == MusicArtefactParser.getVersion(json) + 1);
 	}
 }

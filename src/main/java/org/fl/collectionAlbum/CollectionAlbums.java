@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -47,7 +47,7 @@ import org.fl.collectionAlbumGui.ProgressInformation;
 import org.fl.collectionAlbumGui.ProgressInformationPanel;
 import org.fl.util.json.JsonUtils;
 
-import com.google.gson.JsonObject;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,ProgressInformation>{
 	
@@ -151,7 +151,7 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
     		if ((Files.isRegularFile(file)) &&
 	    		(matcher.matches(name))) {
     			
-	    		JsonObject arteFactJson = JsonUtils.getJsonObjectFromPath(file, Control.getCharset(), albumLog) ;
+    			ObjectNode arteFactJson = (ObjectNode) JsonUtils.getJsonObjectFromPath(file, Control.getCharset(), albumLog) ;
 	    		if (arteFactJson != null) {
 	    			addMusicArtefact(arteFactJson, file) ;
 	    		} else {
@@ -168,17 +168,17 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
     		 return FileVisitResult.CONTINUE;
     	}
 
-    	public abstract void addMusicArtefact(JsonObject artefactJson, Path jsonFile) ;
+    	public abstract void addMusicArtefact(ObjectNode artefactJson, Path jsonFile) ;
     }
     
     private class AlbumFileVisitor extends MusicFileVisitor {
 		protected AlbumFileVisitor(String fileExtension) {	super(fileExtension); }
 
 		@Override
-		public void addMusicArtefact(JsonObject artefactJson, Path jsonFile) {
+		public void addMusicArtefact(ObjectNode artefactJson, Path jsonFile) {
 			
 			// Migration if needed
-			JsonObject migratedJson = MusicArtefactMigrator.getMigrator().migrateAlbum(artefactJson, jsonFile);
+			ObjectNode migratedJson = MusicArtefactMigrator.getMigrator().migrateAlbum(artefactJson, jsonFile);
 			
 			albumsContainer.addAlbum(migratedJson, jsonFile) ;			
 		}    	
@@ -188,7 +188,7 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 		protected ConcertFileVisitor(String fileExtension) {	super(fileExtension); }
 
 		@Override
-		public void addMusicArtefact(JsonObject artefactJson, Path jsonFile) {		
+		public void addMusicArtefact(ObjectNode artefactJson, Path jsonFile) {		
 			albumsContainer.addConcert(artefactJson, jsonFile) ;			
 		}    	
     }

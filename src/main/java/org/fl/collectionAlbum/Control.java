@@ -24,6 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
@@ -32,6 +33,7 @@ import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -40,6 +42,7 @@ import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
+import org.fl.collectionAlbum.metrics.MetricsHistory;
 import org.fl.collectionAlbum.osAction.AlbumCommandParameter;
 import org.fl.collectionAlbum.osAction.DiscogsReleaseCommandParameter;
 import org.fl.collectionAlbum.osAction.ListOfStringCommandParameter;
@@ -66,6 +69,7 @@ public class Control {
    	private AdvancedProperties collectionProperties;
 	private Path collectionDirectoryName;
 	private Path concertDirectoryName;
+	private MetricsHistory collectionMetricsHsitory;
 	private Path rapportPath;
 	private Path oldRapportPath;
 	private String concertTicketImgUri;
@@ -106,6 +110,13 @@ public class Control {
 			// Get path and URI for the rapport
 			rapportPath = collectionProperties.getPathFromURI("album.rapportDirectory.name");
 			oldRapportPath = collectionProperties.getPathFromURI("album.oldRapportDirectory.name");
+			
+			// Get history folder path
+			try {
+				collectionMetricsHsitory = new MetricsHistory(collectionProperties.getPathFromURI("album.historyFolder.name"));
+			} catch (IOException e) {
+				albumLog.log(Level.SEVERE, "IOException accessinng metrics history folder", e);
+			}
 			
 			// get the concert ticket image path
 			concertTicketImgUri = collectionProperties.getProperty("concert.ticketImgDir.name");	
@@ -183,6 +194,10 @@ public class Control {
 	
 	public static Path getOldRapportPath() {
 		return getInstance().oldRapportPath;
+	}
+	
+	public static MetricsHistory getCollectionMetricsHsitory() {
+		return getInstance().collectionMetricsHsitory;
 	}
 	
 	public static String getConcertTicketImgUri() {

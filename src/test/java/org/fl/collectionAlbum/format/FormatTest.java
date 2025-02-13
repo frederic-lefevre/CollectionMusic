@@ -33,29 +33,36 @@ import java.util.Set;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.junit.jupiter.api.Test;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 class FormatTest {
 	
+	private static final ObjectMapper mapper = new ObjectMapper();
+	
 	@Test
-	void test1() {
+	void test1() throws JsonMappingException, JsonProcessingException {
 		
 		String formatStr1 = "{}" ;
-		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
+		ObjectNode jf1 = (ObjectNode)mapper.readTree(formatStr1);
 		Format format1 = new Format(jf1) ;
 
 		assertThat(format1.getPoids()).isZero();
 		assertMediaSupports(format1, Collections.emptySet());
 
 		assertThat(format1.getContentNatures()).isEmpty();
+		assertThat(format1.hasContentNature(ContentNature.AUDIO)).isFalse();
+		
+		assertThat(format1.hasError()).isTrue();
 	}
 
 	@Test
-	void testPoidsNul() {
+	void testPoidsNul() throws JsonMappingException, JsonProcessingException {
 		
 		String formatStr1 = "{\"cd\": 0 }" ;
-		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
+		ObjectNode jf1 = (ObjectNode)mapper.readTree(formatStr1);
 		Format format1 = new Format(jf1) ;
 
 		assertThat(format1.getPoids()).isZero();
@@ -65,13 +72,15 @@ class FormatTest {
 
 		assertThat(format1.hasMediaFiles(ContentNature.AUDIO)).isFalse();
 		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isFalse();
+		
+		assertThat(format1.hasError()).isTrue();
 	}
 	
 	@Test
-	void test2() {
+	void test2() throws JsonMappingException, JsonProcessingException {
 		
 		String formatStr1 = "{\"cd\": 3 }" ;
-		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
+		ObjectNode jf1 = (ObjectNode)mapper.readTree(formatStr1);
 		Format format1 = new Format(jf1) ;
 
 		assertThat(format1.getPoids()).isEqualTo(3);
@@ -82,13 +91,18 @@ class FormatTest {
 		
 		assertThat(format1.getContentNatures()).singleElement()
 			.matches(contentNature -> contentNature.equals(ContentNature.AUDIO));
+		
+		assertThat(format1.hasError()).isFalse();
+		
+		assertThat(format1.hasMissingOrInvalidMediaFilePath(ContentNature.AUDIO)).isFalse();
+		assertThat(format1.hasMissingOrInvalidMediaFilePath(ContentNature.VIDEO)).isFalse();
 	}
 	
 	@Test
-	void test3() {
+	void test3() throws JsonMappingException, JsonProcessingException {
 		
 		String formatStr1 = "{\"cd\": 2 , \"45t\" : 1 }" ;
-		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
+		ObjectNode jf1 = (ObjectNode)mapper.readTree(formatStr1);
 		Format format1 = new Format(jf1) ;
 		
 		assertThat(format1.getPoids()).isEqualTo(2.5);
@@ -99,18 +113,22 @@ class FormatTest {
 		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isFalse();
 		assertThat(format1.hasContentNature(ContentNature.AUDIO)).isTrue();
 		assertThat(format1.hasContentNature(ContentNature.VIDEO)).isFalse();
+		assertThat(format1.hasMissingOrInvalidMediaFilePath(ContentNature.AUDIO)).isFalse();
+		assertThat(format1.hasMissingOrInvalidMediaFilePath(ContentNature.VIDEO)).isFalse();
 		
 		assertMediaSupports(format1, Set.of(MediaSupports.CD, MediaSupports.Vinyl45T));
 		
 		assertThat(format1.getContentNatures()).singleElement()
 			.matches(contentNature -> contentNature.equals(ContentNature.AUDIO));
+		
+		assertThat(format1.hasError()).isFalse();
 	}
 	
 	@Test
-	void test3b() {
+	void test3b() throws JsonMappingException, JsonProcessingException {
 		
 		String formatStr1 = "{\"cd\": 2 , \"dvd\" : 1 }" ;
-		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
+		ObjectNode jf1 = (ObjectNode)mapper.readTree(formatStr1);
 		Format format1 = new Format(jf1) ;
 		
 		assertThat(format1.getPoids()).isEqualTo(3);
@@ -125,17 +143,19 @@ class FormatTest {
 		assertMediaSupports(format1, Set.of(MediaSupports.CD, MediaSupports.DVD));
 		
 		assertThat(format1.getContentNatures()).containsExactlyInAnyOrder(ContentNature.AUDIO, ContentNature.VIDEO);
+		
+		assertThat(format1.hasError()).isFalse();
 	}
 	
 	@Test
-	void test4() {
+	void test4() throws JsonMappingException, JsonProcessingException {
 		
 		String formatStr1 = "{\"33t\": 2 , \"45t\" : 1 }" ;
-		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
+		ObjectNode jf1 = (ObjectNode)mapper.readTree(formatStr1);
 		Format format1 = new Format(jf1) ;
 		
 		String formatStr2 = "{\"cd\": 2 , \"45t\" : 1 }" ;
-		JsonObject jf2 = JsonParser.parseString(formatStr2).getAsJsonObject();
+		ObjectNode jf2 = (ObjectNode)mapper.readTree(formatStr2);
 		Format format2 = new Format(jf2) ;
 		
 		Format format3 = new Format(null) ;
@@ -162,10 +182,12 @@ class FormatTest {
 		
 		assertThat(format3.getContentNatures()).singleElement()
 			.matches(contentNature -> contentNature.equals(ContentNature.AUDIO));
+		
+		assertThat(format1.hasError()).isFalse();
 	}
 	
 	@Test
-	void test5() {
+	void test5() throws JsonMappingException, JsonProcessingException {
 		
 		String formatStr1 = """
 				{"cd": 2 , 
@@ -178,7 +200,7 @@ class FormatTest {
 				}
 				""";
 		
-		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
+		ObjectNode jf1 = (ObjectNode)mapper.readTree(formatStr1);
 		Format format1 = new Format(jf1) ;
 		
 		assertThat(format1.getPoids()).isEqualTo(2.5);
@@ -207,10 +229,12 @@ class FormatTest {
 		assertThat(format1.getSupportsPhysiques()).isNotNull().containsOnly(MediaSupportCategories.CD, MediaSupportCategories.MiniVinyl);
 		assertThat(format1.getSupportsPhysiquesNumbers()).isNotNull()
 			.containsOnly(entry(MediaSupportCategories.CD, 2.0), entry(MediaSupportCategories.MiniVinyl, 1.0));
+		
+		assertThat(format1.hasError()).isFalse();
 	}
 	
 	@Test
-	void test6() {
+	void test6() throws JsonMappingException, JsonProcessingException {
 		
 		String formatStr1 = """
 				{"cd": 2 , 
@@ -223,7 +247,7 @@ class FormatTest {
 				}
 				""";
 		
-		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
+		ObjectNode jf1 = (ObjectNode)mapper.readTree(formatStr1);
 		Format format1 = new Format(jf1) ;
 		
 		assertThat(format1.getPoids()).isEqualTo(2.5);
@@ -248,10 +272,12 @@ class FormatTest {
 		
 		assertThat(format1.getContentNatures()).singleElement()
 			.matches(contentNature -> contentNature.equals(ContentNature.AUDIO));
+		
+		assertThat(format1.hasError()).isFalse();
 	}
 	
 	@Test
-	void test7() {
+	void test7() throws JsonMappingException, JsonProcessingException {
 		
 		String formatStr1 = """
 				{"cd": 2 , 
@@ -270,7 +296,7 @@ class FormatTest {
 				}
 				""";
 		
-		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
+		ObjectNode jf1 = (ObjectNode)mapper.readTree(formatStr1);
 		Format format1 = new Format(jf1) ;
 		
 		assertThat(format1.getPoids()).isEqualTo(2.5);
@@ -318,10 +344,12 @@ class FormatTest {
 			.satisfiesExactlyInAnyOrder(
 					e -> assertThat(e).isEqualTo("Bit depth;Sampling Rate;Type;Source;Note"),
 					e -> assertThat(e).isEqualTo("Bit rate;Sampling Rate;Type;Source;Note"));
+		
+		assertThat(format1.hasError()).isFalse();
 	}
 	
 	@Test
-	void test8() {
+	void test8() throws JsonMappingException, JsonProcessingException {
 		
 		String formatStr1 = """
 				{"cd": 2 , 
@@ -340,7 +368,7 @@ class FormatTest {
 				}
 				""";
 		
-		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
+		ObjectNode jf1 = (ObjectNode)mapper.readTree(formatStr1);
 		Format format1 = new Format(jf1) ;
 		
 		assertThat(format1.getPoids()).isEqualTo(2.5);
@@ -383,10 +411,12 @@ class FormatTest {
 		
 		assertThat(format1.printAudioFilesCsvTitles(";", v -> true)).singleElement()
 			.satisfies(e -> assertThat(e).isEqualTo("Bit depth;Sampling Rate;Type;Source;Note"));
+		
+		assertThat(format1.hasError()).isFalse();
 	}
 	
 	@Test
-	void test9() {
+	void test9() throws JsonMappingException, JsonProcessingException {
 		
 		String formatStr1 = """
 				{"dvd": 2, 
@@ -406,7 +436,7 @@ class FormatTest {
 				}
 				""";
 		
-		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
+		ObjectNode jf1 = (ObjectNode)mapper.readTree(formatStr1);
 		Format format1 = new Format(jf1) ;
 
 		assertThat(format1.hasMediaFiles(ContentNature.AUDIO)).isFalse();
@@ -440,13 +470,15 @@ class FormatTest {
 			.matches(contentNature -> contentNature.equals(ContentNature.VIDEO));
 		
 		assertThat(format1.printAudioFilesCsvTitles(";", v -> true)).isEmpty();
+		
+		assertThat(format1.hasError()).isFalse();
 	}
 	
 	@Test
-	void test10() {
+	void test10() throws JsonMappingException, JsonProcessingException {
 		
 		String formatStr1 = "{\"bluray\": 3 }" ;
-		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
+		ObjectNode jf1 = (ObjectNode)mapper.readTree(formatStr1);
 		Format format1 = new Format(jf1) ;
 
 		assertThat(format1.getPoids()).isZero();
@@ -456,13 +488,15 @@ class FormatTest {
 		assertMediaSupports(format1, Collections.emptySet());
 		
 		assertThat(format1.getContentNatures()).isEmpty();
+		
+		assertThat(format1.hasError()).isTrue();
 	}
 	
 	@Test
-	void test11() {
+	void test11() throws JsonMappingException, JsonProcessingException {
 		
 		String formatStr1 = "{\"blueray\": 3 }" ;
-		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
+		ObjectNode jf1 = (ObjectNode)mapper.readTree(formatStr1);
 		Format format1 = new Format(jf1) ;
 
 		assertThat(format1.getPoids()).isEqualTo(3);
@@ -483,10 +517,10 @@ class FormatTest {
 	}
 	
 	@Test
-	void test12() {
+	void test12() throws JsonMappingException, JsonProcessingException {
 		
 		String formatStr1 = "{\"bluerayAudio\": 3 }" ;
-		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
+		ObjectNode jf1 = (ObjectNode)mapper.readTree(formatStr1);
 		Format format1 = new Format(jf1) ;
 
 		assertThat(format1.getPoids()).isEqualTo(3);
@@ -504,13 +538,15 @@ class FormatTest {
 		assertThat(format1.getSupportsPhysiquesNumbers()).isNotNull()
 			.containsOnlyKeys(MediaSupportCategories.BluRay)
 			.containsValue(3.0);
+		
+		assertThat(format1.hasError()).isFalse();
 	}
 	
 	@Test
-	void test13() {
+	void test13() throws JsonMappingException, JsonProcessingException {
 		
 		String formatStr1 = "{\"bluerayMixed\": 3 }" ;
-		JsonObject jf1 = JsonParser.parseString(formatStr1).getAsJsonObject();
+		ObjectNode jf1 = (ObjectNode)mapper.readTree(formatStr1);
 		Format format1 = new Format(jf1) ;
 
 		assertThat(format1.getPoids()).isEqualTo(3);
@@ -527,6 +563,8 @@ class FormatTest {
 		assertThat(format1.getSupportsPhysiquesNumbers()).isNotNull()
 			.containsOnlyKeys(MediaSupportCategories.BluRay)
 			.containsValue(3.0);
+		
+		assertThat(format1.hasError()).isFalse();
 	}
 	
 	private void assertMediaSupports(Format format, Set<MediaSupports> mediaSupports) {

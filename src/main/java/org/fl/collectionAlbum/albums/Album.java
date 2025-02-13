@@ -51,7 +51,7 @@ import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 import org.fl.collectionAlbum.utils.FuzzyPeriod;
 
-import com.google.gson.JsonObject;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class Album extends MusicArtefact {
 	
@@ -71,7 +71,7 @@ public class Album extends MusicArtefact {
     
     private final Map<ContentNature, List<MediaFilePath>> potentialMediaFilesPath;
     
-	public Album(JsonObject albumJson, List<ListeArtiste> knownArtistes, Path jsonFilePath) {
+	public Album(ObjectNode albumJson, List<ListeArtiste> knownArtistes, Path jsonFilePath) {
 
 		super(albumJson, knownArtistes, jsonFilePath);
 

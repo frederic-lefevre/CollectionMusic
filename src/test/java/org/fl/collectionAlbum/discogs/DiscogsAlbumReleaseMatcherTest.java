@@ -44,11 +44,15 @@ import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 class DiscogsAlbumReleaseMatcherTest {
 
+	private static final ObjectMapper mapper = new ObjectMapper();
+	
 	private final static String softMachineThird = """
 {
 "titre": "Third",
@@ -227,7 +231,7 @@ class DiscogsAlbumReleaseMatcherTest {
 	
 	
 	@Test
-	void shouldGetPotentialReleaseAndAlbumMatches() {
+	void shouldGetPotentialReleaseAndAlbumMatches() throws JsonMappingException, JsonProcessingException {
 		
 		ReleaseMatchResult releaseMatchResult = DiscogsAlbumReleaseMatcher.getPotentialReleaseMatch(getAlbumFromJson(softMachineThird));
 		
@@ -272,7 +276,7 @@ class DiscogsAlbumReleaseMatcherTest {
 	}
 	
 	@Test
-	void shouldGetSeveralPotentialReleaseMatch() {
+	void shouldGetSeveralPotentialReleaseMatch() throws JsonMappingException, JsonProcessingException {
 		
 		ReleaseMatchResult releaseMatchResult = DiscogsAlbumReleaseMatcher.getPotentialReleaseMatch(getAlbumFromJson(electricLadylandSingleCD));
 		
@@ -288,7 +292,7 @@ class DiscogsAlbumReleaseMatcherTest {
 	}
 	
 	@Test
-	void shouldGetPotentialReleaseMatchOnAuteursAndTitleOnly() {
+	void shouldGetPotentialReleaseMatchOnAuteursAndTitleOnly() throws JsonMappingException, JsonProcessingException {
 		
 		ReleaseMatchResult releaseMatchResult = DiscogsAlbumReleaseMatcher.getPotentialReleaseMatch(getAlbumFromJson(softMachineThirdK7));
 		
@@ -303,7 +307,7 @@ class DiscogsAlbumReleaseMatcherTest {
 	}
 	
 	@Test
-	void shouldNotGetPotentialReleaseMatch() {
+	void shouldNotGetPotentialReleaseMatch() throws JsonMappingException, JsonProcessingException {
 		
 		ReleaseMatchResult releaseMatchResult = DiscogsAlbumReleaseMatcher.getPotentialReleaseMatch(getAlbumFromJson(nonExistentAlbum));
 		
@@ -320,9 +324,9 @@ class DiscogsAlbumReleaseMatcherTest {
 				);
 	}
 	
-	private static Album getAlbumFromJson(String albumStr) {
+	private static Album getAlbumFromJson(String albumStr) throws JsonMappingException, JsonProcessingException {
 		
-		JsonObject jAlbum = JsonParser.parseString(albumStr).getAsJsonObject();
+		ObjectNode jAlbum = (ObjectNode)mapper.readTree(albumStr);
 
 		ListeArtiste la = new ListeArtiste();
 		List<ListeArtiste> lla = new ArrayList<ListeArtiste>();

@@ -31,9 +31,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.fasterxml.jackson.databind.JsonNode;
 
 public class ParserHelpers {
 
@@ -42,10 +40,10 @@ public class ParserHelpers {
 	private ParserHelpers() {
 	}
 
-	public static String parseStringProperty(JsonObject json, String property, boolean mandatory) {
+	public static String parseStringProperty(JsonNode json, String property, boolean mandatory) {
 		
 		return Optional.ofNullable(json.get(property))
-				.map(JsonElement::getAsString)
+				.map(JsonNode::asText)
 				.orElseGet(() -> {
 					if (mandatory) {
 						albumLog.severe("Mandatory property " + property + " not found in " + json);
@@ -54,10 +52,10 @@ public class ParserHelpers {
 				});
 	}
 	
-	public static boolean parseBooleanProperty(JsonObject json, String property, boolean mandatory) {
+	public static boolean parseBooleanProperty(JsonNode json, String property, boolean mandatory) {
 		
 		return Optional.ofNullable(json.get(property))
-				.map(JsonElement::getAsBoolean)
+				.map(JsonNode::asBoolean)
 				.orElseGet(() -> {
 					if (mandatory) {
 						albumLog.severe("Mandatory property " + property + " not found in " + json);
@@ -66,15 +64,14 @@ public class ParserHelpers {
 				});
 	}
 	
-	public static List<String> getArrayAttribute(JsonObject json, String jsonMusicProperty) {
+	public static List<String> getArrayAttribute(JsonNode json, String jsonMusicProperty) {
 
-		JsonElement jElem = json.get(jsonMusicProperty);
+		JsonNode jElem = json.get(jsonMusicProperty);
 		if (jElem != null) {
-			if (jElem.isJsonArray()) {
+			if (jElem.isArray()) {
 				List<String> result = new ArrayList<>();
-				JsonArray jArray = jElem.getAsJsonArray();
-				for (JsonElement e : jArray) {
-					result.add(e.getAsString());
+				for (JsonNode e : jElem) {
+					result.add(e.asText());
 				}
 				albumLog.finest(() -> "Nombre de " + jsonMusicProperty + " " + result.size());
 				return result;
@@ -87,13 +84,13 @@ public class ParserHelpers {
 		return new ArrayList<String>();
 	}
 	
-	public static Set<String> getArrayAttributeAsSet(JsonObject json, String jsonMusicProperty) {
+	public static Set<String> getArrayAttributeAsSet(JsonNode json, String jsonMusicProperty) {
 
-		JsonElement jElem = json.get(jsonMusicProperty);
+		JsonNode jElem = json.get(jsonMusicProperty);
 		if (jElem != null) {
-			if (jElem.isJsonArray()) {
+			if (jElem.isArray()) {
 				Set<String> result = new HashSet<>();
-				jElem.getAsJsonArray().forEach(e -> result.add(e.getAsString()));
+				jElem.forEach(e -> result.add(e.asText()));
 				return result;
 			} else {
 				albumLog.warning(jsonMusicProperty + " n'est pas un JsonArray pour l'artefact " + json);

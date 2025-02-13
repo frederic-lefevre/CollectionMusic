@@ -1,7 +1,7 @@
 /*
  MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -36,19 +36,23 @@ import org.fl.util.FilterCounter;
 import org.fl.util.FilterCounter.LogRecordCounter;
 import org.junit.jupiter.api.Test;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 class AudioFileTest {
 	
+	private static final ObjectMapper mapper = new ObjectMapper();
+	
 	@Test
-	void shouldHaveAllValues() {
+	void shouldHaveAllValues() throws JsonMappingException, JsonProcessingException {
 		
 		LogRecordCounter audioFileParserFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.AudioFileParser"));
 		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
 		
 		String audioFileStr1 = "{}" ;
-		JsonObject jf1 = JsonParser.parseString(audioFileStr1).getAsJsonObject();
+		ObjectNode jf1 = (ObjectNode)mapper.readTree(audioFileStr1);
 		
 		AudioFileParser audioFileParser = new AudioFileParser();
 		AbstractAudioFile audio = audioFileParser.parseMediaFile(jf1);
@@ -80,7 +84,7 @@ class AudioFileTest {
 	}
 	
 	@Test
-	void shouldNotDeserializeToAudioFile() {
+	void shouldNotDeserializeToAudioFile() throws JsonMappingException, JsonProcessingException {
 		
 		LogRecordCounter audioFileParserFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.AudioFileParser"));
 		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
@@ -90,7 +94,7 @@ class AudioFileTest {
 			 "samplingRate" : 96, 
 			 "source" : "SACD" }
 				""" ;
-		JsonObject jf1 = JsonParser.parseString(audioFileStr1).getAsJsonObject();
+		ObjectNode jf1 = (ObjectNode)mapper.readTree(audioFileStr1);
 		
 		AudioFileParser audioFileParser = new AudioFileParser();
 		AbstractAudioFile audio = audioFileParser.parseMediaFile(jf1);
@@ -108,7 +112,7 @@ class AudioFileTest {
 	}
 	
 	@Test
-	void shouldDeserializeToAudioFile2() {
+	void shouldDeserializeToAudioFile2() throws JsonMappingException, JsonProcessingException {
 		
 		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
 		
@@ -119,7 +123,7 @@ class AudioFileTest {
 				 "type" : "FLAC",
 				 "note" : "Remaster Ocean view" }
 				""" ;
-		JsonObject jf1 = JsonParser.parseString(audioFileStr1).getAsJsonObject();
+		ObjectNode jf1 = (ObjectNode)mapper.readTree(audioFileStr1);
 		
 		AudioFileParser audioFileParser = new AudioFileParser();
 		AbstractAudioFile audio = audioFileParser.parseMediaFile(jf1);
@@ -159,7 +163,7 @@ class AudioFileTest {
 	}
 	
 	@Test
-	void shouldDeserializeToAudioFileWithInvalidPath() {
+	void shouldDeserializeToAudioFileWithInvalidPath() throws JsonMappingException, JsonProcessingException {
 		
 		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
 		
@@ -171,7 +175,7 @@ class AudioFileTest {
 				 "note" : "Remaster Ocean view",
 				 "location" : "invalid path" }
 				""" ;
-		JsonObject jf1 = JsonParser.parseString(audioFileStr1).getAsJsonObject();
+		ObjectNode jf1 = (ObjectNode)mapper.readTree(audioFileStr1);
 		
 		AudioFileParser audioFileParser = new AudioFileParser();
 		AbstractAudioFile audio = audioFileParser.parseMediaFile(jf1);
@@ -197,7 +201,7 @@ class AudioFileTest {
 	}
 	
 	@Test
-	void shouldDeserializeToAudioFileWithPathNotFound() {
+	void shouldDeserializeToAudioFileWithPathNotFound() throws JsonMappingException, JsonProcessingException {
 		
 		LogRecordCounter filterCounter1 = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.AbstractMediaFileParser"));
 		LogRecordCounter filterCounter2 = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.mediaPath.MediaFileInventory"));
@@ -210,7 +214,7 @@ class AudioFileTest {
 				 "note" : "Remaster Ocean view",
 				 "location" : ["E:/Musique/a/John Abercrombie/notFound/"] }
 				""" ;
-		JsonObject jf1 = JsonParser.parseString(audioFileStr1).getAsJsonObject();
+		ObjectNode jf1 = (ObjectNode)mapper.readTree(audioFileStr1);
 		
 		AudioFileParser audioFileParser = new AudioFileParser();
 		AbstractAudioFile audio = audioFileParser.parseMediaFile(jf1);
