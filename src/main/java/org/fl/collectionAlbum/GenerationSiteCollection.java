@@ -41,6 +41,8 @@ import org.fl.collectionAlbum.concerts.Concert;
 import org.fl.collectionAlbum.concerts.LieuConcert;
 import org.fl.collectionAlbum.concerts.LieuxDesConcerts;
 import org.fl.collectionAlbum.concerts.ListeConcert;
+import org.fl.collectionAlbum.metrics.CollectionMetrics;
+import org.fl.collectionAlbum.metrics.Metrics;
 import org.fl.collectionAlbum.rapportCsv.RapportCsv;
 import org.fl.collectionAlbum.rapportHtml.RapportCollection;
 import org.fl.collectionAlbum.rapportHtml.RapportConcert;
@@ -101,6 +103,11 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 			// Sort for display when scanning the collection
 			collectionAlbumContainer.getCollectionAlbumsMusiques().sortRangementAlbum();
 
+			// Update collection metrics history
+			Metrics collectionMetrics = 
+					CollectionMetrics.buildCollectionMetrics(System.currentTimeMillis(), collectionAlbumContainer);
+			Control.getCollectionMetricsHsitory().addNewMetrics(collectionMetrics);
+			
 			albumLog.info("Fin de la génération");
 
 		} catch (Exception e) {
