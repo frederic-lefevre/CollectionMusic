@@ -194,6 +194,7 @@ class MediaFileInventoryTest {
 				new MediaFileInventory(Paths.get(new URI("file:///M:/Musique")), null, false);
 		
 		assertThat(disconnectedMediaFileInventory).isNotNull();
+		assertThat(disconnectedMediaFileInventory.isConnected()).isFalse();
 		
 		disconnectedMediaFileInventory.scanMediaFilePaths();
 	}
@@ -201,10 +202,7 @@ class MediaFileInventoryTest {
 	@Test
 	void shouldNotValidatePath() throws URISyntaxException {
 		
-		//Should warn that the path is not a sub path of root path *****
-		
-		assertThat(audioFileInventory.validateMediaFilePath(Paths.get("E:\\XX\\e\\Bill Evans\\Portrait In Jazz"))).isNull();
-		
+		assertThat(audioFileInventory.validateMediaFilePath(Paths.get("E:\\XX\\e\\Bill Evans\\Portrait In Jazz"))).isNull();	
 		
 	}
 }

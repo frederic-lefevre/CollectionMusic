@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -45,7 +45,7 @@ import org.fl.collectionAlbum.format.ContentNature;
 
 public class MediaFileInventory {
 
-	private final static Logger albumLog = Logger.getLogger(MediaFileInventory.class.getName());
+	private static final Logger albumLog = Logger.getLogger(MediaFileInventory.class.getName());
 	
 	private static final String SEPARATOR = File.separator;
 	
@@ -58,6 +58,7 @@ public class MediaFileInventory {
 	
 	private final ContentNature contentNature;
 	private final boolean logWarnings;
+	private boolean isConnected;
 	
 	protected MediaFileInventory(Path rootPath, ContentNature contentNature, boolean logWarnings) {
 		
@@ -66,24 +67,30 @@ public class MediaFileInventory {
 		this.logWarnings = logWarnings;
 		mediaFilePathInventory = new LinkedHashMap<>();
 		mediaFilePathList = new ArrayList<>();
+		isConnected = Files.exists(rootPath);
 	}
 
 	public void scanMediaFilePaths() {
-		try {
-			MediaFileVisitor mediaFileVisitor = new MediaFileVisitor();
-			Files.walkFileTree(rootPath, mediaFileVisitor);
-		} catch (Exception e) {
-			albumLog.log(Level.SEVERE, "Exception scanning media directory " + rootPath, e);
+		
+		if (isConnected()) {
+			try {
+				MediaFileVisitor mediaFileVisitor = new MediaFileVisitor();
+				Files.walkFileTree(rootPath, mediaFileVisitor);
+			} catch (Exception e) {
+				albumLog.log(Level.SEVERE, "Exception scanning media directory " + rootPath, e);
+			}
+		} else {
+			albumLog.severe("The media file inventory root path does not exist: " + rootPath);
 		}
 	}
 	
 	public void clearInventory() {
 		mediaFilePathList.clear();
 		mediaFilePathInventory.clear();
+		isConnected = Files.exists(rootPath);
 	}
 	
 	private class MediaFileVisitor extends SimpleFileVisitor<Path> {
-		
 		
 		@Override
 		public FileVisitResult preVisitDirectory(Path file, BasicFileAttributes attr) {
@@ -169,23 +176,37 @@ public class MediaFileInventory {
 		return mediaFilePathList;
 	}
 	
+	public boolean isConnected() {
+		return isConnected;
+	}
+
 	public MediaFilePath validateMediaFilePath(Path path) {
+		
+		if (! isConnected()) {
+			return null;
+		}
 		
 		if (Files.exists(path)) {
 			
-			MediaPathValidatorVisitor mediaPathValidatorVisitor = new MediaPathValidatorVisitor();
-			
-			try {
-				Files.walkFileTree(path, mediaPathValidatorVisitor);
-				
-				if (mediaPathValidatorVisitor.isMediaFilePresent()) {
-					return addMediaFilePathToInventory(path);
-				} else {
-					albumLog.severe("No media file found inside: " + path);
+			if (path.startsWith(rootPath)) {
+
+				MediaPathValidatorVisitor mediaPathValidatorVisitor = new MediaPathValidatorVisitor();
+
+				try {
+					Files.walkFileTree(path, mediaPathValidatorVisitor);
+
+					if (mediaPathValidatorVisitor.isMediaFilePresent()) {
+						return addMediaFilePathToInventory(path);
+					} else {
+						albumLog.severe("No media file found inside: " + path);
+						return null;
+					}
+				} catch (IOException e) {
+					albumLog.log(Level.SEVERE, "IOException listing media file inside " + path, e);
 					return null;
 				}
-			} catch (IOException e) {
-				albumLog.log(Level.SEVERE, "IOException listing media file inside " + path, e);
+			} else {
+				albumLog.severe("Media file path " + path + " is not in the root folder " + rootPath);
 				return null;
 			}
 			
