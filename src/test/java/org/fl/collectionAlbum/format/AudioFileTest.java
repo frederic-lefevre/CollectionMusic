@@ -237,8 +237,7 @@ class AudioFileTest {
 			.isNotNull()
 			.isEmpty();
 		
-		assertThat(filterCounter1.getLogRecordCount()).isEqualTo(1);
-		assertThat(filterCounter1.getLogRecordCount(Level.WARNING)).isEqualTo(1);
+		assertThat(filterCounter1.getLogRecordCount()).isEqualTo(0);
 		assertThat(filterCounter2.getLogRecordCount()).isEqualTo(1);
 		assertThat(filterCounter2.getLogRecordCount(Level.SEVERE)).isEqualTo(1);
 	}
