@@ -40,6 +40,7 @@ import javax.swing.JScrollPane;
 
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.format.ContentNature;
+import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 import org.fl.collectionAlbumGui.listener.MediaFileValidationListener;
 import org.fl.collectionAlbumGui.listener.MediaFilesSearchListener;
 
@@ -110,7 +111,11 @@ public class MediaFilesPane extends JPanel {
 					statusScrollPanels.get(contentNature).getViewport().setBackground(Color.GRAY);
 					contentPane.remove(mediaFilesSearches.get(contentNature));
 				} else if (album.hasMediaFiles(contentNature)) {
-					if (album.hasMediaFilePathNotFound(contentNature) ||
+					if (! MediaFilesInventories.getMediaFileInventory(contentNature).isConnected()) {
+						mediaFilesStatuses.get(contentNature).setText("Répertoire des fichiers " + contentNature.getNom() + " non connecté");
+						contentPane.setBackground(Color.RED);
+						statusScrollPanels.get(contentNature).getViewport().setBackground(Color.RED);
+					} else if (album.hasMediaFilePathNotFound(contentNature) ||
 						album.hasMissingOrInvalidMediaFilePath(contentNature)) {
 							List<Path> potentialMediaFilesPaths = album.getPotentialMediaFilesPaths(contentNature);
 							if (potentialMediaFilesPaths == null) {
