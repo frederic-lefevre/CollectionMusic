@@ -43,8 +43,8 @@ public class CollectionProcessWaiter implements PropertyChangeListener {
 		
 		 if ("state".equals(event.getPropertyName())
                  && SwingWorker.StateValue.DONE == event.getNewValue()) {
-			 for (ActivableElement activavleElement : activableElements) {
-				 activavleElement.activate() ;
+			 for (ActivableElement activableElement : activableElements) {
+				 activableElement.activate() ;
 			 }
 		 }
 	}
