@@ -33,6 +33,8 @@ import java.util.logging.Logger;
 import static org.assertj.core.api.Assertions.*;
 
 import org.fl.util.file.FilesUtils;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class MetricsHistoryTest {
@@ -42,6 +44,30 @@ class MetricsHistoryTest {
 	private static final Path historyFolderBase = Path.of("C:\\ForTests\\CollectionMusiqueHistory");
 	private static final long now = System.currentTimeMillis();
 	private static final long yesterday = System.currentTimeMillis() - 24*3600*1000;
+	
+	private static final Path historyPath1 = historyFolderBase.resolve("testHistoryDirectoryPath1");
+	private static final Path historyPath2 = historyFolderBase.resolve("testHistoryDirectoryPath2");
+	
+	private static void deleteFolderIfExist(Path folder) throws IOException {
+		if (Files.exists(folder)) {
+			FilesUtils.deleteDirectoryTree(folder, true, mLog);
+		}
+	}
+	
+	@BeforeAll
+	static void initHistoryFolder() throws IOException {
+		
+		deleteFolderIfExist(historyPath1);
+		deleteFolderIfExist(historyPath2);
+		Files.createDirectory(historyPath1);
+		Files.createDirectory(historyPath2);
+	}
+	
+	@AfterAll
+	static void deleteHistoryFolder() throws IOException {
+		deleteFolderIfExist(historyPath1);
+		deleteFolderIfExist(historyPath2);
+	}
 	
 	@Test
 	void testNullStoragePath() {
@@ -68,21 +94,18 @@ class MetricsHistoryTest {
 	
 	@Test
 	void testHistoryDirectoryPath() throws IOException {
+				
+		assertThat(historyPath1).isEmptyDirectory();
 		
-		Path historyPath = historyFolderBase.resolve("testHistoryDirectoryPath");
-		Files.createDirectory(historyPath);
-		
-		assertThat(historyPath).isEmptyDirectory();
-		
-		MetricsHistory metricsHistory = new MetricsHistory(historyPath);
+		MetricsHistory metricsHistory = new MetricsHistory(historyPath1);
 		
 		assertThat(metricsHistory).isNotNull();	
 		assertThat(metricsHistory.getMetricsHistory()).isEmpty();
-		assertThat(historyPath).isEmptyDirectory();
+		assertThat(historyPath1).isEmptyDirectory();
 		
 		metricsHistory.addNewMetrics(new Metrics(now, Map.of("albums", 10.0, "Artiste", 5.0)));
 		
-		assertThat(historyPath).isNotEmptyDirectory();
+		assertThat(historyPath1).isNotEmptyDirectory();
 		assertThat(metricsHistory.getMetricsHistory()).singleElement()
 			.satisfies(metrics -> {
 					assertThat(metrics.getMetricTimeStamp()).isEqualTo(now);
@@ -90,9 +113,6 @@ class MetricsHistoryTest {
 							Map.of("albums", 10.0, "Artiste", 5.0)
 							);
 				});
-		
-		FilesUtils.deleteDirectoryTree(historyPath, true, mLog);
-		assertThat(historyPath).doesNotExist();
 	}
 	
 	@Test
@@ -101,10 +121,7 @@ class MetricsHistoryTest {
 		Metrics todayMetrics = new Metrics(now, Map.of("albums", 10.0, "Artiste", 5.0));
 		Metrics yesterdayyMetrics = new Metrics(yesterday, Map.of("albums", 8.0, "Artiste", 5.0));
 		
-		Path historyPath = historyFolderBase.resolve("testMetricsHistoryOrder");
-		Files.createDirectory(historyPath);
-		
-		MetricsHistory metricsHistory = new MetricsHistory(historyPath);
+		MetricsHistory metricsHistory = new MetricsHistory(historyPath2);
 		
 		metricsHistory.addNewMetrics(todayMetrics);
 		metricsHistory.addNewMetrics(yesterdayyMetrics);
@@ -120,8 +137,5 @@ class MetricsHistoryTest {
 						assertThat(metric2.hasSameMetricsAs(new Metrics(0, Map.of("albums", 10.0, "Artiste", 5.0))));
 					}
 					);
-		
-		FilesUtils.deleteDirectoryTree(historyPath, true, mLog);
-		assertThat(historyPath).doesNotExist();
 	}
 }
