@@ -30,6 +30,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.metrics.CollectionMetrics;
+import org.fl.collectionAlbum.metrics.ConcertMetrics;
 import org.fl.collectionAlbum.metrics.Metrics;
 import org.fl.collectionAlbumGui.ProgressInformationPanel;
 import org.junit.jupiter.api.Test;
@@ -82,7 +83,7 @@ class CollectionAlbumsTest {
 		assertThat(albumsContainer.pickRandomAlbumsViaArtiste(4)).isNotNull()
 			.hasSize(4);
 		
-		// Test metrics
+		// Test album metrics
 		Metrics collectionMetrics = CollectionMetrics.buildCollectionMetrics(0, albumsContainer);
 		
 		assertThat(collectionMetrics.getMetricTimeStamp()).isZero();
@@ -100,6 +101,15 @@ class CollectionAlbumsTest {
 		assertThat(collectionMetrics.getMetrics().get("xnbblueray")).isNotNull().isGreaterThan(5);
 		assertThat(collectionMetrics.getMetrics().get("nombreAlbum")).isNotNull().isGreaterThan(1710);
 		assertThat(collectionMetrics.getMetrics().get("nombreArtiste")).isNotNull().isGreaterThan(738);
+		
+		// Test concert metrics
+		Metrics concertMetrics = ConcertMetrics.buildConcertMetrics(0, albumsContainer);
+		assertThat(concertMetrics.getMetricTimeStamp()).isZero();
+		assertThat(concertMetrics.getMetrics()).hasSize(2);
+		
+		assertThat(concertMetrics.getMetrics().get("totalPhysique")).isNull();
+		assertThat(concertMetrics.getMetrics().get("nombreArtiste")).isNotNull().isGreaterThan(148);
+		assertThat(concertMetrics.getMetrics().get("nombreConcert")).isNotNull().isGreaterThan(183);
 		
 		// This is a singleton and it should be reset to empty
 		CollectionAlbumContainer albumsContainer2 = CollectionAlbumContainer.getEmptyInstance();

@@ -70,6 +70,7 @@ public class Control {
 	private Path collectionDirectoryName;
 	private Path concertDirectoryName;
 	private MetricsHistory collectionMetricsHsitory;
+	private MetricsHistory concertMetricsHsitory;
 	private Path rapportPath;
 	private Path oldRapportPath;
 	private String concertTicketImgUri;
@@ -111,11 +112,16 @@ public class Control {
 			rapportPath = collectionProperties.getPathFromURI("album.rapportDirectory.name");
 			oldRapportPath = collectionProperties.getPathFromURI("album.oldRapportDirectory.name");
 			
-			// Get history folder path
+			// Get collection album and concert history folder path
 			try {
 				collectionMetricsHsitory = new MetricsHistory(collectionProperties.getPathFromURI("album.historyFolder.name"));
 			} catch (IOException e) {
-				albumLog.log(Level.SEVERE, "IOException accessinng metrics history folder", e);
+				albumLog.log(Level.SEVERE, "IOException accessinng album collection metrics history folder", e);
+			}
+			try {
+				concertMetricsHsitory = new MetricsHistory(collectionProperties.getPathFromURI("concert.historyFolder.name"));
+			} catch (IOException e) {
+				albumLog.log(Level.SEVERE, "IOException accessinng concert metrics history folder", e);
 			}
 			
 			// get the concert ticket image path
@@ -198,6 +204,10 @@ public class Control {
 	
 	public static MetricsHistory getCollectionMetricsHsitory() {
 		return getInstance().collectionMetricsHsitory;
+	}
+	
+	public static MetricsHistory getConcertMetricsHsitory() {
+		return getInstance().concertMetricsHsitory;
 	}
 	
 	public static String getConcertTicketImgUri() {

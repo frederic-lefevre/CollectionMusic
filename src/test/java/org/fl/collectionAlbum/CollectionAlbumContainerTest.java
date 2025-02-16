@@ -37,6 +37,7 @@ import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.format.Format.RangementSupportPhysique;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 import org.fl.collectionAlbum.metrics.CollectionMetrics;
+import org.fl.collectionAlbum.metrics.ConcertMetrics;
 import org.fl.collectionAlbum.metrics.Metrics;
 import org.fl.collectionAlbum.format.MediaSupports;
 import org.fl.collectionAlbum.rapportHtml.RapportStructuresAndNames;
@@ -83,6 +84,11 @@ class CollectionAlbumContainerTest {
 		assertThat(collectionMetrics.getMetricTimeStamp()).isZero();
 		assertThat(collectionMetrics.getMetrics()).hasSize(3)
 			.contains(new SimpleEntry<>("nombreAlbum", (double)0), new SimpleEntry<>("nombreArtiste", (double)0));
+		
+		Metrics concertMatrics = ConcertMetrics.buildConcertMetrics(0, albumsContainer);
+		assertThat(concertMatrics.getMetricTimeStamp()).isZero();
+		assertThat(concertMatrics.getMetrics()).hasSize(2)
+			.contains(new SimpleEntry<>("nombreConcert", (double)0), new SimpleEntry<>("nombreArtiste", (double)0));
 		
 	}
 	
@@ -204,5 +210,10 @@ class CollectionAlbumContainerTest {
 					new SimpleEntry<>("xnbVinyl", (double)0),
 					new SimpleEntry<>("xnbdvd", (double)0)
 					);
+		
+		Metrics concertMatrics = ConcertMetrics.buildConcertMetrics(0, albumsContainer);
+		assertThat(concertMatrics.getMetricTimeStamp()).isZero();
+		assertThat(concertMatrics.getMetrics()).hasSize(2)
+			.contains(new SimpleEntry<>("nombreConcert", (double)0), new SimpleEntry<>("nombreArtiste", (double)0));
 	}
 }
