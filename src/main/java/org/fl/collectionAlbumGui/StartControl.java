@@ -26,6 +26,7 @@ package org.fl.collectionAlbumGui;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.util.function.BooleanSupplier;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -36,10 +37,13 @@ public class StartControl implements ActivableElement {
 
 	private final JPanel procCtrl;
 	private final JButton pStart;
+	private final BooleanSupplier activationCondition;
 
 	private ProgressInformationPanel pip;
 	
-	public StartControl(String bText, String iText, String sText) {
+	public StartControl(String bText, String iText, String sText, BooleanSupplier activationCondition) {
+		
+		this.activationCondition = activationCondition;
 		
 		String buttonText = "<html><p>" + bText + "</p></html>";
 		
@@ -77,7 +81,9 @@ public class StartControl implements ActivableElement {
 	
 	@Override
 	public void activate() {
-		pStart.setEnabled(true);
+		if (activationCondition.getAsBoolean()) {
+			pStart.setEnabled(true);
+		}
 	}
 	
 	@Override

@@ -64,14 +64,14 @@ public class GenerationPane extends JPanel {
 		JPanel controlPanel = new JPanel();
 		controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.X_AXIS));
 		
-		readCollectionControl = new StartControl(rText, iText, sText);
+		readCollectionControl = new StartControl(rText, iText, sText, () -> true);
 		controlPanel.add(readCollectionControl.getProcCtrl());
 
 		UtilsPane utilsPane = new UtilsPane(this);
 		utilsPane.deactivate();
 		controlPanel.add(utilsPane);
 		
-		generateSiteControl = new StartControl(gText, iText, s1Text);
+		generateSiteControl = new StartControl(gText, iText, s1Text, StartGenerationSite.activationPredicate);
 		generateSiteControl.deactivate();
 		controlPanel.add(generateSiteControl.getProcCtrl());
 

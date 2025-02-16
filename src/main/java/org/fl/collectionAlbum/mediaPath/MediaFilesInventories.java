@@ -59,6 +59,10 @@ public class MediaFilesInventories {
 		getInstance().mediaFilesInventories.values().forEach(MediaFileInventory::clearInventory);
 	}
 	
+	public static boolean areAllConnected() {
+		return getInstance().mediaFilesInventories.values().stream().allMatch(m -> m.isConnected());
+	}
+	
 	private static MediaFilesInventories getInstance() {
 		if (instance == null) {
 			instance = new MediaFilesInventories();
