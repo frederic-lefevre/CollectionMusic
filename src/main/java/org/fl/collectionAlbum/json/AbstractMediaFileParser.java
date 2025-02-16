@@ -24,7 +24,6 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.json;
 
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Objects;
 import java.util.Set;
@@ -64,9 +63,6 @@ public abstract class AbstractMediaFileParser {
 						try {
 							Path locationPath = Path.of(locationString);
 							if (locationPath.isAbsolute()) {
-								if (!Files.exists(locationPath)) {
-									albumLog.warning("Media file location does not exists: " + mediaFileJson);
-								}
 								return MediaFilesInventories.getMediaFileInventory(contentNature).validateMediaFilePath(locationPath);
 							} else {
 								albumLog.severe("Media file location is not absolute: " + mediaFileJson);
