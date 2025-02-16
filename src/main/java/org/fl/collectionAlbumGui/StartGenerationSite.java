@@ -27,14 +27,18 @@ package org.fl.collectionAlbumGui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+import java.util.function.BooleanSupplier;
 
 import org.fl.collectionAlbum.GenerationSiteCollection;
+import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 
 public class StartGenerationSite implements ActionListener {
 	
 	private final ProgressInformationPanel pip;	
 	private final List<ActivableElement>  activableButtons;
 	private CollectionProcessWaiter collectionProcWaiter;
+	
+	public static final BooleanSupplier activationPredicate = () -> MediaFilesInventories.areAllConnected();
 
 	public StartGenerationSite(ProgressInformationPanel progInfoPanel, List<ActivableElement> stList) {
 		

@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -57,6 +57,10 @@ public class MediaFilesInventories {
 	
 	public static void clearInventories() {
 		getInstance().mediaFilesInventories.values().forEach(MediaFileInventory::clearInventory);
+	}
+	
+	public static boolean areAllConnected() {
+		return getInstance().mediaFilesInventories.values().stream().allMatch(m -> m.isConnected());
 	}
 	
 	private static MediaFilesInventories getInstance() {

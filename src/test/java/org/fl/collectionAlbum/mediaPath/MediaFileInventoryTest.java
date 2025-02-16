@@ -26,6 +26,8 @@ package org.fl.collectionAlbum.mediaPath;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -175,5 +177,32 @@ class MediaFileInventoryTest {
 	void shouldFindVideoPath() {
 		
 		assertThat(videoFileInventory.validateMediaFilePath(Path.of("G:\\Video\\Musique\\u\\u2\\The Joshua Tree (Super Deluxe Edition Bonus DVD)"))).isNotNull();
+	}
+	
+	@Test
+	void shouldNotFindAudioPath() {
+		
+		assertThat(audioFileInventory.validateMediaFilePath(Paths.get("E:\\Musique\\e\\Bill Evans\\Does Not Exists"))).isNull();
+	}
+	
+	@Test
+	void shouldNotFindRootPath() throws URISyntaxException {
+		
+		// Should log that root path is disconnected and remember that, do all operation accordingly ****
+		
+		MediaFileInventory disconnectedMediaFileInventory =
+				new MediaFileInventory(Paths.get(new URI("file:///M:/Musique")), null, false);
+		
+		assertThat(disconnectedMediaFileInventory).isNotNull();
+		assertThat(disconnectedMediaFileInventory.isConnected()).isFalse();
+		
+		disconnectedMediaFileInventory.scanMediaFilePaths();
+	}
+	
+	@Test
+	void shouldNotValidatePath() throws URISyntaxException {
+		
+		assertThat(audioFileInventory.validateMediaFilePath(Paths.get("E:\\XX\\e\\Bill Evans\\Portrait In Jazz"))).isNull();	
+		
 	}
 }
