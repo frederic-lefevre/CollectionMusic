@@ -210,7 +210,7 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 				return new JLabel("Fichier couverture non trouvé: " + album.getCoverImage().toString());
 			}
 		} else {
-			return new  JLabel("Album sans fichier couverture");
+			return new  JLabel("Couverture de l'album non disponible");
 		}
 	}
 }
