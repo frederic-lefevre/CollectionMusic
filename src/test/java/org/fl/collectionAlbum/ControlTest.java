@@ -87,7 +87,17 @@ class ControlTest {
 		assertThat(applicationInfo).isNotNull();
 		
 		JsonNode buildInformation = applicationInfo.get("buildInformation");
-		assertThat(buildInformation).isNotNull();
-		assertThat(buildInformation.get("version")).isNotNull();
+		assertThat(buildInformation).isNotEmpty().hasSize(2)
+		.satisfiesExactlyInAnyOrder(
+				buildInfo -> { 
+					assertThat(buildInfo.get("moduleName")).isNotNull();
+					assertThat(buildInfo.get("moduleName").asText()).isEqualTo("org.fl.collectionAlbum");
+				},
+				buildInfo -> { 
+					assertThat(buildInfo.get("moduleName")).isNotNull();
+					assertThat(buildInfo.get("moduleName").asText()).isEqualTo("org.fl.util");
+				}
+				);
+		
 	}
 }
