@@ -87,7 +87,7 @@ class ControlTest {
 		assertThat(applicationInfo).isNotNull();
 		
 		JsonNode buildInformation = applicationInfo.get("buildInformation");
-		assertThat(buildInformation).isNotEmpty().hasSize(2)
+		assertThat(buildInformation).isNotEmpty().hasSize(3)
 		.satisfiesExactlyInAnyOrder(
 				buildInfo -> { 
 					assertThat(buildInfo.get("moduleName")).isNotNull();
@@ -96,8 +96,13 @@ class ControlTest {
 				buildInfo -> { 
 					assertThat(buildInfo.get("moduleName")).isNotNull();
 					assertThat(buildInfo.get("moduleName").asText()).isEqualTo("org.fl.util");
+				},
+				buildInfo -> { 
+					assertThat(buildInfo.get("moduleName")).isNotNull();
+					assertThat(buildInfo.get("moduleName").asText()).isEqualTo("discogsInterface");
 				}
 				);
 		
 	}
+
 }
