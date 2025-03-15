@@ -85,7 +85,7 @@ public class AlbumUtils {
 		buf.append("<h3>Format:</h3>");
 		buf.append(album.getFormatAlbum().mediaSupportsHtmlList());
 		if (album.hasMediaFiles()) {
-			Stream.of(ContentNature.values()).forEach(contentNature -> {
+			Stream.of(ContentNature.values()).forEachOrdered(contentNature -> {
 				if (album.getFormatAlbum().hasMediaFiles(contentNature)) {
 					buf.append("  <h3>Fichiers " + contentNature.getNom() + ":</h3>\n");
 					buf.append("  <table>\n");

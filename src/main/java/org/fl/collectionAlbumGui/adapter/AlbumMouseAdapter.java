@@ -64,7 +64,7 @@ public class AlbumMouseAdapter extends MouseAdapter {
 			)
 		);
 		
-		Stream.of(CustomAction.values()).forEach(customAction -> 
+		Stream.of(CustomAction.values()).forEachOrdered(customAction -> 
 				albumMenuItems.addMenuItem(
 						customAction.getActionTitle(), 
 						new AlbumCustomActionListener(albumsJTable, customAction, generationPane), 

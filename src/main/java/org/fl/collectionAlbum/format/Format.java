@@ -128,7 +128,7 @@ public class Format {
 					albumLog.warning("Pas de support media connu pour le format\n" + formatJson.toString());
 				}
 	
-				Stream.of(ContentNature.values()).forEach(contentNature -> {
+				Stream.of(ContentNature.values()).forEachOrdered(contentNature -> {
 					
 					JsonNode mediaFileArray = formatJson.get(contentNature.getJsonProperty());
 					List<AbstractMediaFile> mediaFileList = new ArrayList<>();
@@ -160,7 +160,7 @@ public class Format {
 			}			
 		} else {
 			hasError = true;
-			Stream.of(ContentNature.values()).forEach(contentNature -> {
+			Stream.of(ContentNature.values()).forEachOrdered(contentNature -> {
 				mediaFiles.put(contentNature, null);
 			});
 		}
@@ -205,7 +205,7 @@ public class Format {
     public EnumMap<MediaSupportCategories, Double> getSupportsPhysiquesNumbers() {
     	
     	EnumMap<MediaSupportCategories, Double> supportPhysiquesNumbers = new EnumMap<MediaSupportCategories, Double>(MediaSupportCategories.class);
-    	getSupportsPhysiques().stream()
+    	getSupportsPhysiques()
     		.forEach(support -> supportPhysiquesNumbers.put(support, getNbSupportPhysique(support)));
     	return supportPhysiquesNumbers;
     }
@@ -458,7 +458,7 @@ public class Format {
 		Stream.of(ContentNature.values())
 			.map(contentNature -> mediaFiles.get(contentNature))
 			.filter(Objects::nonNull)
-			.forEach(mediaFileList -> allMediaFiles.addAll(mediaFileList));
+			.forEachOrdered(mediaFileList -> allMediaFiles.addAll(mediaFileList));
 		
 		return allMediaFiles;
 	}

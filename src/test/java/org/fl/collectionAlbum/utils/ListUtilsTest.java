@@ -43,7 +43,7 @@ class ListUtilsTest {
 		int numrberOfTests = 1000;
 		
 		List<Integer> aList = new ArrayList<>();		
-		IntStream.range(valueMin,valueMax).forEach(aList::add);
+		IntStream.range(valueMin,valueMax).forEachOrdered(aList::add);
 		
 		assertThat(aList).hasSize(valueMax);
 		

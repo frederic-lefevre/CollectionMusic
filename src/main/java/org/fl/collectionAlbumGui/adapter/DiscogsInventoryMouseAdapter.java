@@ -64,7 +64,7 @@ public class DiscogsInventoryMouseAdapter extends MouseAdapter {
 				localJPopupMenu
 		));
 		
-		Streams.of(CustomAction.values()).forEach(customAction -> 
+		Streams.of(CustomAction.values()).forEachOrdered(customAction -> 
 			discogsReleaseMenuItems.addMenuItem(
 					customAction.getActionTitle(), 
 					new DiscogsReleaseCustomActionListener(discogsReleaseJTable, customAction, albumsContainer, generationPane), 

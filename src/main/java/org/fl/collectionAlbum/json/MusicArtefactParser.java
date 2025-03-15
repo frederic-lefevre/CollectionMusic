@@ -41,21 +41,21 @@ public class MusicArtefactParser {
 	
 	private final static Logger albumLog = Logger.getLogger(MusicArtefactParser.class.getName());
 	
-	private List<ListeArtiste> knownArtistes ;
-	private JsonNode arteFactJson ;
-	
-	private ListeArtiste auteurs ;
-	private ListeArtiste interpretes ;
-	private ListeArtiste chefs ;
-	private ListeArtiste ensembles ;
-	private ListeArtiste groupes ;
+	private List<ListeArtiste> knownArtistes;
+	private JsonNode arteFactJson;
+
+	private ListeArtiste auteurs;
+	private ListeArtiste interpretes;
+	private ListeArtiste chefs;
+	private ListeArtiste ensembles;
+	private ListeArtiste groupes;
 	
 	public MusicArtefactParser(JsonNode j, List<ListeArtiste> currentKnownArtistes) {
 		super();
 
 		arteFactJson = j;
 		knownArtistes = new ArrayList<ListeArtiste>();
-		currentKnownArtistes.stream().forEach(la -> knownArtistes.add(la));
+		currentKnownArtistes.forEach(la -> knownArtistes.add(la));
 
 		auteurs = processListeArtistes(Artiste.class, JsonMusicProperties.AUTEUR);
 		knownArtistes.add(auteurs);
@@ -91,8 +91,8 @@ public class MusicArtefactParser {
 	
 	private ListeArtiste processListeArtistes(Class<? extends Artiste> cls, String artistesJprop) {
 		
-		ListeArtiste artistes = new ListeArtiste() ;
-		JsonNode jElem = arteFactJson.get(artistesJprop) ;
+		ListeArtiste artistes = new ListeArtiste();
+		JsonNode jElem = arteFactJson.get(artistesJprop);
 		if (jElem != null) {
 			if (jElem.isArray()) {
 				
@@ -101,14 +101,14 @@ public class MusicArtefactParser {
 					try {
 						artistes.addArtiste(createGetOrUpdateArtiste(cls, jArtiste)) ;
 					} catch (IllegalStateException e) {
-						albumLog.log(Level.WARNING, "un artiste n'est pas un objet json pour l'arteFact " + arteFactJson, e) ;
+						albumLog.log(Level.WARNING, "un artiste n'est pas un objet json pour l'arteFact " + arteFactJson, e);
 					}
 				}
 			} else {
-				albumLog.warning(artistesJprop + " n'est pas un tableau json pour l'arteFact " + arteFactJson) ;
+				albumLog.warning(artistesJprop + " n'est pas un tableau json pour l'arteFact " + arteFactJson);
 			}
 		}
-		return artistes ;
+		return artistes;
 	}
 	
 	// Get an artiste, if it exists, return the existing one eventually updated
@@ -120,19 +120,19 @@ public class MusicArtefactParser {
 														  .map(listeArtiste -> listeArtiste.getArtisteKnown(jArtiste))
 														  .filter(a -> a.isPresent())
 														  .map(a -> a.get())
-														  .findFirst() ;
+														  .findFirst();
 		
-		if (! eventualArtiste.isPresent()) {
+		if (!eventualArtiste.isPresent()) {
 			if (cls == Groupe.class) {
-				artiste = new Groupe(jArtiste) ;
+				artiste = new Groupe(jArtiste);
 			} else {
-				artiste = new Artiste(jArtiste) ;
+				artiste = new Artiste(jArtiste);
 			}
 		} else {
-			artiste = eventualArtiste.get() ;
+			artiste = eventualArtiste.get();
 			artiste.update(jArtiste);
 		}
-		return artiste ;
+		return artiste;
 	}
 	
 	

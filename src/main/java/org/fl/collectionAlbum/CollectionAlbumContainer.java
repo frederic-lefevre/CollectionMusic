@@ -115,7 +115,7 @@ public class CollectionAlbumContainer {
 			.map(mediaFile -> mediaFile.getMediaFilePaths())
 			.filter(Objects::nonNull)
 			.flatMap(mediaFileList -> mediaFileList.stream())
-			.forEach(mediaFile -> mediaFile.addAlbum(album));
+			.forEachOrdered(mediaFile -> mediaFile.addAlbum(album));
 		
 		collectionAlbumsMusiques.addAlbum(album);
 		

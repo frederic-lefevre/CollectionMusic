@@ -101,7 +101,7 @@ public class RapportAlbum extends RapportMusicArtefact {
 
 		if (format.hasMediaFiles()) {
 			
-			Stream.of(ContentNature.values()).forEach(contentNature -> {
+			Stream.of(ContentNature.values()).forEachOrdered(contentNature -> {
 				if (format.hasMediaFiles(contentNature)) {
 					write("  <h4>Fichiers " + contentNature.getNom() + "</h4>\n");
 					write("  <table>\n");
