@@ -76,7 +76,7 @@ public class MetricsHistory {
 						}
 					})
 					.filter(Objects::nonNull)
-					.forEach(metrics -> metricsHistory.add(metrics));
+					.forEachOrdered(metrics -> metricsHistory.add(metrics));
 			} catch (IOException e) {
 				mLog.log(Level.SEVERE,"Exception dans la lecture des fichier metrics json dans la directorie " + storagePath, e);
 				throw e;

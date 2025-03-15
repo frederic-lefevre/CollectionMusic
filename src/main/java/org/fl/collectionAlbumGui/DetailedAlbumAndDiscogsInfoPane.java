@@ -173,7 +173,7 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 					.flatMap(Collection::stream)
 					.map(mediaFilePath -> mediaFilePath.getPath().toString())
 					.distinct()
-					.forEach(mediaFolder -> {
+					.forEachOrdered(mediaFolder -> {
 						JButton showMediaFolderButton = new JButton(mediaFolder);
 						showMediaFolderButton.setBorder(new EmptyBorder(20, 0, 20, 0));
 						

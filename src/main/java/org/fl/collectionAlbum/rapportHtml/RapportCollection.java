@@ -91,13 +91,13 @@ public class RapportCollection extends RapportHtml {
 		write(rapportAlbumWithNoArtiste.printReport(getNextRapportFile(), CssStyles.stylesTableauMusicArtefact));
 		
 		write("</ul>\n</td>\n<td class=\"mainpage\">\n<h3>Albums par nature de contenu</h3>\n<table>\n");
-		Arrays.stream(ContentNature.values()).forEach(contentNature -> {
+		Arrays.stream(ContentNature.values()).forEachOrdered(contentNature -> {
 			writeListeAlbumsRow(albumsContainer.getAlbumsWithOnlyContentNature(contentNature).sortRangementAlbum(), "Albums avec seulement du contenu " + contentNature.getNom());
 		});
 		writeListeAlbumsRow(albumsContainer.getAlbumsWithMixedContentNature().sortRangementAlbum(), "Albums avec plusieurs types de contenus");
 		
 		write("</table>\n</td>\n</tr>\n<tr>\n<td rowspan=2 class=\"mainpage\">\n<h3>Albums par support media</h3>\n<table>\n");
-		Arrays.stream(MediaSupports.values()).forEach(mediaSupport -> {
+		Arrays.stream(MediaSupports.values()).forEachOrdered(mediaSupport -> {
 			writeListeAlbumsRow(albumsContainer.getAlbumsWithMediaSupport(mediaSupport).sortRangementAlbum(), "Albums avec " + mediaSupport.getDescription());
 		});
 		

@@ -74,7 +74,7 @@ public class RapportCsv {
 			listeAlbum.getAlbums().stream()
 				.flatMap(album ->  csvForOneAlbum(album, audioFileFilter).stream())
 				.distinct()
-				.forEach(line -> {
+				.forEachOrdered(line -> {
 					try {
 						outputStream.write(line);
 						outputStream.write("\n");

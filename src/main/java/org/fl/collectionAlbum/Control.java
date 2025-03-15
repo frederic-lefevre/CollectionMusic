@@ -138,7 +138,7 @@ public class Control {
 			
 			mediaFileRootPaths = new HashMap<>();
 			Stream.of(ContentNature.values())
-				.forEach(contentNature -> 
+				.forEachOrdered(contentNature -> 
 					mediaFileRootPaths.put(
 							contentNature, 
 							collectionProperties.getPathFromURI("album." + contentNature.name() + "File.rootPath")));

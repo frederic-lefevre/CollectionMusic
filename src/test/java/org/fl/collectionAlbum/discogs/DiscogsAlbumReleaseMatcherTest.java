@@ -319,7 +319,7 @@ class DiscogsAlbumReleaseMatcherTest {
 	@Test
 	void shouldCoverAllSupportCategories() {
 		
-		Arrays.stream(MediaSupportCategories.values()).forEach(supportCategory ->
+		Arrays.stream(MediaSupportCategories.values()).forEachOrdered(supportCategory ->
 				assertThat(DiscogsAlbumRelease.getFormatMatch(supportCategory)).isNotNull()
 				);
 	}

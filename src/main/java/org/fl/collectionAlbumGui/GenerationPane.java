@@ -102,7 +102,7 @@ public class GenerationPane extends JPanel {
 		collectionTabPanes.add(collectionPane, "Collection d'albums", 0);
 		
 		// Media files tabs
-		Stream.of(ContentNature.values()).forEach(contentNature -> {
+		Stream.of(ContentNature.values()).forEachOrdered(contentNature -> {
 			
 			MediaFilesTableModel tm = new MediaFilesTableModel(MediaFilesInventories.getMediaFileInventory(contentNature));
 			sm.addTableModel(tm);

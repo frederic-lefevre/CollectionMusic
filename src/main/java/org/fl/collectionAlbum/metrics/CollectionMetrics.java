@@ -49,7 +49,7 @@ public class CollectionMetrics {
 			.getSupportsPhysiquesNumbers()
 			.entrySet()
 			.stream()
-			.forEach(entry -> collectionMetrics.put(entry.getKey().getId(), entry.getValue()));		
+			.forEachOrdered(entry -> collectionMetrics.put(entry.getKey().getId(), entry.getValue()));		
 
 		return new Metrics(ts, collectionMetrics);
 	}

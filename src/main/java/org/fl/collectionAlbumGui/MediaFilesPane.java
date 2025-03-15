@@ -71,7 +71,7 @@ public class MediaFilesPane extends JPanel {
 		
 		
 		// Search and validation media files button
-		Stream.of(ContentNature.values()).forEach(contentNature -> {
+		Stream.of(ContentNature.values()).forEachOrdered(contentNature -> {
 			
 			JPanel mediaFilePanel = new JPanel();
 			mediaFilePanel.setLayout(new BoxLayout(mediaFilePanel, BoxLayout.X_AXIS));
@@ -99,7 +99,7 @@ public class MediaFilesPane extends JPanel {
 	public int updateValue(Album album) {
 		
 		Stream.of(ContentNature.values())
-			.forEach(contentNature -> 
+			.forEachOrdered(contentNature -> 
 				mediaFilesPanels.get(contentNature).remove(mediaFilesValidations.get(contentNature)));
 		
 		return Stream.of(ContentNature.values())

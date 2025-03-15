@@ -61,7 +61,7 @@ public class ListeArtiste {
 	}
 	
 	public void addAllArtistes(List<Artiste> artistes, MusicArtefact musicArtefact) {
-		artistes.stream().forEach(a -> addArtiste(a, musicArtefact)  );
+		artistes.forEach(a -> addArtiste(a, musicArtefact)  );
 	}
 	
 	private void addArtiste(Artiste a,  MusicArtefact musicArtefact) {

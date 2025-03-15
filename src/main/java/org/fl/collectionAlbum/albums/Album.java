@@ -77,7 +77,7 @@ public class Album extends MusicArtefact {
 
 		potentialMediaFilesPath = new HashMap<>();
 		Stream.of(ContentNature.values())
-			.forEach(contentNature -> potentialMediaFilesPath.put(contentNature, null));
+			.forEachOrdered(contentNature -> potentialMediaFilesPath.put(contentNature, null));
 		
 		titre = AlbumParser.getAlbumTitre(albumJson);
 		formatAlbum = AlbumParser.getFormatAlbum(albumJson);
