@@ -54,6 +54,9 @@ public class DiscogsReleaseCustomActionListener implements java.awt.event.Action
 
 	private static final Logger aLog = Logger.getLogger(DiscogsReleaseCustomActionListener.class.getName());
 	
+	private static final Font verdana = new Font("Verdana", Font.BOLD, 12);
+	private static final Font monospaced = new Font("monospaced", Font.BOLD, 14);
+	
 	private static final Predicate<DiscogsAlbumRelease> isNotLinkedToAlbum = (release) -> (release != null) && !release.isLinkedToAlbum();
 	private static final Predicate<DiscogsAlbumRelease> isLinkedToAlbumWithFormatProblem = 
 			(release) -> (release != null) && release.isLinkedToAlbum() && (release.formatCompatibility() == FormatCompatibilityResult.KO);
@@ -132,7 +135,7 @@ public class DiscogsReleaseCustomActionListener implements java.awt.event.Action
 						case NO_MATCH -> "Pas d'album potentiel trouvé";
 						});
 
-					infoPotentialAlbums.setFont(new Font("monospaced", Font.BOLD, 14));
+					infoPotentialAlbums.setFont(monospaced);
 					potentialAlbumsPane.add(infoPotentialAlbums);
 					potentialAlbums.forEach(album -> potentialAlbumsPane.add(potentialAlbumPane(release, album, potentialAlbumsPane)));
 					
@@ -150,13 +153,12 @@ public class DiscogsReleaseCustomActionListener implements java.awt.event.Action
 					JTextArea infoFormats = new JTextArea(40, 200);
 					infoFormats.setEditable(false);					
 					infoFormats.setText(release.getFormatsInfo());
-					infoFormats.setFont(new Font("monospaced", Font.BOLD, 14));
+					infoFormats.setFont(monospaced);
 					formatValidationPane.add(infoFormats);
 					
 					JButton formatsValidate = new JButton("Valider les formats");
 					formatsValidate.setBackground(Color.GREEN);
-					Font buttonFont = new Font("Verdana", Font.BOLD, 12);
-					formatsValidate.setFont(buttonFont);
+					formatsValidate.setFont(verdana);
 					formatsValidate.addActionListener(new DiscogsFormatValidationListener(release, formatValidationPane, generationPane));
 					formatValidationPane.add(formatsValidate);
 					
@@ -180,13 +182,12 @@ public class DiscogsReleaseCustomActionListener implements java.awt.event.Action
 		JTextArea infoPotentialAlbum = new JTextArea(0, 150);
 		infoPotentialAlbum.setEditable(false);
 		infoPotentialAlbum.setText(album.getJsonString());
-		infoPotentialAlbum.setFont(new Font("monospaced", Font.BOLD, 14));
+		infoPotentialAlbum.setFont(monospaced);
 		potentialAlbumPane.add(infoPotentialAlbum);
 		
 		JButton albumValidate = new JButton("Valider cet album");
 		albumValidate.setBackground(Color.GREEN);
-		Font buttonFont = new Font("Verdana", Font.BOLD, 12);
-		albumValidate.setFont(buttonFont);
+		albumValidate.setFont(verdana);
 		albumValidate.addActionListener(new ReleaseValidationListener(release, album, potentialAlbumsPane, generationPane));
 		potentialAlbumPane.add(albumValidate);
 		

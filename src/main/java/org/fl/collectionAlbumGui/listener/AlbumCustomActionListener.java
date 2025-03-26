@@ -52,6 +52,9 @@ public class AlbumCustomActionListener implements java.awt.event.ActionListener 
 
 	private static final Logger aLog = Logger.getLogger(AlbumCustomActionListener.class.getName());
 	
+	private static final Font verdana = new Font("Verdana", Font.BOLD, 12);
+	private static final Font monospaced = new Font("monospaced", Font.BOLD, 14);
+	
 	private static final Predicate<Album> isLinkedToDiscogsRelease = (album) -> (album.getDiscogsLink() != null) && !album.getDiscogsLink().isEmpty();
 	
 	public enum CustomAction {
@@ -123,7 +126,7 @@ public class AlbumCustomActionListener implements java.awt.event.ActionListener 
 							case NO_MATCH -> "Pas de release discogs potentielle trouvée";
 							});
 					
-					infoPotentialRelease.setFont(new Font("monospaced", Font.BOLD, 14));
+					infoPotentialRelease.setFont(monospaced);
 					potentialReleasesPane.add(infoPotentialRelease);
 					potentialReleases.forEach(release -> potentialReleasesPane.add(discogsPotentialReleasePane(release, selectedAlbum, potentialReleasesPane)));
 					
@@ -148,13 +151,12 @@ public class AlbumCustomActionListener implements java.awt.event.ActionListener 
 		JTextArea infoPotentialRelease = new JTextArea(0, 150);
 		infoPotentialRelease.setEditable(false);
 		infoPotentialRelease.setText(release.getInfo(true));
-		infoPotentialRelease.setFont(new Font("monospaced", Font.BOLD, 14));
+		infoPotentialRelease.setFont(monospaced);
 		potentialReleasePane.add(infoPotentialRelease);
 		
 		JButton releaseValidate = new JButton("Valider cette release");
 		releaseValidate.setBackground(Color.GREEN);
-		Font buttonFont = new Font("Verdana", Font.BOLD, 12);
-		releaseValidate.setFont(buttonFont);
+		releaseValidate.setFont(verdana);
 		releaseValidate.addActionListener(new ReleaseValidationListener(release, album, potentialReleasesPane, generationPane));
 		potentialReleasePane.add(releaseValidate);
 		
