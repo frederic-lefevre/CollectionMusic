@@ -57,6 +57,10 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 
 	private static final long serialVersionUID = 1L;
 	
+	private static final Font verdana = new Font("Verdana", Font.BOLD, 14);
+	private static final Font monospaced = new Font("monospaced", Font.BOLD, 14);
+	
+	
 	public DetailedAlbumAndDiscogsInfoPane(DiscogsAlbumRelease release) {
 		
 		super();
@@ -99,15 +103,13 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 		
 		JTextArea infoRelease = new JTextArea(releaseInfo);
 		infoRelease.setEditable(false);
-		infoRelease.setFont(new Font("monospaced", Font.BOLD, 14));
+		infoRelease.setFont(monospaced);
 		infoRelease.setBorder(BorderFactory.createMatteBorder(1,1,1,1,Color.BLACK));
 		
 		releasePane.add(infoRelease);
 		
-		Font font = new Font("Verdana", Font.BOLD, 14);
-		
 		JButton showDiscogsRelease = new JButton("Montrer la release sur le site Discogs"); 
-		showDiscogsRelease.setFont(font);
+		showDiscogsRelease.setFont(verdana);
 		showDiscogsRelease.setBackground(Color.GREEN);
 		showDiscogsRelease.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
@@ -147,7 +149,7 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 		infoAlbum.setContentType("text/html");
 		infoAlbum.setText(AlbumUtils.getSimpleHtml(album));
 		infoAlbum.setEditable(false);
-		infoAlbum.setFont(new Font("monospaced", Font.BOLD, 14));
+		infoAlbum.setFont(monospaced);
 		return infoAlbum;
 	}
 	
@@ -165,7 +167,7 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 			
 			JLabel titreMedia = new JLabel("Folders contenant les medias:");
 			titreMedia.setBorder(new EmptyBorder(20, 0, 20, 0));
-			titreMedia.setFont(new Font("Verdana", Font.BOLD, 14));
+			titreMedia.setFont(verdana);
 			albumPane.add(titreMedia);
 			
 			album.getAllMediaFiles().stream()
