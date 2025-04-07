@@ -99,7 +99,7 @@ class ControlTest {
 				},
 				buildInfo -> { 
 					assertThat(buildInfo.get("moduleName")).isNotNull();
-					assertThat(buildInfo.get("moduleName").asText()).isEqualTo("discogsInterface");
+					assertThat(buildInfo.get("moduleName").asText()).isEqualTo("org.fl.discogsInterface");
 				}
 				);
 		
