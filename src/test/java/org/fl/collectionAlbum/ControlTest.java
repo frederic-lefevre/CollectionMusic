@@ -26,6 +26,11 @@ package org.fl.collectionAlbum;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 import org.fl.collectionAlbum.format.ContentNature;
@@ -47,7 +52,6 @@ class ControlTest {
 		
 		assertThat(Control.getDisplayFolderAction()).isNotNull();
 		assertThat(Control.getDisplayUrlAction()).isNotNull();
-	
 	}
 	
 	@Test
@@ -102,7 +106,20 @@ class ControlTest {
 					assertThat(buildInfo.get("moduleName").asText()).isEqualTo("org.fl.discogsInterface");
 				}
 				);
-		
 	}
 
+	@Test
+	void propertyFileTest() throws URISyntaxException {
+		
+		RunningContext runningContext = Control.getMusicRunningContext();
+		
+		URL propertyFileLocation = runningContext.getPropertiesLocation();
+		assertThat(propertyFileLocation).isNotNull();
+
+		URI propertyFileUri = propertyFileLocation.toURI();
+		assertThat(propertyFileUri.isAbsolute()).isTrue();
+		Path propertyFilePath = Paths.get(propertyFileUri);
+		
+		assertThat(propertyFilePath).exists().isRegularFile();
+	}
 }
