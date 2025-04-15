@@ -26,7 +26,6 @@ package org.fl.collectionAlbum;
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.AbstractMap;
@@ -47,6 +46,7 @@ import org.fl.collectionAlbum.osAction.AlbumCommandParameter;
 import org.fl.collectionAlbum.osAction.DiscogsReleaseCommandParameter;
 import org.fl.collectionAlbum.osAction.ListOfStringCommandParameter;
 import org.fl.collectionAlbum.osAction.StringCommandParameter;
+import org.fl.collectionAlbumGui.CollectionAlbumGui;
 import org.fl.collectionAlbum.osAction.MediaFilePathCommandParameter;
 import org.fl.collectionAlbum.osAction.OsAction;
 import org.fl.collectionAlbum.osAction.OsCommandAndOption;
@@ -54,9 +54,6 @@ import org.fl.util.AdvancedProperties;
 import org.fl.util.RunningContext;
 
 public class Control {
-
-	private static final String MUSIQUE_DIRECTORY_URI = "file:///C:/FredericPersonnel/Loisirs/musique/";
-	private static final String DEFAULT_PROP_FILE = MUSIQUE_DIRECTORY_URI + "RapportCollection/albumCollection.properties";
 	
 	private static final String MUSIC_FILE_EXTENSION = "json";
 	
@@ -87,10 +84,13 @@ public class Control {
 	private String cssForGui;
    	
 	private Control() {
+	}
+	
+	private Control(String propertyFile) {
 		
 		try {
 			// access to properties and logger
-			musicRunningContext = new RunningContext("org.fl.collectionAlbum", new URI(DEFAULT_PROP_FILE));
+			musicRunningContext = new RunningContext("org.fl.collectionAlbum", new URI(propertyFile));
 			
 			musicRunningContext.addBuildInformation("org.fl.discogsInterface");
 		
@@ -131,8 +131,7 @@ public class Control {
 
 			// get the path of additional information for concerts and albums
 			musicartefactInfosUri = collectionProperties.getProperty("musicArtefact.information.rootDir.name");
-			
-			
+						
 			discogsCollectionCsvExportPath = collectionProperties.getPathFromURI("album.discogs.collection.csvExport");
 			discogsBaseUrlForRelease = collectionProperties.getProperty("album.discogs.baseUrl.release");
 			
@@ -160,18 +159,23 @@ public class Control {
 					new StringCommandParameter());
 			
 			cssForGui = collectionProperties.getFileContentFromURI("album.cssForGui", Charset.defaultCharset());
-			
-			
-		} catch (URISyntaxException e) {
-			System.out.println("URI syntax exception for property file: " + DEFAULT_PROP_FILE);
-			e.printStackTrace();
+						
+		} catch (Exception e) {
+			albumLog.log(Level.SEVERE, "Exception during inintialisation, propzety file="  + propertyFile, e);
 			collectionProperties = null;
 		}
 	}
 	
 	private static Control getInstance() {
 		if (controlInstance == null) {
-			controlInstance = new Control();
+			controlInstance = new Control(CollectionAlbumGui.getPropertyFile());
+		}
+		return controlInstance;
+	}
+	
+	public static Control initialize(String propertyFile) {
+		if (controlInstance == null) {
+			controlInstance = new Control(propertyFile);
 		}
 		return controlInstance;
 	}
