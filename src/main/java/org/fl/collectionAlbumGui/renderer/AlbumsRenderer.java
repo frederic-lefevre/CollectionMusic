@@ -41,7 +41,7 @@ public class AlbumsRenderer extends JLabel implements TableCellRenderer {
 
 	private static final Logger mLog = Logger.getLogger(AlbumsRenderer.class.getName());
 	
-	private final static String ALBUMS_SEPARATOR = ", ";
+	private static final String ALBUMS_SEPARATOR = ", ";
 	
 	public AlbumsRenderer() {
 		super();
@@ -54,14 +54,13 @@ public class AlbumsRenderer extends JLabel implements TableCellRenderer {
 			// This may happen when rescanning the album collection
 			mLog.fine("Null value in MediaFiles cell. Should be an MediaFilePath");
 			setText("Valeur null");
-		} else if (value instanceof MediaFilePath) {
-			setText(((MediaFilePath)value).getAlbumSet().stream()
+		} else if (value instanceof MediaFilePath mediaFilePath) {
+			setText(mediaFilePath.getAlbumSet().stream()
 					.map(Album::getTitre)
 					.collect(Collectors.joining(ALBUMS_SEPARATOR)));
 		} else {
-			mLog.severe("Invalid value type in Auteurs cell. Should be Album but is " + value.getClass().getName());
+			mLog.severe("Invalid value type in MediaFile cell. Should be MediaFilePath but is " + value.getClass().getName());
 		}
 		return this;
 	}
-
 }

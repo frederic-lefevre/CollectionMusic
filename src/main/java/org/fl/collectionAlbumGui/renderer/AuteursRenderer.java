@@ -41,7 +41,7 @@ public class AuteursRenderer extends JLabel implements TableCellRenderer {
 
 	private static final Logger mLog = Logger.getLogger(AuteursRenderer.class.getName());
 	
-	private final static String AUTEURS_SEPARATOR = ", ";
+	private static final String AUTEURS_SEPARATOR = ", ";
 	
 	public AuteursRenderer() {
 		super();
@@ -53,10 +53,10 @@ public class AuteursRenderer extends JLabel implements TableCellRenderer {
 
 		if (value == null) {
 			// This may happen when rescanning the album collection
-			mLog.fine("Null value in MediaFiles cell. Should be an Album");
+			mLog.fine("Null value in Auteurs cell. Should be an Album");
 			setText("Valeur null");
-		} else if (value instanceof Album) {
-			setText(((Album)value).getAuteurs().stream()
+		} else if (value instanceof Album album) {
+			setText(album.getAuteurs().stream()
 					.map(Artiste::getNomComplet)
 					.collect(Collectors.joining(AUTEURS_SEPARATOR)));
 		} else {

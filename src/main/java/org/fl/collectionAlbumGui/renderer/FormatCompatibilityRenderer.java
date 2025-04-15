@@ -51,9 +51,8 @@ public class FormatCompatibilityRenderer extends DefaultTableCellRenderer {
 			mLog.fine("Null value in MediaFiles cell. Should be non null Boolean");
 			setText("Valeur null");
 			setBackground(Color.RED);
-		} else if (value instanceof FormatCompatibilityResult) {
+		} else if (value instanceof FormatCompatibilityResult formatCompatibilityResult) {
 			
-			FormatCompatibilityResult formatCompatibilityResult = (FormatCompatibilityResult)value;
 			if (formatCompatibilityResult == FormatCompatibilityResult.OK) {
 				setText("Oui");
 				setBackground(Color.GREEN);
@@ -65,6 +64,8 @@ public class FormatCompatibilityRenderer extends DefaultTableCellRenderer {
 				setBackground(Color.RED);
 			}
 			setHorizontalAlignment(SwingConstants.CENTER);
+		} else {
+			mLog.severe("Invalid value type in FormatCompatibilityResult cell. Should be FormatCompatibilityResult but is " + value.getClass().getName());
 		}
 		
 		return this;

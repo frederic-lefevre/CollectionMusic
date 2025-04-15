@@ -1,7 +1,7 @@
 /*
  MIT License
 
-Copyright (c) 2017, 2022 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -25,27 +25,36 @@ SOFTWARE.
 package org.fl.collectionAlbumGui;
 
 import java.awt.EventQueue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.JFrame;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.util.swing.ApplicationTabbedPane;
 
-public class CollectionAlbumGui  extends JFrame {
+public class CollectionAlbumGui extends JFrame {
 	
-	public static final int WINDOW_WIDTH  = 1880;
+	public static final int WINDOW_WIDTH = 1880;
 	public static final int WINDOW_HEIGHT = 1000;
+
+	private static final String DEFAULT_PROP_FILE = "file:///C:/FredericPersonnel/Loisirs/musique/RapportCollection/albumCollection.properties";
+	
+	private static final Logger logger = Logger.getLogger(CollectionAlbumGui.class.getName());
 	
 	private static final long serialVersionUID = 8726429353709418534L;
 
 	public static void main(String[] args) {
+		
+		Control.initialize(DEFAULT_PROP_FILE);
+		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					CollectionAlbumGui window = new CollectionAlbumGui();
 					window.setVisible(true);
 				} catch (Exception e) {
-					e.printStackTrace();
+					logger.log(Level.SEVERE, "Exception while launching application", e);
 				}
 			}
 		});
@@ -58,16 +67,18 @@ public class CollectionAlbumGui  extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Collection d'albums") ;
 		
-		ApplicationTabbedPane collectionTabs = new ApplicationTabbedPane(Control.getMusicRunningContext()) ;
+		ApplicationTabbedPane collectionTabs = new ApplicationTabbedPane(Control.getMusicRunningContext());
 		
 		// init panel de lecture et génération de site
-		GenerationPane gPane   = new GenerationPane() ;
+		GenerationPane gPane   = new GenerationPane();
 		
-		collectionTabs.add(gPane, "Analyse et génération des rapports de la collection", 0) ;
+		collectionTabs.add(gPane, "Analyse et génération des rapports de la collection", 0);
 		
-		collectionTabs.setSelectedIndex(0) ;
-		getContentPane().add(collectionTabs) ;
-		
+		collectionTabs.setSelectedIndex(0);
+		getContentPane().add(collectionTabs);		
 	}
 
+	public static String getPropertyFile() {
+		return DEFAULT_PROP_FILE;
+	}
 }

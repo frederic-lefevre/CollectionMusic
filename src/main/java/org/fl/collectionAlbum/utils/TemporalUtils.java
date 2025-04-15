@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -96,29 +96,29 @@ public class TemporalUtils {
 		}
 	}
 	
-	private static LocalDateTime getRoundedLocalDateTime(TemporalAccessor t) {
+	private static LocalDateTime getRoundedLocalDateTime(TemporalAccessor temporalAccessor) {
 		
-		if (t instanceof LocalDateTime) {
-			return (LocalDateTime)t;
-		} else if (t instanceof LocalDate) {
-			return ((LocalDate)t).atStartOfDay();
-		} else if (t instanceof YearMonth) {
-			return ((YearMonth)t).atDay(1).atStartOfDay();
-		} else if (t instanceof Year) {
-			return ((Year)t).atDay(1).atStartOfDay();
+		if (temporalAccessor instanceof LocalDateTime localDateTime) {
+			return localDateTime;
+		} else if (temporalAccessor instanceof LocalDate localDate) {
+			return localDate.atStartOfDay();
+		} else if (temporalAccessor instanceof YearMonth yearMonth) {
+			return yearMonth.atDay(1).atStartOfDay();
+		} else if (temporalAccessor instanceof Year year) {
+			return year.atDay(1).atStartOfDay();
 		} else {
 			// try to get (some) TemporalField manually 
 						
-			if (t.isSupported(ChronoField.YEAR)) {
+			if (temporalAccessor.isSupported(ChronoField.YEAR)) {
 				
-				int year =  t.get(ChronoField.YEAR);
+				int year =  temporalAccessor.get(ChronoField.YEAR);
 				
-				int month 		 = getRoundedField(t, ChronoField.MONTH_OF_YEAR);
-				int day 		 = getRoundedField(t, ChronoField.DAY_OF_MONTH);
-				int hour 		 = getRoundedField(t, ChronoField.HOUR_OF_DAY);
-				int minute 		 = getRoundedField(t, ChronoField.MINUTE_OF_HOUR);
-				int second 		 = getRoundedField(t, ChronoField.SECOND_OF_MINUTE);
-				int nanoOfsecond = getRoundedField(t, ChronoField.NANO_OF_SECOND);
+				int month 		 = getRoundedField(temporalAccessor, ChronoField.MONTH_OF_YEAR);
+				int day 		 = getRoundedField(temporalAccessor, ChronoField.DAY_OF_MONTH);
+				int hour 		 = getRoundedField(temporalAccessor, ChronoField.HOUR_OF_DAY);
+				int minute 		 = getRoundedField(temporalAccessor, ChronoField.MINUTE_OF_HOUR);
+				int second 		 = getRoundedField(temporalAccessor, ChronoField.SECOND_OF_MINUTE);
+				int nanoOfsecond = getRoundedField(temporalAccessor, ChronoField.NANO_OF_SECOND);
 				
 				return LocalDateTime.of(year, month, day, hour, minute,second, nanoOfsecond);
 				
@@ -126,15 +126,14 @@ public class TemporalUtils {
 				return null;
 			}
 		}
-
 	}
    
-   private static int getRoundedField(TemporalAccessor t, ChronoField c) {
-   	
-   	if (t.isSupported(c)) {
-   		return t.get(c);
-   	} else {
-   		return (int)c.range().getMinimum();
-   	}
-   }
+	private static int getRoundedField(TemporalAccessor t, ChronoField c) {
+
+		if (t.isSupported(c)) {
+			return t.get(c);
+		} else {
+			return (int) c.range().getMinimum();
+		}
+	}
 }

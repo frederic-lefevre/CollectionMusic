@@ -63,8 +63,8 @@ public class MediaFilesCellEditor extends MediaFilesPane implements TableCellEdi
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 		if (value == null) {
 			mLog.severe("Null value in MediaFiles cell. Should be an Album");
-		} else if (value instanceof Album) {
-			int rowHeight = updateValue((Album)value);
+		} else if (value instanceof Album album) {
+			int rowHeight = updateValue(album);
 			table.setRowHeight(row, rowHeight);
 		} else {
 			mLog.severe("Invalid value type in MediaFiles cell. Should be Album but is " + value.getClass().getName());
