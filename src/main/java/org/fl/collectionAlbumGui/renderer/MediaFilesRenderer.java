@@ -58,8 +58,8 @@ public class MediaFilesRenderer extends MediaFilesPane implements TableCellRende
 			// This may happen when rescanning the album collection
 			mLog.fine("Null value in MediaFiles cell. Should be an Album");
 			setBackground(Color.RED);
-		} else if (value instanceof Album) {
-			int rowHeight = updateValue((Album)value);
+		} else if (value instanceof Album album) {
+			int rowHeight = updateValue(album);
 			table.setRowHeight(row, rowHeight);
 			if (isSelected) {
 				setBackground(Color.LIGHT_GRAY);

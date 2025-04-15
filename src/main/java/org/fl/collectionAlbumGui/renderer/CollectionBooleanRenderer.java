@@ -49,8 +49,8 @@ public class CollectionBooleanRenderer extends DefaultTableCellRenderer {
 			mLog.fine("Null value in MediaFiles cell. Should be non null Boolean");
 			setText("Valeur null");
 			setBackground(Color.RED);
-		} else if (value instanceof Boolean) {
-			if ((Boolean)value) {
+		} else if (value instanceof Boolean booleanValue) {
+			if (booleanValue) {
 				setText("Oui");
 				setBackground(Color.ORANGE);
 			} else {
@@ -62,6 +62,8 @@ public class CollectionBooleanRenderer extends DefaultTableCellRenderer {
 				}
 			}
 			setHorizontalAlignment(SwingConstants.CENTER);
+		} else {
+			mLog.severe("Invalid value type in cell. Should be Boolean but is " + value.getClass().getName());
 		}
 		return this;
 	}

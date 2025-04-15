@@ -44,13 +44,13 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 public class Artiste {
 	
-	protected String 		   nom ;
-	protected String 		   prenoms ;
+	protected String nom;
+	protected String prenoms;
 	protected TemporalAccessor naissance;
-	protected TemporalAccessor mort ;
-	protected List<String> 	   instruments;
-	protected ListeAlbum 	   albums ;
-	protected ListeConcert 	   concerts ;
+	protected TemporalAccessor mort;
+	protected List<String> instruments;
+	protected ListeAlbum albums;
+	protected ListeConcert concerts;
 	
 	private final static Logger albumLog = Logger.getLogger(Artiste.class.getName());
 
@@ -155,10 +155,10 @@ public class Artiste {
 	}
 
 	public void addArteFact(MusicArtefact musicArtefact) {
-		if (musicArtefact instanceof Album) {
-			albums.addAlbum((Album) musicArtefact);
-		} else if (musicArtefact instanceof Concert) {
-			concerts.addConcert((Concert) musicArtefact);
+		if (musicArtefact instanceof Album album) {
+			albums.addAlbum(album);
+		} else if (musicArtefact instanceof Concert concert) {
+			concerts.addConcert(concert);
 		} else {
 			albumLog.severe("MusicArteFact n'est ni un Album, ni un concert: " + musicArtefact.getClass().getName());
 		}
