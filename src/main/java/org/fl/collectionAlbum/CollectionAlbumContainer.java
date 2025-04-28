@@ -26,11 +26,11 @@ package org.fl.collectionAlbum;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.albums.ListeAlbum;
@@ -256,8 +256,7 @@ public class CollectionAlbumContainer {
 		if (a == null) {
 			a = concertsArtistes.getArtisteKnown(nom, prenom) ;
 		}
-		return a ;
-		
+		return a ;		
 	}
 	
 	public List<Album> pickRandomAlbums(int nbAlbum) {
@@ -266,9 +265,10 @@ public class CollectionAlbumContainer {
 	
 	public List<Album> pickRandomAlbumsViaArtiste(int nbAlbum) {
 		
-		return collectionArtistes.pickRandomArtistes(nbAlbum).stream()
-				.map(artiste -> artiste.getAlbums().pickRandomAlbums(1))
-				.flatMap(Collection::stream)
-				.collect(Collectors.toList());
+		return Stream.generate(() -> collectionArtistes.pickRandomArtiste())
+			.map(artiste -> artiste.getAlbums().pickRandomAlbum())
+			.distinct()
+			.limit(nbAlbum)
+			.collect(Collectors.toList());
 	}
 }

@@ -138,4 +138,8 @@ public class ListeArtiste {
 	public List<Artiste> pickRandomArtistes(int nbArtiste) {
 		return ListUtils.pickRandomDistinctElements(artistes, nbArtiste);
 	}
+	
+	public Artiste pickRandomArtiste() {
+		return ListUtils.pickRandomElement(artistes);
+	}
 }

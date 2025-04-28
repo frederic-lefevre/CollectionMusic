@@ -51,7 +51,7 @@ public class ListUtils {
 		} else if (nbPick < 1) {
 			throw new IllegalArgumentException("Invalid number of elements requested: " + nbPick);
 		} 
-		
+
 		List<T> lWithDistinctElements = l.stream().distinct().collect(Collectors.toList());
 		
 		if (lWithDistinctElements.size() <= nbPick) {

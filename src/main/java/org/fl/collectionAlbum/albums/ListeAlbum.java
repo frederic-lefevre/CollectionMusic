@@ -94,6 +94,10 @@ public class ListeAlbum {
 		return ListUtils.pickRandomDistinctElements(albums, nbAlbum);
 	}
 
+	public Album pickRandomAlbum() {
+		return ListUtils.pickRandomElement(albums);
+	}
+	
 	public static class Builder {
 		
 		private final ListeAlbum listeAlbum;
