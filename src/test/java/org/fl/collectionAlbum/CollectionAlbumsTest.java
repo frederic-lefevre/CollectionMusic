@@ -77,11 +77,20 @@ class CollectionAlbumsTest {
 		assertThat(bobDylan.getConcerts().getConcerts()).hasSizeGreaterThan(5);
 		assertThat(bobDylan.getDateNaissance()).isEqualTo("24 mai 1941");
 		
+		// Test random pick
+		long startTimeStamp = System.currentTimeMillis();
+		
 		assertThat(albumsContainer.pickRandomAlbums(3)).isNotNull()
 			.hasSize(3);
 		
 		assertThat(albumsContainer.pickRandomAlbumsViaArtiste(4)).isNotNull()
 			.hasSize(4);
+		
+		assertThat(albumsContainer.pickRandomAlbumsViaArtiste(300)).isNotNull()
+		.hasSize(300);
+		
+		long duration = System.currentTimeMillis() - startTimeStamp;
+		System.out.print("Duration pick=" + duration);
 		
 		// Test album metrics
 		Metrics collectionMetrics = CollectionMetrics.buildCollectionMetrics(0, albumsContainer);

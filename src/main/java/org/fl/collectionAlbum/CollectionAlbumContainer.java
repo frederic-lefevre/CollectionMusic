@@ -29,8 +29,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.albums.ListeAlbum;
@@ -260,21 +258,15 @@ public class CollectionAlbumContainer {
 	}
 	
 	public List<Album> pickRandomAlbums(int nbAlbum) {
-		return collectionAlbumsMusiques.pickRandomAlbums(nbAlbum);
+		return RandomAlbumPicker.pickRandomAlbums(collectionAlbumsMusiques, nbAlbum);
 	}
 	
 	public List<Album> pickRandomAlbumsViaArtiste(int nbAlbum) {
 		
 		if (collectionAlbumsMusiques.getNombreAlbums() <= nbAlbum) {
 			return collectionAlbumsMusiques.getAlbums();
-		} else if (collectionAlbumsMusiques.getNombreAlbums()/20 <= nbAlbum) {
-			throw new IllegalArgumentException("Requested number too high");
 		} else {
-			return Stream.generate(() -> collectionArtistes.pickRandomAuteur())
-				.map(artiste -> artiste.getAlbums().pickRandomAlbum())
-				.distinct()
-				.limit(nbAlbum)
-				.collect(Collectors.toList());
+			return RandomAlbumPicker.pickRandomAlbumsViaArtiste(collectionArtistes, nbAlbum);
 		}
 	}
 }
