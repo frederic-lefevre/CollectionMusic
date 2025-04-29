@@ -26,6 +26,8 @@ package org.fl.collectionAlbum.artistes;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.util.Set;
+
 import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
@@ -41,7 +43,7 @@ class ArtisteTest {
 		jArt.put("prenom", "Bill");
 		jArt.put("mort", "1980-09-15");
 
-		Artiste artiste = new Artiste(jArt);
+		Artiste artiste = new Artiste(jArt, ArtistRole.AUTEUR);
 
 		assertThat(artiste.getNom()).isEqualTo("Evans");
 		assertThat(artiste.getPrenoms()).isEqualTo("Bill");
@@ -49,12 +51,14 @@ class ArtisteTest {
 		assertThat(artiste.getNbAlbum()).isZero();
 		assertThat(artiste.getNbConcert()).isZero();
 
-		assertThat(artiste.getInstruments()).isNull();
-
 		assertThat(artiste.getAlbums().getNombreAlbums()).isZero();
 		assertThat(artiste.getConcerts().getNombreConcerts()).isZero();
 
 		assertThat(artiste.getAlbumsFormat().getPoids()).isZero();
+		
+		assertThat(artiste.hasRole(ArtistRole.AUTEUR)).isTrue();
+		
+		assertThat(artiste.getArtistRoles()).hasSameElementsAs(Set.of(ArtistRole.AUTEUR));
 	}
 
 }

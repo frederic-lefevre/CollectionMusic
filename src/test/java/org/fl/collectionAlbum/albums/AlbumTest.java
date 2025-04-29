@@ -40,6 +40,7 @@ import java.util.logging.Logger;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.JsonMusicProperties;
+import org.fl.collectionAlbum.artistes.ArtistRole;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory;
@@ -533,6 +534,9 @@ class AlbumTest {
 		assertThat(bill.getNom()).isEqualTo("Evans");
 		
 		assertThat(bill.getNbAlbum()).isZero();
+		
+		assertThat(bill.hasRole(ArtistRole.AUTEUR)).isTrue();
+		assertThat(bill.getArtistRoles()).hasSameElementsAs(Set.of(ArtistRole.AUTEUR));
 		
 		album.addMusicArtfactArtistesToList(la);
 		assertThat(bill.getNbAlbum()).isEqualTo(1);

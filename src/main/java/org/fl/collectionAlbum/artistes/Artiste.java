@@ -24,7 +24,8 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.artistes;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.time.temporal.TemporalAccessor;
 import java.util.logging.Logger;
 
@@ -46,17 +47,19 @@ public class Artiste {
 	private final String prenoms;
 	private TemporalAccessor naissance;
 	private TemporalAccessor mort;
-	private List<String> instruments;
 	private final ListeAlbum albums;
 	private final ListeConcert concerts;
+	private final Set<ArtistRole> artistRoles;
 	
 	private final static Logger albumLog = Logger.getLogger(Artiste.class.getName());
 
-	public Artiste(JsonNode jArtiste) {
+	public Artiste(JsonNode jArtiste, ArtistRole artisteRole) {
 
 		super();
 		albums = ListeAlbum.Builder.getBuilder().build();
 		concerts = new ListeConcert();
+		artistRoles = new HashSet<>();
+		artistRoles.add(artisteRole);
 		
 		nom = JsonUtils.getAsStringOrBlank(jArtiste.get(JsonMusicProperties.NOM));
 		prenoms = getFirstNameOrArticle(jArtiste);
@@ -80,7 +83,6 @@ public class Artiste {
 
 		String lastName = JsonUtils.getAsStringOrBlank(jArtiste.get(JsonMusicProperties.NOM));
 		String firstName = getFirstNameOrArticle(jArtiste);
-
 		return (nom.equals(lastName) && prenoms.equals(firstName));
 	}
 
@@ -94,11 +96,13 @@ public class Artiste {
 		}
 	}
     
-	public void update(JsonNode jArtiste) {
+	public void update(JsonNode jArtiste, ArtistRole artisteRole) {
 
 		String birth = JsonUtils.getAsStringOrNull(jArtiste.get(JsonMusicProperties.NAISSANCE));
 		String death = JsonUtils.getAsStringOrNull(jArtiste.get(JsonMusicProperties.MORT));
 		update(birth, death);
+		
+		artistRoles.add(artisteRole);
 	}
 	
     private void update(String n, String m) {
@@ -181,10 +185,14 @@ public class Artiste {
 		return prenoms;
 	}
 
-	public List<String> getInstruments() {
-		return instruments;
+	public Set<ArtistRole> getArtistRoles() {
+		return artistRoles;
 	}
 
+	public boolean hasRole(ArtistRole artistRole) {
+		return artistRoles.contains(artistRole);
+	}
+	
 	public ListeConcert getConcerts() {
 		return concerts;
 	}

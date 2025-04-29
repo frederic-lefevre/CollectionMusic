@@ -100,7 +100,7 @@ public class MusicArtefactParser {
 				for (JsonNode jArtiste : jElem) {
 
 					try {
-						artistes.addArtiste(createGetOrUpdateArtiste(jArtiste)) ;
+						artistes.addArtiste(createGetOrUpdateArtiste(jArtiste, artisteRole)) ;
 					} catch (IllegalStateException e) {
 						albumLog.log(Level.WARNING, "un artiste n'est pas un objet json pour l'arteFact " + arteFactJson, e);
 					}
@@ -114,7 +114,7 @@ public class MusicArtefactParser {
 	
 	// Get an artiste, if it exists, return the existing one eventually updated
 	// if it does not exists, create it
-	private Artiste createGetOrUpdateArtiste(JsonNode jArtiste) {
+	private Artiste createGetOrUpdateArtiste(JsonNode jArtiste, ArtistRole artisteRole) {
 		
 		Artiste artiste;
 		Optional<Artiste> eventualArtiste =	knownArtistes.stream()
@@ -124,10 +124,10 @@ public class MusicArtefactParser {
 														  .findFirst();
 		
 		if (!eventualArtiste.isPresent()) {
-			artiste = new Artiste(jArtiste);
+			artiste = new Artiste(jArtiste, artisteRole);
 		} else {
 			artiste = eventualArtiste.get();
-			artiste.update(jArtiste);
+			artiste.update(jArtiste, artisteRole);
 		}
 		return artiste;
 	}
