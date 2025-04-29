@@ -536,6 +536,7 @@ class AlbumTest {
 		assertThat(bill.getNbAlbum()).isZero();
 		
 		assertThat(bill.hasRole(ArtistRole.AUTEUR)).isTrue();
+		assertThat(bill.hasAnyRole(ArtistRole.AUTEUR)).isTrue();
 		assertThat(bill.getArtistRoles()).hasSameElementsAs(Set.of(ArtistRole.AUTEUR));
 		
 		album.addMusicArtfactArtistesToList(la);

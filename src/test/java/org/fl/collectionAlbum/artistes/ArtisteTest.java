@@ -57,6 +57,7 @@ class ArtisteTest {
 		assertThat(artiste.getAlbumsFormat().getPoids()).isZero();
 		
 		assertThat(artiste.hasRole(ArtistRole.AUTEUR)).isTrue();
+		assertThat(artiste.hasAnyRole(ArtistRole.AUTEUR)).isTrue();
 		
 		assertThat(artiste.getArtistRoles()).hasSameElementsAs(Set.of(ArtistRole.AUTEUR));
 	}

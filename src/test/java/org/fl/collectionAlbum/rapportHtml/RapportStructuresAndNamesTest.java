@@ -134,6 +134,7 @@ class RapportStructuresAndNamesTest {
 		album.addMusicArtfactArtistesToList(la);
 		
 		assertThat(bill.hasRole(ArtistRole.AUTEUR)).isTrue();
+		assertThat(bill.hasAnyRole(ArtistRole.AUTEUR)).isTrue();
 		assertThat(bill.getArtistRoles()).hasSameElementsAs(Set.of(ArtistRole.AUTEUR));
 		
 		URI pAlbum = RapportStructuresAndNames.getArtisteAlbumRapportRelativeUri(bill);

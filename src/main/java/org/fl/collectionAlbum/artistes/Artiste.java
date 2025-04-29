@@ -24,6 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.artistes;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.time.temporal.TemporalAccessor;
@@ -191,6 +192,10 @@ public class Artiste {
 
 	public boolean hasRole(ArtistRole artistRole) {
 		return artistRoles.contains(artistRole);
+	}
+	
+	public boolean hasAnyRole(ArtistRole... roles) {
+		return Arrays.stream(roles).anyMatch(role -> artistRoles.contains(role));
 	}
 	
 	public ListeConcert getConcerts() {

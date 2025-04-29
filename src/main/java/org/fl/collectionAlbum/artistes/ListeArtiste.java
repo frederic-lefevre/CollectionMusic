@@ -27,8 +27,10 @@ package org.fl.collectionAlbum.artistes;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.Collections;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import org.fl.collectionAlbum.MusicArtefact;
 import org.fl.collectionAlbum.PoidsComparator;
@@ -135,8 +137,14 @@ public class ListeArtiste {
 		return artistes;
 	}
 	
-	public List<Artiste> pickRandomArtistes(int nbArtiste) {
-		return ListUtils.pickRandomDistinctElements(artistes, nbArtiste);
+	public List<Artiste> getArtistesSatisfying(Predicate<Artiste> artistePredicate) {
+		return artistes.stream()
+				.filter(artistePredicate)
+				.collect(Collectors.toList());
+	}
+	
+	public List<Artiste> pickRandomAuteurs(int nbArtiste) {
+		return ListUtils.pickRandomDistinctElements(getArtistesSatisfying(artist -> artist.hasAnyRole(ArtistRole.AUTEUR, ArtistRole.GROUPE)), nbArtiste);
 	}
 	
 	public Artiste pickRandomArtiste() {
