@@ -76,7 +76,6 @@ public class ListUtils {
 			return lWithDistinctElements;
 		} else {
 			return Stream.generate(() -> pickRemoveRandomElement(lWithDistinctElements))
-					.distinct()
 					.limit(nbPick)
 					.collect(Collectors.toList());
 		}

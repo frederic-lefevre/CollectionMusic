@@ -25,9 +25,12 @@ SOFTWARE.
 package org.fl.collectionAlbum;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Supplier;
 
 import static org.assertj.core.api.Assertions.*;
 
+import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.metrics.CollectionMetrics;
 import org.fl.collectionAlbum.metrics.ConcertMetrics;
@@ -77,20 +80,17 @@ class CollectionAlbumsTest {
 		assertThat(bobDylan.getConcerts().getConcerts()).hasSizeGreaterThan(5);
 		assertThat(bobDylan.getDateNaissance()).isEqualTo("24 mai 1941");
 		
-		// Test random pick
-		long startTimeStamp = System.currentTimeMillis();
+		// Test random pick	
+		pickRandomAlbumsAssert(() -> albumsContainer.pickRandomAlbumsViaArtiste(1), 1);
+		pickRandomAlbumsAssert(() -> albumsContainer.pickRandomAlbums(3), 3);
+		pickRandomAlbumsAssert(() -> albumsContainer.pickRandomAlbumsViaArtiste(4), 4);
+		pickRandomAlbumsAssert(() -> albumsContainer.pickRandomAlbumsViaArtiste(100), 100);
+		pickRandomAlbumsAssert(() -> albumsContainer.pickRandomAlbums(300), 300);
+		pickRandomAlbumsAssert(() -> albumsContainer.pickRandomAlbumsViaArtiste(1000), 1000);
 		
-		assertThat(albumsContainer.pickRandomAlbums(3)).isNotNull()
-			.hasSize(3);
-		
-		assertThat(albumsContainer.pickRandomAlbumsViaArtiste(4)).isNotNull()
-			.hasSize(4);
-		
-		assertThat(albumsContainer.pickRandomAlbumsViaArtiste(300)).isNotNull()
-		.hasSize(300);
-		
-		long duration = System.currentTimeMillis() - startTimeStamp;
-		System.out.print("Duration pick=" + duration);
+		int nbAlbumsWithNoAuteur = (int) albumsContainer.getCollectionAlbumsMusiques().getAlbums().stream().filter(album -> album.getAuteurs().isEmpty()).count();
+		int nbAlbumsJustBelowTotal = albumsContainer.getCollectionAlbumsMusiques().getNombreAlbums() - nbAlbumsWithNoAuteur -2;
+		pickRandomAlbumsAssert(() -> albumsContainer.pickRandomAlbumsViaArtiste(nbAlbumsJustBelowTotal), nbAlbumsJustBelowTotal);
 		
 		// Test album metrics
 		Metrics collectionMetrics = CollectionMetrics.buildCollectionMetrics(0, albumsContainer);
@@ -124,5 +124,16 @@ class CollectionAlbumsTest {
 		CollectionAlbumContainer albumsContainer2 = CollectionAlbumContainer.getEmptyInstance();
 		assertThat(albumsContainer2).isEqualTo(albumsContainer);
 		TestUtils.assertEmptyCollection(albumsContainer);
+	}
+	
+	private void pickRandomAlbumsAssert(Supplier<List<Album>> randomListPickerSupplier, int pickNumber) {
+		
+		long startTimeStamp = System.currentTimeMillis();
+		List<Album> pickList = randomListPickerSupplier.get();
+		long duration = System.currentTimeMillis() - startTimeStamp;
+				
+		assertThat(pickList).isNotNull().hasSize(pickNumber);
+		assertThat(pickList.stream().distinct().toList()).hasSize(pickList.size());
+		assertThat(duration).as("Duration of random album pick in the largest case should be less than 15ms").isLessThan(200); 
 	}
 }

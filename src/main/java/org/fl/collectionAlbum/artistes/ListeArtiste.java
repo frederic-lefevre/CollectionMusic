@@ -35,13 +35,12 @@ import java.util.stream.Collectors;
 import org.fl.collectionAlbum.MusicArtefact;
 import org.fl.collectionAlbum.PoidsComparator;
 import org.fl.collectionAlbum.concerts.ConcertPoidsComparator;
-import org.fl.collectionAlbum.utils.ListUtils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class ListeArtiste {
 	
-	private final static Logger albumLog = Logger.getLogger(ListeArtiste.class.getName());
+	private static final Logger albumLog = Logger.getLogger(ListeArtiste.class.getName());
 	
 	private final List<Artiste> artistes;
 
@@ -141,13 +140,5 @@ public class ListeArtiste {
 		return artistes.stream()
 				.filter(artistePredicate)
 				.collect(Collectors.toList());
-	}
-	
-	public List<Artiste> pickRandomAuteurs(int nbArtiste) {
-		return ListUtils.pickRandomDistinctElements(getArtistesSatisfying(artist -> artist.hasAnyRole(ArtistRole.AUTEUR, ArtistRole.GROUPE)), nbArtiste);
-	}
-	
-	public Artiste pickRandomAuteur() {
-		return ListUtils.pickRandomElement(getArtistesSatisfying(artist -> artist.hasAnyRole(ArtistRole.AUTEUR, ArtistRole.GROUPE)));
 	}
 }

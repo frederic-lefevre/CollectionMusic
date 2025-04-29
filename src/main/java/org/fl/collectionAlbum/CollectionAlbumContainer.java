@@ -32,6 +32,7 @@ import java.util.function.Predicate;
 
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.albums.ListeAlbum;
+import org.fl.collectionAlbum.artistes.ArtistRole;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.concerts.Concert;
@@ -266,7 +267,8 @@ public class CollectionAlbumContainer {
 		if (collectionAlbumsMusiques.getNombreAlbums() <= nbAlbum) {
 			return collectionAlbumsMusiques.getAlbums();
 		} else {
-			return RandomAlbumPicker.pickRandomAlbumsViaArtiste(collectionArtistes, nbAlbum);
+			return RandomAlbumPicker.pickRandomAlbumsViaArtiste(
+					collectionArtistes.getArtistesSatisfying(artist -> artist.hasAnyRole(ArtistRole.AUTEUR, ArtistRole.GROUPE)), nbAlbum);
 		}
 	}
 }
