@@ -252,11 +252,11 @@ public class CollectionAlbumContainer {
 	
 	public Artiste getArtisteKnown(String nom, String prenom) {
 		
-		Artiste a = collectionArtistes.getArtisteKnown(nom, prenom) ;
+		Artiste a = collectionArtistes.getArtisteKnown(nom, prenom);
 		if (a == null) {
-			a = concertsArtistes.getArtisteKnown(nom, prenom) ;
+			a = concertsArtistes.getArtisteKnown(nom, prenom);
 		}
-		return a ;		
+		return a;		
 	}
 	
 	public List<Album> pickRandomAlbums(int nbAlbum) {
@@ -265,10 +265,14 @@ public class CollectionAlbumContainer {
 	
 	public List<Album> pickRandomAlbumsViaArtiste(int nbAlbum) {
 		
-		return Stream.generate(() -> collectionArtistes.pickRandomArtiste())
-			.map(artiste -> artiste.getAlbums().pickRandomAlbum())
-			.distinct()
-			.limit(nbAlbum)
-			.collect(Collectors.toList());
+		if (collectionAlbumsMusiques.getNombreAlbums()/20 <= nbAlbum) {
+			throw new IllegalArgumentException("Requested number too high");
+		} else {
+			return Stream.generate(() -> collectionArtistes.pickRandomArtiste())
+				.map(artiste -> artiste.getAlbums().pickRandomAlbum())
+				.distinct()
+				.limit(nbAlbum)
+				.collect(Collectors.toList());
+		}
 	}
 }
