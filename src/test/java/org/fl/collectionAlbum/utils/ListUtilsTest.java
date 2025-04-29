@@ -25,6 +25,7 @@ SOFTWARE.
 package org.fl.collectionAlbum.utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -53,6 +54,25 @@ class ListUtilsTest {
 			.limit(numrberOfTests)
 			.forEach(elem -> assertThat(elem).isBetween(valueMin, valueMax));
 
+	}
+	
+	@Test
+	void testRemoveRandomListPick() {
+		
+		int valueMin = 0;
+		int valueMax = 2500;
+		int numrberOfTests = 1000;
+		
+		List<Integer> aList = new ArrayList<>();		
+		IntStream.range(valueMin,valueMax).forEachOrdered(aList::add);
+		
+		assertThat(aList).hasSize(valueMax);
+		
+		Stream.generate(() -> ListUtils.pickRemoveRandomElement(aList))
+			.limit(numrberOfTests)
+			.forEach(elem -> assertThat(elem).isBetween(valueMin, valueMax));
+
+		assertThat(aList).hasSize(valueMax-numrberOfTests);
 	}
 	
 	@Test
@@ -126,8 +146,18 @@ class ListUtilsTest {
 	}
 	
 	@Test
+	void nullListShouldRaiseIllegalArgumentException3() {
+		assertThatIllegalArgumentException().isThrownBy(() -> ListUtils.pickRemoveRandomElement(null));
+	}
+	
+	@Test
 	void emptyListShouldRaiseIllegalArgumentException() {
 		assertThatIllegalArgumentException().isThrownBy(() -> ListUtils.pickRandomElement(List.of()));
+	}
+	
+	@Test
+	void emptyListShouldRaiseIllegalArgumentException3() {
+		assertThatIllegalArgumentException().isThrownBy(() -> ListUtils.pickRemoveRandomElement(new ArrayList<>()));
 	}
 	
 	@Test
@@ -138,8 +168,25 @@ class ListUtilsTest {
 	}
 	
 	@Test
+	void testPickRemoveSingleElement() {
+		
+		String value = "une valeur";
+		String value2 = "une autre valeur";
+		List<String> aList = new ArrayList<>(Arrays.asList( value, value2));
+		String pickedElement = ListUtils.pickRemoveRandomElement(aList);
+		assertThat(pickedElement).matches(s -> s.equals(value2) || s.equals(value));
+		assertThat(aList).singleElement().matches(s -> ! s.equals(pickedElement));
+	}
+	
+	@Test
 	void nullListShouldRaiseNullPointException2() {
 		assertThatNullPointerException().isThrownBy(() -> ListUtils.pickRandomDistinctElements(null, 5));
+	}
+	
+	@Test
+	void pickRemoveFromUnmodifiableListRaisesException() {
+		assertThatExceptionOfType(java.lang.UnsupportedOperationException.class)
+			.isThrownBy(() -> ListUtils.pickRemoveRandomElement(List.of("1", "2")));
 	}
 	
 	@Test
