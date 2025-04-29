@@ -270,7 +270,7 @@ public class CollectionAlbumContainer {
 		} else if (collectionAlbumsMusiques.getNombreAlbums()/20 <= nbAlbum) {
 			throw new IllegalArgumentException("Requested number too high");
 		} else {
-			return Stream.generate(() -> collectionArtistes.pickRandomArtiste())
+			return Stream.generate(() -> collectionArtistes.pickRandomAuteur())
 				.map(artiste -> artiste.getAlbums().pickRandomAlbum())
 				.distinct()
 				.limit(nbAlbum)

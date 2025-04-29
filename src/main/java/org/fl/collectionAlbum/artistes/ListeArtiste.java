@@ -147,7 +147,7 @@ public class ListeArtiste {
 		return ListUtils.pickRandomDistinctElements(getArtistesSatisfying(artist -> artist.hasAnyRole(ArtistRole.AUTEUR, ArtistRole.GROUPE)), nbArtiste);
 	}
 	
-	public Artiste pickRandomArtiste() {
-		return ListUtils.pickRandomElement(artistes);
+	public Artiste pickRandomAuteur() {
+		return ListUtils.pickRandomElement(getArtistesSatisfying(artist -> artist.hasAnyRole(ArtistRole.AUTEUR, ArtistRole.GROUPE)));
 	}
 }
