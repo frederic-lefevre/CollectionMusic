@@ -59,7 +59,7 @@ public class Artiste {
 		super();
 
 		String lastName = JsonUtils.getAsStringOrNull(jArtiste.get(JsonMusicProperties.NOM));
-		String firstName = JsonUtils.getAsStringOrNull(jArtiste.get(JsonMusicProperties.PRENOM));
+		String firstName = getFirstNameOrArticle(jArtiste);
 		String birth = JsonUtils.getAsStringOrNull(jArtiste.get(JsonMusicProperties.NAISSANCE));
 		String death = JsonUtils.getAsStringOrNull(jArtiste.get(JsonMusicProperties.MORT));
 
@@ -84,11 +84,21 @@ public class Artiste {
 	public boolean isSameArtiste(JsonNode jArtiste) {
 
 		String lastName = JsonUtils.getAsStringOrBlank(jArtiste.get(JsonMusicProperties.NOM));
-		String firstName = JsonUtils.getAsStringOrBlank(jArtiste.get(JsonMusicProperties.PRENOM));
+		String firstName = getFirstNameOrArticle(jArtiste);
 
 		return (nom.equals(lastName) && prenoms.equals(firstName));
 	}
 
+	private String getFirstNameOrArticle(JsonNode jArtiste) {
+		if (jArtiste.has(JsonMusicProperties.PRENOM)) {
+			return JsonUtils.getAsStringOrBlank(jArtiste.get(JsonMusicProperties.PRENOM));
+		} else if (jArtiste.has(JsonMusicProperties.ARTICLE)) {
+			return JsonUtils.getAsStringOrBlank(jArtiste.get(JsonMusicProperties.ARTICLE));
+		} else {
+			return "";
+		}
+	}
+	
 	public Artiste() {
 		super();
 		setArtiste("", "", null, null);
