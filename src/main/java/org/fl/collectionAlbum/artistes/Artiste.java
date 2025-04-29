@@ -24,8 +24,6 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.artistes;
 
-import java.util.ArrayList;
-
 import java.util.List;
 import java.time.temporal.TemporalAccessor;
 import java.util.logging.Logger;
@@ -76,20 +74,6 @@ public class Artiste {
 
 		albumLog.finest(() -> "Nouvel artiste: " + nom + " " + prenoms + " (" + getDateNaissance() + " - "
 				+ getDateMort() + ")");
-
-		JsonNode jElem = jArtiste.get(JsonMusicProperties.INSTRUMENTS);
-		if (jElem != null) {
-			if (jElem.isArray()) {
-				instruments = new ArrayList<String>();
-
-				for (JsonNode jInstrument : jElem) {
-					instruments.add(jInstrument.asText());
-				}
-			} else {
-				albumLog.warning(
-						JsonMusicProperties.INSTRUMENTS + " n'est pas un JsonArray pour l'artiste " + jArtiste);
-			}
-		}
 	}
 	
 	public boolean isSameArtiste(JsonNode jArtiste) {
