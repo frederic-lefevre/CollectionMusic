@@ -31,6 +31,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.JsonMusicProperties;
+import org.fl.collectionAlbum.artistes.ArtistRole;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.Groupe;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
@@ -57,15 +58,15 @@ public class MusicArtefactParser {
 		knownArtistes = new ArrayList<ListeArtiste>();
 		currentKnownArtistes.forEach(la -> knownArtistes.add(la));
 
-		auteurs = processListeArtistes(Artiste.class, JsonMusicProperties.AUTEUR);
+		auteurs = processListeArtistes(Artiste.class, ArtistRole.AUTEUR);
 		knownArtistes.add(auteurs);
-		interpretes = processListeArtistes(Artiste.class, JsonMusicProperties.INTERPRETE);
+		interpretes = processListeArtistes(Artiste.class, ArtistRole.INTERPRETE);
 		knownArtistes.add(interpretes);
-		chefs = processListeArtistes(Artiste.class, JsonMusicProperties.CHEF);
+		chefs = processListeArtistes(Artiste.class, ArtistRole.CHEF_ORCHESTRE);
 		knownArtistes.add(chefs);
-		ensembles = processListeArtistes(Groupe.class, JsonMusicProperties.ENSEMBLE);
+		ensembles = processListeArtistes(Groupe.class, ArtistRole.ENSEMBLE);
 		knownArtistes.add(ensembles);
-		groupes = processListeArtistes(Groupe.class, JsonMusicProperties.GROUPE);
+		groupes = processListeArtistes(Groupe.class, ArtistRole.GROUPE);
 		knownArtistes.add(groupes);
 	}
 
@@ -89,8 +90,9 @@ public class MusicArtefactParser {
 		return groupes.getArtistes();
 	}
 	
-	private ListeArtiste processListeArtistes(Class<? extends Artiste> cls, String artistesJprop) {
+	private ListeArtiste processListeArtistes(Class<? extends Artiste> cls, ArtistRole artisteRole) {
 		
+		String artistesJprop = artisteRole.getJsonProperty();
 		ListeArtiste artistes = new ListeArtiste();
 		JsonNode jElem = arteFactJson.get(artistesJprop);
 		if (jElem != null) {
