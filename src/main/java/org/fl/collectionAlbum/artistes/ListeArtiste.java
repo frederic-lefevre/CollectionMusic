@@ -27,19 +27,20 @@ package org.fl.collectionAlbum.artistes;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 import java.util.Collections;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import org.fl.collectionAlbum.MusicArtefact;
 import org.fl.collectionAlbum.PoidsComparator;
 import org.fl.collectionAlbum.concerts.ConcertPoidsComparator;
-import org.fl.collectionAlbum.utils.ListUtils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 
 public class ListeArtiste {
 	
-	private final static Logger albumLog = Logger.getLogger(ListeArtiste.class.getName());
+	private static final Logger albumLog = Logger.getLogger(ListeArtiste.class.getName());
 	
 	private final List<Artiste> artistes;
 
@@ -135,7 +136,9 @@ public class ListeArtiste {
 		return artistes;
 	}
 	
-	public List<Artiste> pickRandomArtistes(int nbArtiste) {
-		return ListUtils.pickRandomDistinctElements(artistes, nbArtiste);
+	public List<Artiste> getArtistesSatisfying(Predicate<Artiste> artistePredicate) {
+		return artistes.stream()
+				.filter(artistePredicate)
+				.collect(Collectors.toList());
 	}
 }

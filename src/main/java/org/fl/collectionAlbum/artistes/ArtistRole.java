@@ -24,42 +24,22 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.artistes;
 
-import static org.assertj.core.api.Assertions.*;
+import org.fl.collectionAlbum.JsonMusicProperties;
 
-import java.util.Set;
-
-import org.junit.jupiter.api.Test;
-
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-
-class ArtisteTest {
+public enum ArtistRole {
+	AUTEUR(JsonMusicProperties.AUTEUR), 
+	GROUPE(JsonMusicProperties.GROUPE), 
+	INTERPRETE(JsonMusicProperties.INTERPRETE), 
+	CHEF_ORCHESTRE(JsonMusicProperties.CHEF), 
+	ENSEMBLE(JsonMusicProperties.ENSEMBLE);
 	
-	@Test
-	void test() {
-
-		ObjectNode jArt = JsonNodeFactory.instance.objectNode();
-		jArt.put("nom", "Evans");
-		jArt.put("prenom", "Bill");
-		jArt.put("mort", "1980-09-15");
-
-		Artiste artiste = new Artiste(jArt, ArtistRole.AUTEUR);
-
-		assertThat(artiste.getNom()).isEqualTo("Evans");
-		assertThat(artiste.getPrenoms()).isEqualTo("Bill");
-
-		assertThat(artiste.getNbAlbum()).isZero();
-		assertThat(artiste.getNbConcert()).isZero();
-
-		assertThat(artiste.getAlbums().getNombreAlbums()).isZero();
-		assertThat(artiste.getConcerts().getNombreConcerts()).isZero();
-
-		assertThat(artiste.getAlbumsFormat().getPoids()).isZero();
-		
-		assertThat(artiste.hasRole(ArtistRole.AUTEUR)).isTrue();
-		assertThat(artiste.hasAnyRole(ArtistRole.AUTEUR)).isTrue();
-		
-		assertThat(artiste.getArtistRoles()).hasSameElementsAs(Set.of(ArtistRole.AUTEUR));
+	private final String jsonProperty;
+	
+	private ArtistRole(String jsonProperty) {
+		this.jsonProperty = jsonProperty;
 	}
-
+	
+	public String getJsonProperty() {
+		return jsonProperty;
+	}
 }

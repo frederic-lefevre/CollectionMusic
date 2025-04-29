@@ -24,9 +24,9 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.artistes;
 
-import java.util.ArrayList;
-
-import java.util.List;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import java.time.temporal.TemporalAccessor;
 import java.util.logging.Logger;
 
@@ -44,116 +44,98 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 public class Artiste {
 	
-	protected String nom;
-	protected String prenoms;
-	protected TemporalAccessor naissance;
-	protected TemporalAccessor mort;
-	protected List<String> instruments;
-	protected ListeAlbum albums;
-	protected ListeConcert concerts;
+	private final String nom;
+	private final String prenoms;
+	private TemporalAccessor naissance;
+	private TemporalAccessor mort;
+	private final ListeAlbum albums;
+	private final ListeConcert concerts;
+	private final Set<ArtistRole> artistRoles;
 	
-	private final static Logger albumLog = Logger.getLogger(Artiste.class.getName());
+	private static final Logger albumLog = Logger.getLogger(Artiste.class.getName());
 
-	public Artiste(JsonNode jArtiste) {
+	public Artiste(JsonNode jArtiste, ArtistRole artisteRole) {
 
 		super();
+		albums = ListeAlbum.Builder.getBuilder().build();
+		concerts = new ListeConcert();
+		artistRoles = new HashSet<>();
+		artistRoles.add(artisteRole);
+		
+		nom = JsonUtils.getAsStringOrBlank(jArtiste.get(JsonMusicProperties.NOM));
+		prenoms = getFirstNameOrArticle(jArtiste);
 
-		String lastName = JsonUtils.getAsStringOrNull(jArtiste.get(JsonMusicProperties.NOM));
-		String firstName = JsonUtils.getAsStringOrNull(jArtiste.get(JsonMusicProperties.PRENOM));
-		String birth = JsonUtils.getAsStringOrNull(jArtiste.get(JsonMusicProperties.NAISSANCE));
-		String death = JsonUtils.getAsStringOrNull(jArtiste.get(JsonMusicProperties.MORT));
-
-		setArtiste(lastName, firstName, birth, death);
-
-		JsonNode jElem = jArtiste.get(JsonMusicProperties.INSTRUMENTS);
-		if (jElem != null) {
-			if (jElem.isArray()) {
-				instruments = new ArrayList<String>();
-
-				for (JsonNode jInstrument : jElem) {
-					instruments.add(jInstrument.asText());
-				}
-			} else {
-				albumLog.warning(
-						JsonMusicProperties.INSTRUMENTS + " n'est pas un JsonArray pour l'artiste " + jArtiste);
-			}
+		if (nom.isBlank()) {
+			albumLog.warning("Nom d'artiste null");
 		}
 
+		if (prenoms.isBlank()) {
+			albumLog.info("Prénoms d'artiste null pour le nom " + nom);
+		}
+
+		naissance = getTemporalAccessor(JsonUtils.getAsStringOrNull(jArtiste.get(JsonMusicProperties.NAISSANCE)));
+		mort = getTemporalAccessor(JsonUtils.getAsStringOrNull(jArtiste.get(JsonMusicProperties.MORT)));
+
+		albumLog.finest(() -> "Nouvel artiste: " + nom + " " + prenoms + " (" + getDateNaissance() + " - "
+				+ getDateMort() + ")");
 	}
 	
 	public boolean isSameArtiste(JsonNode jArtiste) {
 
 		String lastName = JsonUtils.getAsStringOrBlank(jArtiste.get(JsonMusicProperties.NOM));
-		String firstName = JsonUtils.getAsStringOrBlank(jArtiste.get(JsonMusicProperties.PRENOM));
-
+		String firstName = getFirstNameOrArticle(jArtiste);
 		return (nom.equals(lastName) && prenoms.equals(firstName));
 	}
 
-	public Artiste() {
-		super();
-		setArtiste("", "", null, null);
+	private String getFirstNameOrArticle(JsonNode jArtiste) {
+		if (jArtiste.has(JsonMusicProperties.PRENOM)) {
+			return JsonUtils.getAsStringOrBlank(jArtiste.get(JsonMusicProperties.PRENOM));
+		} else if (jArtiste.has(JsonMusicProperties.ARTICLE)) {
+			return JsonUtils.getAsStringOrBlank(jArtiste.get(JsonMusicProperties.ARTICLE));
+		} else {
+			return "";
+		}
 	}
     
-	protected void setArtiste(String aNom, String aPrenoms, String n, String m) {
+	public void update(JsonNode jArtiste, ArtistRole artisteRole) {
 
-		albums = ListeAlbum.Builder.getBuilder().build();
-		concerts = new ListeConcert();
-		if (aNom == null) {
-			albumLog.warning("Nom d'artiste null");
-			aNom = "";
-		}
-
-		if (aPrenoms == null) {
-			albumLog.info("Prénoms d'artiste null pour le nom " + aNom);
-			aPrenoms = "";
-		}
-
-		nom = aNom;
-		prenoms = aPrenoms;
-
-		try {
-			naissance = TemporalUtils.parseDate(n);
-			mort = TemporalUtils.parseDate(m);
-		} catch (Exception e) {
-			albumLog.severe("Erreur dans les dates de " + aPrenoms + " " + aNom);
-		}
-
-		albumLog.finest(() -> "Nouvel artiste: " + nom + " " + prenoms + " (" + getDateNaissance() + " - "
-				+ getDateMort() + ")");
+		String birth = JsonUtils.getAsStringOrNull(jArtiste.get(JsonMusicProperties.NAISSANCE));
+		String death = JsonUtils.getAsStringOrNull(jArtiste.get(JsonMusicProperties.MORT));
+		update(birth, death);
+		
+		artistRoles.add(artisteRole);
 	}
-    
-    public void update(String n, String m) {
+	
+    private void update(String n, String m) {
     	if ((n != null) && (! n.isEmpty())) {
     		if (naissance != null) {
     			albumLog.warning("Date de naissance définie 2 fois pour " + prenoms + " " + nom) ;
     		} else {
-    			try {
-    	            naissance = TemporalUtils.parseDate(n) ;
-    	        } catch (Exception e) {
-    	        	albumLog.severe("Erreur dans les dates de " + prenoms + " " + nom);
-    	        }
+    			naissance = getTemporalAccessor(n);
     		}
     	}
     	if ((m != null) && (! m.isEmpty())) {
     		if (mort != null) {
     			albumLog.warning("Date de décés définie 2 fois pour " + prenoms + " " + nom) ;
     		} else {
-    			try {
-    	            mort = TemporalUtils.parseDate(m) ;
-    	        } catch (Exception e) {
-    	        	albumLog.severe("Erreur dans les dates de " + prenoms + " " + nom);
-    	        }
+    			 mort = getTemporalAccessor(n);
     		}
     	}
     }
+
+    private TemporalAccessor getTemporalAccessor(String temporalString) {
+    	
+    	if ((temporalString == null) || temporalString.isBlank()) {
+    		return null;
+    	}
+    	try {
+            return TemporalUtils.parseDate(temporalString);
+        } catch (Exception e) {
+        	albumLog.severe("Erreur dans les dates de " + prenoms + " " + nom);
+        	return null;
+        }
+    }
     
-	public void update(JsonNode jArtiste) {
-
-		String birth = JsonUtils.getAsStringOrNull(jArtiste.get(JsonMusicProperties.NAISSANCE));
-		String death = JsonUtils.getAsStringOrNull(jArtiste.get(JsonMusicProperties.MORT));
-		update(birth, death);
-	}
-
 	public void addArteFact(MusicArtefact musicArtefact) {
 		if (musicArtefact instanceof Album album) {
 			albums.addAlbum(album);
@@ -204,10 +186,18 @@ public class Artiste {
 		return prenoms;
 	}
 
-	public List<String> getInstruments() {
-		return instruments;
+	public Set<ArtistRole> getArtistRoles() {
+		return artistRoles;
 	}
 
+	public boolean hasRole(ArtistRole artistRole) {
+		return artistRoles.contains(artistRole);
+	}
+	
+	public boolean hasAnyRole(ArtistRole... roles) {
+		return Arrays.stream(roles).anyMatch(role -> artistRoles.contains(role));
+	}
+	
 	public ListeConcert getConcerts() {
 		return concerts;
 	}

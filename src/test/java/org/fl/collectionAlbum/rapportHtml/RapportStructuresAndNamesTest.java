@@ -31,9 +31,11 @@ import java.net.URI;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
+import org.fl.collectionAlbum.artistes.ArtistRole;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.concerts.Concert;
@@ -79,7 +81,7 @@ class RapportStructuresAndNamesTest {
 		jArt.put("naissance", "1929-08-16") ;
 		jArt.put("mort",  "1980-09-15") ;
 		
-		Artiste artiste= new Artiste(jArt);
+		Artiste artiste= new Artiste(jArt, ArtistRole.AUTEUR);
 		
 		URI pAlbum = RapportStructuresAndNames.getArtisteAlbumRapportRelativeUri(artiste);
 		assertThat(pAlbum.toString()).isEqualTo("artistes/albums/i0.html");
@@ -130,6 +132,10 @@ class RapportStructuresAndNamesTest {
 		Album album = new Album(jAlbum, lla, Path.of("dummyPath"));
 		Artiste bill = album.getAuteurs().get(0);
 		album.addMusicArtfactArtistesToList(la);
+		
+		assertThat(bill.hasRole(ArtistRole.AUTEUR)).isTrue();
+		assertThat(bill.hasAnyRole(ArtistRole.AUTEUR)).isTrue();
+		assertThat(bill.getArtistRoles()).hasSameElementsAs(Set.of(ArtistRole.AUTEUR));
 		
 		URI pAlbum = RapportStructuresAndNames.getArtisteAlbumRapportRelativeUri(bill);
 		assertThat(pAlbum).hasToString("artistes/albums/i0.html");

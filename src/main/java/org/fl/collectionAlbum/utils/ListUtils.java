@@ -36,10 +36,28 @@ public class ListUtils {
 	// Randomly return one element of a list
 	public static <T> T pickRandomElement(List<T> l) {
 		
+		if ((l == null) || l.isEmpty()) {
+			throw new IllegalArgumentException("Null or empty list");
+		}
+		
 		if (l.size() == 1) {
 			return l.get(0);
 		} else {
 			return l.get(random.nextInt(l.size() - 1));
+		}
+	}
+	
+	// Randomly remove and return one element of a list
+	public static <T> T pickRemoveRandomElement(List<T> l) {
+		
+		if ((l == null) || l.isEmpty()) {
+			throw new IllegalArgumentException("Null or empty list");
+		}
+		
+		if (l.size() == 1) {
+			return l.remove(0);
+		} else {
+			return l.remove(random.nextInt(l.size() - 1));
 		}
 	}
 	
@@ -51,14 +69,13 @@ public class ListUtils {
 		} else if (nbPick < 1) {
 			throw new IllegalArgumentException("Invalid number of elements requested: " + nbPick);
 		} 
-		
+
 		List<T> lWithDistinctElements = l.stream().distinct().collect(Collectors.toList());
 		
 		if (lWithDistinctElements.size() <= nbPick) {
 			return lWithDistinctElements;
 		} else {
-			return Stream.generate(() -> pickRandomElement(lWithDistinctElements))
-					.distinct()
+			return Stream.generate(() -> pickRemoveRandomElement(lWithDistinctElements))
 					.limit(nbPick)
 					.collect(Collectors.toList());
 		}

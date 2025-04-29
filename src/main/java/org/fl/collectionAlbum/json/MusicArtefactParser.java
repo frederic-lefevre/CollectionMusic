@@ -31,8 +31,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.JsonMusicProperties;
+import org.fl.collectionAlbum.artistes.ArtistRole;
 import org.fl.collectionAlbum.artistes.Artiste;
-import org.fl.collectionAlbum.artistes.Groupe;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -57,15 +57,15 @@ public class MusicArtefactParser {
 		knownArtistes = new ArrayList<ListeArtiste>();
 		currentKnownArtistes.forEach(la -> knownArtistes.add(la));
 
-		auteurs = processListeArtistes(Artiste.class, JsonMusicProperties.AUTEUR);
+		auteurs = processListeArtistes(ArtistRole.AUTEUR);
 		knownArtistes.add(auteurs);
-		interpretes = processListeArtistes(Artiste.class, JsonMusicProperties.INTERPRETE);
+		interpretes = processListeArtistes(ArtistRole.INTERPRETE);
 		knownArtistes.add(interpretes);
-		chefs = processListeArtistes(Artiste.class, JsonMusicProperties.CHEF);
+		chefs = processListeArtistes(ArtistRole.CHEF_ORCHESTRE);
 		knownArtistes.add(chefs);
-		ensembles = processListeArtistes(Groupe.class, JsonMusicProperties.ENSEMBLE);
+		ensembles = processListeArtistes(ArtistRole.ENSEMBLE);
 		knownArtistes.add(ensembles);
-		groupes = processListeArtistes(Groupe.class, JsonMusicProperties.GROUPE);
+		groupes = processListeArtistes(ArtistRole.GROUPE);
 		knownArtistes.add(groupes);
 	}
 
@@ -89,8 +89,9 @@ public class MusicArtefactParser {
 		return groupes.getArtistes();
 	}
 	
-	private ListeArtiste processListeArtistes(Class<? extends Artiste> cls, String artistesJprop) {
+	private ListeArtiste processListeArtistes(ArtistRole artisteRole) {
 		
+		String artistesJprop = artisteRole.getJsonProperty();
 		ListeArtiste artistes = new ListeArtiste();
 		JsonNode jElem = arteFactJson.get(artistesJprop);
 		if (jElem != null) {
@@ -99,7 +100,7 @@ public class MusicArtefactParser {
 				for (JsonNode jArtiste : jElem) {
 
 					try {
-						artistes.addArtiste(createGetOrUpdateArtiste(cls, jArtiste)) ;
+						artistes.addArtiste(createGetOrUpdateArtiste(jArtiste, artisteRole)) ;
 					} catch (IllegalStateException e) {
 						albumLog.log(Level.WARNING, "un artiste n'est pas un objet json pour l'arteFact " + arteFactJson, e);
 					}
@@ -113,7 +114,7 @@ public class MusicArtefactParser {
 	
 	// Get an artiste, if it exists, return the existing one eventually updated
 	// if it does not exists, create it
-	private Artiste createGetOrUpdateArtiste(Class<? extends Artiste> cls, JsonNode jArtiste) {
+	private Artiste createGetOrUpdateArtiste(JsonNode jArtiste, ArtistRole artisteRole) {
 		
 		Artiste artiste;
 		Optional<Artiste> eventualArtiste =	knownArtistes.stream()
@@ -123,14 +124,10 @@ public class MusicArtefactParser {
 														  .findFirst();
 		
 		if (!eventualArtiste.isPresent()) {
-			if (cls == Groupe.class) {
-				artiste = new Groupe(jArtiste);
-			} else {
-				artiste = new Artiste(jArtiste);
-			}
+			artiste = new Artiste(jArtiste, artisteRole);
 		} else {
 			artiste = eventualArtiste.get();
-			artiste.update(jArtiste);
+			artiste.update(jArtiste, artisteRole);
 		}
 		return artiste;
 	}

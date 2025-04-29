@@ -26,14 +26,13 @@ package org.fl.collectionAlbum;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.albums.ListeAlbum;
+import org.fl.collectionAlbum.artistes.ArtistRole;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.concerts.Concert;
@@ -252,23 +251,24 @@ public class CollectionAlbumContainer {
 	
 	public Artiste getArtisteKnown(String nom, String prenom) {
 		
-		Artiste a = collectionArtistes.getArtisteKnown(nom, prenom) ;
+		Artiste a = collectionArtistes.getArtisteKnown(nom, prenom);
 		if (a == null) {
-			a = concertsArtistes.getArtisteKnown(nom, prenom) ;
+			a = concertsArtistes.getArtisteKnown(nom, prenom);
 		}
-		return a ;
-		
+		return a;		
 	}
 	
 	public List<Album> pickRandomAlbums(int nbAlbum) {
-		return collectionAlbumsMusiques.pickRandomAlbums(nbAlbum);
+		return RandomAlbumPicker.pickRandomAlbums(collectionAlbumsMusiques, nbAlbum);
 	}
 	
 	public List<Album> pickRandomAlbumsViaArtiste(int nbAlbum) {
 		
-		return collectionArtistes.pickRandomArtistes(nbAlbum).stream()
-				.map(artiste -> artiste.getAlbums().pickRandomAlbums(1))
-				.flatMap(Collection::stream)
-				.collect(Collectors.toList());
+		if (collectionAlbumsMusiques.getNombreAlbums() <= nbAlbum) {
+			return collectionAlbumsMusiques.getAlbums();
+		} else {
+			return RandomAlbumPicker.pickRandomAlbumsViaArtiste(
+					collectionArtistes.getArtistesSatisfying(artist -> artist.hasAnyRole(ArtistRole.AUTEUR, ArtistRole.GROUPE)), nbAlbum);
+		}
 	}
 }

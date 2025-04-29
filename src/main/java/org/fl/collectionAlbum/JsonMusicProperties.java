@@ -64,7 +64,6 @@ public class JsonMusicProperties {
 	public final static String LIENS		  = "liensUrl" ;
 	public final static String DATE			  = "date" ;
 	public final static String LIEU			  = "lieu" ;
-	public final static String INSTRUMENTS	  = "instruments" ;
 	public final static String TICKET_IMG	  = "imageTicket" ;
 	public final static String MORCEAUX		  = "morceaux" ;
 	public final static String AUDIO_FILE	  = "audioFiles" ;
@@ -82,5 +81,4 @@ public class JsonMusicProperties {
 	public final static String SLEEVE_IMG	  = "sleeveImg" ;
 	public final static String DISCOGS_VALID  = "discogsFormatValidation" ;
 	
-
 }

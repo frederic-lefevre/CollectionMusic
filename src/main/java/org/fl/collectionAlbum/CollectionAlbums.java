@@ -49,23 +49,23 @@ import org.fl.util.json.JsonUtils;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 
-public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,ProgressInformation>{
+public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,ProgressInformation> {
 	
-	private final static Logger albumLog = Logger.getLogger(CollectionAlbums.class.getName());
+	private static final Logger albumLog = Logger.getLogger(CollectionAlbums.class.getName());
 	
-	private CollectionAlbumContainer albumsContainer ;
+	private CollectionAlbumContainer albumsContainer;
 	private final ProgressInformationPanel progressPanel;
 	private final List<AbstractTableModel> tableModels;
 	
 	// Information prefix
-	private final static String ARRET 			= "Arrêté" ;
-	private final static String EN_EXAMEN		= "Dossier examiné: " ;
-	
+	private static final String ARRET = "Arrêté";
+	private static final String EN_EXAMEN = "Dossier examiné: ";
+
 	// Status
-	private final static String LECTURE_ALBUM 	= "Lecture des albums" ;
-	private final static String LECTURE_CONCERT = "Lecture des  concerts" ;
-	private final static String CALENDARS 		= "Construction des calendriers" ;
-	private final static String FIN_LECTURE		= "Collection chargée" ;
+	private static final String LECTURE_ALBUM = "Lecture des albums";
+	private static final String LECTURE_CONCERT = "Lecture des  concerts";
+	private static final String CALENDARS = "Construction des calendriers";
+	private static final String FIN_LECTURE = "Collection chargée";
 	
 	public CollectionAlbums(List<AbstractTableModel> tableModels, ProgressInformationPanel pip) {
 
@@ -84,20 +84,20 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 		publish(new ProgressInformation("Inventaire des releases discogs en cours"));
 		DiscogsInventory.buildDiscogsInventory();
 		
-		albumsContainer = CollectionAlbumContainer.getEmptyInstance() ;
+		albumsContainer = CollectionAlbumContainer.getEmptyInstance();
 		progressPanel.setStepPrefixInformation(EN_EXAMEN);
 
-		albumLog.info("Lecture des données des albums") ;		
-		progressPanel.setProcessStatus(LECTURE_ALBUM) ;
-		buildAlbumsCollection() ;
+		albumLog.info("Lecture des données des albums");		
+		progressPanel.setProcessStatus(LECTURE_ALBUM);
+		buildAlbumsCollection();
 		
 		albumLog.info("Lecture des données des concerts");
 		progressPanel.setProcessStatus(LECTURE_CONCERT);
-		buildConcerts() ;	
+		buildConcerts();	
 		
-		albumLog.info("Construction du calendrier") ;
+		albumLog.info("Construction du calendrier");
 		progressPanel.setProcessStatus(CALENDARS);
-		buildCalendrier() ;
+		buildCalendrier();
 		
 		publish(new ProgressInformation("Inventaire des fichiers media en cours"));
 		MediaFilesInventories.scanMediaFilePaths();
@@ -111,11 +111,11 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 	
 	private void buildAlbumsCollection() {
   	
-		Path albumsPath = Control.getCollectionDirectoryName() ;
+		Path albumsPath = Control.getCollectionDirectoryName();
 		try {
-			MusicFileVisitor albumsVisitor = new AlbumFileVisitor(Control.getMusicfileExtension()) ;
+			MusicFileVisitor albumsVisitor = new AlbumFileVisitor(Control.getMusicfileExtension());
 			
-			Files.walkFileTree(albumsPath, albumsVisitor) ;
+			Files.walkFileTree(albumsPath, albumsVisitor);
 				
 		} catch (Exception e) {
 			albumLog.log(Level.SEVERE, "Exception scanning album directory " + albumsPath, e);
@@ -125,11 +125,11 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
   
 	private void buildConcerts() {
 
-		Path concertsPath = Control.getConcertDirectoryName() ;
+		Path concertsPath = Control.getConcertDirectoryName();
 		try {
-			MusicFileVisitor concertsVisitor = new ConcertFileVisitor(Control.getMusicfileExtension()) ;
+			MusicFileVisitor concertsVisitor = new ConcertFileVisitor(Control.getMusicfileExtension());
 			
-			Files.walkFileTree(concertsPath, concertsVisitor) ;
+			Files.walkFileTree(concertsPath, concertsVisitor);
 			
 		} catch (Exception e) {
 			albumLog.log(Level.SEVERE, "Exception scanning concert directory " + concertsPath, e);
@@ -141,19 +141,19 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
     	private PathMatcher matcher ;
     	
     	protected MusicFileVisitor(String fileExtension) {
-    		matcher = FileSystems.getDefault().getPathMatcher("glob:*." + fileExtension) ;
+    		matcher = FileSystems.getDefault().getPathMatcher("glob:*." + fileExtension);
     	}
     	
     	@Override
 		public FileVisitResult visitFile(Path file, BasicFileAttributes attr) {
     		
-    		Path name = file.getFileName() ;
+    		Path name = file.getFileName();
     		if ((Files.isRegularFile(file)) &&
 	    		(matcher.matches(name))) {
     			
-    			ObjectNode arteFactJson = (ObjectNode) JsonUtils.getJsonObjectFromPath(file, Control.getCharset(), albumLog) ;
+    			ObjectNode arteFactJson = (ObjectNode) JsonUtils.getJsonObjectFromPath(file, Control.getCharset(), albumLog);
 	    		if (arteFactJson != null) {
-	    			addMusicArtefact(arteFactJson, file) ;
+	    			addMusicArtefact(arteFactJson, file);
 	    		} else {
 	    			albumLog.warning("Impossible de lire le fichier json " + file);
 	    		}
@@ -164,41 +164,45 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
     	
     	@Override
 		public FileVisitResult preVisitDirectory(Path file, BasicFileAttributes attr) {
-    		 publish(new ProgressInformation(file.getFileName().toString())) ;
+    		 publish(new ProgressInformation(file.getFileName().toString()));
     		 return FileVisitResult.CONTINUE;
     	}
 
-    	public abstract void addMusicArtefact(ObjectNode artefactJson, Path jsonFile) ;
+    	public abstract void addMusicArtefact(ObjectNode artefactJson, Path jsonFile);
     }
     
-    private class AlbumFileVisitor extends MusicFileVisitor {
-		protected AlbumFileVisitor(String fileExtension) {	super(fileExtension); }
+	private class AlbumFileVisitor extends MusicFileVisitor {
+		protected AlbumFileVisitor(String fileExtension) {
+			super(fileExtension);
+		}
 
 		@Override
 		public void addMusicArtefact(ObjectNode artefactJson, Path jsonFile) {
-			
+
 			// Migration if needed
 			ObjectNode migratedJson = MusicArtefactMigrator.getMigrator().migrateAlbum(artefactJson, jsonFile);
-			
-			albumsContainer.addAlbum(migratedJson, jsonFile) ;			
-		}    	
-    }
+
+			albumsContainer.addAlbum(migratedJson, jsonFile);
+		}
+	}
     
-    private class ConcertFileVisitor extends MusicFileVisitor {
-		protected ConcertFileVisitor(String fileExtension) {	super(fileExtension); }
+	private class ConcertFileVisitor extends MusicFileVisitor {
+		protected ConcertFileVisitor(String fileExtension) {
+			super(fileExtension);
+		}
 
 		@Override
-		public void addMusicArtefact(ObjectNode artefactJson, Path jsonFile) {		
-			albumsContainer.addConcert(artefactJson, jsonFile) ;			
-		}    	
-    }
-    
+		public void addMusicArtefact(ObjectNode artefactJson, Path jsonFile) {
+			albumsContainer.addConcert(artefactJson, jsonFile);
+		}
+	}
+
     private void buildCalendrier() {
 
     	try {
-    		ListeArtiste allArtistes =  albumsContainer.getCollectionArtistes().getReunion(albumsContainer.getConcertsArtistes())  ;
+    		ListeArtiste allArtistes =  albumsContainer.getCollectionArtistes().getReunion(albumsContainer.getConcertsArtistes());
     		for (Artiste a : allArtistes.getArtistes()) {
-    			albumsContainer.getCalendrierArtistes().add(a) ;
+    			albumsContainer.getCalendrierArtistes().add(a);
     		}
     	} catch (Exception e) {
     		albumLog.log(Level.SEVERE, "Exception in build calendrier ", e);
