@@ -52,7 +52,7 @@ public class Artiste {
 	private final ListeConcert concerts;
 	private final Set<ArtistRole> artistRoles;
 	
-	private final static Logger albumLog = Logger.getLogger(Artiste.class.getName());
+	private static final Logger albumLog = Logger.getLogger(Artiste.class.getName());
 
 	public Artiste(JsonNode jArtiste, ArtistRole artisteRole) {
 

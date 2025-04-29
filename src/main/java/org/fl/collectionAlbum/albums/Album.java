@@ -55,7 +55,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class Album extends MusicArtefact {
 	
-	protected final static Logger albumLog = Logger.getLogger(Album.class.getName());
+	protected static final Logger albumLog = Logger.getLogger(Album.class.getName());
 	
     private final String titre;
     
