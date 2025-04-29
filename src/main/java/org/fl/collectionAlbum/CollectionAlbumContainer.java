@@ -265,7 +265,9 @@ public class CollectionAlbumContainer {
 	
 	public List<Album> pickRandomAlbumsViaArtiste(int nbAlbum) {
 		
-		if (collectionAlbumsMusiques.getNombreAlbums()/20 <= nbAlbum) {
+		if (collectionAlbumsMusiques.getNombreAlbums() <= nbAlbum) {
+			return collectionAlbumsMusiques.getAlbums();
+		} else if (collectionAlbumsMusiques.getNombreAlbums()/20 <= nbAlbum) {
 			throw new IllegalArgumentException("Requested number too high");
 		} else {
 			return Stream.generate(() -> collectionArtistes.pickRandomArtiste())

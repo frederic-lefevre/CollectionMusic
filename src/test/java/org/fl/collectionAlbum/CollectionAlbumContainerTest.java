@@ -193,6 +193,10 @@ class CollectionAlbumContainerTest {
 			.singleElement()
 			.satisfies(alb -> assertThat(alb.getTitre()).isEqualTo("Portrait in jazz"));
 		
+		assertThat(albumsContainer.pickRandomAlbumsViaArtiste(3)).isNotNull()
+			.singleElement()
+			.satisfies(alb -> assertThat(alb.getTitre()).isEqualTo("Portrait in jazz"));
+		
 		Metrics collectionMetrics = CollectionMetrics.buildCollectionMetrics(0, albumsContainer);
 		
 		assertThat(collectionMetrics.getMetricTimeStamp()).isZero();
