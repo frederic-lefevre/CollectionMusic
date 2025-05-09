@@ -27,7 +27,12 @@ package org.fl.collectionAlbum.artistes;
 import static org.assertj.core.api.Assertions.*;
 
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import org.fl.collectionAlbum.utils.TemporalUtils;
+import org.fl.util.FilterCounter;
+import org.fl.util.FilterCounter.LogRecordCounter;
 import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
@@ -41,6 +46,7 @@ class ArtisteTest {
 		ObjectNode jArt = JsonNodeFactory.instance.objectNode();
 		jArt.put("nom", "Evans");
 		jArt.put("prenom", "Bill");
+		jArt.put("naissance", "1929-08-16");
 		jArt.put("mort", "1980-09-15");
 
 		Artiste artiste = new Artiste(jArt, ArtistRole.AUTEUR);
@@ -48,6 +54,9 @@ class ArtisteTest {
 		assertThat(artiste.getNom()).isEqualTo("Evans");
 		assertThat(artiste.getPrenoms()).isEqualTo("Bill");
 
+		assertThat(artiste.getDateNaissance()).isEqualTo(TemporalUtils.formatDate(artiste.getNaissance()));
+		assertThat(artiste.getDateMort()).isEqualTo(TemporalUtils.formatDate(artiste.getMort()));
+		
 		assertThat(artiste.getNbAlbum()).isZero();
 		assertThat(artiste.getNbConcert()).isZero();
 
@@ -61,5 +70,81 @@ class ArtisteTest {
 		
 		assertThat(artiste.getArtistRoles()).hasSameElementsAs(Set.of(ArtistRole.AUTEUR));
 	}
+	
+	
+	@Test
+	void test2() {
+		
+		ObjectNode jArt = JsonNodeFactory.instance.objectNode();
+		jArt.put("nom", "Evans");
+		jArt.put("prenom", "Bill");
 
+		Artiste artiste = new Artiste(jArt, ArtistRole.AUTEUR);
+
+		assertThat(artiste.getNom()).isEqualTo("Evans");
+		assertThat(artiste.getPrenoms()).isEqualTo("Bill");
+
+		assertThat(artiste.getDateNaissance()).isEmpty();
+		assertThat(artiste.getDateMort()).isEmpty();
+		
+		ObjectNode jArt2 = JsonNodeFactory.instance.objectNode();
+		jArt2.put("nom", "Evans");
+		jArt2.put("prenom", "Bill");
+		jArt2.put("naissance", "1929-08-16");
+		jArt2.put("mort", "1980-09-15");
+		
+		artiste.update(jArt2, ArtistRole.AUTEUR);
+		
+		assertThat(artiste.getArtistRoles()).hasSameElementsAs(Set.of(ArtistRole.AUTEUR));
+		
+		assertThat(artiste.getDateNaissance()).isEqualTo(TemporalUtils.formatDate(artiste.getNaissance()));
+		assertThat(artiste.getDateMort()).isEqualTo(TemporalUtils.formatDate(artiste.getMort()));
+	}
+	
+	@Test
+	void test3() {
+		
+		ObjectNode jArt = JsonNodeFactory.instance.objectNode();
+		jArt.put("nom", "Evans");
+		jArt.put("prenom", "Bill");
+
+		Artiste artiste = new Artiste(jArt, ArtistRole.AUTEUR);
+
+		ObjectNode jArt2 = JsonNodeFactory.instance.objectNode();
+		jArt2.put("nom", "Evans");
+		jArt2.put("prenom", "Bill");
+		
+		artiste.update(jArt2, ArtistRole.INTERPRETE);
+		
+		assertThat(artiste.getArtistRoles()).hasSameElementsAs(Set.of(ArtistRole.AUTEUR, ArtistRole.INTERPRETE));
+		
+		assertThat(artiste.getDateNaissance()).isEmpty();
+		assertThat(artiste.getDateMort()).isEmpty();
+	}
+	
+	@Test
+	void updatingAlreadySetDateShouldRaiseWarnings() {
+
+		ObjectNode jArt = JsonNodeFactory.instance.objectNode();
+		jArt.put("nom", "Evans");
+		jArt.put("prenom", "Bill");
+		jArt.put("naissance", "1929-08-16");
+		jArt.put("mort", "1980-09-15");
+
+		Artiste artiste = new Artiste(jArt, ArtistRole.AUTEUR);
+		
+		ObjectNode jArt2 = JsonNodeFactory.instance.objectNode();
+		jArt2.put("nom", "Evans");
+		jArt2.put("prenom", "Bill");
+		jArt2.put("naissance", "1929-08-16");
+		jArt2.put("mort", "1980-09-15");
+		
+		LogRecordCounter logCounter = 
+				FilterCounter.getLogRecordCounter(Logger.getLogger(Artiste.class.getName()));
+		
+		artiste.update(jArt2, ArtistRole.AUTEUR);
+		
+		assertThat(logCounter.getLogRecordCount()).isEqualTo(2);
+		assertThat(logCounter.getLogRecordCount(Level.WARNING)).isEqualTo(2);
+	}
 }
