@@ -106,19 +106,19 @@ public class Artiste {
 		artistRoles.add(artisteRole);
 	}
 	
-    private void update(String n, String m) {
-    	if ((n != null) && (! n.isEmpty())) {
-    		if (naissance != null) {
+    private void update(String newNaissance, String newMort) {
+    	if ((newNaissance != null) && (! newNaissance.isEmpty())) {
+    		if (this.naissance != null) {
     			albumLog.warning("Date de naissance définie 2 fois pour " + prenoms + " " + nom) ;
     		} else {
-    			naissance = getTemporalAccessor(n);
+    			this.naissance = getTemporalAccessor(newNaissance);
     		}
     	}
-    	if ((m != null) && (! m.isEmpty())) {
-    		if (mort != null) {
+    	if ((newMort != null) && (! newMort.isEmpty())) {
+    		if (this.mort != null) {
     			albumLog.warning("Date de décés définie 2 fois pour " + prenoms + " " + nom) ;
     		} else {
-    			 mort = getTemporalAccessor(n);
+    			 this.mort = getTemporalAccessor(newMort);
     		}
     	}
     }
