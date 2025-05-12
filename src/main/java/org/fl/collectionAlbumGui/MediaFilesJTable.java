@@ -58,14 +58,7 @@ public class MediaFilesJTable extends JTable {
 		getColumnModel().getColumn(MediaFilesTableModel.COVER_IMAGE_COL_IDX).setPreferredWidth(140);
 		getColumnModel().getColumn(MediaFilesTableModel.EXTENSION_COL_IDX).setPreferredWidth(100);
 		getColumnModel().getColumn(MediaFilesTableModel.COVER_IMAGE_COL_IDX).setCellRenderer(new CollectionBooleanRenderer());
-		
-		// Row sorter
-		TableRowSorter<TableModel> sorter = new TableRowSorter<>(getModel());
-		setRowSorter(sorter);
-		sorter.sort();
 				
-		sorter.setComparator(MediaFilesTableModel.ALBUMS_COL_IDX, new MediaFilePathAlbumComparator());
-		
 		// Allow single row selection only
 		ListSelectionModel listSelectionModel = new DefaultListSelectionModel();
 		listSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -74,6 +67,13 @@ public class MediaFilesJTable extends JTable {
 		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		
 		addMouseListener(new MediaFileMouseAdapter(this, Control.getOsActionOnMediaFilePath()));
+		setAutoCreateRowSorter(true);
+		
+		// Row sorter
+		TableRowSorter<TableModel> sorter = new TableRowSorter<>(getModel());
+		setRowSorter(sorter);
+				
+		sorter.setComparator(MediaFilesTableModel.ALBUMS_COL_IDX, new MediaFilePathAlbumComparator());
 	}
 
 	public MediaFilePath getSelectedMediaFile() {

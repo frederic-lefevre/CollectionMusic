@@ -92,7 +92,7 @@ public class Control {
 			// access to properties and logger
 			musicRunningContext = new RunningContext("org.fl.collectionAlbum", new URI(propertyFile));
 			
-			musicRunningContext.addBuildInformation("org.fl.discogsInterface");
+			musicRunningContext.addBuildInformation("org.fl.discogsInterface", org.fl.discogsInterface.inventory.Inventory.class.getClassLoader());
 		
 			collectionProperties = musicRunningContext.getProps();
 		    albumLog.info("Properties taken from " + musicRunningContext.getPropertiesLocation());

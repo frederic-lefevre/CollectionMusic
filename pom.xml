@@ -4,18 +4,18 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.fl</groupId>
 	<artifactId>collection-music</artifactId>
-	<version>7.11.2</version>
+	<version>7.11.3</version>
 
 	<dependencies>
 		<dependency>
 			<groupId>org.fl</groupId>
 			<artifactId>FlUtils</artifactId>
-			<version>8.6.0</version>
+			<version>8.8.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.fl</groupId>
   			<artifactId>discogsInterface</artifactId>
-  			<version>0.2.3</version>
+  			<version>0.2.4</version>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
@@ -81,7 +81,6 @@
 							<mainClass>
 								org.fl.collectionAlbumGui.CollectionAlbumGui
 							</mainClass>
-
 						</manifest>
 					</archive>
 					<descriptorRefs>

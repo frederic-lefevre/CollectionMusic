@@ -60,11 +60,19 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 	private static final Font verdana = new Font("Verdana", Font.BOLD, 14);
 	private static final Font monospaced = new Font("monospaced", Font.BOLD, 14);
 	
+	private static final int PREFERRED_WIDTH = 1700;
+	private static final int PREFERRED_HEIGHT = 900;
+	
+	private static final int MAX_COVER_WIDTH = 400;
+	private static final int MAX_COVER_HEIGHT = 400;
+	
+	private static final int RELEASE_INFO_PREFERRED_WIDTH = PREFERRED_WIDTH - 450;
+	private static final int RELEASE_INFO_PREFERRED_HEIGHT = PREFERRED_HEIGHT - 575;
 	
 	public DetailedAlbumAndDiscogsInfoPane(DiscogsAlbumRelease release) {
 		
 		super();
-		setPreferredSize(new Dimension(1650,850));
+		setPreferredSize(new Dimension(PREFERRED_WIDTH, PREFERRED_HEIGHT));
 		JPanel infosPane = new JPanel();
 		infosPane.setLayout(new BoxLayout(infosPane, BoxLayout.Y_AXIS));
 		
@@ -76,7 +84,7 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 	public DetailedAlbumAndDiscogsInfoPane(Album album) {
 		
 		super();
-		setPreferredSize(new Dimension(1650,850));
+		setPreferredSize(new Dimension(PREFERRED_WIDTH, PREFERRED_HEIGHT));
 		JPanel infosPane = new JPanel();
 		infosPane.setLayout(new BoxLayout(infosPane, BoxLayout.Y_AXIS));
 		
@@ -106,7 +114,10 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 		infoRelease.setFont(monospaced);
 		infoRelease.setBorder(BorderFactory.createMatteBorder(1,1,1,1,Color.BLACK));
 		
-		releasePane.add(infoRelease);
+		JScrollPane discogsReleasesScrollPane = new JScrollPane(infoRelease);
+		discogsReleasesScrollPane.setPreferredSize(new Dimension(RELEASE_INFO_PREFERRED_WIDTH,RELEASE_INFO_PREFERRED_HEIGHT));
+		
+		releasePane.add(discogsReleasesScrollPane);
 		
 		JButton showDiscogsRelease = new JButton("Montrer la release sur le site Discogs"); 
 		showDiscogsRelease.setFont(verdana);
@@ -152,9 +163,6 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 		infoAlbum.setFont(monospaced);
 		return infoAlbum;
 	}
-	
-	private static final int MAX_COVER_WIDTH = 400;
-	private static final int MAX_COVER_HEIGHT = 400;
 	
 	private JPanel albumOtherInfo(Album album) {
 		
@@ -212,7 +220,7 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 				return new JLabel("Fichier couverture non trouvé: " + album.getCoverImage().toString());
 			}
 		} else {
-			return new  JLabel("Couverture de l'album non disponible");
+			return new JLabel("Couverture de l'album non disponible");
 		}
 	}
 }

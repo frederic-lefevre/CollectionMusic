@@ -83,14 +83,6 @@ public class AlbumsJTable extends JTable {
 		getColumnModel().getColumn(AlbumsTableModel.PROBLEM_COL_IDX).setPreferredWidth(80);
 		getColumnModel().getColumn(AlbumsTableModel.DISCOGS_COL_IDX).setPreferredWidth(120);
 		
-		// Row sorter
-		TableRowSorter<TableModel> sorter = new TableRowSorter<>(getModel());
-		setRowSorter(sorter);
-		sorter.sort();
-		
-		sorter.setComparator(AlbumsTableModel.AUTEUR_COL_IDX, new RangementComparator());
-		sorter.setComparator(AlbumsTableModel.MEDIA_FILES_COL_IDX, new RangementComparator());
-		
 		// Allow single row selection only
 		ListSelectionModel listSelectionModel = new DefaultListSelectionModel();
 		listSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -99,7 +91,14 @@ public class AlbumsJTable extends JTable {
 		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		
 		addMouseListener(new AlbumMouseAdapter(this, Control.getOsActionsOnAlbum(), generationPane));
-
+		setAutoCreateRowSorter(true);
+		
+		// Row sorter
+		TableRowSorter<TableModel> sorter = new TableRowSorter<>(getModel());
+		setRowSorter(sorter);
+		
+		sorter.setComparator(AlbumsTableModel.AUTEUR_COL_IDX, new RangementComparator());
+		sorter.setComparator(AlbumsTableModel.MEDIA_FILES_COL_IDX, new RangementComparator());
 	}
 
 	// Get the selected album
