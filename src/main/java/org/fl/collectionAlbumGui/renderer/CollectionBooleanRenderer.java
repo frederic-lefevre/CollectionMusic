@@ -25,25 +25,27 @@ SOFTWARE.
 package org.fl.collectionAlbumGui.renderer;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Font;
 import java.util.logging.Logger;
 
-import javax.swing.JTable;
 import javax.swing.SwingConstants;
-import javax.swing.table.DefaultTableCellRenderer;
 
-public class CollectionBooleanRenderer extends DefaultTableCellRenderer {
+import org.fl.util.swing.CustomTableCellRenderer;
+
+public class CollectionBooleanRenderer extends CustomTableCellRenderer {
 
 	private static final long serialVersionUID = 1L;
 	
 	private static final Logger mLog = Logger.getLogger(CollectionBooleanRenderer.class.getName());
 	
+	private static final Font font = new Font("Dialog", Font.BOLD, 12);
+	
+	public CollectionBooleanRenderer() {
+		super(font, SwingConstants.CENTER);
+	}
+
 	@Override
-	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-			int row, int column) {
-		
-		setFont(getFont().deriveFont(Font.BOLD));
+	public void valueProcessor(Object value) {
 		if (value == null) {
 			// This may happen when rescanning the album collection
 			mLog.fine("Null value in MediaFiles cell. Should be non null Boolean");
@@ -55,17 +57,11 @@ public class CollectionBooleanRenderer extends DefaultTableCellRenderer {
 				setBackground(Color.ORANGE);
 			} else {
 				setText("Non");
-				if (isSelected) {
-					setBackground(Color.LIGHT_GRAY);
-				} else {
-					setBackground(Color.WHITE);
-				}
+				setBackground(Color.WHITE);
 			}
-			setHorizontalAlignment(SwingConstants.CENTER);
 		} else {
 			mLog.severe("Invalid value type in cell. Should be Boolean but is " + value.getClass().getName());
 		}
-		return this;
 	}
 
 }

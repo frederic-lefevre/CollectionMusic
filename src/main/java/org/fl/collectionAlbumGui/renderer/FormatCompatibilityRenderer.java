@@ -25,27 +25,29 @@ SOFTWARE.
 package org.fl.collectionAlbumGui.renderer;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Font;
 import java.util.logging.Logger;
 
-import javax.swing.JTable;
 import javax.swing.SwingConstants;
-import javax.swing.table.DefaultTableCellRenderer;
 
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease.FormatCompatibilityResult;
+import org.fl.util.swing.CustomTableCellRenderer;
 
-public class FormatCompatibilityRenderer extends DefaultTableCellRenderer {
+public class FormatCompatibilityRenderer extends CustomTableCellRenderer {
 
 	private static final long serialVersionUID = 1L;
 	
 	private static final Logger mLog = Logger.getLogger(FormatCompatibilityRenderer.class.getName());
 	
-	@Override
-	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-			int row, int column) {
+	private static final Font font = new Font("Dialog", Font.BOLD, 12);
+	
+	public FormatCompatibilityRenderer() {
+		super(font, SwingConstants.CENTER);
+	}
 
-		setFont(getFont().deriveFont(Font.BOLD));
+	@Override
+	public void valueProcessor(Object value) {
+		
 		if (value == null) {
 			// This may happen when rescanning the album collection
 			mLog.fine("Null value in MediaFiles cell. Should be non null Boolean");
@@ -63,12 +65,8 @@ public class FormatCompatibilityRenderer extends DefaultTableCellRenderer {
 				setText("Non");
 				setBackground(Color.RED);
 			}
-			setHorizontalAlignment(SwingConstants.CENTER);
 		} else {
 			mLog.severe("Invalid value type in FormatCompatibilityResult cell. Should be FormatCompatibilityResult but is " + value.getClass().getName());
 		}
-		
-		return this;
 	}
-
 }
