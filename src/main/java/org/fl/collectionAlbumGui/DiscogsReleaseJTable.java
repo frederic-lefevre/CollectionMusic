@@ -62,11 +62,6 @@ public class DiscogsReleaseJTable extends JTable {
 		getColumnModel().getColumn(DisocgsReleaseTableModel.ALBUM_LINK_COL_IDX).setPreferredWidth(100);
 		getColumnModel().getColumn(DisocgsReleaseTableModel.FORMAT_MATCH_COL_IDX).setPreferredWidth(100);
 		
-		// Row sorter
-		TableRowSorter<TableModel> sorter = new TableRowSorter<>(getModel());
-		setRowSorter(sorter);
-		sorter.sort();
-		
 		// Allow single row selection only
 		ListSelectionModel listSelectionModel = new DefaultListSelectionModel();
 		listSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -75,6 +70,11 @@ public class DiscogsReleaseJTable extends JTable {
 		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		
 		addMouseListener(new DiscogsInventoryMouseAdapter(this, Control.getOsActionOnDiscogsRelease(), albumsContainer, generationPane));
+		setAutoCreateRowSorter(true);
+		
+		// Row sorter
+		TableRowSorter<TableModel> sorter = new TableRowSorter<>(getModel());
+		setRowSorter(sorter);
 	}
 
 	public DiscogsAlbumRelease getSelectedDisocgsRelease(){
