@@ -96,14 +96,20 @@ class ControlTest {
 				buildInfo -> { 
 					assertThat(buildInfo.get("moduleName")).isNotNull();
 					assertThat(buildInfo.get("moduleName").asText()).isEqualTo("org.fl.collectionAlbum");
+					assertThat(buildInfo.get("version")).isNotNull();
+					assertThat(buildInfo.get("version").asText()).isNotEmpty();
 				},
 				buildInfo -> { 
 					assertThat(buildInfo.get("moduleName")).isNotNull();
 					assertThat(buildInfo.get("moduleName").asText()).isEqualTo("org.fl.util");
+					assertThat(buildInfo.get("version")).isNotNull();
+					assertThat(buildInfo.get("version").asText()).isNotEmpty();
 				},
 				buildInfo -> { 
 					assertThat(buildInfo.get("moduleName")).isNotNull();
 					assertThat(buildInfo.get("moduleName").asText()).isEqualTo("org.fl.discogsInterface");
+					assertThat(buildInfo.get("version")).isNotNull();
+					assertThat(buildInfo.get("version").asText()).isNotEmpty();
 				}
 				);
 	}
