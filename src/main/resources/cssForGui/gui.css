@@ -19,3 +19,14 @@ span.artiste { font-size: x-large;
 				font-weight: bold;
 }
  
+span.artistesmall { font-size: 9px;
+             padding : 0px ;
+             margin : 0px ;
+             border : 0px;
+}
+
+span.interv { font-size: 8px;
+             padding : 0px ;
+             margin : 0px ;
+             border : 0px;
+}

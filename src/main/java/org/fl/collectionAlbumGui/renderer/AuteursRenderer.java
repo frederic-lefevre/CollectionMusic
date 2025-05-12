@@ -24,45 +24,39 @@ SOFTWARE.
 
 package org.fl.collectionAlbumGui.renderer;
 
-import java.awt.Component;
+import java.awt.Font;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
-import javax.swing.JLabel;
-import javax.swing.JTable;
-import javax.swing.table.TableCellRenderer;
+import javax.swing.SwingConstants;
 
 import org.fl.collectionAlbum.albums.Album;
-import org.fl.collectionAlbum.artistes.Artiste;
+import org.fl.collectionAlbum.utils.AlbumUtils;
+import org.fl.util.swing.CustomTableCellRenderer;
 
-public class AuteursRenderer extends JLabel implements TableCellRenderer {
+public class AuteursRenderer extends CustomTableCellRenderer {
 
 	private static final long serialVersionUID = 1L;
 
 	private static final Logger mLog = Logger.getLogger(AuteursRenderer.class.getName());
 	
-	private static final String AUTEURS_SEPARATOR = ", ";
+	private static final Font font = new Font("Dialog", Font.PLAIN, 12);
 	
 	public AuteursRenderer() {
-		super();
+		super(font, SwingConstants.LEFT);
 	}
 
 	@Override
-	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus,
-			int row, int column) {
-
+	public void valueProcessor(Object value) {
+		
 		if (value == null) {
 			// This may happen when rescanning the album collection
 			mLog.fine("Null value in Auteurs cell. Should be an Album");
 			setText("Valeur null");
 		} else if (value instanceof Album album) {
-			setText(album.getAuteurs().stream()
-					.map(Artiste::getNomComplet)
-					.collect(Collectors.joining(AUTEURS_SEPARATOR)));
+			setText(AlbumUtils.getHtmlForArtistes(album));
 		} else {
 			mLog.severe("Invalid value type in Auteurs cell. Should be Album but is " + value.getClass().getName());
-		}
-		return this;
+		}	
 	}
 
 }

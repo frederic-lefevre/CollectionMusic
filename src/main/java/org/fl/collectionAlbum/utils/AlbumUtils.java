@@ -25,6 +25,7 @@ SOFTWARE.
 package org.fl.collectionAlbum.utils;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.fl.collectionAlbum.Control;
@@ -33,6 +34,77 @@ import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.format.ContentNature;
 
 public class AlbumUtils {
+	
+	private static final String AUTEURS_SEPARATOR = ", ";
+	
+	public static String getHtmlForArtistes(Album album) {
+		
+		StringBuilder buf = new StringBuilder();	
+		
+		buf.append("<html><head><style>");
+		buf.append(Control.getCssForGui());
+		buf.append("</style></head><body>");
+		
+		List<Artiste> artistes = album.getAuteurs();
+		if ((artistes != null) && !artistes.isEmpty()) {
+			appendHtmlForArtistes(buf, album, artistes, true);
+		}
+		buf.append("</body></html>");
+		return buf.toString();
+	}
+	
+	private static void appendHtmlForArtistes(StringBuilder buf, Album album, List<Artiste> artistes, boolean compact) {
+				
+		String auteurCssClass;
+		if (compact) {
+			auteurCssClass = "artistesmall";
+			buf.append("<span class=\"")
+				.append(auteurCssClass).append("\">")
+				.append(album.getAuteurs().stream()
+							.map(Artiste::getNomComplet)
+							.collect(Collectors.joining(AUTEURS_SEPARATOR)))
+				.append("</span><br/>");
+		} else {
+			auteurCssClass = "artiste";
+			artistes.forEach(artiste ->
+					buf.append("<span class=\"").append(auteurCssClass).append("\">").append(artiste.getNomComplet()).append("</span><br/>")
+				);
+		}
+		
+		if (album.hasIntervenant()) {
+			if (compact) {
+				buf.append("<span class=\"interv\">");
+		
+				appendIntervenants(buf, "- Direction: ", album.getChefsOrchestre(), compact);
+				appendIntervenants(buf, "- Interprète: ", album.getInterpretes(), compact);
+				appendIntervenants(buf, "- Ensemble: ", album.getEnsembles(), compact);
+
+			} else {
+				buf.append("Interprètes:");
+				buf.append("<ul>");
+				
+				appendIntervenants(buf, "<li>Direction: ", album.getChefsOrchestre(), compact);
+				appendIntervenants(buf, "<li>Interprète: ", album.getInterpretes(), compact);
+				appendIntervenants(buf, "<li>Ensemble: ", album.getEnsembles(), compact);
+				
+				buf.append("</ul>");
+			}	
+		}		
+	}
+	
+	private static void appendIntervenants(StringBuilder buf, String prefix, List<Artiste> artistes, boolean compact) {
+		
+		if (! artistes.isEmpty()) {
+			if (compact) {			
+				buf.append(prefix)
+					.append(artistes.stream()
+							.map(Artiste::getNomComplet)
+							.collect(Collectors.joining(AUTEURS_SEPARATOR)));
+			} else {
+				artistes.forEach(artiste -> buf.append(prefix).append(artiste.getNomComplet()));
+			}
+		}
+	}
 	
 	public static String getSimpleHtml(Album album) {
 		
@@ -45,27 +117,9 @@ public class AlbumUtils {
 		buf.append("<h1>").append(album.getTitre()).append("</h1");
 		
 		List<Artiste> artistes = album.getAuteurs();
-		if (artistes != null) {
+		if ((artistes != null) && !artistes.isEmpty()) {
 			buf.append("<h3>Artistes:</h3>");
-			
-			artistes.forEach(artiste ->
-				buf.append("<span class=\"artiste\">").append(artiste.getPrenoms()).append(" ").append(artiste.getNom()).append("</span><br/>")
-			);
-			
-			if (album.hasIntervenant()) {
-				buf.append("Interprètes:");
-				buf.append("<ul>");
-				album.getChefsOrchestre().forEach(chefOrchestre ->
-					buf.append("<li>Direction: ").append(chefOrchestre.getPrenoms()).append(" ").append(chefOrchestre.getNom()).append("</li>")
-						);
-				album.getInterpretes().forEach(interprete ->
-					buf.append("<li>Interprète: ").append(interprete.getPrenoms()).append(" ").append(interprete.getNom()).append("</li>")
-				);
-				album.getEnsembles().forEach(ensemble ->
-					buf.append("<li>Ensemble: ").append(ensemble.getPrenoms()).append(" ").append(ensemble.getNom()).append("</li>")
-				);
-				buf.append("</ul>");
-			}
+			appendHtmlForArtistes(buf, album, artistes, false);
 		}
 		
 		buf.append("<h3>Dates de composition / Dates d'enregistrement:</h3>");
@@ -115,9 +169,6 @@ public class AlbumUtils {
 		}
 
 		buf.append("</body></html>");
-		return buf.toString();
-		
+		return buf.toString();		
 	}
-
-
 }

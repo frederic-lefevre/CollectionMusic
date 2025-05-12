@@ -76,8 +76,8 @@ public class AlbumsJTable extends JTable {
 			.setCellEditor(new MediaFilesCellEditor(this, mediaFilesSearchListeners, mediaFilesValidationListeners));
 		getColumnModel().getColumn(AlbumsTableModel.PROBLEM_COL_IDX)
 			.setCellRenderer(new CollectionBooleanRenderer());
-		getColumnModel().getColumn(AlbumsTableModel.TITRE_COL_IDX).setPreferredWidth(350);
-		getColumnModel().getColumn(AlbumsTableModel.AUTEUR_COL_IDX).setPreferredWidth(350);
+		getColumnModel().getColumn(AlbumsTableModel.TITRE_COL_IDX).setPreferredWidth(400);
+		getColumnModel().getColumn(AlbumsTableModel.AUTEUR_COL_IDX).setPreferredWidth(500);
 		getColumnModel().getColumn(AlbumsTableModel.FORMAT_COL_IDX).setPreferredWidth(150);
 		getColumnModel().getColumn(AlbumsTableModel.MEDIA_FILES_COL_IDX).setPreferredWidth(400);
 		getColumnModel().getColumn(AlbumsTableModel.PROBLEM_COL_IDX).setPreferredWidth(80);
