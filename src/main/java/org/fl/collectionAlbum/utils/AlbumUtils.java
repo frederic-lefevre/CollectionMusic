@@ -32,6 +32,7 @@ import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.format.ContentNature;
+import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 
 public class AlbumUtils {
 	
@@ -39,11 +40,7 @@ public class AlbumUtils {
 	
 	public static String getHtmlForArtistes(Album album) {
 		
-		StringBuilder buf = new StringBuilder();	
-		
-		buf.append("<html><head><style>");
-		buf.append(Control.getCssForGui());
-		buf.append("</style></head><body>");
+		StringBuilder buf = getStringBuilderWithHtmlBegin();
 		
 		List<Artiste> artistes = album.getAuteurs();
 		if ((artistes != null) && !artistes.isEmpty()) {
@@ -106,13 +103,17 @@ public class AlbumUtils {
 		}
 	}
 	
+	private static StringBuilder getStringBuilderWithHtmlBegin() {
+		return new StringBuilder()
+				.append("<html><head><style>")
+				.append(Control.getCssForGui())
+				.append("</style></head><body>");
+		
+	}
+	
 	public static String getSimpleHtml(Album album) {
 		
-		StringBuilder buf = new StringBuilder();	
-		
-		buf.append("<html><head><style>");
-		buf.append(Control.getCssForGui());
-		buf.append("</style></head><body>");
+		StringBuilder buf = getStringBuilderWithHtmlBegin();	
 		
 		buf.append("<h1>").append(album.getTitre()).append("</h1");
 		
@@ -168,6 +169,29 @@ public class AlbumUtils {
 			album.getUrlLinks().forEach(urlLink -> buf.append(" <li><h3><a href=\"").append(urlLink.toString()).append(""));
 		}
 
+		buf.append("</body></html>");
+		return buf.toString();		
+	}
+	
+	public static String getHtmlForMediaFiles(Album album) {
+		
+		StringBuilder buf = getStringBuilderWithHtmlBegin();
+		Stream.of(ContentNature.values()).forEachOrdered(contentNature -> {
+			if (!album.hasContentNature(contentNature)) {
+				buf.append("<span class=\"nomedia\">Pas de contenu ").append(contentNature.getNom()).append("</span><br/>");
+			} else if (album.hasMediaFiles(contentNature)) {
+				 if (! MediaFilesInventories.getMediaFileInventory(contentNature).isConnected()) {
+					 buf.append("<span class=\"mediako\">Répertoire des fichiers ").append(contentNature.getNom()).append(" non connecté</span><br/>");
+				 } else if (album.hasMediaFilePathNotFound(contentNature) ||
+							album.hasMissingOrInvalidMediaFilePath(contentNature)) {
+					 buf.append("<span class=\"mediako\">Chemin ").append(contentNature.getNom()).append(" manquant ou invalides</span><br/>");
+				 } else {
+					 buf.append("<span class=\"mediaok\">Chemin ").append(contentNature.getNom()).append("  trouvé</span><br/>");
+				 }
+			 } else {
+				 buf.append("<span class=\"nofile\">Pas de fichier ").append(contentNature.getNom()).append("</span><br/>");
+			 }
+		});
 		buf.append("</body></html>");
 		return buf.toString();		
 	}

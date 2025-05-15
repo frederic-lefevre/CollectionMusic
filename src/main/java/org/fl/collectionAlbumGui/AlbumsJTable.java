@@ -24,7 +24,6 @@ SOFTWARE.
 
 package org.fl.collectionAlbumGui;
 
-import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.swing.DefaultListSelectionModel;
@@ -38,8 +37,6 @@ import org.fl.collectionAlbum.RangementComparator;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbumGui.adapter.AlbumMouseAdapter;
-import org.fl.collectionAlbumGui.listener.MediaFileValidationListener;
-import org.fl.collectionAlbumGui.listener.MediaFilesSearchListener;
 import org.fl.collectionAlbumGui.renderer.AuteursRenderer;
 import org.fl.collectionAlbumGui.renderer.CollectionBooleanRenderer;
 import org.fl.collectionAlbumGui.renderer.MediaFilesRenderer;
@@ -54,32 +51,17 @@ public class AlbumsJTable extends JTable {
 		super(dm);
 		
 		setFillsViewportHeight(true);
-		setAutoCreateRowSorter(true);
 		
-		Map<ContentNature, MediaFilesSearchListener> mediaFilesSearchListeners = 
-				Map.of(
-					ContentNature.AUDIO, new MediaFilesSearchListener(this, ContentNature.AUDIO),
-					ContentNature.VIDEO, new MediaFilesSearchListener(this, ContentNature.VIDEO
-				));
-
-		Map<ContentNature, MediaFileValidationListener> mediaFilesValidationListeners = 
-				Map.of(
-					ContentNature.AUDIO, new MediaFileValidationListener(this, ContentNature.AUDIO, generationPane),
-					ContentNature.VIDEO, new MediaFileValidationListener(this, ContentNature.VIDEO, generationPane
-				));
+		setRowHeight(ContentNature.values().length*25);
 		
-		getColumnModel().getColumn(AlbumsTableModel.AUTEUR_COL_IDX)
-			.setCellRenderer(new AuteursRenderer());
-		getColumnModel().getColumn(AlbumsTableModel.MEDIA_FILES_COL_IDX)
-			.setCellRenderer(new MediaFilesRenderer(mediaFilesSearchListeners, mediaFilesValidationListeners));
-		getColumnModel().getColumn(AlbumsTableModel.MEDIA_FILES_COL_IDX)
-			.setCellEditor(new MediaFilesCellEditor(this, mediaFilesSearchListeners, mediaFilesValidationListeners));
-		getColumnModel().getColumn(AlbumsTableModel.PROBLEM_COL_IDX)
-			.setCellRenderer(new CollectionBooleanRenderer());
-		getColumnModel().getColumn(AlbumsTableModel.TITRE_COL_IDX).setPreferredWidth(400);
-		getColumnModel().getColumn(AlbumsTableModel.AUTEUR_COL_IDX).setPreferredWidth(500);
+		getColumnModel().getColumn(AlbumsTableModel.AUTEUR_COL_IDX).setCellRenderer(new AuteursRenderer());
+		getColumnModel().getColumn(AlbumsTableModel.MEDIA_FILES_COL_IDX).setCellRenderer(new MediaFilesRenderer());
+		getColumnModel().getColumn(AlbumsTableModel.PROBLEM_COL_IDX).setCellRenderer(new CollectionBooleanRenderer());
+		
+		getColumnModel().getColumn(AlbumsTableModel.TITRE_COL_IDX).setPreferredWidth(500);
+		getColumnModel().getColumn(AlbumsTableModel.AUTEUR_COL_IDX).setPreferredWidth(600);
 		getColumnModel().getColumn(AlbumsTableModel.FORMAT_COL_IDX).setPreferredWidth(150);
-		getColumnModel().getColumn(AlbumsTableModel.MEDIA_FILES_COL_IDX).setPreferredWidth(400);
+		getColumnModel().getColumn(AlbumsTableModel.MEDIA_FILES_COL_IDX).setPreferredWidth(250);
 		getColumnModel().getColumn(AlbumsTableModel.PROBLEM_COL_IDX).setPreferredWidth(80);
 		getColumnModel().getColumn(AlbumsTableModel.DISCOGS_COL_IDX).setPreferredWidth(120);
 		
