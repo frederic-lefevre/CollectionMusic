@@ -73,7 +73,6 @@ public class AlbumsJTable extends JTable {
 		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		
 		addMouseListener(new AlbumMouseAdapter(this, Control.getOsActionsOnAlbum(), generationPane));
-		setAutoCreateRowSorter(true);
 		
 		// Row sorter
 		TableRowSorter<TableModel> sorter = new TableRowSorter<>(getModel());
