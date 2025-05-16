@@ -32,10 +32,10 @@ import static org.assertj.core.api.Assertions.*;
 
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.Artiste;
+import org.fl.collectionAlbum.gui.ProgressInformationPanel;
 import org.fl.collectionAlbum.metrics.CollectionMetrics;
 import org.fl.collectionAlbum.metrics.ConcertMetrics;
 import org.fl.collectionAlbum.metrics.Metrics;
-import org.fl.collectionAlbumGui.ProgressInformationPanel;
 import org.junit.jupiter.api.Test;
 
 class CollectionAlbumsTest {

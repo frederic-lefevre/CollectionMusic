@@ -41,6 +41,8 @@ import org.fl.collectionAlbum.concerts.Concert;
 import org.fl.collectionAlbum.concerts.LieuConcert;
 import org.fl.collectionAlbum.concerts.LieuxDesConcerts;
 import org.fl.collectionAlbum.concerts.ListeConcert;
+import org.fl.collectionAlbum.gui.ProgressInformation;
+import org.fl.collectionAlbum.gui.ProgressInformationPanel;
 import org.fl.collectionAlbum.metrics.CollectionMetrics;
 import org.fl.collectionAlbum.metrics.ConcertMetrics;
 import org.fl.collectionAlbum.metrics.Metrics;
@@ -57,8 +59,6 @@ import org.fl.collectionAlbum.rapportHtml.CssStyles;
 import org.fl.collectionAlbum.rapportHtml.RapportAlbum;
 import org.fl.collectionAlbum.rapportHtml.RapportAlbumsDunArtiste;
 import org.fl.collectionAlbum.rapportHtml.RapportBuildInfo;
-import org.fl.collectionAlbumGui.ProgressInformation;
-import org.fl.collectionAlbumGui.ProgressInformationPanel;
 import org.fl.util.file.FilesUtils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
