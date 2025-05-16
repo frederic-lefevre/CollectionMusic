@@ -31,19 +31,20 @@ span.interv { font-size: 8px;
              border : 0px;
 }
 
-span.mediaok {
+td.mediaok {
 	background: lime;
 }
 
-span.nomedia {
+td.nomedia {
 	background: silver;
 }
 
-span.nofile {
+td.nofile {
+	color: white;
 	background: fuchsia;
 }
 
-span.mediako {
+td.mediako {
 	color: white;
 	background: red;
 }

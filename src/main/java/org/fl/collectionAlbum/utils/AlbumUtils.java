@@ -176,23 +176,29 @@ public class AlbumUtils {
 	public static String getHtmlForMediaFiles(Album album) {
 		
 		StringBuilder buf = getStringBuilderWithHtmlBegin();
+		buf.append("<table border=0>");
 		Stream.of(ContentNature.values()).forEachOrdered(contentNature -> {
 			if (!album.hasContentNature(contentNature)) {
-				buf.append("<span class=\"nomedia\">Pas de contenu ").append(contentNature.getNom()).append("</span><br/>");
+				buf.append("<tr><td class=\"nomedia\">").append(contentNature.getNom())
+					.append("</td><td class=\"nomedia\">Pas de contenu</td></tr>");
 			} else if (album.hasMediaFiles(contentNature)) {
 				 if (! MediaFilesInventories.getMediaFileInventory(contentNature).isConnected()) {
-					 buf.append("<span class=\"mediako\">Répertoire des fichiers ").append(contentNature.getNom()).append(" non connecté</span><br/>");
+					 buf.append("<tr><td class=\"mediako\">").append(contentNature.getNom())
+					 	.append("</td><td class=\"mediako\">Répertoire des fichiers non connecté</td></tr>");
 				 } else if (album.hasMediaFilePathNotFound(contentNature) ||
 							album.hasMissingOrInvalidMediaFilePath(contentNature)) {
-					 buf.append("<span class=\"mediako\">Chemin ").append(contentNature.getNom()).append(" manquant ou invalides</span><br/>");
+					 buf.append("<tr><td class=\"mediako\">").append(contentNature.getNom())
+					 	.append("</td><td class=\"mediako\">Chemin manquant ou invalides</td></tr>");
 				 } else {
-					 buf.append("<span class=\"mediaok\">Chemin ").append(contentNature.getNom()).append("  trouvé</span><br/>");
+					 buf.append("<tr><td class=\"mediaok\">").append(contentNature.getNom())
+					 	.append("</td><td class=\"mediaok\">Chemin trouvé</td></tr>");
 				 }
 			 } else {
-				 buf.append("<span class=\"nofile\">Pas de fichier ").append(contentNature.getNom()).append("</span><br/>");
+				 buf.append("<tr><td class=\"nofile\">").append(contentNature.getNom())
+				 	.append("</td><td class=\"nofile\">Pas de fichier</td></tr>");
 			 }
 		});
-		buf.append("</body></html>");
+		buf.append("</table></body></html>");
 		return buf.toString();		
 	}
 }
