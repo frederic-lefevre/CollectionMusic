@@ -79,7 +79,7 @@
 						</manifestEntries>
 						<manifest>
 							<mainClass>
-								org.fl.collectionAlbumGui.CollectionAlbumGui
+								org.fl.collectionAlbum.gui.CollectionAlbumGui
 							</mainClass>
 						</manifest>
 					</archive>
