@@ -92,7 +92,7 @@ public class DiscogsInventory {
 		
 		DiscogsAlbumRelease discogsAlbumRelease = getInstance().getDiscogsRelease(releaseId);
 		if (discogsAlbumRelease == null) {
-			albumLog.severe("L'album " + album.getTitre() + " est lié à une release discogs (" + releaseId + ") inconnue dans l'inventaire");
+			albumLog.severe("L'album " + album.getTitre() + " (" + album.getJsonFilePath() + ") est lié à une release discogs (" + releaseId + ") inconnue dans l'inventaire");
 		} else {
 			discogsAlbumRelease.addCollectionAlbums(album);
 		}
