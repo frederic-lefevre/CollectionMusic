@@ -207,7 +207,7 @@ public class MediaFilesSearchPane extends JScrollPane {
 		}
 	}
 	
-	private static class MediaFileValidationListener implements ActionListener {
+	private class MediaFileValidationListener implements ActionListener {
 
 		private final Album album;
 		private final ContentNature contentNature;
@@ -225,6 +225,7 @@ public class MediaFilesSearchPane extends JScrollPane {
 			if (success) {
 				// Wirte json into file
 				album.writeJson();
+				updateValue(album);
 				generationPane.rescanNeeded();
 			}	
 		}
