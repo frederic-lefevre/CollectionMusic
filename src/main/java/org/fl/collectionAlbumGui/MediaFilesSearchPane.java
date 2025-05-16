@@ -223,7 +223,7 @@ public class MediaFilesSearchPane extends JScrollPane {
 		public void actionPerformed(ActionEvent e) {
 			boolean success = album.validatePotentialMediaFilePath(contentNature);
 			if (success) {
-				// Wirte json into file
+				// Write json into file
 				album.writeJson();
 				updateValue(album);
 				generationPane.rescanNeeded();
