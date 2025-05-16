@@ -1,6 +1,6 @@
 
 td.mediadetail { vertical-align: top;
-           background: white ;
+           background: white;
              width: auto;
              padding: 2px;
              margin: 2px ;
@@ -26,7 +26,25 @@ span.artistesmall { font-size: 9px;
 }
 
 span.interv { font-size: 8px;
-             padding : 0px ;
-             margin : 0px ;
+             padding : 0px;
+             margin : 0px;
              border : 0px;
+}
+
+td.mediaok {
+	background: lime;
+}
+
+td.nomedia {
+	background: silver;
+}
+
+td.nofile {
+	color: white;
+	background: fuchsia;
+}
+
+td.mediako {
+	color: white;
+	background: red;
 }

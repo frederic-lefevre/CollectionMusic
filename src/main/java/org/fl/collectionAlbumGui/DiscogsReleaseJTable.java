@@ -49,7 +49,6 @@ public class DiscogsReleaseJTable extends JTable {
 		super(dm);
 		
 		setFillsViewportHeight(true);
-		setAutoCreateRowSorter(true);
 		
 		getColumnModel().getColumn(DisocgsReleaseTableModel.ALBUM_LINK_COL_IDX)
 			.setCellRenderer(new CollectionBooleanRenderer());
@@ -70,7 +69,6 @@ public class DiscogsReleaseJTable extends JTable {
 		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		
 		addMouseListener(new DiscogsInventoryMouseAdapter(this, Control.getOsActionOnDiscogsRelease(), albumsContainer, generationPane));
-		setAutoCreateRowSorter(true);
 		
 		// Row sorter
 		TableRowSorter<TableModel> sorter = new TableRowSorter<>(getModel());

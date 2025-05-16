@@ -25,6 +25,9 @@ SOFTWARE.
 package org.fl.collectionAlbumGui;
 
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
@@ -41,27 +44,28 @@ import javax.swing.JScrollPane;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
-import org.fl.collectionAlbumGui.listener.MediaFileValidationListener;
-import org.fl.collectionAlbumGui.listener.MediaFilesSearchListener;
 
-public class MediaFilesPane extends JPanel {
+public class MediaFilesSearchPane extends JScrollPane {
 
 	private static final long serialVersionUID = 1L;
-
+	
+	private static final ContentNature[] CONTENT_NATURES = ContentNature.values();
+	
+	private static final int PREFERRED_WIDTH = 1000;
+	private static final int PREFERRED_HEIGHT = 50*CONTENT_NATURES.length;
+	
 	private Map<ContentNature, JLabel> mediaFilesStatuses;
 	private Map<ContentNature, JButton> mediaFilesSearches;
 	private Map<ContentNature, JButton> mediaFilesValidations;
 	private Map<ContentNature,JScrollPane> statusScrollPanels;
 	private Map<ContentNature,JPanel> mediaFilesPanels;
 	
-	private static final int SINGLE_ROW_HEIGHT = 25;
-	
-	public MediaFilesPane(
-			Map<ContentNature, MediaFilesSearchListener>  mediaFilesSearchListeners, 
-			Map<ContentNature, MediaFileValidationListener> mediaFilesValidationListeners) {
+	public MediaFilesSearchPane(Album album, GenerationPane generationPane) {
 		
 		super();
-		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		
+		Map<ContentNature, MediaFilesSearchListener> mediaFilesSearchListeners = new HashMap<>();
+		Map<ContentNature, MediaFileValidationListener> mediaFilesValidationListeners = new HashMap<>();
 		
 		mediaFilesStatuses = new HashMap<>();
 		mediaFilesSearches = new HashMap<>();
@@ -69,9 +73,19 @@ public class MediaFilesPane extends JPanel {
 		statusScrollPanels = new HashMap<>();
 		mediaFilesPanels = new HashMap<>();
 		
+		Stream.of(CONTENT_NATURES).forEachOrdered(contentNature -> {
+			mediaFilesSearchListeners.put(contentNature, new MediaFilesSearchListener(album, contentNature));
+			mediaFilesValidationListeners.put(contentNature, new MediaFileValidationListener(album, contentNature, generationPane));
+		});
+		
+		
+		setPreferredSize(new Dimension(PREFERRED_WIDTH, PREFERRED_HEIGHT));
+		
+		JPanel mediaFilesSearchPane = new JPanel();
+		mediaFilesSearchPane.setLayout(new BoxLayout(mediaFilesSearchPane, BoxLayout.Y_AXIS));
 		
 		// Search and validation media files button
-		Stream.of(ContentNature.values()).forEachOrdered(contentNature -> {
+		Stream.of(CONTENT_NATURES).forEachOrdered(contentNature -> {
 			
 			JPanel mediaFilePanel = new JPanel();
 			mediaFilePanel.setLayout(new BoxLayout(mediaFilePanel, BoxLayout.X_AXIS));
@@ -91,25 +105,30 @@ public class MediaFilesPane extends JPanel {
 			JScrollPane statusScrollPane = new JScrollPane(mediaFilesStatus);	
 			statusScrollPanels.put(contentNature, statusScrollPane);
 			mediaFilePanel.add(statusScrollPane);
+			mediaFilePanel.add(searchButton);
+			mediaFilePanel.add(validationButton);
 			
-			add(mediaFilePanel);
+			mediaFilesSearchPane.add(mediaFilePanel);
 		});
+		setViewportView(mediaFilesSearchPane);
+		
+		updateValue(album);
 	}
-
-	public int updateValue(Album album) {
+	
+	private void updateValue(Album album) {
 		
-		Stream.of(ContentNature.values())
+		Stream.of(CONTENT_NATURES)
 			.forEachOrdered(contentNature -> 
-				mediaFilesPanels.get(contentNature).remove(mediaFilesValidations.get(contentNature)));
+				mediaFilesValidations.get(contentNature).setVisible(false));
 		
-		return Stream.of(ContentNature.values())
-			.map(contentNature -> {
+		Stream.of(CONTENT_NATURES)
+			.forEach(contentNature -> {
 				JPanel contentPane = mediaFilesPanels.get(contentNature);
 				if (!album.hasContentNature(contentNature)) {
 					mediaFilesStatuses.get(contentNature).setText("Pas de contenu " + contentNature.getNom());
 					contentPane.setBackground(Color.GRAY);
 					statusScrollPanels.get(contentNature).getViewport().setBackground(Color.GRAY);
-					contentPane.remove(mediaFilesSearches.get(contentNature));
+					mediaFilesSearches.get(contentNature).setVisible(false);
 				} else if (album.hasMediaFiles(contentNature)) {
 					if (! MediaFilesInventories.getMediaFileInventory(contentNature).isConnected()) {
 						mediaFilesStatuses.get(contentNature).setText("Répertoire des fichiers " + contentNature.getNom() + " non connecté");
@@ -120,18 +139,18 @@ public class MediaFilesPane extends JPanel {
 							List<Path> potentialMediaFilesPaths = album.getPotentialMediaFilesPaths(contentNature);
 							if (potentialMediaFilesPaths == null) {
 								mediaFilesStatuses.get(contentNature).setText("Chemin " + contentNature.getNom() + " manquant ou invalides");
-								contentPane.add(mediaFilesSearches.get(contentNature));
+								mediaFilesSearches.get(contentNature).setVisible(true);
 								contentPane.setBackground(Color.RED);
 								statusScrollPanels.get(contentNature).getViewport().setBackground(Color.RED);
 						
 							} else if (potentialMediaFilesPaths.isEmpty()) {
 								mediaFilesStatuses.get(contentNature).setText("Aucun chemin " + contentNature.getNom() + " potentiel trouvé");
-								contentPane.remove(mediaFilesSearches.get(contentNature));
+								mediaFilesSearches.get(contentNature).setVisible(false);
 								setBackground(Color.ORANGE);
 								statusScrollPanels.get(contentNature).getViewport().setBackground(Color.ORANGE);
 							} else {
 								mediaFilesStatuses.get(contentNature).setText(potentialMediaFilesList(potentialMediaFilesPaths, contentNature));
-								contentPane.remove(mediaFilesSearches.get(contentNature));
+								mediaFilesSearches.get(contentNature).setVisible(false);
 								contentPane.setBackground(Color.PINK);
 								statusScrollPanels.get(contentNature).getViewport().setBackground(Color.PINK);
 								
@@ -140,9 +159,8 @@ public class MediaFilesPane extends JPanel {
 										(album.getFormatAlbum().getMediaFiles(contentNature).size() == 1)) {
 									// Media file paths can be validated if and only if there is a single potential link
 									// and a single media file defined in the album
-									contentPane.add(mediaFilesValidations.get(contentNature));
+									mediaFilesValidations.get(contentNature).setVisible(true);
 								}
-								return (potentialMediaFilesPaths.size() + 2)*SINGLE_ROW_HEIGHT;
 							}
 						} else {
 							statusScrollPanels.get(contentNature).getViewport().setBackground(Color.GREEN);
@@ -157,22 +175,59 @@ public class MediaFilesPane extends JPanel {
 					statusScrollPanels.get(contentNature).getViewport().setBackground(Color.MAGENTA);
 					contentPane.remove(mediaFilesSearches.get(contentNature));
 				}
-				return SINGLE_ROW_HEIGHT;
-			})
-			.mapToInt(Integer::valueOf)
-		    .sum();
-		
-		
+			});			
 	}
 	
 	private String potentialMediaFilesList(List<Path> potentialMediaFilesPaths, ContentNature contentNature) {
 
-		StringBuilder htmlString = new StringBuilder("<html><body>Chemin potentiels des fichiers " + contentNature.getNom() + ":<br/>");
-
+		StringBuilder htmlString = new StringBuilder();
 		htmlString
+			.append("<html><body>Chemin potentiels des fichiers ")
+			.append(contentNature.getNom())
+			.append(":<br/>")
 			.append(potentialMediaFilesPaths.stream().map(path -> path.toString()).collect(Collectors.joining("<br/>")))
 			.append("</body></html>");
 		
 		return htmlString.toString();
+	}
+	
+	private class MediaFilesSearchListener implements ActionListener {
+
+		private final Album album;
+		private final ContentNature contentNature;		
+		public MediaFilesSearchListener(Album album, ContentNature contentNature) {
+			this.album = album;
+			this.contentNature = contentNature;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {			
+			album.searchPotentialMediaFilesPaths(contentNature);
+			updateValue(album);			
+		}
+	}
+	
+	private class MediaFileValidationListener implements ActionListener {
+
+		private final Album album;
+		private final ContentNature contentNature;
+		private final GenerationPane generationPane;
+		
+		public MediaFileValidationListener(Album album, ContentNature contentNature, GenerationPane generationPane) {
+			this.album = album;
+			this.contentNature = contentNature;
+			this.generationPane = generationPane;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			boolean success = album.validatePotentialMediaFilePath(contentNature);
+			if (success) {
+				// Write json into file
+				album.writeJson();
+				updateValue(album);
+				generationPane.rescanNeeded();
+			}	
+		}
 	}
 }

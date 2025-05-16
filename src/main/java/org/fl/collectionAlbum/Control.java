@@ -95,7 +95,7 @@ public class Control {
 			musicRunningContext.addBuildInformation("org.fl.discogsInterface", org.fl.discogsInterface.inventory.Inventory.class.getClassLoader());
 		
 			collectionProperties = musicRunningContext.getProps();
-		    albumLog.info("Properties taken from " + musicRunningContext.getPropertiesLocation());
+		    albumLog.fine(() -> "Properties taken from " + musicRunningContext.getPropertiesLocation());
 				
 			// Get CharSet to read music files and write rapport
 		    String cs = collectionProperties.getProperty("rapport.charset", "UTF-8");
@@ -105,7 +105,7 @@ public class Control {
 				charset = Charset.defaultCharset();
 				albumLog.severe("Unsupported charset: " + cs + ". Default JVM charset assumed: " + charset);				
 			}
-		
+			
 			// Get the root directory for the album collection and concert
 			collectionDirectoryName = collectionProperties.getPathFromURI("album.rootDir.name");
 			concertDirectoryName = collectionProperties.getPathFromURI("concert.rootDir.name");

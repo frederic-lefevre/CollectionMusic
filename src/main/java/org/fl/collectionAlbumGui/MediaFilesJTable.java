@@ -49,7 +49,6 @@ public class MediaFilesJTable extends JTable {
 		super(dm);
 		
 		setFillsViewportHeight(true);
-		setAutoCreateRowSorter(true);
 		
 		getColumnModel().getColumn(MediaFilesTableModel.ALBUMS_COL_IDX).setCellRenderer(new AlbumsRenderer());
 		getColumnModel().getColumn(MediaFilesTableModel.PATH_COL_IDX).setPreferredWidth(700);
@@ -67,7 +66,6 @@ public class MediaFilesJTable extends JTable {
 		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		
 		addMouseListener(new MediaFileMouseAdapter(this, Control.getOsActionOnMediaFilePath()));
-		setAutoCreateRowSorter(true);
 		
 		// Row sorter
 		TableRowSorter<TableModel> sorter = new TableRowSorter<>(getModel());

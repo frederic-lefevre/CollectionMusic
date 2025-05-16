@@ -32,6 +32,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -44,9 +45,11 @@ import javax.swing.JTextArea;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.ReleaseMatchResult;
+import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbumGui.AlbumsJTable;
 import org.fl.collectionAlbumGui.DetailedAlbumAndDiscogsInfoPane;
 import org.fl.collectionAlbumGui.GenerationPane;
+import org.fl.collectionAlbumGui.MediaFilesSearchPane;
 
 public class AlbumCustomActionListener implements java.awt.event.ActionListener {
 
@@ -56,11 +59,15 @@ public class AlbumCustomActionListener implements java.awt.event.ActionListener 
 	private static final Font monospaced = new Font("monospaced", Font.BOLD, 14);
 	
 	private static final Predicate<Album> isLinkedToDiscogsRelease = (album) -> (album.getDiscogsLink() != null) && !album.getDiscogsLink().isEmpty();
+	private static final Predicate<Album> hasMissingOrInvalidMediaFiles = 
+			(album) -> Stream.of(ContentNature.values())
+				.anyMatch(contentNature -> album.hasMediaFilePathNotFound(contentNature) || album.hasMissingOrInvalidMediaFilePath(contentNature)); 
 	
 	public enum CustomAction {
 		
 		DETAILED_INFO_DISPLAY("Informations détaillées", Objects::nonNull), 
-		DISCOGS_RELEASE_SEARCH("Chercher la release discogs", isLinkedToDiscogsRelease.negate()) ;
+		DISCOGS_RELEASE_SEARCH("Chercher la release discogs", isLinkedToDiscogsRelease.negate()),
+		MISSING_MEDIA_FILES_SEARCH("Chercher les fichiers media manquants ou invalides", hasMissingOrInvalidMediaFiles);
 		
 		private final String actionTitle;
 		private final Predicate<Album> displayable;
@@ -134,6 +141,10 @@ public class AlbumCustomActionListener implements java.awt.event.ActionListener 
 					infoReleaseScroll.setPreferredSize(new Dimension(1650,850));
 					JOptionPane.showMessageDialog(null, infoReleaseScroll, "Recherche de release discogs", JOptionPane.INFORMATION_MESSAGE);
 					
+					break;
+				case MISSING_MEDIA_FILES_SEARCH:
+					
+					JOptionPane.showMessageDialog(null, new MediaFilesSearchPane(selectedAlbum, generationPane), "Recherche de fichiers media manquants ou invalides", JOptionPane.INFORMATION_MESSAGE);
 					break;
 				default:
 					aLog.severe("Unkown custom action triggered for discogs release: " + customAction);

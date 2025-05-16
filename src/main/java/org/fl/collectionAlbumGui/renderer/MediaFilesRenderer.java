@@ -24,49 +24,38 @@ SOFTWARE.
 
 package org.fl.collectionAlbumGui.renderer;
 
-import java.awt.Color;
-import java.awt.Component;
-import java.util.Map;
+import java.awt.Font;
 import java.util.logging.Logger;
 
-import javax.swing.JTable;
-import javax.swing.table.TableCellRenderer;
+import javax.swing.SwingConstants;
 
 import org.fl.collectionAlbum.albums.Album;
-import org.fl.collectionAlbum.format.ContentNature;
-import org.fl.collectionAlbumGui.MediaFilesPane;
-import org.fl.collectionAlbumGui.listener.MediaFileValidationListener;
-import org.fl.collectionAlbumGui.listener.MediaFilesSearchListener;
+import org.fl.collectionAlbum.utils.AlbumUtils;
+import org.fl.util.swing.CustomTableCellRenderer;
 
-public class MediaFilesRenderer extends MediaFilesPane implements TableCellRenderer {
+public class MediaFilesRenderer extends CustomTableCellRenderer {
 
 	private static final long serialVersionUID = 1L;
 
 	private static final Logger mLog = Logger.getLogger(MediaFilesRenderer.class.getName());
 	
-	public MediaFilesRenderer(
-			Map<ContentNature, MediaFilesSearchListener>  mediaFilesSearchListeners, 
-			Map<ContentNature, MediaFileValidationListener> mediaFilesValidationListeners) {
-		super(mediaFilesSearchListeners, mediaFilesValidationListeners);
+	private static final Font font = new Font("Dialog", Font.BOLD, 12);
+	
+	public MediaFilesRenderer() {
+		super(font, SwingConstants.LEFT);
 	}
 
-	@Override 
-	public Component getTableCellRendererComponent(
-		      JTable table, Object value, boolean isSelected, boolean hasFocus,
-		      int row, int column) {
+	@Override
+	public void valueProcessor(Object value) {
+		
 		if (value == null) {
 			// This may happen when rescanning the album collection
-			mLog.fine("Null value in MediaFiles cell. Should be an Album");
-			setBackground(Color.RED);
+			mLog.fine("Null value in Auteurs cell. Should be an Album");
+			setText("Valeur null");
 		} else if (value instanceof Album album) {
-			int rowHeight = updateValue(album);
-			table.setRowHeight(row, rowHeight);
-			if (isSelected) {
-				setBackground(Color.LIGHT_GRAY);
-			}
+			setText(AlbumUtils.getHtmlForMediaFiles(album));	
 		} else {
 			mLog.severe("Invalid value type in MediaFiles cell. Should be Album but is " + value.getClass().getName());
 		}
-		return this;
 	}
 }
