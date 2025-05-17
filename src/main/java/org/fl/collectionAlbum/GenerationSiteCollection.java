@@ -101,8 +101,8 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 			collectionAlbumContainer.getCollectionAlbumsMusiques().sortRangementAlbum();
 
 			// Update collection and concert metrics history
-			Control.getCollectionMetricsHsitory().addPresentCollectionMetrics(System.currentTimeMillis(), collectionAlbumContainer);
-			Control.getConcertMetricsHsitory().addPresentConcertMetrics(System.currentTimeMillis(), collectionAlbumContainer);
+			Control.getCollectionMetricsHsitory().addPresentCollectionMetricsToHistory(System.currentTimeMillis(), collectionAlbumContainer);
+			Control.getConcertMetricsHsitory().addPresentConcertMetricsToHistory(System.currentTimeMillis(), collectionAlbumContainer);
 			
 			albumLog.info("Fin de la génération");
 

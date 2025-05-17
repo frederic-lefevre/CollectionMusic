@@ -44,9 +44,11 @@ class MetricsHistoryTest {
 	private static final Path historyFolderBase = Path.of("C:\\ForTests\\CollectionMusiqueHistory");
 	private static final long now = System.currentTimeMillis();
 	private static final long yesterday = System.currentTimeMillis() - 24*3600*1000;
+	private static final long twoDaysAgo = System.currentTimeMillis() - 48*3600*1000;
 	
 	private static final Path historyPath1 = historyFolderBase.resolve("testHistoryDirectoryPath1");
 	private static final Path historyPath2 = historyFolderBase.resolve("testHistoryDirectoryPath2");
+	private static final Path historyPath3 = historyFolderBase.resolve("testHistoryDirectoryPath3");
 	
 	private static void deleteFolderIfExist(Path folder) throws IOException {
 		if (Files.exists(folder)) {
@@ -59,14 +61,17 @@ class MetricsHistoryTest {
 		
 		deleteFolderIfExist(historyPath1);
 		deleteFolderIfExist(historyPath2);
+		deleteFolderIfExist(historyPath3);
 		Files.createDirectory(historyPath1);
 		Files.createDirectory(historyPath2);
+		Files.createDirectory(historyPath3);
 	}
 	
 	@AfterAll
 	static void deleteHistoryFolder() throws IOException {
 		deleteFolderIfExist(historyPath1);
 		deleteFolderIfExist(historyPath2);
+		deleteFolderIfExist(historyPath3);
 	}
 	
 	@Test
@@ -119,17 +124,45 @@ class MetricsHistoryTest {
 	void testMetricsHistoryOrder() throws IOException {
 		
 		Metrics todayMetrics = new Metrics(now, Map.of("albums", 10.0, "Artiste", 5.0));
-		Metrics yesterdayyMetrics = new Metrics(yesterday, Map.of("albums", 8.0, "Artiste", 5.0));
+		Metrics yesterdayMetrics = new Metrics(yesterday, Map.of("albums", 8.0, "Artiste", 5.0));
 		
 		MetricsHistory metricsHistory = new MetricsHistory(historyPath2);
 		
 		metricsHistory.addNewMetrics(todayMetrics);
-		metricsHistory.addNewMetrics(yesterdayyMetrics);
+		metricsHistory.addNewMetrics(yesterdayMetrics);
 		
 		assertThat(metricsHistory.getMetricsHistory()).hasSize(2)
 			.satisfiesExactly(
 					metric1 -> { 
 						assertThat(metric1.getMetricTimeStamp()).isEqualTo(yesterday);
+						assertThat(metric1.hasSameMetricsAs(new Metrics(0, Map.of("albums", 8.0, "Artiste", 5.0))));
+					},
+					metric2 -> { 
+						assertThat(metric2.getMetricTimeStamp()).isEqualTo(now);
+						assertThat(metric2.hasSameMetricsAs(new Metrics(0, Map.of("albums", 10.0, "Artiste", 5.0))));
+					}
+					);
+	}
+	
+	@Test
+	void testAddingSameMetricsTwice() throws IOException {
+		
+		Metrics todayMetrics = new Metrics(now, Map.of("albums", 10.0, "Artiste", 5.0));
+		Metrics todayMetrics2 = new Metrics(now, Map.of("albums", 10.0, "Artiste", 5.0));
+		Metrics yesterdayMetrics = new Metrics(yesterday, Map.of("albums", 8.0, "Artiste", 5.0));
+		Metrics twoDaysAgoMetrics = new Metrics(twoDaysAgo, Map.of("albums", 8.0, "Artiste", 5.0));
+		
+		MetricsHistory metricsHistory = new MetricsHistory(historyPath3);
+		
+		metricsHistory.addNewMetrics(twoDaysAgoMetrics);
+		metricsHistory.addNewMetrics(yesterdayMetrics);
+		metricsHistory.addNewMetrics(todayMetrics);
+		metricsHistory.addNewMetrics(todayMetrics2);
+		
+		assertThat(metricsHistory.getMetricsHistory()).hasSize(2)
+			.satisfiesExactly(
+					metric1 -> { 
+						assertThat(metric1.getMetricTimeStamp()).isEqualTo(twoDaysAgo);
 						assertThat(metric1.hasSameMetricsAs(new Metrics(0, Map.of("albums", 8.0, "Artiste", 5.0))));
 					},
 					metric2 -> { 

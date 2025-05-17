@@ -159,10 +159,14 @@ public class Format {
 				albumLog.log(Level.SEVERE, "Exception when parsing album format", e);
 			}			
 		} else {
-			hasError = true;
-			Stream.of(ContentNature.values()).forEachOrdered(contentNature -> {
-				mediaFiles.put(contentNature, null);
-			});
+			// Format for a newly created ListeAlbum (which is empty)
+			hasError = false;
+			Stream.of(MediaSupports.values()).forEachOrdered(mediaSupport -> 
+				tableFormat.put(mediaSupport, 0D)
+			);
+			Stream.of(ContentNature.values()).forEachOrdered(contentNature -> 
+				mediaFiles.put(contentNature, null)
+			);
 		}
 	}
 
@@ -238,8 +242,7 @@ public class Format {
 		return tableFormat.keySet().stream()
 			.map(MediaSupports::getSupportPhysique)
 			.filter(sp -> sp.equals(supportPhysique))
-			.findFirst()
-			.isPresent();
+			.anyMatch(sp -> this.getNbSupportPhysique(sp) > 0);
 	}
 	
 	// Get the poids of the format

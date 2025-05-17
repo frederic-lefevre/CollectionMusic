@@ -47,7 +47,15 @@ public class CollectionMetricsHistory extends MetricsHistory {
 		return collectionMetricsHistory;
 	}
 	
-	public Metrics addPresentCollectionMetrics(long ts, CollectionAlbumContainer collectionAlbumContainer) {
+	public Metrics addPresentCollectionMetricsToHistory(long ts, CollectionAlbumContainer collectionAlbumContainer) {
+	
+		Metrics presentMetrics = getCollectionMetrics(ts, collectionAlbumContainer);
+		addNewMetrics(presentMetrics);
+
+		return presentMetrics;
+	}
+	
+	public Metrics getCollectionMetrics(long ts, CollectionAlbumContainer collectionAlbumContainer) {
 		
 		Map<String, Double> collectionMetrics = new HashMap<>();
 		
@@ -63,10 +71,7 @@ public class CollectionMetricsHistory extends MetricsHistory {
 			.stream()
 			.forEachOrdered(entry -> collectionMetrics.put(entry.getKey().getId(), entry.getValue()));	
 		
-		Metrics presentMetrics = new Metrics(ts, collectionMetrics);
-		addNewMetrics(presentMetrics);
-
-		return presentMetrics;
+		return new Metrics(ts, collectionMetrics);
 	}
 	
 	private CollectionMetricsHistory(Path storagePath) throws IOException {

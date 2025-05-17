@@ -46,14 +46,19 @@ public class ConcertMetricsHistory extends MetricsHistory {
 		return concertMetricsHistory;
 	}
 	
-	public Metrics addPresentConcertMetrics(long ts, CollectionAlbumContainer collectionAlbumContainer) {	
+	public Metrics addPresentConcertMetricsToHistory(long ts, CollectionAlbumContainer collectionAlbumContainer) {	
 
-		Metrics presentMetrics = new Metrics(ts, 		Map.of(
-				NB_ARTISTE, (double)collectionAlbumContainer.getConcertsArtistes().getNombreArtistes(),
-				NB_CONCERT, (double)collectionAlbumContainer.getConcerts().getNombreConcerts()));
+		Metrics presentMetrics = getConcertMetrics(ts, collectionAlbumContainer);
 		addNewMetrics(presentMetrics);
 		
 		return presentMetrics;
+	}
+	
+	public Metrics getConcertMetrics(long ts, CollectionAlbumContainer collectionAlbumContainer) {	
+
+		return new Metrics(ts, 		Map.of(
+				NB_ARTISTE, (double)collectionAlbumContainer.getConcertsArtistes().getNombreArtistes(),
+				NB_CONCERT, (double)collectionAlbumContainer.getConcerts().getNombreConcerts()));
 	}
 	
 	private ConcertMetricsHistory(Path storagePath) throws IOException {

@@ -77,17 +77,16 @@ class CollectionAlbumContainerTest {
 		assertThat(albumsContainer2).isEqualTo(albumsContainer);
 		TestUtils.assertEmptyCollection(albumsContainer);
 		
-		Metrics collectionMetrics = Control.getCollectionMetricsHsitory().addPresentCollectionMetrics(0, albumsContainer);
+		Metrics collectionMetrics = Control.getCollectionMetricsHsitory().getCollectionMetrics(0, albumsContainer);
 		
 		assertThat(collectionMetrics.getMetricTimeStamp()).isZero();
-		assertThat(collectionMetrics.getMetrics()).hasSize(3)
+		assertThat(collectionMetrics.getMetrics()).hasSize(12)
 			.contains(new SimpleEntry<>("nombreAlbum", (double)0), new SimpleEntry<>("nombreArtiste", (double)0));
 		
-		Metrics concertMatrics = Control.getConcertMetricsHsitory().addPresentConcertMetrics(0, albumsContainer);
+		Metrics concertMatrics = Control.getConcertMetricsHsitory().getConcertMetrics(0, albumsContainer);
 		assertThat(concertMatrics.getMetricTimeStamp()).isZero();
 		assertThat(concertMatrics.getMetrics()).hasSize(2)
 			.contains(new SimpleEntry<>("nombreConcert", (double)0), new SimpleEntry<>("nombreArtiste", (double)0));
-		
 	}
 	
 	private static final String albumStr1 = """
@@ -195,7 +194,7 @@ class CollectionAlbumContainerTest {
 			.singleElement()
 			.satisfies(alb -> assertThat(alb.getTitre()).isEqualTo("Portrait in jazz"));
 		
-		Metrics collectionMetrics = Control.getCollectionMetricsHsitory().addPresentCollectionMetrics(0, albumsContainer);
+		Metrics collectionMetrics = Control.getCollectionMetricsHsitory().getCollectionMetrics(0, albumsContainer);
 		
 		assertThat(collectionMetrics.getMetricTimeStamp()).isZero();
 		assertThat(collectionMetrics.getMetrics()).hasSize(12)
@@ -209,7 +208,7 @@ class CollectionAlbumContainerTest {
 					new SimpleEntry<>("xnbdvd", (double)0)
 					);
 		
-		Metrics concertMatrics = Control.getConcertMetricsHsitory().addPresentConcertMetrics(0, albumsContainer);
+		Metrics concertMatrics = Control.getConcertMetricsHsitory().getConcertMetrics(0, albumsContainer);
 		assertThat(concertMatrics.getMetricTimeStamp()).isZero();
 		assertThat(concertMatrics.getMetrics()).hasSize(2)
 			.contains(new SimpleEntry<>("nombreConcert", (double)0), new SimpleEntry<>("nombreArtiste", (double)0));

@@ -88,8 +88,17 @@ public class MetricsHistory {
 	}
 
 	protected boolean addNewMetrics(Metrics metrics) {
-		
-		if (metricsHistory.stream().allMatch(m -> !m.hasSameMetricsAs(metrics))) {
+	
+		if ((! metricsHistory.isEmpty()) &&
+			(! metrics.hasSameMetricsTypeAs(metricsHistory.getFirst()))) {
+			
+			String errorMessage = "Adding a incompatible metrics to metricsHistory.\nMetrics added: " + Objects.toString(metrics.getMetrics()) 
+				+ "\nHistory metrics: " + Objects.toString(metricsHistory.getFirst().getMetrics());
+			mLog.severe(errorMessage);
+			throw new IllegalArgumentException(errorMessage);	
+			
+		} else if (metricsHistory.stream().allMatch(m -> !m.hasSameMetricsAs(metrics))) {
+			// Do not add the same metrics twice
 			metricsHistory.add(metrics);
 			writeJson(metrics);
 			return true;

@@ -43,11 +43,25 @@ class FormatTest {
 	private static final ObjectMapper mapper = new ObjectMapper();
 	
 	@Test
+	void nullFormat() {
+		
+		Format format1 = new Format(null);
+		assertThat(format1.hasError()).isFalse();
+		
+		assertThat(format1.getPoids()).isZero();
+		assertMediaSupports(format1, Collections.emptySet());
+		
+		assertThat(format1.getContentNatures()).isEmpty();
+		assertThat(format1.getSupportsPhysiques()).isNotNull().containsOnly(MediaSupportCategories.values());
+		
+	}
+	
+	@Test
 	void test1() throws JsonMappingException, JsonProcessingException {
 		
 		String formatStr1 = "{}" ;
 		ObjectNode jf1 = (ObjectNode)mapper.readTree(formatStr1);
-		Format format1 = new Format(jf1) ;
+		Format format1 = new Format(jf1);
 
 		assertThat(format1.getPoids()).isZero();
 		assertMediaSupports(format1, Collections.emptySet());
@@ -167,7 +181,7 @@ class FormatTest {
 		format3.incrementFormat(format2);
 		assertThat(format3.getPoids()).isEqualTo(format1.getPoids() + format2.getPoids());
 		
-		assertThat(format3.hasError()).isTrue();
+		assertThat(format3.hasError()).isFalse();
 		assertThat(format3.hasMediaFiles(ContentNature.AUDIO)).isFalse();
 		assertThat(format3.getMediaFiles(ContentNature.AUDIO)).isNull();
 		assertThat(format3.hasMediaFiles(ContentNature.VIDEO)).isFalse();
