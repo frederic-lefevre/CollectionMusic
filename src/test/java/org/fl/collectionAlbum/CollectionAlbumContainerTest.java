@@ -36,8 +36,6 @@ import org.fl.collectionAlbum.disocgs.DiscogsInventory;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.format.Format.RangementSupportPhysique;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
-import org.fl.collectionAlbum.metrics.CollectionMetrics;
-import org.fl.collectionAlbum.metrics.ConcertMetrics;
 import org.fl.collectionAlbum.metrics.Metrics;
 import org.fl.collectionAlbum.format.MediaSupports;
 import org.fl.collectionAlbum.rapportHtml.RapportStructuresAndNames;
@@ -79,13 +77,13 @@ class CollectionAlbumContainerTest {
 		assertThat(albumsContainer2).isEqualTo(albumsContainer);
 		TestUtils.assertEmptyCollection(albumsContainer);
 		
-		Metrics collectionMetrics = CollectionMetrics.buildCollectionMetrics(0, albumsContainer);
+		Metrics collectionMetrics = Control.getCollectionMetricsHsitory().addPresentCollectionMetrics(0, albumsContainer);
 		
 		assertThat(collectionMetrics.getMetricTimeStamp()).isZero();
 		assertThat(collectionMetrics.getMetrics()).hasSize(3)
 			.contains(new SimpleEntry<>("nombreAlbum", (double)0), new SimpleEntry<>("nombreArtiste", (double)0));
 		
-		Metrics concertMatrics = ConcertMetrics.buildConcertMetrics(0, albumsContainer);
+		Metrics concertMatrics = Control.getConcertMetricsHsitory().addPresentConcertMetrics(0, albumsContainer);
 		assertThat(concertMatrics.getMetricTimeStamp()).isZero();
 		assertThat(concertMatrics.getMetrics()).hasSize(2)
 			.contains(new SimpleEntry<>("nombreConcert", (double)0), new SimpleEntry<>("nombreArtiste", (double)0));
@@ -197,7 +195,7 @@ class CollectionAlbumContainerTest {
 			.singleElement()
 			.satisfies(alb -> assertThat(alb.getTitre()).isEqualTo("Portrait in jazz"));
 		
-		Metrics collectionMetrics = CollectionMetrics.buildCollectionMetrics(0, albumsContainer);
+		Metrics collectionMetrics = Control.getCollectionMetricsHsitory().addPresentCollectionMetrics(0, albumsContainer);
 		
 		assertThat(collectionMetrics.getMetricTimeStamp()).isZero();
 		assertThat(collectionMetrics.getMetrics()).hasSize(12)
@@ -211,7 +209,7 @@ class CollectionAlbumContainerTest {
 					new SimpleEntry<>("xnbdvd", (double)0)
 					);
 		
-		Metrics concertMatrics = ConcertMetrics.buildConcertMetrics(0, albumsContainer);
+		Metrics concertMatrics = Control.getConcertMetricsHsitory().addPresentConcertMetrics(0, albumsContainer);
 		assertThat(concertMatrics.getMetricTimeStamp()).isZero();
 		assertThat(concertMatrics.getMetrics()).hasSize(2)
 			.contains(new SimpleEntry<>("nombreConcert", (double)0), new SimpleEntry<>("nombreArtiste", (double)0));

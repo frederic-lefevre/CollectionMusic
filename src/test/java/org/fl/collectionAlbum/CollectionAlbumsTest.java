@@ -33,8 +33,6 @@ import static org.assertj.core.api.Assertions.*;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.gui.ProgressInformationPanel;
-import org.fl.collectionAlbum.metrics.CollectionMetrics;
-import org.fl.collectionAlbum.metrics.ConcertMetrics;
 import org.fl.collectionAlbum.metrics.Metrics;
 import org.junit.jupiter.api.Test;
 
@@ -93,7 +91,7 @@ class CollectionAlbumsTest {
 		pickRandomAlbumsAssert(() -> albumsContainer.pickRandomAlbumsViaArtiste(nbAlbumsJustBelowTotal), nbAlbumsJustBelowTotal);
 		
 		// Test album metrics
-		Metrics collectionMetrics = CollectionMetrics.buildCollectionMetrics(0, albumsContainer);
+		Metrics collectionMetrics = Control.getCollectionMetricsHsitory().addPresentCollectionMetrics(0, albumsContainer);
 		
 		assertThat(collectionMetrics.getMetricTimeStamp()).isZero();
 		assertThat(collectionMetrics.getMetrics()).hasSize(12);
@@ -112,7 +110,7 @@ class CollectionAlbumsTest {
 		assertThat(collectionMetrics.getMetrics().get("nombreArtiste")).isNotNull().isGreaterThan(738);
 		
 		// Test concert metrics
-		Metrics concertMetrics = ConcertMetrics.buildConcertMetrics(0, albumsContainer);
+		Metrics concertMetrics = Control.getConcertMetricsHsitory().addPresentConcertMetrics(0, albumsContainer);
 		assertThat(concertMetrics.getMetricTimeStamp()).isZero();
 		assertThat(concertMetrics.getMetrics()).hasSize(2);
 		

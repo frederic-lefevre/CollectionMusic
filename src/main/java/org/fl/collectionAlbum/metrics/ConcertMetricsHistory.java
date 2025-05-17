@@ -24,19 +24,39 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.metrics;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Map;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
 
-public class ConcertMetrics {
+public class ConcertMetricsHistory extends MetricsHistory {
 
 	private static final String NB_ARTISTE = "nombreArtiste";
 	private static final String NB_CONCERT = "nombreConcert";
 	
-	public static Metrics buildConcertMetrics(long ts, CollectionAlbumContainer collectionAlbumContainer) {	
+	// Singleton
+	private static ConcertMetricsHistory concertMetricsHistory;
+	
+	public static ConcertMetricsHistory buildConcertMetricsHistory(Path storagePath) throws IOException {
+		
+		if (concertMetricsHistory == null) {
+			concertMetricsHistory = new ConcertMetricsHistory(storagePath);
+		}
+		return concertMetricsHistory;
+	}
+	
+	public Metrics addPresentConcertMetrics(long ts, CollectionAlbumContainer collectionAlbumContainer) {	
 
-		return new Metrics(ts, 		Map.of(
+		Metrics presentMetrics = new Metrics(ts, 		Map.of(
 				NB_ARTISTE, (double)collectionAlbumContainer.getConcertsArtistes().getNombreArtistes(),
 				NB_CONCERT, (double)collectionAlbumContainer.getConcerts().getNombreConcerts()));
+		addNewMetrics(presentMetrics);
+		
+		return presentMetrics;
+	}
+	
+	private ConcertMetricsHistory(Path storagePath) throws IOException {
+		super(storagePath);
 	}
 }

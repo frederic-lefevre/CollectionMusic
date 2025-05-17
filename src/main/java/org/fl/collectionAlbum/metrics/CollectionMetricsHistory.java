@@ -24,18 +24,30 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.metrics;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
 
-public class CollectionMetrics {
+public class CollectionMetricsHistory extends MetricsHistory {
 
 	private static final String TOTAL = "totalPhysique";
 	private static final String NB_ARTISTE = "nombreArtiste";
 	private static final String NB_ALBUM = "nombreAlbum";
 	
-	public static Metrics buildCollectionMetrics(long ts, CollectionAlbumContainer collectionAlbumContainer) {
+	// Singleton
+	private static CollectionMetricsHistory collectionMetricsHistory;
+	
+	public static CollectionMetricsHistory buildCollectionMetricsHistory(Path storagePath) throws IOException {
+		if (collectionMetricsHistory == null) {
+			collectionMetricsHistory = new CollectionMetricsHistory(storagePath);
+		}
+		return collectionMetricsHistory;
+	}
+	
+	public Metrics addPresentCollectionMetrics(long ts, CollectionAlbumContainer collectionAlbumContainer) {
 		
 		Map<String, Double> collectionMetrics = new HashMap<>();
 		
@@ -49,8 +61,17 @@ public class CollectionMetrics {
 			.getSupportsPhysiquesNumbers()
 			.entrySet()
 			.stream()
-			.forEachOrdered(entry -> collectionMetrics.put(entry.getKey().getId(), entry.getValue()));		
+			.forEachOrdered(entry -> collectionMetrics.put(entry.getKey().getId(), entry.getValue()));	
+		
+		Metrics presentMetrics = new Metrics(ts, collectionMetrics);
+		addNewMetrics(presentMetrics);
 
-		return new Metrics(ts, collectionMetrics);
+		return presentMetrics;
 	}
+	
+	private CollectionMetricsHistory(Path storagePath) throws IOException {
+		super(storagePath);
+	}
+	
+	
 }
