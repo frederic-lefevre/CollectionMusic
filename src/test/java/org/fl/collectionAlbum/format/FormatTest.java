@@ -29,8 +29,12 @@ import static org.assertj.core.api.Assertions.*;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.assertj.core.api.InstanceOfAssertFactories;
+import org.fl.util.FilterCounter;
+import org.fl.util.FilterCounter.LogRecordCounter;
 import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -54,6 +58,14 @@ class FormatTest {
 		assertThat(format1.getContentNatures()).isEmpty();
 		assertThat(format1.getSupportsPhysiques()).isNotNull().containsOnly(MediaSupportCategories.values());
 		
+		LogRecordCounter formatFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.format.Format"));
+		
+		assertThat(format1.inferRangement()).isNull();
+		
+		assertThat(formatFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(formatFilterCounter.getLogRecordCount(Level.SEVERE)).isEqualTo(1);
+		assertThat(formatFilterCounter.getLogRecords()).singleElement()
+			.satisfies(logRecord -> assertThat(logRecord.getMessage()).isEqualTo("Rangement du support physiques non trouvé"));
 	}
 	
 	@Test
