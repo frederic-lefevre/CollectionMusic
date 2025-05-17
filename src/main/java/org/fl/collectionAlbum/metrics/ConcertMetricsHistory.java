@@ -64,4 +64,10 @@ public class ConcertMetricsHistory extends MetricsHistory {
 	private ConcertMetricsHistory(Path storagePath) throws IOException {
 		super(storagePath);
 	}
+
+	@Override
+	public Map<String, String> getMetricsNames() {
+
+		return Map.of(NB_ARTISTE, "Nombre d'artistes", NB_CONCERT, "Nombre de concerts");
+	}
 }

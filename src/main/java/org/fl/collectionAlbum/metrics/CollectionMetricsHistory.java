@@ -28,8 +28,11 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
+import org.fl.collectionAlbum.format.MediaSupportCategories;
 
 public class CollectionMetricsHistory extends MetricsHistory {
 
@@ -76,6 +79,18 @@ public class CollectionMetricsHistory extends MetricsHistory {
 	
 	private CollectionMetricsHistory(Path storagePath) throws IOException {
 		super(storagePath);
+	}
+
+	@Override
+	public Map<String, String> getMetricsNames() {
+		
+		Map<String, String> metricsNamesMap = Stream.of(MediaSupportCategories.values())
+			.collect(Collectors.toMap(MediaSupportCategories::getId, MediaSupportCategories::getNom));
+		metricsNamesMap.put(TOTAL, "Nombre total d'unités physiques");
+		metricsNamesMap.put(NB_ARTISTE, "Nombre d'artistes");
+		metricsNamesMap.put(NB_ALBUM, "Nombre d'albums");
+		
+		return metricsNamesMap;
 	}
 	
 	

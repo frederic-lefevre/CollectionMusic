@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -42,7 +43,7 @@ import org.fl.util.json.JsonUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class MetricsHistory {
+public abstract class MetricsHistory {
 
 	private static final MetricsDateComparator metricsDateComparator = new MetricsDateComparator();
 	private static final ObjectMapper mapper = new ObjectMapper();
@@ -89,11 +90,10 @@ public class MetricsHistory {
 
 	protected boolean addNewMetrics(Metrics metrics) {
 	
-		if ((! metricsHistory.isEmpty()) &&
-			(! metrics.hasSameMetricsTypeAs(metricsHistory.getFirst()))) {
+		if (! hasMetricsCompatibleWithMetricNames(metrics)) {
 			
 			String errorMessage = "Adding a incompatible metrics to metricsHistory.\nMetrics added: " + Objects.toString(metrics.getMetrics()) 
-				+ "\nHistory metrics: " + Objects.toString(metricsHistory.getFirst().getMetrics());
+				+ "\nHistory metrics pattern: " + Objects.toString(getMetricsNames());
 			mLog.severe(errorMessage);
 			throw new IllegalArgumentException(errorMessage);	
 			
@@ -107,10 +107,17 @@ public class MetricsHistory {
 		}
 	}
 	
+	private boolean hasMetricsCompatibleWithMetricNames(Metrics metrics) {
+		return ((metrics.getMetrics().size() == getMetricsNames().size()) &&
+				metrics.getMetrics().keySet().stream().allMatch(key -> getMetricsNames().containsKey(key)));
+	}
+	
 	public List<Metrics> getMetricsHistory() {
 		Collections.sort(metricsHistory, metricsDateComparator);
 		return metricsHistory;
 	}
+	
+	public abstract Map<String, String> getMetricsNames();
 	
 	private static class MetricsDateComparator implements Comparator<Metrics> {
 

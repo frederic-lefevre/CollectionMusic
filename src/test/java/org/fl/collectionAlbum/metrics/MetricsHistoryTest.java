@@ -28,10 +28,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static org.assertj.core.api.Assertions.*;
 
+import org.fl.util.FilterCounter;
+import org.fl.util.FilterCounter.LogRecordCounter;
 import org.fl.util.file.FilesUtils;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -49,11 +52,25 @@ class MetricsHistoryTest {
 	private static final Path historyPath1 = historyFolderBase.resolve("testHistoryDirectoryPath1");
 	private static final Path historyPath2 = historyFolderBase.resolve("testHistoryDirectoryPath2");
 	private static final Path historyPath3 = historyFolderBase.resolve("testHistoryDirectoryPath3");
+	private static final Path historyPath4 = historyFolderBase.resolve("testHistoryDirectoryPath4");
+	private static final Path historyPath5 = historyFolderBase.resolve("testHistoryDirectoryPath5");
 	
 	private static void deleteFolderIfExist(Path folder) throws IOException {
 		if (Files.exists(folder)) {
 			FilesUtils.deleteDirectoryTree(folder, true, mLog);
 		}
+	}
+	
+	private static class TestMetricsHistory extends MetricsHistory {
+
+		protected TestMetricsHistory(Path storagePath) throws IOException {
+			super(storagePath);
+		}
+
+		@Override
+		public Map<String, String> getMetricsNames() {
+			return Map.of("albums", "Nombre album", "Artiste", "Nombre artiste");
+		}		
 	}
 	
 	@BeforeAll
@@ -62,9 +79,13 @@ class MetricsHistoryTest {
 		deleteFolderIfExist(historyPath1);
 		deleteFolderIfExist(historyPath2);
 		deleteFolderIfExist(historyPath3);
+		deleteFolderIfExist(historyPath4);
+		deleteFolderIfExist(historyPath5);
 		Files.createDirectory(historyPath1);
 		Files.createDirectory(historyPath2);
 		Files.createDirectory(historyPath3);
+		Files.createDirectory(historyPath4);
+		Files.createDirectory(historyPath5);
 	}
 	
 	@AfterAll
@@ -72,20 +93,22 @@ class MetricsHistoryTest {
 		deleteFolderIfExist(historyPath1);
 		deleteFolderIfExist(historyPath2);
 		deleteFolderIfExist(historyPath3);
+		deleteFolderIfExist(historyPath4);
+		deleteFolderIfExist(historyPath5);
 	}
 	
 	@Test
 	void testNullStoragePath() {
 		
 		assertThatIllegalArgumentException()
-			.isThrownBy(() -> new MetricsHistory(null))
+			.isThrownBy(() -> new TestMetricsHistory(null))
 			.withMessageContaining("should not be null");
 	}
 	
 	@Test
 	void testNonDirectoryPath() {
 		assertThatIllegalArgumentException()
-			.isThrownBy(() -> new MetricsHistory(Path.of("C:\\ForTests\\CollectionMusique\\PortraitInJazz.json")))
+			.isThrownBy(() -> new TestMetricsHistory(Path.of("C:\\ForTests\\CollectionMusique\\PortraitInJazz.json")))
 			.withMessageContaining("should be a directory");
 	}
 	
@@ -93,7 +116,7 @@ class MetricsHistoryTest {
 	void testNnonExistantStoragePath() {
 		
 		assertThatIllegalArgumentException()
-			.isThrownBy(() -> new MetricsHistory(Path.of("C:\\ForTests\\DoesNotExist")))
+			.isThrownBy(() -> new TestMetricsHistory(Path.of("C:\\ForTests\\DoesNotExist")))
 			.withMessageContaining("should exist");
 	}
 	
@@ -102,7 +125,7 @@ class MetricsHistoryTest {
 				
 		assertThat(historyPath1).isEmptyDirectory();
 		
-		MetricsHistory metricsHistory = new MetricsHistory(historyPath1);
+		MetricsHistory metricsHistory = new TestMetricsHistory(historyPath1);
 		
 		assertThat(metricsHistory).isNotNull();	
 		assertThat(metricsHistory.getMetricsHistory()).isEmpty();
@@ -126,7 +149,7 @@ class MetricsHistoryTest {
 		Metrics todayMetrics = new Metrics(now, Map.of("albums", 10.0, "Artiste", 5.0));
 		Metrics yesterdayMetrics = new Metrics(yesterday, Map.of("albums", 8.0, "Artiste", 5.0));
 		
-		MetricsHistory metricsHistory = new MetricsHistory(historyPath2);
+		MetricsHistory metricsHistory = new TestMetricsHistory(historyPath2);
 		
 		metricsHistory.addNewMetrics(todayMetrics);
 		metricsHistory.addNewMetrics(yesterdayMetrics);
@@ -152,7 +175,7 @@ class MetricsHistoryTest {
 		Metrics yesterdayMetrics = new Metrics(yesterday, Map.of("albums", 8.0, "Artiste", 5.0));
 		Metrics twoDaysAgoMetrics = new Metrics(twoDaysAgo, Map.of("albums", 8.0, "Artiste", 5.0));
 		
-		MetricsHistory metricsHistory = new MetricsHistory(historyPath3);
+		MetricsHistory metricsHistory = new TestMetricsHistory(historyPath3);
 		
 		metricsHistory.addNewMetrics(twoDaysAgoMetrics);
 		metricsHistory.addNewMetrics(yesterdayMetrics);
@@ -170,5 +193,64 @@ class MetricsHistoryTest {
 						assertThat(metric2.hasSameMetricsAs(new Metrics(0, Map.of("albums", 10.0, "Artiste", 5.0))));
 					}
 					);
+	}
+	
+	@Test
+	void testAddingIncompatibleMetrics() throws IOException {
+		
+		Metrics todayMetrics = new Metrics(now, Map.of("albums", 10.0, "Auteurs", 5.0));
+		
+		MetricsHistory metricsHistory = new TestMetricsHistory(historyPath4);
+		
+		LogRecordCounter filterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.metrics.MetricsHistory"));
+		
+		assertThatIllegalArgumentException()
+			.isThrownBy(() -> metricsHistory.addNewMetrics(todayMetrics))
+			.withMessageContaining("Adding a incompatible metrics to metricsHistory");
+		
+		assertThat(filterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(filterCounter.getLogRecordCount(Level.SEVERE)).isEqualTo(1);
+		assertThat(filterCounter.getLogRecords()).singleElement()
+			.satisfies(logRecord -> assertThat(logRecord.getMessage()).contains("Adding a incompatible metrics to metricsHistory"));
+	}
+	
+	@Test
+	void testAddingIncompatibleMetrics2() throws IOException {
+		
+		Metrics yesterdayMetrics = new Metrics(yesterday, Map.of("albums", 8.0, "Artiste", 5.0));
+		Metrics todayMetrics = new Metrics(now, Map.of("albums", 10.0, "Auteurs", 5.0));
+		
+		MetricsHistory metricsHistory = new TestMetricsHistory(historyPath5);
+		metricsHistory.addNewMetrics(yesterdayMetrics);
+		
+		LogRecordCounter filterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.metrics.MetricsHistory"));
+		
+		assertThatIllegalArgumentException()
+			.isThrownBy(() -> metricsHistory.addNewMetrics(todayMetrics))
+			.withMessageContaining("Adding a incompatible metrics to metricsHistory");
+		
+		assertThat(filterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(filterCounter.getLogRecordCount(Level.SEVERE)).isEqualTo(1);
+		assertThat(filterCounter.getLogRecords()).singleElement()
+			.satisfies(logRecord -> assertThat(logRecord.getMessage()).contains("Adding a incompatible metrics to metricsHistory"));
+	}
+	
+	@Test
+	void testAddingIncompatibleMetrics3() throws IOException {
+		
+		Metrics todayMetrics = new Metrics(now, Map.of("albums", 10.0, "Artiste", 5.0, "Auteurs", 5.0));
+		
+		MetricsHistory metricsHistory = new TestMetricsHistory(historyPath4);
+		
+		LogRecordCounter filterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.metrics.MetricsHistory"));
+		
+		assertThatIllegalArgumentException()
+			.isThrownBy(() -> metricsHistory.addNewMetrics(todayMetrics))
+			.withMessageContaining("Adding a incompatible metrics to metricsHistory");
+		
+		assertThat(filterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(filterCounter.getLogRecordCount(Level.SEVERE)).isEqualTo(1);
+		assertThat(filterCounter.getLogRecords()).singleElement()
+			.satisfies(logRecord -> assertThat(logRecord.getMessage()).contains("Adding a incompatible metrics to metricsHistory"));
 	}
 }
