@@ -93,7 +93,7 @@ public abstract class MetricsHistory {
 		if (! hasMetricsCompatibleWithMetricNames(metrics)) {
 			
 			String errorMessage = "Adding a incompatible metrics to metricsHistory.\nMetrics added: " + Objects.toString(metrics.getMetrics()) 
-				+ "\nHistory metrics pattern: " + Objects.toString(getMetricsNames());
+				+ "\nHistory metrics pattern: " + Objects.toString(getMetricsNamesMap());
 			mLog.severe(errorMessage);
 			throw new IllegalArgumentException(errorMessage);	
 			
@@ -108,8 +108,8 @@ public abstract class MetricsHistory {
 	}
 	
 	private boolean hasMetricsCompatibleWithMetricNames(Metrics metrics) {
-		return ((metrics.getMetrics().size() == getMetricsNames().size()) &&
-				metrics.getMetrics().keySet().stream().allMatch(key -> getMetricsNames().containsKey(key)));
+		return ((metrics.getMetrics().size() == getMetricsNamesMap().size()) &&
+				metrics.getMetrics().keySet().stream().allMatch(key -> getMetricsNamesMap().containsKey(key)));
 	}
 	
 	public List<Metrics> getMetricsHistory() {
@@ -117,7 +117,9 @@ public abstract class MetricsHistory {
 		return metricsHistory;
 	}
 	
-	public abstract Map<String, String> getMetricsNames();
+	public abstract Map<String, String> getMetricsNamesMap();
+	
+	public abstract List<String> getMetricsKeys();
 	
 	private static class MetricsDateComparator implements Comparator<Metrics> {
 

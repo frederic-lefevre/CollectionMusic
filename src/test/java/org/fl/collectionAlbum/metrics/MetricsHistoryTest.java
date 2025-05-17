@@ -27,6 +27,7 @@ package org.fl.collectionAlbum.metrics;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -68,8 +69,13 @@ class MetricsHistoryTest {
 		}
 
 		@Override
-		public Map<String, String> getMetricsNames() {
+		public Map<String, String> getMetricsNamesMap() {
 			return Map.of("albums", "Nombre album", "Artiste", "Nombre artiste");
+		}
+
+		@Override
+		public List<String> getMetricsKeys() {			
+			return List.of("albums", "Artiste");
 		}		
 	}
 	

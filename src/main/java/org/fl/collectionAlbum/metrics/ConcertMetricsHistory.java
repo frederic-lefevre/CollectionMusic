@@ -26,6 +26,7 @@ package org.fl.collectionAlbum.metrics;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Map;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
@@ -66,8 +67,13 @@ public class ConcertMetricsHistory extends MetricsHistory {
 	}
 
 	@Override
-	public Map<String, String> getMetricsNames() {
+	public Map<String, String> getMetricsNamesMap() {
 
 		return Map.of(NB_ARTISTE, "Nombre d'artistes", NB_CONCERT, "Nombre de concerts");
+	}
+
+	@Override
+	public List<String> getMetricsKeys() {
+		return List.of(NB_CONCERT, NB_ARTISTE);
 	}
 }

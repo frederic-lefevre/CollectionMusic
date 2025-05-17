@@ -26,7 +26,9 @@ package org.fl.collectionAlbum.metrics;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -82,7 +84,7 @@ public class CollectionMetricsHistory extends MetricsHistory {
 	}
 
 	@Override
-	public Map<String, String> getMetricsNames() {
+	public Map<String, String> getMetricsNamesMap() {
 		
 		Map<String, String> metricsNamesMap = Stream.of(MediaSupportCategories.values())
 			.collect(Collectors.toMap(MediaSupportCategories::getId, MediaSupportCategories::getNom));
@@ -91,6 +93,17 @@ public class CollectionMetricsHistory extends MetricsHistory {
 		metricsNamesMap.put(NB_ALBUM, "Nombre d'albums");
 		
 		return metricsNamesMap;
+	}
+
+	@Override
+	public List<String> getMetricsKeys() {
+		
+		List<String> metricKeys = new ArrayList<>();
+		metricKeys.add(TOTAL);
+		metricKeys.add(NB_ALBUM);
+		metricKeys.add(NB_ARTISTE);
+		metricKeys.addAll(Stream.of(MediaSupportCategories.values()).map(MediaSupportCategories::getId).toList());
+		return metricKeys;
 	}
 	
 	
