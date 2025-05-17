@@ -22,7 +22,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-
 package org.fl.collectionAlbum;
 
 import java.nio.file.Files;
@@ -41,9 +40,8 @@ import org.fl.collectionAlbum.concerts.Concert;
 import org.fl.collectionAlbum.concerts.LieuConcert;
 import org.fl.collectionAlbum.concerts.LieuxDesConcerts;
 import org.fl.collectionAlbum.concerts.ListeConcert;
-import org.fl.collectionAlbum.metrics.CollectionMetrics;
-import org.fl.collectionAlbum.metrics.ConcertMetrics;
-import org.fl.collectionAlbum.metrics.Metrics;
+import org.fl.collectionAlbum.gui.ProgressInformation;
+import org.fl.collectionAlbum.gui.ProgressInformationPanel;
 import org.fl.collectionAlbum.rapportCsv.RapportCsv;
 import org.fl.collectionAlbum.rapportHtml.RapportCollection;
 import org.fl.collectionAlbum.rapportHtml.RapportConcert;
@@ -57,8 +55,6 @@ import org.fl.collectionAlbum.rapportHtml.CssStyles;
 import org.fl.collectionAlbum.rapportHtml.RapportAlbum;
 import org.fl.collectionAlbum.rapportHtml.RapportAlbumsDunArtiste;
 import org.fl.collectionAlbum.rapportHtml.RapportBuildInfo;
-import org.fl.collectionAlbumGui.ProgressInformation;
-import org.fl.collectionAlbumGui.ProgressInformationPanel;
 import org.fl.util.file.FilesUtils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -104,14 +100,9 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 			// Sort for display when scanning the collection
 			collectionAlbumContainer.getCollectionAlbumsMusiques().sortRangementAlbum();
 
-			// Update collection metrics history
-			Metrics collectionMetrics = 
-					CollectionMetrics.buildCollectionMetrics(System.currentTimeMillis(), collectionAlbumContainer);
-			Control.getCollectionMetricsHsitory().addNewMetrics(collectionMetrics);
-			
-			Metrics concertMetrics = 
-					ConcertMetrics.buildConcertMetrics(System.currentTimeMillis(), collectionAlbumContainer);
-			Control.getConcertMetricsHsitory().addNewMetrics(concertMetrics);
+			// Update collection and concert metrics history
+			Control.getCollectionMetricsHsitory().addPresentCollectionMetrics(System.currentTimeMillis(), collectionAlbumContainer);
+			Control.getConcertMetricsHsitory().addPresentConcertMetrics(System.currentTimeMillis(), collectionAlbumContainer);
 			
 			albumLog.info("Fin de la génération");
 

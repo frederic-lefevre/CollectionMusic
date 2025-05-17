@@ -41,10 +41,10 @@ import javax.swing.table.AbstractTableModel;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory;
+import org.fl.collectionAlbum.gui.ProgressInformation;
+import org.fl.collectionAlbum.gui.ProgressInformationPanel;
 import org.fl.collectionAlbum.json.migrator.MusicArtefactMigrator;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
-import org.fl.collectionAlbumGui.ProgressInformation;
-import org.fl.collectionAlbumGui.ProgressInformationPanel;
 import org.fl.util.json.JsonUtils;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;

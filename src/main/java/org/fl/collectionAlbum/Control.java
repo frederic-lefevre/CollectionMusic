@@ -40,13 +40,14 @@ import java.util.stream.Stream;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
 import org.fl.collectionAlbum.format.ContentNature;
+import org.fl.collectionAlbum.gui.CollectionAlbumGui;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
-import org.fl.collectionAlbum.metrics.MetricsHistory;
+import org.fl.collectionAlbum.metrics.CollectionMetricsHistory;
+import org.fl.collectionAlbum.metrics.ConcertMetricsHistory;
 import org.fl.collectionAlbum.osAction.AlbumCommandParameter;
 import org.fl.collectionAlbum.osAction.DiscogsReleaseCommandParameter;
 import org.fl.collectionAlbum.osAction.ListOfStringCommandParameter;
 import org.fl.collectionAlbum.osAction.StringCommandParameter;
-import org.fl.collectionAlbumGui.CollectionAlbumGui;
 import org.fl.collectionAlbum.osAction.MediaFilePathCommandParameter;
 import org.fl.collectionAlbum.osAction.OsAction;
 import org.fl.collectionAlbum.osAction.OsCommandAndOption;
@@ -66,8 +67,8 @@ public class Control {
    	private AdvancedProperties collectionProperties;
 	private Path collectionDirectoryName;
 	private Path concertDirectoryName;
-	private MetricsHistory collectionMetricsHsitory;
-	private MetricsHistory concertMetricsHsitory;
+	private CollectionMetricsHistory collectionMetricsHsitory;
+	private ConcertMetricsHistory concertMetricsHsitory;
 	private Path rapportPath;
 	private Path oldRapportPath;
 	private String concertTicketImgUri;
@@ -116,12 +117,12 @@ public class Control {
 			
 			// Get collection album and concert history folder path
 			try {
-				collectionMetricsHsitory = new MetricsHistory(collectionProperties.getPathFromURI("album.historyFolder.name"));
+				collectionMetricsHsitory = CollectionMetricsHistory.buildCollectionMetricsHistory(collectionProperties.getPathFromURI("album.historyFolder.name"));
 			} catch (IOException e) {
 				albumLog.log(Level.SEVERE, "IOException accessinng album collection metrics history folder", e);
 			}
 			try {
-				concertMetricsHsitory = new MetricsHistory(collectionProperties.getPathFromURI("concert.historyFolder.name"));
+				concertMetricsHsitory = ConcertMetricsHistory.buildConcertMetricsHistory(collectionProperties.getPathFromURI("concert.historyFolder.name"));
 			} catch (IOException e) {
 				albumLog.log(Level.SEVERE, "IOException accessinng concert metrics history folder", e);
 			}
@@ -208,11 +209,11 @@ public class Control {
 		return getInstance().oldRapportPath;
 	}
 	
-	public static MetricsHistory getCollectionMetricsHsitory() {
+	public static CollectionMetricsHistory getCollectionMetricsHsitory() {
 		return getInstance().collectionMetricsHsitory;
 	}
 	
-	public static MetricsHistory getConcertMetricsHsitory() {
+	public static ConcertMetricsHistory getConcertMetricsHsitory() {
 		return getInstance().concertMetricsHsitory;
 	}
 	

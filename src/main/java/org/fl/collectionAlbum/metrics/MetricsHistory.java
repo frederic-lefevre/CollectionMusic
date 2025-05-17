@@ -51,7 +51,7 @@ public class MetricsHistory {
 	private final Path storagePath;
 	private final List<Metrics> metricsHistory;
 	
-	public MetricsHistory(Path storagePath) throws IOException {
+	protected MetricsHistory(Path storagePath) throws IOException {
 		
 		if (storagePath == null) {
 			throw new IllegalArgumentException("The metrics history storage path should not be null");
@@ -87,7 +87,7 @@ public class MetricsHistory {
 		}
 	}
 
-	public boolean addNewMetrics(Metrics metrics) {
+	protected boolean addNewMetrics(Metrics metrics) {
 		
 		if (metricsHistory.stream().allMatch(m -> !m.hasSameMetricsAs(metrics))) {
 			metricsHistory.add(metrics);
