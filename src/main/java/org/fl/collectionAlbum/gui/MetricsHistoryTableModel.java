@@ -44,6 +44,8 @@ public class MetricsHistoryTableModel extends AbstractTableModel{
 	private static final String dateFrancePattern = "EEEE dd MMMM uuuu à HH:mm";
 	private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(dateFrancePattern, Locale.FRANCE);
 	
+	private static final String DATE_COLUMN_HEADER = "Date";
+	
 	private final MetricsHistory metricsHistory;
 	private final List<String> metricsKeyList;
 	
@@ -63,6 +65,17 @@ public class MetricsHistoryTableModel extends AbstractTableModel{
 		return metricsKeyList.size() + 1;
 	}
 
+	@Override
+	public String getColumnName(int col) {
+		if (col == 0) {
+			// First column is Date column
+			return DATE_COLUMN_HEADER;
+		} else {
+			String metricKey = metricsKeyList.get(col - 1);
+			return metricsHistory.getMetricsNamesMap().get(metricKey);
+		}
+	}
+	
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		
