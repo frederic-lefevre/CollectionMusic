@@ -34,16 +34,16 @@ import org.fl.collectionAlbum.albums.Album;
 
 public class AlbumsTableModel extends AbstractTableModel {
 
-	public final static int TITRE_COL_IDX = 0;
-	public final static int AUTEUR_COL_IDX = 1;
-	public final static int FORMAT_COL_IDX = 2;
-	public final static int MEDIA_FILES_COL_IDX = 3;
-	public final static int PROBLEM_COL_IDX = 4;
-	public final static int DISCOGS_COL_IDX = 5;
+	public static final int TITRE_COL_IDX = 0;
+	public static final int AUTEUR_COL_IDX = 1;
+	public static final int FORMAT_COL_IDX = 2;
+	public static final int MEDIA_FILES_COL_IDX = 3;
+	public static final int PROBLEM_COL_IDX = 4;
+	public static final int DISCOGS_COL_IDX = 5;
 	
 	private static final long serialVersionUID = 1L;
 	
-	private final static String[] entetes = {"Titres", "Auteurs", "Formats", "Chemins des fichiers media", "Problème", "Discogs release"};
+	private static final String[] entetes = {"Titres", "Auteurs", "Formats", "Chemins des fichiers media", "Problème", "Discogs release"};
 	
 	private final List<Album> albumsList;
 	
