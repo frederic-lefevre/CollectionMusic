@@ -32,8 +32,10 @@ import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
+import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
@@ -133,6 +135,20 @@ public class GenerationPane extends JPanel {
 		discogsReleasesPane.add(discogsReleasesScrollPane);
 
 		collectionTabPanes.add(discogsReleasesPane, "Discogs releases");
+		
+		// Collection metrics history
+		JTabbedPane collectionMetricsTabPanes = new JTabbedPane();
+		
+		JTable collectionMetricsHistoryTable = new JTable(new MetricsHistoryTableModel(Control.getCollectionMetricsHsitory()));
+		JTable concertMetricsHistoryTable = new JTable(new MetricsHistoryTableModel(Control.getConcertMetricsHsitory()));
+		
+		JScrollPane collectionHistoryScrollPane = new JScrollPane(collectionMetricsHistoryTable);
+		JScrollPane concertHistoryScrollPane = new JScrollPane(concertMetricsHistoryTable);
+		
+		collectionMetricsTabPanes.add(collectionHistoryScrollPane, "Evolution des albums");
+		collectionMetricsTabPanes.add(concertHistoryScrollPane, "Evolution des concerts");
+		
+		collectionTabPanes.add(collectionMetricsTabPanes, "Evolution de la collection");
 		
 		add(collectionTabPanes);
 	}
