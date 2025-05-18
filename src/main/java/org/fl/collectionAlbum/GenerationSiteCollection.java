@@ -22,7 +22,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-
 package org.fl.collectionAlbum;
 
 import java.nio.file.Files;
@@ -41,9 +40,8 @@ import org.fl.collectionAlbum.concerts.Concert;
 import org.fl.collectionAlbum.concerts.LieuConcert;
 import org.fl.collectionAlbum.concerts.LieuxDesConcerts;
 import org.fl.collectionAlbum.concerts.ListeConcert;
-import org.fl.collectionAlbum.metrics.CollectionMetrics;
-import org.fl.collectionAlbum.metrics.ConcertMetrics;
-import org.fl.collectionAlbum.metrics.Metrics;
+import org.fl.collectionAlbum.gui.ProgressInformation;
+import org.fl.collectionAlbum.gui.ProgressInformationPanel;
 import org.fl.collectionAlbum.rapportCsv.RapportCsv;
 import org.fl.collectionAlbum.rapportHtml.RapportCollection;
 import org.fl.collectionAlbum.rapportHtml.RapportConcert;
@@ -57,8 +55,6 @@ import org.fl.collectionAlbum.rapportHtml.CssStyles;
 import org.fl.collectionAlbum.rapportHtml.RapportAlbum;
 import org.fl.collectionAlbum.rapportHtml.RapportAlbumsDunArtiste;
 import org.fl.collectionAlbum.rapportHtml.RapportBuildInfo;
-import org.fl.collectionAlbumGui.ProgressInformation;
-import org.fl.collectionAlbumGui.ProgressInformationPanel;
 import org.fl.util.file.FilesUtils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -67,20 +63,20 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 
 	private final static Logger albumLog = Logger.getLogger(GenerationSiteCollection.class.getName());
 	
-	private CollectionAlbumContainer collectionAlbumContainer ;
+	private CollectionAlbumContainer collectionAlbumContainer;
 	private final ProgressInformationPanel progressPanel;
-	
+
 	// Information prefix
-	private final static String ARRET 			= "Arreté" ;
-	private final static String FIN_GENERATION	= "Nouveau site généré" ;
-	private final static String CLEANUP 		= "Nettoyage de l'ancien site" ;
-	private final static String ECRITURE 		= "Ecriture du nouveau site" ;
-	
+	private final static String ARRET = "Arreté";
+	private final static String FIN_GENERATION = "Nouveau site généré";
+	private final static String CLEANUP = "Nettoyage de l'ancien site";
+	private final static String ECRITURE = "Ecriture du nouveau site";
+
 	// Status
-	private final static String GENERATION 	    = "En cours de génération" ;
+	private final static String GENERATION = "En cours de génération";
 
 	public GenerationSiteCollection(ProgressInformationPanel pip) {
-		progressPanel 	= pip ;
+		progressPanel = pip;
 	}
 
 	@Override
@@ -104,14 +100,9 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 			// Sort for display when scanning the collection
 			collectionAlbumContainer.getCollectionAlbumsMusiques().sortRangementAlbum();
 
-			// Update collection metrics history
-			Metrics collectionMetrics = 
-					CollectionMetrics.buildCollectionMetrics(System.currentTimeMillis(), collectionAlbumContainer);
-			Control.getCollectionMetricsHsitory().addNewMetrics(collectionMetrics);
-			
-			Metrics concertMetrics = 
-					ConcertMetrics.buildConcertMetrics(System.currentTimeMillis(), collectionAlbumContainer);
-			Control.getConcertMetricsHsitory().addNewMetrics(concertMetrics);
+			// Update collection and concert metrics history
+			Control.getCollectionMetricsHsitory().addPresentCollectionMetricsToHistory(System.currentTimeMillis(), collectionAlbumContainer);
+			Control.getConcertMetricsHsitory().addPresentConcertMetricsToHistory(System.currentTimeMillis(), collectionAlbumContainer);
 			
 			albumLog.info("Fin de la génération");
 
@@ -205,16 +196,16 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 			 if (artiste.getNbAlbum() > 0) {
 				 Path albumAbsolutePath   = RapportStructuresAndNames.getArtisteAlbumRapportAbsolutePath(artiste);
 				 if (! Files.exists(albumAbsolutePath)) {
-					 RapportAlbumsDunArtiste rapportDeSesAlbums = new RapportAlbumsDunArtiste(artiste, getOffset(rapportPath, albumAbsolutePath.getParent())) ;
-					 rapportDeSesAlbums.printReport(albumAbsolutePath, CssStyles.stylesTableauDunArtiste) ;
+					 RapportAlbumsDunArtiste rapportDeSesAlbums = new RapportAlbumsDunArtiste(artiste, getOffset(rapportPath, albumAbsolutePath.getParent()));
+					 rapportDeSesAlbums.printReport(albumAbsolutePath, CssStyles.stylesTableauDunArtiste);
 				 }
 			 }
 
 			 if (artiste.getNbConcert() > 0) {
 				 Path concertAbsolutePath = RapportStructuresAndNames.getArtisteConcertRapportAbsolutePath(artiste);
 				 if (! Files.exists(concertAbsolutePath)) {
-					 RapportConcertsDunArtiste rapportDeSesConcerts = new RapportConcertsDunArtiste(artiste, getOffset(rapportPath, concertAbsolutePath.getParent())) ;
-					 rapportDeSesConcerts.printReport(concertAbsolutePath, CssStyles.stylesTableauDunArtiste) ;
+					 RapportConcertsDunArtiste rapportDeSesConcerts = new RapportConcertsDunArtiste(artiste, getOffset(rapportPath, concertAbsolutePath.getParent()));
+					 rapportDeSesConcerts.printReport(concertAbsolutePath, CssStyles.stylesTableauDunArtiste);
 				 }
 			 }
 		 }
@@ -244,10 +235,10 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 		 for (LieuConcert lieuConcert : lieuxDesConcerts.getLieuxConcerts()) {
 			 Path absolutePath = RapportStructuresAndNames.getLieuRapportAbsolutePath(lieuConcert);
 			 if (! Files.exists(absolutePath)) {
-				 String offSet = getOffset(rapportPath, absolutePath.getParent()) ;
-				 RapportListeConcerts concertDeCeLieu = new RapportListeConcerts(lieuConcert.getConcerts().sortChrono(), lieuConcert.getLieu(), LinkType.LIST) ;
+				 String offSet = getOffset(rapportPath, absolutePath.getParent());
+				 RapportListeConcerts concertDeCeLieu = new RapportListeConcerts(lieuConcert.getConcerts().sortChrono(), lieuConcert.getLieu(), LinkType.LIST);
 				 concertDeCeLieu.withOffset(offSet);
-				 concertDeCeLieu.printReport(absolutePath, CssStyles.stylesTableauMusicArtefact) ;
+				 concertDeCeLieu.printReport(absolutePath, CssStyles.stylesTableauMusicArtefact);
 			 }
 		 }
 	 }
@@ -256,26 +247,26 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 
 	 private static String getOffset(Path rootPath, Path targetPath) {
 
-		 int diffPath = targetPath.getNameCount() - rootPath.getNameCount() ;	
+		 int diffPath = targetPath.getNameCount() - rootPath.getNameCount();	
 		 if (diffPath <= 0) {
 			 return "" ;
 		 } else {
-			 return getOffset(rootPath, targetPath.getParent()) + OFFSET_ELEMENT ;
+			 return getOffset(rootPath, targetPath.getParent()) + OFFSET_ELEMENT;
 		 }
 	 }
 
 	 private void rapportsHtml(Path rapportDir) {	
 	   	
 		Path rapportFile = RapportStructuresAndNames.getAbsoluteHomeCollectionFile();
-		RapportCollection rapportCollection = new RapportCollection(collectionAlbumContainer, rapportDir, "Collections d'albums") ;
-		rapportCollection.printReport(rapportFile, CssStyles.mainFormat) ;				
+		RapportCollection rapportCollection = new RapportCollection(collectionAlbumContainer, rapportDir, "Collections d'albums");
+		rapportCollection.printReport(rapportFile, CssStyles.mainFormat);				
 	}
 		 
 	private void rapportsConcertHtml(Path rapportDir) {
 
-		 Path rapportFile = RapportStructuresAndNames.getAbsoluteHomeConcertFile() ;
+		 Path rapportFile = RapportStructuresAndNames.getAbsoluteHomeConcertFile();
 		 RapportDesConcerts rapportConcerts = new RapportDesConcerts(collectionAlbumContainer, rapportDir, "Concerts");
-		 rapportConcerts.printReport(rapportFile, CssStyles.main) ;
+		 rapportConcerts.printReport(rapportFile, CssStyles.main);
 	 }
 	
 	private void rapportBuildInfo() {

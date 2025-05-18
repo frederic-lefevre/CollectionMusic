@@ -59,12 +59,21 @@ public class Metrics {
 		
 		if (m == null) {
 			throw new IllegalArgumentException("Illegal argument null");
-		} else {			
+		} else {	
+			return m.hasSameMetricsTypeAs(this) &&
+					metrics.entrySet().stream()
+						.allMatch(entry -> m.metrics.get(entry.getKey()).equals(metrics.get(entry.getKey())));
+		}
+	}
+	
+	protected boolean hasSameMetricsTypeAs(Metrics m) {
+		
+		if (m == null) {
+			throw new IllegalArgumentException("Illegal argument null");
+		} else {
 			return ((m.metrics.size() == metrics.size()) &&
 					metrics.entrySet().stream()
-						.allMatch(entry -> 
-							(m.metrics.containsKey(entry.getKey()) && 
-							(m.metrics.get(entry.getKey()).equals(metrics.get(entry.getKey()))))));
+						.allMatch(entry -> m.metrics.containsKey(entry.getKey())));
 		}
 	}
 }

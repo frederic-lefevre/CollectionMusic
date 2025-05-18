@@ -49,6 +49,7 @@ class MetricsTest {
 		Metrics metrics2 = new Metrics(yesterday, new HashMap<>());
 		
 		assertThat(metrics.hasSameMetricsAs(metrics2)).isTrue();
+		assertThat(metrics2.hasSameMetricsAs(metrics)).isTrue();
 	}
 	
 	@Test
@@ -60,6 +61,7 @@ class MetricsTest {
 		Metrics metrics2 = new Metrics(yesterday,  Map.of("Artiste", 5.0, "albums", 10.0));
 		
 		assertThat(metrics.hasSameMetricsAs(metrics2)).isTrue();
+		assertThat(metrics2.hasSameMetricsAs(metrics)).isTrue();
 	}
 	
 	@Test
@@ -71,6 +73,17 @@ class MetricsTest {
 		Metrics metrics2 = new Metrics(yesterday,  Map.of("Artiste", 5.0, "albums", 11.0));
 		
 		assertThat(metrics.hasSameMetricsAs(metrics2)).isFalse();
+		assertThat(metrics2.hasSameMetricsAs(metrics)).isFalse();
+	}
+	
+	@Test
+	void testSameTypeMetrics() {
+		
+		Metrics metrics = new Metrics(now, Map.of("albums", 10.0, "Artiste", 5.0));		
+		Metrics metrics2 = new Metrics(yesterday,  Map.of("Artiste", 5.0, "albums", 11.0));
+		
+		assertThat(metrics.hasSameMetricsTypeAs(metrics2)).isTrue();
+		assertThat(metrics2.hasSameMetricsTypeAs(metrics)).isTrue();
 	}
 	
 	@Test
@@ -82,6 +95,27 @@ class MetricsTest {
 		Metrics metrics2 = new Metrics(yesterday,  Map.of("Artiste", 5.0, "albums", 10.0, "cd", 1.0));
 		
 		assertThat(metrics.hasSameMetricsAs(metrics2)).isFalse();
+		assertThat(metrics2.hasSameMetricsAs(metrics)).isFalse();
+	}
+	
+	@Test
+	void testDifferentTypeMetrics() {
+		
+		Metrics metrics = new Metrics(now, Map.of("albums", 10.0, "Artiste", 5.0));		
+		Metrics metrics2 = new Metrics(yesterday,  Map.of("Artiste", 5.0, "albums", 11.0, "cd", 1.0));
+		
+		assertThat(metrics.hasSameMetricsTypeAs(metrics2)).isFalse();
+		assertThat(metrics2.hasSameMetricsTypeAs(metrics)).isFalse();
+	}
+	
+	@Test
+	void testDifferentTypeMetrics2() {
+		
+		Metrics metrics = new Metrics(now, Map.of("albums", 10.0, "Artiste", 5.0, "vinyl", 2.0));		
+		Metrics metrics2 = new Metrics(yesterday,  Map.of("Artiste", 5.0, "albums", 11.0, "cd", 1.0));
+		
+		assertThat(metrics.hasSameMetricsTypeAs(metrics2)).isFalse();
+		assertThat(metrics2.hasSameMetricsTypeAs(metrics)).isFalse();
 	}
 	
 	@Test
@@ -93,6 +127,7 @@ class MetricsTest {
 		Metrics metrics2 = new Metrics(yesterday,  Map.of("Artiste", 5.0, "albums", 10.0));
 		
 		assertThat(metrics.hasSameMetricsAs(metrics2)).isFalse();
+		assertThat(metrics2.hasSameMetricsAs(metrics)).isFalse();
 	}
 	
 	@Test
@@ -105,6 +140,7 @@ class MetricsTest {
 		
 		Metrics metrics2 = mapper.readValue(s, Metrics.class);
 		assertThat(metrics.hasSameMetricsAs(metrics2)).isTrue();
+		assertThat(metrics2.hasSameMetricsAs(metrics)).isTrue();
 		
 	}
 }

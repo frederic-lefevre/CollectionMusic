@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -42,7 +43,7 @@ import org.fl.util.json.JsonUtils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class MetricsHistory {
+public abstract class MetricsHistory {
 
 	private static final MetricsDateComparator metricsDateComparator = new MetricsDateComparator();
 	private static final ObjectMapper mapper = new ObjectMapper();
@@ -51,7 +52,7 @@ public class MetricsHistory {
 	private final Path storagePath;
 	private final List<Metrics> metricsHistory;
 	
-	public MetricsHistory(Path storagePath) throws IOException {
+	protected MetricsHistory(Path storagePath) throws IOException {
 		
 		if (storagePath == null) {
 			throw new IllegalArgumentException("The metrics history storage path should not be null");
@@ -87,9 +88,17 @@ public class MetricsHistory {
 		}
 	}
 
-	public boolean addNewMetrics(Metrics metrics) {
-		
-		if (metricsHistory.stream().allMatch(m -> !m.hasSameMetricsAs(metrics))) {
+	protected boolean addNewMetrics(Metrics metrics) {
+	
+		if (! hasMetricsCompatibleWithMetricNames(metrics)) {
+			
+			String errorMessage = "Adding a incompatible metrics to metricsHistory.\nMetrics added: " + Objects.toString(metrics.getMetrics()) 
+				+ "\nHistory metrics pattern: " + Objects.toString(getMetricsNamesMap());
+			mLog.severe(errorMessage);
+			throw new IllegalArgumentException(errorMessage);	
+			
+		} else if (metricsHistory.stream().allMatch(m -> !m.hasSameMetricsAs(metrics))) {
+			// Do not add the same metrics twice
 			metricsHistory.add(metrics);
 			writeJson(metrics);
 			return true;
@@ -98,10 +107,19 @@ public class MetricsHistory {
 		}
 	}
 	
+	private boolean hasMetricsCompatibleWithMetricNames(Metrics metrics) {
+		return ((metrics.getMetrics().size() == getMetricsNamesMap().size()) &&
+				metrics.getMetrics().keySet().stream().allMatch(key -> getMetricsNamesMap().containsKey(key)));
+	}
+	
 	public List<Metrics> getMetricsHistory() {
 		Collections.sort(metricsHistory, metricsDateComparator);
 		return metricsHistory;
 	}
+	
+	public abstract Map<String, String> getMetricsNamesMap();
+	
+	public abstract List<String> getMetricsKeys();
 	
 	private static class MetricsDateComparator implements Comparator<Metrics> {
 

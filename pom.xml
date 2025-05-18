@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.fl</groupId>
 	<artifactId>collection-music</artifactId>
-	<version>7.13.0</version>
+	<version>7.14.0</version>
 
 	<dependencies>
 		<dependency>
@@ -79,7 +79,7 @@
 						</manifestEntries>
 						<manifest>
 							<mainClass>
-								org.fl.collectionAlbumGui.CollectionAlbumGui
+								org.fl.collectionAlbum.gui.CollectionAlbumGui
 							</mainClass>
 						</manifest>
 					</archive>
