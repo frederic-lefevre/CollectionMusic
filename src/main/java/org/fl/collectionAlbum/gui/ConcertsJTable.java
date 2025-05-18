@@ -29,7 +29,6 @@ import java.util.logging.Logger;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import org.fl.collectionAlbum.concerts.Concert;
@@ -63,7 +62,7 @@ public class ConcertsJTable extends JTable {
 		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		
 		// Row sorter
-		TableRowSorter<TableModel> sorter = new TableRowSorter<>(getModel());
+		TableRowSorter<ConcertTableModel> sorter = new TableRowSorter<>(concertTableModel);
 		setRowSorter(sorter);
 	}
 	

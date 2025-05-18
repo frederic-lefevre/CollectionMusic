@@ -29,7 +29,6 @@ import java.util.logging.Logger;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import org.fl.collectionAlbum.Control;
@@ -48,8 +47,8 @@ public class AlbumsJTable extends JTable {
 
 	private static final Logger tLog = Logger.getLogger(AlbumsJTable.class.getName());
 	
-	public AlbumsJTable(AlbumsTableModel dm, GenerationPane generationPane) {
-		super(dm);
+	public AlbumsJTable(AlbumsTableModel albumsTableModel, GenerationPane generationPane) {
+		super(albumsTableModel);
 		
 		setFillsViewportHeight(true);
 		
@@ -76,7 +75,7 @@ public class AlbumsJTable extends JTable {
 		addMouseListener(new AlbumMouseAdapter(this, Control.getOsActionsOnAlbum(), generationPane));
 		
 		// Row sorter
-		TableRowSorter<TableModel> sorter = new TableRowSorter<>(getModel());
+		TableRowSorter<AlbumsTableModel> sorter = new TableRowSorter<>(albumsTableModel);
 		setRowSorter(sorter);
 		
 		sorter.setComparator(AlbumsTableModel.AUTEUR_COL_IDX, new RangementComparator());
