@@ -30,7 +30,7 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingConstants;
 
-import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease.FormatCompatibilityResult;
+import org.fl.collectionAlbum.disocgs.FormatCompatibilityResult;
 import org.fl.util.swing.CustomTableCellRenderer;
 
 public class FormatCompatibilityRenderer extends CustomTableCellRenderer {
@@ -55,14 +55,14 @@ public class FormatCompatibilityRenderer extends CustomTableCellRenderer {
 			setBackground(Color.RED);
 		} else if (value instanceof FormatCompatibilityResult formatCompatibilityResult) {
 			
+			setText(formatCompatibilityResult.getNom());
 			if (formatCompatibilityResult == FormatCompatibilityResult.OK) {
-				setText("Oui");
 				setBackground(Color.GREEN);
 			} else if (formatCompatibilityResult == FormatCompatibilityResult.ACCEPTED) {
-				setText("Accepté");
 				setBackground(Color.ORANGE);
+			} else if (formatCompatibilityResult == FormatCompatibilityResult.NOT_LINKED) {
+					setBackground(Color.WHITE);	
 			} else {
-				setText("Non");
 				setBackground(Color.RED);
 			}
 		} else {

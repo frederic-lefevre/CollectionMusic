@@ -35,6 +35,7 @@ import javax.swing.table.TableRowSorter;
 import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
+import org.fl.collectionAlbum.disocgs.FormatCompatibilityResult;
 import org.fl.collectionAlbum.gui.adapter.DiscogsInventoryMouseAdapter;
 import org.fl.collectionAlbum.gui.renderer.CollectionBooleanRenderer;
 import org.fl.collectionAlbum.gui.renderer.FormatCompatibilityRenderer;
@@ -73,6 +74,8 @@ public class DiscogsReleaseJTable extends JTable {
 		// Row sorter
 		TableRowSorter<TableModel> sorter = new TableRowSorter<>(getModel());
 		setRowSorter(sorter);
+		
+		sorter.setComparator(DisocgsReleaseTableModel.FORMAT_MATCH_COL_IDX, new FormatCompatibilityResult.FormatCompatibilityComparator());
 	}
 
 	public DiscogsAlbumRelease getSelectedDisocgsRelease(){

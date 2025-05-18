@@ -78,19 +78,21 @@ public class DiscogsAlbumRelease {
 		return inventoryCsvAlbum;
 	}
 	
-	public enum FormatCompatibilityResult {OK, ACCEPTED, KO};
-	
 	public FormatCompatibilityResult formatCompatibility() {
 	
-		FormatCompatibilityResult result = FormatCompatibilityResult.OK;
-		
-		for (Album album : collectionAlbums) {
-			if (album.getDiscogsFormatValidation()) {
-				result = FormatCompatibilityResult.ACCEPTED;
-			} else if (!checkOneAlbumFormatQuantityMatch(album)) {
-				return FormatCompatibilityResult.KO;
-			}
+		FormatCompatibilityResult result;
+		if (isLinkedToAlbum()) {
+			result = FormatCompatibilityResult.OK;
 			
+			for (Album album : collectionAlbums) {
+				if (album.getDiscogsFormatValidation()) {
+					result = FormatCompatibilityResult.ACCEPTED;
+				} else if (!checkOneAlbumFormatQuantityMatch(album)) {
+					return FormatCompatibilityResult.KO;
+				}				
+			}
+		} else {
+			result = FormatCompatibilityResult.NOT_LINKED;
 		}
 		return result;
 	}

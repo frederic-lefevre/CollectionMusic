@@ -44,8 +44,8 @@ import javax.swing.JTextArea;
 import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
-import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease.FormatCompatibilityResult;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.AlbumMatchResult;
+import org.fl.collectionAlbum.disocgs.FormatCompatibilityResult;
 import org.fl.collectionAlbum.gui.DetailedAlbumAndDiscogsInfoPane;
 import org.fl.collectionAlbum.gui.DiscogsReleaseJTable;
 import org.fl.collectionAlbum.gui.GenerationPane;
@@ -131,7 +131,7 @@ public class DiscogsReleaseCustomActionListener implements java.awt.event.Action
 					infoPotentialAlbums.setText(
 						switch (albumMatchResult.getMatchResultType()) {
 						case MATCH -> "Albums potentiels trouvés:\n\n";
-						case NO_FORMAT_MATCH -> "Pas d'album potentiel trouvé\nAlbum potentiel avec le même titre et des auteurs communs:\n\n";
+						case NO_FORMAT_MATCH -> "Pas d'album potentiel trouvé (différence de format)\nAlbum potentiel avec le même titre et des auteurs communs:\n\n";
 						case NO_MATCH -> "Pas d'album potentiel trouvé";
 						});
 
