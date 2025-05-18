@@ -78,7 +78,7 @@ public class DiscogsAlbumRelease {
 		return inventoryCsvAlbum;
 	}
 	
-	public enum FormatCompatibilityResult {OK("Oui"), ACCEPTED("Accepté"), KO("Non");
+	public enum FormatCompatibilityResult {OK("Oui"), ACCEPTED("Accepté"), KO("Non"), NOT_LINKED("Non lié");
 		
 		private final String nom;
 		private FormatCompatibilityResult(String nom) {
@@ -92,15 +92,19 @@ public class DiscogsAlbumRelease {
 	
 	public FormatCompatibilityResult formatCompatibility() {
 	
-		FormatCompatibilityResult result = FormatCompatibilityResult.OK;
-		
-		for (Album album : collectionAlbums) {
-			if (album.getDiscogsFormatValidation()) {
-				result = FormatCompatibilityResult.ACCEPTED;
-			} else if (!checkOneAlbumFormatQuantityMatch(album)) {
-				return FormatCompatibilityResult.KO;
-			}
+		FormatCompatibilityResult result;
+		if (isLinkedToAlbum()) {
+			result = FormatCompatibilityResult.OK;
 			
+			for (Album album : collectionAlbums) {
+				if (album.getDiscogsFormatValidation()) {
+					result = FormatCompatibilityResult.ACCEPTED;
+				} else if (!checkOneAlbumFormatQuantityMatch(album)) {
+					return FormatCompatibilityResult.KO;
+				}				
+			}
+		} else {
+			result = FormatCompatibilityResult.NOT_LINKED;
 		}
 		return result;
 	}

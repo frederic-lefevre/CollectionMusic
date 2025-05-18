@@ -60,6 +60,8 @@ public class FormatCompatibilityRenderer extends CustomTableCellRenderer {
 				setBackground(Color.GREEN);
 			} else if (formatCompatibilityResult == FormatCompatibilityResult.ACCEPTED) {
 				setBackground(Color.ORANGE);
+			} else if (formatCompatibilityResult == FormatCompatibilityResult.NOT_LINKED) {
+					setBackground(Color.WHITE);	
 			} else {
 				setBackground(Color.RED);
 			}
