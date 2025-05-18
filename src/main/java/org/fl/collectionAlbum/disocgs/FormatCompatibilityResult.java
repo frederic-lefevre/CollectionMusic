@@ -24,6 +24,8 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.disocgs;
 
+import java.util.Comparator;
+
 public enum FormatCompatibilityResult {OK("Oui"), ACCEPTED("Accepté"), KO("Non"), NOT_LINKED("Non lié");
 	
 	private final String nom;
@@ -33,5 +35,16 @@ public enum FormatCompatibilityResult {OK("Oui"), ACCEPTED("Accepté"), KO("Non"
 	
 	public String getNom() {
 		return nom;
+	}
+	
+	public static class FormatCompatibilityComparator implements Comparator<FormatCompatibilityResult> {
+
+		@Override
+		public int compare(FormatCompatibilityResult o1, FormatCompatibilityResult o2) {
+			
+			if (o1.ordinal() < o2.ordinal()) return 1;
+			if (o1.ordinal() > o2.ordinal()) return -1;
+			return 0;
+		}		
 	}
 }
