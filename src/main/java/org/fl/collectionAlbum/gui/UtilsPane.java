@@ -26,7 +26,6 @@ package org.fl.collectionAlbum.gui;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.util.List;
 import java.util.Optional;
@@ -36,9 +35,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JList;
 import javax.swing.JPanel;
-import javax.swing.ListCellRenderer;
 import javax.swing.border.EmptyBorder;
 
 import org.fl.collectionAlbum.Control;
@@ -98,10 +95,7 @@ public class UtilsPane extends JPanel implements ActivableElement {
 		choixNombreAlbumPane.add(titreAlbumsAleatoire);
 		
 		numberOfAlbumBox = new JComboBox<>(numberOfAlbumsChoice);
-		numberOfAlbumBox.setSelectedIndex(DEFAULT_NUMBER_OF_RANDOM_ALBUMS-1);
-		ComboBoxRenderer renderer = new ComboBoxRenderer();
-		renderer.setPreferredSize(new Dimension(25, 10));
-		numberOfAlbumBox.setRenderer(renderer);		
+		numberOfAlbumBox.setSelectedIndex(DEFAULT_NUMBER_OF_RANDOM_ALBUMS-1);	
 		choixNombreAlbumPane.add(numberOfAlbumBox);
 		
 		choixAleatoirePane.add(choixNombreAlbumPane);
@@ -165,25 +159,4 @@ public class UtilsPane extends JPanel implements ActivableElement {
 	public void deactivate() {
 		pickRandomAlbumsButton.setEnabled(false);	
 	}
-	
-	private class  ComboBoxRenderer extends JLabel implements ListCellRenderer<Object> {
-
-		private static final long serialVersionUID = 1L;
-
-		public ComboBoxRenderer() {
-	        setOpaque(true);
-	        setHorizontalAlignment(CENTER);
-	        setVerticalAlignment(CENTER);
-	    }
-	    
-		@Override
-		public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected,
-				boolean cellHasFocus) {
-
-			setText(((Integer)value).toString());
-			return this;
-		}
-		
-	}
-
 }
