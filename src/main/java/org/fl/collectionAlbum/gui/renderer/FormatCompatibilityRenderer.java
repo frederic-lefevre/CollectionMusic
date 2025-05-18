@@ -55,14 +55,12 @@ public class FormatCompatibilityRenderer extends CustomTableCellRenderer {
 			setBackground(Color.RED);
 		} else if (value instanceof FormatCompatibilityResult formatCompatibilityResult) {
 			
+			setText(formatCompatibilityResult.getNom());
 			if (formatCompatibilityResult == FormatCompatibilityResult.OK) {
-				setText("Oui");
 				setBackground(Color.GREEN);
 			} else if (formatCompatibilityResult == FormatCompatibilityResult.ACCEPTED) {
-				setText("Accepté");
 				setBackground(Color.ORANGE);
 			} else {
-				setText("Non");
 				setBackground(Color.RED);
 			}
 		} else {
