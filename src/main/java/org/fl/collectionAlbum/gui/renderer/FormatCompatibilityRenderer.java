@@ -30,7 +30,7 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingConstants;
 
-import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease.FormatCompatibilityResult;
+import org.fl.collectionAlbum.disocgs.FormatCompatibilityResult;
 import org.fl.util.swing.CustomTableCellRenderer;
 
 public class FormatCompatibilityRenderer extends CustomTableCellRenderer {

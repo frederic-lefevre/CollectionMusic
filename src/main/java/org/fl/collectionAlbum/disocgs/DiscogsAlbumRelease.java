@@ -78,18 +78,6 @@ public class DiscogsAlbumRelease {
 		return inventoryCsvAlbum;
 	}
 	
-	public enum FormatCompatibilityResult {OK("Oui"), ACCEPTED("Accepté"), KO("Non"), NOT_LINKED("Non lié");
-		
-		private final String nom;
-		private FormatCompatibilityResult(String nom) {
-			this.nom = nom;
-		}
-		
-		public String getNom() {
-			return nom;
-		}
-	};
-	
 	public FormatCompatibilityResult formatCompatibility() {
 	
 		FormatCompatibilityResult result;
