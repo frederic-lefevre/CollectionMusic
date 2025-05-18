@@ -131,7 +131,7 @@ public class DiscogsReleaseCustomActionListener implements java.awt.event.Action
 					infoPotentialAlbums.setText(
 						switch (albumMatchResult.getMatchResultType()) {
 						case MATCH -> "Albums potentiels trouvés:\n\n";
-						case NO_FORMAT_MATCH -> "Pas d'album potentiel trouvé\nAlbum potentiel avec le même titre et des auteurs communs:\n\n";
+						case NO_FORMAT_MATCH -> "Pas d'album potentiel trouvé (différence de format)\nAlbum potentiel avec le même titre et des auteurs communs:\n\n";
 						case NO_MATCH -> "Pas d'album potentiel trouvé";
 						});
 

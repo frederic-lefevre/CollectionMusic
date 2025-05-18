@@ -129,7 +129,7 @@ public class AlbumCustomActionListener implements java.awt.event.ActionListener 
 					infoPotentialRelease.setText(
 							switch (releaseMatchResult.getMatchResultType()) {
 							case MATCH -> "Releases discogs potentielles trouvées:\n\n";
-							case NO_FORMAT_MATCH -> "Pas de release discogs potentielle trouvée  (différence de format)\nRelease potentielle avec le même titre et des auteurs communs:\n\n";
+							case NO_FORMAT_MATCH -> "Pas de release discogs potentielle trouvée (différence de format)\nRelease potentielle avec le même titre et des auteurs communs:\n\n";
 							case NO_MATCH -> "Pas de release discogs potentielle trouvée";
 							});
 					
