@@ -110,5 +110,4 @@ public class AlbumsTableModel extends AbstractTableModel {
 	public Album getAlbumAt(int rowIndex) {
 		return albumsList.get(rowIndex);
 	}
-
 }

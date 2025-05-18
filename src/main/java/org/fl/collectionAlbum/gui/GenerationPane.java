@@ -127,6 +127,15 @@ public class GenerationPane extends JPanel {
 
 		collectionTabPanes.add(discogsReleasesScrollPane, "Discogs releases");
 		
+		// Concert pane
+		ConcertTableModel concertTableModel = new ConcertTableModel(CollectionAlbumContainer.getInstance().getConcerts().getConcerts());
+		ConcertsJTable concertsJTable = new ConcertsJTable(concertTableModel);
+		
+		JScrollPane concertsScrollPane = new JScrollPane(concertsJTable);
+		concertsScrollPane.setPreferredSize(new Dimension(1800,700));
+		
+		collectionTabPanes.add(concertsScrollPane, "Concerts");
+		
 		// Collection metrics history
 		JTabbedPane collectionMetricsTabPanes = new JTabbedPane();
 		

@@ -29,6 +29,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.fl.collectionAlbum.Control;
+import org.fl.collectionAlbum.MusicArtefact;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.format.ContentNature;
@@ -38,26 +39,26 @@ public class AlbumUtils {
 	
 	private static final String AUTEURS_SEPARATOR = ", ";
 	
-	public static String getHtmlForArtistes(Album album) {
+	public static String getHtmlForArtistes(MusicArtefact musicArtefact) {
 		
 		StringBuilder buf = getStringBuilderWithHtmlBegin();
 		
-		List<Artiste> artistes = album.getAuteurs();
+		List<Artiste> artistes = musicArtefact.getAuteurs();
 		if ((artistes != null) && !artistes.isEmpty()) {
-			appendHtmlForArtistes(buf, album, artistes, true);
+			appendHtmlForArtistes(buf, musicArtefact, artistes, true);
 		}
 		buf.append("</body></html>");
 		return buf.toString();
 	}
 	
-	private static void appendHtmlForArtistes(StringBuilder buf, Album album, List<Artiste> artistes, boolean compact) {
+	private static void appendHtmlForArtistes(StringBuilder buf, MusicArtefact musicArtefact, List<Artiste> artistes, boolean compact) {
 				
 		String auteurCssClass;
 		if (compact) {
 			auteurCssClass = "artistesmall";
 			buf.append("<span class=\"")
 				.append(auteurCssClass).append("\">")
-				.append(album.getAuteurs().stream()
+				.append(musicArtefact.getAuteurs().stream()
 							.map(Artiste::getNomComplet)
 							.collect(Collectors.joining(AUTEURS_SEPARATOR)))
 				.append("</span><br/>");
@@ -68,21 +69,21 @@ public class AlbumUtils {
 				);
 		}
 		
-		if (album.hasIntervenant()) {
+		if (musicArtefact.hasIntervenant()) {
 			if (compact) {
 				buf.append("<span class=\"interv\">");
 		
-				appendIntervenants(buf, "- Direction: ", album.getChefsOrchestre(), compact);
-				appendIntervenants(buf, "- Interprète: ", album.getInterpretes(), compact);
-				appendIntervenants(buf, "- Ensemble: ", album.getEnsembles(), compact);
+				appendIntervenants(buf, "- Direction: ", musicArtefact.getChefsOrchestre(), compact);
+				appendIntervenants(buf, "- Interprète: ", musicArtefact.getInterpretes(), compact);
+				appendIntervenants(buf, "- Ensemble: ", musicArtefact.getEnsembles(), compact);
 
 			} else {
 				buf.append("Interprètes:");
 				buf.append("<ul>");
 				
-				appendIntervenants(buf, "<li>Direction: ", album.getChefsOrchestre(), compact);
-				appendIntervenants(buf, "<li>Interprète: ", album.getInterpretes(), compact);
-				appendIntervenants(buf, "<li>Ensemble: ", album.getEnsembles(), compact);
+				appendIntervenants(buf, "<li>Direction: ", musicArtefact.getChefsOrchestre(), compact);
+				appendIntervenants(buf, "<li>Interprète: ", musicArtefact.getInterpretes(), compact);
+				appendIntervenants(buf, "<li>Ensemble: ", musicArtefact.getEnsembles(), compact);
 				
 				buf.append("</ul>");
 			}	
