@@ -94,14 +94,11 @@ public class GenerationPane extends JPanel {
 		JTabbedPane collectionTabPanes = new JTabbedPane();
 		
 		// collection tab
-		JPanel collectionPane = new JPanel();
-		
 		// Scroll pane to contain the collection table
 		JScrollPane albumsScrollTable = new JScrollPane(albumsJTable);
 		albumsScrollTable.setPreferredSize(new Dimension(1800,700));
-		collectionPane.add(albumsScrollTable);
 		
-		collectionTabPanes.add(collectionPane, "Collection d'albums", 0);
+		collectionTabPanes.add(albumsScrollTable, "Collection d'albums", 0);
 		
 		// Media files tabs
 		Stream.of(ContentNature.values()).forEachOrdered(contentNature -> {
@@ -111,14 +108,11 @@ public class GenerationPane extends JPanel {
 			
 			MediaFilesJTable mediaFilesJTable = new MediaFilesJTable(tm);
 			
-			JPanel mediaFilesPane = new JPanel();
-			
 			// Scroll pane to contain the media path table
 			JScrollPane mediaFilesScrollTable = new JScrollPane(mediaFilesJTable);
 			mediaFilesScrollTable.setPreferredSize(new Dimension(1800,700));
-			mediaFilesPane.add(mediaFilesScrollTable);
 			
-			collectionTabPanes.add(mediaFilesPane, "Chemins des fichiers " + contentNature.getNom());
+			collectionTabPanes.add(mediaFilesScrollTable, "Chemins des fichiers " + contentNature.getNom());
 		});
 		
 		// Discogs releases pane
@@ -127,14 +121,11 @@ public class GenerationPane extends JPanel {
 		
 		DiscogsReleaseJTable discogsReleaseJTable = new DiscogsReleaseJTable(dtm, CollectionAlbumContainer.getInstance(), this);
 		
-		JPanel discogsReleasesPane = new JPanel();
-		
 		// Scroll pane to contain the discogs releases pane
 		JScrollPane discogsReleasesScrollPane = new JScrollPane(discogsReleaseJTable);
 		discogsReleasesScrollPane.setPreferredSize(new Dimension(1800,700));
-		discogsReleasesPane.add(discogsReleasesScrollPane);
 
-		collectionTabPanes.add(discogsReleasesPane, "Discogs releases");
+		collectionTabPanes.add(discogsReleasesScrollPane, "Discogs releases");
 		
 		// Collection metrics history
 		JTabbedPane collectionMetricsTabPanes = new JTabbedPane();
