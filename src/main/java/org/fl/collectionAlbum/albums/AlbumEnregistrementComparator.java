@@ -30,10 +30,7 @@ import java.util.Comparator;
 import org.fl.collectionAlbum.utils.TemporalUtils;
 
 public class AlbumEnregistrementComparator implements Comparator<Album> {
-	
-	public AlbumEnregistrementComparator() {
-	}
-	
+
 	public int compare(Album arg0, Album arg1) {
 		
 		TemporalAccessor d0 = arg0.getDebutEnregistrement();
