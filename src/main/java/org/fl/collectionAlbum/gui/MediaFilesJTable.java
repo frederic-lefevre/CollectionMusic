@@ -37,6 +37,7 @@ import org.fl.collectionAlbum.gui.renderer.AlbumsRenderer;
 import org.fl.collectionAlbum.gui.renderer.CollectionBooleanRenderer;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.fl.collectionAlbum.mediaPath.MediaFilePathAlbumComparator;
+import org.fl.collectionAlbum.utils.AlbumUtils;
 
 public class MediaFilesJTable extends JTable {
 
@@ -71,6 +72,7 @@ public class MediaFilesJTable extends JTable {
 		setRowSorter(sorter);
 				
 		sorter.setComparator(MediaFilesTableModel.ALBUMS_COL_IDX, new MediaFilePathAlbumComparator());
+		sorter.setComparator(MediaFilesTableModel.NB_FILES_COL_IDX, new AlbumUtils.LongComparator());
 	}
 
 	public MediaFilePath getSelectedMediaFile() {

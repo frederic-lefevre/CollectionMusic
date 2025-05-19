@@ -24,6 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.utils;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -201,5 +202,13 @@ public class AlbumUtils {
 		});
 		buf.append("</table></body></html>");
 		return buf.toString();		
+	}
+	
+	public static class LongComparator implements Comparator<Long> {
+
+		@Override
+		public int compare(Long o1, Long o2) {		
+			return Long.compare(o1, o2);
+		}	
 	}
 }
