@@ -29,7 +29,6 @@ import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
 import org.fl.collectionAlbum.concerts.Concert;
-import org.fl.collectionAlbum.utils.TemporalUtils;
 
 public class ConcertTableModel extends AbstractTableModel {
 

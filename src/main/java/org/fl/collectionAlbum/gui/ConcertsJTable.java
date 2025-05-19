@@ -34,6 +34,7 @@ import javax.swing.table.TableRowSorter;
 import org.fl.collectionAlbum.concerts.Concert;
 import org.fl.collectionAlbum.gui.renderer.AuteursRenderer;
 import org.fl.collectionAlbum.gui.renderer.DateRenderer;
+import org.fl.collectionAlbum.utils.TemporalUtils;
 
 public class ConcertsJTable extends JTable {
 
@@ -66,6 +67,8 @@ public class ConcertsJTable extends JTable {
 		// Row sorter
 		TableRowSorter<ConcertTableModel> sorter = new TableRowSorter<>(concertTableModel);
 		setRowSorter(sorter);
+		
+		sorter.setComparator(ConcertTableModel.DATE_COL_IDX, new TemporalUtils.TemporalAccessorComparator());
 	}
 	
 	public Concert getSelectedConcert() {
