@@ -72,7 +72,7 @@ public class ConcertTableModel extends AbstractTableModel {
 		} else {
 			
 			return switch(columnIndex) {
-				case DATE_COL_IDX -> TemporalUtils.formatDate(listeConcert.get(rowIndex).getDateConcert());
+				case DATE_COL_IDX -> listeConcert.get(rowIndex).getDateConcert();
 				case ARTISTE_COL_IDX -> listeConcert.get(rowIndex);
 				case LIEU_COL_IDX -> listeConcert.get(rowIndex).getLieuConcert().getLieu();
 				default -> null;

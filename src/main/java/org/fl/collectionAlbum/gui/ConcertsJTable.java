@@ -33,6 +33,7 @@ import javax.swing.table.TableRowSorter;
 
 import org.fl.collectionAlbum.concerts.Concert;
 import org.fl.collectionAlbum.gui.renderer.AuteursRenderer;
+import org.fl.collectionAlbum.gui.renderer.DateRenderer;
 
 public class ConcertsJTable extends JTable {
 
@@ -48,6 +49,7 @@ public class ConcertsJTable extends JTable {
 		
 		setRowHeight(50);
 		
+		getColumnModel().getColumn(ConcertTableModel.DATE_COL_IDX).setCellRenderer(new DateRenderer());
 		getColumnModel().getColumn(ConcertTableModel.ARTISTE_COL_IDX).setCellRenderer(new AuteursRenderer());
 		
 		getColumnModel().getColumn(ConcertTableModel.DATE_COL_IDX).setPreferredWidth(200);
