@@ -36,7 +36,7 @@ import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 
-public class AlbumUtils {
+public class CollectionUtils {
 	
 	private static final String AUTEURS_SEPARATOR = ", ";
 	

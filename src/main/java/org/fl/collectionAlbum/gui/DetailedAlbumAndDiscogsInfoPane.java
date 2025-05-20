@@ -51,7 +51,7 @@ import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory;
 import org.fl.collectionAlbum.gui.listener.OsActionListener;
-import org.fl.collectionAlbum.utils.AlbumUtils;
+import org.fl.collectionAlbum.utils.CollectionUtils;
 
 public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 
@@ -158,7 +158,7 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 		
 		JEditorPane infoAlbum = new JEditorPane();
 		infoAlbum.setContentType("text/html");
-		infoAlbum.setText(AlbumUtils.getSimpleHtml(album));
+		infoAlbum.setText(CollectionUtils.getSimpleHtml(album));
 		infoAlbum.setEditable(false);
 		infoAlbum.setFont(monospaced);
 		return infoAlbum;

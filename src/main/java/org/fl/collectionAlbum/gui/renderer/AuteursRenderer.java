@@ -30,7 +30,7 @@ import java.util.logging.Logger;
 import javax.swing.SwingConstants;
 
 import org.fl.collectionAlbum.MusicArtefact;
-import org.fl.collectionAlbum.utils.AlbumUtils;
+import org.fl.collectionAlbum.utils.CollectionUtils;
 import org.fl.util.swing.CustomTableCellRenderer;
 
 public class AuteursRenderer extends CustomTableCellRenderer {
@@ -53,7 +53,7 @@ public class AuteursRenderer extends CustomTableCellRenderer {
 			mLog.fine("Null value in Auteurs cell. Should be an Album");
 			setText("Valeur null");
 		} else if (MusicArtefact.class.isAssignableFrom(value.getClass())) {
-			setText(AlbumUtils.getHtmlForArtistes((MusicArtefact)value));
+			setText(CollectionUtils.getHtmlForArtistes((MusicArtefact)value));
 		} else {
 			mLog.severe("Invalid value type in Auteurs cell. Should be Album or Concert but is " + value.getClass().getName());
 		}	
