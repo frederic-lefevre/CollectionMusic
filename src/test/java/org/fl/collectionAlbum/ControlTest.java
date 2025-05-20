@@ -77,6 +77,7 @@ class ControlTest {
 		assertThat(Control.getOsActionOnDiscogsRelease()).isNotNull().isNotEmpty();
 		assertThat(Control.getOsActionOnMediaFilePath()).isNotNull().isNotEmpty();
 		assertThat(Control.getOsActionsOnAlbum()).isNotNull().isNotEmpty();
+		assertThat(Control.getOsActionsOnConcert()).isNotNull().isNotEmpty();
 	}
 	
 	@Test

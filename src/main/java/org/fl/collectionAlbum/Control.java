@@ -38,13 +38,14 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.fl.collectionAlbum.albums.Album;
+import org.fl.collectionAlbum.concerts.Concert;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.gui.CollectionAlbumGui;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.fl.collectionAlbum.metrics.CollectionMetricsHistory;
 import org.fl.collectionAlbum.metrics.ConcertMetricsHistory;
-import org.fl.collectionAlbum.osAction.AlbumCommandParameter;
+import org.fl.collectionAlbum.osAction.MusicArtefactCommandParameter;
 import org.fl.collectionAlbum.osAction.DiscogsReleaseCommandParameter;
 import org.fl.collectionAlbum.osAction.ListOfStringCommandParameter;
 import org.fl.collectionAlbum.osAction.StringCommandParameter;
@@ -76,6 +77,7 @@ public class Control {
 	private Map<ContentNature,Path> mediaFileRootPaths;
 	private Map<String, OsCommandAndOption> mapOfOsCommandsAndOptions;
 	private List<OsAction<Album>> osActionsOnAlbum;
+	private List<OsAction<Concert>> osActionsOnConcert;
 	private List<OsAction<DiscogsAlbumRelease>> osActionsOnDiscogsRelease;
 	private List<OsAction<MediaFilePath>> osActionsOnMediaFilePath;
 	private OsAction<List<String>> displayUrlAction;
@@ -145,7 +147,10 @@ public class Control {
 				
 			mapOfOsCommandsAndOptions = getMapOfOsCommandsAndOptions("osCommandAndOptions.");
 			
+			// OsAaction identiques qur Album et Concert
 			osActionsOnAlbum = getOsActionsOnAlbum("album.command.");
+			osActionsOnConcert = getOsActionsOnConcert("album.command.");
+			
 			osActionsOnDiscogsRelease = getOsActionsOnDiscogsRelease("album.discogs.command.");
 			osActionsOnMediaFilePath = getOsActionOnMediaFilePath("album.mediaFile.command.");
 			
@@ -233,6 +238,10 @@ public class Control {
 		return getInstance().osActionsOnAlbum;
 	}
 
+	public static List<OsAction<Concert>> getOsActionsOnConcert() {
+		return getInstance().osActionsOnConcert;
+	}
+	
 	public static List<OsAction<DiscogsAlbumRelease>> getOsActionOnDiscogsRelease() {
 		return getInstance().osActionsOnDiscogsRelease;
 	}
@@ -283,12 +292,23 @@ public class Control {
 		}
 	}
 	
+	private List<OsAction<Concert>> getOsActionsOnConcert(String osCmdPropBase) {
+
+		return collectionProperties.getKeysElements(osCmdPropBase).stream()
+				.map(prop -> new OsAction<Concert>(
+						collectionProperties.getProperty(osCmdPropBase + prop + ".title"),
+						getOsCommandAndOption(collectionProperties.getProperty(osCmdPropBase + prop + ".cmd")),
+						new MusicArtefactCommandParameter<>(MusicArtefactCommandParameter.ParameterType.valueOf(collectionProperties.getProperty(osCmdPropBase + prop + ".param")))))
+				.collect(Collectors.toList());
+	}
+	
 	private List<OsAction<Album>> getOsActionsOnAlbum(String osCmdPropBase) {
 
 		return collectionProperties.getKeysElements(osCmdPropBase).stream()
-				.map(prop -> new OsAction<Album>(collectionProperties.getProperty(osCmdPropBase + prop + ".title"),
+				.map(prop -> new OsAction<Album>(
+						collectionProperties.getProperty(osCmdPropBase + prop + ".title"),
 						getOsCommandAndOption(collectionProperties.getProperty(osCmdPropBase + prop + ".cmd")),
-						AlbumCommandParameter.valueOf(collectionProperties.getProperty(osCmdPropBase + prop + ".param"))))
+						new MusicArtefactCommandParameter<>(MusicArtefactCommandParameter.ParameterType.valueOf(collectionProperties.getProperty(osCmdPropBase + prop + ".param")))))
 				.collect(Collectors.toList());
 	}
 	

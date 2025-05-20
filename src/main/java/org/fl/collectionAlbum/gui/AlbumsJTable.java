@@ -41,7 +41,7 @@ import org.fl.collectionAlbum.gui.renderer.AuteursRenderer;
 import org.fl.collectionAlbum.gui.renderer.CollectionBooleanRenderer;
 import org.fl.collectionAlbum.gui.renderer.MediaFilesRenderer;
 
-public class AlbumsJTable extends JTable {
+public class AlbumsJTable extends JTable implements MusicArtefactTable<Album> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -83,7 +83,8 @@ public class AlbumsJTable extends JTable {
 	}
 
 	// Get the selected album
-	public Album getSelectedAlbum() {
+	@Override
+	public Album getSelectedMusicArtefact() {
 		
 		int[] rowIdxs = getSelectedRows();
 		if (rowIdxs.length == 0) {

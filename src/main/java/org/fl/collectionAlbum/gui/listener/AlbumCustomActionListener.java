@@ -46,10 +46,10 @@ import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.ReleaseMatchResult;
 import org.fl.collectionAlbum.format.ContentNature;
-import org.fl.collectionAlbum.gui.AlbumsJTable;
 import org.fl.collectionAlbum.gui.DetailedAlbumAndDiscogsInfoPane;
 import org.fl.collectionAlbum.gui.GenerationPane;
 import org.fl.collectionAlbum.gui.MediaFilesSearchPane;
+import org.fl.collectionAlbum.gui.MusicArtefactTable;
 
 public class AlbumCustomActionListener implements java.awt.event.ActionListener {
 
@@ -86,11 +86,11 @@ public class AlbumCustomActionListener implements java.awt.event.ActionListener 
 		}		
 	};
 	
-	private final AlbumsJTable albumsJTable;
+	private final MusicArtefactTable<Album> albumsJTable;
 	private final CustomAction customAction;
 	private final GenerationPane generationPane;
 	
-	public AlbumCustomActionListener(AlbumsJTable ajt, CustomAction ca, GenerationPane generationPane) {
+	public AlbumCustomActionListener(MusicArtefactTable<Album> ajt, CustomAction ca, GenerationPane generationPane) {
 		
 		albumsJTable = ajt;
 		customAction = ca;
@@ -100,7 +100,7 @@ public class AlbumCustomActionListener implements java.awt.event.ActionListener 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		Album selectedAlbum = albumsJTable.getSelectedAlbum();
+		Album selectedAlbum = albumsJTable.getSelectedMusicArtefact();
 		
 		if (selectedAlbum != null) {
 			
