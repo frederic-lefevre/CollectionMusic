@@ -24,16 +24,29 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui.adapter;
 
+import java.awt.event.ActionEvent;
 import java.util.List;
 
+import javax.swing.JOptionPane;
 
 import org.fl.collectionAlbum.concerts.Concert;
+import org.fl.collectionAlbum.gui.DetailedConcertInfoPane;
 import org.fl.collectionAlbum.gui.MusicArtefactTable;
 import org.fl.collectionAlbum.osAction.OsAction;
 
 public class ConcertMouseAdapter extends MusicArtefactMouseAdapter<Concert>  {
-
+	
 	public ConcertMouseAdapter(MusicArtefactTable<Concert> concertsTable, List<OsAction<Concert>> osActions) {
 		super(concertsTable, osActions);
+		
+		musicArtefactMenuItems.addMenuItem("Informations détaillées", new ConcertCustomActionListener(), (concert) -> concert != null, localJPopupMenu);
+	}
+	
+	private class ConcertCustomActionListener implements java.awt.event.ActionListener {
+	
+		@Override
+		public void actionPerformed(ActionEvent e) {			
+			JOptionPane.showMessageDialog(null, new DetailedConcertInfoPane(musicArtefactTable.getSelectedMusicArtefact()), "Informations détaillées", JOptionPane.INFORMATION_MESSAGE);			
+		}	
 	}
 }
