@@ -31,13 +31,15 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.TableRowSorter;
 
+import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.concerts.Concert;
 import org.fl.collectionAlbum.concerts.ConcertAuteurComparator;
+import org.fl.collectionAlbum.gui.adapter.ConcertMouseAdapter;
 import org.fl.collectionAlbum.gui.renderer.AuteursRenderer;
 import org.fl.collectionAlbum.gui.renderer.DateRenderer;
 import org.fl.collectionAlbum.utils.TemporalUtils;
 
-public class ConcertsJTable extends JTable {
+public class ConcertsJTable extends JTable implements MusicArtefactTable<Concert> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -65,6 +67,8 @@ public class ConcertsJTable extends JTable {
 		
 		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		
+		addMouseListener(new ConcertMouseAdapter(this, Control.getOsActionsOnConcert()));
+		
 		// Row sorter
 		TableRowSorter<ConcertTableModel> sorter = new TableRowSorter<>(concertTableModel);
 		setRowSorter(sorter);
@@ -73,7 +77,9 @@ public class ConcertsJTable extends JTable {
 		sorter.setComparator(ConcertTableModel.ARTISTE_COL_IDX, new ConcertAuteurComparator());
 	}
 	
-	public Concert getSelectedConcert() {
+	// Get the selected concert
+	@Override
+	public Concert getSelectedMusicArtefact() {
 		
 		int[] rowIdxs = getSelectedRows();
 		if (rowIdxs.length == 0) {
