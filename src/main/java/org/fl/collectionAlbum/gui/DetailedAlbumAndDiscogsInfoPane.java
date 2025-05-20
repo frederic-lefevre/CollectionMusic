@@ -30,8 +30,10 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
@@ -199,9 +201,10 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 	
 	private JLabel getCoverImage(Album album) {
 		
-		if (album.getCoverImage() != null) {
+		Path coverImagePath = album.getCoverImage();
+		if (coverImagePath != null) {
 			try {
-				ImageIcon cover = new ImageIcon(ImageIO.read(album.getCoverImage().toFile()));
+				ImageIcon cover = new ImageIcon(ImageIO.read(coverImagePath.toFile()));
 				final int coverWidth = cover.getIconWidth();
 				final int coverHeight = cover.getIconHeight();
 				int adjustedCoverWidth;
@@ -217,7 +220,7 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 
 				return new JLabel(adjusteCover);
 			} catch (IOException e) {
-				return new JLabel("Fichier couverture non trouvé: " + album.getCoverImage().toString());
+				return new JLabel("Fichier couverture non trouvé: " + Objects.toString(coverImagePath));
 			}
 		} else {
 			return new JLabel("Couverture de l'album non disponible");
