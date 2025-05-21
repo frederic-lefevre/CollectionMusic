@@ -24,7 +24,6 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.rapportHtml;
 
-import java.net.URI;
 import java.util.List;
 
 import org.fl.collectionAlbum.Control;
@@ -76,11 +75,12 @@ public class RapportMusicArtefact extends RapportHtml {
 		}
 		
 		if (musicArtefact.hasUrlLinks()) {
+			write("  <h3>Autres liens</h3>\n");
 			write("<ul>\n");
-			for (String url : musicArtefact.getUrlLinks()) {
-				URI infosUri = RapportStructuresAndNames.getArtefactInfosAbsoluteUri(url) ;
-				write("  <li><h3><a href=\"").write(infosUri.toString()).write("\">").write(url).write("</a></h3></li>\n") ;
-			}
+			musicArtefact.getUrlLinks().forEach(infosUri -> {
+				String uriString = infosUri.toString();
+				write("  <li><a href=\"").write(uriString).write("\">").write(uriString).write("</a></li>\n");			
+			});
 			write("</ul>\n");
 		}		
 	}

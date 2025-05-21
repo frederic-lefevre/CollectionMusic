@@ -24,12 +24,17 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.json;
 
+import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.artistes.ArtistRole;
 import org.fl.collectionAlbum.artistes.Artiste;
@@ -145,10 +150,27 @@ public class MusicArtefactParser {
 		return ParserHelpers.getArrayAttribute(arteFactJson, JsonMusicProperties.NOTES);
 	}
 
-	public List<String> getUrlLinks() {		
-		return ParserHelpers.getArrayAttribute(arteFactJson, JsonMusicProperties.LIENS);
+	public List<URI> getUrlLinks() {		
+		return ParserHelpers.getArrayAttribute(arteFactJson, JsonMusicProperties.LIENS).stream()
+				.map(relativeUriString -> getAbsoluteUri(Control.getMusicartefactInfosUri(), relativeUriString))
+				.filter(Objects::nonNull)
+				.toList();
 	}
 
+	protected URI getAbsoluteUri(String rootUri, String relativeDirUriStr) {
+		try {
+			URI absoluteUri = new URI(rootUri + relativeDirUriStr);
+			// check that the file exists
+			if (!(Files.exists(Paths.get(absoluteUri)))) {
+				albumLog.warning("Le fichier suivant n'existe pas: " + absoluteUri.toString() +  "\nMusicArtefact JSON:\n" + arteFactJson);
+			}
+			return absoluteUri;
+		} catch (Exception e) {
+			albumLog.log(Level.SEVERE, "Wrong URI string\nFile relative URI: " + relativeDirUriStr + "\nRoot URI: " + rootUri + "\nMusicArtefact JSON:\n" + arteFactJson, e);
+			return null;
+		}
+	}
+	
 	public static int getVersion(JsonNode json) {
 		
 		return Optional.ofNullable(json.get(JsonMusicProperties.JSON_VERSION))

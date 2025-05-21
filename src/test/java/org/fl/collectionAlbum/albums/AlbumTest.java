@@ -27,6 +27,7 @@ package org.fl.collectionAlbum.albums;
 import static org.assertj.core.api.Assertions.*;
 
 import java.io.IOException;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -503,11 +504,11 @@ class AlbumTest {
 		
 		assertThat(album.getTitre()).isEqualTo("Portrait in jazz");
 
-		List<String> liens = album.getUrlLinks();
+		List<URI> liens = album.getUrlLinks();
 		assertThat(liens)
 			.isNotNull()
 			.singleElement()
-			.isEqualTo("http://somwhere");
+			.hasToString("http://somwhere");
 		
 		assertThat(album.hasAudioFiles()).isTrue();
 		assertThat(album.hasVideoFiles()).isFalse();
