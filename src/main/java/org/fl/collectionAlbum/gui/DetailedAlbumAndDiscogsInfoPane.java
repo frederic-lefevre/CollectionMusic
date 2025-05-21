@@ -165,13 +165,12 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 		
 		JPanel albumPane = new JPanel();
 		albumPane.setLayout(new BoxLayout(albumPane, BoxLayout.Y_AXIS));
-		
 		albumPane.add(getCoverImage(album));
 		
 		if (album.hasMediaFiles()) {
 			
 			JLabel titreMedia = new JLabel("Folders contenant les medias:");
-			titreMedia.setBorder(new EmptyBorder(20, 0, 20, 0));
+			titreMedia.setBorder(new EmptyBorder(10, 0, 10, 0));
 			titreMedia.setFont(verdana);
 			albumPane.add(titreMedia);
 			
@@ -182,7 +181,6 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 					.distinct()
 					.forEachOrdered(mediaFolder -> {
 						JButton showMediaFolderButton = new JButton(mediaFolder);
-						showMediaFolderButton.setBorder(new EmptyBorder(20, 0, 20, 0));
 						
 						OsActionListener<String> showMediaFolderListener = new OsActionListener<>(mediaFolder, Control.getDisplayFolderAction());
 						showMediaFolderButton.addActionListener(showMediaFolderListener);
@@ -190,7 +188,11 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 						albumPane.add(showMediaFolderButton);
 					});						
 		}
-			
+		
+		if (album.hasUrlLinks()) {
+			albumPane.add(CollectionUtils.urlLinkPanel(album));
+		}
+		
 		return albumPane;
 	}
 	

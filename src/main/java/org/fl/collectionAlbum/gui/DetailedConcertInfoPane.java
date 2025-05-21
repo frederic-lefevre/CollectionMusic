@@ -29,6 +29,8 @@ import java.awt.Font;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.BoxLayout;
 import javax.swing.JEditorPane;
@@ -50,6 +52,8 @@ public class DetailedConcertInfoPane extends JScrollPane {
 	
 	private static final int MAX_TICKET_WIDTH = 1400;
 	private static final int MAX_TICKET_HEIGHT = 800;
+	
+	private static final Logger logger = Logger.getLogger(DetailedConcertInfoPane.class.getName());
 	
 	private static final Font monospaced = new Font("monospaced", Font.BOLD, 14);
 	
@@ -73,14 +77,17 @@ public class DetailedConcertInfoPane extends JScrollPane {
 				try {
 					return FilesUtils.uriStringToAbsolutePath(ticketImagesRoot + relativeStringPath);
 				} catch (URISyntaxException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					logger.log(Level.SEVERE, "Exception building concert image absolute path for concert:\n" + concert.getJsonString());
 					return null;
 				}
 			})
 			.filter(Objects::nonNull)
 			.forEach(ticketImagePath -> infosPane.add(getTicketImage(ticketImagePath)));
 			
+		if (concert.hasUrlLinks()) {
+			infosPane.add(CollectionUtils.urlLinkPanel(concert));
+		}
+		
 		setViewportView(infosPane);
 	}
 	

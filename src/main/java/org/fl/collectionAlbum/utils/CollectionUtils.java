@@ -24,8 +24,10 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.utils;
 
+import java.awt.Font;
 import java.awt.Image;
 import java.io.IOException;
+import java.net.URI;
 import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.List;
@@ -34,8 +36,12 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.imageio.ImageIO;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.MusicArtefact;
@@ -43,6 +49,7 @@ import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.concerts.Concert;
 import org.fl.collectionAlbum.format.ContentNature;
+import org.fl.collectionAlbum.gui.listener.OsActionListener;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 
 public class CollectionUtils {
@@ -263,5 +270,32 @@ public class CollectionUtils {
 		} catch (IOException e) {
 			return new JLabel("Fichier image non trouvé: " + Objects.toString(imagePath));
 		}
+	}
+	
+	private static final Font verdana = new Font("Verdana", Font.BOLD, 14);
+	
+	public static JPanel urlLinkPanel(MusicArtefact musicArtefact) {
+		
+		JPanel urlLinkPanel = new JPanel();
+		urlLinkPanel.setLayout(new BoxLayout(urlLinkPanel, BoxLayout.X_AXIS));
+		urlLinkPanel.setAlignmentX(0);
+		urlLinkPanel.setBorder(new EmptyBorder(10, 0, 10, 0));
+		
+		JLabel titreUrlLinks = new JLabel("Liens: ");
+		titreUrlLinks.setFont(verdana);
+		urlLinkPanel.add(titreUrlLinks);
+		
+		JButton showLinkButton = new JButton("Afficher dans un navigateur");
+		
+		OsActionListener<List<String>> showLinkListener = new OsActionListener<>(
+				musicArtefact.getUrlLinks().stream()
+					.map(URI::toString)
+					.toList(), 
+				Control.getDisplayUrlAction());
+		
+		showLinkButton.addActionListener(showLinkListener);
+		urlLinkPanel.add(showLinkButton);
+			
+		return urlLinkPanel;
 	}
 }
