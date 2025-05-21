@@ -147,7 +147,7 @@ class AlbumTest {
 			    }                                 
 			  ],    								
 			  "enregistrement": [ "1959-12-28",  "1959-12-28" ],  
-			  "liensUrl":  [ "http://somwhere" ] 
+			  "liensUrl":  [ "/Concerts/2006/EricClapton20060505" ] 
 			 } 
 			""" ;
 			  
@@ -508,7 +508,7 @@ class AlbumTest {
 		assertThat(liens)
 			.isNotNull()
 			.singleElement()
-			.hasToString("http://somwhere");
+			.hasToString(Control.getMusicartefactInfosUri() + "/Concerts/2006/EricClapton20060505");
 		
 		assertThat(album.hasAudioFiles()).isTrue();
 		assertThat(album.hasVideoFiles()).isFalse();
