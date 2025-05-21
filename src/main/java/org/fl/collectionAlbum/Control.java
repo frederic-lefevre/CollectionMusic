@@ -136,7 +136,8 @@ public class Control {
 			concertTicketImgUri = collectionProperties.getProperty("concert.ticketImgDir.name");	
 
 			// get the path of additional information for concerts and albums
-			musicartefactInfosUri = collectionProperties.getProperty("musicArtefact.information.rootDir.name");
+			musicartefactInfosUri = FilesUtils.uriStringToAbsolutePath(collectionProperties.getProperty("musicArtefact.information.rootDir.name"))
+					.toUri().toString();  // Converting to absolute path, in Windows OS case, put the default C: drive if it is not mentioned in the property value
 						
 			discogsCollectionCsvExportPath = FilesUtils.uriStringToAbsolutePath(collectionProperties.getProperty("album.discogs.collection.csvExport"));
 			discogsBaseUrlForRelease = collectionProperties.getProperty("album.discogs.baseUrl.release");
