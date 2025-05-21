@@ -140,7 +140,7 @@ public class CollectionUtils {
 			buf.append("</ol>");
 		}
 		
-		appendNotesAndLinks(buf, concert);
+		appendNotes(buf, concert);
 		
 		buf.append("</body></html>");
 		return buf.toString();
@@ -192,23 +192,18 @@ public class CollectionUtils {
 			buf.append("<h3>Release id Discogs: ").append(album.getDiscogsLink()).append("</h3>");
 		}
 		
-		appendNotesAndLinks(buf, album);
+		appendNotes(buf, album);
 
 		buf.append("</body></html>");
 		return buf.toString();		
 	}
 	
-	private static void appendNotesAndLinks(StringBuilder buf, MusicArtefact musicArtefact) {
+	private static void appendNotes(StringBuilder buf, MusicArtefact musicArtefact) {
 		
 		if (musicArtefact.hasNotes()) {
 			buf.append("<h3>Notes:</h3>");
 			musicArtefact.getNotes().forEach(note -> buf.append("<p>").append(note).append("</p>"));
-		}
-		
-		if (musicArtefact.hasUrlLinks()) {
-			musicArtefact.getUrlLinks().forEach(urlLink -> buf.append(" <li><h3><a href=\"").append(urlLink.toString()).append("\">").append(urlLink.toString()).append("</a></h3></li>"));
-		}
-		
+		}	
 	}
 	
 	public static String getHtmlForMediaFiles(Album album) {
