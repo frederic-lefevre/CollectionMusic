@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -31,19 +31,21 @@ import org.fl.collectionAlbum.artistes.AuteurComparator;
 
 public class ConcertPoidsComparator implements Comparator<Artiste> {
 	
+	private static final AuteurComparator auteurComparator = new AuteurComparator();
+	
 	public int compare(Artiste arg0, Artiste arg1) {
-		
-		float poids0 = arg0.getNbConcert()  ;
-		float poids1 = arg1.getNbConcert() ;
-		
-		int ordreNom = 0 ;
+
+		float poids0 = arg0.getNbConcert();
+		float poids1 = arg1.getNbConcert();
+
+		int ordreNom = 0;
 		if (poids0 == poids1) {
-			ordreNom = (new AuteurComparator()).compare(arg0,arg1) ;	
+			ordreNom = auteurComparator.compare(arg0, arg1);
 		} else if (poids0 < poids1) {
-			ordreNom = 1 ;
+			ordreNom = 1;
 		} else if (poids0 > poids1) {
-			ordreNom = -1 ;
+			ordreNom = -1;
 		}
-		return ordreNom ;
+		return ordreNom;
 	}
 }

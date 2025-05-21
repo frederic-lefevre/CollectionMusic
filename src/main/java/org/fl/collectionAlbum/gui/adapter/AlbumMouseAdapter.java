@@ -24,73 +24,27 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui.adapter;
 
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.stream.Stream;
 
-import javax.swing.JPopupMenu;
-
 import org.fl.collectionAlbum.albums.Album;
-import org.fl.collectionAlbum.gui.AlbumsJTable;
-import org.fl.collectionAlbum.gui.CollectionMenuItems;
 import org.fl.collectionAlbum.gui.GenerationPane;
-import org.fl.collectionAlbum.gui.listener.AlbumCommandListener;
+import org.fl.collectionAlbum.gui.MusicArtefactTable;
 import org.fl.collectionAlbum.gui.listener.AlbumCustomActionListener;
 import org.fl.collectionAlbum.gui.listener.AlbumCustomActionListener.CustomAction;
 import org.fl.collectionAlbum.osAction.OsAction;
 
-public class AlbumMouseAdapter extends MouseAdapter {
+public class AlbumMouseAdapter extends MusicArtefactMouseAdapter<Album> {
+	
+	public AlbumMouseAdapter(MusicArtefactTable<Album> albumsTable, List<OsAction<Album>>  osActions, GenerationPane generationPane) {
+		
+		super(albumsTable, osActions);
 
-	private final AlbumsJTable albumsJTable;
-	private final JPopupMenu localJPopupMenu;
-	
-	private final CollectionMenuItems<Album> albumMenuItems;
-	
-	public AlbumMouseAdapter(AlbumsJTable ajt, List<OsAction<Album>> osActions, GenerationPane generationPane) {
-		
-		super();
-		this.albumsJTable = ajt;
-		localJPopupMenu = new JPopupMenu();
-		
-		albumMenuItems = new CollectionMenuItems<>();
-		
-		osActions.forEach(osAction ->
-			albumMenuItems.addMenuItem(
-					osAction.getActionTitle(), 
-					new AlbumCommandListener(albumsJTable, osAction), 
-					osAction.getCommandParameter().getActionValidityPredicate(),
-					localJPopupMenu
-			)
-		);
-		
 		Stream.of(CustomAction.values()).forEachOrdered(customAction -> 
-				albumMenuItems.addMenuItem(
+			musicArtefactMenuItems.addMenuItem(
 						customAction.getActionTitle(), 
-						new AlbumCustomActionListener(albumsJTable, customAction, generationPane), 
+						new AlbumCustomActionListener(albumsTable, customAction, generationPane), 
 						customAction.getDisplayable(),
 						localJPopupMenu));
-
 	}
-
-	@Override
-	public void mousePressed(MouseEvent evt) {
-		if (evt.isPopupTrigger()) {
-			enableMenuItems();
-			localJPopupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
-		}
-	}
-
-	@Override
-	public void mouseReleased(MouseEvent evt) {
-		if (evt.isPopupTrigger()) {
-			enableMenuItems();
-			localJPopupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
-		}
-	}
-
-	private void enableMenuItems() {
-		albumMenuItems.enableMenuItems(albumsJTable.getSelectedAlbum());
-	}
-
 }

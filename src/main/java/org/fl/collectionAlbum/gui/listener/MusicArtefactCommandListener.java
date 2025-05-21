@@ -1,5 +1,5 @@
 /*
- MIT License
+ * MIT License
 
 Copyright (c) 2017, 2025 Frederic Lefevre
 
@@ -20,42 +20,35 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
- */
+*/
 
-package org.fl.collectionAlbum.osAction;
+package org.fl.collectionAlbum.gui.listener;
 
-import java.util.List;
-import java.util.function.Function;
-import java.util.function.Predicate;
+import java.awt.event.ActionEvent;
 
-import org.fl.collectionAlbum.Control;
-import org.fl.collectionAlbum.albums.Album;
+import org.fl.collectionAlbum.MusicArtefact;
+import org.fl.collectionAlbum.gui.MusicArtefactTable;
+import org.fl.collectionAlbum.osAction.OsAction;
 
-public enum AlbumCommandParameter implements OsActionCommandParameter<Album> {
-
-	JSON(
-			(album) -> List.of(album.getJsonFilePath().toAbsolutePath().toString()), 
-			(album) -> true),
-	DISCOGS_RELEASE_INFO(
-			(album) -> List.of(Control.getDiscogsBaseUrlForRelease() + album.getDiscogsLink()), 
-			(album) -> (album.getDiscogsLink() != null) && !album.getDiscogsLink().isEmpty());
+public class MusicArtefactCommandListener<T extends MusicArtefact> implements java.awt.event.ActionListener {
 	
-	private final Function<Album,List<String>> parametersGetter;
-	private final Predicate<Album> actionValidityPredicate;
+	private final MusicArtefactTable<T> musicArtefactTable;
+	private final OsAction<T> osAction;
 	
-	private AlbumCommandParameter(Function<Album,List<String>> gp, Predicate<Album> vp) {
-		parametersGetter = gp;
-		actionValidityPredicate = vp;
+	public MusicArtefactCommandListener(MusicArtefactTable<T> musicArtefactTable, OsAction<T> osAction) {
+		
+		this.musicArtefactTable = musicArtefactTable;
+		this.osAction = osAction;
 	}
 
 	@Override
-	public Function<Album, List<String>> getParametersGetter() {
-		return parametersGetter;
-	}
-
-	@Override
-	public Predicate<Album> getActionValidityPredicate() {
-		return actionValidityPredicate;
+	public void actionPerformed(ActionEvent e) {
+		
+		T selectedMusicArtefact = musicArtefactTable.getSelectedMusicArtefact();
+		
+		if (selectedMusicArtefact != null) {		
+			osAction.runOsAction(selectedMusicArtefact);
+		}		
 	}
 
 }

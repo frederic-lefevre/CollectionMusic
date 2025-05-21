@@ -25,37 +25,34 @@ SOFTWARE.
 package org.fl.collectionAlbum.gui.renderer;
 
 import java.awt.Font;
+import java.time.temporal.TemporalAccessor;
 import java.util.logging.Logger;
 
 import javax.swing.SwingConstants;
 
-import org.fl.collectionAlbum.albums.Album;
-import org.fl.collectionAlbum.utils.CollectionUtils;
+import org.fl.collectionAlbum.utils.TemporalUtils;
 import org.fl.util.swing.CustomTableCellRenderer;
 
-public class MediaFilesRenderer extends CustomTableCellRenderer {
+public class DateRenderer  extends CustomTableCellRenderer {
 
 	private static final long serialVersionUID = 1L;
-
-	private static final Logger mLog = Logger.getLogger(MediaFilesRenderer.class.getName());
 	
-	private static final Font font = new Font("Dialog", Font.BOLD, 12);
+	private static final Logger logger = Logger.getLogger(AuteursRenderer.class.getName());
 	
-	public MediaFilesRenderer() {
+	private static final Font font = new Font("Dialog", Font.PLAIN, 12);
+	
+	public DateRenderer() {
 		super(font, SwingConstants.LEFT);
 	}
 
 	@Override
 	public void valueProcessor(Object value) {
 		
-		if (value == null) {
-			// This may happen when rescanning the album collection
-			mLog.fine("Null value in Auteurs cell. Should be an Album");
-			setText("Valeur null");
-		} else if (value instanceof Album album) {
-			setText(CollectionUtils.getHtmlForMediaFiles(album));	
+		if (TemporalAccessor.class.isAssignableFrom(value.getClass())) {
+			setText(TemporalUtils.formatDate((TemporalAccessor)value));
 		} else {
-			mLog.severe("Invalid value type in MediaFiles cell. Should be Album but is " + value.getClass().getName());
+			logger.severe("Invalid value type in Date cell. Should be assignable to TemporalAccessor but is " + value.getClass().getName());
 		}
 	}
+
 }

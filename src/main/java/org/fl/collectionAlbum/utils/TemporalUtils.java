@@ -33,6 +33,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.ResolverStyle;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
+import java.util.Comparator;
 import java.util.Locale;
 
 public class TemporalUtils {
@@ -73,6 +74,14 @@ public class TemporalUtils {
     		return yearTimeFormatter.format(d);
     	}	
     }
+   
+   public static class TemporalAccessorComparator implements Comparator<TemporalAccessor> {
+
+		@Override
+		public int compare(TemporalAccessor t1, TemporalAccessor t2) {		
+			return compareTemporal(t1, t2);
+		}
+   }
    
 	// (Try to) compare 2 TemporalAccessors
 	public static int compareTemporal(TemporalAccessor t1, TemporalAccessor t2) {

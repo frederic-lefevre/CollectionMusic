@@ -79,10 +79,10 @@ public class GenerationPane extends JPanel {
 
 		List<ActivableElement> activableElements = List.of(readCollectionControl, utilsPane, generateSiteControl);
 
-		StartReadCollection sm = new StartReadCollection(readCollectionControl.getPip(), activableElements);
-		sm.setCollectionProcWaiter(new CollectionProcessWaiter(activableElements));
-		sm.addTableModel(albumsTableModel);
-		readCollectionControl.getStartButton().addActionListener(sm);
+		StartReadCollection startReadCollection = new StartReadCollection(readCollectionControl.getPip(), activableElements);
+		startReadCollection.setCollectionProcWaiter(new CollectionProcessWaiter(activableElements));
+		startReadCollection.addTableModel(albumsTableModel);
+		readCollectionControl.getStartButton().addActionListener(startReadCollection);
 
 		StartGenerationSite sg = new StartGenerationSite(generateSiteControl.getPip(), activableElements);
 		sg.setCollectionProcWaiter(new CollectionProcessWaiter(activableElements));
@@ -104,7 +104,7 @@ public class GenerationPane extends JPanel {
 		Stream.of(ContentNature.values()).forEachOrdered(contentNature -> {
 			
 			MediaFilesTableModel tm = new MediaFilesTableModel(MediaFilesInventories.getMediaFileInventory(contentNature));
-			sm.addTableModel(tm);
+			startReadCollection.addTableModel(tm);
 			
 			MediaFilesJTable mediaFilesJTable = new MediaFilesJTable(tm);
 			
@@ -117,7 +117,7 @@ public class GenerationPane extends JPanel {
 		
 		// Discogs releases pane
 		DisocgsReleaseTableModel dtm = new DisocgsReleaseTableModel(DiscogsInventory.getDiscogsInventory());
-		sm.addTableModel(dtm);
+		startReadCollection.addTableModel(dtm);
 		
 		DiscogsReleaseJTable discogsReleaseJTable = new DiscogsReleaseJTable(dtm, CollectionAlbumContainer.getInstance(), this);
 		
@@ -126,6 +126,17 @@ public class GenerationPane extends JPanel {
 		discogsReleasesScrollPane.setPreferredSize(new Dimension(1800,700));
 
 		collectionTabPanes.add(discogsReleasesScrollPane, "Discogs releases");
+		
+		// Concert pane
+		ConcertTableModel concertTableModel = new ConcertTableModel(CollectionAlbumContainer.getInstance().getConcerts().getConcerts());
+		startReadCollection.addTableModel(concertTableModel);
+		
+		ConcertsJTable concertsJTable = new ConcertsJTable(concertTableModel);
+		
+		JScrollPane concertsScrollPane = new JScrollPane(concertsJTable);
+		concertsScrollPane.setPreferredSize(new Dimension(1800,700));
+		
+		collectionTabPanes.add(concertsScrollPane, "Concerts");
 		
 		// Collection metrics history
 		JTabbedPane collectionMetricsTabPanes = new JTabbedPane();

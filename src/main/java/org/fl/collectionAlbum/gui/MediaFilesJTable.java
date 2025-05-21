@@ -29,7 +29,6 @@ import java.util.logging.Logger;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import org.fl.collectionAlbum.Control;
@@ -38,6 +37,7 @@ import org.fl.collectionAlbum.gui.renderer.AlbumsRenderer;
 import org.fl.collectionAlbum.gui.renderer.CollectionBooleanRenderer;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.fl.collectionAlbum.mediaPath.MediaFilePathAlbumComparator;
+import org.fl.collectionAlbum.utils.CollectionUtils;
 
 public class MediaFilesJTable extends JTable {
 
@@ -45,8 +45,8 @@ public class MediaFilesJTable extends JTable {
 
 	private static final Logger tLog = Logger.getLogger(MediaFilesJTable.class.getName());
 	
-	public MediaFilesJTable(MediaFilesTableModel dm) {
-		super(dm);
+	public MediaFilesJTable(MediaFilesTableModel mediaFilesTableModel) {
+		super(mediaFilesTableModel);
 		
 		setFillsViewportHeight(true);
 		
@@ -68,10 +68,11 @@ public class MediaFilesJTable extends JTable {
 		addMouseListener(new MediaFileMouseAdapter(this, Control.getOsActionOnMediaFilePath()));
 		
 		// Row sorter
-		TableRowSorter<TableModel> sorter = new TableRowSorter<>(getModel());
+		TableRowSorter<MediaFilesTableModel> sorter = new TableRowSorter<>(mediaFilesTableModel);
 		setRowSorter(sorter);
 				
 		sorter.setComparator(MediaFilesTableModel.ALBUMS_COL_IDX, new MediaFilePathAlbumComparator());
+		sorter.setComparator(MediaFilesTableModel.NB_FILES_COL_IDX, new CollectionUtils.LongComparator());
 	}
 
 	public MediaFilePath getSelectedMediaFile() {

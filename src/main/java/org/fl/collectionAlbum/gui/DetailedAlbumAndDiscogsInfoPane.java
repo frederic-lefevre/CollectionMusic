@@ -28,16 +28,13 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.Image;
-import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
@@ -51,7 +48,7 @@ import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory;
 import org.fl.collectionAlbum.gui.listener.OsActionListener;
-import org.fl.collectionAlbum.utils.AlbumUtils;
+import org.fl.collectionAlbum.utils.CollectionUtils;
 
 public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 
@@ -158,7 +155,7 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 		
 		JEditorPane infoAlbum = new JEditorPane();
 		infoAlbum.setContentType("text/html");
-		infoAlbum.setText(AlbumUtils.getSimpleHtml(album));
+		infoAlbum.setText(CollectionUtils.getSimpleHtml(album));
 		infoAlbum.setEditable(false);
 		infoAlbum.setFont(monospaced);
 		return infoAlbum;
@@ -168,13 +165,12 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 		
 		JPanel albumPane = new JPanel();
 		albumPane.setLayout(new BoxLayout(albumPane, BoxLayout.Y_AXIS));
-		
 		albumPane.add(getCoverImage(album));
 		
 		if (album.hasMediaFiles()) {
 			
 			JLabel titreMedia = new JLabel("Folders contenant les medias:");
-			titreMedia.setBorder(new EmptyBorder(20, 0, 20, 0));
+			titreMedia.setBorder(new EmptyBorder(10, 0, 10, 0));
 			titreMedia.setFont(verdana);
 			albumPane.add(titreMedia);
 			
@@ -185,7 +181,6 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 					.distinct()
 					.forEachOrdered(mediaFolder -> {
 						JButton showMediaFolderButton = new JButton(mediaFolder);
-						showMediaFolderButton.setBorder(new EmptyBorder(20, 0, 20, 0));
 						
 						OsActionListener<String> showMediaFolderListener = new OsActionListener<>(mediaFolder, Control.getDisplayFolderAction());
 						showMediaFolderButton.addActionListener(showMediaFolderListener);
@@ -193,32 +188,19 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 						albumPane.add(showMediaFolderButton);
 					});						
 		}
-			
+		
+		if (album.hasUrlLinks()) {
+			albumPane.add(CollectionUtils.urlLinkPanel(album));
+		}
+		
 		return albumPane;
 	}
 	
 	private JLabel getCoverImage(Album album) {
 		
-		if (album.getCoverImage() != null) {
-			try {
-				ImageIcon cover = new ImageIcon(ImageIO.read(album.getCoverImage().toFile()));
-				final int coverWidth = cover.getIconWidth();
-				final int coverHeight = cover.getIconHeight();
-				int adjustedCoverWidth;
-				int adjustedCoverHeight;
-				if (coverWidth > coverHeight) {
-					adjustedCoverWidth = MAX_COVER_WIDTH;
-					adjustedCoverHeight = (coverHeight * MAX_COVER_WIDTH)/coverWidth;
-				} else {
-					adjustedCoverHeight = MAX_COVER_HEIGHT;
-					adjustedCoverWidth = (coverWidth* MAX_COVER_HEIGHT)/coverHeight;
-				}
-				ImageIcon adjusteCover = new ImageIcon(cover.getImage().getScaledInstance(adjustedCoverWidth, adjustedCoverHeight, Image.SCALE_SMOOTH));
-
-				return new JLabel(adjusteCover);
-			} catch (IOException e) {
-				return new JLabel("Fichier couverture non trouvé: " + album.getCoverImage().toString());
-			}
+		Path coverImagePath = album.getCoverImage();
+		if (coverImagePath != null) {
+			return CollectionUtils.getAdjustedImageLabel(coverImagePath, MAX_COVER_WIDTH, MAX_COVER_HEIGHT);
 		} else {
 			return new JLabel("Couverture de l'album non disponible");
 		}

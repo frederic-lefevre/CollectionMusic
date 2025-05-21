@@ -29,7 +29,6 @@ import java.util.logging.Logger;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import org.fl.collectionAlbum.Control;
@@ -42,14 +41,14 @@ import org.fl.collectionAlbum.gui.renderer.AuteursRenderer;
 import org.fl.collectionAlbum.gui.renderer.CollectionBooleanRenderer;
 import org.fl.collectionAlbum.gui.renderer.MediaFilesRenderer;
 
-public class AlbumsJTable extends JTable {
+public class AlbumsJTable extends JTable implements MusicArtefactTable<Album> {
 
 	private static final long serialVersionUID = 1L;
 
 	private static final Logger tLog = Logger.getLogger(AlbumsJTable.class.getName());
 	
-	public AlbumsJTable(AlbumsTableModel dm, GenerationPane generationPane) {
-		super(dm);
+	public AlbumsJTable(AlbumsTableModel albumsTableModel, GenerationPane generationPane) {
+		super(albumsTableModel);
 		
 		setFillsViewportHeight(true);
 		
@@ -76,7 +75,7 @@ public class AlbumsJTable extends JTable {
 		addMouseListener(new AlbumMouseAdapter(this, Control.getOsActionsOnAlbum(), generationPane));
 		
 		// Row sorter
-		TableRowSorter<TableModel> sorter = new TableRowSorter<>(getModel());
+		TableRowSorter<AlbumsTableModel> sorter = new TableRowSorter<>(albumsTableModel);
 		setRowSorter(sorter);
 		
 		sorter.setComparator(AlbumsTableModel.AUTEUR_COL_IDX, new RangementComparator());
@@ -84,7 +83,8 @@ public class AlbumsJTable extends JTable {
 	}
 
 	// Get the selected album
-	public Album getSelectedAlbum() {
+	@Override
+	public Album getSelectedMusicArtefact() {
 		
 		int[] rowIdxs = getSelectedRows();
 		if (rowIdxs.length == 0) {

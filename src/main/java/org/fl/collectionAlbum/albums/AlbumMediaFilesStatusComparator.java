@@ -73,11 +73,7 @@ public class AlbumMediaFilesStatusComparator implements Comparator<Album> {
 		}		
 	}
 	
-	private final RangementComparator rangementComparator;
-	
-	public AlbumMediaFilesStatusComparator() {
-		rangementComparator = new RangementComparator();
-	}
+	private static final RangementComparator rangementComparator = new RangementComparator();
 	
 	@Override
 	public int compare(Album o1, Album o2) {

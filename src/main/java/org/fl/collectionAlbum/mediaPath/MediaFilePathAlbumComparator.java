@@ -33,11 +33,7 @@ import org.fl.collectionAlbum.albums.AlbumAlphaComparator;
 
 public class MediaFilePathAlbumComparator implements Comparator<MediaFilePath> {
 
-	private final AlbumAlphaComparator albumComparator;
-	
-	public MediaFilePathAlbumComparator() {
-		albumComparator = new AlbumAlphaComparator();
-	}
+	private static final AlbumAlphaComparator albumComparator = new AlbumAlphaComparator();
 
 	@Override
 	public int compare(MediaFilePath o1, MediaFilePath o2) {
@@ -61,8 +57,6 @@ public class MediaFilePathAlbumComparator implements Comparator<MediaFilePath> {
 			ts2.addAll(as2);
 			
 			return albumComparator.compare(ts1.first(), ts2.first());
-		}
-		
+		}		
 	}
-
 }

@@ -46,10 +46,10 @@ import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.ReleaseMatchResult;
 import org.fl.collectionAlbum.format.ContentNature;
-import org.fl.collectionAlbum.gui.AlbumsJTable;
 import org.fl.collectionAlbum.gui.DetailedAlbumAndDiscogsInfoPane;
 import org.fl.collectionAlbum.gui.GenerationPane;
 import org.fl.collectionAlbum.gui.MediaFilesSearchPane;
+import org.fl.collectionAlbum.gui.MusicArtefactTable;
 
 public class AlbumCustomActionListener implements java.awt.event.ActionListener {
 
@@ -86,11 +86,11 @@ public class AlbumCustomActionListener implements java.awt.event.ActionListener 
 		}		
 	};
 	
-	private final AlbumsJTable albumsJTable;
+	private final MusicArtefactTable<Album> albumsJTable;
 	private final CustomAction customAction;
 	private final GenerationPane generationPane;
 	
-	public AlbumCustomActionListener(AlbumsJTable ajt, CustomAction ca, GenerationPane generationPane) {
+	public AlbumCustomActionListener(MusicArtefactTable<Album> ajt, CustomAction ca, GenerationPane generationPane) {
 		
 		albumsJTable = ajt;
 		customAction = ca;
@@ -100,7 +100,7 @@ public class AlbumCustomActionListener implements java.awt.event.ActionListener 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		Album selectedAlbum = albumsJTable.getSelectedAlbum();
+		Album selectedAlbum = albumsJTable.getSelectedMusicArtefact();
 		
 		if (selectedAlbum != null) {
 			
@@ -108,7 +108,7 @@ public class AlbumCustomActionListener implements java.awt.event.ActionListener 
 			
 				case DETAILED_INFO_DISPLAY:
 					
-					JOptionPane.showMessageDialog(null, new DetailedAlbumAndDiscogsInfoPane(selectedAlbum), "Informations détaillées", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, new DetailedAlbumAndDiscogsInfoPane(selectedAlbum), customAction.getActionTitle(), JOptionPane.INFORMATION_MESSAGE);
 					break;
 					
 				case DISCOGS_RELEASE_SEARCH:
@@ -139,12 +139,12 @@ public class AlbumCustomActionListener implements java.awt.event.ActionListener 
 					
 					JScrollPane infoReleaseScroll = new JScrollPane(potentialReleasesPane);
 					infoReleaseScroll.setPreferredSize(new Dimension(1650,850));
-					JOptionPane.showMessageDialog(null, infoReleaseScroll, "Recherche de release discogs", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, infoReleaseScroll, customAction.getActionTitle(), JOptionPane.INFORMATION_MESSAGE);
 					
 					break;
 				case MISSING_MEDIA_FILES_SEARCH:
 					
-					JOptionPane.showMessageDialog(null, new MediaFilesSearchPane(selectedAlbum, generationPane), "Recherche de fichiers media manquants ou invalides", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, new MediaFilesSearchPane(selectedAlbum, generationPane), customAction.getActionTitle(), JOptionPane.INFORMATION_MESSAGE);
 					break;
 				default:
 					aLog.severe("Unkown custom action triggered for discogs release: " + customAction);

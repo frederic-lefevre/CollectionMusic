@@ -25,6 +25,7 @@ SOFTWARE.
 package org.fl.collectionAlbum;
 
 import java.io.BufferedWriter;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -51,7 +52,7 @@ public abstract class MusicArtefact {
 
 	// Additional information (optional)
 	private final List<String> notes;
-	private final List<String> urlLinks;
+	private final List<URI> urlLinks;
 	private String discogsLink;
 	private boolean hasAdditionalInfo;
 	private boolean discogsFormatValidation;
@@ -112,7 +113,7 @@ public abstract class MusicArtefact {
 		return notes;
 	}
 
-	public List<String> getUrlLinks() {
+	public List<URI> getUrlLinks() {
 		return urlLinks;
 	}
 

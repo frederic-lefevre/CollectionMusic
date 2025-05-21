@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -29,15 +29,14 @@ import java.util.Comparator;
 public class StatAnComparator implements Comparator<StatAnnee> {
 	
 	public int compare(StatAnnee arg0, StatAnnee arg1) {
-		int a0 = arg0.getAn() ;
-		int a1 = arg1.getAn() ;
-		if ( a0 < a1) {
-			return -1 ;
+		int a0 = arg0.getAn();
+		int a1 = arg1.getAn();
+		if (a0 < a1) {
+			return -1;
 		} else if (a0 > a1) {
-			return 1 ;
+			return 1;
 		} else {
-			return 0 ;
+			return 0;
 		}
 	}
-
 }

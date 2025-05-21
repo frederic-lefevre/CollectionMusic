@@ -81,8 +81,7 @@ class MediaFileInventoryTest {
 				      "mort": "1980-09-15"  
 				    }                                 
 				  ],    								
-				  "enregistrement": [ "1959-12-28",  "1959-12-28" ],  
-				  "liensUrl":  [ "http://somwhere" ] 
+				  "enregistrement": [ "1959-12-28",  "1959-12-28" ]
 				 } 
 				""" ;
 		

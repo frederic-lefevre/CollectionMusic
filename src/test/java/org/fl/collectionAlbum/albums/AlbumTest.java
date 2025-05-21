@@ -27,6 +27,7 @@ package org.fl.collectionAlbum.albums;
 import static org.assertj.core.api.Assertions.*;
 
 import java.io.IOException;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -146,7 +147,7 @@ class AlbumTest {
 			    }                                 
 			  ],    								
 			  "enregistrement": [ "1959-12-28",  "1959-12-28" ],  
-			  "liensUrl":  [ "http://somwhere" ] 
+			  "liensUrl":  [ "/Concerts/2006/EricClapton20060505" ] 
 			 } 
 			""" ;
 			  
@@ -503,11 +504,11 @@ class AlbumTest {
 		
 		assertThat(album.getTitre()).isEqualTo("Portrait in jazz");
 
-		List<String> liens = album.getUrlLinks();
+		List<URI> liens = album.getUrlLinks();
 		assertThat(liens)
 			.isNotNull()
 			.singleElement()
-			.isEqualTo("http://somwhere");
+			.hasToString(Control.getMusicartefactInfosUri() + "/Concerts/2006/EricClapton20060505");
 		
 		assertThat(album.hasAudioFiles()).isTrue();
 		assertThat(album.hasVideoFiles()).isFalse();

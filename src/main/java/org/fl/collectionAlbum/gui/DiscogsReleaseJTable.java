@@ -29,7 +29,6 @@ import java.util.logging.Logger;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
-import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
@@ -46,8 +45,8 @@ public class DiscogsReleaseJTable extends JTable {
 
 	private static final Logger tLog = Logger.getLogger(DiscogsReleaseJTable.class.getName());
 	
-	public DiscogsReleaseJTable(DisocgsReleaseTableModel dm, CollectionAlbumContainer albumsContainer, GenerationPane generationPane) {
-		super(dm);
+	public DiscogsReleaseJTable(DisocgsReleaseTableModel discogsTableModel, CollectionAlbumContainer albumsContainer, GenerationPane generationPane) {
+		super(discogsTableModel);
 		
 		setFillsViewportHeight(true);
 		
@@ -72,7 +71,7 @@ public class DiscogsReleaseJTable extends JTable {
 		addMouseListener(new DiscogsInventoryMouseAdapter(this, Control.getOsActionOnDiscogsRelease(), albumsContainer, generationPane));
 		
 		// Row sorter
-		TableRowSorter<TableModel> sorter = new TableRowSorter<>(getModel());
+		TableRowSorter<DisocgsReleaseTableModel> sorter = new TableRowSorter<>(discogsTableModel);
 		setRowSorter(sorter);
 		
 		sorter.setComparator(DisocgsReleaseTableModel.FORMAT_MATCH_COL_IDX, new FormatCompatibilityResult.FormatCompatibilityComparator());

@@ -22,40 +22,31 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.gui.renderer;
+package org.fl.collectionAlbum.gui.adapter;
 
-import java.awt.Font;
-import java.util.logging.Logger;
+import java.awt.event.ActionEvent;
+import java.util.List;
 
-import javax.swing.SwingConstants;
+import javax.swing.JOptionPane;
 
-import org.fl.collectionAlbum.albums.Album;
-import org.fl.collectionAlbum.utils.CollectionUtils;
-import org.fl.util.swing.CustomTableCellRenderer;
+import org.fl.collectionAlbum.concerts.Concert;
+import org.fl.collectionAlbum.gui.DetailedConcertInfoPane;
+import org.fl.collectionAlbum.gui.MusicArtefactTable;
+import org.fl.collectionAlbum.osAction.OsAction;
 
-public class MediaFilesRenderer extends CustomTableCellRenderer {
-
-	private static final long serialVersionUID = 1L;
-
-	private static final Logger mLog = Logger.getLogger(MediaFilesRenderer.class.getName());
+public class ConcertMouseAdapter extends MusicArtefactMouseAdapter<Concert>  {
 	
-	private static final Font font = new Font("Dialog", Font.BOLD, 12);
-	
-	public MediaFilesRenderer() {
-		super(font, SwingConstants.LEFT);
-	}
-
-	@Override
-	public void valueProcessor(Object value) {
+	public ConcertMouseAdapter(MusicArtefactTable<Concert> concertsTable, List<OsAction<Concert>> osActions) {
+		super(concertsTable, osActions);
 		
-		if (value == null) {
-			// This may happen when rescanning the album collection
-			mLog.fine("Null value in Auteurs cell. Should be an Album");
-			setText("Valeur null");
-		} else if (value instanceof Album album) {
-			setText(CollectionUtils.getHtmlForMediaFiles(album));	
-		} else {
-			mLog.severe("Invalid value type in MediaFiles cell. Should be Album but is " + value.getClass().getName());
-		}
+		musicArtefactMenuItems.addMenuItem("Informations détaillées", new ConcertCustomActionListener(), (concert) -> concert != null, localJPopupMenu);
+	}
+	
+	private class ConcertCustomActionListener implements java.awt.event.ActionListener {
+	
+		@Override
+		public void actionPerformed(ActionEvent e) {			
+			JOptionPane.showMessageDialog(null, new DetailedConcertInfoPane(musicArtefactTable.getSelectedMusicArtefact()), "Informations détaillées", JOptionPane.INFORMATION_MESSAGE);			
+		}	
 	}
 }

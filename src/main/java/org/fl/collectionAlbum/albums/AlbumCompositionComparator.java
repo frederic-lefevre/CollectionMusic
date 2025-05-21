@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -31,8 +31,7 @@ import org.fl.collectionAlbum.utils.TemporalUtils;
 
 public class AlbumCompositionComparator  implements Comparator<Album> {
 	
-	public AlbumCompositionComparator() {
-	}
+	private static final AlbumEnregistrementComparator albumEnregistrementComparator = new AlbumEnregistrementComparator();
 	
 	public int compare(Album arg0, Album arg1) {
 
@@ -48,7 +47,7 @@ public class AlbumCompositionComparator  implements Comparator<Album> {
 		}
 
 		if (comp == 0) {
-			comp = (new AlbumEnregistrementComparator()).compare(arg0, arg1);
+			comp = albumEnregistrementComparator.compare(arg0, arg1);
 		}
 
 		return comp;

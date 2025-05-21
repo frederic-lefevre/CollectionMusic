@@ -69,7 +69,6 @@ public class RapportStructuresAndNames {
 	private final Path rapportPath;
 	private final Path oldRapportPath;
 	private final String concertTicketImgUri;
-	private final String musicartefactInfosUri;
 
 	private RapportMap<Album> albumRapportPaths;
 	private RapportMap<Artiste> artisteAlbumRapportPaths;
@@ -95,9 +94,6 @@ public class RapportStructuresAndNames {
 
 		// get the concert ticket image path
 		concertTicketImgUri = Control.getConcertTicketImgUri();
-
-		// get the path of additional information for concerts and albums
-		musicartefactInfosUri = Control.getMusicartefactInfosUri();
 
 		renewRapportMap();
 	}
@@ -176,10 +172,6 @@ public class RapportStructuresAndNames {
 	public static Path getAbsoluteBuildInfoFile() {
 		return getInstance().rapportPath.resolve(buildInfoFile);
 	}
-	
-	private static String getMusicartefactInfosUri() {
-		return getInstance().musicartefactInfosUri;
-	}
 
 	private static String getConcertTicketImgUri() {
 		return getInstance().concertTicketImgUri;
@@ -247,10 +239,6 @@ public class RapportStructuresAndNames {
 
 	public static URI getTicketImageAbsoluteUri(String relativeToPhotoDirUriStr) {
 		return getUri(getConcertTicketImgUri(), relativeToPhotoDirUriStr);
-	}
-
-	public static URI getArtefactInfosAbsoluteUri(String relativeToInfosDirUriStr) {
-		return getUri(getMusicartefactInfosUri(), relativeToInfosDirUriStr);
 	}
 
 	private static URI getUri(String rootPath, String relativeDirUriStr) {

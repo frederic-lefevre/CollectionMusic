@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -30,10 +30,7 @@ import java.util.Comparator;
 import org.fl.collectionAlbum.utils.TemporalUtils;
 
 public class AuteurDateComparator  implements Comparator<Artiste> {
-	
-	public AuteurDateComparator() {
-	}
-	
+
 	public int compare(Artiste arg0, Artiste arg1) {
 		TemporalAccessor d0 = arg0.getNaissance();
 		TemporalAccessor d1 = arg1.getNaissance();

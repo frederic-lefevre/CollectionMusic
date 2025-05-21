@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -30,16 +30,16 @@ public class AuteurComparator implements Comparator<Artiste> {
 
 	public int compare(Artiste arg0, Artiste arg1) {
 		
-		String nom0    = arg0.getNom() ;
-		String prenom0 = arg0.getPrenoms() ;
-		String nom1    = arg1.getNom() ;
-		String prenom1 = arg1.getPrenoms() ;
-		
-		int ordreNom = nom0.compareToIgnoreCase(nom1) ;
+		String nom0 = arg0.getNom();
+		String prenom0 = arg0.getPrenoms();
+		String nom1 = arg1.getNom();
+		String prenom1 = arg1.getPrenoms();
+
+		int ordreNom = nom0.compareToIgnoreCase(nom1);
 		if (ordreNom == 0) {
-			return prenom0.compareToIgnoreCase(prenom1) ;
+			return prenom0.compareToIgnoreCase(prenom1);
 		} else {
-			return ordreNom ;
+			return ordreNom;
 		}
 	}
 }

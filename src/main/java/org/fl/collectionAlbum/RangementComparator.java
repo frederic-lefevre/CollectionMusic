@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -37,8 +37,10 @@ import java.util.Collections;
 
 public class RangementComparator implements Comparator<Album> {
 	
-	public RangementComparator() {
-	}
+	private static final PoidsComparator poidsComparator = new PoidsComparator();
+	private static final AuteurComparator auteurComparator = new AuteurComparator();
+	private static final AlbumCompositionComparator albumCompositionComparator = new AlbumCompositionComparator();
+	private static final AlbumEnregistrementComparator albumEnregistrementComparator = new AlbumEnregistrementComparator();
 	
 	public int compare(Album arg0, Album arg1) {
 		
@@ -62,25 +64,24 @@ public class RangementComparator implements Comparator<Album> {
 		//	no author for album a1: a0 is before
 		
 		// For the 2 albums, get the author who has the highest number of albums
-		PoidsComparator compPoids = new PoidsComparator();
-		Collections.sort(l0, compPoids) ;
-		Collections.sort(l1, compPoids) ;
+		Collections.sort(l0, poidsComparator) ;
+		Collections.sort(l1, poidsComparator) ;
 		
 		Artiste art0 = l0.get(0) ;
 		Artiste art1 = l1.get(0) ;
 		
 		// Compare lexicographically the 2 authors;
-		int autComp = (new AuteurComparator()).compare(art0,art1) ;
+		int autComp = auteurComparator.compare(art0,art1) ;
 		
 		if (autComp == 0) {
 		// same author for the 2 albums
 		    
 		    // Compare the composition dates
-		    int albComp = (new AlbumCompositionComparator()).compare(arg0, arg1) ;
+		    int albComp = albumCompositionComparator.compare(arg0, arg1) ;
 		    if (albComp == 0) {
 		    // same composition dates: compare the recording dates
 		        // return the oldest album (recording)
-				return (new AlbumEnregistrementComparator()).compare(arg0, arg1) ;
+				return albumEnregistrementComparator.compare(arg0, arg1) ;
 		    } else {
 		        // return the oldest album (composition)
 		        return albComp ;
