@@ -178,7 +178,7 @@ public class Control {
 	
 	private static String convertToAbsoluteUriString(String uri) {
 		 try {
-			// Converting to absolute path may be necessary, in Windows OS case, to put the default C: drive if it is not mentioned in the property value
+			// Converting to absolute path may be necessary, in Windows OS case, to put the default C drive if it is not mentioned in the property value
 			return FilesUtils.uriStringToAbsolutePath(uri)
 				.toUri().toString();
 		} catch (URISyntaxException e) {
