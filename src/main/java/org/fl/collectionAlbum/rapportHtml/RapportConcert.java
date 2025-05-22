@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,7 +24,6 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.rapportHtml;
 
-import java.net.URI;
 import java.util.List;
 
 import org.fl.collectionAlbum.concerts.Concert;
@@ -50,24 +49,16 @@ public class RapportConcert extends RapportMusicArtefact {
 		super.corpsRapport();
 		
 		List<String> titres = concert.getTitres();
-		if ((titres != null) && (titres.size() >0)) {
-			write("<h3>Titres</h3>");
-			write("<ol>");
-			for (String titre : titres) {
-				write("<li>").write(titre).write("</li>");
-			}
-			write("</ol>");
+		if ((titres != null) && (titres.size() > 0)) {
+			write("<h3>Titres</h3>\n  <ol>\n");
+			titres.forEach(titre -> write("    <li>").write(titre).write("</li>\n"));
+			write("  </ol>\n");
 		}
 		
-		List<String> ticketImages = concert.getTicketImages();
-		if (ticketImages != null) {
-			
-			for (String ticketImage : ticketImages) {
-				URI imgUri = RapportStructuresAndNames.getTicketImageAbsoluteUri(ticketImage);
-				write("<a href=\"").write(imgUri.toString() ).write("\">\n");
-				write("    <img class=\"ticket\" src=\"").write(imgUri.toString()).write("\"/>\n</a>");
-			}			
-		}			
+		concert.getTicketImages().forEach(ticketImageUri -> {
+			write("<a href=\"").write(ticketImageUri.toString() ).write("\">\n");
+			write("    <img class=\"ticket\" src=\"").write(ticketImageUri.toString()).write("\"/>\n</a>");
+		});			
 	}
 	
 	public static RapportConcert createRapportConcert(Concert c) {

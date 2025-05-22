@@ -30,20 +30,14 @@ import org.fl.collectionAlbum.concerts.Concert;
 import org.fl.collectionAlbum.concerts.LieuConcert;
 
 import java.net.URI;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.Control;
 
 public class RapportStructuresAndNames {
-
-	private static final Logger rapportLog = Logger.getLogger(RapportStructuresAndNames.class.getName());
 	
 	private static final String albumDir = "albums";
 	private static final String concertDir = "concerts";
@@ -68,7 +62,6 @@ public class RapportStructuresAndNames {
 	
 	private final Path rapportPath;
 	private final Path oldRapportPath;
-	private final String concertTicketImgUri;
 
 	private RapportMap<Album> albumRapportPaths;
 	private RapportMap<Artiste> artisteAlbumRapportPaths;
@@ -91,9 +84,6 @@ public class RapportStructuresAndNames {
 		oldRapportPath = Control.getOldRapportPath();
 
 		accueils = getAccueil();
-
-		// get the concert ticket image path
-		concertTicketImgUri = Control.getConcertTicketImgUri();
 
 		renewRapportMap();
 	}
@@ -173,10 +163,6 @@ public class RapportStructuresAndNames {
 		return getInstance().rapportPath.resolve(buildInfoFile);
 	}
 
-	private static String getConcertTicketImgUri() {
-		return getInstance().concertTicketImgUri;
-	}
-
 	public static HtmlLinkList getAccueils() {
 		return getInstance().accueils;
 	}
@@ -235,23 +221,5 @@ public class RapportStructuresAndNames {
 
 	public static Path getArtisteConcertRapportAbsolutePath(Artiste artiste) {
 		return getInstance().rapportPath.resolve(getArtisteConcertRapportRelativeUri(artiste).getPath());
-	}
-
-	public static URI getTicketImageAbsoluteUri(String relativeToPhotoDirUriStr) {
-		return getUri(getConcertTicketImgUri(), relativeToPhotoDirUriStr);
-	}
-
-	private static URI getUri(String rootPath, String relativeDirUriStr) {
-		try {
-			URI absoluteUri = new URI(rootPath + relativeDirUriStr);
-			// check that the file exists
-			if (!(Files.exists(Paths.get(absoluteUri)))) {
-				rapportLog.warning("Le fichier suivant n'existe pas: " + absoluteUri.toString());
-			}
-			return absoluteUri;
-		} catch (Exception e) {
-			rapportLog.log(Level.SEVERE, "Wrong URI string for file: " + relativeDirUriStr, e);
-			return null;
-		}
 	}
 }

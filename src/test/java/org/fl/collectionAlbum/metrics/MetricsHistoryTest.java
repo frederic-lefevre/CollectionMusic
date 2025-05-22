@@ -25,6 +25,7 @@ SOFTWARE.
 package org.fl.collectionAlbum.metrics;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -45,16 +46,17 @@ class MetricsHistoryTest {
 
 	private final static Logger mLog = Logger.getLogger(MetricsHistoryTest.class.getName());
 	
-	private static final Path historyFolderBase = Path.of("C:\\ForTests\\CollectionMusiqueHistory");
+	private static Path historyFolderBase;
+
 	private static final long now = System.currentTimeMillis();
 	private static final long yesterday = System.currentTimeMillis() - 24*3600*1000;
 	private static final long twoDaysAgo = System.currentTimeMillis() - 48*3600*1000;
 	
-	private static final Path historyPath1 = historyFolderBase.resolve("testHistoryDirectoryPath1");
-	private static final Path historyPath2 = historyFolderBase.resolve("testHistoryDirectoryPath2");
-	private static final Path historyPath3 = historyFolderBase.resolve("testHistoryDirectoryPath3");
-	private static final Path historyPath4 = historyFolderBase.resolve("testHistoryDirectoryPath4");
-	private static final Path historyPath5 = historyFolderBase.resolve("testHistoryDirectoryPath5");
+	private static Path historyPath1;
+	private static Path historyPath2;
+	private static Path historyPath3;
+	private static Path historyPath4;
+	private static Path historyPath5;
 	
 	private static void deleteFolderIfExist(Path folder) throws IOException {
 		if (Files.exists(folder)) {
@@ -80,7 +82,14 @@ class MetricsHistoryTest {
 	}
 	
 	@BeforeAll
-	static void initHistoryFolder() throws IOException {
+	static void initHistoryFolder() throws IOException, URISyntaxException {
+		
+		historyFolderBase = FilesUtils.uriStringToAbsolutePath("file:///ForTests/CollectionMusiqueHistory");
+		historyPath1 = historyFolderBase.resolve("testHistoryDirectoryPath1");
+		historyPath2 = historyFolderBase.resolve("testHistoryDirectoryPath2");
+		historyPath3 = historyFolderBase.resolve("testHistoryDirectoryPath3");
+		historyPath4 = historyFolderBase.resolve("testHistoryDirectoryPath4");
+		historyPath5 = historyFolderBase.resolve("testHistoryDirectoryPath5");
 		
 		deleteFolderIfExist(historyPath1);
 		deleteFolderIfExist(historyPath2);
@@ -114,7 +123,7 @@ class MetricsHistoryTest {
 	@Test
 	void testNonDirectoryPath() {
 		assertThatIllegalArgumentException()
-			.isThrownBy(() -> new TestMetricsHistory(Path.of("C:\\ForTests\\CollectionMusique\\PortraitInJazz.json")))
+			.isThrownBy(() -> new TestMetricsHistory(FilesUtils.uriStringToAbsolutePath("file:///ForTests/CollectionMusique/PortraitInJazz.json")))
 			.withMessageContaining("should be a directory");
 	}
 	
@@ -122,7 +131,7 @@ class MetricsHistoryTest {
 	void testNnonExistantStoragePath() {
 		
 		assertThatIllegalArgumentException()
-			.isThrownBy(() -> new TestMetricsHistory(Path.of("C:\\ForTests\\DoesNotExist")))
+			.isThrownBy(() -> new TestMetricsHistory(FilesUtils.uriStringToAbsolutePath("file:///ForTests/DoesNotExist")))
 			.withMessageContaining("should exist");
 	}
 	

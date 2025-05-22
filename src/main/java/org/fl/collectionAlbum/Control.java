@@ -26,6 +26,7 @@ package org.fl.collectionAlbum;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.AbstractMap;
@@ -54,6 +55,7 @@ import org.fl.collectionAlbum.osAction.OsAction;
 import org.fl.collectionAlbum.osAction.OsCommandAndOption;
 import org.fl.util.AdvancedProperties;
 import org.fl.util.RunningContext;
+import org.fl.util.file.FilesUtils;
 
 public class Control {
 	
@@ -110,32 +112,34 @@ public class Control {
 			}
 			
 			// Get the root directory for the album collection and concert
-			collectionDirectoryName = collectionProperties.getPathFromURI("album.rootDir.name");
-			concertDirectoryName = collectionProperties.getPathFromURI("concert.rootDir.name");
+			collectionDirectoryName = FilesUtils.uriStringToAbsolutePath(collectionProperties.getProperty("album.rootDir.name"));
+			concertDirectoryName = FilesUtils.uriStringToAbsolutePath(collectionProperties.getProperty("concert.rootDir.name"));
 			
 			// Get path and URI for the rapport
-			rapportPath = collectionProperties.getPathFromURI("album.rapportDirectory.name");
-			oldRapportPath = collectionProperties.getPathFromURI("album.oldRapportDirectory.name");
+			rapportPath = FilesUtils.uriStringToAbsolutePath(collectionProperties.getProperty("album.rapportDirectory.name"));
+			oldRapportPath = FilesUtils.uriStringToAbsolutePath(collectionProperties.getProperty("album.oldRapportDirectory.name"));
 			
 			// Get collection album and concert history folder path
 			try {
-				collectionMetricsHsitory = CollectionMetricsHistory.buildCollectionMetricsHistory(collectionProperties.getPathFromURI("album.historyFolder.name"));
+				collectionMetricsHsitory = CollectionMetricsHistory.buildCollectionMetricsHistory(
+						FilesUtils.uriStringToAbsolutePath(collectionProperties.getProperty("album.historyFolder.name")));
 			} catch (IOException e) {
 				albumLog.log(Level.SEVERE, "IOException accessinng album collection metrics history folder", e);
 			}
 			try {
-				concertMetricsHsitory = ConcertMetricsHistory.buildConcertMetricsHistory(collectionProperties.getPathFromURI("concert.historyFolder.name"));
+				concertMetricsHsitory = ConcertMetricsHistory.buildConcertMetricsHistory(
+						FilesUtils.uriStringToAbsolutePath(collectionProperties.getProperty("concert.historyFolder.name")));
 			} catch (IOException e) {
 				albumLog.log(Level.SEVERE, "IOException accessinng concert metrics history folder", e);
 			}
 			
 			// get the concert ticket image path
-			concertTicketImgUri = collectionProperties.getProperty("concert.ticketImgDir.name");	
+			concertTicketImgUri = convertToAbsoluteUriString(collectionProperties.getProperty("concert.ticketImgDir.name"));	
 
 			// get the path of additional information for concerts and albums
-			musicartefactInfosUri = collectionProperties.getProperty("musicArtefact.information.rootDir.name");
+			musicartefactInfosUri = convertToAbsoluteUriString(collectionProperties.getProperty("musicArtefact.information.rootDir.name"));
 						
-			discogsCollectionCsvExportPath = collectionProperties.getPathFromURI("album.discogs.collection.csvExport");
+			discogsCollectionCsvExportPath = FilesUtils.uriStringToAbsolutePath(collectionProperties.getProperty("album.discogs.collection.csvExport"));
 			discogsBaseUrlForRelease = collectionProperties.getProperty("album.discogs.baseUrl.release");
 			
 			mediaFileRootPaths = new HashMap<>();
@@ -167,9 +171,20 @@ public class Control {
 			cssForGui = collectionProperties.getFileContentFromURI("album.cssForGui", Charset.defaultCharset());
 						
 		} catch (Exception e) {
-			albumLog.log(Level.SEVERE, "Exception during inintialisation, propzety file="  + propertyFile, e);
+			albumLog.log(Level.SEVERE, "Exception during inintialisation, property file="  + propertyFile, e);
 			collectionProperties = null;
 		}
+	}
+	
+	private static String convertToAbsoluteUriString(String uri) {
+		 try {
+			// Converting to absolute path may be necessary, in Windows OS case, to put the default C drive if it is not mentioned in the property value
+			return FilesUtils.uriStringToAbsolutePath(uri)
+				.toUri().toString();
+		} catch (URISyntaxException e) {
+			albumLog.log(Level.SEVERE, "Exception trying to convert to absolute uri: " + uri, e);
+			return null;
+		}  
 	}
 	
 	private static Control getInstance() {

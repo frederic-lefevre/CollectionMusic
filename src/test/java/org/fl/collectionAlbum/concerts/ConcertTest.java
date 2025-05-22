@@ -32,10 +32,12 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.util.FilterCounter;
 import org.fl.util.FilterCounter.LogRecordCounter;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -47,6 +49,16 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 class ConcertTest {
 	
 	private static final ObjectMapper mapper = new ObjectMapper();
+	
+	@BeforeAll
+	static void initLoggers() {
+		
+		// This call triggers init, and in particular Loggers init
+		// If it is not done, the level of loggers changes during the test execution, depending on the order of execution
+		// and if the test are executed seperatly or not
+		// So the checks done in the test on the llogger's level becomes hazardous 
+		Control.getConcertTicketImgUri();
+	}
 	
 	@Test
 	void test() {
@@ -73,6 +85,8 @@ class ConcertTest {
 		
 		assertThat(concertParserFilterCounter.getLogRecordCount()).isEqualTo(1);
 		assertThat(concertParserFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
+		
+		parserHelpersFilterCounter.stopLogCountAndFilter();
 	}
 	
 	private static final String concertStr1 = """
@@ -90,7 +104,7 @@ class ConcertTest {
 
 	@Test
 	void testConcert1() throws JsonMappingException, JsonProcessingException {
-
+		
 		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
 		
 		ObjectNode jConcert = (ObjectNode)mapper.readTree(concertStr1);
@@ -108,8 +122,8 @@ class ConcertTest {
 		assertThat(juan.getNombreConcert()).isZero();
 
 		assertThat(concert.getTicketImages())
-			.singleElement()
-			.isEqualTo("/Annees1990/1990/07_Juillet/RayCharles01.jpg");
+			.singleElement()			
+			.hasToString(Control.getConcertTicketImgUri() + "/Annees1990/1990/07_Juillet/RayCharles01.jpg");
 
 		juan.addConcert(concert);
 		assertThat(juan.getNombreConcert()).isEqualTo(1);
@@ -132,13 +146,14 @@ class ConcertTest {
 					.singleElement()
 					.isEqualTo(concert);
 			});
-		
+
 		if (parserHelpersFilterCounter.isLoggable(Level.INFO)) {
 			assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(3);
 			assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.INFO)).isEqualTo(3);
 		} else {
 			assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(0);
 		}
-
+		
+		parserHelpersFilterCounter.stopLogCountAndFilter();
 	}
 }

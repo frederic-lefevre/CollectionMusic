@@ -151,13 +151,17 @@ public class MusicArtefactParser {
 	}
 
 	public List<URI> getUrlLinks() {		
-		return ParserHelpers.getArrayAttribute(arteFactJson, JsonMusicProperties.LIENS).stream()
-				.map(relativeUriString -> getAbsoluteUri(Control.getMusicartefactInfosUri(), relativeUriString))
+		return getUrisList(arteFactJson, JsonMusicProperties.LIENS, Control.getMusicartefactInfosUri());
+	}
+
+	protected static List<URI> getUrisList(JsonNode arteFactJson, String jsonProperty, String rootUri) {
+		return ParserHelpers.getArrayAttribute(arteFactJson, jsonProperty).stream()
+				.map(relativeUriString -> getAbsoluteUri(rootUri, relativeUriString, arteFactJson))
 				.filter(Objects::nonNull)
 				.toList();
 	}
-
-	protected URI getAbsoluteUri(String rootUri, String relativeDirUriStr) {
+	
+	private static URI getAbsoluteUri(String rootUri, String relativeDirUriStr, JsonNode arteFactJson) {
 		try {
 			URI absoluteUri = new URI(rootUri + relativeDirUriStr);
 			// check that the file exists

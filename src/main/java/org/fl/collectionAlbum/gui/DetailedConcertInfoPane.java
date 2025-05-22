@@ -38,7 +38,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.concerts.Concert;
 import org.fl.collectionAlbum.utils.CollectionUtils;
 import org.fl.util.file.FilesUtils;
@@ -71,11 +70,10 @@ public class DetailedConcertInfoPane extends JScrollPane {
 		concertTextInfo.setFont(monospaced);
 		infosPane.add(concertTextInfo);
 		
-		String ticketImagesRoot = Control.getConcertTicketImgUri();
 		concert.getTicketImages().stream()
-			.map(relativeStringPath -> {
+			.map(ticketImageUri -> {
 				try {
-					return FilesUtils.uriStringToAbsolutePath(ticketImagesRoot + relativeStringPath);
+					return FilesUtils.uriStringToAbsolutePath(ticketImageUri.toString());
 				} catch (URISyntaxException e) {
 					logger.log(Level.SEVERE, "Exception building concert image absolute path for concert:\n" + concert.getJsonString());
 					return null;

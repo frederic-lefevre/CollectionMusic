@@ -28,6 +28,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -57,6 +58,7 @@ import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 import org.fl.discogsInterface.inventory.InventoryCsvAlbum;
 import org.fl.util.FilterCounter;
 import org.fl.util.FilterCounter.LogRecordCounter;
+import org.fl.util.file.FilesUtils;
 import org.fl.util.json.JsonUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -152,7 +154,7 @@ class AlbumTest {
 			""" ;
 			  
 	@Test
-	void testAlbum1() throws JsonMappingException, JsonProcessingException {
+	void testAlbum1() throws JsonMappingException, JsonProcessingException, URISyntaxException {
 		
 		ObjectNode jAlbum = (ObjectNode)mapper.readTree(albumStr1);
 
@@ -258,7 +260,7 @@ class AlbumTest {
 		ObjectNode modifiedJson2 = album2.getJson();
 		
 		// Recreate an album from this json
-		Path jsonFilePath = Path.of("C:\\ForTests\\CollectionMusique\\PortraitInJazz.json");
+		Path jsonFilePath = FilesUtils.uriStringToAbsolutePath("file:///ForTests/CollectionMusique/PortraitInJazz.json");
 		
 		ListeArtiste la3 = new ListeArtiste();
 		List<ListeArtiste> lla3 = new ArrayList<ListeArtiste>();

@@ -38,7 +38,7 @@ public class CollectionAlbumGui extends JFrame {
 	public static final int WINDOW_WIDTH = 1880;
 	public static final int WINDOW_HEIGHT = 1000;
 
-	private static final String DEFAULT_PROP_FILE = "file:///C:/FredericPersonnel/Loisirs/musique/RapportCollection/albumCollection.properties";
+	private static final String DEFAULT_PROP_FILE = "file:///FredericPersonnel/Loisirs/musique/RapportCollection/albumCollection.properties";
 	
 	private static final Logger logger = Logger.getLogger(CollectionAlbumGui.class.getName());
 	

@@ -26,6 +26,7 @@ package org.fl.collectionAlbum.json.migrator;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,6 +35,7 @@ import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.json.MusicArtefactParser;
 import org.fl.util.FilterCounter;
 import org.fl.util.FilterCounter.LogRecordCounter;
+import org.fl.util.file.FilesUtils;
 import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -69,7 +71,7 @@ class MusicArtefactMigratorTest {
 			""" ;
 	
 	@Test
-	void shouldMigrateAlbum() throws JsonMappingException, JsonProcessingException {
+	void shouldMigrateAlbum() throws JsonMappingException, JsonProcessingException, URISyntaxException {
 		
 		LogRecordCounter migratorFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.migrator.MusicArtefactMigrator"));
 		
@@ -82,7 +84,7 @@ class MusicArtefactMigratorTest {
 		
 		assertThat(albumJson.get(JsonMusicProperties.JSON_VERSION)).isNull();
 		
-		Path jsonFilePath = Path.of("C:\\ForTests\\CollectionMusique\\PortraitInJazz2.json");
+		Path jsonFilePath = FilesUtils.uriStringToAbsolutePath("file:///ForTests/CollectionMusique/PortraitInJazz2.json");
 		
 		ObjectNode migratedAlbum = migrator.migrateAlbum(albumJson, jsonFilePath);
 		
