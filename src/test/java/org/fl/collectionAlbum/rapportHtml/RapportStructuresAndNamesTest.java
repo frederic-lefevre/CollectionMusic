@@ -22,12 +22,12 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-
 package org.fl.collectionAlbum.rapportHtml;
 
 import static org.assertj.core.api.Assertions.*;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +40,8 @@ import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.concerts.Concert;
 import org.fl.collectionAlbum.concerts.LieuxDesConcerts;
+import org.fl.util.file.FilesUtils;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -51,9 +53,14 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 class RapportStructuresAndNamesTest {
 
-	private static final String MUSIQUE_DIRECTORY_URI = "file:///C:/FredericPersonnel/Loisirs/musique/";
+	private static String MUSIQUE_DIRECTORY_URI;
 	
 	private static final ObjectMapper mapper = new ObjectMapper();
+	
+	@BeforeAll
+	static void init() throws URISyntaxException {
+		MUSIQUE_DIRECTORY_URI = FilesUtils.uriStringToAbsolutePath("file:///FredericPersonnel/Loisirs/musique/").toUri().toString();
+	}
 	
 	@BeforeEach
 	void initRapoortStructuresAndNames() {
