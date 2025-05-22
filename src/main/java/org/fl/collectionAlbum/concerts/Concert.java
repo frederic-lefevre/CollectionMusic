@@ -24,6 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.concerts;
 
+import java.net.URI;
 import java.nio.file.Path;
 import java.time.temporal.TemporalAccessor;
 import java.util.List;
@@ -39,7 +40,7 @@ public class Concert extends MusicArtefact {
     private TemporalAccessor dateConcert;   
     private LieuConcert	lieuConcert;     
     private List<String> titres;    
-    private List<String> ticketImages;
+    private List<URI> ticketImages;
     
 	public Concert(ObjectNode concertJson, List<ListeArtiste> knownArtistes, LieuxDesConcerts lieuxDesConcerts,
 			Path jsonFilePath) {
@@ -55,13 +56,11 @@ public class Concert extends MusicArtefact {
 	@Override
 	public boolean hasAdditionnalInfo() {
 
-		boolean res = false;
 		if ((ticketImages != null) && (ticketImages.size() > 0)) {
-			res = true;
+			return true;
 		} else {
-			res = super.hasAdditionnalInfo();
+			return super.hasAdditionnalInfo();
 		}
-		return res;
 	}
 
 	public LieuConcert getLieuConcert() {
@@ -76,7 +75,7 @@ public class Concert extends MusicArtefact {
 		return titres;
 	}
 
-	public List<String> getTicketImages() {
+	public List<URI> getTicketImages() {
 		return ticketImages;
 	}
 	

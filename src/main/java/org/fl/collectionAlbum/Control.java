@@ -26,6 +26,7 @@ package org.fl.collectionAlbum;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.AbstractMap;
@@ -133,11 +134,10 @@ public class Control {
 			}
 			
 			// get the concert ticket image path
-			concertTicketImgUri = collectionProperties.getProperty("concert.ticketImgDir.name");	
+			concertTicketImgUri = convertToAbsoluteUriString(collectionProperties.getProperty("concert.ticketImgDir.name"));	
 
 			// get the path of additional information for concerts and albums
-			musicartefactInfosUri = FilesUtils.uriStringToAbsolutePath(collectionProperties.getProperty("musicArtefact.information.rootDir.name"))
-					.toUri().toString();  // Converting to absolute path, in Windows OS case, put the default C: drive if it is not mentioned in the property value
+			musicartefactInfosUri = convertToAbsoluteUriString(collectionProperties.getProperty("musicArtefact.information.rootDir.name"));
 						
 			discogsCollectionCsvExportPath = FilesUtils.uriStringToAbsolutePath(collectionProperties.getProperty("album.discogs.collection.csvExport"));
 			discogsBaseUrlForRelease = collectionProperties.getProperty("album.discogs.baseUrl.release");
@@ -174,6 +174,17 @@ public class Control {
 			albumLog.log(Level.SEVERE, "Exception during inintialisation, property file="  + propertyFile, e);
 			collectionProperties = null;
 		}
+	}
+	
+	private static String convertToAbsoluteUriString(String uri) {
+		 try {
+			// Converting to absolute path may be necessary, in Windows OS case, to put the default C: drive if it is not mentioned in the property value
+			return FilesUtils.uriStringToAbsolutePath(uri)
+				.toUri().toString();
+		} catch (URISyntaxException e) {
+			albumLog.log(Level.SEVERE, "Exception trying to convert to absolute uri: " + uri, e);
+			return null;
+		}  
 	}
 	
 	private static Control getInstance() {

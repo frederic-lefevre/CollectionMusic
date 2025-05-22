@@ -24,11 +24,13 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.json;
 
+import java.net.URI;
 import java.time.temporal.TemporalAccessor;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.utils.TemporalUtils;
 
@@ -62,8 +64,7 @@ public class ConcertParser {
 		return ParserHelpers.getArrayAttribute(arteFactJson, JsonMusicProperties.MORCEAUX);
 	}
 	
-	public static List<String> getConcertTickets(JsonNode arteFactJson) {
-		return ParserHelpers.getArrayAttribute(arteFactJson, JsonMusicProperties.TICKET_IMG);
+	public static List<URI> getConcertTickets(JsonNode arteFactJson) {
+		return MusicArtefactParser.getUrisList(arteFactJson, JsonMusicProperties.TICKET_IMG, Control.getConcertTicketImgUri());
 	}
-
 }
