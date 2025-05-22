@@ -47,6 +47,7 @@ class ControlTest {
 		assertThat(Control.getCharset()).isNotNull();
 		assertThat(Control.getCollectionDirectoryName()).isNotNull();
 		assertThat(Control.getConcertDirectoryName()).isNotNull();
+		assertThat(Control.getAlbumSleevesImgUri()).isNotNull().isNotEmpty();
 		assertThat(Control.getConcertTicketImgUri()).isNotNull().isNotEmpty();
 		assertThat(Control.getCssForGui()).isNotNull().isNotEmpty();
 		
