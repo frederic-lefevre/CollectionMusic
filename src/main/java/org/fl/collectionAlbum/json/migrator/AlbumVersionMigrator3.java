@@ -98,16 +98,19 @@ public class AlbumVersionMigrator3 implements VersionMigrator {
 						Path reconstructedAbsolutePath = FilesUtils.uriStringToAbsolutePath(absoluteUriBase.toString() + relativeResultUriString);
 						
 						if (! Files.exists(reconstructedAbsolutePath)) {
-							albumLog.severe("Sleeve Image file does not exists: " + Objects.toString(reconstructedAbsolutePath));
-						} else {
-							albumJson.put(JsonMusicProperties.SLEEVE_IMG, relativeResultUriString);
+							albumLog.severe("Reconstructed Sleeve Image file does not exists: " + Objects.toString(reconstructedAbsolutePath));
+						} 
+						albumJson.put(JsonMusicProperties.SLEEVE_IMG, relativeResultUriString);
 							
-							albumJson.put(JsonMusicProperties.JSON_VERSION, TARGET_VERSION);
-						}
+						albumJson.put(JsonMusicProperties.JSON_VERSION, TARGET_VERSION);
+						
 					} catch (URISyntaxException e) {
 						albumLog.log(Level.SEVERE, "Exception reconstructing sleeves images URI with relative URI String:" + relativeResultUriString, e);
 					}
 				}
+			} else {
+				// No Sleeve image for this album : just upgrade version
+				albumJson.put(JsonMusicProperties.JSON_VERSION, TARGET_VERSION);
 			}
 			
 		}
