@@ -74,6 +74,7 @@ public class Control {
 	private ConcertMetricsHistory concertMetricsHsitory;
 	private Path rapportPath;
 	private Path oldRapportPath;
+	private String albumSleevesImgUri;
 	private String concertTicketImgUri;
 	private String musicartefactInfosUri;
 	private Map<ContentNature,Path> mediaFileRootPaths;
@@ -132,6 +133,10 @@ public class Control {
 			} catch (IOException e) {
 				albumLog.log(Level.SEVERE, "IOException accessinng concert metrics history folder", e);
 			}
+			
+			// get the album sleeves images path (this is storing the sleeves images when the sleeve image of the media files is
+			// not similar to the album ones
+			albumSleevesImgUri = convertToAbsoluteUriString(collectionProperties.getProperty("album.sleevesImgDir.name"));
 			
 			// get the concert ticket image path
 			concertTicketImgUri = convertToAbsoluteUriString(collectionProperties.getProperty("concert.ticketImgDir.name"));	
@@ -235,6 +240,10 @@ public class Control {
 	
 	public static ConcertMetricsHistory getConcertMetricsHsitory() {
 		return getInstance().concertMetricsHsitory;
+	}
+	
+	public static String getAlbumSleevesImgUri() {
+		return getInstance().albumSleevesImgUri;
 	}
 	
 	public static String getConcertTicketImgUri() {
