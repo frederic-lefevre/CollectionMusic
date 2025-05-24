@@ -26,14 +26,17 @@ package org.fl.collectionAlbum.json;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.format.Format;
 import org.fl.collectionAlbum.format.Format.RangementSupportPhysique;
 import org.fl.collectionAlbum.utils.FuzzyPeriod;
 import org.fl.collectionAlbum.utils.TemporalUtils;
+import org.fl.util.file.FilesUtils;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -56,16 +59,19 @@ public class AlbumParser {
 		if (sleeveImg == null) {
 			return null;
 		} else {
-			Path sleevePath = Path.of(sleeveImg);
-			if (sleevePath.isAbsolute()) {
+			try {
+				String absoluteSleeveImageUriString = Control.getAlbumSleevesImgUri() + sleeveImg;
+				Path sleevePath = FilesUtils.uriStringToAbsolutePath(absoluteSleeveImageUriString);
+				
 				if (Files.exists(sleevePath)) {
 					return sleevePath;
 				} else {
-					albumLog.warning("Le path de la pochette n'existe pas pour l'album " + jAlbum);
+					albumLog.severe("Le path de la pochette n'existe pas pour l'album " + jAlbum);
 					return null;					
 				}
-			} else {
-				albumLog.warning("Le path de la pochette n'est pas absolu pour l'album " + jAlbum);
+			} catch (Exception e) {
+				albumLog.log(Level.SEVERE, "Exception building absolute album sleeve image path. Root path=" + Objects.toString(Control.getAlbumSleevesImgUri()
+						+ " relative image path=" + sleeveImg), e);
 				return null;
 			}
 		}
