@@ -28,7 +28,6 @@ import static org.assertj.core.api.Assertions.*;
 
 import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.json.MusicArtefactParser;
-import org.fl.util.json.JsonUtils;
 import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -153,27 +152,8 @@ class AlbumVersionMigrator4Test {
 	
 	@Test
 	void shouldMigrateAlbum() throws JsonMappingException, JsonProcessingException {
-		
-		AlbumVersionMigrator4 migrator = AlbumVersionMigrator4.getInstance();
-		
-		ObjectNode albumJson = (ObjectNode)mapper.readTree(albumStr2);
-		int nbChildNode = albumJson.size();
-		
-		assertThat(albumJson.get(JsonMusicProperties.JSON_VERSION).asInt()).isEqualTo(3);
-		
-		ObjectNode migratedAlbum = migrator.migrate(albumJson);
-		
-		assertThat(migratedAlbum).isNotNull();
-		
-		assertThat(migratedAlbum.get(JsonMusicProperties.JSON_VERSION).asInt())
-			.isEqualTo(migrator.targetVersion())
-			.isEqualTo(albumJson.get(JsonMusicProperties.JSON_VERSION).asInt())
-			.isEqualTo(MusicArtefactParser.getVersion(migratedAlbum))
-			.isEqualTo(MusicArtefactParser.getVersion(albumJson));
-		
-		assertThat(migratedAlbum.size()).isEqualTo(nbChildNode);
-		
-		JsonNode formatJson = albumJson.get(JsonMusicProperties.FORMAT);
+
+		JsonNode formatJson = assertAndGetFormatJson(albumStr2);
 		
 		JsonNode jsonAudioFiles = formatJson.get(JsonMusicProperties.AUDIO_FILE);
 		assertThat(jsonAudioFiles).isNotNull();
@@ -191,8 +171,73 @@ class AlbumVersionMigrator4Test {
 						assertThat(locationJson.asText()).isEqualTo("b/Black Sabbath/Sabbath Bloody Sabbath [24 176]/"));		
 				});
 		
-		System.out.println(JsonUtils.jsonPrettyPrint(migratedAlbum));
+	}
+	
+	private static final String albumStr3 = """
+{
+  "titre" : "أخلد الألحان بأجمل الأصوات (Les plus belles chansons avec la plus belle voix)",
+  "format" : {
+    "cd" : 1,
+    "audioFiles" : [ {
+      "bitDepth" : 16,
+      "samplingRate" : 44.1,
+      "source" : "CD",
+      "type" : "FLAC",
+      "location" : [ "E:\\\\Musique\\\\a\\\\Farid El Atrache\\\\(Les plus belles chansons avec la plus belle voix) أخلد الألحان بأجمل الأصوات" ]
+    } ]
+  },
+  "auteurCompositeurs" : [ {
+    "nom" : "Atrache",
+    "prenom" : "Farid El",
+    "naissance" : "1915-01-01",
+    "mort" : "1974-12-26"
+  } ],
+  "enregistrement" : [ "1950-01-01", "1950-01-01" ],
+  "jsonVersion" : 3,
+  "discogs" : "11944355"
+}
+			""";
+	
+	@Test
+	void shouldMigrateAlbum2() throws JsonMappingException, JsonProcessingException {
+		
+		JsonNode formatJson = assertAndGetFormatJson(albumStr3);
+		
+		JsonNode jsonAudioFiles = formatJson.get(JsonMusicProperties.AUDIO_FILE);
+		assertThat(jsonAudioFiles).isNotNull();
+		assertThat(jsonAudioFiles.size()).isEqualTo(1);
+		
+		JsonNode jsonAudioFile = jsonAudioFiles.get(0);
+		JsonNode locationsJson = jsonAudioFile.get( JsonMusicProperties.LOCATION);
+		assertThat(locationsJson).isNotNull().singleElement().satisfies(locationJson -> 
+			assertThat(locationJson.asText()).isEqualTo("a/Farid El Atrache/(Les plus belles chansons avec la plus belle voix) أخلد الألحان بأجمل الأصوات/"));	
+
 		
 	}
 	
+	private JsonNode assertAndGetFormatJson(String albumStr) throws JsonMappingException, JsonProcessingException {
+		
+		AlbumVersionMigrator4 migrator = AlbumVersionMigrator4.getInstance();
+		
+		ObjectNode albumJson = (ObjectNode)mapper.readTree(albumStr);
+		int nbChildNode = albumJson.size();
+		
+		assertThat(albumJson.get(JsonMusicProperties.JSON_VERSION).asInt()).isEqualTo(3);
+		
+		ObjectNode migratedAlbum = migrator.migrate(albumJson);
+		
+		assertThat(migratedAlbum).isNotNull();
+		
+		assertThat(migratedAlbum.get(JsonMusicProperties.JSON_VERSION).asInt())
+			.isEqualTo(migrator.targetVersion())
+			.isEqualTo(albumJson.get(JsonMusicProperties.JSON_VERSION).asInt())
+			.isEqualTo(MusicArtefactParser.getVersion(migratedAlbum))
+			.isEqualTo(MusicArtefactParser.getVersion(albumJson));
+		
+		assertThat(migratedAlbum.size()).isEqualTo(nbChildNode);
+		
+		return albumJson.get(JsonMusicProperties.FORMAT);
+	}
+
 }
+
