@@ -28,6 +28,7 @@ import java.io.BufferedWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -88,7 +89,8 @@ public class MusicArtefactMigrator {
 			try {
 				albumLog.log(Level.SEVERE, "Exception dans la migration de l'artefact " + JsonUtils.jsonPrettyPrint(artefactJson), e);
 			} catch (JsonProcessingException e1) {
-				albumLog.log(Level.SEVERE, "Exception dans la migration de l'artefact, puis dans le logging de l'erreur (json erroné)", e);
+				albumLog.log(Level.SEVERE, 
+						"Exception dans la migration de l'artefact, puis dans le logging de l'erreur (json erroné) pour le fichier " + Objects.toString(jsonFilePath), e);
 			}
 		}
 
