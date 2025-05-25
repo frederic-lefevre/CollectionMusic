@@ -245,8 +245,8 @@ class AlbumVersionMigrator3Test {
 		assertThat(migratorFilterCounter.getLogRecordCount()).isEqualTo(2);
 		assertThat(migratorFilterCounter.getLogRecordCount(Level.SEVERE)).isEqualTo(2);
 		assertThat(migratorFilterCounter.getLogRecords()).satisfiesExactlyInAnyOrder(
-				logRecord -> logRecord.getMessage().contains("Sleeve Image file does not exists"),
-				logRecord -> logRecord.getMessage().contains("not under the base folder"));
+				logRecord -> assertThat(logRecord.getMessage()).contains("Sleeve Image file does not exists"),
+				logRecord -> assertThat(logRecord.getMessage()).contains("not under the base folder"));
 		
 		assertThat(notMigratedAlbum).isNotNull();
 		assertThat(notMigratedAlbum.size()).isEqualTo(nbChildNode);
