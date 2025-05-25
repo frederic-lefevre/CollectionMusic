@@ -55,7 +55,9 @@ class MusicArtefactMigratorTest {
 				    "bitDepth": 16 , 
 				    "samplingRate" : 44.1, 
 				    "source" : "MOFI Fidelity Sound Lab", 
-				    "type" : "FLAC" }]
+				    "type" : "FLAC",
+				    "location" : "E:\\\\Musique\\\\e\\\\Bill Evans\\\\Portrait In Jazz"
+				     }]
 			     }, 
 			  "auteurCompositeurs": [ 
 			    {  
