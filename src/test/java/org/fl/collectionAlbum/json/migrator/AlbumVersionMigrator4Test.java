@@ -26,8 +26,13 @@ package org.fl.collectionAlbum.json.migrator;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.json.MusicArtefactParser;
+import org.fl.util.FilterCounter;
+import org.fl.util.FilterCounter.LogRecordCounter;
 import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -325,6 +330,96 @@ class AlbumVersionMigrator4Test {
 			assertThat(locationJson.asText()).isEqualTo("h/Jimi Hendrix/Electric Ladyland 1968/"));	
 	}
 	
+	private static final String albumStr5 = """
+{
+  "titre": "Sabbath bloody sabbath",
+  "format": {
+    "k7": 1,
+    "audioFiles": [
+      {
+        "bitDepth": 16,
+        "samplingRate": 44.1,
+        "source": "CD",
+        "type": "FLAC",
+        "location": [
+          "E:\\\\MusiqueBad\\\\b\\\\Black Sabbath\\\\Sabbath Bloody Sabbath"
+        ]
+      },
+      {
+        "bitDepth": 24,
+        "samplingRate": 176.4,
+        "source": "SACD",
+        "type": "FLAC",
+        "location": [
+          "E:\\\\Musique\\\\b\\\\Black Sabbath\\\\Sabbath Bloody Sabbath [24 176]"
+        ]
+      }
+    ]
+  },
+  "groupe": [
+    {
+      "nom": "Black Sabbath"
+    }
+  ],
+  "enregistrement": [
+    "1973-07-01",
+    "1973-07-31"
+  ],
+  "jsonVersion": 3,
+  "discogs": "9556137",
+  "sleeveImg": "b/BlackSabbath/SabbathBloodySabbathK7.jpg"
+}	
+			""";
+	
+	@Test
+	void shouldDetectWrongFolder() throws JsonMappingException, JsonProcessingException {
+		
+AlbumVersionMigrator4 migrator = AlbumVersionMigrator4.getInstance();
+		
+		ObjectNode albumJson = (ObjectNode)mapper.readTree(albumStr5);
+		int nbChildNode = albumJson.size();
+		
+		assertThat(albumJson.get(JsonMusicProperties.JSON_VERSION).asInt()).isEqualTo(3);
+		
+		LogRecordCounter migratorFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(AlbumVersionMigrator4.class.getName()));
+		
+		ObjectNode migratedAlbum = migrator.migrate(albumJson);
+		
+		assertThat(migratorFilterCounter.getLogRecordCount()).isEqualTo(2);
+		assertThat(migratorFilterCounter.getLogRecordCount(Level.SEVERE)).isEqualTo(2);
+		assertThat(migratorFilterCounter.getLogRecords()).satisfiesExactlyInAnyOrder(
+				logRecord -> assertThat(logRecord.getMessage()).contains("The media file path does not exists"),
+				logRecord -> assertThat(logRecord.getMessage()).contains("ONE PATH NOT MIGRATED *** The media file").contains("is not under the base folder"));
+		
+		assertThat(migratedAlbum).isNotNull();
+
+		assertThat(migratedAlbum.get(JsonMusicProperties.JSON_VERSION).asInt())
+			.isEqualTo(3)
+			.isEqualTo(albumJson.get(JsonMusicProperties.JSON_VERSION).asInt())
+			.isEqualTo(MusicArtefactParser.getVersion(migratedAlbum))
+			.isEqualTo(MusicArtefactParser.getVersion(albumJson));
+		
+		assertThat(migratedAlbum.size()).isEqualTo(nbChildNode);
+		
+		JsonNode formatJson =  albumJson.get(JsonMusicProperties.FORMAT);
+		
+		JsonNode jsonAudioFiles = formatJson.get(JsonMusicProperties.AUDIO_FILE);
+		assertThat(jsonAudioFiles).isNotNull();
+		assertThat(jsonAudioFiles.size()).isEqualTo(2);
+		
+		assertThat(jsonAudioFiles).satisfiesExactlyInAnyOrder(
+				jsonAudioFile -> { 
+					JsonNode locationsJson = jsonAudioFile.get( JsonMusicProperties.LOCATION);
+					assertThat(locationsJson).isNotNull().singleElement().satisfies(locationJson -> 
+						assertThat(locationJson.asText()).isEqualTo("E:\\MusiqueBad\\b\\Black Sabbath\\Sabbath Bloody Sabbath"));					
+				},
+				jsonAudioFile -> {
+					JsonNode locationsJson = jsonAudioFile.get( JsonMusicProperties.LOCATION);
+					assertThat(locationsJson).isNotNull().singleElement().satisfies(locationJson -> 
+						assertThat(locationJson.asText()).isEqualTo("b/Black Sabbath/Sabbath Bloody Sabbath [24 176]/"));		
+				});
+	}
+	
 	private JsonNode assertAndGetFormatJson(String albumStr) throws JsonMappingException, JsonProcessingException {
 		
 		AlbumVersionMigrator4 migrator = AlbumVersionMigrator4.getInstance();
@@ -337,7 +432,7 @@ class AlbumVersionMigrator4Test {
 		ObjectNode migratedAlbum = migrator.migrate(albumJson);
 		
 		assertThat(migratedAlbum).isNotNull();
-		
+
 		assertThat(migratedAlbum.get(JsonMusicProperties.JSON_VERSION).asInt())
 			.isEqualTo(migrator.targetVersion())
 			.isEqualTo(albumJson.get(JsonMusicProperties.JSON_VERSION).asInt())
@@ -348,6 +443,5 @@ class AlbumVersionMigrator4Test {
 		
 		return albumJson.get(JsonMusicProperties.FORMAT);
 	}
-
 }
 

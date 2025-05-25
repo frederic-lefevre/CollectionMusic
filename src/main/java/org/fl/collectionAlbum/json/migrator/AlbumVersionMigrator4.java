@@ -57,6 +57,7 @@ public class AlbumVersionMigrator4 implements VersionMigrator {
 	
 	private final URI audioAbsoluteUriBase;
 	private final URI videoAbsoluteUriBase;
+	private boolean migrationComplete;
 	
 	private AlbumVersionMigrator4() {
 		
@@ -103,10 +104,13 @@ public class AlbumVersionMigrator4 implements VersionMigrator {
 				}
 			} else {
 				
+				migrationComplete = true;
 				migrateMediaFiles(formatJson, JsonMusicProperties.AUDIO_FILE, audioAbsoluteUriBase, albumJson);
 				migrateMediaFiles(formatJson, JsonMusicProperties.VIDEO_FILE, videoAbsoluteUriBase, albumJson);
 				
-				albumJson.put(JsonMusicProperties.JSON_VERSION, TARGET_VERSION);
+				if (migrationComplete) {
+					albumJson.put(JsonMusicProperties.JSON_VERSION, TARGET_VERSION);
+				}
 			}
 		}
 		return albumJson;
@@ -148,8 +152,9 @@ public class AlbumVersionMigrator4 implements VersionMigrator {
 		
 		URI absoluteLocationUri = absoluteLocationPath.toUri();
 		if (! absoluteLocationUri.toString().startsWith(baseMediaFileUri.toString())) {
-			albumLog.severe("PATH NOT MIGRATED *** The media file " + absoluteLocationPathString + " is not under the base folder " + baseMediaFileUri);
-			return null;
+			albumLog.severe("ONE PATH NOT MIGRATED *** The media file " + absoluteLocationPathString + " is not under the base folder " + baseMediaFileUri);
+			migrationComplete = false;
+			return absoluteLocationPathString;
 		} else {
 			URI relativeResultUri = baseMediaFileUri.relativize(absoluteLocationUri);
 			
