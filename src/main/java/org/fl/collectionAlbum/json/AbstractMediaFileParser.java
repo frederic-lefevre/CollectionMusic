@@ -31,6 +31,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.format.AbstractMediaFile;
 import org.fl.collectionAlbum.format.ContentNature;
@@ -61,11 +62,11 @@ public abstract class AbstractMediaFileParser {
 			return locations.stream()
 					.map(locationString -> {
 						try {
-							Path locationPath = Path.of(locationString);
+							Path locationPath = Path.of(Control.getMediaFileRootPath(contentNature).toString(), locationString);
 							if (locationPath.isAbsolute()) {
 								return MediaFilesInventories.getMediaFileInventory(contentNature).validateMediaFilePath(locationPath);
 							} else {
-								albumLog.severe("Media file location is not absolute: " + mediaFileJson);
+								albumLog.severe("Reconstructed media file location is not absolute: " + Objects.toString(locationPath) + "\nMedia file locations: " + mediaFileJson);
 								return null;
 							}
 						} catch (Exception e) {

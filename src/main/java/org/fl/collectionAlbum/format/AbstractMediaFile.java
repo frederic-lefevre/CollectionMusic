@@ -24,11 +24,13 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.format;
 
-
+import java.net.URI;
 import java.nio.file.Files;
-import java.util.HashSet;
+import java.nio.file.Path;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiConsumer;
+import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
@@ -39,6 +41,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public abstract class AbstractMediaFile {
 
+	private static final Logger logger = Logger.getLogger(AbstractMediaFile.class.getName());
+	
 	private final String source;
 	private final String note;
 	private final ObjectNode mediaJson;
@@ -49,7 +53,7 @@ public abstract class AbstractMediaFile {
 	
 	private static final String SOURCE_TITLE = "Source";
 	private static final String NOTE_TITLE = "Note";
-	private static final String FILE_LINK1 = "<a href=\"file:///";
+	private static final String FILE_LINK1 = "<a href=\"";
 	private static final String FILE_LINK2 = "\">";
 	private static final String FILE_LINK3 = "</a>";
 	
@@ -81,31 +85,12 @@ public abstract class AbstractMediaFile {
 		return mediaFilePaths;
 	}
 	
-	public void addMediaFilePath(MediaFilePath mediaFilePath) {
-		if (mediaFilePaths == null) {
-			mediaFilePaths = new HashSet<>();
-		}
-		mediaFilePaths.add(mediaFilePath);
-		
-		modifiyJson();
-		checkMediaFilePaths();
-	}
-	
-	public void replaceMediaFilePath(MediaFilePath mediaFilePath) {
-
-		mediaFilePaths = new HashSet<>();
-		mediaFilePaths.add(mediaFilePath);
-		
-		modifiyJson();
-		checkMediaFilePaths();
-	}
-	
-	public void setMediaFilePath(Set<MediaFilePath> mediaFilePaths) {
+	public void setMediaFilePath(Set<MediaFilePath> mediaFilePaths, URI mediaFilesRoot) {
 
 		this.mediaFilePaths = mediaFilePaths;
 		
 		if (this.mediaFilePaths != null) {
-			modifiyJson();
+			modifiyJson(mediaFilesRoot);
 			checkMediaFilePaths();
 		}
 	}
@@ -118,11 +103,35 @@ public abstract class AbstractMediaFile {
 		return mediaFilePathNotFound;
 	}
 
-	private void modifiyJson() {
+	private void modifiyJson(URI mediaFilesRoot) {
 		ArrayNode mediaPathsJson = JsonNodeFactory.instance.arrayNode();
-		mediaFilePaths.forEach(mediaFilePath -> mediaPathsJson.add(mediaFilePath.getPath().toString()));
+		mediaFilePaths.stream()
+			.map(mediaFilePath -> mediaFilePath.getPath())
+			.map(absolutePath -> getRelativeMediaLocationPath(absolutePath, mediaFilesRoot))
+			.filter(Objects::nonNull)
+			.forEach(relativePathString -> mediaPathsJson.add(relativePathString));
 		
 		mediaJson.set(JsonMusicProperties.LOCATION, mediaPathsJson);
+	}
+	
+	private String getRelativeMediaLocationPath(Path absoluteLocationPath, URI baseMediaFileUri) {
+		
+		if (! Files.exists(absoluteLocationPath)) {
+			logger.severe("The media file path does not exists: " + absoluteLocationPath);
+		}
+		
+		URI absoluteLocationUri = absoluteLocationPath.toUri();
+		if (! absoluteLocationUri.toString().startsWith(baseMediaFileUri.toString())) {
+			logger.severe("The media file " + absoluteLocationPath + " is not under the base folder " + baseMediaFileUri);
+			return null;
+		} else {
+			URI relativeResultUri = baseMediaFileUri.relativize(absoluteLocationUri);
+			
+			// getPath() decodes the URI
+			String relativeResultUriString = relativeResultUri.getPath();
+
+			return relativeResultUriString;
+		}
 	}
 	
 	private void checkMediaFilePaths() {
@@ -153,7 +162,7 @@ public abstract class AbstractMediaFile {
 			mediaFilePaths.forEach(mediaFilePath -> {
 				mediaFilesDetails.append(separator)
 				.append(FILE_LINK1)
-				.append(mediaFilePath.getPath())
+				.append(mediaFilePath.getPath().toUri())
 				.append(FILE_LINK2)
 				.append(mediaFilePath.getPath())
 				.append(FILE_LINK3);

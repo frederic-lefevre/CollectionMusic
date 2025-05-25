@@ -65,7 +65,7 @@ class DiscogsAlbumReleaseMatcherTest {
     "source": "CD",
     "type": "FLAC",
     "location": [
-      "E:\\\\Musique\\\\s\\\\Soft Machine\\\\Third"
+      "s/Soft Machine/Third"
     ]
   }
 ]
@@ -95,7 +95,7 @@ class DiscogsAlbumReleaseMatcherTest {
         "source": "CD",
         "type": "FLAC",
         "location": [
-          "E:\\\\Musique\\\\h\\\\Jimi Hendrix\\\\Electric Ladyland\\\\Electric Ladyland [823 359-2W. Germany - 1984]"
+          "h/Jimi Hendrix/Electric Ladyland/Electric Ladyland [823 359-2W. Germany - 1984]"
         ]
       }
     ]
@@ -132,7 +132,7 @@ class DiscogsAlbumReleaseMatcherTest {
         "type": "FLAC",
         "note": "Remaster Ocean view",
         "location": [
-          "E:\\\\Musique\\\\h\\\\Jimi Hendrix\\\\Electric Ladyland\\\\Electric Ladyland [847 233-2, Polygram 1993]"
+          "h/Jimi Hendrix/Electric Ladyland/Electric Ladyland [847 233-2, Polygram 1993]"
         ]
       }
     ]
@@ -168,7 +168,7 @@ class DiscogsAlbumReleaseMatcherTest {
     "source": "CD",
     "type": "FLAC",
     "location": [
-      "E:\\\\Musique\\\\s\\\\Soft Machine\\\\Third"
+      "s/Soft Machine/Third"
     ]
   }
 ]
@@ -198,7 +198,7 @@ class DiscogsAlbumReleaseMatcherTest {
     "source": "CD",
     "type": "FLAC",
     "location": [
-      "E:\\\\Musique\\\\s\\\\Soft Machine\\\\Third"
+      "s/Soft Machine/Third"
     ]
   }
 ]

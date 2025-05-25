@@ -98,7 +98,7 @@ class CollectionAlbumContainerTest {
 				    "samplingRate" : 44.1, 
 				    "source" : "MOFI Fidelity Sound Lab", 
 				    "type" : "FLAC",
-                    "location": ["E:\\\\Musique\\\\e\\\\Bill Evans\\\\Portrait In Jazz"] 
+                    "location": ["e/Bill Evans/Portrait In Jazz"] 
                    }]
 				 },
 			  "auteurCompositeurs": [ 
