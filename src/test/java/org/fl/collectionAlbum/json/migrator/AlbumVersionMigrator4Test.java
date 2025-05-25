@@ -374,7 +374,7 @@ class AlbumVersionMigrator4Test {
 	@Test
 	void shouldDetectWrongFolder() throws JsonMappingException, JsonProcessingException {
 		
-AlbumVersionMigrator4 migrator = AlbumVersionMigrator4.getInstance();
+		AlbumVersionMigrator4 migrator = AlbumVersionMigrator4.getInstance();
 		
 		ObjectNode albumJson = (ObjectNode)mapper.readTree(albumStr5);
 		int nbChildNode = albumJson.size();
@@ -418,6 +418,105 @@ AlbumVersionMigrator4 migrator = AlbumVersionMigrator4.getInstance();
 					assertThat(locationsJson).isNotNull().singleElement().satisfies(locationJson -> 
 						assertThat(locationJson.asText()).isEqualTo("b/Black Sabbath/Sabbath Bloody Sabbath [24 176]/"));		
 				});
+	}
+	
+	private static final String albumStr6 = """
+{
+  "titre" : "Les plus belles chansons de Veronique Sanson",
+  "format" : {
+    "cd" : 1
+  },
+  "auteurCompositeurs" : [ {
+    "nom" : "Sanson",
+    "prenom" : "Veronique",
+    "naissance" : "1949-04-24"
+  } ],
+  "enregistrement" : [ "1972-01-01", "1985-01-01" ],
+  "jsonVersion" : 3,
+  "discogs" : "4912304"
+}	
+			""";
+	
+	@Test
+	void shouldMigrateAlbumWithNoMedia() throws JsonMappingException, JsonProcessingException {
+		
+		JsonNode formatJson = assertAndGetFormatJson(albumStr6);
+		
+		JsonNode jsonAudioFiles = formatJson.get(JsonMusicProperties.AUDIO_FILE);
+		assertThat(jsonAudioFiles).isNull();
+		
+		JsonNode jsonVideoFiles = formatJson.get(JsonMusicProperties.VIDEO_FILE);
+		assertThat(jsonVideoFiles).isNull();
+	}
+	
+	private static final String albumStr7 = """
+{
+  "titre" : "Speak No Evil",
+  "format" : {
+    "cd" : 1,
+    "audioFiles" : [ {
+      "bitDepth" : 16,
+      "samplingRate" : 44.1,
+      "source" : "CD",
+      "type" : "FLAC"
+    } ]
+  },
+  "auteurCompositeurs" : [ {
+    "nom" : "Shorter",
+    "prenom" : "Wayne",
+    "naissance" : "1933-08-25",
+    "mort" : "2023-03-02"
+  } ],
+  "enregistrement" : [ "1964-12-24", "1964-12-24" ],
+  "jsonVersion" : 3,
+  "discogs" : "11052375"
+}	
+			""";
+	
+	
+	@Test
+	void shouldMigrateAlbumWithMissingMediaLocation() throws JsonMappingException, JsonProcessingException {
+		
+		AlbumVersionMigrator4 migrator = AlbumVersionMigrator4.getInstance();
+		
+		ObjectNode albumJson = (ObjectNode)mapper.readTree(albumStr7);
+		int nbChildNode = albumJson.size();
+		
+		assertThat(albumJson.get(JsonMusicProperties.JSON_VERSION).asInt()).isEqualTo(3);
+		
+		LogRecordCounter migratorFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(AlbumVersionMigrator4.class.getName()));
+		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(org.fl.collectionAlbum.json.ParserHelpers.class.getName()));
+		
+		ObjectNode migratedAlbum = migrator.migrate(albumJson);
+		
+		assertThat(migratorFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(migratorFilterCounter.getLogRecordCount(Level.SEVERE)).isEqualTo(1);
+		assertThat(migratorFilterCounter.getLogRecords()).singleElement().satisfies(
+				logRecord -> assertThat(logRecord.getMessage()).contains("Media files location missing"));
+		
+		assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.INFO)).isEqualTo(1);
+		assertThat(parserHelpersFilterCounter.getLogRecords()).singleElement().satisfies(
+				logRecord -> assertThat(logRecord.getMessage()).contains("No property location"));
+		
+		assertThat(migratedAlbum).isNotNull();
+
+		assertThat(migratedAlbum.get(JsonMusicProperties.JSON_VERSION).asInt())
+			.isEqualTo(migrator.targetVersion())
+			.isEqualTo(albumJson.get(JsonMusicProperties.JSON_VERSION).asInt())
+			.isEqualTo(MusicArtefactParser.getVersion(migratedAlbum))
+			.isEqualTo(MusicArtefactParser.getVersion(albumJson));
+		
+		assertThat(migratedAlbum.size()).isEqualTo(nbChildNode);
+		
+		JsonNode formatJson =  albumJson.get(JsonMusicProperties.FORMAT);
+		
+		JsonNode jsonAudioFiles = formatJson.get(JsonMusicProperties.AUDIO_FILE);
+		assertThat(jsonAudioFiles).isNotNull();
+		assertThat(jsonAudioFiles.size()).isEqualTo(1);
+		
+		JsonNode jsonAudioFile = jsonAudioFiles.get(0);
+		assertThat(jsonAudioFile.get( JsonMusicProperties.LOCATION)).isNull();
 	}
 	
 	private JsonNode assertAndGetFormatJson(String albumStr) throws JsonMappingException, JsonProcessingException {
