@@ -52,7 +52,8 @@ public class MusicArtefactMigrator {
 		albumVersionMigrators = List.of(
 				AlbumVersionMigrator1.getInstance(),
 				AlbumVersionMigrator2.getInstance(),
-				AlbumVersionMigrator3.getInstance()
+				AlbumVersionMigrator3.getInstance(),
+				AlbumVersionMigrator4.getInstance()
 				);
 	}
 
