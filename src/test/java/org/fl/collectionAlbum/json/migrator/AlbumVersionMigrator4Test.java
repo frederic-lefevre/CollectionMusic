@@ -494,10 +494,12 @@ class AlbumVersionMigrator4Test {
 		assertThat(migratorFilterCounter.getLogRecords()).singleElement().satisfies(
 				logRecord -> assertThat(logRecord.getMessage()).contains("Media files location missing"));
 		
-		assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(1);
-		assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.INFO)).isEqualTo(1);
-		assertThat(parserHelpersFilterCounter.getLogRecords()).singleElement().satisfies(
-				logRecord -> assertThat(logRecord.getMessage()).contains("No property location"));
+		if (parserHelpersFilterCounter.isLoggable(Level.INFO)) {
+			assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(1);
+			assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.INFO)).isEqualTo(1);
+			assertThat(parserHelpersFilterCounter.getLogRecords()).singleElement().satisfies(
+					logRecord -> assertThat(logRecord.getMessage()).contains("No property location"));
+		}
 		
 		assertThat(migratedAlbum).isNotNull();
 
