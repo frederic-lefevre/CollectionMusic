@@ -32,9 +32,11 @@ import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -136,7 +138,7 @@ public class MediaFileInventory {
 		return inventoryKey.toString().toLowerCase().contains(pathPart.toLowerCase());
 	}
 	
-	public List<MediaFilePath> getPotentialMediaPath(Album album) {
+	public Set<MediaFilePath> getPotentialMediaPath(Album album) {
 		
 		String title = album.getTitre();
 		List<Artiste> auteurs = album.getAuteurs();
@@ -151,20 +153,20 @@ public class MediaFileInventory {
 			.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
 		if (potentialMediaPath.size() > 1) {
-			List<MediaFilePath> potentialMediaPath2 = potentialMediaPath.entrySet().stream()
+			Set<MediaFilePath> potentialMediaPath2 = potentialMediaPath.entrySet().stream()
 				.filter(inventoryEntry -> auteurs.stream()
 						.map(auteur -> auteur.getNomComplet())
 						.anyMatch(auteurName -> checkInventoryKey(inventoryEntry.getKey(), auteurName, title)))
 				.map(inventoryEntry -> inventoryEntry.getValue())
-				.collect(Collectors.toList());
+				.collect(Collectors.toSet());
 			
 			if (potentialMediaPath2.isEmpty()) {
-				return new ArrayList<>(potentialMediaPath.values());
+				return new HashSet<>(potentialMediaPath.values());
 			} else {
 				return potentialMediaPath2;
 			}
 		} else {
-			return new ArrayList<>(potentialMediaPath.values());
+			return new HashSet<>(potentialMediaPath.values());
 		}
 	}
 	

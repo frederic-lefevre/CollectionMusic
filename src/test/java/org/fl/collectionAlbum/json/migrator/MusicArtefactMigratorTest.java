@@ -55,7 +55,9 @@ class MusicArtefactMigratorTest {
 				    "bitDepth": 16 , 
 				    "samplingRate" : 44.1, 
 				    "source" : "MOFI Fidelity Sound Lab", 
-				    "type" : "FLAC" }]
+				    "type" : "FLAC",
+				    "location" : "E:\\\\Musique\\\\e\\\\Bill Evans\\\\Portrait In Jazz"
+				     }]
 			     }, 
 			  "auteurCompositeurs": [ 
 			    {  
@@ -92,10 +94,98 @@ class MusicArtefactMigratorTest {
 			.isEqualTo(albumJson.get(JsonMusicProperties.JSON_VERSION).asInt())
 			.isEqualTo(MusicArtefactParser.getVersion(migratedAlbum))
 			.isEqualTo(MusicArtefactParser.getVersion(albumJson))
-			.isEqualTo(migrator.albumVersionMigrators.size());
+			.isEqualTo(migrator.getHighestVersion());
+		
+		assertThat(migratorFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(migratorFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
+	}
+	
+	private static final String albumStr2 = """
+{
+  "titre" : "Speak No Evil",
+  "format" : {
+    "cd" : 1,
+    "audioFiles" : [ {
+      "bitDepth" : 16,
+      "samplingRate" : 44.1,
+      "source" : "CD",
+      "type" : "FLAC",
+      "location" : [ "E:\\\\Musique\\\\s\\\\Wayne Shorter\\\\Speak No Evil" ]
+    } ]
+  },
+  "auteurCompositeurs" : [ {
+    "nom" : "Shorter",
+    "prenom" : "Wayne",
+    "naissance" : "1933-08-25",
+    "mort" : "2023-03-02"
+  } ],
+  "enregistrement" : [ "1964-12-24", "1964-12-24" ],
+  "jsonVersion" : 3,
+  "discogs" : "11052375"
+}	
+			""";
+	
+	@Test
+	void shouldMigrateAlbum2() throws JsonMappingException, JsonProcessingException, URISyntaxException {
+		
+		LogRecordCounter migratorFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.migrator.MusicArtefactMigrator"));
+		
+		MusicArtefactMigrator migrator = MusicArtefactMigrator.getMigrator();
+		
+		ObjectNode albumJson = (ObjectNode)mapper.readTree(albumStr2);
+		
+		int initialVersion = MusicArtefactParser.getVersion(albumJson);
+		assertThat(initialVersion).isEqualTo(3);
+		
+		assertThat(albumJson.get(JsonMusicProperties.JSON_VERSION)).isNotNull();
+		assertThat(albumJson.get(JsonMusicProperties.JSON_VERSION).asInt()).isEqualTo(3);
+		
+		Path jsonFilePath = FilesUtils.uriStringToAbsolutePath("file:///ForTests/CollectionMusique/SpeakNoEvil.json");
+		
+		ObjectNode migratedAlbum = migrator.migrateAlbum(albumJson, jsonFilePath);
+		
+		assertThat(migratedAlbum.get(JsonMusicProperties.JSON_VERSION).asInt())
+			.isEqualTo(albumJson.get(JsonMusicProperties.JSON_VERSION).asInt())
+			.isEqualTo(MusicArtefactParser.getVersion(migratedAlbum))
+			.isEqualTo(MusicArtefactParser.getVersion(albumJson))
+			.isEqualTo(migrator.getHighestVersion());
 		
 		assertThat(migratorFilterCounter.getLogRecordCount()).isEqualTo(1);
 		assertThat(migratorFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
 	}
 
+	@Test
+	void testUnexpectedJsonVersion() throws JsonMappingException, JsonProcessingException, URISyntaxException {
+		
+		LogRecordCounter migratorFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.migrator.MusicArtefactMigrator"));
+		
+		MusicArtefactMigrator migrator = MusicArtefactMigrator.getMigrator();
+		
+		ObjectNode albumJson = (ObjectNode)mapper.readTree(albumStr2);
+		
+		// Change version to unexpected version
+		int tooHighVersion = migrator.getHighestVersion() + 1;		
+		albumJson.put(JsonMusicProperties.JSON_VERSION, tooHighVersion);
+		
+		int initialVersion = MusicArtefactParser.getVersion(albumJson);
+		assertThat(initialVersion).isEqualTo(tooHighVersion);
+		
+		assertThat(albumJson.get(JsonMusicProperties.JSON_VERSION)).isNotNull();
+		assertThat(albumJson.get(JsonMusicProperties.JSON_VERSION).asInt()).isEqualTo(tooHighVersion);
+		
+		Path jsonFilePath = FilesUtils.uriStringToAbsolutePath("file:///ForTests/CollectionMusique/SpeakNoEvil.json");
+		
+		ObjectNode migratedAlbum = migrator.migrateAlbum(albumJson, jsonFilePath);
+		
+		assertThat(migratedAlbum.get(JsonMusicProperties.JSON_VERSION).asInt())
+			.isEqualTo(albumJson.get(JsonMusicProperties.JSON_VERSION).asInt())
+			.isEqualTo(MusicArtefactParser.getVersion(migratedAlbum))
+			.isEqualTo(MusicArtefactParser.getVersion(albumJson))
+			.isEqualTo(tooHighVersion);
+		
+		assertThat(migratorFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(migratorFilterCounter.getLogRecordCount(Level.SEVERE)).isEqualTo(1);
+		assertThat(migratorFilterCounter.getLogRecords()).singleElement().satisfies(
+				logRecord -> assertThat(logRecord.getMessage()).contains("The album json has an unexpected (too high) json version"));
+	}
 }

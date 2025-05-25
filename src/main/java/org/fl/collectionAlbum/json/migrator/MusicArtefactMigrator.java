@@ -33,6 +33,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.Control;
+import org.fl.collectionAlbum.json.MusicArtefactParser;
 import org.fl.util.json.JsonUtils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -45,15 +46,19 @@ public class MusicArtefactMigrator {
 	
 	private static MusicArtefactMigrator instance;
 	
-	protected final List<VersionMigrator> albumVersionMigrators;
+	private final List<VersionMigrator> albumVersionMigrators;
+	private final int highestVersion;
 	
 	private MusicArtefactMigrator() {
 		
 		albumVersionMigrators = List.of(
 				AlbumVersionMigrator1.getInstance(),
 				AlbumVersionMigrator2.getInstance(),
-				AlbumVersionMigrator3.getInstance()
+				AlbumVersionMigrator3.getInstance(),
+				AlbumVersionMigrator4.getInstance()
 				);
+		
+		highestVersion = albumVersionMigrators.getLast().targetVersion();
 	}
 
 	public static MusicArtefactMigrator getMigrator() {
@@ -77,6 +82,11 @@ public class MusicArtefactMigrator {
 		}
 		
 		try {
+			
+			if (MusicArtefactParser.getVersion(artefactJson) > highestVersion) {
+				albumLog.severe("The album json has an unexpected (too high) json version. Highest version expected: " + highestVersion + "\nalbum json:\n" + JsonUtils.jsonPrettyPrint(artefactJson));
+			}
+			
 			long nbMigrationDone = migrators.stream()
 				.filter(versionMigrator -> versionMigrator.checkVersion(artefactJson))
 				.map(versionMigrator -> versionMigrator.migrate(artefactJson))
@@ -112,5 +122,9 @@ public class MusicArtefactMigrator {
 		} catch (Exception e) {			
 			albumLog.log(Level.SEVERE,"Erreur dans l'écriture du fichier json" + jsonFilePath, e) ;
 		}
+	}
+
+	public int getHighestVersion() {
+		return highestVersion;
 	}
 }

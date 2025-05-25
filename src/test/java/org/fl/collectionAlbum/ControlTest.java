@@ -35,6 +35,7 @@ import java.util.stream.Stream;
 
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.util.RunningContext;
+import org.fl.util.file.FilesUtils;
 import org.junit.jupiter.api.Test;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -68,8 +69,18 @@ class ControlTest {
 	void controlMediaPathFileTest() {
 		
 		Stream.of(ContentNature.values())
+			.forEach(contentNature ->
+				assertThat(Control.getMediaFileRootPath(contentNature)).isNotNull().exists().isAbsolute().isDirectory());
+	}
+	
+	@Test
+	void controlMediaPathFileUriTest() {
+		
+		Stream.of(ContentNature.values())
 			.forEach(contentNature -> 
-				assertThat(Control.getMediaFileRootPath(contentNature)).isNotNull());
+				assertThat(Control.getMediaFileRootUri(contentNature)).isNotNull()
+					.satisfies(mediaRootUri -> 
+						assertThat(FilesUtils.uriStringToAbsolutePath(mediaRootUri.toString())).isNotNull().exists().isAbsolute().isDirectory()));
 	}
 	
 	@Test

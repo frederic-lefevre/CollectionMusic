@@ -65,7 +65,7 @@ class DiscogsAlbumReleaseMatcherTest {
     "source": "CD",
     "type": "FLAC",
     "location": [
-      "E:\\\\Musique\\\\s\\\\Soft Machine\\\\Third"
+      "s/Soft Machine/Third"
     ]
   }
 ]
@@ -79,7 +79,7 @@ class DiscogsAlbumReleaseMatcherTest {
 "1970-01-04",
 "1970-01-31"
 ],
-"jsonVersion": 3
+"jsonVersion": 4
 }
 			""" ;
 	
@@ -95,7 +95,7 @@ class DiscogsAlbumReleaseMatcherTest {
         "source": "CD",
         "type": "FLAC",
         "location": [
-          "E:\\\\Musique\\\\h\\\\Jimi Hendrix\\\\Electric Ladyland\\\\Electric Ladyland [823 359-2W. Germany - 1984]"
+          "h/Jimi Hendrix/Electric Ladyland/Electric Ladyland [823 359-2W. Germany - 1984]"
         ]
       }
     ]
@@ -115,7 +115,7 @@ class DiscogsAlbumReleaseMatcherTest {
     "1967-05-06",
     "1968-08-30"
   ],
-  "jsonVersion": 3
+  "jsonVersion": 4
 }			
 			""";
 	
@@ -132,7 +132,7 @@ class DiscogsAlbumReleaseMatcherTest {
         "type": "FLAC",
         "note": "Remaster Ocean view",
         "location": [
-          "E:\\\\Musique\\\\h\\\\Jimi Hendrix\\\\Electric Ladyland\\\\Electric Ladyland [847 233-2, Polygram 1993]"
+          "h/Jimi Hendrix/Electric Ladyland/Electric Ladyland [847 233-2, Polygram 1993]"
         ]
       }
     ]
@@ -152,7 +152,7 @@ class DiscogsAlbumReleaseMatcherTest {
     "1967-05-06",
     "1968-08-30"
   ],
-  "jsonVersion": 3
+  "jsonVersion": 4
 }			
 			""";
 	
@@ -168,7 +168,7 @@ class DiscogsAlbumReleaseMatcherTest {
     "source": "CD",
     "type": "FLAC",
     "location": [
-      "E:\\\\Musique\\\\s\\\\Soft Machine\\\\Third"
+      "s/Soft Machine/Third"
     ]
   }
 ]
@@ -182,7 +182,7 @@ class DiscogsAlbumReleaseMatcherTest {
 "1970-01-04",
 "1970-01-31"
 ],
-"jsonVersion": 3
+"jsonVersion": 4
 }
 			""" ;
 	
@@ -198,7 +198,7 @@ class DiscogsAlbumReleaseMatcherTest {
     "source": "CD",
     "type": "FLAC",
     "location": [
-      "E:\\\\Musique\\\\s\\\\Soft Machine\\\\Third"
+      "s/Soft Machine/Third"
     ]
   }
 ]
@@ -212,7 +212,7 @@ class DiscogsAlbumReleaseMatcherTest {
 "1970-01-04",
 "1970-01-31"
 ],
-"jsonVersion": 3
+"jsonVersion": 4
 }
 			""" ;
 	

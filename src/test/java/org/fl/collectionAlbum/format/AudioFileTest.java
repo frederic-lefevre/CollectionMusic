@@ -27,9 +27,11 @@ package org.fl.collectionAlbum.format;
 import static org.assertj.core.api.Assertions.*;
 
 import java.nio.file.Paths;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.json.AudioFileParser;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.fl.util.FilterCounter;
@@ -144,7 +146,9 @@ class AudioFileTest {
 		
 		assertThat(losslessAudio.getMediaFilePaths()).isNull();
 		
-		losslessAudio.addMediaFilePath(new MediaFilePath(Paths.get("E:/Musique/a/John Abercrombie/M [24-96]/"), ContentNature.AUDIO, true));
+		losslessAudio.setMediaFilePath(
+				Set.of(new MediaFilePath(Paths.get("E:/Musique/a/John Abercrombie/M [24-96]/"), ContentNature.AUDIO, true)),
+				Control.getMediaFileRootUri(ContentNature.AUDIO));
 		
 		assertThat(losslessAudio.hasMissingOrInvalidMediaFilePath()).isFalse();
 		assertThat(losslessAudio.hasMediaFilePathNotFound()).isFalse();
@@ -212,7 +216,7 @@ class AudioFileTest {
 				 "source" : "MOFI Fidelity Sound Lab", 
 				 "type" : "FLAC",
 				 "note" : "Remaster Ocean view",
-				 "location" : ["E:/Musique/a/John Abercrombie/notFound/"] }
+				 "location" : ["a/John Abercrombie/notFound/"] }
 				""" ;
 		ObjectNode jf1 = (ObjectNode)mapper.readTree(audioFileStr1);
 		

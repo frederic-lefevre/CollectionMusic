@@ -37,6 +37,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.MusicArtefact;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher;
@@ -69,7 +70,7 @@ public class Album extends MusicArtefact {
     
     private final Path sleevePath;
     
-    private final Map<ContentNature, List<MediaFilePath>> potentialMediaFilesPath;
+    private final Map<ContentNature, Set<MediaFilePath>> potentialMediaFilesPath;
     
 	public Album(ObjectNode albumJson, List<ListeArtiste> knownArtistes, Path jsonFilePath) {
 
@@ -213,7 +214,7 @@ public class Album extends MusicArtefact {
 			return null;
 		}
 		
-		List<MediaFilePath> mediaPaths = potentialMediaFilesPath.get(contentNature);
+		Set<MediaFilePath> mediaPaths = potentialMediaFilesPath.get(contentNature);
 		if (mediaPaths == null) {
 			return null;
 		} else {
@@ -224,9 +225,9 @@ public class Album extends MusicArtefact {
 		
 	}
 	
-	public List<MediaFilePath> searchPotentialMediaFilesPaths(ContentNature contentNature) {
+	public Set<MediaFilePath> searchPotentialMediaFilesPaths(ContentNature contentNature) {
 		
-		List<MediaFilePath> potentialMediaPaths = MediaFilesInventories.getMediaFileInventory(contentNature).getPotentialMediaPath(this);
+		Set<MediaFilePath> potentialMediaPaths = MediaFilesInventories.getMediaFileInventory(contentNature).getPotentialMediaPath(this);
 		potentialMediaFilesPath.put(contentNature, potentialMediaPaths);
 		return potentialMediaPaths;
 	}
@@ -243,7 +244,7 @@ public class Album extends MusicArtefact {
 		return formatAlbum.getAllMediaFiles();
 	}
 	
-	private boolean validatePotentialMediaFilePath(List<MediaFilePath> potentialMediaFilePath, ContentNature contentNature) {
+	private boolean validatePotentialMediaFilePath(Set<MediaFilePath> potentialMediaFilePath, ContentNature contentNature) {
 		
 		if (potentialMediaFilePath == null) {
 			albumLog.severe("Trying to validate " + contentNature.getNom() + " file path with null value for album " + getTitre());
@@ -261,7 +262,8 @@ public class Album extends MusicArtefact {
 							return false;
 						}
 					}
-					mediaFiles.get(0).replaceMediaFilePath(potentialMediaFilePath.get(0));
+					mediaFiles.get(0).setMediaFilePath(potentialMediaFilePath, Control.getMediaFileRootUri(contentNature));
+
 					potentialMediaFilePath = null;
 					return true;
 					

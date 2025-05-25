@@ -194,7 +194,9 @@ class AlbumTest {
 		
 		// Add the audio file path
 		AbstractAudioFile audioFile = (AbstractAudioFile) audioFiles.get(0);
-		audioFile.addMediaFilePath(new MediaFilePath(Paths.get("E:/Musique/e/Bill Evans/Waltz for Debby/"), ContentNature.AUDIO, ContentNature.AUDIO.strictCheckings()));
+		audioFile.setMediaFilePath(
+				Set.of(new MediaFilePath(Paths.get("E:/Musique/e/Bill Evans/Waltz for Debby/"), ContentNature.AUDIO, ContentNature.AUDIO.strictCheckings())),
+				Control.getMediaFileRootUri(ContentNature.AUDIO));
 		
 		assertThat(album.getFormatAlbum().getMediaFiles(ContentNature.AUDIO)).singleElement().satisfies(audio -> {
 			assertThat(audio.hasMissingOrInvalidMediaFilePath()).isFalse();
@@ -246,7 +248,9 @@ class AlbumTest {
 		
 		// Fix the audio file path
 		AbstractAudioFile audioFile2 = (AbstractAudioFile) album2.getFormatAlbum().getMediaFiles(ContentNature.AUDIO).get(0);
-		audioFile2.setMediaFilePath(Set.of(new MediaFilePath(Paths.get("E:/Musique/e/Bill Evans/Portrait In Jazz/"), ContentNature.AUDIO, ContentNature.AUDIO.strictCheckings())));
+		audioFile2.setMediaFilePath(
+				Set.of(new MediaFilePath(Paths.get("E:/Musique/e/Bill Evans/Portrait In Jazz/"), ContentNature.AUDIO, ContentNature.AUDIO.strictCheckings())),
+				Control.getMediaFileRootUri(ContentNature.AUDIO));
 		
 		assertThat(album2.getFormatAlbum().getMediaFiles(ContentNature.AUDIO)).singleElement().satisfies(audio -> {
 			assertThat(audio.hasMissingOrInvalidMediaFilePath()).isFalse();
@@ -350,7 +354,7 @@ class AlbumTest {
 
 		Album album = new Album(jAlbum, lla, Path.of("dummyPath"));
 
-		List<MediaFilePath> potentialPaths = album.searchPotentialMediaFilesPaths(ContentNature.AUDIO);
+		Set<MediaFilePath> potentialPaths = album.searchPotentialMediaFilesPaths(ContentNature.AUDIO);
 
 		assertThat(potentialPaths).isNotNull().singleElement()
 			.satisfies(mediaFilePath -> assertThat(mediaFilePath.getPath()).hasToString("E:\\Musique\\e\\Bill Evans\\Portrait In Jazz"));
@@ -372,7 +376,7 @@ class AlbumTest {
         "source": "CD",
         "type": "FLAC",
         "location": [
-          "E:\\\\Musique\\\\b\\\\The Beatles\\\\Magical Mystery Tour"
+          "b/The Beatles/Magical Mystery Tour"
         ]
       }
     ]
@@ -387,7 +391,7 @@ class AlbumTest {
     "1966-11-24",
     "1967-11-07"
   ],
-  "jsonVersion": 3
+  "jsonVersion": 4
 }
 			""";
 	
@@ -456,10 +460,10 @@ class AlbumTest {
 
 		Album album = new Album(jAlbum, lla, Path.of("dummyPath"));
 
-		List<MediaFilePath> potentialPaths = album.searchPotentialMediaFilesPaths(ContentNature.AUDIO);
+		Set<MediaFilePath> potentialPaths = album.searchPotentialMediaFilesPaths(ContentNature.AUDIO);
 
 		assertThat(potentialPaths).isNotNull().singleElement()
-		.satisfies(mediaFilePath -> assertThat(mediaFilePath.getPath()).hasToString("E:\\Musique\\v\\Van Halen\\Van Halen [24 - 192]"));
+			.satisfies(mediaFilePath -> assertThat(mediaFilePath.getPath()).hasToString("E:\\Musique\\v\\Van Halen\\Van Halen [24 - 192]"));
 		
 		assertMediaSupports(album, Set.of(MediaSupports.CD));
 		

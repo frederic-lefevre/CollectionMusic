@@ -78,6 +78,7 @@ public class Control {
 	private String concertTicketImgUri;
 	private String musicartefactInfosUri;
 	private Map<ContentNature,Path> mediaFileRootPaths;
+	private Map<ContentNature,URI> mediaFileRootUris;
 	private Map<String, OsCommandAndOption> mapOfOsCommandsAndOptions;
 	private List<OsAction<Album>> osActionsOnAlbum;
 	private List<OsAction<Concert>> osActionsOnConcert;
@@ -148,11 +149,23 @@ public class Control {
 			discogsBaseUrlForRelease = collectionProperties.getProperty("album.discogs.baseUrl.release");
 			
 			mediaFileRootPaths = new HashMap<>();
+			mediaFileRootUris = new HashMap<>();
 			Stream.of(ContentNature.values())
 				.forEachOrdered(contentNature -> 
-					mediaFileRootPaths.put(
-							contentNature, 
-							collectionProperties.getPathFromURI("album." + contentNature.name() + "File.rootPath")));
+					{
+						String mediaFileRootUriString = collectionProperties.getProperty("album." + contentNature.name() + "File.rootPath");
+						try {
+							
+							Path mediaFileRootPath = FilesUtils.uriStringToAbsolutePath(mediaFileRootUriString);
+							mediaFileRootPaths.put(contentNature, mediaFileRootPath);
+							
+							URI mediaFileRootUri = mediaFileRootPath.toUri();
+							mediaFileRootUris.put(contentNature, mediaFileRootUri);
+							
+						} catch (Exception e) {
+							albumLog.log(Level.SEVERE, "Wrong URI root for " + contentNature.name() + " files: " + mediaFileRootUriString, e);
+						}
+					});
 				
 			mapOfOsCommandsAndOptions = getMapOfOsCommandsAndOptions("osCommandAndOptions.");
 			
@@ -256,6 +269,10 @@ public class Control {
 	
 	public static Path getMediaFileRootPath(ContentNature contentNature) {
 		return getInstance().mediaFileRootPaths.get(contentNature);
+	}
+	
+	public static URI getMediaFileRootUri(ContentNature contentNature) {
+		return getInstance().mediaFileRootUris.get(contentNature);
 	}
 	
 	public static List<OsAction<Album>> getOsActionsOnAlbum() {

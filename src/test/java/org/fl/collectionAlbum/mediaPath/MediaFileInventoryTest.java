@@ -32,6 +32,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
@@ -93,7 +94,7 @@ class MediaFileInventoryTest {
 
 		Album album = new Album(jAlbum, lla, Path.of("dummyPath"));
 		
-		List<MediaFilePath> potentialPaths = audioFileInventory.getPotentialMediaPath(album);
+		Set<MediaFilePath> potentialPaths = audioFileInventory.getPotentialMediaPath(album);
 		
 		assertThat(potentialPaths)
 			.isNotNull()
@@ -148,17 +149,17 @@ class MediaFileInventoryTest {
 
 		Album album = new Album(jAlbum, lla, Path.of("dummyPath"));
 		
-		List<MediaFilePath> potentialAudioPaths = audioFileInventory.getPotentialMediaPath(album);
+		Set<MediaFilePath> potentialAudioPaths = audioFileInventory.getPotentialMediaPath(album);
 		
 		assertThat(potentialAudioPaths)
 			.isNotNull()
-			.hasSize(1)
-			.allSatisfy(audioPath -> {
+			.singleElement()
+			.satisfies(audioPath -> {
 				assertThat(audioPath.getPath().toString()).contains("A Bigger Bang, Live On Copacabana Beach");
 				assertThat(audioPath.hasCover()).isTrue();
 			});
 		
-		List<MediaFilePath> potentialVideoPaths = videoFileInventory.getPotentialMediaPath(album);
+		Set<MediaFilePath> potentialVideoPaths = videoFileInventory.getPotentialMediaPath(album);
 		
 		assertThat(potentialVideoPaths)
 			.isNotNull()
