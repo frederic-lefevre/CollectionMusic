@@ -79,7 +79,7 @@ class DiscogsAlbumReleaseMatcherTest {
 "1970-01-04",
 "1970-01-31"
 ],
-"jsonVersion": 3
+"jsonVersion": 4
 }
 			""" ;
 	
@@ -115,7 +115,7 @@ class DiscogsAlbumReleaseMatcherTest {
     "1967-05-06",
     "1968-08-30"
   ],
-  "jsonVersion": 3
+  "jsonVersion": 4
 }			
 			""";
 	
@@ -152,7 +152,7 @@ class DiscogsAlbumReleaseMatcherTest {
     "1967-05-06",
     "1968-08-30"
   ],
-  "jsonVersion": 3
+  "jsonVersion": 4
 }			
 			""";
 	
@@ -182,7 +182,7 @@ class DiscogsAlbumReleaseMatcherTest {
 "1970-01-04",
 "1970-01-31"
 ],
-"jsonVersion": 3
+"jsonVersion": 4
 }
 			""" ;
 	
@@ -212,7 +212,7 @@ class DiscogsAlbumReleaseMatcherTest {
 "1970-01-04",
 "1970-01-31"
 ],
-"jsonVersion": 3
+"jsonVersion": 4
 }
 			""" ;
 	

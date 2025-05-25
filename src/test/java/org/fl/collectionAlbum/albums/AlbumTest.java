@@ -391,7 +391,7 @@ class AlbumTest {
     "1966-11-24",
     "1967-11-07"
   ],
-  "jsonVersion": 3
+  "jsonVersion": 4
 }
 			""";
 	
