@@ -35,6 +35,7 @@ import java.util.logging.Logger;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.json.MusicArtefactParser;
+import org.fl.collectionAlbum.json.MusicArtefactParser.CheckPathOption;
 import org.fl.util.json.JsonUtils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -75,7 +76,7 @@ public abstract class MusicArtefact {
 		auteurs.addAll(musicParser.getListeGroupes());
 
 		notes = musicParser.getNotes();
-		urlLinks = musicParser.getUrlLinks();
+		urlLinks = musicParser.getUrlLinks(CheckPathOption.EXISTS);
 		discogsLink = musicParser.getDisocgs();
 		discogsFormatValidation = musicParser.getDisocgsFormatValidation();
 		

@@ -32,6 +32,7 @@ import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.JsonMusicProperties;
+import org.fl.collectionAlbum.json.MusicArtefactParser.CheckPathOption;
 import org.fl.collectionAlbum.utils.TemporalUtils;
 
 import com.fasterxml.jackson.databind.JsonNode;
@@ -65,6 +66,6 @@ public class ConcertParser {
 	}
 	
 	public static List<URI> getConcertTickets(JsonNode arteFactJson) {
-		return MusicArtefactParser.getUrisList(arteFactJson, JsonMusicProperties.TICKET_IMG, Control.getConcertTicketImgUri());
+		return MusicArtefactParser.getUrisList(arteFactJson, JsonMusicProperties.TICKET_IMG, Control.getConcertTicketImgUri(), CheckPathOption.EXISTS, CheckPathOption.IS_IMAGE_FILE);
 	}
 }

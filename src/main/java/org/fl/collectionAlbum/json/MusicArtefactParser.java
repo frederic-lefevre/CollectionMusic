@@ -26,13 +26,16 @@ package org.fl.collectionAlbum.json;
 
 import java.net.URI;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.JsonMusicProperties;
@@ -150,23 +153,25 @@ public class MusicArtefactParser {
 		return ParserHelpers.getArrayAttribute(arteFactJson, JsonMusicProperties.NOTES);
 	}
 
-	public List<URI> getUrlLinks() {		
-		return getUrisList(arteFactJson, JsonMusicProperties.LIENS, Control.getMusicartefactInfosUri());
+	public enum CheckPathOption { EXISTS, IS_FILE, IS_IMAGE_FILE };
+	
+	public List<URI> getUrlLinks(CheckPathOption... checkPathOptions) {		
+		return getUrisList(arteFactJson, JsonMusicProperties.LIENS, Control.getMusicartefactInfosUri(), checkPathOptions);
 	}
 
-	protected static List<URI> getUrisList(JsonNode arteFactJson, String jsonProperty, String rootUri) {
+	protected static List<URI> getUrisList(JsonNode arteFactJson, String jsonProperty, String rootUri, CheckPathOption... checkPathOptions) {
 		return ParserHelpers.getArrayAttribute(arteFactJson, jsonProperty).stream()
-				.map(relativeUriString -> getAbsoluteUri(rootUri, relativeUriString, arteFactJson))
+				.map(relativeUriString -> getAbsoluteUri(rootUri, relativeUriString, arteFactJson, checkPathOptions))
 				.filter(Objects::nonNull)
 				.toList();
 	}
 	
-	private static URI getAbsoluteUri(String rootUri, String relativeDirUriStr, JsonNode arteFactJson) {
+	private static URI getAbsoluteUri(String rootUri, String relativeDirUriStr, JsonNode arteFactJson, CheckPathOption... checkPathOptions) {
 		try {
 			URI absoluteUri = new URI(rootUri + relativeDirUriStr);
-			// check that the file exists
-			if (!(Files.exists(Paths.get(absoluteUri)))) {
-				albumLog.warning("Le fichier suivant n'existe pas: " + absoluteUri.toString() +  "\nMusicArtefact JSON:\n" + arteFactJson);
+			
+			if (checkPathOptions != null) {
+				Stream.of(checkPathOptions).forEach(checkPathOption -> checkPathOption(checkPathOption, absoluteUri, arteFactJson));
 			}
 			return absoluteUri;
 		} catch (Exception e) {
@@ -175,11 +180,39 @@ public class MusicArtefactParser {
 		}
 	}
 	
+	private static final Set<String> imageExtensions = Set.of(".jpg", ".png");
+	
+	private static void checkPathOption(CheckPathOption checkPathOption, URI absoluteUri, JsonNode arteFactJson) {
+		
+		switch (checkPathOption) {
+		case EXISTS -> {
+			if (!Files.exists(Paths.get(absoluteUri))) {
+				albumLog.warning("Le fichier suivant n'existe pas: " + absoluteUri.toString() +  "\nMusicArtefact JSON:\n" + arteFactJson);
+			}			
+		}
+		case IS_FILE -> {
+			if (!Files.isRegularFile(Paths.get(absoluteUri))) {
+				albumLog.warning("L'URI suivante devrait être un fichier: " + absoluteUri.toString() +  "\nMusicArtefact JSON:\n" + arteFactJson);
+			}			
+		}
+		case IS_IMAGE_FILE -> {
+			Path path = Paths.get(absoluteUri);
+			if (!Files.isRegularFile(path)) {
+				albumLog.warning("L'URI suivante devrait être un fichier: " + absoluteUri.toString() +  "\nMusicArtefact JSON:\n" + arteFactJson);
+			} else {
+				String fileName = path.getFileName().toString();
+				if (! imageExtensions.stream().anyMatch(extension -> fileName.endsWith(extension))) {
+					albumLog.warning("L'URI suivante devrait être un fichier image: " + absoluteUri.toString() +  "\nMusicArtefact JSON:\n" + arteFactJson);
+				}
+			}
+		}
+		}
+	}
+	
 	public static int getVersion(JsonNode json) {
 		
 		return Optional.ofNullable(json.get(JsonMusicProperties.JSON_VERSION))
 				.map(JsonNode::asInt)
 				.orElse(0);
-
 	}
 }
