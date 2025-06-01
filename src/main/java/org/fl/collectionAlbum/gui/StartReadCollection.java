@@ -59,7 +59,7 @@ public class StartReadCollection implements ActionListener {
 	public void actionPerformed(ActionEvent arg0) {
 
 		for (ActivableElement st : activableButtons) {
-			st.deactivate();;
+			st.deactivate();
 		}
 		CollectionAlbums ca = new CollectionAlbums(tableModels, pip);
 		ca.addPropertyChangeListener(collectionProcWaiter);
