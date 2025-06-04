@@ -126,9 +126,15 @@ public abstract class MetricsHistory {
 		@Override
 		public int compare(Metrics o1, Metrics o2) {
 			
-			return (int)(o1.getMetricTimeStamp() - o2.getMetricTimeStamp());
-		}
-		
+			long difference = o1.getMetricTimeStamp() - o2.getMetricTimeStamp();
+			if (difference > 0) {
+				return -1;
+			} else if (difference < 0) {
+				return 1;
+			} else {
+				return 0;
+			}
+		}		
 	}
 	
 	private boolean writeJson(Metrics metrics) {
