@@ -46,11 +46,9 @@ public class StartGenerationSite implements ActionListener {
 		activableButtons = stList;
 	}
 	
-
 	public void setCollectionProcWaiter(CollectionProcessWaiter collectionProcWaiter) {
 		this.collectionProcWaiter = collectionProcWaiter;
 	}
-
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
@@ -62,6 +60,4 @@ public class StartGenerationSite implements ActionListener {
 		gc.addPropertyChangeListener(collectionProcWaiter);
 		gc.execute();
 	}
-
-
 }

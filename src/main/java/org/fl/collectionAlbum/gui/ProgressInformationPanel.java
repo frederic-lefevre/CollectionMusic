@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -31,6 +31,7 @@ import java.awt.Font;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -39,74 +40,82 @@ import javax.swing.JPanel;
 
 public class ProgressInformationPanel {
 
-	private JPanel procInfos ;
+	private static final Logger logger = Logger.getLogger(ProgressInformationPanel.class.getName());
+	
+	private JPanel procInfos;
 	private JLabel lblStep;
 	private JLabel lblStepPrefixInformation;
 	private JLabel lblStepInformation;
 	private JLabel lblStatusTitle;
 	private JLabel lblStatus;
-	private static String dateFrancePattern = " EEEE dd MMMM yyyy à HH:mm:ss" ;
-	private DateTimeFormatter dateTimeFormatter ;
+	private static String dateFrancePattern = " EEEE dd MMMM yyyy à HH:mm:ss";
+	private DateTimeFormatter dateTimeFormatter;
 	
 	public ProgressInformationPanel() {
 
-		dateTimeFormatter = DateTimeFormatter.ofPattern(dateFrancePattern, Locale.FRANCE) ;
+		dateTimeFormatter = DateTimeFormatter.ofPattern(dateFrancePattern, Locale.FRANCE);
 		Font font = new Font("Verdana", Font.BOLD, 14);
-		procInfos = new JPanel() ;
+		procInfos = new JPanel();
 		procInfos.setLayout(new BoxLayout(procInfos, BoxLayout.Y_AXIS));
-		procInfos.setBackground(Color.WHITE) ;
-		procInfos.setBorder(BorderFactory.createMatteBorder(10,10,10,10,Color.WHITE)) ;
-		procInfos.setAlignmentX(Component.LEFT_ALIGNMENT) ;
-		
-		JPanel statusPane = new JPanel() ;
-		statusPane.setLayout(new FlowLayout(FlowLayout.LEFT)) ;
-		lblStatusTitle = new JLabel("Etat: ");	
+		procInfos.setBackground(Color.WHITE);
+		procInfos.setBorder(BorderFactory.createMatteBorder(10, 10, 10, 10, Color.WHITE));
+		procInfos.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+		JPanel statusPane = new JPanel();
+		statusPane.setLayout(new FlowLayout(FlowLayout.LEFT));
+		lblStatusTitle = new JLabel("Etat: ");
 		lblStatus = new JLabel("");
-		lblStatusTitle.setFont(font) ;
-		lblStatusTitle.setAlignmentX(Component.LEFT_ALIGNMENT) ;
-		lblStatusTitle.setBackground(Color.WHITE) ;
-		lblStatus.setFont(font) ;
-		lblStatus.setAlignmentX(Component.LEFT_ALIGNMENT) ;
-		lblStatus.setBackground(Color.WHITE) ;
-		statusPane.add(lblStatusTitle) ;
-		statusPane.add(lblStatus) ;
-		statusPane.setBackground(Color.WHITE) ;
-		statusPane.setAlignmentX(Component.LEFT_ALIGNMENT) ;
-		procInfos.add(statusPane) ;
-		
-		JPanel infoStep = new JPanel() ;
-		infoStep.setLayout(new FlowLayout(FlowLayout.LEFT)) ;
+		lblStatusTitle.setFont(font);
+		lblStatusTitle.setAlignmentX(Component.LEFT_ALIGNMENT);
+		lblStatusTitle.setBackground(Color.WHITE);
+		lblStatus.setFont(font);
+		lblStatus.setAlignmentX(Component.LEFT_ALIGNMENT);
+		lblStatus.setBackground(Color.WHITE);
+		statusPane.add(lblStatusTitle);
+		statusPane.add(lblStatus);
+		statusPane.setBackground(Color.WHITE);
+		statusPane.setAlignmentX(Component.LEFT_ALIGNMENT);
+		procInfos.add(statusPane);
+
+		JPanel infoStep = new JPanel();
+		infoStep.setLayout(new FlowLayout(FlowLayout.LEFT));
 		lblStep = new JLabel("Progression: ");
 		lblStepPrefixInformation = new JLabel("");
 		lblStepInformation = new JLabel("");
-		lblStep.setAlignmentX(Component.LEFT_ALIGNMENT) ;
-		lblStep.setFont(font) ;
-		lblStepInformation.setFont(font) ;
-		lblStepInformation.setBackground(Color.WHITE) ;
-		lblStepPrefixInformation.setFont(font) ;
-		lblStepPrefixInformation.setBackground(Color.WHITE) ;
-		lblStep.setBackground(Color.WHITE) ;
-		infoStep.add(lblStep) ;		
-		infoStep.add(lblStepPrefixInformation) ;
-		infoStep.add(lblStepInformation) ;
-		infoStep.setAlignmentX(Component.LEFT_ALIGNMENT) ;
-		infoStep.setBackground(Color.WHITE) ;
-		procInfos.add(infoStep) ;
+		lblStep.setAlignmentX(Component.LEFT_ALIGNMENT);
+		lblStep.setFont(font);
+		lblStepInformation.setFont(font);
+		lblStepInformation.setBackground(Color.WHITE);
+		lblStepPrefixInformation.setFont(font);
+		lblStepPrefixInformation.setBackground(Color.WHITE);
+		lblStep.setBackground(Color.WHITE);
+		infoStep.add(lblStep);
+		infoStep.add(lblStepPrefixInformation);
+		infoStep.add(lblStepInformation);
+		infoStep.setAlignmentX(Component.LEFT_ALIGNMENT);
+		infoStep.setBackground(Color.WHITE);
+		procInfos.add(infoStep);
 	}
 
 	public JPanel getProcInfos() {
 		return procInfos;
 	}
 	
-	public void setStepInformation(String info) {
-		lblStepInformation.setText(info);
-	}
-	
-	public void setStepPrefixInformation(String prefixInfo) {
-		lblStepPrefixInformation.setText(prefixInfo);
-	}
-	
-	public void setProcessStatus(String st) {
-		 lblStatus.setText(st + dateTimeFormatter.format(LocalDateTime.now()));
+	public void setProgressInformation(ProgressInformation progressInformation) {
+		
+    	String processStatus = progressInformation.getProcessStatus();
+    	String stepPrefixInformation = progressInformation.getStepPrefixInformation();
+    	String stepInformation = progressInformation.getStepInformation();
+    	
+    	if (processStatus != null) {
+    		lblStatus.setText(processStatus + dateTimeFormatter.format(LocalDateTime.now()));
+    		logger.info(processStatus);
+    	}
+    	if (stepPrefixInformation != null) {
+    		lblStepPrefixInformation.setText(stepPrefixInformation);
+    	}
+    	if (stepInformation != null) {
+    		lblStepInformation.setText(stepInformation);
+    	}
 	}
 }

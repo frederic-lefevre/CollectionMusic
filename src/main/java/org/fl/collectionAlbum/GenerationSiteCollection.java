@@ -71,6 +71,10 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 	private final static String FIN_GENERATION = "Nouveau site généré";
 	private final static String CLEANUP = "Nettoyage de l'ancien site";
 	private final static String ECRITURE = "Ecriture du nouveau site";
+	private final static String RAPPORT_ALBUM = "Rapport des albums";
+	private final static String RAPPORT_ARTISTE = "Rapport des artistes";
+	private final static String RAPPORT_CONCERT = "Rapport des concerts";
+	private final static String RAPPORT_MEDIA = "Rapport des medias";
 
 	// Status
 	private final static String GENERATION = "En cours de génération";
@@ -84,17 +88,15 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 
 		try {
 			collectionAlbumContainer = CollectionAlbumContainer.getInstance();
-			progressPanel.setProcessStatus(GENERATION);
+			publish(new ProgressInformation(GENERATION, "", ""));
 
 			RapportHtml.withCharset(Control.getCharset());
 			RapportStructuresAndNames.renew();
 
-			albumLog.info("Nettoyage de l'ancien site");
-			progressPanel.setStepPrefixInformation(CLEANUP);
+			publish(new ProgressInformation(null, CLEANUP, null));
 			cleanRapport();
 
-			albumLog.info("Ecriture du nouveau site");
-			progressPanel.setStepPrefixInformation(ECRITURE);
+			publish(new ProgressInformation(null, ECRITURE, null));
 			rapportCollection();
 
 			// Sort for display when scanning the collection
@@ -117,8 +119,7 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 		 try {
 			 Path rDir  = RapportStructuresAndNames.getRapportPath();
 			 Path roDir = RapportStructuresAndNames.getOldRapportPath();
-			 albumLog.info("Rapport path=" + rDir);
-			 albumLog.info("Rapport od path=" + roDir);
+			 albumLog.info(() -> "Rapport path=" + rDir + "\nRapport old path=" + roDir);
 
 			 // delete old rapport directory
 			 if (Files.exists(roDir)) {
@@ -134,7 +135,7 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 
 			 // move rapport directory to old rapport
 			 if (Files.exists(rDir)) {
-				 albumLog.finest("Deplacement de la directorie des rapports " + roDir );
+				 albumLog.finest(() -> "Deplacement de la directorie des rapports " + roDir );
 				 try {
 					 Files.move(rDir, roDir);
 				 } catch (Exception e1) {
@@ -181,6 +182,7 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 		 rapportsConcertHtml(rapportDir);
 		 rapportBuildInfo();
 		 
+		 publish(new ProgressInformation(null, RAPPORT_MEDIA, null));
 		 RapportCsv.writeCsvAudioFile(collectionAlbumContainer.getAlbumsWithAudioFile(), (audioFile) -> true, RapportStructuresAndNames.getAbsoluteCsvAudioFiles());
 		 RapportCsv.writeCsvAudioFile(collectionAlbumContainer.getAlbumsWithHighResAudio(), (audioFile) -> audioFile.isHighRes(), RapportStructuresAndNames.getAbsoluteCsvHdAudioFiles());
 	 }
@@ -192,6 +194,7 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 
 		 Path rapportPath = RapportStructuresAndNames.getRapportPath();
 		 
+		 publish(new ProgressInformation(null, RAPPORT_ARTISTE, null));
 		 for (Artiste artiste : listeArtiste.getArtistes()) {	
 			 if (artiste.getNbAlbum() > 0) {
 				 Path albumAbsolutePath   = RapportStructuresAndNames.getArtisteAlbumRapportAbsolutePath(artiste);
@@ -210,6 +213,7 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 			 }
 		 }
 
+		 publish(new ProgressInformation(null, RAPPORT_ALBUM, null));
 		 for (Album album : listeAlbum.getAlbums()) {
 			 if (album.hasAdditionnalInfo()) {
 				 Path absolutePath = RapportStructuresAndNames.getAlbumRapportAbsolutePath(album);
@@ -221,6 +225,7 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 			 }
 		 }
 		 
+		 publish(new ProgressInformation(null, RAPPORT_CONCERT, null));
 		 for (Concert concert : listeConcert.getConcerts()) {
 			 if (concert.hasAdditionnalInfo()) {
 				 Path absolutePath = RapportStructuresAndNames.getConcertRapportAbsolutePath(concert);
@@ -287,15 +292,14 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 	@Override
 	public void done() {
 
-		progressPanel.setStepInformation("");
-    	progressPanel.setStepPrefixInformation(ARRET);
-    	progressPanel.setProcessStatus(FIN_GENERATION);
+		progressPanel.setProgressInformation(new ProgressInformation(FIN_GENERATION, ARRET, ""));
 	}
 
 	@Override
-	public void process(List<ProgressInformation> lp) {
+	public void process(List<ProgressInformation> progressInformationList) {
 
-		ProgressInformation latestResult = lp.get(lp.size() - 1);
-		progressPanel.setStepInformation(latestResult.getInformation());
+    	if (progressInformationList != null) {
+    		progressInformationList.forEach(progressInformation -> progressPanel.setProgressInformation(progressInformation));
+    	}
 	}
 }

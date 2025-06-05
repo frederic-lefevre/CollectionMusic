@@ -171,15 +171,14 @@ class MetricsHistoryTest {
 		
 		assertThat(metricsHistory.getMetricsHistory()).hasSize(2)
 			.satisfiesExactly(
-					metric1 -> { 
-						assertThat(metric1.getMetricTimeStamp()).isEqualTo(yesterday);
-						assertThat(metric1.hasSameMetricsAs(new Metrics(0, Map.of("albums", 8.0, "Artiste", 5.0))));
+					metricNow -> { 
+						assertThat(metricNow.getMetricTimeStamp()).isEqualTo(now);
+						assertThat(metricNow.hasSameMetricsAs(new Metrics(0, Map.of("albums", 10.0, "Artiste", 5.0))));
 					},
-					metric2 -> { 
-						assertThat(metric2.getMetricTimeStamp()).isEqualTo(now);
-						assertThat(metric2.hasSameMetricsAs(new Metrics(0, Map.of("albums", 10.0, "Artiste", 5.0))));
-					}
-					);
+					metricYesterday -> { 
+						assertThat(metricYesterday.getMetricTimeStamp()).isEqualTo(yesterday);
+						assertThat(metricYesterday.hasSameMetricsAs(new Metrics(0, Map.of("albums", 8.0, "Artiste", 5.0))));
+					});
 	}
 	
 	@Test
@@ -199,15 +198,14 @@ class MetricsHistoryTest {
 		
 		assertThat(metricsHistory.getMetricsHistory()).hasSize(2)
 			.satisfiesExactly(
-					metric1 -> { 
-						assertThat(metric1.getMetricTimeStamp()).isEqualTo(twoDaysAgo);
-						assertThat(metric1.hasSameMetricsAs(new Metrics(0, Map.of("albums", 8.0, "Artiste", 5.0))));
+					metricNow -> { 
+						assertThat(metricNow.getMetricTimeStamp()).isEqualTo(now);
+						assertThat(metricNow.hasSameMetricsAs(new Metrics(0, Map.of("albums", 10.0, "Artiste", 5.0))));
 					},
-					metric2 -> { 
-						assertThat(metric2.getMetricTimeStamp()).isEqualTo(now);
-						assertThat(metric2.hasSameMetricsAs(new Metrics(0, Map.of("albums", 10.0, "Artiste", 5.0))));
-					}
-					);
+					metricTwoDaysAgo -> { 
+						assertThat(metricTwoDaysAgo.getMetricTimeStamp()).isEqualTo(twoDaysAgo);
+						assertThat(metricTwoDaysAgo.hasSameMetricsAs(new Metrics(0, Map.of("albums", 8.0, "Artiste", 5.0))));
+					});
 	}
 	
 	@Test

@@ -39,7 +39,7 @@ public class StartControl implements ActivableElement {
 	private final JButton pStart;
 	private final BooleanSupplier activationCondition;
 
-	private ProgressInformationPanel pip;
+	private final ProgressInformationPanel progressInformationPanel;
 	
 	public StartControl(String bText, String iText, String sText, BooleanSupplier activationCondition) {
 		
@@ -59,12 +59,10 @@ public class StartControl implements ActivableElement {
 		
 		procCtrl.add(pStart);
 		
-		pip = new ProgressInformationPanel();
-		pip.setProcessStatus(sText);
-		pip.setStepPrefixInformation(iText);
-		pip.setStepInformation("");
-			
-		procCtrl.add(pip.getProcInfos());		
+		progressInformationPanel = new ProgressInformationPanel();
+		progressInformationPanel.setProgressInformation(new ProgressInformation(sText, iText, ""));
+
+		procCtrl.add(progressInformationPanel.getProcInfos());		
 	}
 
 	public JPanel getProcCtrl() {
@@ -75,8 +73,8 @@ public class StartControl implements ActivableElement {
 		return pStart;
 	}
 
-	public ProgressInformationPanel getPip() {
-		return pip;
+	public ProgressInformationPanel getProgressInformationPanel() {
+		return progressInformationPanel;
 	}
 	
 	@Override
