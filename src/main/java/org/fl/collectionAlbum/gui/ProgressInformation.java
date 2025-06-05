@@ -26,14 +26,26 @@ package org.fl.collectionAlbum.gui;
 
 public class ProgressInformation {
 
-	private String information;
+	private final String stepInformation;
+	private final String stepPrefixInformation;
+	private final String processStatus;
 	
-	public ProgressInformation(String info) {
-		information = info;
+	public ProgressInformation(String processStatus, String stepPrefixInformation, String stepInformation) {
+		
+		this.stepInformation = stepInformation;
+		this.stepPrefixInformation = stepPrefixInformation;
+		this.processStatus = processStatus;
 	}
 
-	public String getInformation() {
-		return information;
+	public String getStepInformation() {
+		return stepInformation;
 	}
 
+	public String getStepPrefixInformation() {
+		return stepPrefixInformation;
+	}
+
+	public String getProcessStatus() {
+		return processStatus;
+	}
 }

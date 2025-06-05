@@ -62,8 +62,13 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 	private static final String EN_EXAMEN = "Dossier examiné: ";
 
 	// Status
+	private static final String MEDIA_INVENTORY = "Inventaire media";
+	private static final String INIT_MEDIA_INVENTORY = "Initialisation des inventaires des fichiers media";
+	private static final String MEDIA_INVENTORY_PRORESS = "Inventaire des fichiers media en cours";
+	private static final String DISCOGS_INVENTORY = "Inventaire discogs";
+	private static final String DISCOGS_INVENTORY_PROGRESS = "Inventaire des releases discogs en cours";
 	private static final String LECTURE_ALBUM = "Lecture des albums";
-	private static final String LECTURE_CONCERT = "Lecture des  concerts";
+	private static final String LECTURE_CONCERT = "Lecture des concerts";
 	private static final String CALENDARS = "Construction des calendriers";
 	private static final String FIN_LECTURE = "Collection chargée";
 	
@@ -76,30 +81,23 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 	@Override 
 	public CollectionAlbumContainer doInBackground() {
 
-		progressPanel.setStepInformation("");
-		progressPanel.setStepPrefixInformation("");
-
-		publish(new ProgressInformation("Initialisation des inventaires des fichiers media en cours"));
+		publish(new ProgressInformation(MEDIA_INVENTORY, INIT_MEDIA_INVENTORY, ""));
 		MediaFilesInventories.clearInventories();
-		publish(new ProgressInformation("Inventaire des releases discogs en cours"));
+		
+		publish(new ProgressInformation(DISCOGS_INVENTORY, DISCOGS_INVENTORY_PROGRESS, ""));
 		DiscogsInventory.buildDiscogsInventory();
 		
+		publish(new ProgressInformation(LECTURE_ALBUM, EN_EXAMEN, ""));
 		albumsContainer = CollectionAlbumContainer.getEmptyInstance();
-		progressPanel.setStepPrefixInformation(EN_EXAMEN);
-
-		albumLog.info("Lecture des données des albums");		
-		progressPanel.setProcessStatus(LECTURE_ALBUM);
 		buildAlbumsCollection();
 		
-		albumLog.info("Lecture des données des concerts");
-		progressPanel.setProcessStatus(LECTURE_CONCERT);
+		publish(new ProgressInformation(LECTURE_CONCERT, EN_EXAMEN, ""));
 		buildConcerts();	
 		
-		albumLog.info("Construction du calendrier");
-		progressPanel.setProcessStatus(CALENDARS);
+		publish(new ProgressInformation(CALENDARS, "", ""));
 		buildCalendrier();
 		
-		publish(new ProgressInformation("Inventaire des fichiers media en cours"));
+		publish(new ProgressInformation(MEDIA_INVENTORY, MEDIA_INVENTORY_PRORESS, ""));
 		MediaFilesInventories.scanMediaFilePaths();
 		
 		// Sort for display when scanning the collection
@@ -108,7 +106,6 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 		return albumsContainer;
 	}
    	
-	
 	private void buildAlbumsCollection() {
   	
 		Path albumsPath = Control.getCollectionDirectoryName();
@@ -164,7 +161,7 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
     	
     	@Override
 		public FileVisitResult preVisitDirectory(Path file, BasicFileAttributes attr) {
-    		 publish(new ProgressInformation(file.getFileName().toString()));
+    		 publish(new ProgressInformation(null, null, file.getFileName().toString()));
     		 return FileVisitResult.CONTINUE;
     	}
 
@@ -212,16 +209,15 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
     @Override
     public void done() {
 
-    	progressPanel.setStepInformation("");
-    	progressPanel.setStepPrefixInformation(ARRET);
-    	progressPanel.setProcessStatus(FIN_LECTURE);
+    	progressPanel.setProgressInformation(new ProgressInformation(FIN_LECTURE, ARRET, ""));
     	tableModels.forEach(AbstractTableModel::fireTableDataChanged);
     }
 
     @Override
-    public void process(List<ProgressInformation> lp) {
+    public void process(List<ProgressInformation> progressInformationList) {
 
-    	ProgressInformation latestResult = lp.get(lp.size() - 1);
-    	progressPanel.setStepInformation(latestResult.getInformation());
+    	if (progressInformationList != null) {
+    		progressInformationList.forEach(progressInformation -> progressPanel.setProgressInformation(progressInformation));
+    	}
     }
 }

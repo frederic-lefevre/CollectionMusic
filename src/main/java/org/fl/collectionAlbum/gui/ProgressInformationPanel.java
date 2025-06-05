@@ -31,6 +31,7 @@ import java.awt.Font;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -39,6 +40,8 @@ import javax.swing.JPanel;
 
 public class ProgressInformationPanel {
 
+	private static final Logger logger = Logger.getLogger(ProgressInformationPanel.class.getName());
+	
 	private JPanel procInfos;
 	private JLabel lblStep;
 	private JLabel lblStepPrefixInformation;
@@ -98,15 +101,21 @@ public class ProgressInformationPanel {
 		return procInfos;
 	}
 	
-	public void setStepInformation(String info) {
-		lblStepInformation.setText(info);
-	}
-	
-	public void setStepPrefixInformation(String prefixInfo) {
-		lblStepPrefixInformation.setText(prefixInfo);
-	}
-	
-	public void setProcessStatus(String st) {
-		 lblStatus.setText(st + dateTimeFormatter.format(LocalDateTime.now()));
+	public void setProgressInformation(ProgressInformation progressInformation) {
+		
+    	String processStatus = progressInformation.getProcessStatus();
+    	String stepPrefixInformation = progressInformation.getStepPrefixInformation();
+    	String stepInformation = progressInformation.getStepInformation();
+    	
+    	if (processStatus != null) {
+    		lblStatus.setText(processStatus + dateTimeFormatter.format(LocalDateTime.now()));
+    		logger.info(processStatus);
+    	}
+    	if (stepPrefixInformation != null) {
+    		lblStepPrefixInformation.setText(stepPrefixInformation);
+    	}
+    	if (stepInformation != null) {
+    		lblStepInformation.setText(stepInformation);
+    	}
 	}
 }

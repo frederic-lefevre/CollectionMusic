@@ -79,12 +79,12 @@ public class GenerationPane extends JPanel {
 
 		List<ActivableElement> activableElements = List.of(readCollectionControl, utilsPane, generateSiteControl);
 
-		StartReadCollection startReadCollection = new StartReadCollection(readCollectionControl.getPip(), activableElements);
+		StartReadCollection startReadCollection = new StartReadCollection(readCollectionControl.getProgressInformationPanel(), activableElements);
 		startReadCollection.setCollectionProcWaiter(new CollectionProcessWaiter(activableElements));
 		startReadCollection.addTableModel(albumsTableModel);
 		readCollectionControl.getStartButton().addActionListener(startReadCollection);
 
-		StartGenerationSite sg = new StartGenerationSite(generateSiteControl.getPip(), activableElements);
+		StartGenerationSite sg = new StartGenerationSite(generateSiteControl.getProgressInformationPanel(), activableElements);
 		sg.setCollectionProcWaiter(new CollectionProcessWaiter(activableElements));
 		generateSiteControl.getStartButton().addActionListener(sg);
 		
@@ -158,6 +158,6 @@ public class GenerationPane extends JPanel {
 	public void rescanNeeded() {
 		
 		generateSiteControl.deactivate();
-		readCollectionControl.getPip().setProcessStatus("Relecture nécessaire");
+		readCollectionControl.getProgressInformationPanel().setProgressInformation(new ProgressInformation("Relecture nécessaire", null, null));
 	}
 }

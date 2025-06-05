@@ -84,17 +84,15 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 
 		try {
 			collectionAlbumContainer = CollectionAlbumContainer.getInstance();
-			progressPanel.setProcessStatus(GENERATION);
+			publish(new ProgressInformation(GENERATION, null, null));
 
 			RapportHtml.withCharset(Control.getCharset());
 			RapportStructuresAndNames.renew();
 
-			albumLog.info("Nettoyage de l'ancien site");
-			progressPanel.setStepPrefixInformation(CLEANUP);
+			publish(new ProgressInformation(null, CLEANUP, null));
 			cleanRapport();
 
-			albumLog.info("Ecriture du nouveau site");
-			progressPanel.setStepPrefixInformation(ECRITURE);
+			publish(new ProgressInformation(null, ECRITURE, null));
 			rapportCollection();
 
 			// Sort for display when scanning the collection
@@ -117,8 +115,7 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 		 try {
 			 Path rDir  = RapportStructuresAndNames.getRapportPath();
 			 Path roDir = RapportStructuresAndNames.getOldRapportPath();
-			 albumLog.info("Rapport path=" + rDir);
-			 albumLog.info("Rapport od path=" + roDir);
+			 albumLog.info(() -> "Rapport path=" + rDir + "\nRapport old path=" + roDir);
 
 			 // delete old rapport directory
 			 if (Files.exists(roDir)) {
@@ -134,7 +131,7 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 
 			 // move rapport directory to old rapport
 			 if (Files.exists(rDir)) {
-				 albumLog.finest("Deplacement de la directorie des rapports " + roDir );
+				 albumLog.finest(() -> "Deplacement de la directorie des rapports " + roDir );
 				 try {
 					 Files.move(rDir, roDir);
 				 } catch (Exception e1) {
@@ -287,15 +284,14 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 	@Override
 	public void done() {
 
-		progressPanel.setStepInformation("");
-    	progressPanel.setStepPrefixInformation(ARRET);
-    	progressPanel.setProcessStatus(FIN_GENERATION);
+		progressPanel.setProgressInformation(new ProgressInformation(FIN_GENERATION, ARRET, ""));
 	}
 
 	@Override
 	public void process(List<ProgressInformation> lp) {
 
-		ProgressInformation latestResult = lp.get(lp.size() - 1);
-		progressPanel.setStepInformation(latestResult.getInformation());
+    	if ((lp != null) && !lp.isEmpty()) {
+    		progressPanel.setProgressInformation(lp.getLast());
+    	}
 	}
 }
