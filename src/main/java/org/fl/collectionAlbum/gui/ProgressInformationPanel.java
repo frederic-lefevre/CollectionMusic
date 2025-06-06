@@ -43,13 +43,12 @@ public class ProgressInformationPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(ProgressInformationPanel.class.getName());
 	
-	private JLabel lblStep;
-	private JLabel lblStepPrefixInformation;
-	private JLabel lblStepInformation;
-	private JLabel lblStatusTitle;
-	private JLabel lblStatus;
-	private static String dateFrancePattern = " EEEE dd MMMM yyyy à HH:mm:ss";
-	private DateTimeFormatter dateTimeFormatter;
+	private final JLabel lblStepPrefixInformation;
+	private final JLabel lblStepInformation;
+	private final JLabel lblStatus;
+	
+	private static final String dateFrancePattern = " EEEE dd MMMM yyyy à HH:mm:ss";
+	private final DateTimeFormatter dateTimeFormatter;
 	
 	public ProgressInformationPanel() {
 		
@@ -64,7 +63,7 @@ public class ProgressInformationPanel extends JPanel {
 
 		JPanel statusPane = new JPanel();
 		statusPane.setLayout(new FlowLayout(FlowLayout.LEFT));
-		lblStatusTitle = new JLabel("Etat: ");
+		JLabel lblStatusTitle = new JLabel("Etat: ");
 		lblStatus = new JLabel("");
 		lblStatusTitle.setFont(font);
 		lblStatusTitle.setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -80,7 +79,7 @@ public class ProgressInformationPanel extends JPanel {
 
 		JPanel infoStep = new JPanel();
 		infoStep.setLayout(new FlowLayout(FlowLayout.LEFT));
-		lblStep = new JLabel("Progression: ");
+		JLabel lblStep = new JLabel("Progression: ");
 		lblStepPrefixInformation = new JLabel("");
 		lblStepInformation = new JLabel("");
 		lblStep.setAlignmentX(Component.LEFT_ALIGNMENT);
