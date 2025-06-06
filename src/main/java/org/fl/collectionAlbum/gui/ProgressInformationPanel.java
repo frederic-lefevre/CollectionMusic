@@ -38,11 +38,11 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
-public class ProgressInformationPanel {
+public class ProgressInformationPanel extends JPanel {
 
+	private static final long serialVersionUID = 1L;
 	private static final Logger logger = Logger.getLogger(ProgressInformationPanel.class.getName());
 	
-	private JPanel procInfos;
 	private JLabel lblStep;
 	private JLabel lblStepPrefixInformation;
 	private JLabel lblStepInformation;
@@ -52,14 +52,15 @@ public class ProgressInformationPanel {
 	private DateTimeFormatter dateTimeFormatter;
 	
 	public ProgressInformationPanel() {
-
+		
+		super();
 		dateTimeFormatter = DateTimeFormatter.ofPattern(dateFrancePattern, Locale.FRANCE);
 		Font font = new Font("Verdana", Font.BOLD, 14);
-		procInfos = new JPanel();
-		procInfos.setLayout(new BoxLayout(procInfos, BoxLayout.Y_AXIS));
-		procInfos.setBackground(Color.WHITE);
-		procInfos.setBorder(BorderFactory.createMatteBorder(10, 10, 10, 10, Color.WHITE));
-		procInfos.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		setBackground(Color.WHITE);
+		setBorder(BorderFactory.createMatteBorder(10, 10, 10, 10, Color.WHITE));
+		setAlignmentX(Component.LEFT_ALIGNMENT);
 
 		JPanel statusPane = new JPanel();
 		statusPane.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -75,7 +76,7 @@ public class ProgressInformationPanel {
 		statusPane.add(lblStatus);
 		statusPane.setBackground(Color.WHITE);
 		statusPane.setAlignmentX(Component.LEFT_ALIGNMENT);
-		procInfos.add(statusPane);
+		add(statusPane);
 
 		JPanel infoStep = new JPanel();
 		infoStep.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -94,11 +95,7 @@ public class ProgressInformationPanel {
 		infoStep.add(lblStepInformation);
 		infoStep.setAlignmentX(Component.LEFT_ALIGNMENT);
 		infoStep.setBackground(Color.WHITE);
-		procInfos.add(infoStep);
-	}
-
-	public JPanel getProcInfos() {
-		return procInfos;
+		add(infoStep);
 	}
 	
 	public void setProgressInformation(ProgressInformation progressInformation) {
