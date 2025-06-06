@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -33,26 +33,27 @@ public class FragmentListeArtistesSimple {
 
 	public static void buildTable(List<Artiste> auteurs, StringBuilder fragment) {
 
-		fragment.append("<table>\n") ;
+		fragment.append("<table>\n");
 		for (Artiste unArtiste : auteurs) {
-			fragment.append("  <tr>\n    <td class=\"auteur\">") ;
-			fragment.append("<a href=\"") ;
+			fragment.append("  <tr>\n    <td class=\"auteur\">");
+			fragment.append("<a href=\"");
 
-			URI albumUri = RapportStructuresAndNames.getArtisteAlbumRapportRelativeUri(unArtiste) ;
+			URI albumUri = RapportStructuresAndNames.getArtisteAlbumRapportRelativeUri(unArtiste);
 			if (albumUri != null) {
-				fragment.append(albumUri.toString()) ;
+				fragment.append(albumUri.toString());
 			} else {
-				URI concertUri = RapportStructuresAndNames.getArtisteConcertRapportRelativeUri(unArtiste) ;
+				URI concertUri = RapportStructuresAndNames.getArtisteConcertRapportRelativeUri(unArtiste);
 				if (concertUri != null) {
-					fragment.append(concertUri.toString()) ;
+					fragment.append(concertUri.toString());
 				}
 			}
 
-			fragment.append("\">").append(unArtiste.getPrenoms()).append(" ").append(unArtiste.getNom()).append("</a></td>\n") ;
-			fragment.append("    <td class=\"an\">").append(unArtiste.getDateNaissance()).append("</td>\n") ;
-			fragment.append("    <td class=\"an\">").append(unArtiste.getDateMort()).append("</td>\n") ;
-			fragment.append("  </tr>\n") ;
+			fragment.append("\">").append(unArtiste.getPrenoms()).append(" ").append(unArtiste.getNom())
+					.append("</a></td>\n");
+			fragment.append("    <td class=\"an\">").append(unArtiste.getDateNaissance()).append("</td>\n");
+			fragment.append("    <td class=\"an\">").append(unArtiste.getDateMort()).append("</td>\n");
+			fragment.append("  </tr>\n");
 		}
-		fragment.append("</table>\n") ;
+		fragment.append("</table>\n");
 	}
 }

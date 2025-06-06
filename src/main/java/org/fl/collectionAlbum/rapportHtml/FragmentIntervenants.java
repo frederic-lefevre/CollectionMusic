@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -37,32 +37,32 @@ public class FragmentIntervenants {
 
 		if (musicArtefact.hasIntervenant()) {
 		
-			fragment.append("      <ul class=\"interv\">\n") ;
+			fragment.append("      <ul class=\"interv\">\n");
 
 			if (musicArtefact.getChefsOrchestre() != null) {
 				for (Artiste unChef : musicArtefact.getChefsOrchestre()) {
-					fragment.append("        <li>Direction: ") ;
+					fragment.append("        <li>Direction: ");
 					appendLinkAlbumArtiste(unChef, musicArtefact.getClass(), fragment, urlOffset) ;
-					fragment.append("</li>\n") ;
+					fragment.append("</li>\n");
 				}
 			}
 			
 			if (musicArtefact.getInterpretes() != null) {
 				for (Artiste unInterprete : musicArtefact.getInterpretes()) {
-					fragment.append("        <li>Interpr&egrave;te: ") ;
+					fragment.append("        <li>Interpr&egrave;te: ");
 					appendLinkAlbumArtiste(unInterprete,  musicArtefact.getClass(), fragment, urlOffset) ;
-					fragment.append("</li>\n") ;
+					fragment.append("</li>\n");
 				}
 			}	
 			
 			if (musicArtefact.getEnsembles() != null) {
 				for (Artiste unGroupe : musicArtefact.getEnsembles()) {
-					fragment.append("        <li>Ensemble: ") ;
+					fragment.append("        <li>Ensemble: ");
 					appendLinkAlbumArtiste(unGroupe,  musicArtefact.getClass(), fragment, urlOffset) ;
-					fragment.append("</li>\n") ;
+					fragment.append("</li>\n");
 				}
 			}
-			fragment.append("      </ul>") ;
+			fragment.append("      </ul>");
 		}
 	}
 	
@@ -80,12 +80,12 @@ public class FragmentIntervenants {
 	private static void appendLinkAlbumArtiste(Artiste unArtiste, Class<? extends MusicArtefact> artefactsClass, StringBuilder fragment,  String urlOffset) {
 		URI artefactsUri = null ;
 		if (artefactsClass.equals(Album.class)) {
-			artefactsUri = RapportStructuresAndNames.getArtisteAlbumRapportRelativeUri(unArtiste) ;
+			artefactsUri = RapportStructuresAndNames.getArtisteAlbumRapportRelativeUri(unArtiste);
 		} else if (artefactsClass.equals(Concert.class)) {
-			artefactsUri = RapportStructuresAndNames.getArtisteConcertRapportRelativeUri(unArtiste) ;
+			artefactsUri = RapportStructuresAndNames.getArtisteConcertRapportRelativeUri(unArtiste);
 		}
 		if (artefactsUri != null) {
-			fragment.append("<a href=\"").append(urlOffset).append(artefactsUri.toString()).append("\">").append(unArtiste.getPrenoms()).append(" ").append(unArtiste.getNom()).append("</a><br/>") ;
+			fragment.append("<a href=\"").append(urlOffset).append(artefactsUri.toString()).append("\">").append(unArtiste.getPrenoms()).append(" ").append(unArtiste.getNom()).append("</a><br/>");
 		}
 	}
 

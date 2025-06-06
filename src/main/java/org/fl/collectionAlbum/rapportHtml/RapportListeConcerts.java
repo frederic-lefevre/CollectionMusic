@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -29,18 +29,17 @@ import org.fl.collectionAlbum.concerts.ListeConcert;
 public class RapportListeConcerts extends RapportHtml {
 
 	private final ListeConcert listeConcerts;
-	
-	public RapportListeConcerts(ListeConcert lc,  String titre, LinkType linkType) {
+
+	public RapportListeConcerts(ListeConcert lc, String titre, LinkType linkType) {
 		super(titre, linkType);
 		withHtmlLinkList(RapportStructuresAndNames.getAccueils());
 		withTitleDisplayed();
-		listeConcerts = lc ;
+		listeConcerts = lc;
 	}
 
 	@Override
 	protected void corpsRapport() {
-		
-		FragmentListeConcerts.buildTable(listeConcerts, rBuilder, urlOffset);		
-	}
 
+		FragmentListeConcerts.buildTable(listeConcerts, rBuilder, urlOffset);
+	}
 }

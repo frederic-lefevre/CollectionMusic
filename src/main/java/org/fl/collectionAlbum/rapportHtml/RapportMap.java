@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,7 +22,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-
 package org.fl.collectionAlbum.rapportHtml;
 
 import java.net.URI;
@@ -33,31 +32,31 @@ public class RapportMap<K> extends HashMap<K, Path> {
 
 	private static final long serialVersionUID = 1L;
 	
-	private int  id ;
-	private final Path absoluteRootPath ;
-	private final Path absoluteLocationPath ;	
-	private final URI  absoluteRootUri ;
-	
+	private int id;
+	private final Path absoluteRootPath;
+	private final Path absoluteLocationPath;
+	private final URI absoluteRootUri;
+
 	public RapportMap(Path ar, Path al) {
 		super();
-		 id 			 	  = 0 ;
-		 absoluteRootPath	  = ar ;
-		 absoluteLocationPath = al ;
-		 absoluteRootUri	  = absoluteRootPath.toUri() ;
+		id = 0;
+		absoluteRootPath = ar;
+		absoluteLocationPath = al;
+		absoluteRootUri = absoluteRootPath.toUri();
 	}
 
 	public URI getUri(K musicObject) {
-		Path relativePath = get(musicObject) ;
-		Path absolutePath ;
+		Path relativePath = get(musicObject);
+		Path absolutePath;
 		if (relativePath == null) {
-			absolutePath = absoluteLocationPath.resolve("i" + id + ".html") ;
-			id++ ;
-			relativePath = absoluteRootPath.relativize(absolutePath) ;
-			put(musicObject, relativePath) ;			
+			absolutePath = absoluteLocationPath.resolve("i" + id + ".html");
+			id++;
+			relativePath = absoluteRootPath.relativize(absolutePath);
+			put(musicObject, relativePath);
 		} else {
-			absolutePath = absoluteRootPath.resolve(relativePath) ;			
+			absolutePath = absoluteRootPath.resolve(relativePath);
 		}
-		return absoluteRootUri.relativize(absolutePath.toUri()) ;	
+		return absoluteRootUri.relativize(absolutePath.toUri());
 	}
 	
 }

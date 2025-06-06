@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -28,13 +28,13 @@ import org.fl.collectionAlbum.albums.ListeAlbum;
 
 public class RapportListeAlbums extends RapportHtml {
 
-	private final ListeAlbum listeAlbums ;
+	private final ListeAlbum listeAlbums;
 	
 	public RapportListeAlbums(ListeAlbum la, String titre, LinkType linkType) {
 		super(titre, linkType);
 		withTitleDisplayed() ;
 		withHtmlLinkList(RapportStructuresAndNames.getAccueils());
-		listeAlbums = la ;
+		listeAlbums = la;
 	}
 
 	@Override
@@ -43,7 +43,6 @@ public class RapportListeAlbums extends RapportHtml {
 		write("  <p>Nombre d'albums: ");
 		write(listeAlbums.getNombreAlbums());
 		write("</p>\n");
-		FragmentListeAlbums.buildTable(listeAlbums, rBuilder, urlOffset, balises) ;
+		FragmentListeAlbums.buildTable(listeAlbums, rBuilder, urlOffset, balises);
 	}	
-
 }

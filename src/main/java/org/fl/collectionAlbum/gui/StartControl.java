@@ -62,7 +62,7 @@ public class StartControl implements ActivableElement {
 		progressInformationPanel = new ProgressInformationPanel();
 		progressInformationPanel.setProgressInformation(new ProgressInformation(sText, iText, ""));
 
-		procCtrl.add(progressInformationPanel.getProcInfos());		
+		procCtrl.add(progressInformationPanel);		
 	}
 
 	public JPanel getProcCtrl() {

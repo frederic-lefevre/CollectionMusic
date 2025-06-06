@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -35,13 +35,13 @@ public class MediaFilesTableModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 1L;
 
-	public final static int PATH_COL_IDX = 0;
-	public final static int ALBUMS_COL_IDX = 1;
-	public final static int NB_FILES_COL_IDX = 2;
-	public final static int COVER_IMAGE_COL_IDX = 3;
-	public final static int EXTENSION_COL_IDX = 4;
+	public static final int PATH_COL_IDX = 0;
+	public static final int ALBUMS_COL_IDX = 1;
+	public static final int NB_FILES_COL_IDX = 2;
+	public static final int COVER_IMAGE_COL_IDX = 3;
+	public static final int EXTENSION_COL_IDX = 4;
 	
-	private final static String[] entetes = {"Chemins", "Albums", "Nombre de medias", "Image de la pochette", "Type de media"};
+	private static final String[] entetes = {"Chemins", "Albums", "Nombre de medias", "Image de la pochette", "Type de media"};
 	
 	private final List<MediaFilePath> mediaFilePaths;
 	

@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,24 +26,24 @@ package org.fl.collectionAlbum.concerts;
 
 public class LieuConcert {
 
-	private final String lieu ;
-	private ListeConcert concerts ;
+	private final String lieu;
+	private final ListeConcert concerts;
 
 	public LieuConcert(String l) {
-		lieu 		  = l ;
-		concerts  	 = new ListeConcert() ;
+		lieu = l;
+		concerts = new ListeConcert();
 	}
 
 	public String getLieu() {
 		return lieu;
 	}
-	
+
 	public int getNombreConcert() {
 		return concerts.getNombreConcerts();
 	}
 
 	public void addConcert(Concert concert) {
-		concerts.addConcert(concert) ;
+		concerts.addConcert(concert);
 	}
 
 	public ListeConcert getConcerts() {

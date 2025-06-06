@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -31,9 +31,9 @@ public class HtmlLinkList {
 
 	private class HtmlLink {
 		
-		private final static String AHREF1 = "  <a href=\"" ;
-		private final static String AHREF2 = "\">" ;
-		private final static String AHREF3 = "</a><br/>\n" ;
+		private static final String AHREF1 = "  <a href=\"";
+		private static final String AHREF2 = "\">";
+		private static final String AHREF3 = "</a><br/>\n";
 		
 		private final String title;
 		private final String url;
@@ -78,6 +78,6 @@ public class HtmlLinkList {
 	}
 	
 	public int getNbLink() {
-		return linkList.size() ;
+		return linkList.size();
 	}
 }
