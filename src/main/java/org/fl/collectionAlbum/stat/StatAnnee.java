@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -26,12 +26,12 @@ package org.fl.collectionAlbum.stat;
 
 public class StatAnnee {
 	
-	private final int an ;
-	private double nombre ;
+	private final int an;
+	private double nombre;
 
 	public StatAnnee(int aan, double anombre) {
-		an 	   = aan ;
-		nombre = anombre ;
+		an = aan;
+		nombre = anombre;
 	}
 
 	public int getAn() {
@@ -39,21 +39,21 @@ public class StatAnnee {
 	}
 
 	public String getNombre() {
-		
+
 		if (nombre == 0) {
-			return "" ;
+			return "";
 		} else {
-			long poidsArrondi = Math.round(nombre) ;
-	
+			long poidsArrondi = Math.round(nombre);
+
 			if (nombre == poidsArrondi) {
-				return Long.toString(poidsArrondi) ;
+				return Long.toString(poidsArrondi);
 			} else {
-				return Double.toString(nombre) ;
+				return Double.toString(nombre);
 			}
 		}
 	}
 
 	public void incrementNombre(double n) {
-		nombre = nombre + n ;
+		nombre = nombre + n;
 	}
 }

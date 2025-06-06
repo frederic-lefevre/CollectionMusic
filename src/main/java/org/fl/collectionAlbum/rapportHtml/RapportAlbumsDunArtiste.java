@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -31,25 +31,25 @@ import org.fl.collectionAlbum.format.Format;
 
 public class RapportAlbumsDunArtiste extends RapportHtml {
 
-	private static final String ALBUMS = " - Albums" ;
+	private static final String ALBUMS = " - Albums";
 	
-	private final Artiste artiste ;
+	private final Artiste artiste;
 	
 	private static final boolean DONT_APPEND_AUDIO_FILE = false;
 	
 	public RapportAlbumsDunArtiste(Artiste a, String offset) {
 		super("", null);
-		withOffset(offset) ;
-		artiste = a ;
-		
-		withTitle(artiste.getPrenoms() + " " + artiste.getNom() + ALBUMS) ;
-		HtmlLinkList concertLink = new HtmlLinkList(RapportStructuresAndNames.getAccueils()) ;
-	
+		withOffset(offset);
+		artiste = a;
+
+		withTitle(artiste.getPrenoms() + " " + artiste.getNom() + ALBUMS);
+		HtmlLinkList concertLink = new HtmlLinkList(RapportStructuresAndNames.getAccueils());
+
 		if (artiste.getNbConcert() > 0) {
-			URI concertUri = RapportStructuresAndNames.getArtisteConcertRapportRelativeUri(artiste) ;
-			concertLink.addLink("Concerts", concertUri.toString()) ;	
+			URI concertUri = RapportStructuresAndNames.getArtisteConcertRapportRelativeUri(artiste);
+			concertLink.addLink("Concerts", concertUri.toString());
 		}
-		withHtmlLinkList(concertLink) ;
+		withHtmlLinkList(concertLink);
 	}
 	
 	@Override

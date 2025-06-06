@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -32,41 +32,40 @@ import org.fl.collectionAlbum.concerts.LieuxDesConcerts;
 
 public class RapportLieuxConcerts  extends RapportHtml {
 
-	private final static String F1 = "<div class=\"mhc\">\n  <table>\n  <tr>\n" ;
-	private final static String F2 = "    <td class=\"album\">Lieu</td>\n" ;
-	private final static String F3 = "    <td class=\"total\">Nombre<br/>concerts</td>\n" ;
-	private final static String F4 = "</tr>\n  </table>\n</div>\n  <table>\n  <tr class=\"head\">\n" ;
-	private final static String F5 = "  </tr>\n" ;
-	private final static String table1 = F1 + F2 + F3 + F4 + F2 + F3 + F5 ;
+	private static final String F1 = "<div class=\"mhc\">\n  <table>\n  <tr>\n";
+	private static final String F2 = "    <td class=\"album\">Lieu</td>\n";
+	private static final String F3 = "    <td class=\"total\">Nombre<br/>concerts</td>\n";
+	private static final String F4 = "</tr>\n  </table>\n</div>\n  <table>\n  <tr class=\"head\">\n";
+	private static final String F5 = "  </tr>\n";
+	private static final String table1 = F1 + F2 + F3 + F4 + F2 + F3 + F5;
 
-	private final LieuxDesConcerts lieuxDesConcerts ;
-	
+	private final LieuxDesConcerts lieuxDesConcerts;
+
 	protected RapportLieuxConcerts(LieuxDesConcerts ldc, String titre, LinkType linkType) {
 		super(titre, linkType);
-		withTitleDisplayed() ;
+		withTitleDisplayed();
 		withHtmlLinkList(RapportStructuresAndNames.getAccueils());
-		lieuxDesConcerts = ldc ;
+		lieuxDesConcerts = ldc;
 	}
 
 	@Override
 	protected void corpsRapport() {
-		
-		write(table1) ;
-		
-		Collection<LieuConcert> lieux = lieuxDesConcerts.getLieuxConcerts() ;
-		for (LieuConcert unLieu : lieux) {
-			write("  <tr>\n    <td class=\"album\">") ;
-			
-			URI aPath = RapportStructuresAndNames.getLieuRapportRelativeUri(unLieu) ;
-			if (aPath != null) {
-				write("<a href=\"").write(aPath.toString()).write("\">").write(unLieu.getLieu()).write("</a>") ;
-			} else {
-				write(unLieu.getLieu()) ;
-			}
-			write("    </td>\n") ;
-			write("    <td class=\"total\">").write(unLieu.getNombreConcert()).write("</td>\n  </tr>\n") ;
-		}
-		write("</table>\n") ;
-	}
 
+		write(table1);
+
+		Collection<LieuConcert> lieux = lieuxDesConcerts.getLieuxConcerts();
+		for (LieuConcert unLieu : lieux) {
+			write("  <tr>\n    <td class=\"album\">");
+
+			URI aPath = RapportStructuresAndNames.getLieuRapportRelativeUri(unLieu);
+			if (aPath != null) {
+				write("<a href=\"").write(aPath.toString()).write("\">").write(unLieu.getLieu()).write("</a>");
+			} else {
+				write(unLieu.getLieu());
+			}
+			write("    </td>\n");
+			write("    <td class=\"total\">").write(unLieu.getNombreConcert()).write("</td>\n  </tr>\n");
+		}
+		write("</table>\n");
+	}
 }

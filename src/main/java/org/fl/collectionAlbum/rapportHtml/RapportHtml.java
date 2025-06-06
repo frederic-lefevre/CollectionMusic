@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -34,32 +34,32 @@ import java.util.logging.Logger;
 
 public abstract class RapportHtml {
 
-	protected final static Logger rapportLog = Logger.getLogger(RapportHtml.class.getName());
+	protected static final Logger rapportLog = Logger.getLogger(RapportHtml.class.getName());
 	
 	// Useful HTML fragment
-	private final static String ENTETE1 = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN_\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">\n" +
+	private static final String ENTETE1 = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN_\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">\n" +
 										  "<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">\n<head>\n" +
 										  "  <meta http-equiv=\"Content-Type\" content=\"text/html; charset=";
-	private final static String ENTETE6 = "\" />\n  <title>" ;
-	private final static String ENTETE2 = "</title>\n" ;
-	private final static String ENTETE3 = "  <link rel=\"STYLESHEET\" href=\"" ;
-	private final static String ENTETE4 = ".css\" type=\"text/css\"/>\n" ;
-	private final static String ENTETE5 = "</head>\n<body>\n" ;
-	private final static String H2_B 	= "<h2>" ;
-	private final static String H2_E 	= "</h2>\n" ;
-	private final static String L_LIST1 = "<div class=\"home\">\n" ;
-	private final static String IMG_1   = "  <img  class=\"cover\" src=\"";
-	private final static String L_LIST4 = "</div>\n" ;
-	private final static String END		= "</body>\n</html>" ;
-	
-	private final static String LIST_BEGIN = "  <li";	
-	private final static String CELL_BEGIN = "<td";
-	private final static String CLASS_PART1 = " class=\"";
-	private final static String HREF_PART = "><a href=\"";
-	private final static String CSS_END_HREF_PART = "\"" + HREF_PART;
-	private final static String LIST_END = "</a></li>\n";
-	private final static String CELL_END = "</a></td>";
-	
+	private static final String ENTETE6 = "\" />\n  <title>";
+	private static final String ENTETE2 = "</title>\n";
+	private static final String ENTETE3 = "  <link rel=\"STYLESHEET\" href=\"";
+	private static final String ENTETE4 = ".css\" type=\"text/css\"/>\n";
+	private static final String ENTETE5 = "</head>\n<body>\n";
+	private static final String H2_B = "<h2>";
+	private static final String H2_E = "</h2>\n";
+	private static final String L_LIST1 = "<div class=\"home\">\n";
+	private static final String IMG_1 = "  <img  class=\"cover\" src=\"";
+	private static final String L_LIST4 = "</div>\n";
+	private static final String END = "</body>\n</html>";
+
+	private static final String LIST_BEGIN = "  <li";
+	private static final String CELL_BEGIN = "<td";
+	private static final String CLASS_PART1 = " class=\"";
+	private static final String HREF_PART = "><a href=\"";
+	private static final String CSS_END_HREF_PART = "\"" + HREF_PART;
+	private static final String LIST_END = "</a></li>\n";
+	private static final String CELL_END = "</a></td>";
+
 	public enum LinkType {
 		LIST(LIST_BEGIN, LIST_END), CELL(CELL_BEGIN, CELL_END);
 		
@@ -88,7 +88,7 @@ public abstract class RapportHtml {
 	private static String htmlBegin = ENTETE1 + StandardCharsets.UTF_8.name() + ENTETE6;
 	
 	// Initial size of the StringBuilder buffer
-	private final static int TAILLE_INITIALE = 8192;
+	private static final int TAILLE_INITIALE = 8192;
 	
 	private static Charset charset;
 	
@@ -99,7 +99,7 @@ public abstract class RapportHtml {
 	protected final StringBuilder rBuilder;
 	
 	// directory pour les css
-	private final static String CSSOFFSET = "../css/";
+	private static final String CSSOFFSET = "../css/";
 	
 	protected String urlOffset;
 	private LinkType linkType;

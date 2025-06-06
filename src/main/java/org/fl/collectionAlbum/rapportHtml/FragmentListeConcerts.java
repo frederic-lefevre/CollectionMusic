@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2023 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -38,47 +38,63 @@ public class FragmentListeConcerts {
 	private final static String table1 = "<div class=\"mhc\">\n  <table>\n  <tr>\n    <td class=\"an\">Date</td>\n    <td class=\"auteur\">Artistes</td>\n    <td class=\"album\">Lieu</td>\n  </tr>\n  </table>\n</div>\n  <table>\n  <tr class=\"head\">\n    <td class=\"an\">Date</td>\n    <td class=\"auteur\">Artistes</td>\n    <td class=\"album\">Lieu</td>\n  </tr>\n" ;
 	
 	public static void buildTable(ListeConcert listeConcerts,StringBuilder fragment, String urlOffset) {
-		
-		fragment.append(table1) ;
+
+		fragment.append(table1);
 		for (Concert unConcert : listeConcerts.getConcerts()) {
-			String dateConcert = TemporalUtils.formatDate(unConcert.getDateConcert()) ;
-			
-			fragment.append("  <tr>\n    <td class=\"an\">") ;
-			URI aPath = RapportStructuresAndNames.getConcertRapportRelativeUri(unConcert) ;
+			String dateConcert = TemporalUtils.formatDate(unConcert.getDateConcert());
+
+			fragment.append("  <tr>\n    <td class=\"an\">");
+			URI aPath = RapportStructuresAndNames.getConcertRapportRelativeUri(unConcert);
 			if (aPath != null) {
-				fragment.append("<a href=\"").append(urlOffset).append(aPath.toString()).append("\">").append(dateConcert).append("</a>") ;
+				fragment.append("<a href=\"")
+					.append(urlOffset)
+					.append(aPath.toString())
+					.append("\">")
+					.append(dateConcert)
+					.append("</a>");
 			} else {
-				fragment.append(dateConcert) ;
+				fragment.append(dateConcert);
 			}
-			
-			fragment.append("</td>\n    <td class=\"auteur\">\n") ;
-			
+
+			fragment.append("</td>\n    <td class=\"auteur\">\n");
+
 			if (unConcert.getAuteurs() != null) {
 				for (Artiste unArtiste : unConcert.getAuteurs()) {
-					appendLinkConcertArtiste(unArtiste, fragment, urlOffset) ;
+					appendLinkConcertArtiste(unArtiste, fragment, urlOffset);
 				}
 			}
-			FragmentIntervenants.printIntervenant(unConcert, fragment, urlOffset) ;
-			
-			fragment.append("    </td>\n    <td class=\"album\">") ;
-			
-			LieuConcert lieuConcert = unConcert.getLieuConcert() ;
-			URI lieuPath = RapportStructuresAndNames.getLieuRapportRelativeUri(lieuConcert) ;			
+			FragmentIntervenants.printIntervenant(unConcert, fragment, urlOffset);
+
+			fragment.append("    </td>\n    <td class=\"album\">");
+
+			LieuConcert lieuConcert = unConcert.getLieuConcert();
+			URI lieuPath = RapportStructuresAndNames.getLieuRapportRelativeUri(lieuConcert);
 			if (lieuPath != null) {
-				fragment.append("<a href=\"").append(urlOffset).append(lieuPath.toString()).append("\">").append(lieuConcert.getLieu()).append("</a>") ;
+				fragment.append("<a href=\"")
+					.append(urlOffset)
+					.append(lieuPath.toString())
+					.append("\">")
+					.append(lieuConcert.getLieu()).append("</a>");
 			} else {
-				fragment.append(lieuConcert.getLieu()) ;
+				fragment.append(lieuConcert.getLieu());
 			}
 			
-			fragment.append("\n    </td>\n  </tr>\n") ;
+			fragment.append("\n    </td>\n  </tr>\n");
 		}
-		fragment.append("</table>\n") ;
+		fragment.append("</table>\n");
 	}
 
 	private static void appendLinkConcertArtiste(Artiste unArtiste, StringBuilder fragment,  String urlOffset) {
-		URI concertUri = RapportStructuresAndNames.getArtisteConcertRapportRelativeUri(unArtiste) ;
+		URI concertUri = RapportStructuresAndNames.getArtisteConcertRapportRelativeUri(unArtiste);
 		if (concertUri != null) {
-			fragment.append("      <a href=\"").append(urlOffset).append(concertUri.toString()).append("\">").append(unArtiste.getPrenoms()).append(" ").append(unArtiste.getNom()).append("</a><br/>\n") ;
+			fragment.append("      <a href=\"")
+				.append(urlOffset)
+				.append(concertUri.toString())
+				.append("\">")
+				.append(unArtiste.getPrenoms())
+				.append(" ")
+				.append(unArtiste.getNom())
+				.append("</a><br/>\n");
 
 		}
 	}

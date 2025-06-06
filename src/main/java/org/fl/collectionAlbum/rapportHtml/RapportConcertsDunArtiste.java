@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -30,31 +30,31 @@ import org.fl.collectionAlbum.artistes.Artiste;
 
 public class RapportConcertsDunArtiste extends RapportHtml {
 
-	private static final String CONCERTS = " - Concerts" ;
-	
-	private final Artiste artiste ;
-	
+	private static final String CONCERTS = " - Concerts";
+
+	private final Artiste artiste;
+
 	public RapportConcertsDunArtiste(Artiste a, String offset) {
 		super("", null);
-		withOffset(offset) ;
-		artiste = a ;
-		withTitle(artiste.getPrenoms() + " " + artiste.getNom() + CONCERTS) ;
-		HtmlLinkList albumLink = new HtmlLinkList(RapportStructuresAndNames.getAccueils()) ;
-				
+		withOffset(offset);
+		artiste = a;
+		withTitle(artiste.getPrenoms() + " " + artiste.getNom() + CONCERTS);
+		HtmlLinkList albumLink = new HtmlLinkList(RapportStructuresAndNames.getAccueils());
+
 		if (artiste.getNbAlbum() > 0) {
-			URI albumUri = RapportStructuresAndNames.getArtisteAlbumRapportRelativeUri(artiste) ;
-			albumLink.addLink("Albums", albumUri.toString()) ;	
+			URI albumUri = RapportStructuresAndNames.getArtisteAlbumRapportRelativeUri(artiste);
+			albumLink.addLink("Albums", albumUri.toString());
 		}
-		withHtmlLinkList(albumLink) ;		
+		withHtmlLinkList(albumLink);
 	}
 
 	@Override
 	protected void corpsRapport() {
-		
-		write("<table class=\"auteurTab\">\n  <tr>\n    <td class=\"auteurTitre\"><span class=\"auteurTitre\">") ;
-		write(artiste.getPrenoms()).write(" ").write(artiste.getNom()) ;
-		write("</span> (").write(artiste.getDateNaissance()).write(" - ").write(artiste.getDateMort()) ;
-		write(")</td>\n  </tr>\n</table>\n") ;
+
+		write("<table class=\"auteurTab\">\n  <tr>\n    <td class=\"auteurTitre\"><span class=\"auteurTitre\">");
+		write(artiste.getPrenoms()).write(" ").write(artiste.getNom());
+		write("</span> (").write(artiste.getDateNaissance()).write(" - ").write(artiste.getDateMort());
+		write(")</td>\n  </tr>\n</table>\n");
 		FragmentListeConcerts.buildTable(artiste.getConcerts().sortChrono(), rBuilder, "../../");		
 	}
 }

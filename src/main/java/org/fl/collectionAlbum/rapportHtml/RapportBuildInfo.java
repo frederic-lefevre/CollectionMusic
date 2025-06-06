@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2025 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +29,7 @@ public class RapportBuildInfo extends RapportHtml {
 	private final String buildInfo;
 	
 	public RapportBuildInfo(String buildInfo, String titre, LinkType linkType) {
-		super(titre, linkType) ;
+		super(titre, linkType);
 		withHtmlLinkList(RapportStructuresAndNames.getAccueils());
 		withTitleDisplayed();
 		this.buildInfo = buildInfo;
@@ -38,8 +38,6 @@ public class RapportBuildInfo extends RapportHtml {
 	@Override
 	protected void corpsRapport() {
 		
-		write("<pre>\n").write(buildInfo).write("\n</pre>");
-		
+		write("<pre>\n").write(buildInfo).write("\n</pre>");		
 	}
-
 }
