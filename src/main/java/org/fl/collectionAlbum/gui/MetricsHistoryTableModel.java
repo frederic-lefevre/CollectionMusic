@@ -41,6 +41,8 @@ public class MetricsHistoryTableModel extends AbstractTableModel{
 
 	private static final long serialVersionUID = 1L;
 	
+	public static final int DATE_COL_IDX = 0;
+	
 	private static final String dateFrancePattern = "EEEE dd MMMM uuuu à HH:mm";
 	private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(dateFrancePattern, Locale.FRANCE);
 	
@@ -67,7 +69,7 @@ public class MetricsHistoryTableModel extends AbstractTableModel{
 
 	@Override
 	public String getColumnName(int col) {
-		if (col == 0) {
+		if (col == DATE_COL_IDX) {
 			// First column is Date column
 			return DATE_COLUMN_HEADER;
 		} else {
@@ -80,7 +82,7 @@ public class MetricsHistoryTableModel extends AbstractTableModel{
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		
 		Metrics metrics = metricsHistory.getMetricsHistory().get(rowIndex);
-		if (columnIndex == 0) {
+		if (columnIndex == DATE_COL_IDX) {
 			// First column is Date column
 			return dateTimeFormatter.format(
 					LocalDateTime.ofInstant(Instant.ofEpochMilli(metrics.getMetricTimeStamp()), ZoneId.systemDefault()));
