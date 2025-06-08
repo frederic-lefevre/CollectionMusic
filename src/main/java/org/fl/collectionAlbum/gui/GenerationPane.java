@@ -141,7 +141,7 @@ public class GenerationPane extends JPanel {
 		// Collection metrics history
 		JTabbedPane collectionMetricsTabPanes = new JTabbedPane();
 		
-		JTable collectionMetricsHistoryTable = new JTable(new MetricsHistoryTableModel(Control.getCollectionMetricsHsitory()));
+		JTable collectionMetricsHistoryTable = new CollectionMetricsHistoryJTable(new MetricsHistoryTableModel(Control.getCollectionMetricsHsitory()));
 		JTable concertMetricsHistoryTable = new JTable(new MetricsHistoryTableModel(Control.getConcertMetricsHsitory()));
 		
 		JScrollPane collectionHistoryScrollPane = new JScrollPane(collectionMetricsHistoryTable);
