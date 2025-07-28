@@ -67,7 +67,7 @@ public class RapportCollection extends RapportHtml {
 		rapportArtistesAlbumsChrono.withBalises(new Balises(Balises.BalisesType.TEMPORAL));
 		write(rapportArtistesAlbumsChrono.printReport(getNextRapportFile(),  CssStyles.stylesTableauAvecBalise));
 
-		RapportCalendrier rapportCalendrier = new RapportCalendrier(albumsContainer.getCalendrierArtistes(), "Calendrier", LinkType.LIST);
+		RapportCalendrier rapportCalendrier = new RapportCalendrier(albumsContainer.getCalendrierAlbumArtistes(), "Calendrier", LinkType.LIST);
 		write(rapportCalendrier.printReport(getNextRapportFile(), CssStyles.stylesCalendrier));
 		
 		write("</ul>\n</td>\n<td class=\"mainpage\">\n<h3>Listes des albums</h3>\n<ul>\n");

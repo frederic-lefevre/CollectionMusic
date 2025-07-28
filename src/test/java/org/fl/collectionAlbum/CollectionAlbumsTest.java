@@ -51,7 +51,8 @@ class CollectionAlbumsTest {
 		assertThat(albumsContainer.getConcerts()).isNotNull();
 		assertThat(albumsContainer.getCollectionArtistes()).isNotNull();
 		assertThat(albumsContainer.getConcertsArtistes()).isNotNull();
-		assertThat(albumsContainer.getCalendrierArtistes()).isNotNull();
+		assertThat(albumsContainer.getCalendrierAlbumArtistes()).isNotNull();
+		assertThat(albumsContainer.getCalendrierConcertArtistes()).isNotNull();
 		assertThat(albumsContainer.getStatChronoComposition()).isNotNull();
 		assertThat(albumsContainer.getStatChronoEnregistrement()).isNotNull();
 		

@@ -55,7 +55,7 @@ public class StatChrono {
 		statSiecle.clear();
 	}
 	
-	public void AddAlbum(TemporalAccessor dateAlbum, double poidsAlbum) {
+	public void addAlbum(TemporalAccessor dateAlbum, double poidsAlbum) {
 
 		int year = getYearFromDate(dateAlbum);
 		int decennie = getDecennie(year);
