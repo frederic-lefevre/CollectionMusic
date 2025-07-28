@@ -54,6 +54,9 @@ public class RapportDesConcerts extends RapportHtml {
 
 		 RapportListeArtistesConcert artistesPoids = new RapportListeArtistesConcert(albumsContainer.getConcertsArtistes().sortArtistesPoidsConcerts(), "Classement par nombre de concerts", LinkType.LIST);
 		 write(artistesPoids.printReport( getNextRapportFile(), CssStyles.stylesTableauAvecBalise));
+		 
+		RapportCalendrier rapportCalendrier = new RapportCalendrier(albumsContainer.getCalendrierConcertArtistes(), "Calendrier", LinkType.LIST);
+		write(rapportCalendrier.printReport(getNextRapportFile(), CssStyles.stylesCalendrier));
 
 		 write("</ul>\n<h3>Classement des concerts</h3>\n<ul>\n");
 		 RapportListeConcerts rapportDesConcerts = new RapportListeConcerts(albumsContainer.getConcerts().sortChrono(), "Classement chronologique", LinkType.LIST);
