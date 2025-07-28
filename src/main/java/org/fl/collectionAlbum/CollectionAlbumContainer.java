@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.albums.ListeAlbum;
@@ -48,6 +50,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class CollectionAlbumContainer {
 	
+	private static final Logger albumLog = Logger.getLogger(CollectionAlbumContainer.class.getName());
+	
 	// Liste d'artistes pour les albums
 	private final ListeArtiste collectionArtistes;
 	
@@ -60,7 +64,8 @@ public class CollectionAlbumContainer {
 	private final ListeAlbum collectionAlbumsMusiques;
 	
 	private final ListeConcert concerts;	
-	private final ChronoArtistes calendrierArtistes;
+	private final ChronoArtistes calendrierAlbumArtistes;
+	private final ChronoArtistes calendrierConcertArtistes;
 	
 	private final StatChrono statChronoEnregistrement;
 	private final StatChrono statChronoComposition;
@@ -95,7 +100,8 @@ public class CollectionAlbumContainer {
 		concerts = new ListeConcert();
 		statChronoEnregistrement = new StatChrono();
 		statChronoComposition = new StatChrono();
-		calendrierArtistes = new ChronoArtistes();
+		calendrierAlbumArtistes = new ChronoArtistes();
+		calendrierConcertArtistes = new ChronoArtistes();
 		lieuxDesConcerts = new LieuxDesConcerts();
 		allArtistes = new ArrayList<ListeArtiste>();
    		
@@ -123,8 +129,8 @@ public class CollectionAlbumContainer {
 			DiscogsInventory.linkToAlbum(album.getDiscogsLink(), album);
 		} 
 		
-		statChronoEnregistrement.AddAlbum(album.getDebutEnregistrement(), album.getFormatAlbum().getPoids());
-	    statChronoComposition.AddAlbum(album.getDebutComposition(), album.getFormatAlbum().getPoids());
+		statChronoEnregistrement.addAlbum(album.getDebutEnregistrement(), album.getFormatAlbum().getPoids());
+	    statChronoComposition.addAlbum(album.getDebutComposition(), album.getFormatAlbum().getPoids());
 	}
 	
 	public void addConcert(ObjectNode arteFactJson, Path jsonFile) { 
@@ -135,6 +141,16 @@ public class CollectionAlbumContainer {
 		concert.addMusicArtfactArtistesToList(concertsArtistes);
 		
 		concerts.addConcert(concert); 	
+	}
+	
+	public void buildCalendriers() {
+		
+		try {
+			collectionArtistes.getArtistes().forEach(artist -> calendrierAlbumArtistes.add(artist));
+			concertsArtistes.getArtistes().forEach(artist -> calendrierConcertArtistes.add(artist));
+		} catch (Exception e) {
+    		albumLog.log(Level.SEVERE, "Exception in build calendrier ", e);
+    	}
 	}
 	
 	private ListeAlbum getAlbumsSastisfying(Predicate<Album> albumPredicate) {
@@ -181,10 +197,14 @@ public class CollectionAlbumContainer {
 		return concerts;
 	}
 
-	public ChronoArtistes getCalendrierArtistes() {
-		return calendrierArtistes;
+	public ChronoArtistes getCalendrierAlbumArtistes() {
+		return calendrierAlbumArtistes;
 	}
 
+	public ChronoArtistes getCalendrierConcertArtistes() {
+		return calendrierConcertArtistes;
+	}
+	
 	public StatChrono getStatChronoComposition() {
 		return statChronoComposition;
 	}
@@ -241,7 +261,8 @@ public class CollectionAlbumContainer {
    		concerts.reset(); 		
    		statChronoEnregistrement.reset();
    		statChronoComposition.reset();  		
-   		calendrierArtistes.reset();
+   		calendrierAlbumArtistes.reset();
+   		calendrierConcertArtistes.reset();
    		lieuxDesConcerts.reset();
    		
    		allArtistes.clear();

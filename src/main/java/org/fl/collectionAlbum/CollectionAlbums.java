@@ -38,8 +38,6 @@ import java.util.logging.Logger;
 import javax.swing.SwingWorker;
 import javax.swing.table.AbstractTableModel;
 
-import org.fl.collectionAlbum.artistes.Artiste;
-import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory;
 import org.fl.collectionAlbum.gui.ProgressInformation;
 import org.fl.collectionAlbum.gui.ProgressInformationPanel;
@@ -95,7 +93,7 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 		buildConcerts();	
 		
 		publish(new ProgressInformation(CALENDARS, "", ""));
-		buildCalendrier();
+		buildCalendriers();
 		
 		publish(new ProgressInformation(MEDIA_INVENTORY, MEDIA_INVENTORY_PRORESS, ""));
 		MediaFilesInventories.scanMediaFilePaths();
@@ -194,16 +192,9 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 		}
 	}
 
-    private void buildCalendrier() {
+    private void buildCalendriers() {
 
-    	try {
-    		ListeArtiste allArtistes =  albumsContainer.getCollectionArtistes().getReunion(albumsContainer.getConcertsArtistes());
-    		for (Artiste a : allArtistes.getArtistes()) {
-    			albumsContainer.getCalendrierArtistes().add(a);
-    		}
-    	} catch (Exception e) {
-    		albumLog.log(Level.SEVERE, "Exception in build calendrier ", e);
-    	}
+    	albumsContainer.buildCalendriers();
     }
 
     @Override

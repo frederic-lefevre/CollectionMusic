@@ -55,10 +55,10 @@ class StatChronoTest {
 		String d4 = "1970-01-01";
 		TemporalAccessor ta4 = TemporalUtils.parseDate(d4);
 
-		sc1.AddAlbum(ta1, 1.5);
-		sc1.AddAlbum(ta2, 1);
-		sc1.AddAlbum(ta3, 2);
-		sc1.AddAlbum(ta4, 5);
+		sc1.addAlbum(ta1, 1.5);
+		sc1.addAlbum(ta2, 1);
+		sc1.addAlbum(ta3, 2);
+		sc1.addAlbum(ta4, 5);
 		assertThat(sc1.getStatForYear(1969)).isEqualTo("3.5");
 		assertThat(sc1.getStatForYear(1960)).isEqualTo("1");
 		assertThat(sc1.getStatForDecennie(1960)).isEqualTo("4.5");
