@@ -84,9 +84,9 @@ public class GenerationPane extends JPanel {
 		startReadCollection.addTableModel(albumsTableModel);
 		readCollectionControl.getStartButton().addActionListener(startReadCollection);
 
-		StartGenerationSite sg = new StartGenerationSite(generateSiteControl.getProgressInformationPanel(), activableElements);
-		sg.setCollectionProcWaiter(new CollectionProcessWaiter(activableElements));
-		generateSiteControl.getStartButton().addActionListener(sg);
+		StartGenerationSite startGenerationSite = new StartGenerationSite(generateSiteControl.getProgressInformationPanel(), activableElements);
+		startGenerationSite.setCollectionProcWaiter(new CollectionProcessWaiter(activableElements));
+		generateSiteControl.getStartButton().addActionListener(startGenerationSite);
 		
 		add(controlPanel);
 		
@@ -141,8 +141,15 @@ public class GenerationPane extends JPanel {
 		// Collection metrics history
 		JTabbedPane collectionMetricsTabPanes = new JTabbedPane();
 		
-		JTable collectionMetricsHistoryTable = new CollectionMetricsHistoryJTable(new MetricsHistoryTableModel(Control.getCollectionMetricsHsitory()));
-		JTable concertMetricsHistoryTable = new JTable(new MetricsHistoryTableModel(Control.getConcertMetricsHsitory()));
+		MetricsHistoryTableModel collectionHistoryTableModel = new MetricsHistoryTableModel(Control.getCollectionMetricsHsitory());
+		MetricsHistoryTableModel concertHistoryTableModel = new MetricsHistoryTableModel(Control.getConcertMetricsHsitory());
+		startReadCollection.addTableModel(collectionHistoryTableModel);
+		startReadCollection.addTableModel(concertHistoryTableModel);
+		startGenerationSite.addTableModel(collectionHistoryTableModel);
+		startGenerationSite.addTableModel(concertHistoryTableModel);
+		
+		JTable collectionMetricsHistoryTable = new CollectionMetricsHistoryJTable(collectionHistoryTableModel);
+		JTable concertMetricsHistoryTable = new JTable(concertHistoryTableModel);
 		
 		JScrollPane collectionHistoryScrollPane = new JScrollPane(collectionMetricsHistoryTable);
 		JScrollPane concertHistoryScrollPane = new JScrollPane(concertMetricsHistoryTable);

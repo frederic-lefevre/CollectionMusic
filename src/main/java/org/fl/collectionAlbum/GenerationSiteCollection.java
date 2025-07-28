@@ -31,6 +31,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.SwingWorker;
+import javax.swing.table.AbstractTableModel;
 
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.albums.ListeAlbum;
@@ -65,6 +66,7 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 	
 	private CollectionAlbumContainer collectionAlbumContainer;
 	private final ProgressInformationPanel progressPanel;
+	private final List<AbstractTableModel> tableModels;
 
 	// Information prefix
 	private final static String ARRET = "Arreté";
@@ -79,7 +81,9 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 	// Status
 	private final static String GENERATION = "En cours de génération";
 
-	public GenerationSiteCollection(ProgressInformationPanel pip) {
+	public GenerationSiteCollection(List<AbstractTableModel> tableModels, ProgressInformationPanel pip) {
+		
+		this.tableModels = tableModels;
 		progressPanel = pip;
 	}
 
@@ -293,6 +297,7 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 	public void done() {
 
 		progressPanel.setProgressInformation(new ProgressInformation(FIN_GENERATION, ARRET, ""));
+		tableModels.forEach(AbstractTableModel::fireTableDataChanged);
 	}
 
 	@Override
