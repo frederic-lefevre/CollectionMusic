@@ -58,8 +58,14 @@ public class RapportListeArtistesConcert extends RapportHtml {
 
 		for (Artiste unArtiste : auteurs.getArtistes()) {
 			write("  <tr>\n    <td class=\"auteur\">");
-			if (balises != null) {
-				balises.addCheckBaliseString(rBuilder, unArtiste.getNom());
+			if (balises != null) {				
+				if (balises.getBalisesType() == Balises.BalisesType.ALPHA) {
+					balises.addCheckBaliseString(rBuilder, unArtiste.getNom());
+				} else if (balises.getBalisesType() == Balises.BalisesType.TEMPORAL) {
+					balises.addCheckBaliseTemporal(rBuilder, unArtiste.getNaissance());
+				} else {
+					rapportLog.severe("Inappropriate Balises Type: " + balises.getBalisesType());
+				}
 			}
 
 			URI concertUri = RapportStructuresAndNames.getArtisteConcertRapportRelativeUri(unArtiste);
