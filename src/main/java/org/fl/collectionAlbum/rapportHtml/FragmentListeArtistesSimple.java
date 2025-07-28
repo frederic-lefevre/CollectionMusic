@@ -26,11 +26,14 @@ package org.fl.collectionAlbum.rapportHtml;
 
 import java.net.URI;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.artistes.Artiste;
 
 public class FragmentListeArtistesSimple {
 
+	private static final Logger albumLog = Logger.getLogger(FragmentListeArtistesSimple.class.getName());
+	
 	public static void buildTable(List<Artiste> auteurs, StringBuilder fragment) {
 
 		fragment.append("<table>\n");
@@ -38,15 +41,16 @@ public class FragmentListeArtistesSimple {
 			fragment.append("  <tr>\n    <td class=\"auteur\">");
 			fragment.append("<a href=\"");
 
-			URI albumUri = RapportStructuresAndNames.getArtisteAlbumRapportRelativeUri(unArtiste);
-			if (albumUri != null) {
-				fragment.append(albumUri.toString());
+			URI artisteUri;
+			if (unArtiste.getNbAlbum() > 0) {
+				artisteUri = RapportStructuresAndNames.getArtisteAlbumRapportRelativeUri(unArtiste);
+			} else if (unArtiste.getNbConcert() > 0) {
+				artisteUri = RapportStructuresAndNames.getArtisteConcertRapportRelativeUri(unArtiste);
 			} else {
-				URI concertUri = RapportStructuresAndNames.getArtisteConcertRapportRelativeUri(unArtiste);
-				if (concertUri != null) {
-					fragment.append(concertUri.toString());
-				}
+				albumLog.severe("Un artiste n'a ni album, ni concert: " + unArtiste.getNomComplet());
+				artisteUri = URI.create("");
 			}
+			fragment.append(artisteUri.toString());
 
 			fragment.append("\">").append(unArtiste.getPrenoms()).append(" ").append(unArtiste.getNom())
 					.append("</a></td>\n");
