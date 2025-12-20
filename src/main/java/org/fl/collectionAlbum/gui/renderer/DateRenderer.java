@@ -26,11 +26,11 @@ package org.fl.collectionAlbum.gui.renderer;
 
 import java.awt.Font;
 import java.time.temporal.TemporalAccessor;
+import java.util.function.Function;
 import java.util.logging.Logger;
 
 import javax.swing.SwingConstants;
 
-import org.fl.collectionAlbum.utils.TemporalUtils;
 import org.fl.util.swing.CustomTableCellRenderer;
 
 public class DateRenderer  extends CustomTableCellRenderer {
@@ -41,15 +41,18 @@ public class DateRenderer  extends CustomTableCellRenderer {
 	
 	private static final Font font = new Font("Dialog", Font.PLAIN, 12);
 	
-	public DateRenderer() {
+	private final Function<TemporalAccessor, String> dateFormatter;
+	
+	public DateRenderer(Function<TemporalAccessor, String> dateFormatter) {
 		super(font, SwingConstants.LEFT);
+		this.dateFormatter = dateFormatter;
 	}
 
 	@Override
 	public void valueProcessor(Object value) {
 		
 		if (TemporalAccessor.class.isAssignableFrom(value.getClass())) {
-			setText(TemporalUtils.formatDate((TemporalAccessor)value));
+			setText(dateFormatter.apply((TemporalAccessor)value));
 		} else {
 			logger.severe("Invalid value type in Date cell. Should be assignable to TemporalAccessor but is " + value.getClass().getName());
 		}

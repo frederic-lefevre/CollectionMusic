@@ -24,6 +24,8 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui;
 
+import java.time.temporal.TemporalAccessor;
+import java.util.function.Function;
 import java.util.logging.Logger;
 
 import javax.swing.DefaultListSelectionModel;
@@ -37,7 +39,9 @@ import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
 import org.fl.collectionAlbum.disocgs.FormatCompatibilityResult;
 import org.fl.collectionAlbum.gui.adapter.DiscogsInventoryMouseAdapter;
 import org.fl.collectionAlbum.gui.renderer.CollectionBooleanRenderer;
+import org.fl.collectionAlbum.gui.renderer.DateRenderer;
 import org.fl.collectionAlbum.gui.renderer.FormatCompatibilityRenderer;
+import org.fl.collectionAlbum.utils.TemporalUtils;
 
 public class DiscogsReleaseJTable extends JTable {
 
@@ -45,21 +49,26 @@ public class DiscogsReleaseJTable extends JTable {
 
 	private static final Logger tLog = Logger.getLogger(DiscogsReleaseJTable.class.getName());
 	
+	private static final Function<TemporalAccessor, String> discogsDateFormatter = t -> TemporalUtils.formatDateNumeric((TemporalAccessor)t);
+	
 	public DiscogsReleaseJTable(DisocgsReleaseTableModel discogsTableModel, CollectionAlbumContainer albumsContainer, GenerationPane generationPane) {
 		super(discogsTableModel);
 		
 		setFillsViewportHeight(true);
 		
+		getColumnModel().getColumn(DisocgsReleaseTableModel.DATE_ADDED_COL_IDX)
+			.setCellRenderer(new DateRenderer(discogsDateFormatter));
 		getColumnModel().getColumn(DisocgsReleaseTableModel.ALBUM_LINK_COL_IDX)
 			.setCellRenderer(new CollectionBooleanRenderer());
 		getColumnModel().getColumn(DisocgsReleaseTableModel.FORMAT_MATCH_COL_IDX)
 			.setCellRenderer(new FormatCompatibilityRenderer());
 		getColumnModel().getColumn(DisocgsReleaseTableModel.ID_COL_IDX).setPreferredWidth(70);
-		getColumnModel().getColumn(DisocgsReleaseTableModel.ARTISTS_COL_IDX).setPreferredWidth(720);
+		getColumnModel().getColumn(DisocgsReleaseTableModel.ARTISTS_COL_IDX).setPreferredWidth(700);
 		getColumnModel().getColumn(DisocgsReleaseTableModel.TITLE_COL_IDX).setPreferredWidth(580);
 		getColumnModel().getColumn(DisocgsReleaseTableModel.FORMAT_COL_IDX).setPreferredWidth(200);
+		getColumnModel().getColumn(DisocgsReleaseTableModel.DATE_ADDED_COL_IDX).setPreferredWidth(90);
 		getColumnModel().getColumn(DisocgsReleaseTableModel.ALBUM_LINK_COL_IDX).setPreferredWidth(100);
-		getColumnModel().getColumn(DisocgsReleaseTableModel.FORMAT_MATCH_COL_IDX).setPreferredWidth(100);
+		getColumnModel().getColumn(DisocgsReleaseTableModel.FORMAT_MATCH_COL_IDX).setPreferredWidth(80);
 		
 		// Allow single row selection only
 		ListSelectionModel listSelectionModel = new DefaultListSelectionModel();
