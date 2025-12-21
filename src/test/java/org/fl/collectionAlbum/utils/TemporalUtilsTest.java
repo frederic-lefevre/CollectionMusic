@@ -82,4 +82,18 @@ class TemporalUtilsTest {
 		String dRes1 = TemporalUtils.formatDate(ta1);
 		assertThat(dRes1).isEqualTo("janvier 2016");
 	}
+	
+	@Test
+	void test5() {
+		
+		String d1 = "2019-06-16";
+		TemporalAccessor ta1 = TemporalUtils.parseDate(d1);
+		
+		assertThat(ta1.get(ChronoField.DAY_OF_MONTH)).isEqualTo(16);
+		assertThat(ta1.get(ChronoField.MONTH_OF_YEAR)).isEqualTo(6);
+		assertThat(ta1.get(ChronoField.YEAR)).isEqualTo(2019);
+		
+		String dRes1 = TemporalUtils.formatDateNumeric(ta1);
+		assertThat(dRes1).isEqualTo("16-06-2019");
+	}
 }

@@ -41,10 +41,12 @@ public class TemporalUtils {
    	// Pattern pour les dates (parse et format)
    	private static final String datePatternParse  = "uuuu[-MM[-dd]]";  	
    	private static final String datePatternFormat = "[[dd ]MMMM] uuuu";
+   	private static final String numericDatePatternFormat = "[[dd-]MM-]uuuu";
    	private static final String yearPatternFormat = "uuuu";
    	
    	private static final DateTimeFormatter dateTimeParser    = DateTimeFormatter.ofPattern(datePatternParse,  Locale.FRANCE).withResolverStyle(ResolverStyle.STRICT);
    	private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(datePatternFormat, Locale.FRANCE).withResolverStyle(ResolverStyle.STRICT);
+   	private static final DateTimeFormatter numericDateTimeFormatter = DateTimeFormatter.ofPattern(numericDatePatternFormat, Locale.FRANCE).withResolverStyle(ResolverStyle.STRICT);
    	private static final DateTimeFormatter yearTimeFormatter = DateTimeFormatter.ofPattern(yearPatternFormat, Locale.FRANCE).withResolverStyle(ResolverStyle.STRICT);
 
 	// Parse a date and try to return a LocalDate first, if not possible a YearMonth, if not possible a Year
@@ -58,22 +60,25 @@ public class TemporalUtils {
     }
     
     public static String formatDate(TemporalAccessor d) {
-    	
-       	if (d == null) {
-    		return "";
-       	} else {
-    		return dateTimeFormatter.format(d);
-    	}	
+    	return formatDate(dateTimeFormatter, d);
+    }
+    
+    public static String formatDateNumeric(TemporalAccessor d) {
+    	return formatDate(numericDateTimeFormatter, d);	
     }
     
    public static String formatYear(TemporalAccessor d) {
-    	
-       	if (d == null) {
-    		return "";
-       	} else {
-    		return yearTimeFormatter.format(d);
-    	}	
+	   return formatDate(yearTimeFormatter, d);
     }
+   
+   private static String formatDate(DateTimeFormatter dateFormatter, TemporalAccessor d) {
+
+		if (d == null) {
+			return "";
+		} else {
+			return dateFormatter.format(d);
+		}
+	}
    
    public static class TemporalAccessorComparator implements Comparator<TemporalAccessor> {
 

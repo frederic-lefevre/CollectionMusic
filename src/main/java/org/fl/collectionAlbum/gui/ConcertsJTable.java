@@ -24,6 +24,8 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui;
 
+import java.time.temporal.TemporalAccessor;
+import java.util.function.Function;
 import java.util.logging.Logger;
 
 import javax.swing.DefaultListSelectionModel;
@@ -45,6 +47,8 @@ public class ConcertsJTable extends JTable implements MusicArtefactTable<Concert
 
 	private static final Logger logger = Logger.getLogger(ConcertsJTable.class.getName());
 	
+	private static final Function<TemporalAccessor, String> concertDateFormatter = t -> TemporalUtils.formatDate((TemporalAccessor)t);
+	
 	public ConcertsJTable(ConcertTableModel concertTableModel) {
 		
 		super(concertTableModel);
@@ -53,7 +57,7 @@ public class ConcertsJTable extends JTable implements MusicArtefactTable<Concert
 		
 		setRowHeight(50);
 		
-		getColumnModel().getColumn(ConcertTableModel.DATE_COL_IDX).setCellRenderer(new DateRenderer());
+		getColumnModel().getColumn(ConcertTableModel.DATE_COL_IDX).setCellRenderer(new DateRenderer(concertDateFormatter));
 		getColumnModel().getColumn(ConcertTableModel.ARTISTE_COL_IDX).setCellRenderer(new AuteursRenderer());
 		
 		getColumnModel().getColumn(ConcertTableModel.DATE_COL_IDX).setPreferredWidth(200);
