@@ -97,7 +97,7 @@ public class Control {
 		
 		try {
 			// access to properties and logger
-			musicRunningContext = new RunningContext("org.fl.collectionAlbum", new URI(propertyFile));
+			musicRunningContext = new RunningContext("org.fl.collectionAlbum", propertyFile);
 			
 			musicRunningContext.addBuildInformation("org.fl.discogsInterface", org.fl.discogsInterface.inventory.Inventory.class.getClassLoader());
 		
