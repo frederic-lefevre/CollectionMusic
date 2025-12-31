@@ -60,7 +60,7 @@ public class CollectionAlbumGui extends JFrame {
 		});
 	}
 		
-	public CollectionAlbumGui() {
+	private CollectionAlbumGui() {
    		
    		// init main window
    		setBounds(20, 20, WINDOW_WIDTH, WINDOW_HEIGHT);
