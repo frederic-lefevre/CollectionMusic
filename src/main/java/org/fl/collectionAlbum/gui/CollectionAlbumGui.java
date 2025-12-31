@@ -46,8 +46,6 @@ public class CollectionAlbumGui extends JFrame {
 
 	public static void main(String[] args) {
 		
-		Control.initialize(DEFAULT_PROP_FILE);
-		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -60,7 +58,7 @@ public class CollectionAlbumGui extends JFrame {
 		});
 	}
 		
-	public CollectionAlbumGui() {
+	private CollectionAlbumGui() {
    		
    		// init main window
    		setBounds(20, 20, WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -69,12 +67,15 @@ public class CollectionAlbumGui extends JFrame {
 		
 		ApplicationTabbedPane collectionTabs = new ApplicationTabbedPane(Control.getMusicRunningContext());
 		
-		// init panel de lecture et génération de site
-		GenerationPane gPane   = new GenerationPane();
+		try {
+			// init panel de lecture et génération de site
+			collectionTabs.add(new GenerationPane(), "Analyse et génération des rapports de la collection", 0);
+
+			collectionTabs.setSelectedIndex(0);
+		} catch (Exception e) {
+			logger.log(Level.SEVERE, "Exception in application startup", e);
+		}
 		
-		collectionTabs.add(gPane, "Analyse et génération des rapports de la collection", 0);
-		
-		collectionTabs.setSelectedIndex(0);
 		getContentPane().add(collectionTabs);		
 	}
 
