@@ -94,11 +94,11 @@ public class Control {
 	}
 	
 	private Control(String propertyFile) {
+
+		musicRunningContext = new RunningContext("org.fl.collectionAlbum", propertyFile);
 		
 		try {
-			// access to properties and logger
-			musicRunningContext = new RunningContext("org.fl.collectionAlbum", propertyFile);
-			
+
 			musicRunningContext.addBuildInformation("org.fl.discogsInterface", org.fl.discogsInterface.inventory.Inventory.class.getClassLoader());
 		
 			collectionProperties = musicRunningContext.getProps();
@@ -190,7 +190,6 @@ public class Control {
 						
 		} catch (Exception e) {
 			albumLog.log(Level.SEVERE, "Exception during inintialisation, property file="  + propertyFile, e);
-			collectionProperties = null;
 		}
 	}
 	
