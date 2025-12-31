@@ -212,13 +212,6 @@ public class Control {
 		return controlInstance;
 	}
 	
-	public static Control initialize(String propertyFile) {
-		if (controlInstance == null) {
-			controlInstance = new Control(propertyFile);
-		}
-		return controlInstance;
-	}
-	
 	public static String getMusicfileExtension() {
 		return MUSIC_FILE_EXTENSION;
 	}

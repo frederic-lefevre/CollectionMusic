@@ -46,8 +46,6 @@ public class CollectionAlbumGui extends JFrame {
 
 	public static void main(String[] args) {
 		
-		Control.initialize(DEFAULT_PROP_FILE);
-		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
