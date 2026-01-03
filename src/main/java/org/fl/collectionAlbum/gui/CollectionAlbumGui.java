@@ -30,7 +30,7 @@ import java.util.logging.Logger;
 
 import javax.swing.JFrame;
 
-import org.fl.collectionAlbum.Control;
+import org.fl.util.RunningContext;
 import org.fl.util.swing.ApplicationTabbedPane;
 
 public class CollectionAlbumGui extends JFrame {
@@ -44,8 +44,12 @@ public class CollectionAlbumGui extends JFrame {
 	
 	private static final long serialVersionUID = 8726429353709418534L;
 
+	private static RunningContext musicRunningContext;
+	
 	public static void main(String[] args) {
 		
+		getRunningContext();
+				
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -65,7 +69,7 @@ public class CollectionAlbumGui extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("Collection d'albums") ;
 		
-		ApplicationTabbedPane collectionTabs = new ApplicationTabbedPane(Control.getMusicRunningContext());
+		ApplicationTabbedPane collectionTabs = new ApplicationTabbedPane(getRunningContext());
 		
 		try {
 			// init panel de lecture et génération de site
@@ -78,8 +82,12 @@ public class CollectionAlbumGui extends JFrame {
 		
 		getContentPane().add(collectionTabs);		
 	}
-
-	public static String getPropertyFile() {
-		return DEFAULT_PROP_FILE;
+	
+	public static RunningContext getRunningContext() {
+		if (musicRunningContext == null) {
+			musicRunningContext = new RunningContext("org.fl.collectionAlbum", DEFAULT_PROP_FILE);
+			musicRunningContext.addBuildInformation("org.fl.discogsInterface", org.fl.discogsInterface.inventory.Inventory.class.getClassLoader());
+		}
+		return musicRunningContext;
 	}
 }

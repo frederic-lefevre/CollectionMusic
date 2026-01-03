@@ -33,6 +33,7 @@ import java.util.AbstractMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -93,16 +94,12 @@ public class Control {
 	private Control() {
 	}
 	
-	private Control(String propertyFile) {
-
-		musicRunningContext = new RunningContext("org.fl.collectionAlbum", propertyFile);
+	private Control(RunningContext musicRunningContext) {
 		
 		try {
-
-			musicRunningContext.addBuildInformation("org.fl.discogsInterface", org.fl.discogsInterface.inventory.Inventory.class.getClassLoader());
 		
-			collectionProperties = musicRunningContext.getProps();
-		    albumLog.fine(() -> "Properties taken from " + musicRunningContext.getPropertiesLocation());
+			this.musicRunningContext = musicRunningContext;
+			this.collectionProperties = musicRunningContext.getProps();
 				
 			// Get CharSet to read music files and write rapport
 		    String cs = collectionProperties.getProperty("rapport.charset", "UTF-8");
@@ -189,7 +186,7 @@ public class Control {
 			cssForGui = collectionProperties.getFileContentFromURI("album.cssForGui", Charset.defaultCharset());
 						
 		} catch (Exception e) {
-			albumLog.log(Level.SEVERE, "Exception during inintialisation, property file="  + propertyFile, e);
+			albumLog.log(Level.SEVERE, "Exception during inintialisation, property file="  + Objects.toString(musicRunningContext.getPropertiesLocation()), e);
 		}
 	}
 	
@@ -206,7 +203,7 @@ public class Control {
 	
 	private static Control getInstance() {
 		if (controlInstance == null) {
-			controlInstance = new Control(CollectionAlbumGui.getPropertyFile());
+			controlInstance = new Control(CollectionAlbumGui.getRunningContext());
 		}
 		return controlInstance;
 	}
