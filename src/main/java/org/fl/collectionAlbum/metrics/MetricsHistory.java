@@ -94,8 +94,10 @@ public abstract class MetricsHistory {
 		return presentMetrics;
 	}
 
-	public void setPresentMetrics(Metrics presentMetrics) {
-		this.presentMetrics = presentMetrics;
+	public void setPresentMetricsIfNew(Metrics presentMetrics) {
+		if (metricsHistory.stream().allMatch(m -> !m.hasSameMetricsAs(presentMetrics))) {
+			this.presentMetrics = presentMetrics;
+		}
 	}
 
 	protected boolean addAndWriteNewMetricsToHistory(Metrics metrics) {

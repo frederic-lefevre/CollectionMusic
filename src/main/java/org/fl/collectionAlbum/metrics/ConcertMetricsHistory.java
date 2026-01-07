@@ -51,12 +51,12 @@ public class ConcertMetricsHistory extends MetricsHistory {
 
 		Metrics presentMetrics = getConcertMetrics(ts, collectionAlbumContainer);
 		addAndWriteNewMetricsToHistory(presentMetrics);
-		setPresentMetrics(null);
+		setPresentMetricsIfNew(null);
 		return presentMetrics;
 	}
 	
 	public void setPresentMetrics(long ts, CollectionAlbumContainer collectionAlbumContainer) {
-		setPresentMetrics(getConcertMetrics(ts, collectionAlbumContainer));
+		setPresentMetricsIfNew(getConcertMetrics(ts, collectionAlbumContainer));
 	}
 	
 	public Metrics getConcertMetrics(long ts, CollectionAlbumContainer collectionAlbumContainer) {	
