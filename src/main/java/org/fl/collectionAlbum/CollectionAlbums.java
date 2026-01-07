@@ -100,7 +100,12 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 		
 		// Sort for display when scanning the collection
 		albumsContainer.getCollectionAlbumsMusiques().sortRangementAlbum();
-				
+			
+		// Set present metrics
+		long now = System.currentTimeMillis();
+		Control.getCollectionMetricsHsitory().setPresentMetricsIfNew(now, albumsContainer);
+		Control.getConcertMetricsHsitory().setPresentMetricsIfNew(now, albumsContainer);
+		
 		return albumsContainer;
 	}
    	
