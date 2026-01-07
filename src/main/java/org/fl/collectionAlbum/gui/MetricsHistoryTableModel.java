@@ -59,7 +59,11 @@ public class MetricsHistoryTableModel extends AbstractTableModel{
 	
 	@Override
 	public int getRowCount() {
-		return metricsHistory.getMetricsHistory().size();
+		if (metricsHistory.getPresentMetrics() == null) {
+			return metricsHistory.getMetricsHistory().size();
+		} else {
+			return metricsHistory.getMetricsHistory().size() + 1;
+		}
 	}
 
 	@Override
@@ -81,7 +85,17 @@ public class MetricsHistoryTableModel extends AbstractTableModel{
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		
-		Metrics metrics = metricsHistory.getMetricsHistory().get(rowIndex);
+		Metrics metrics;
+
+		Metrics presentMetrics = metricsHistory.getPresentMetrics();
+		if (presentMetrics == null) {
+			metrics = metricsHistory.getMetricsHistory().get(rowIndex);
+		} else if (rowIndex > 0) {
+			metrics = metricsHistory.getMetricsHistory().get(rowIndex - 1);
+		} else {
+			metrics = presentMetrics;
+		}
+		
 		if (columnIndex == DATE_COL_IDX) {
 			// First column is Date column
 			return dateTimeFormatter.format(
