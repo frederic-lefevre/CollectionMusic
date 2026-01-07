@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2025 Frederic Lefevre
+Copyright (c) 2017, 2026 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -51,9 +51,11 @@ public abstract class MetricsHistory {
 			
 	private final Path storagePath;
 	private final List<Metrics> metricsHistory;
+	private Metrics presentMetrics;
 	
 	protected MetricsHistory(Path storagePath) throws IOException {
 		
+		presentMetrics = null;
 		if (storagePath == null) {
 			throw new IllegalArgumentException("The metrics history storage path should not be null");
 		} else if (! Files.exists(storagePath)) {
@@ -88,7 +90,15 @@ public abstract class MetricsHistory {
 		}
 	}
 
-	protected boolean addNewMetrics(Metrics metrics) {
+	public Metrics getPresentMetrics() {
+		return presentMetrics;
+	}
+
+	public void setPresentMetrics(Metrics presentMetrics) {
+		this.presentMetrics = presentMetrics;
+	}
+
+	protected boolean addAndWriteNewMetricsToHistory(Metrics metrics) {
 	
 		if (! hasMetricsCompatibleWithMetricNames(metrics)) {
 			

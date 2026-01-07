@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2025 Frederic Lefevre
+Copyright (c) 2017, 2026 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -146,7 +146,7 @@ class MetricsHistoryTest {
 		assertThat(metricsHistory.getMetricsHistory()).isEmpty();
 		assertThat(historyPath1).isEmptyDirectory();
 		
-		metricsHistory.addNewMetrics(new Metrics(now, Map.of("albums", 10.0, "Artiste", 5.0)));
+		metricsHistory.addAndWriteNewMetricsToHistory(new Metrics(now, Map.of("albums", 10.0, "Artiste", 5.0)));
 		
 		assertThat(historyPath1).isNotEmptyDirectory();
 		assertThat(metricsHistory.getMetricsHistory()).singleElement()
@@ -166,8 +166,8 @@ class MetricsHistoryTest {
 		
 		MetricsHistory metricsHistory = new TestMetricsHistory(historyPath2);
 		
-		metricsHistory.addNewMetrics(todayMetrics);
-		metricsHistory.addNewMetrics(yesterdayMetrics);
+		metricsHistory.addAndWriteNewMetricsToHistory(todayMetrics);
+		metricsHistory.addAndWriteNewMetricsToHistory(yesterdayMetrics);
 		
 		assertThat(metricsHistory.getMetricsHistory()).hasSize(2)
 			.satisfiesExactly(
@@ -191,10 +191,10 @@ class MetricsHistoryTest {
 		
 		MetricsHistory metricsHistory = new TestMetricsHistory(historyPath3);
 		
-		metricsHistory.addNewMetrics(twoDaysAgoMetrics);
-		metricsHistory.addNewMetrics(yesterdayMetrics);
-		metricsHistory.addNewMetrics(todayMetrics);
-		metricsHistory.addNewMetrics(todayMetrics2);
+		metricsHistory.addAndWriteNewMetricsToHistory(twoDaysAgoMetrics);
+		metricsHistory.addAndWriteNewMetricsToHistory(yesterdayMetrics);
+		metricsHistory.addAndWriteNewMetricsToHistory(todayMetrics);
+		metricsHistory.addAndWriteNewMetricsToHistory(todayMetrics2);
 		
 		assertThat(metricsHistory.getMetricsHistory()).hasSize(2)
 			.satisfiesExactly(
@@ -218,7 +218,7 @@ class MetricsHistoryTest {
 		LogRecordCounter filterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.metrics.MetricsHistory"));
 		
 		assertThatIllegalArgumentException()
-			.isThrownBy(() -> metricsHistory.addNewMetrics(todayMetrics))
+			.isThrownBy(() -> metricsHistory.addAndWriteNewMetricsToHistory(todayMetrics))
 			.withMessageContaining("Adding a incompatible metrics to metricsHistory");
 		
 		assertThat(filterCounter.getLogRecordCount()).isEqualTo(1);
@@ -234,12 +234,12 @@ class MetricsHistoryTest {
 		Metrics todayMetrics = new Metrics(now, Map.of("albums", 10.0, "Auteurs", 5.0));
 		
 		MetricsHistory metricsHistory = new TestMetricsHistory(historyPath5);
-		metricsHistory.addNewMetrics(yesterdayMetrics);
+		metricsHistory.addAndWriteNewMetricsToHistory(yesterdayMetrics);
 		
 		LogRecordCounter filterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.metrics.MetricsHistory"));
 		
 		assertThatIllegalArgumentException()
-			.isThrownBy(() -> metricsHistory.addNewMetrics(todayMetrics))
+			.isThrownBy(() -> metricsHistory.addAndWriteNewMetricsToHistory(todayMetrics))
 			.withMessageContaining("Adding a incompatible metrics to metricsHistory");
 		
 		assertThat(filterCounter.getLogRecordCount()).isEqualTo(1);
@@ -258,7 +258,7 @@ class MetricsHistoryTest {
 		LogRecordCounter filterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.metrics.MetricsHistory"));
 		
 		assertThatIllegalArgumentException()
-			.isThrownBy(() -> metricsHistory.addNewMetrics(todayMetrics))
+			.isThrownBy(() -> metricsHistory.addAndWriteNewMetricsToHistory(todayMetrics))
 			.withMessageContaining("Adding a incompatible metrics to metricsHistory");
 		
 		assertThat(filterCounter.getLogRecordCount()).isEqualTo(1);

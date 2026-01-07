@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2025 Frederic Lefevre
+Copyright (c) 2017, 2026 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -50,9 +50,13 @@ public class ConcertMetricsHistory extends MetricsHistory {
 	public Metrics addPresentConcertMetricsToHistory(long ts, CollectionAlbumContainer collectionAlbumContainer) {	
 
 		Metrics presentMetrics = getConcertMetrics(ts, collectionAlbumContainer);
-		addNewMetrics(presentMetrics);
-		
+		addAndWriteNewMetricsToHistory(presentMetrics);
+		setPresentMetrics(null);
 		return presentMetrics;
+	}
+	
+	public void setPresentMetrics(long ts, CollectionAlbumContainer collectionAlbumContainer) {
+		setPresentMetrics(getConcertMetrics(ts, collectionAlbumContainer));
 	}
 	
 	public Metrics getConcertMetrics(long ts, CollectionAlbumContainer collectionAlbumContainer) {	

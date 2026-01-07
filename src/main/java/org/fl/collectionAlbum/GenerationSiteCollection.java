@@ -60,7 +60,7 @@ import org.fl.util.file.FilesUtils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-public class GenerationSiteCollection  extends SwingWorker<String,ProgressInformation> {
+public class GenerationSiteCollection extends SwingWorker<String,ProgressInformation> {
 
 	private final static Logger albumLog = Logger.getLogger(GenerationSiteCollection.class.getName());
 	
