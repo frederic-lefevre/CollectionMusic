@@ -60,7 +60,7 @@ public class CollectionMetricsHistory extends MetricsHistory {
 		return presentMetrics;
 	}
 	
-	public void setPresentMetrics(long ts, CollectionAlbumContainer collectionAlbumContainer) {
+	public void setPresentMetricsIfNew(long ts, CollectionAlbumContainer collectionAlbumContainer) {
 		setPresentMetricsIfNew(getCollectionMetrics(ts, collectionAlbumContainer));
 	}
 	

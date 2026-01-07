@@ -55,7 +55,7 @@ public class ConcertMetricsHistory extends MetricsHistory {
 		return presentMetrics;
 	}
 	
-	public void setPresentMetrics(long ts, CollectionAlbumContainer collectionAlbumContainer) {
+	public void setPresentMetricsIfNew(long ts, CollectionAlbumContainer collectionAlbumContainer) {
 		setPresentMetricsIfNew(getConcertMetrics(ts, collectionAlbumContainer));
 	}
 	
