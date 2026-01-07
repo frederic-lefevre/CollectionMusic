@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.fl</groupId>
 	<artifactId>collection-music</artifactId>
-	<version>9.8.3</version>
+	<version>9.9.0</version>
 
 	<dependencyManagement>
 		<dependencies>
