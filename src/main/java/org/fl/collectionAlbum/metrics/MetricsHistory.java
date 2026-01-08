@@ -123,6 +123,12 @@ public abstract class MetricsHistory {
 		}
 	}
 	
+	protected Metrics addPresentMetricsToHistory(Metrics metrics) {
+		addAndWriteNewMetricsToHistory(presentMetrics);
+		setPresentMetricsIfNew(null);
+		return metrics;
+	}
+	
 	private boolean hasMetricsCompatibleWithMetricNames(Metrics metrics) {
 		return ((metrics.getMetrics().size() == getMetricsNamesMap().size()) &&
 				metrics.getMetrics().keySet().stream().allMatch(key -> getMetricsNamesMap().containsKey(key)));

@@ -53,11 +53,7 @@ public class CollectionMetricsHistory extends MetricsHistory {
 	}
 	
 	public Metrics addPresentCollectionMetricsToHistory(long ts, CollectionAlbumContainer collectionAlbumContainer) {
-	
-		Metrics presentMetrics = getCollectionMetrics(ts, collectionAlbumContainer);
-		addAndWriteNewMetricsToHistory(presentMetrics);
-		setPresentMetricsIfNew(null);
-		return presentMetrics;
+		return addPresentMetricsToHistory(getCollectionMetrics(ts, collectionAlbumContainer));
 	}
 	
 	public void setPresentMetricsIfNew(long ts, CollectionAlbumContainer collectionAlbumContainer) {
