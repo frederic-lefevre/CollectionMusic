@@ -69,6 +69,7 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 	private static final String LECTURE_CONCERT = "Lecture des concerts";
 	private static final String CALENDARS = "Construction des calendriers";
 	private static final String FIN_LECTURE = "Collection chargée";
+	private static final String FIN_LECTURE_EN_EVOLUTION = FIN_LECTURE + " et en évolution";
 	
 	public CollectionAlbums(List<AbstractTableModel> tableModels, ProgressInformationPanel pip) {
 
@@ -205,7 +206,16 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
     @Override
     public void done() {
 
-    	progressPanel.setProgressInformation(new ProgressInformation(FIN_LECTURE, ARRET, ""));
+    	boolean hasEvolved = Control.getCollectionMetricsHsitory().hasEvolded() || Control.getConcertMetricsHsitory().hasEvolded();
+    	
+    	String status;
+    	if (hasEvolved) {
+    		status = FIN_LECTURE_EN_EVOLUTION;
+    	} else {
+    		status = FIN_LECTURE;
+    	}
+    	
+    	progressPanel.setProgressInformation(new ProgressInformation(status, ARRET, ""));
     	tableModels.forEach(AbstractTableModel::fireTableDataChanged);
     }
 
