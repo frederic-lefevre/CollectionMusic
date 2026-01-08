@@ -37,7 +37,7 @@ import org.fl.collectionAlbum.format.Format;
 import org.fl.collectionAlbum.metrics.Metrics;
 import org.fl.collectionAlbum.metrics.MetricsHistory;
 
-public class MetricsHistoryTableModel extends AbstractTableModel{
+public class MetricsHistoryTableModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 1L;
 	

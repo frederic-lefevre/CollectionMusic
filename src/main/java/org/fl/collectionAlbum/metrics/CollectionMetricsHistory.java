@@ -38,6 +38,8 @@ import org.fl.collectionAlbum.format.MediaSupportCategories;
 
 public class CollectionMetricsHistory extends MetricsHistory {
 
+	private static final String METRIC_NAME = "Evolution des albums";
+	
 	private static final String TOTAL = "totalPhysique";
 	private static final String NB_ARTISTE = "nombreArtiste";
 	private static final String NB_ALBUM = "nombreAlbum";
@@ -80,7 +82,7 @@ public class CollectionMetricsHistory extends MetricsHistory {
 	}
 	
 	private CollectionMetricsHistory(Path storagePath) throws IOException {
-		super(storagePath);
+		super(storagePath, METRIC_NAME);
 	}
 
 	@Override

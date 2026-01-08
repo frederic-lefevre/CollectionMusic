@@ -50,11 +50,13 @@ public abstract class MetricsHistory {
 	private final static Logger mLog = Logger.getLogger(MetricsHistory.class.getName());
 			
 	private final Path storagePath;
+	private final String name;
 	private final List<Metrics> metricsHistory;
 	private Metrics presentMetrics;
 	
-	protected MetricsHistory(Path storagePath) throws IOException {
+	protected MetricsHistory(Path storagePath, String name) throws IOException {
 		
+		this.name = name;
 		presentMetrics = null;
 		if (storagePath == null) {
 			throw new IllegalArgumentException("The metrics history storage path should not be null");
@@ -90,6 +92,10 @@ public abstract class MetricsHistory {
 		}
 	}
 
+	public String getName() {
+		return name;
+	}
+	
 	public Metrics getPresentMetrics() {
 		return presentMetrics;
 	}

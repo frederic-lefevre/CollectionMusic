@@ -33,6 +33,8 @@ import org.fl.collectionAlbum.CollectionAlbumContainer;
 
 public class ConcertMetricsHistory extends MetricsHistory {
 
+	private static final String METRIC_NAME = "Evolution des concerts";
+	
 	private static final String NB_ARTISTE = "nombreArtiste";
 	private static final String NB_CONCERT = "nombreConcert";
 	
@@ -63,7 +65,7 @@ public class ConcertMetricsHistory extends MetricsHistory {
 	}
 	
 	private ConcertMetricsHistory(Path storagePath) throws IOException {
-		super(storagePath);
+		super(storagePath, METRIC_NAME);
 	}
 
 	@Override

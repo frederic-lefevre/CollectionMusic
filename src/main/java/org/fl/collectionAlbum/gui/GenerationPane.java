@@ -32,7 +32,6 @@ import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
-import javax.swing.JTable;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.Control;
@@ -139,23 +138,12 @@ public class GenerationPane extends JPanel {
 		collectionTabPanes.add(concertsScrollPane, "Concerts");
 		
 		// Collection metrics history
-		JTabbedPane collectionMetricsTabPanes = new JTabbedPane();
-		
-		MetricsHistoryTableModel collectionHistoryTableModel = new MetricsHistoryTableModel(Control.getCollectionMetricsHsitory());
-		MetricsHistoryTableModel concertHistoryTableModel = new MetricsHistoryTableModel(Control.getConcertMetricsHsitory());
-		startReadCollection.addTableModel(collectionHistoryTableModel);
-		startReadCollection.addTableModel(concertHistoryTableModel);
-		startGenerationSite.addTableModel(collectionHistoryTableModel);
-		startGenerationSite.addTableModel(concertHistoryTableModel);
-		
-		JTable collectionMetricsHistoryTable = new CollectionMetricsHistoryJTable(collectionHistoryTableModel);
-		JTable concertMetricsHistoryTable = new JTable(concertHistoryTableModel);
-		
-		JScrollPane collectionHistoryScrollPane = new JScrollPane(collectionMetricsHistoryTable);
-		JScrollPane concertHistoryScrollPane = new JScrollPane(concertMetricsHistoryTable);
-		
-		collectionMetricsTabPanes.add(collectionHistoryScrollPane, "Evolution des albums");
-		collectionMetricsTabPanes.add(concertHistoryScrollPane, "Evolution des concerts");
+		CollectionMetricsTabbedPane collectionMetricsTabPanes = new CollectionMetricsTabbedPane(List.of(Control.getCollectionMetricsHsitory(), Control.getConcertMetricsHsitory()));
+
+		collectionMetricsTabPanes.getTableModels().forEach(tableModel -> {
+			startReadCollection.addTableModel(tableModel);
+			startGenerationSite.addTableModel(tableModel);
+		});
 		
 		collectionTabPanes.add(collectionMetricsTabPanes, "Evolution de la collection");
 		

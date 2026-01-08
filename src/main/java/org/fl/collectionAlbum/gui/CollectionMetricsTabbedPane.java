@@ -24,19 +24,37 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 
-public class CollectionMetricsHistoryJTable extends JTable {
+import org.fl.collectionAlbum.metrics.MetricsHistory;
+
+public class CollectionMetricsTabbedPane extends JTabbedPane {
 
 	private static final long serialVersionUID = 1L;
+
+	private final List<MetricsHistoryTableModel> metricsHistoryTableModelList;
 	
-	private static final int TOTAL_COL_IDX = 1;
+	public CollectionMetricsTabbedPane(List<MetricsHistory> metricsHistoryList) {
+		super();
+
+		this.metricsHistoryTableModelList = new ArrayList<>();
+		
+		for (MetricsHistory metricHistory : metricsHistoryList) {
+			MetricsHistoryTableModel metricHistoryTableModel = new MetricsHistoryTableModel(metricHistory);
+			metricsHistoryTableModelList.add(metricHistoryTableModel);
+			JTable metricsHistoryTable = new JTable(metricHistoryTableModel);
+			metricsHistoryTable.getColumnModel().getColumn(MetricsHistoryTableModel.DATE_COL_IDX).setPreferredWidth(200);
+			JScrollPane metricHistoryScrollPane = new JScrollPane(metricsHistoryTable);
+			add(metricHistoryScrollPane, metricHistory.getName());
+		}
+	}
 	
-	public CollectionMetricsHistoryJTable(MetricsHistoryTableModel metricsHistoryTableModel) {
-		
-		super(metricsHistoryTableModel);
-		
-		getColumnModel().getColumn(MetricsHistoryTableModel.DATE_COL_IDX).setPreferredWidth(200);
-		getColumnModel().getColumn(TOTAL_COL_IDX).setPreferredWidth(250);
+	public List<MetricsHistoryTableModel> getTableModels() {
+		return metricsHistoryTableModelList;
 	}
 }

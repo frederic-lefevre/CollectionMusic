@@ -43,7 +43,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class MetricsHistoryTest {
-
+	
 	private final static Logger mLog = Logger.getLogger(MetricsHistoryTest.class.getName());
 	
 	private static Path historyFolderBase;
@@ -66,8 +66,10 @@ class MetricsHistoryTest {
 	
 	private static class TestMetricsHistory extends MetricsHistory {
 
+		protected static final String METRIC_NAME = "Metric name for test";
+		
 		protected TestMetricsHistory(Path storagePath) throws IOException {
-			super(storagePath);
+			super(storagePath, METRIC_NAME);
 		}
 
 		@Override
@@ -165,6 +167,7 @@ class MetricsHistoryTest {
 		Metrics yesterdayMetrics = new Metrics(yesterday, Map.of("albums", 8.0, "Artiste", 5.0));
 		
 		MetricsHistory metricsHistory = new TestMetricsHistory(historyPath2);
+		assertThat(metricsHistory.getName()).isEqualTo(TestMetricsHistory.METRIC_NAME);
 		
 		metricsHistory.addAndWriteNewMetricsToHistory(todayMetrics);
 		metricsHistory.addAndWriteNewMetricsToHistory(yesterdayMetrics);
