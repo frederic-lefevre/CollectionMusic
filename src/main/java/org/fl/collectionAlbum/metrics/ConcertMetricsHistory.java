@@ -69,13 +69,9 @@ public class ConcertMetricsHistory extends MetricsHistory {
 	}
 
 	@Override
-	public Map<String, String> getMetricsNamesMap() {
-
-		return Map.of(NB_ARTISTE, "Nombre d'artistes", NB_CONCERT, "Nombre de concerts");
-	}
-
-	@Override
-	public List<String> getMetricsKeys() {
-		return List.of(NB_CONCERT, NB_ARTISTE);
+	public MetricAttributesList getMetricsAttributes() {
+		return new MetricAttributesList(List.of(
+				new MetricAttributes(NB_CONCERT, "Nombre de concerts", 300), 
+				new MetricAttributes(NB_ARTISTE, "Nombre d'artistes", 300)));
 	}
 }

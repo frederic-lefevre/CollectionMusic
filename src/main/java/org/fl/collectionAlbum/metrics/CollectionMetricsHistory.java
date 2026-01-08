@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
@@ -86,27 +85,15 @@ public class CollectionMetricsHistory extends MetricsHistory {
 	}
 
 	@Override
-	public Map<String, String> getMetricsNamesMap() {
+	public MetricAttributesList getMetricsAttributes() {
 		
-		Map<String, String> metricsNamesMap = Stream.of(MediaSupportCategories.values())
-			.collect(Collectors.toMap(MediaSupportCategories::getId, MediaSupportCategories::getNom));
-		metricsNamesMap.put(TOTAL, "Nombre total d'unités physiques");
-		metricsNamesMap.put(NB_ARTISTE, "Nombre d'artistes");
-		metricsNamesMap.put(NB_ALBUM, "Nombre d'albums");
-		
-		return metricsNamesMap;
-	}
+		List<MetricAttributes> metricsAttributes = new ArrayList<>();
+		metricsAttributes.add(new MetricAttributes(TOTAL, "Unités physiques totales", 400));
+		metricsAttributes.add(new MetricAttributes(NB_ALBUM, "Nombre d'artistes", 200));
+		metricsAttributes.add(new MetricAttributes(NB_ARTISTE, "Nombre d'albums", 200));
+		metricsAttributes.addAll(
+				Stream.of(MediaSupportCategories.values()).map(msc -> new MetricAttributes(msc.getId(), msc.getNom(), 50)).toList());
+		return new MetricAttributesList(metricsAttributes);
+	}	
 
-	@Override
-	public List<String> getMetricsKeys() {
-		
-		List<String> metricKeys = new ArrayList<>();
-		metricKeys.add(TOTAL);
-		metricKeys.add(NB_ALBUM);
-		metricKeys.add(NB_ARTISTE);
-		metricKeys.addAll(Stream.of(MediaSupportCategories.values()).map(MediaSupportCategories::getId).toList());
-		return metricKeys;
-	}
-	
-	
 }

@@ -28,7 +28,6 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.Locale;
 
 import javax.swing.table.AbstractTableModel;
@@ -36,6 +35,7 @@ import javax.swing.table.AbstractTableModel;
 import org.fl.collectionAlbum.format.Format;
 import org.fl.collectionAlbum.metrics.Metrics;
 import org.fl.collectionAlbum.metrics.MetricsHistory;
+import org.fl.collectionAlbum.metrics.MetricsHistory.MetricAttributesList;
 
 public class MetricsHistoryTableModel extends AbstractTableModel {
 
@@ -49,12 +49,12 @@ public class MetricsHistoryTableModel extends AbstractTableModel {
 	private static final String DATE_COLUMN_HEADER = "Date";
 	
 	private final MetricsHistory metricsHistory;
-	private final List<String> metricsKeyList;
+	private final MetricAttributesList metricsKeysAttributes;
 	
 	public MetricsHistoryTableModel(MetricsHistory metricsHistory) {
 		super();
 		this.metricsHistory = metricsHistory;
-		metricsKeyList = metricsHistory.getMetricsKeys();
+		metricsKeysAttributes = metricsHistory.getMetricsAttributes();
 	}
 	
 	@Override
@@ -68,7 +68,7 @@ public class MetricsHistoryTableModel extends AbstractTableModel {
 
 	@Override
 	public int getColumnCount() {
-		return metricsKeyList.size() + 1;
+		return metricsKeysAttributes.size() + 1;
 	}
 
 	@Override
@@ -77,8 +77,7 @@ public class MetricsHistoryTableModel extends AbstractTableModel {
 			// First column is Date column
 			return DATE_COLUMN_HEADER;
 		} else {
-			String metricKey = metricsKeyList.get(col - 1);
-			return metricsHistory.getMetricsNamesMap().get(metricKey);
+			return metricsKeysAttributes.get(col - 1).getMetricName();
 		}
 	}
 	
@@ -101,7 +100,7 @@ public class MetricsHistoryTableModel extends AbstractTableModel {
 
 		} else {
 			// Following columns are metric numbers
-			String metricKey = metricsKeyList.get(columnIndex - 1);
+			String metricKey = metricsKeysAttributes.get(columnIndex - 1).getMetricKey();
 			return Format.poidsToString(metrics.getMetrics().get(metricKey));
 		}
 	}

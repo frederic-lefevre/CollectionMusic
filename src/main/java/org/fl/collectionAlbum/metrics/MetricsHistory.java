@@ -31,9 +31,10 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Stream;
@@ -115,7 +116,7 @@ public abstract class MetricsHistory {
 		if (! hasMetricsCompatibleWithMetricNames(metrics)) {
 			
 			String errorMessage = "Adding a incompatible metrics to metricsHistory.\nMetrics added: " + Objects.toString(metrics.getMetrics()) 
-				+ "\nHistory metrics pattern: " + Objects.toString(getMetricsNamesMap());
+				+ "\nHistory metrics pattern: " + Objects.toString(getMetricsAttributes().getKeySet());
 			mLog.severe(errorMessage);
 			throw new IllegalArgumentException(errorMessage);	
 			
@@ -136,8 +137,8 @@ public abstract class MetricsHistory {
 	}
 	
 	private boolean hasMetricsCompatibleWithMetricNames(Metrics metrics) {
-		return ((metrics.getMetrics().size() == getMetricsNamesMap().size()) &&
-				metrics.getMetrics().keySet().stream().allMatch(key -> getMetricsNamesMap().containsKey(key)));
+		return ((metrics.getMetrics().size() == getMetricsAttributes().size()) &&
+				metrics.getMetrics().keySet().stream().allMatch(key -> getMetricsAttributes().containsKey(key)));
 	}
 	
 	public List<Metrics> getMetricsHistory() {
@@ -145,9 +146,52 @@ public abstract class MetricsHistory {
 		return metricsHistory;
 	}
 	
-	public abstract Map<String, String> getMetricsNamesMap();
+	public abstract MetricAttributesList getMetricsAttributes();
 	
-	public abstract List<String> getMetricsKeys();
+	public static class MetricAttributesList extends ArrayList<MetricAttributes> {
+
+		private static final long serialVersionUID = 1L;
+		private final Set<String> keySet;
+		
+		public MetricAttributesList(List<MetricAttributes> metricAttributes) {		
+			super(metricAttributes);
+			keySet = new HashSet<>(metricAttributes.stream().map(m -> m.getMetricKey()).toList());
+		}
+		
+		private boolean containsKey(String key) {
+			return keySet.contains(key);
+		}
+		
+		private Set<String> getKeySet() {
+			return keySet;
+		}
+	}
+	
+	public static class MetricAttributes {
+		
+		private final String metricKey;
+		private final String metricName;
+		private final int representationWidth; // Width of the column that holds the metric
+		
+		MetricAttributes(String metricKey, String metricName, int representationWidth) {
+			super();
+			this.metricKey = metricKey;
+			this.metricName = metricName;
+			this.representationWidth = representationWidth;
+		}
+
+		public String getMetricKey() {
+			return metricKey;
+		}
+
+		public String getMetricName() {
+			return metricName;
+		}
+
+		public int getRepresentationWidth() {
+			return representationWidth;
+		}
+	}
 	
 	private static class MetricsDateComparator implements Comparator<Metrics> {
 

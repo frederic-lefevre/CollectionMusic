@@ -73,13 +73,10 @@ class MetricsHistoryTest {
 		}
 
 		@Override
-		public Map<String, String> getMetricsNamesMap() {
-			return Map.of("albums", "Nombre album", "Artiste", "Nombre artiste");
-		}
-
-		@Override
-		public List<String> getMetricsKeys() {			
-			return List.of("albums", "Artiste");
+		public MetricAttributesList getMetricsAttributes() {			
+			return new MetricAttributesList(List.of(
+					new MetricAttributes("albums", "Nombre album", 300), 
+					new MetricAttributes("Artiste", "Nombre artiste", 300)));
 		}		
 	}
 	
