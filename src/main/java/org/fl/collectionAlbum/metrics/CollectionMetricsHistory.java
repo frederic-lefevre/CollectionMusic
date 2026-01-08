@@ -88,7 +88,7 @@ public class CollectionMetricsHistory extends MetricsHistory {
 	public MetricAttributesList getMetricsAttributes() {
 		
 		List<MetricAttributes> metricsAttributes = new ArrayList<>();
-		metricsAttributes.add(new MetricAttributes(TOTAL, "Unités physiques totales", 400));
+		metricsAttributes.add(new MetricAttributes(TOTAL, "Nombre total d'unités physiques", 250));
 		metricsAttributes.add(new MetricAttributes(NB_ALBUM, "Nombre d'artistes", 200));
 		metricsAttributes.add(new MetricAttributes(NB_ARTISTE, "Nombre d'albums", 200));
 		metricsAttributes.addAll(

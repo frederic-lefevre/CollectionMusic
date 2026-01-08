@@ -32,6 +32,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 
 import org.fl.collectionAlbum.metrics.MetricsHistory;
+import org.fl.collectionAlbum.metrics.MetricsHistory.MetricAttributes;
 
 public class CollectionMetricsTabbedPane extends JTabbedPane {
 
@@ -49,6 +50,12 @@ public class CollectionMetricsTabbedPane extends JTabbedPane {
 			metricsHistoryTableModelList.add(metricHistoryTableModel);
 			JTable metricsHistoryTable = new JTable(metricHistoryTableModel);
 			metricsHistoryTable.getColumnModel().getColumn(MetricsHistoryTableModel.DATE_COL_IDX).setPreferredWidth(200);
+			int colIdx = 1;
+			for (MetricAttributes metricAttributes : metricHistory.getMetricsAttributes()) {
+				metricsHistoryTable.getColumnModel().getColumn(colIdx).setPreferredWidth(metricAttributes.getRepresentationWidth());
+				colIdx++;
+			}
+			
 			JScrollPane metricHistoryScrollPane = new JScrollPane(metricsHistoryTable);
 			add(metricHistoryScrollPane, metricHistory.getName());
 		}
