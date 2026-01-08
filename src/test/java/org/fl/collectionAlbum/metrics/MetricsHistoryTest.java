@@ -207,9 +207,11 @@ class MetricsHistoryTest {
 						assertThat(metricTwoDaysAgo.hasSameMetricsAs(new Metrics(0, Map.of("albums", 8.0, "Artiste", 5.0))));
 					});
 		assertThat(metricsHistory.getPresentMetrics()).isNull();
+		assertThat(metricsHistory.hasEvolded()).isFalse();
 		
 		metricsHistory.setPresentMetricsIfNew(todayMetrics);
 		assertThat(metricsHistory.getPresentMetrics()).isNull();
+		assertThat(metricsHistory.hasEvolded()).isFalse();
 		
 		Metrics newPresentyMetrics = new Metrics(now, Map.of("albums", 11.0, "Artiste", 5.0));
 		
@@ -220,6 +222,7 @@ class MetricsHistoryTest {
 				assertThat(metricNow.getMetricTimeStamp()).isEqualTo(now);
 				assertThat(metricNow.hasSameMetricsAs(new Metrics(0, Map.of("albums", 11.0, "Artiste", 5.0))));
 			});
+		assertThat(metricsHistory.hasEvolded()).isTrue();
 		
 		metricsHistory.addAndWriteNewMetricsToHistory(newPresentyMetrics);
 		

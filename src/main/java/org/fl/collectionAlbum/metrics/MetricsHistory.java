@@ -94,6 +94,10 @@ public abstract class MetricsHistory {
 		return presentMetrics;
 	}
 
+	public boolean hasEvolded() {
+		return presentMetrics != null;
+	}
+	
 	public void setPresentMetricsIfNew(Metrics presentMetrics) {
 		if (metricsHistory.stream().allMatch(m -> !m.hasSameMetricsAs(presentMetrics))) {
 			this.presentMetrics = presentMetrics;

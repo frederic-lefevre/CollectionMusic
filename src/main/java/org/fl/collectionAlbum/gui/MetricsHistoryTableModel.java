@@ -59,10 +59,10 @@ public class MetricsHistoryTableModel extends AbstractTableModel{
 	
 	@Override
 	public int getRowCount() {
-		if (metricsHistory.getPresentMetrics() == null) {
-			return metricsHistory.getMetricsHistory().size();
-		} else {
+		if (metricsHistory.hasEvolded()) {
 			return metricsHistory.getMetricsHistory().size() + 1;
+		} else {
+			return metricsHistory.getMetricsHistory().size();
 		}
 	}
 
@@ -86,14 +86,12 @@ public class MetricsHistoryTableModel extends AbstractTableModel{
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		
 		Metrics metrics;
-
-		Metrics presentMetrics = metricsHistory.getPresentMetrics();
-		if (presentMetrics == null) {
+		if (! metricsHistory.hasEvolded()) {
 			metrics = metricsHistory.getMetricsHistory().get(rowIndex);
 		} else if (rowIndex > 0) {
 			metrics = metricsHistory.getMetricsHistory().get(rowIndex - 1);
 		} else {
-			metrics = presentMetrics;
+			metrics = metricsHistory.getPresentMetrics();
 		}
 		
 		if (columnIndex == DATE_COL_IDX) {
