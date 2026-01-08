@@ -94,7 +94,7 @@ public abstract class MetricsHistory {
 		return presentMetrics;
 	}
 
-	public boolean hasEvolded() {
+	public boolean hasEvolved() {
 		return presentMetrics != null;
 	}
 	

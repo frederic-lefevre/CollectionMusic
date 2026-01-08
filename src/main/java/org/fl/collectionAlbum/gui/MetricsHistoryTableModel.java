@@ -59,7 +59,7 @@ public class MetricsHistoryTableModel extends AbstractTableModel{
 	
 	@Override
 	public int getRowCount() {
-		if (metricsHistory.hasEvolded()) {
+		if (metricsHistory.hasEvolved()) {
 			return metricsHistory.getMetricsHistory().size() + 1;
 		} else {
 			return metricsHistory.getMetricsHistory().size();
@@ -86,7 +86,7 @@ public class MetricsHistoryTableModel extends AbstractTableModel{
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		
 		Metrics metrics;
-		if (! metricsHistory.hasEvolded()) {
+		if (! metricsHistory.hasEvolved()) {
 			metrics = metricsHistory.getMetricsHistory().get(rowIndex);
 		} else if (rowIndex > 0) {
 			metrics = metricsHistory.getMetricsHistory().get(rowIndex - 1);

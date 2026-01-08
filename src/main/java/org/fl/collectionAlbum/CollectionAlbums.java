@@ -206,7 +206,7 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
     @Override
     public void done() {
 
-    	boolean hasEvolved = Control.getCollectionMetricsHsitory().hasEvolded() || Control.getConcertMetricsHsitory().hasEvolded();
+    	boolean hasEvolved = Control.getCollectionMetricsHsitory().hasEvolved() || Control.getConcertMetricsHsitory().hasEvolved();
     	
     	String status;
     	if (hasEvolved) {
