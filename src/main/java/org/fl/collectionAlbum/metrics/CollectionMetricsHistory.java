@@ -89,8 +89,8 @@ public class CollectionMetricsHistory extends MetricsHistory {
 		
 		List<MetricAttributes> metricsAttributes = new ArrayList<>();
 		metricsAttributes.add(new MetricAttributes(TOTAL, "Nombre total d'unités physiques", 250));
-		metricsAttributes.add(new MetricAttributes(NB_ALBUM, "Nombre d'artistes", 200));
-		metricsAttributes.add(new MetricAttributes(NB_ARTISTE, "Nombre d'albums", 200));
+		metricsAttributes.add(new MetricAttributes(NB_ALBUM, "Nombre d'albums", 200));
+		metricsAttributes.add(new MetricAttributes(NB_ARTISTE, "Nombre d'artistes", 200));
 		metricsAttributes.addAll(
 				Stream.of(MediaSupportCategories.values()).map(msc -> new MetricAttributes(msc.getId(), msc.getNom(), 50)).toList());
 		return new MetricAttributesList(metricsAttributes);
