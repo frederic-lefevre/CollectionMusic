@@ -41,6 +41,7 @@ import org.fl.collectionAlbum.concerts.Concert;
 import org.fl.collectionAlbum.concerts.LieuConcert;
 import org.fl.collectionAlbum.concerts.LieuxDesConcerts;
 import org.fl.collectionAlbum.concerts.ListeConcert;
+import org.fl.collectionAlbum.gui.AbstractColorableTabbedPane;
 import org.fl.collectionAlbum.gui.ProgressInformation;
 import org.fl.collectionAlbum.gui.ProgressInformationPanel;
 import org.fl.collectionAlbum.rapportCsv.RapportCsv;
@@ -67,6 +68,7 @@ public class GenerationSiteCollection extends SwingWorker<String,ProgressInforma
 	private CollectionAlbumContainer collectionAlbumContainer;
 	private final ProgressInformationPanel progressPanel;
 	private final List<AbstractTableModel> tableModels;
+	private final List<AbstractColorableTabbedPane> colorableTabbedPanes;
 
 	// Information prefix
 	private final static String ARRET = "Arreté";
@@ -81,9 +83,10 @@ public class GenerationSiteCollection extends SwingWorker<String,ProgressInforma
 	// Status
 	private final static String GENERATION = "En cours de génération";
 
-	public GenerationSiteCollection(List<AbstractTableModel> tableModels, ProgressInformationPanel pip) {
+	public GenerationSiteCollection(List<AbstractTableModel> tableModels, List<AbstractColorableTabbedPane> colorableTabbedPanes, ProgressInformationPanel pip) {
 		
 		this.tableModels = tableModels;
+		this.colorableTabbedPanes = colorableTabbedPanes;
 		progressPanel = pip;
 	}
 
@@ -299,6 +302,7 @@ public class GenerationSiteCollection extends SwingWorker<String,ProgressInforma
 
 		progressPanel.setProgressInformation(new ProgressInformation(FIN_GENERATION, ARRET, ""));
 		tableModels.forEach(AbstractTableModel::fireTableDataChanged);
+		colorableTabbedPanes.forEach(AbstractColorableTabbedPane::setTabColor);
 	}
 
 	@Override
