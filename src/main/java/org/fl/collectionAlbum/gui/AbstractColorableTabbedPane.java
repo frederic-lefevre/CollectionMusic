@@ -32,12 +32,14 @@ public abstract class AbstractColorableTabbedPane extends JTabbedPane {
 
 	private static final long serialVersionUID = 1L;
 
-	protected abstract Color getColorFor(int idx);
+	protected abstract Color getBackgroundColorFor(int idx);
+	protected abstract Color getForegroundColorFor(int idx);
 	
 	public void setTabColor() {
 		
 		for(int idx=0; idx < getTabCount(); idx++) {
-			setBackgroundAt(idx, getColorFor(idx));
+			setForegroundAt(idx, getForegroundColorFor(idx));
+			setBackgroundAt(idx, getBackgroundColorFor(idx));
 		}
 	}
 }

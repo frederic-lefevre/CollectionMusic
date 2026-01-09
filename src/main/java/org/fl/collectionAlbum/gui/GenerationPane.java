@@ -163,14 +163,25 @@ public class GenerationPane extends JPanel {
 		private static final long serialVersionUID = 1L;
 
 		@Override
-		protected Color getColorFor(int idx) {
+		protected Color getBackgroundColorFor(int idx) {
 			if (getComponentAt(idx) instanceof CollectionMetricsTabbedPane pane) {
 				if (pane.metricsHasEvolved()) {
-					return CollectionMetricsTabbedPane.HISTORY_TAB_HIGHLIGHT;
+					return CollectionMetricsTabbedPane.METRICS_TAB_BACKGROUND_COLOR_HIGHLIGHT;
 				}
 				return null;
 			}
 			return null;
-		}		
+		}
+		
+		@Override
+		protected Color getForegroundColorFor(int idx) {
+			if (getComponentAt(idx) instanceof CollectionMetricsTabbedPane pane) {
+				if (pane.metricsHasEvolved()) {
+					return CollectionMetricsTabbedPane.METRICS_TAB_FOREGROUND_COLOR_HIGHLIGHT;
+				}
+				return null;
+			}
+			return null;
+		}
 	}
 }

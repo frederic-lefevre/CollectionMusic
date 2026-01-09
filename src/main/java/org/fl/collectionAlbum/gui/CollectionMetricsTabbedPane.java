@@ -41,7 +41,8 @@ public class CollectionMetricsTabbedPane extends AbstractColorableTabbedPane {
 
 	private static final long serialVersionUID = 1L;
 
-	public static final Color HISTORY_TAB_HIGHLIGHT = Color.CYAN;
+	public static final Color METRICS_TAB_BACKGROUND_COLOR_HIGHLIGHT = Color.CYAN;
+	public static final Color METRICS_TAB_FOREGROUND_COLOR_HIGHLIGHT = Color.RED;
 	
 	private final List<MetricsHistory> metricsHistoryList;
 	private final List<MetricsHistoryTableModel> metricsHistoryTableModelList;
@@ -89,9 +90,18 @@ public class CollectionMetricsTabbedPane extends AbstractColorableTabbedPane {
 	}
 	
 	@Override
-	protected Color getColorFor(int idx) {
+	protected Color getBackgroundColorFor(int idx) {
 		if (getMetricHistoryAt(idx).hasEvolved()) {
-			return HISTORY_TAB_HIGHLIGHT;
+			return METRICS_TAB_BACKGROUND_COLOR_HIGHLIGHT;
+		} else {
+			// Default tab color
+			return null;
+		}
+	}
+	@Override
+	protected Color getForegroundColorFor(int idx) {
+		if (getMetricHistoryAt(idx).hasEvolved()) {
+			return METRICS_TAB_FOREGROUND_COLOR_HIGHLIGHT;
 		} else {
 			// Default tab color
 			return null;
