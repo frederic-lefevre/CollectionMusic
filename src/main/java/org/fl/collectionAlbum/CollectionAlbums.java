@@ -39,6 +39,7 @@ import javax.swing.SwingWorker;
 import javax.swing.table.AbstractTableModel;
 
 import org.fl.collectionAlbum.disocgs.DiscogsInventory;
+import org.fl.collectionAlbum.gui.AbstractColorableTabbedPane;
 import org.fl.collectionAlbum.gui.ProgressInformation;
 import org.fl.collectionAlbum.gui.ProgressInformationPanel;
 import org.fl.collectionAlbum.json.migrator.MusicArtefactMigrator;
@@ -54,6 +55,7 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 	private CollectionAlbumContainer albumsContainer;
 	private final ProgressInformationPanel progressPanel;
 	private final List<AbstractTableModel> tableModels;
+	private final List<AbstractColorableTabbedPane> colorableTabbedPanes;
 	
 	// Information prefix
 	private static final String ARRET = "Arrêté";
@@ -71,10 +73,11 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 	private static final String FIN_LECTURE = "Collection chargée";
 	private static final String FIN_LECTURE_EN_EVOLUTION = FIN_LECTURE + " et en évolution";
 	
-	public CollectionAlbums(List<AbstractTableModel> tableModels, ProgressInformationPanel pip) {
+	public CollectionAlbums(List<AbstractTableModel> tableModels, List<AbstractColorableTabbedPane> colorableTabbedPanes, ProgressInformationPanel pip) {
 
 		progressPanel = pip;
 		this.tableModels = tableModels;
+		this.colorableTabbedPanes = colorableTabbedPanes;
 	}
 	
 	@Override 
@@ -217,6 +220,7 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
     	
     	progressPanel.setProgressInformation(new ProgressInformation(status, ARRET, ""));
     	tableModels.forEach(AbstractTableModel::fireTableDataChanged);
+    	colorableTabbedPanes.forEach(AbstractColorableTabbedPane::setTabColor);
     }
 
     @Override

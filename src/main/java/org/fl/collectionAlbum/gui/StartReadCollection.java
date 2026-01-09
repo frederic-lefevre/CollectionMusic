@@ -36,6 +36,7 @@ import org.fl.collectionAlbum.CollectionAlbums;
 public class StartReadCollection implements ActionListener {
 
 	private final List<AbstractTableModel> tableModels;
+	private final List<AbstractColorableTabbedPane> colorableTabbedPanes;
 	private final ProgressInformationPanel pip;
 	private CollectionProcessWaiter collectionProcWaiter;
 	private final List<ActivableElement> activableButtons;
@@ -43,6 +44,7 @@ public class StartReadCollection implements ActionListener {
 	public StartReadCollection(ProgressInformationPanel progInfoPanel, List<ActivableElement> stList) {
 
 		this.tableModels = new ArrayList<>();
+		this.colorableTabbedPanes = new ArrayList<>();
 		pip = progInfoPanel;
 		activableButtons = stList;
 	}
@@ -55,13 +57,17 @@ public class StartReadCollection implements ActionListener {
 		tableModels.add(tableModel);
 	}
 	
+	public void addColorableTabbedPane(AbstractColorableTabbedPane pane) {
+		colorableTabbedPanes.add(pane);
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 
 		for (ActivableElement st : activableButtons) {
 			st.deactivate();
 		}
-		CollectionAlbums ca = new CollectionAlbums(tableModels, pip);
+		CollectionAlbums ca = new CollectionAlbums(tableModels, colorableTabbedPanes, pip);
 		ca.addPropertyChangeListener(collectionProcWaiter);
 		ca.execute();
 	}

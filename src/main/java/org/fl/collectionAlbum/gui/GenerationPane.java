@@ -140,6 +140,7 @@ public class GenerationPane extends JPanel {
 		// Collection metrics history
 		CollectionMetricsTabbedPane collectionMetricsTabPanes = new CollectionMetricsTabbedPane(List.of(Control.getCollectionMetricsHsitory(), Control.getConcertMetricsHsitory()));
 
+		startReadCollection.addColorableTabbedPane(collectionMetricsTabPanes);
 		collectionMetricsTabPanes.getTableModels().forEach(tableModel -> {
 			startReadCollection.addTableModel(tableModel);
 			startGenerationSite.addTableModel(tableModel);
