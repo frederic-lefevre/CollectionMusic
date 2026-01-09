@@ -61,8 +61,8 @@ public class StartGenerationSite implements ActionListener {
 		tableModels.add(tableModel);
 	}
 	
-	public void addColorableTabbedPane(AbstractColorableTabbedPane pane) {
-		colorableTabbedPanes.add(pane);
+	public void addColorableTabbedPane(List<AbstractColorableTabbedPane> pane) {
+		colorableTabbedPanes.addAll(pane);
 	}
 	
 	@Override

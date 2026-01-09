@@ -41,8 +41,9 @@ public class CollectionMetricsTabbedPane extends AbstractColorableTabbedPane {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final Color historyTabHighLightColor = Color.MAGENTA;
+	public static final Color HISTORY_TAB_HIGHLIGHT = Color.CYAN;
 	
+	private final List<MetricsHistory> metricsHistoryList;
 	private final List<MetricsHistoryTableModel> metricsHistoryTableModelList;
 	
 	private final Map<Component, MetricsHistory> componentMap;
@@ -50,6 +51,7 @@ public class CollectionMetricsTabbedPane extends AbstractColorableTabbedPane {
 	public CollectionMetricsTabbedPane(List<MetricsHistory> metricsHistoryList) {
 		super();
 
+		this.metricsHistoryList = metricsHistoryList;
 		this.metricsHistoryTableModelList = new ArrayList<>();
 		this.componentMap = new HashMap<>();
 		
@@ -82,10 +84,14 @@ public class CollectionMetricsTabbedPane extends AbstractColorableTabbedPane {
 		}
 	}
 	
+	public boolean metricsHasEvolved() {
+		return metricsHistoryList.stream().anyMatch(MetricsHistory::hasEvolved);
+	}
+	
 	@Override
 	protected Color getColorFor(int idx) {
 		if (getMetricHistoryAt(idx).hasEvolved()) {
-			return historyTabHighLightColor;
+			return HISTORY_TAB_HIGHLIGHT;
 		} else {
 			// Default tab color
 			return null;

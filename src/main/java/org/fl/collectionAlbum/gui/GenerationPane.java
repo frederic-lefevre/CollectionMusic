@@ -24,6 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.util.List;
 import java.util.stream.Stream;
@@ -31,7 +32,6 @@ import java.util.stream.Stream;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.Control;
@@ -90,7 +90,7 @@ public class GenerationPane extends JPanel {
 		add(controlPanel);
 		
 		// Tab pane for generation of collection
-		JTabbedPane collectionTabPanes = new JTabbedPane();
+		CollectionTabPanes collectionTabPanes = new CollectionTabPanes();
 		
 		// collection tab
 		// Scroll pane to contain the collection table
@@ -140,8 +140,8 @@ public class GenerationPane extends JPanel {
 		// Collection metrics history
 		CollectionMetricsTabbedPane collectionMetricsTabPanes = new CollectionMetricsTabbedPane(List.of(Control.getCollectionMetricsHsitory(), Control.getConcertMetricsHsitory()));
 
-		startReadCollection.addColorableTabbedPane(collectionMetricsTabPanes);
-		startGenerationSite.addColorableTabbedPane(collectionMetricsTabPanes);
+		startReadCollection.addColorableTabbedPane(List.of(collectionMetricsTabPanes, collectionTabPanes));
+		startGenerationSite.addColorableTabbedPane(List.of(collectionMetricsTabPanes, collectionTabPanes));
 		collectionMetricsTabPanes.getTableModels().forEach(tableModel -> {
 			startReadCollection.addTableModel(tableModel);
 			startGenerationSite.addTableModel(tableModel);
@@ -156,5 +156,21 @@ public class GenerationPane extends JPanel {
 		
 		generateSiteControl.deactivate();
 		readCollectionControl.getProgressInformationPanel().setProgressInformation(new ProgressInformation("Relecture nécessaire", null, null));
+	}
+	
+	private static class CollectionTabPanes extends AbstractColorableTabbedPane {
+
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected Color getColorFor(int idx) {
+			if (getComponentAt(idx) instanceof CollectionMetricsTabbedPane pane) {
+				if (pane.metricsHasEvolved()) {
+					return CollectionMetricsTabbedPane.HISTORY_TAB_HIGHLIGHT;
+				}
+				return null;
+			}
+			return null;
+		}		
 	}
 }
