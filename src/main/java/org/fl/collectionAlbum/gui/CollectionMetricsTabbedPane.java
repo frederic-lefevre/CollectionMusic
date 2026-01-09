@@ -41,7 +41,6 @@ public class CollectionMetricsTabbedPane extends AbstractColorableTabbedPane {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final Color historyTabRegularColor = Color.LIGHT_GRAY;
 	private static final Color historyTabHighLightColor = Color.MAGENTA;
 	
 	private final List<MetricsHistoryTableModel> metricsHistoryTableModelList;
@@ -88,7 +87,8 @@ public class CollectionMetricsTabbedPane extends AbstractColorableTabbedPane {
 		if (getMetricHistoryAt(idx).hasEvolved()) {
 			return historyTabHighLightColor;
 		} else {
-			return historyTabRegularColor;
+			// Default tab color
+			return null;
 		}
 	}
 }
