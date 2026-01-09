@@ -38,6 +38,7 @@ import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 public class StartGenerationSite implements ActionListener {
 	
 	private final List<AbstractTableModel> tableModels;
+	private final List<AbstractColorableTabbedPane> colorableTabbedPanes;
 	private final ProgressInformationPanel pip;	
 	private final List<ActivableElement>  activableButtons;
 	private CollectionProcessWaiter collectionProcWaiter;
@@ -47,6 +48,7 @@ public class StartGenerationSite implements ActionListener {
 	public StartGenerationSite(ProgressInformationPanel progInfoPanel, List<ActivableElement> stList) {
 		
 		this.tableModels = new ArrayList<>();
+		this.colorableTabbedPanes = new ArrayList<>();
 		pip = progInfoPanel;
 		activableButtons = stList;
 	}
@@ -59,13 +61,17 @@ public class StartGenerationSite implements ActionListener {
 		tableModels.add(tableModel);
 	}
 	
+	public void addColorableTabbedPane(List<AbstractColorableTabbedPane> pane) {
+		colorableTabbedPanes.addAll(pane);
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
 		
 		for (ActivableElement st : activableButtons ) {
 			st.deactivate();
 		}
-		GenerationSiteCollection gc = new GenerationSiteCollection(tableModels, pip);
+		GenerationSiteCollection gc = new GenerationSiteCollection(tableModels, colorableTabbedPanes, pip);
 		gc.addPropertyChangeListener(collectionProcWaiter);
 		gc.execute();
 	}

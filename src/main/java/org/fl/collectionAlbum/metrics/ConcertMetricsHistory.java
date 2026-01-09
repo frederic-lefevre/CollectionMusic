@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2025 Frederic Lefevre
+Copyright (c) 2017, 2026 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -33,6 +33,8 @@ import org.fl.collectionAlbum.CollectionAlbumContainer;
 
 public class ConcertMetricsHistory extends MetricsHistory {
 
+	private static final String METRIC_NAME = "Evolution des concerts";
+	
 	private static final String NB_ARTISTE = "nombreArtiste";
 	private static final String NB_CONCERT = "nombreConcert";
 	
@@ -48,11 +50,11 @@ public class ConcertMetricsHistory extends MetricsHistory {
 	}
 	
 	public Metrics addPresentConcertMetricsToHistory(long ts, CollectionAlbumContainer collectionAlbumContainer) {	
-
-		Metrics presentMetrics = getConcertMetrics(ts, collectionAlbumContainer);
-		addNewMetrics(presentMetrics);
-		
-		return presentMetrics;
+		return addPresentMetricsToHistory(getConcertMetrics(ts, collectionAlbumContainer));
+	}
+	
+	public void setPresentMetricsIfNew(long ts, CollectionAlbumContainer collectionAlbumContainer) {
+		setPresentMetricsIfNew(getConcertMetrics(ts, collectionAlbumContainer));
 	}
 	
 	public Metrics getConcertMetrics(long ts, CollectionAlbumContainer collectionAlbumContainer) {	
@@ -63,17 +65,13 @@ public class ConcertMetricsHistory extends MetricsHistory {
 	}
 	
 	private ConcertMetricsHistory(Path storagePath) throws IOException {
-		super(storagePath);
+		super(storagePath, METRIC_NAME);
 	}
 
 	@Override
-	public Map<String, String> getMetricsNamesMap() {
-
-		return Map.of(NB_ARTISTE, "Nombre d'artistes", NB_CONCERT, "Nombre de concerts");
-	}
-
-	@Override
-	public List<String> getMetricsKeys() {
-		return List.of(NB_CONCERT, NB_ARTISTE);
+	public MetricAttributesList getMetricsAttributes() {
+		return new MetricAttributesList(List.of(
+				new MetricAttributes(NB_CONCERT, "Nombre de concerts", 300), 
+				new MetricAttributes(NB_ARTISTE, "Nombre d'artistes", 300)));
 	}
 }

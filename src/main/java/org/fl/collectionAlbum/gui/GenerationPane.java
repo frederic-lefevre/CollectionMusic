@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2025 Frederic Lefevre
+Copyright (c) 2017, 2026 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,6 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.util.List;
 import java.util.stream.Stream;
@@ -31,8 +32,6 @@ import java.util.stream.Stream;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JTable;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.Control;
@@ -91,7 +90,7 @@ public class GenerationPane extends JPanel {
 		add(controlPanel);
 		
 		// Tab pane for generation of collection
-		JTabbedPane collectionTabPanes = new JTabbedPane();
+		CollectionTabPanes collectionTabPanes = new CollectionTabPanes();
 		
 		// collection tab
 		// Scroll pane to contain the collection table
@@ -139,23 +138,14 @@ public class GenerationPane extends JPanel {
 		collectionTabPanes.add(concertsScrollPane, "Concerts");
 		
 		// Collection metrics history
-		JTabbedPane collectionMetricsTabPanes = new JTabbedPane();
-		
-		MetricsHistoryTableModel collectionHistoryTableModel = new MetricsHistoryTableModel(Control.getCollectionMetricsHsitory());
-		MetricsHistoryTableModel concertHistoryTableModel = new MetricsHistoryTableModel(Control.getConcertMetricsHsitory());
-		startReadCollection.addTableModel(collectionHistoryTableModel);
-		startReadCollection.addTableModel(concertHistoryTableModel);
-		startGenerationSite.addTableModel(collectionHistoryTableModel);
-		startGenerationSite.addTableModel(concertHistoryTableModel);
-		
-		JTable collectionMetricsHistoryTable = new CollectionMetricsHistoryJTable(collectionHistoryTableModel);
-		JTable concertMetricsHistoryTable = new JTable(concertHistoryTableModel);
-		
-		JScrollPane collectionHistoryScrollPane = new JScrollPane(collectionMetricsHistoryTable);
-		JScrollPane concertHistoryScrollPane = new JScrollPane(concertMetricsHistoryTable);
-		
-		collectionMetricsTabPanes.add(collectionHistoryScrollPane, "Evolution des albums");
-		collectionMetricsTabPanes.add(concertHistoryScrollPane, "Evolution des concerts");
+		CollectionMetricsTabbedPane collectionMetricsTabPanes = new CollectionMetricsTabbedPane(List.of(Control.getCollectionMetricsHsitory(), Control.getConcertMetricsHsitory()));
+
+		startReadCollection.addColorableTabbedPane(List.of(collectionMetricsTabPanes, collectionTabPanes));
+		startGenerationSite.addColorableTabbedPane(List.of(collectionMetricsTabPanes, collectionTabPanes));
+		collectionMetricsTabPanes.getTableModels().forEach(tableModel -> {
+			startReadCollection.addTableModel(tableModel);
+			startGenerationSite.addTableModel(tableModel);
+		});
 		
 		collectionTabPanes.add(collectionMetricsTabPanes, "Evolution de la collection");
 		
@@ -166,5 +156,32 @@ public class GenerationPane extends JPanel {
 		
 		generateSiteControl.deactivate();
 		readCollectionControl.getProgressInformationPanel().setProgressInformation(new ProgressInformation("Relecture nécessaire", null, null));
+	}
+	
+	private static class CollectionTabPanes extends AbstractColorableTabbedPane {
+
+		private static final long serialVersionUID = 1L;
+
+		@Override
+		protected Color getBackgroundColorFor(int idx) {
+			if (getComponentAt(idx) instanceof CollectionMetricsTabbedPane pane) {
+				if (pane.metricsHasEvolved()) {
+					return CollectionMetricsTabbedPane.METRICS_TAB_BACKGROUND_COLOR_HIGHLIGHT;
+				}
+				return null;
+			}
+			return null;
+		}
+		
+		@Override
+		protected Color getForegroundColorFor(int idx) {
+			if (getComponentAt(idx) instanceof CollectionMetricsTabbedPane pane) {
+				if (pane.metricsHasEvolved()) {
+					return CollectionMetricsTabbedPane.METRICS_TAB_FOREGROUND_COLOR_HIGHLIGHT;
+				}
+				return null;
+			}
+			return null;
+		}
 	}
 }

@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2025 Frederic Lefevre
+Copyright (c) 2017, 2026 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -39,6 +39,7 @@ import javax.swing.SwingWorker;
 import javax.swing.table.AbstractTableModel;
 
 import org.fl.collectionAlbum.disocgs.DiscogsInventory;
+import org.fl.collectionAlbum.gui.AbstractColorableTabbedPane;
 import org.fl.collectionAlbum.gui.ProgressInformation;
 import org.fl.collectionAlbum.gui.ProgressInformationPanel;
 import org.fl.collectionAlbum.json.migrator.MusicArtefactMigrator;
@@ -54,6 +55,7 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 	private CollectionAlbumContainer albumsContainer;
 	private final ProgressInformationPanel progressPanel;
 	private final List<AbstractTableModel> tableModels;
+	private final List<AbstractColorableTabbedPane> colorableTabbedPanes;
 	
 	// Information prefix
 	private static final String ARRET = "Arrêté";
@@ -69,11 +71,13 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 	private static final String LECTURE_CONCERT = "Lecture des concerts";
 	private static final String CALENDARS = "Construction des calendriers";
 	private static final String FIN_LECTURE = "Collection chargée";
+	private static final String FIN_LECTURE_EN_EVOLUTION = FIN_LECTURE + " et en évolution";
 	
-	public CollectionAlbums(List<AbstractTableModel> tableModels, ProgressInformationPanel pip) {
+	public CollectionAlbums(List<AbstractTableModel> tableModels, List<AbstractColorableTabbedPane> colorableTabbedPanes, ProgressInformationPanel pip) {
 
 		progressPanel = pip;
 		this.tableModels = tableModels;
+		this.colorableTabbedPanes = colorableTabbedPanes;
 	}
 	
 	@Override 
@@ -100,7 +104,12 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 		
 		// Sort for display when scanning the collection
 		albumsContainer.getCollectionAlbumsMusiques().sortRangementAlbum();
-				
+			
+		// Set present metrics
+		long now = System.currentTimeMillis();
+		Control.getCollectionMetricsHsitory().setPresentMetricsIfNew(now, albumsContainer);
+		Control.getConcertMetricsHsitory().setPresentMetricsIfNew(now, albumsContainer);
+		
 		return albumsContainer;
 	}
    	
@@ -200,8 +209,18 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
     @Override
     public void done() {
 
-    	progressPanel.setProgressInformation(new ProgressInformation(FIN_LECTURE, ARRET, ""));
+    	boolean hasEvolved = Control.getCollectionMetricsHsitory().hasEvolved() || Control.getConcertMetricsHsitory().hasEvolved();
+    	
+    	String status;
+    	if (hasEvolved) {
+    		status = FIN_LECTURE_EN_EVOLUTION;
+    	} else {
+    		status = FIN_LECTURE;
+    	}
+    	
+    	progressPanel.setProgressInformation(new ProgressInformation(status, ARRET, ""));
     	tableModels.forEach(AbstractTableModel::fireTableDataChanged);
+    	colorableTabbedPanes.forEach(AbstractColorableTabbedPane::setTabColor);
     }
 
     @Override

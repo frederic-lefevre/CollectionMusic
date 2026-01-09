@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2025 Frederic Lefevre
+Copyright (c) 2017, 2026 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
@@ -38,6 +37,8 @@ import org.fl.collectionAlbum.format.MediaSupportCategories;
 
 public class CollectionMetricsHistory extends MetricsHistory {
 
+	private static final String METRIC_NAME = "Evolution des albums";
+	
 	private static final String TOTAL = "totalPhysique";
 	private static final String NB_ARTISTE = "nombreArtiste";
 	private static final String NB_ALBUM = "nombreAlbum";
@@ -53,11 +54,11 @@ public class CollectionMetricsHistory extends MetricsHistory {
 	}
 	
 	public Metrics addPresentCollectionMetricsToHistory(long ts, CollectionAlbumContainer collectionAlbumContainer) {
+		return addPresentMetricsToHistory(getCollectionMetrics(ts, collectionAlbumContainer));
+	}
 	
-		Metrics presentMetrics = getCollectionMetrics(ts, collectionAlbumContainer);
-		addNewMetrics(presentMetrics);
-
-		return presentMetrics;
+	public void setPresentMetricsIfNew(long ts, CollectionAlbumContainer collectionAlbumContainer) {
+		setPresentMetricsIfNew(getCollectionMetrics(ts, collectionAlbumContainer));
 	}
 	
 	public Metrics getCollectionMetrics(long ts, CollectionAlbumContainer collectionAlbumContainer) {
@@ -80,31 +81,19 @@ public class CollectionMetricsHistory extends MetricsHistory {
 	}
 	
 	private CollectionMetricsHistory(Path storagePath) throws IOException {
-		super(storagePath);
+		super(storagePath, METRIC_NAME);
 	}
 
 	@Override
-	public Map<String, String> getMetricsNamesMap() {
+	public MetricAttributesList getMetricsAttributes() {
 		
-		Map<String, String> metricsNamesMap = Stream.of(MediaSupportCategories.values())
-			.collect(Collectors.toMap(MediaSupportCategories::getId, MediaSupportCategories::getNom));
-		metricsNamesMap.put(TOTAL, "Nombre total d'unités physiques");
-		metricsNamesMap.put(NB_ARTISTE, "Nombre d'artistes");
-		metricsNamesMap.put(NB_ALBUM, "Nombre d'albums");
-		
-		return metricsNamesMap;
-	}
+		List<MetricAttributes> metricsAttributes = new ArrayList<>();
+		metricsAttributes.add(new MetricAttributes(TOTAL, "Nombre total d'unités physiques", 250));
+		metricsAttributes.add(new MetricAttributes(NB_ALBUM, "Nombre d'artistes", 200));
+		metricsAttributes.add(new MetricAttributes(NB_ARTISTE, "Nombre d'albums", 200));
+		metricsAttributes.addAll(
+				Stream.of(MediaSupportCategories.values()).map(msc -> new MetricAttributes(msc.getId(), msc.getNom(), 50)).toList());
+		return new MetricAttributesList(metricsAttributes);
+	}	
 
-	@Override
-	public List<String> getMetricsKeys() {
-		
-		List<String> metricKeys = new ArrayList<>();
-		metricKeys.add(TOTAL);
-		metricKeys.add(NB_ALBUM);
-		metricKeys.add(NB_ARTISTE);
-		metricKeys.addAll(Stream.of(MediaSupportCategories.values()).map(MediaSupportCategories::getId).toList());
-		return metricKeys;
-	}
-	
-	
 }

@@ -41,6 +41,7 @@ import org.fl.collectionAlbum.concerts.Concert;
 import org.fl.collectionAlbum.concerts.LieuConcert;
 import org.fl.collectionAlbum.concerts.LieuxDesConcerts;
 import org.fl.collectionAlbum.concerts.ListeConcert;
+import org.fl.collectionAlbum.gui.AbstractColorableTabbedPane;
 import org.fl.collectionAlbum.gui.ProgressInformation;
 import org.fl.collectionAlbum.gui.ProgressInformationPanel;
 import org.fl.collectionAlbum.rapportCsv.RapportCsv;
@@ -60,13 +61,14 @@ import org.fl.util.file.FilesUtils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-public class GenerationSiteCollection  extends SwingWorker<String,ProgressInformation> {
+public class GenerationSiteCollection extends SwingWorker<String,ProgressInformation> {
 
 	private final static Logger albumLog = Logger.getLogger(GenerationSiteCollection.class.getName());
 	
 	private CollectionAlbumContainer collectionAlbumContainer;
 	private final ProgressInformationPanel progressPanel;
 	private final List<AbstractTableModel> tableModels;
+	private final List<AbstractColorableTabbedPane> colorableTabbedPanes;
 
 	// Information prefix
 	private final static String ARRET = "Arreté";
@@ -81,9 +83,10 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 	// Status
 	private final static String GENERATION = "En cours de génération";
 
-	public GenerationSiteCollection(List<AbstractTableModel> tableModels, ProgressInformationPanel pip) {
+	public GenerationSiteCollection(List<AbstractTableModel> tableModels, List<AbstractColorableTabbedPane> colorableTabbedPanes, ProgressInformationPanel pip) {
 		
 		this.tableModels = tableModels;
+		this.colorableTabbedPanes = colorableTabbedPanes;
 		progressPanel = pip;
 	}
 
@@ -107,8 +110,9 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 			collectionAlbumContainer.getCollectionAlbumsMusiques().sortRangementAlbum();
 
 			// Update collection and concert metrics history
-			Control.getCollectionMetricsHsitory().addPresentCollectionMetricsToHistory(System.currentTimeMillis(), collectionAlbumContainer);
-			Control.getConcertMetricsHsitory().addPresentConcertMetricsToHistory(System.currentTimeMillis(), collectionAlbumContainer);
+			long now = System.currentTimeMillis();
+			Control.getCollectionMetricsHsitory().addPresentCollectionMetricsToHistory(now, collectionAlbumContainer);
+			Control.getConcertMetricsHsitory().addPresentConcertMetricsToHistory(now, collectionAlbumContainer);
 			
 			albumLog.info("Fin de la génération");
 
@@ -298,6 +302,7 @@ public class GenerationSiteCollection  extends SwingWorker<String,ProgressInform
 
 		progressPanel.setProgressInformation(new ProgressInformation(FIN_GENERATION, ARRET, ""));
 		tableModels.forEach(AbstractTableModel::fireTableDataChanged);
+		colorableTabbedPanes.forEach(AbstractColorableTabbedPane::setTabColor);
 	}
 
 	@Override

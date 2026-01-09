@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2025 Frederic Lefevre
+Copyright (c) 2017, 2026 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -43,7 +43,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 class MetricsHistoryTest {
-
+	
 	private final static Logger mLog = Logger.getLogger(MetricsHistoryTest.class.getName());
 	
 	private static Path historyFolderBase;
@@ -66,18 +66,17 @@ class MetricsHistoryTest {
 	
 	private static class TestMetricsHistory extends MetricsHistory {
 
+		protected static final String METRIC_NAME = "Metric name for test";
+		
 		protected TestMetricsHistory(Path storagePath) throws IOException {
-			super(storagePath);
+			super(storagePath, METRIC_NAME);
 		}
 
 		@Override
-		public Map<String, String> getMetricsNamesMap() {
-			return Map.of("albums", "Nombre album", "Artiste", "Nombre artiste");
-		}
-
-		@Override
-		public List<String> getMetricsKeys() {			
-			return List.of("albums", "Artiste");
+		public MetricAttributesList getMetricsAttributes() {			
+			return new MetricAttributesList(List.of(
+					new MetricAttributes("albums", "Nombre album", 300), 
+					new MetricAttributes("Artiste", "Nombre artiste", 300)));
 		}		
 	}
 	
@@ -146,7 +145,7 @@ class MetricsHistoryTest {
 		assertThat(metricsHistory.getMetricsHistory()).isEmpty();
 		assertThat(historyPath1).isEmptyDirectory();
 		
-		metricsHistory.addNewMetrics(new Metrics(now, Map.of("albums", 10.0, "Artiste", 5.0)));
+		metricsHistory.addAndWriteNewMetricsToHistory(new Metrics(now, Map.of("albums", 10.0, "Artiste", 5.0)));
 		
 		assertThat(historyPath1).isNotEmptyDirectory();
 		assertThat(metricsHistory.getMetricsHistory()).singleElement()
@@ -165,9 +164,10 @@ class MetricsHistoryTest {
 		Metrics yesterdayMetrics = new Metrics(yesterday, Map.of("albums", 8.0, "Artiste", 5.0));
 		
 		MetricsHistory metricsHistory = new TestMetricsHistory(historyPath2);
+		assertThat(metricsHistory.getName()).isEqualTo(TestMetricsHistory.METRIC_NAME);
 		
-		metricsHistory.addNewMetrics(todayMetrics);
-		metricsHistory.addNewMetrics(yesterdayMetrics);
+		metricsHistory.addAndWriteNewMetricsToHistory(todayMetrics);
+		metricsHistory.addAndWriteNewMetricsToHistory(yesterdayMetrics);
 		
 		assertThat(metricsHistory.getMetricsHistory()).hasSize(2)
 			.satisfiesExactly(
@@ -191,10 +191,10 @@ class MetricsHistoryTest {
 		
 		MetricsHistory metricsHistory = new TestMetricsHistory(historyPath3);
 		
-		metricsHistory.addNewMetrics(twoDaysAgoMetrics);
-		metricsHistory.addNewMetrics(yesterdayMetrics);
-		metricsHistory.addNewMetrics(todayMetrics);
-		metricsHistory.addNewMetrics(todayMetrics2);
+		metricsHistory.addAndWriteNewMetricsToHistory(twoDaysAgoMetrics);
+		metricsHistory.addAndWriteNewMetricsToHistory(yesterdayMetrics);
+		metricsHistory.addAndWriteNewMetricsToHistory(todayMetrics);
+		metricsHistory.addAndWriteNewMetricsToHistory(todayMetrics2);
 		
 		assertThat(metricsHistory.getMetricsHistory()).hasSize(2)
 			.satisfiesExactly(
@@ -206,6 +206,40 @@ class MetricsHistoryTest {
 						assertThat(metricTwoDaysAgo.getMetricTimeStamp()).isEqualTo(twoDaysAgo);
 						assertThat(metricTwoDaysAgo.hasSameMetricsAs(new Metrics(0, Map.of("albums", 8.0, "Artiste", 5.0))));
 					});
+		assertThat(metricsHistory.getPresentMetrics()).isNull();
+		assertThat(metricsHistory.hasEvolved()).isFalse();
+		
+		metricsHistory.setPresentMetricsIfNew(todayMetrics);
+		assertThat(metricsHistory.getPresentMetrics()).isNull();
+		assertThat(metricsHistory.hasEvolved()).isFalse();
+		
+		Metrics newPresentyMetrics = new Metrics(now, Map.of("albums", 11.0, "Artiste", 5.0));
+		
+		metricsHistory.setPresentMetricsIfNew(newPresentyMetrics);
+		assertThat(metricsHistory.getPresentMetrics())
+			.isNotNull()
+			.satisfies(metricNow -> {
+				assertThat(metricNow.getMetricTimeStamp()).isEqualTo(now);
+				assertThat(metricNow.hasSameMetricsAs(new Metrics(0, Map.of("albums", 11.0, "Artiste", 5.0))));
+			});
+		assertThat(metricsHistory.hasEvolved()).isTrue();
+		
+		metricsHistory.addAndWriteNewMetricsToHistory(newPresentyMetrics);
+		
+		assertThat(metricsHistory.getMetricsHistory()).hasSize(3)
+			.satisfiesExactly(
+				metricPresent -> { 
+					assertThat(metricPresent.getMetricTimeStamp()).isEqualTo(now);
+					assertThat(metricPresent.hasSameMetricsAs(new Metrics(0, Map.of("albums", 11.0, "Artiste", 5.0))));
+				},
+				metricNow -> { 
+					assertThat(metricNow.getMetricTimeStamp()).isEqualTo(now);
+					assertThat(metricNow.hasSameMetricsAs(new Metrics(0, Map.of("albums", 10.0, "Artiste", 5.0))));
+				},
+				metricTwoDaysAgo -> { 
+					assertThat(metricTwoDaysAgo.getMetricTimeStamp()).isEqualTo(twoDaysAgo);
+					assertThat(metricTwoDaysAgo.hasSameMetricsAs(new Metrics(0, Map.of("albums", 8.0, "Artiste", 5.0))));
+				});
 	}
 	
 	@Test
@@ -218,7 +252,7 @@ class MetricsHistoryTest {
 		LogRecordCounter filterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.metrics.MetricsHistory"));
 		
 		assertThatIllegalArgumentException()
-			.isThrownBy(() -> metricsHistory.addNewMetrics(todayMetrics))
+			.isThrownBy(() -> metricsHistory.addAndWriteNewMetricsToHistory(todayMetrics))
 			.withMessageContaining("Adding a incompatible metrics to metricsHistory");
 		
 		assertThat(filterCounter.getLogRecordCount()).isEqualTo(1);
@@ -234,12 +268,12 @@ class MetricsHistoryTest {
 		Metrics todayMetrics = new Metrics(now, Map.of("albums", 10.0, "Auteurs", 5.0));
 		
 		MetricsHistory metricsHistory = new TestMetricsHistory(historyPath5);
-		metricsHistory.addNewMetrics(yesterdayMetrics);
+		metricsHistory.addAndWriteNewMetricsToHistory(yesterdayMetrics);
 		
 		LogRecordCounter filterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.metrics.MetricsHistory"));
 		
 		assertThatIllegalArgumentException()
-			.isThrownBy(() -> metricsHistory.addNewMetrics(todayMetrics))
+			.isThrownBy(() -> metricsHistory.addAndWriteNewMetricsToHistory(todayMetrics))
 			.withMessageContaining("Adding a incompatible metrics to metricsHistory");
 		
 		assertThat(filterCounter.getLogRecordCount()).isEqualTo(1);
@@ -258,7 +292,7 @@ class MetricsHistoryTest {
 		LogRecordCounter filterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.metrics.MetricsHistory"));
 		
 		assertThatIllegalArgumentException()
-			.isThrownBy(() -> metricsHistory.addNewMetrics(todayMetrics))
+			.isThrownBy(() -> metricsHistory.addAndWriteNewMetricsToHistory(todayMetrics))
 			.withMessageContaining("Adding a incompatible metrics to metricsHistory");
 		
 		assertThat(filterCounter.getLogRecordCount()).isEqualTo(1);

@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2025 Frederic Lefevre
+Copyright (c) 2017, 2026 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,19 +24,22 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui;
 
-import javax.swing.JTable;
+import java.awt.Color;
 
-public class CollectionMetricsHistoryJTable  extends JTable {
+import javax.swing.JTabbedPane;
+
+public abstract class AbstractColorableTabbedPane extends JTabbedPane {
 
 	private static final long serialVersionUID = 1L;
+
+	protected abstract Color getBackgroundColorFor(int idx);
+	protected abstract Color getForegroundColorFor(int idx);
 	
-	private static final int TOTAL_COL_IDX = 1;
-	
-	public CollectionMetricsHistoryJTable(MetricsHistoryTableModel metricsHistoryTableModel) {
+	public void setTabColor() {
 		
-		super(metricsHistoryTableModel);
-		
-		getColumnModel().getColumn(MetricsHistoryTableModel.DATE_COL_IDX).setPreferredWidth(200);
-		getColumnModel().getColumn(TOTAL_COL_IDX).setPreferredWidth(250);
+		for(int idx=0; idx < getTabCount(); idx++) {
+			setForegroundAt(idx, getForegroundColorFor(idx));
+			setBackgroundAt(idx, getBackgroundColorFor(idx));
+		}
 	}
 }
