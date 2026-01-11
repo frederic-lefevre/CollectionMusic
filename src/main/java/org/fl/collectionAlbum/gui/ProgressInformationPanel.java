@@ -24,7 +24,6 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -33,10 +32,10 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.logging.Logger;
 
-import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 
 public class ProgressInformationPanel extends JPanel {
 
@@ -57,8 +56,7 @@ public class ProgressInformationPanel extends JPanel {
 		Font font = new Font("Verdana", Font.BOLD, 14);
 
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-		setBackground(Color.WHITE);
-		setBorder(BorderFactory.createMatteBorder(10, 10, 10, 10, Color.WHITE));
+		setBorder(new EmptyBorder(10, 10, 10, 10));
 		setAlignmentX(Component.LEFT_ALIGNMENT);
 
 		JPanel statusPane = new JPanel();
@@ -67,13 +65,10 @@ public class ProgressInformationPanel extends JPanel {
 		lblStatus = new JLabel("");
 		lblStatusTitle.setFont(font);
 		lblStatusTitle.setAlignmentX(Component.LEFT_ALIGNMENT);
-		lblStatusTitle.setBackground(Color.WHITE);
 		lblStatus.setFont(font);
 		lblStatus.setAlignmentX(Component.LEFT_ALIGNMENT);
-		lblStatus.setBackground(Color.WHITE);
 		statusPane.add(lblStatusTitle);
 		statusPane.add(lblStatus);
-		statusPane.setBackground(Color.WHITE);
 		statusPane.setAlignmentX(Component.LEFT_ALIGNMENT);
 		add(statusPane);
 
@@ -85,15 +80,11 @@ public class ProgressInformationPanel extends JPanel {
 		lblStep.setAlignmentX(Component.LEFT_ALIGNMENT);
 		lblStep.setFont(font);
 		lblStepInformation.setFont(font);
-		lblStepInformation.setBackground(Color.WHITE);
 		lblStepPrefixInformation.setFont(font);
-		lblStepPrefixInformation.setBackground(Color.WHITE);
-		lblStep.setBackground(Color.WHITE);
 		infoStep.add(lblStep);
 		infoStep.add(lblStepPrefixInformation);
 		infoStep.add(lblStepInformation);
 		infoStep.setAlignmentX(Component.LEFT_ALIGNMENT);
-		infoStep.setBackground(Color.WHITE);
 		add(infoStep);
 	}
 	
