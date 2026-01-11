@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2025 Frederic Lefevre
+Copyright (c) 2017, 2026 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -47,6 +47,8 @@ public class UtilsPane extends JPanel implements ActivableElement {
 
 	private static final long serialVersionUID = 1L;
 	
+	private final JButton albumsSearchButton;
+	
 	private final JButton pickRandomAlbumsButton;
 	private final JComboBox<Integer> numberOfAlbumBox;
 	private final JComboBox<String> methodOfChoiceBox;
@@ -68,22 +70,37 @@ public class UtilsPane extends JPanel implements ActivableElement {
 		Font buttonFont = new Font("Verdana", Font.BOLD, 14);
 		Font textFont = new Font("Verdana", Font.BOLD, 12);
 		
+		JPanel showCollectionPanel = new JPanel();
+		
 		JButton showCollectionButton = new JButton("Montrer la collection");
 		
 		showCollectionButton.setFont(buttonFont);
 		showCollectionButton.setBackground(Color.GREEN);
 		showCollectionButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
-		add(showCollectionButton);
+		showCollectionPanel.add(showCollectionButton);
+		showCollectionPanel.setBorder(new EmptyBorder(10, 0, 5, 0));
+		add(showCollectionPanel);
 		
 		OsActionListener<List<String>> showCollectionListener = 
 				new OsActionListener<>(List.of(RapportStructuresAndNames.getAbsoluteHomeCollectionUrl()), Control.getDisplayUrlAction());
 		
 		showCollectionButton.addActionListener(showCollectionListener);
 
+		JPanel albumsSearchPanel = new JPanel();
+		
+		albumsSearchButton = new JButton("Rechercher des albums");
+		albumsSearchButton.setFont(buttonFont);
+		albumsSearchButton.setBackground(Color.GREEN);
+		albumsSearchButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		albumsSearchPanel.add(albumsSearchButton);
+		albumsSearchPanel.setBorder(new EmptyBorder(5, 0, 5, 0));
+		add(albumsSearchPanel);
+		
 		JPanel choixAleatoirePane = new JPanel();
 		choixAleatoirePane.setLayout(new BoxLayout(choixAleatoirePane, BoxLayout.Y_AXIS));
-		choixAleatoirePane.setBorder(new EmptyBorder(60, 0, 20, 40));
+		choixAleatoirePane.setBorder(new EmptyBorder(10, 0, 20, 40));
 		
 		JPanel choixNombreAlbumPane = new JPanel();
 		choixNombreAlbumPane.setLayout(new BoxLayout(choixNombreAlbumPane, BoxLayout.X_AXIS));
@@ -153,10 +170,12 @@ public class UtilsPane extends JPanel implements ActivableElement {
 	@Override
 	public void activate() {
 		pickRandomAlbumsButton.setEnabled(true);
+		albumsSearchButton.setEnabled(true);
 	}
 
 	@Override
 	public void deactivate() {
-		pickRandomAlbumsButton.setEnabled(false);	
+		pickRandomAlbumsButton.setEnabled(false);
+		albumsSearchButton.setEnabled(false);
 	}
 }
