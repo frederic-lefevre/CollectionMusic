@@ -65,7 +65,7 @@ public class AlbumCustomActionListener implements java.awt.event.ActionListener 
 	
 	public enum CustomAction {
 		
-		DETAILED_INFO_DISPLAY("Informations détaillées", Objects::nonNull), 
+		DETAILED_INFO_DISPLAY("Informations détaillées de l'album", Objects::nonNull), 
 		DISCOGS_RELEASE_SEARCH("Chercher la release discogs", isLinkedToDiscogsRelease.negate()),
 		MISSING_MEDIA_FILES_SEARCH("Chercher les fichiers media manquants ou invalides", hasMissingOrInvalidMediaFiles);
 		
