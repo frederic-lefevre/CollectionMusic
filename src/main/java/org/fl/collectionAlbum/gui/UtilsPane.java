@@ -100,7 +100,7 @@ public class UtilsPane extends JPanel implements ActivableElement {
 		
 		JPanel choixAleatoirePane = new JPanel();
 		choixAleatoirePane.setLayout(new BoxLayout(choixAleatoirePane, BoxLayout.Y_AXIS));
-		choixAleatoirePane.setBorder(new EmptyBorder(10, 0, 20, 40));
+		choixAleatoirePane.setBorder(new EmptyBorder(10, 0, 10, 30));
 		
 		JPanel choixNombreAlbumPane = new JPanel();
 		choixNombreAlbumPane.setLayout(new BoxLayout(choixNombreAlbumPane, BoxLayout.X_AXIS));
@@ -120,7 +120,7 @@ public class UtilsPane extends JPanel implements ActivableElement {
 		pickRandomAlbumsButton = new JButton("Albums aléatoires");
 		pickRandomAlbumsButton.setFont(buttonFont);
 		pickRandomAlbumsButton.setBackground(Color.GREEN);
-		pickRandomAlbumsButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+		pickRandomAlbumsButton.setAlignmentX(Component.RIGHT_ALIGNMENT);
 		
 		choixAleatoirePane.add(pickRandomAlbumsButton);
 		

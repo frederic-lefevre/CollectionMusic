@@ -43,12 +43,16 @@ public class GenerationPane extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	private final static String rText = "Lecture des fichiers albums et concerts";
-	private final static String gText = "Génération du nouveau site collection";
-	private final static String iText = "Arrêt";
-	private final static String sText = "Aucune collection lue";
-	private final static String s1Text = "Aucun site généré";
+	private static final String rText = "Lecture des fichiers albums et concerts";
+	private static final String gText = "Génération du nouveau site collection";
+	private static final String iText = "Arrêt";
+	private static final String sText = "Aucune collection lue";
+	private static final String s1Text = "Aucun site généré";
 
+	private static final int CONTROL_PANEL_HEIGHT = 250;
+	private static final int START_CONTROL_PANEL_WIDTH = 700;
+	private static final int UTILS_PANEL_WIDTH = 300;
+	
 	private final StartControl readCollectionControl;
 	private final StartControl generateSiteControl;
 	
@@ -66,15 +70,20 @@ public class GenerationPane extends JPanel {
 		controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.X_AXIS));
 		
 		readCollectionControl = new StartControl(rText, iText, sText, () -> true);
-		controlPanel.add(readCollectionControl.getProcessControlPanel());
+		JPanel readCollectionControlPanel = readCollectionControl.getProcessControlPanel();
+		readCollectionControlPanel.setPreferredSize(new Dimension(START_CONTROL_PANEL_WIDTH, CONTROL_PANEL_HEIGHT));
+		controlPanel.add(readCollectionControlPanel);
 
 		UtilsPane utilsPane = new UtilsPane(this);
+		utilsPane.setPreferredSize(new Dimension(UTILS_PANEL_WIDTH, CONTROL_PANEL_HEIGHT));
 		utilsPane.deactivate();
 		controlPanel.add(utilsPane);
 		
 		generateSiteControl = new StartControl(gText, iText, s1Text, StartGenerationSite.activationPredicate);
 		generateSiteControl.deactivate();
-		controlPanel.add(generateSiteControl.getProcessControlPanel());
+		JPanel generateSiteControlPanel = generateSiteControl.getProcessControlPanel();
+		generateSiteControlPanel.setPreferredSize(new Dimension(START_CONTROL_PANEL_WIDTH, CONTROL_PANEL_HEIGHT));
+		controlPanel.add(generateSiteControlPanel);
 
 		List<ActivableElement> activableElements = List.of(readCollectionControl, utilsPane, generateSiteControl);
 
