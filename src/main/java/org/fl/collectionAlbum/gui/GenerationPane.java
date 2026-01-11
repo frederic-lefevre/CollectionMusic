@@ -66,7 +66,7 @@ public class GenerationPane extends JPanel {
 		controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.X_AXIS));
 		
 		readCollectionControl = new StartControl(rText, iText, sText, () -> true);
-		controlPanel.add(readCollectionControl.getProcCtrl());
+		controlPanel.add(readCollectionControl.getProcessControlPanel());
 
 		UtilsPane utilsPane = new UtilsPane(this);
 		utilsPane.deactivate();
@@ -74,7 +74,7 @@ public class GenerationPane extends JPanel {
 		
 		generateSiteControl = new StartControl(gText, iText, s1Text, StartGenerationSite.activationPredicate);
 		generateSiteControl.deactivate();
-		controlPanel.add(generateSiteControl.getProcCtrl());
+		controlPanel.add(generateSiteControl.getProcessControlPanel());
 
 		List<ActivableElement> activableElements = List.of(readCollectionControl, utilsPane, generateSiteControl);
 
