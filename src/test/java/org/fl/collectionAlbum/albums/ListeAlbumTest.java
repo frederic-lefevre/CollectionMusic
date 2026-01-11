@@ -26,52 +26,63 @@ package org.fl.collectionAlbum.albums;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.List;
 
+import org.assertj.core.util.Arrays;
+import org.fl.collectionAlbum.Control;
+import org.fl.collectionAlbum.artistes.ListeArtiste;
+import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.format.Format;
 import org.fl.collectionAlbum.format.MediaSupportCategories;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
 class ListeAlbumTest {
 
+	@BeforeAll
+	static void initControl() {
+		
+		// Just to configure Logger so that INFO message are not displayed
+		Control.getMusicRunningContext();
+	}
+	
 	@Test
 	void testEmptyListe() {
 		
 		ListeAlbum emptyListe =  ListeAlbum.Builder.getBuilder().build();
-		
-		assertThat(emptyListe).isNotNull();
-		
-		assertThat(emptyListe.getAlbums()).isNotNull().isEmpty();
-		assertThat(emptyListe.getNombreAlbums()).isZero();
-		
-		Format format = emptyListe.getFormatListeAlbum();
-		
-		assertThat(format.hasError()).isFalse();
-		assertThat(format.getPoids()).isZero();
-		
-		assertThat(format.getContentNatures()).isEmpty();
-		assertThat(format.getSupportsPhysiques()).isNotNull().containsOnly(MediaSupportCategories.values());
-		assertThat(format.getSupportsPhysiquesNumbers()).allSatisfy((sp, number) -> assertThat(number).isZero());	
+		emptyListeAlbumsAsserts(emptyListe);
 	}
 	
 	@Test
 	void testEmptyListe2() {
 		
 		ListeAlbum emptyListe =  ListeAlbum.Builder.getBuilderFrom(new ArrayList<>()).build();
+		emptyListeAlbumsAsserts(emptyListe);	
+	}
+	
+	@Test
+	void testEmptyListe3() {
 		
-		assertThat(emptyListe).isNotNull();
+		ListeAlbum emptyListe =  ListeAlbum.Builder.getBuilderFrom(new ArrayList<>())
+				.withAlbumSatisfying(album -> album.hasContentNature(ContentNature.AUDIO))
+				.build();
+		emptyListeAlbumsAsserts(emptyListe);	
+	}
+	
+	@Test
+	void testEmptyListe4() {
 		
-		assertThat(emptyListe.getAlbums()).isNotNull().isEmpty();
-		assertThat(emptyListe.getNombreAlbums()).isZero();
-		
-		Format format = emptyListe.getFormatListeAlbum();
-		
-		assertThat(format.hasError()).isFalse();
-		assertThat(format.getPoids()).isZero();
-		
-		assertThat(format.getContentNatures()).isEmpty();
-		assertThat(format.getSupportsPhysiques()).isNotNull().containsOnly(MediaSupportCategories.values());
-		assertThat(format.getSupportsPhysiquesNumbers()).allSatisfy((sp, number) -> assertThat(number).isZero());	
+		ListeAlbum emptyListe =  ListeAlbum.Builder.getBuilderFrom(new ArrayList<>())
+				.withAlbumSatisfying(album -> album.hasContentNature(ContentNature.AUDIO))
+				.withAlbumSatisfying(album -> !album.getTitre().contains("Van"))
+				.build();
+		emptyListeAlbumsAsserts(emptyListe);	
 	}
 	
 	private static final String albumStr1 = """
@@ -154,10 +165,120 @@ class ListeAlbumTest {
 }
 			""";
 	
+	private static final ObjectMapper mapper = new ObjectMapper();
 
+	private List<Album> buildAlbumList(String ...albumJsons) {
+		
+		return Arrays.asList(albumJsons).stream()
+			.map(albumJson -> {
+				try {
+					return (ObjectNode)mapper.readTree((String)albumJson);
+				} catch (JsonProcessingException e) {
+					fail("Exception when parsing album json");
+					return null;
+				}
+			})
+			.map(jAlbum -> {
+				ListeArtiste la = new ListeArtiste();
+				List<ListeArtiste> lla = new ArrayList<ListeArtiste>();
+				lla.add(la);
+
+				return new Album(jAlbum, lla, Path.of("dummyPath"));
+			}).toList();
+	}
+	
 	@Test
 	void testListeBuild1() {
 		
-		ListeAlbum listeAlbum =  ListeAlbum.Builder.getBuilder().build();
+		ListeAlbum listeAlbum =  ListeAlbum.Builder.getBuilderFrom(buildAlbumList(albumStr1, albumStr2, albumStr3)).build();
+		
+		listeAlbumsAsserts(listeAlbum, 3);
+	}
+	
+	@Test
+	void testListeBuild2() {
+		
+		ListeAlbum listeAlbum =  ListeAlbum.Builder.getBuilderFrom(buildAlbumList(albumStr1, albumStr2, albumStr3))
+				.withAlbumSatisfying(album -> album.hasContentNature(ContentNature.AUDIO))
+				.build();
+		
+		listeAlbumsAsserts(listeAlbum, 3);
+	}
+	
+	@Test
+	void testListeBuild3() {
+		
+		ListeAlbum listeAlbum =  ListeAlbum.Builder.getBuilderFrom(buildAlbumList(albumStr1, albumStr2, albumStr3))
+				.withAlbumSatisfying(album -> album.hasContentNature(ContentNature.VIDEO))
+				.build();
+		emptyListeAlbumsAsserts(listeAlbum);	
+	}
+	
+	@Test
+	void testListeBuild4() {
+		
+		ListeAlbum listeAlbum =  ListeAlbum.Builder.getBuilderFrom(buildAlbumList(albumStr1, albumStr2, albumStr3))
+				.withAlbumSatisfying(album -> album.getTitre().contains("mystery"))
+				.build();
+		
+		listeAlbumsAsserts(listeAlbum, 1);
+	}
+	
+	@Test
+	void testListeBuild5() {
+		
+		ListeAlbum listeAlbum =  ListeAlbum.Builder.getBuilderFrom(buildAlbumList(albumStr1, albumStr2, albumStr3))
+				.withAlbumSatisfying(album -> !album.getTitre().contains("Van"))
+				.build();
+		
+		listeAlbumsAsserts(listeAlbum, 2);
+	}
+	
+	@Test
+	void testListeBuild6() {
+		
+		ListeAlbum listeAlbum =  ListeAlbum.Builder.getBuilderFrom(buildAlbumList(albumStr1, albumStr2, albumStr3))
+				.withAlbumSatisfying(album -> album.getTitre().contains("Peu importe"))
+				.build();
+		
+		emptyListeAlbumsAsserts(listeAlbum);
+	}
+	
+	private void emptyListeAlbumsAsserts(ListeAlbum emptyListe) {
+		
+		assertThat(emptyListe).isNotNull();
+		
+		assertThat(emptyListe.getAlbums()).isNotNull().isEmpty();
+		assertThat(emptyListe.getNombreAlbums()).isZero();
+		
+		Format format = emptyListe.getFormatListeAlbum();
+		
+		assertThat(format.hasError()).isFalse();
+		assertThat(format.getPoids()).isZero();
+		
+		assertThat(format.getContentNatures()).isEmpty();
+		assertThat(format.getSupportsPhysiques()).isNotNull().containsOnly(MediaSupportCategories.values());
+		assertThat(format.getSupportsPhysiquesNumbers()).allSatisfy((sp, number) -> assertThat(number).isZero());	
+	}
+	
+	private void listeAlbumsAsserts(ListeAlbum listeAlbum, int expectedNumber) {
+		
+		assertThat(listeAlbum).isNotNull();
+		assertThat(listeAlbum.getNombreAlbums()).isEqualTo(expectedNumber);
+		
+		Format format = listeAlbum.getFormatListeAlbum();
+		
+		assertThat(format.hasError()).isFalse();
+		assertThat(format.getPoids()).isEqualTo(expectedNumber);
+		
+		assertThat(format.getContentNatures()).isNotEmpty().hasSize(1).contains(ContentNature.AUDIO);
+		assertThat(format.getSupportsPhysiques()).isNotNull().containsOnly(MediaSupportCategories.values());
+		assertThat(format.getSupportsPhysiquesNumbers()).allSatisfy((sp, number) -> {
+				if (sp == MediaSupportCategories.CD) {
+					assertThat(number).isEqualTo(expectedNumber);
+				} else {
+					assertThat(number).isZero(); 
+				}
+			});	
 	}
 }

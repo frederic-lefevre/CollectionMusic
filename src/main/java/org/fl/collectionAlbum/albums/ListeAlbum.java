@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2025 Frederic Lefevre
+Copyright (c) 2017, 2026 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -100,32 +100,35 @@ public class ListeAlbum {
 	
 	public static class Builder {
 		
-		private final ListeAlbum listeAlbum;
+		private List<Album> albums;
 		
 		private Builder() {
-			listeAlbum = new ListeAlbum();
+			albums = new ArrayList<>();	
+		}
+		
+		private Builder(List<Album> la) {
+			albums = new ArrayList<>(la);
+
 		}
 		
 		public static Builder getBuilder() {
 			return new Builder();
 		}
 		
-		public Builder from(List<Album> la) {
-			listeAlbum.reset();
-			if (la != null) {
-				la.forEach(album -> listeAlbum.addAlbum(album));
-			}
-			return this;
+		public static Builder getBuilderFrom(List<Album> la) {
+			return new Builder(la);
 		}
 		
 		public Builder withAlbumSatisfying(Predicate<Album> albumPredicate) {
-			
-			return from(listeAlbum.getAlbums().stream()
-					.filter(albumPredicate)
-					.collect(Collectors.toList()));
+			albums = albums.stream()
+				.filter(albumPredicate)
+				.collect(Collectors.toList());		
+			return this;
 		}
 		
 		public ListeAlbum build() {
+			ListeAlbum listeAlbum = new ListeAlbum();
+			albums.forEach(album -> listeAlbum.addAlbum(album));
 			return listeAlbum;
 		}
 	}
