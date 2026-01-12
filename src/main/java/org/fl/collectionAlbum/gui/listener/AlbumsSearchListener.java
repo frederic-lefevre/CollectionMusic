@@ -24,16 +24,23 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui.listener;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import org.fl.collectionAlbum.gui.GenerationPane;
 
 public class AlbumsSearchListener implements java.awt.event.ActionListener {
 
+	private static final Font buttonFont = new Font("Verdana", Font.BOLD, 14);
+	
 	private final GenerationPane generationPane;
 	
 	public AlbumsSearchListener(GenerationPane generationPane) {
@@ -44,10 +51,27 @@ public class AlbumsSearchListener implements java.awt.event.ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
-		JScrollPane albumsScrollTable = new JScrollPane();
-		albumsScrollTable.setPreferredSize(new Dimension(1800,700));
+		JPanel mainPane = new JPanel();
+		mainPane.setLayout(new BoxLayout(mainPane, BoxLayout.Y_AXIS));
 		
-		JOptionPane.showMessageDialog(null, albumsScrollTable, "Recherche d'albums", JOptionPane.INFORMATION_MESSAGE);
+		JPanel searchCriteriaPanel = new JPanel();
+		searchCriteriaPanel.setLayout(new BoxLayout(searchCriteriaPanel, BoxLayout.X_AXIS));
+		
+		JButton albumsSearchButton = new JButton("Rechercher");
+		
+		searchCriteriaPanel.add(albumsSearchButton);
+		
+		albumsSearchButton.setFont(buttonFont);
+		albumsSearchButton.setBackground(Color.GREEN);
+		
+		mainPane.add(searchCriteriaPanel);
+		
+		JScrollPane albumsScrollTable = new JScrollPane();
+		albumsScrollTable.setPreferredSize(new Dimension(1800,900));
+		
+		mainPane.add(albumsScrollTable);
+		
+		JOptionPane.showMessageDialog(null, mainPane, "Recherche d'albums", JOptionPane.INFORMATION_MESSAGE);
 	}
 
 }
