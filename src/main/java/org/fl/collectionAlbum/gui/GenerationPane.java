@@ -49,7 +49,7 @@ public class GenerationPane extends JPanel {
 	private static final String sText = "Aucune collection lue";
 	private static final String s1Text = "Aucun site généré";
 
-	private static final int CONTROL_PANEL_HEIGHT = 250;
+	private static final int CONTROL_PANEL_HEIGHT = 220;
 	private static final int START_CONTROL_PANEL_WIDTH = 700;
 	private static final int UTILS_PANEL_WIDTH = 300;
 	

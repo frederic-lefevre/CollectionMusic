@@ -79,7 +79,7 @@ public class UtilsPane extends JPanel implements ActivableElement {
 		showCollectionButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		showCollectionPanel.add(showCollectionButton);
-		showCollectionPanel.setBorder(new EmptyBorder(10, 0, 5, 0));
+		showCollectionPanel.setBorder(new EmptyBorder(2, 0, 4, 0));
 		add(showCollectionPanel);
 		
 		OsActionListener<List<String>> showCollectionListener = 
@@ -95,12 +95,12 @@ public class UtilsPane extends JPanel implements ActivableElement {
 		albumsSearchButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		albumsSearchPanel.add(albumsSearchButton);
-		albumsSearchPanel.setBorder(new EmptyBorder(5, 0, 5, 0));
+		albumsSearchPanel.setBorder(new EmptyBorder(4, 0, 4, 0));
 		add(albumsSearchPanel);
 		
 		JPanel choixAleatoirePane = new JPanel();
 		choixAleatoirePane.setLayout(new BoxLayout(choixAleatoirePane, BoxLayout.Y_AXIS));
-		choixAleatoirePane.setBorder(new EmptyBorder(10, 0, 10, 30));
+		choixAleatoirePane.setBorder(new EmptyBorder(4, 0, 4, 30));
 		
 		JPanel choixNombreAlbumPane = new JPanel();
 		choixNombreAlbumPane.setLayout(new BoxLayout(choixNombreAlbumPane, BoxLayout.X_AXIS));
