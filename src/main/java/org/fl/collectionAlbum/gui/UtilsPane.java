@@ -25,7 +25,6 @@ SOFTWARE.
 package org.fl.collectionAlbum.gui;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Font;
 import java.util.List;
 import java.util.Optional;
@@ -36,7 +35,9 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.LineBorder;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.gui.listener.OsActionListener;
@@ -76,10 +77,9 @@ public class UtilsPane extends JPanel implements ActivableElement {
 		
 		showCollectionButton.setFont(buttonFont);
 		showCollectionButton.setBackground(Color.GREEN);
-		showCollectionButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		showCollectionPanel.add(showCollectionButton);
-		showCollectionPanel.setBorder(new EmptyBorder(2, 0, 4, 0));
+		showCollectionPanel.setBorder(new CompoundBorder(new LineBorder(Color.BLACK), new EmptyBorder(2, 0, 4, 0)));
 		add(showCollectionPanel);
 		
 		OsActionListener<List<String>> showCollectionListener = 
@@ -92,19 +92,19 @@ public class UtilsPane extends JPanel implements ActivableElement {
 		albumsSearchButton = new JButton("Rechercher des albums");
 		albumsSearchButton.setFont(buttonFont);
 		albumsSearchButton.setBackground(Color.GREEN);
-		albumsSearchButton.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		albumsSearchPanel.add(albumsSearchButton);
-		albumsSearchPanel.setBorder(new EmptyBorder(4, 0, 4, 0));
+		albumsSearchPanel.setBorder(new CompoundBorder(new LineBorder(Color.BLACK), new EmptyBorder(4, 0, 4, 0)));
+		albumsSearchPanel.setBackground(Color.WHITE);
 		add(albumsSearchPanel);
 		
 		JPanel choixAleatoirePane = new JPanel();
 		choixAleatoirePane.setLayout(new BoxLayout(choixAleatoirePane, BoxLayout.Y_AXIS));
-		choixAleatoirePane.setBorder(new EmptyBorder(4, 0, 4, 30));
+		choixAleatoirePane.setBorder(new EmptyBorder(4, 0, 4, 0));
 		
 		JPanel choixNombreAlbumPane = new JPanel();
 		choixNombreAlbumPane.setLayout(new BoxLayout(choixNombreAlbumPane, BoxLayout.X_AXIS));
-		choixNombreAlbumPane.setBorder(new EmptyBorder(0, 5, 5, 5));
+		choixNombreAlbumPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		
 		JLabel titreAlbumsAleatoire = new JLabel("Choisir");
 		titreAlbumsAleatoire.setFont(textFont);
@@ -114,19 +114,22 @@ public class UtilsPane extends JPanel implements ActivableElement {
 		numberOfAlbumBox = new JComboBox<>(numberOfAlbumsChoice);
 		numberOfAlbumBox.setSelectedIndex(DEFAULT_NUMBER_OF_RANDOM_ALBUMS-1);	
 		choixNombreAlbumPane.add(numberOfAlbumBox);
+		choixNombreAlbumPane.setBorder(new EmptyBorder(4, 5, 5, 100));
 		
 		choixAleatoirePane.add(choixNombreAlbumPane);
 		
+		JPanel pickRandomAlbumsPanel = new JPanel();
 		pickRandomAlbumsButton = new JButton("Albums aléatoires");
 		pickRandomAlbumsButton.setFont(buttonFont);
 		pickRandomAlbumsButton.setBackground(Color.GREEN);
-		pickRandomAlbumsButton.setAlignmentX(Component.RIGHT_ALIGNMENT);
+		pickRandomAlbumsPanel.add(pickRandomAlbumsButton);
+		pickRandomAlbumsPanel.setBorder(new EmptyBorder(0, 0, 0, 80));
 		
-		choixAleatoirePane.add(pickRandomAlbumsButton);
+		choixAleatoirePane.add(pickRandomAlbumsPanel);
 		
 		JPanel choixMethodPane = new JPanel();
 		choixMethodPane.setLayout(new BoxLayout(choixMethodPane, BoxLayout.X_AXIS));
-		choixMethodPane.setBorder(new EmptyBorder(5, 5, 5, 0));
+		choixMethodPane.setBorder(new EmptyBorder(4, 5, 5, 100));
 		
 		JLabel methodeAleatoire = new JLabel("équi-réparti par");
 		methodeAleatoire.setFont(textFont);
@@ -137,6 +140,7 @@ public class UtilsPane extends JPanel implements ActivableElement {
 		choixMethodPane.add(methodeAleatoire);
 		choixMethodPane.add(methodOfChoiceBox);
 		
+		choixAleatoirePane.setBorder(new LineBorder(Color.BLACK));
 		choixAleatoirePane.add(choixMethodPane);
 		
 		RandomAlbumsPickListener pickRandomAlbumsListener = new RandomAlbumsPickListener(this, generationPane);
