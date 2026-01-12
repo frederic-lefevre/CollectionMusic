@@ -35,10 +35,12 @@ import javax.swing.JPanel;
 
 public class StartControl implements ActivableElement {
 
+	private static final Font font = new Font("Verdana", Font.BOLD, 14);
+	
 	private final JPanel processControlPanel;
 	private final JButton processStartButton;
 	private final BooleanSupplier activationCondition;
-
+	
 	private final ProgressInformationPanel progressInformationPanel;
 	
 	public StartControl(String bText, String iText, String sText, BooleanSupplier activationCondition) {
@@ -53,7 +55,6 @@ public class StartControl implements ActivableElement {
 		
 		processStartButton = new JButton(buttonText);
 		
-		Font font = new Font("Verdana", Font.BOLD, 14);
 		processStartButton.setFont(font);
 		processStartButton.setBackground(Color.GREEN);		
 		

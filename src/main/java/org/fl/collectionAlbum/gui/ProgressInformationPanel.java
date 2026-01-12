@@ -46,6 +46,8 @@ public class ProgressInformationPanel extends JPanel {
 	private final JLabel lblStepInformation;
 	private final JLabel lblStatus;
 	
+	private static final Font font = new Font("Verdana", Font.BOLD, 14);
+	
 	private static final String dateFrancePattern = " EEEE dd MMMM yyyy à HH:mm:ss";
 	private final DateTimeFormatter dateTimeFormatter;
 	
@@ -53,7 +55,6 @@ public class ProgressInformationPanel extends JPanel {
 		
 		super();
 		dateTimeFormatter = DateTimeFormatter.ofPattern(dateFrancePattern, Locale.FRANCE);
-		Font font = new Font("Verdana", Font.BOLD, 14);
 
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setBorder(new EmptyBorder(10, 10, 10, 10));

@@ -49,6 +49,9 @@ public class UtilsPane extends JPanel implements ActivableElement {
 
 	private static final long serialVersionUID = 1L;
 	
+	private static final Font buttonFont = new Font("Verdana", Font.BOLD, 14);
+	private static final Font textFont = new Font("Verdana", Font.BOLD, 12);
+	
 	private final JButton albumsSearchButton;
 	
 	private final JButton pickRandomAlbumsButton;
@@ -68,9 +71,6 @@ public class UtilsPane extends JPanel implements ActivableElement {
 
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.setBorder(BorderFactory.createMatteBorder(10,0,10,0,Color.BLACK));
-		
-		Font buttonFont = new Font("Verdana", Font.BOLD, 14);
-		Font textFont = new Font("Verdana", Font.BOLD, 12);
 		
 		JPanel showCollectionPanel = new JPanel();
 		
