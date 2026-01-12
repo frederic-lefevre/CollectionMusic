@@ -54,7 +54,7 @@ public class UtilsPane extends JPanel implements ActivableElement {
 	private final JComboBox<Integer> numberOfAlbumBox;
 	private final JComboBox<String> methodOfChoiceBox;
 	
-	private static final int DEFAULT_NUMBER_OF_RANDOM_ALBUMS = 5;
+	private static final int DEFAULT_NUMBER_OF_RANDOM_ALBUMS = 10;
 	public static final String EQUI_REPARTI_PAR_ARTISTE = "artiste";
 	public static final String EQUI_REPARTI_PAR_ALBUM = "album";
 	
