@@ -40,6 +40,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 import org.fl.collectionAlbum.Control;
+import org.fl.collectionAlbum.gui.listener.AlbumsSearchListener;
 import org.fl.collectionAlbum.gui.listener.OsActionListener;
 import org.fl.collectionAlbum.gui.listener.RandomAlbumsPickListener;
 import org.fl.collectionAlbum.rapportHtml.RapportStructuresAndNames;
@@ -125,6 +126,7 @@ public class UtilsPane extends JPanel implements ActivableElement {
 		pickRandomAlbumsPanel.add(pickRandomAlbumsButton);
 		pickRandomAlbumsPanel.setBorder(new EmptyBorder(0, 0, 0, 80));
 		
+		albumsSearchButton.addActionListener(new AlbumsSearchListener(generationPane));
 		choixAleatoirePane.add(pickRandomAlbumsPanel);
 		
 		JPanel choixMethodPane = new JPanel();
