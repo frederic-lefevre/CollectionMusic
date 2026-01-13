@@ -28,6 +28,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
+import java.time.LocalDate;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -35,6 +36,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import org.fl.collectionAlbum.gui.DateChooser;
 import org.fl.collectionAlbum.gui.GenerationPane;
 
 public class AlbumsSearchListener implements java.awt.event.ActionListener {
@@ -56,6 +58,9 @@ public class AlbumsSearchListener implements java.awt.event.ActionListener {
 		
 		JPanel searchCriteriaPanel = new JPanel();
 		searchCriteriaPanel.setLayout(new BoxLayout(searchCriteriaPanel, BoxLayout.X_AXIS));
+		
+		DateChooser dateChooser = new DateChooser(LocalDate.now());
+		searchCriteriaPanel.add(dateChooser);
 		
 		JButton albumsSearchButton = new JButton("Rechercher");
 		
