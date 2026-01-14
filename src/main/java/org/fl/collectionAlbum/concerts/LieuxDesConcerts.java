@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2025 Frederic Lefevre
+Copyright (c) 2017, 2026 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -32,10 +32,12 @@ import java.util.Map;
 
 public class LieuxDesConcerts {
 
-	private static Map<String, LieuConcert> lieuxConcerts ;
+	private static final LieuxPoidsComparator LIEUX_POIDS_COMPARATOR = new LieuxPoidsComparator();
 	
+	private final Map<String, LieuConcert> lieuxConcerts;
+
 	public LieuxDesConcerts() {
-		lieuxConcerts = new HashMap<String, LieuConcert>() ;
+		lieuxConcerts = new HashMap<String, LieuConcert>();
 	}
 	
 	public void reset() {
@@ -43,18 +45,17 @@ public class LieuxDesConcerts {
 	}
 	
 	public LieuConcert addLieuDunConcert(String lieu) {
-		LieuConcert lieuConcert = lieuxConcerts.get(lieu) ;
+		LieuConcert lieuConcert = lieuxConcerts.get(lieu);
 		if (lieuConcert == null) {
-			lieuConcert = new LieuConcert(lieu) ;
-			lieuxConcerts.put(lieu, lieuConcert) ;
+			lieuConcert = new LieuConcert(lieu);
+			lieuxConcerts.put(lieu, lieuConcert);
 		}
-		return lieuConcert ;
+		return lieuConcert;
 	}
 	
 	public List<LieuConcert> getLieuxConcerts() {
-		LieuxPoidsComparator lieuxComparator = new LieuxPoidsComparator() ;
-		List<LieuConcert> lieux = new ArrayList<LieuConcert>(lieuxConcerts.values()) ;
-		Collections.sort(lieux, lieuxComparator) ;
-		return lieux ;
+		List<LieuConcert> lieux = new ArrayList<LieuConcert>(lieuxConcerts.values());
+		Collections.sort(lieux, LIEUX_POIDS_COMPARATOR);
+		return lieux;
 	}
 }

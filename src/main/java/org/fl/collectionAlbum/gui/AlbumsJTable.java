@@ -47,6 +47,9 @@ public class AlbumsJTable extends JTable implements MusicArtefactTable<Album> {
 
 	private static final Logger tLog = Logger.getLogger(AlbumsJTable.class.getName());
 	
+	private static final RangementComparator RANGEMENT_COMPARATOR = new RangementComparator();
+	private static final AlbumMediaFilesStatusComparator ALBUM_MEDIA_FILES_STATUS_COMPARATOR = new AlbumMediaFilesStatusComparator();
+	
 	public AlbumsJTable(AlbumsTableModel albumsTableModel, GenerationPane generationPane) {
 		super(albumsTableModel);
 		
@@ -78,8 +81,8 @@ public class AlbumsJTable extends JTable implements MusicArtefactTable<Album> {
 		TableRowSorter<AlbumsTableModel> sorter = new TableRowSorter<>(albumsTableModel);
 		setRowSorter(sorter);
 		
-		sorter.setComparator(AlbumsTableModel.AUTEUR_COL_IDX, new RangementComparator());
-		sorter.setComparator(AlbumsTableModel.MEDIA_FILES_COL_IDX, new AlbumMediaFilesStatusComparator());
+		sorter.setComparator(AlbumsTableModel.AUTEUR_COL_IDX, RANGEMENT_COMPARATOR);
+		sorter.setComparator(AlbumsTableModel.MEDIA_FILES_COL_IDX, ALBUM_MEDIA_FILES_STATUS_COMPARATOR);
 	}
 
 	// Get the selected album
