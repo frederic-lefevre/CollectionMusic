@@ -72,23 +72,13 @@ public class CollectionAlbumContainer {
 	
 	private final LieuxDesConcerts lieuxDesConcerts ;
 	
-	private static CollectionAlbumContainer collectionAlbumContainer;
+	private static final CollectionAlbumContainer collectionAlbumContainer = new CollectionAlbumContainer();
 	
 	public static CollectionAlbumContainer getEmptyInstance() {
-		
-		if (collectionAlbumContainer == null) {
-			collectionAlbumContainer = new CollectionAlbumContainer();
-		} else {
-			collectionAlbumContainer.reset();
-		}
-		return collectionAlbumContainer;
+		return	collectionAlbumContainer.reset();
 	}
 	
 	public static CollectionAlbumContainer getInstance() {
-		
-		if (collectionAlbumContainer == null) {
-			collectionAlbumContainer = new CollectionAlbumContainer();
-		}
 		return collectionAlbumContainer;
 	}
 	
@@ -252,7 +242,7 @@ public class CollectionAlbumContainer {
 		return getAlbumsSastisfying(Predicate.not(Album::hasArtiste));
 	}
 	
-	private void reset() {
+	private CollectionAlbumContainer reset() {
 		
    		collectionAlbumsMusiques.reset();
 		collectionArtistes.reset();
@@ -267,6 +257,7 @@ public class CollectionAlbumContainer {
    		allArtistes.clear();
    		allArtistes.add(collectionArtistes);
    		allArtistes.add(concertsArtistes);
+   		return this;
 	}
 	
 	public Artiste getArtisteKnown(String nom, String prenom) {
