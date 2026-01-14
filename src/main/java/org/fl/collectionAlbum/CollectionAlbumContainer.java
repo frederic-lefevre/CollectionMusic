@@ -25,6 +25,7 @@ SOFTWARE.
 package org.fl.collectionAlbum;
 
 import java.nio.file.Path;
+import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -262,6 +263,10 @@ public class CollectionAlbumContainer {
 			a = concertsArtistes.getArtisteKnown(nom, prenom);
 		}
 		return a;		
+	}
+	
+	public TemporalAccessor getAlbumOldestRecordingDate() {
+			return collectionAlbumsMusiques.getOldestRecordingDate();
 	}
 	
 	public List<Album> pickRandomAlbums(int nbAlbum) {

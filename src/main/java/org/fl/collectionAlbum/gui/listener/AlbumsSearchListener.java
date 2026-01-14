@@ -36,18 +36,22 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.gui.DateRangeChooser;
 import org.fl.collectionAlbum.gui.GenerationPane;
+import org.fl.collectionAlbum.utils.TemporalUtils;
 
 public class AlbumsSearchListener implements java.awt.event.ActionListener {
 
 	private static final Font buttonFont = new Font("Verdana", Font.BOLD, 14);
 	
 	private final GenerationPane generationPane;
+	private final CollectionAlbumContainer collectionAlbumContainer;
 	
-	public AlbumsSearchListener(GenerationPane generationPane) {
+	public AlbumsSearchListener(GenerationPane generationPane, CollectionAlbumContainer collectionAlbumContainer) {
 		super();
 		this.generationPane = generationPane;
+		this.collectionAlbumContainer = collectionAlbumContainer;
 	}
 	
 	@Override
@@ -59,7 +63,10 @@ public class AlbumsSearchListener implements java.awt.event.ActionListener {
 		JPanel searchCriteriaPanel = new JPanel();
 		searchCriteriaPanel.setLayout(new BoxLayout(searchCriteriaPanel, BoxLayout.X_AXIS));
 		
-		DateRangeChooser dateEnregistrement = new DateRangeChooser("Dates d'enregistrement", LocalDate.now(), LocalDate.now());
+		DateRangeChooser dateEnregistrement = new DateRangeChooser(
+				"Dates d'enregistrement", 
+				TemporalUtils.getRoundedLocalDate(collectionAlbumContainer.getAlbumOldestRecordingDate()), 
+				LocalDate.now());
 		searchCriteriaPanel.add(dateEnregistrement);
 		
 		DateRangeChooser dateComposition = new DateRangeChooser("Dates de composition", LocalDate.now(), LocalDate.now());

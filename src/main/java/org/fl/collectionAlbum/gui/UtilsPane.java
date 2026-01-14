@@ -127,7 +127,7 @@ public class UtilsPane extends JPanel implements ActivableElement {
 		pickRandomAlbumsPanel.add(pickRandomAlbumsButton);
 		pickRandomAlbumsPanel.setBorder(new EmptyBorder(0, 0, 0, 80));
 		
-		albumsSearchButton.addActionListener(new AlbumsSearchListener(generationPane));
+		albumsSearchButton.addActionListener(new AlbumsSearchListener(generationPane, collectionAlbumContainer));
 		choixAleatoirePane.add(pickRandomAlbumsPanel);
 		
 		JPanel choixMethodPane = new JPanel();

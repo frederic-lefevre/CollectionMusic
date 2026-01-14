@@ -110,6 +110,12 @@ public class TemporalUtils {
 		}
 	}
 	
+	public static LocalDate getRoundedLocalDate(TemporalAccessor temporalAccessor) {
+		
+		LocalDateTime localDateTime = getRoundedLocalDateTime(temporalAccessor);
+		return LocalDate.of(localDateTime.getYear(), localDateTime.getMonth(), localDateTime.getDayOfMonth());
+	}
+	
 	private static LocalDateTime getRoundedLocalDateTime(TemporalAccessor temporalAccessor) {
 		
 		if (temporalAccessor instanceof LocalDateTime localDateTime) {
