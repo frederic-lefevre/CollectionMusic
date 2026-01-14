@@ -27,6 +27,8 @@ package org.fl.collectionAlbum.albums;
 import static org.assertj.core.api.Assertions.*;
 
 import java.nio.file.Path;
+import java.time.temporal.ChronoField;
+import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -103,7 +105,7 @@ class ListeAlbumTest {
 			      "mort": "1980-09-15"  
 			    }                                 
 			  ],    								
-			  "enregistrement": [ "1959-12-28",  "1959-12-28" ],  
+			  "enregistrement": [ "1959-12-28",  "1959-12-29" ],  
 			  "liensUrl":  [ "/Concerts/2006/EricClapton20060505" ] 
 			 } 
 			""" ;
@@ -193,6 +195,13 @@ class ListeAlbumTest {
 		ListeAlbum listeAlbum =  ListeAlbum.Builder.getBuilderFrom(buildAlbumList(albumStr1, albumStr2, albumStr3)).build();
 		
 		listeAlbumsAsserts(listeAlbum, 3);
+		
+		TemporalAccessor oldestRecordingDate = listeAlbum.getOldestRecordingDate();
+		assertThat(oldestRecordingDate).isNotNull();
+		
+		assertThat(oldestRecordingDate.get(ChronoField.YEAR)).isEqualTo(1959);
+		assertThat(oldestRecordingDate.get(ChronoField.MONTH_OF_YEAR)).isEqualTo(12);
+		assertThat(oldestRecordingDate.get(ChronoField.DAY_OF_MONTH)).isEqualTo(28);
 	}
 	
 	@Test
@@ -250,6 +259,8 @@ class ListeAlbumTest {
 		
 		assertThat(emptyListe.getAlbums()).isNotNull().isEmpty();
 		assertThat(emptyListe.getNombreAlbums()).isZero();
+		
+		assertThat(emptyListe.getOldestRecordingDate()).isNull();
 		
 		Format format = emptyListe.getFormatListeAlbum();
 		

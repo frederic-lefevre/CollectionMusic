@@ -24,6 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.albums;
 
+import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -35,6 +36,11 @@ import org.fl.collectionAlbum.format.Format;
 import org.fl.collectionAlbum.utils.ListUtils;
 
 public class ListeAlbum {
+	
+	private static final AlbumAlphaComparator ALBUM_ALPHA_COMPARATOR = new AlbumAlphaComparator();
+	private static final AlbumEnregistrementComparator ALBUM_ENREGISTREMENT_COMPARATOR = new AlbumEnregistrementComparator();
+	private static final AlbumCompositionComparator ALBUM_COMPOSITION_COMPARATOR = new AlbumCompositionComparator();
+	private static final RangementComparator RANGEMENT_COMPARATOR = new RangementComparator();
 	
 	private final List<Album> albums;
 
@@ -59,22 +65,22 @@ public class ListeAlbum {
 	}
 	
 	public ListeAlbum sortAlphaOnTitle() {
-		Collections.sort(albums, new AlbumAlphaComparator());
+		Collections.sort(albums, ALBUM_ALPHA_COMPARATOR);
 		return this;
 	}
 	
 	public ListeAlbum sortChronoEnregistrement() {
-		Collections.sort(albums, new AlbumEnregistrementComparator());
+		Collections.sort(albums, ALBUM_ENREGISTREMENT_COMPARATOR);
 		return this;
 	}
 
 	public ListeAlbum sortChronoComposition() {
-		Collections.sort(albums, new AlbumCompositionComparator());
+		Collections.sort(albums, ALBUM_COMPOSITION_COMPARATOR);
 		return this;
 	}
 
 	public ListeAlbum sortRangementAlbum() {
-		Collections.sort(albums, new RangementComparator());
+		Collections.sort(albums, RANGEMENT_COMPARATOR);
 		return this;
 	}
 
@@ -96,6 +102,15 @@ public class ListeAlbum {
 
 	public Album pickRandomAlbum() {
 		return ListUtils.pickRandomElement(albums);
+	}
+	
+	public TemporalAccessor getOldestRecordingDate() {
+		
+		if (albums.isEmpty()) {
+			return null;
+		} else {
+			return Collections.min(albums, new AlbumEnregistrementComparator()).getDebutEnregistrement();
+		}
 	}
 	
 	public static class Builder {
