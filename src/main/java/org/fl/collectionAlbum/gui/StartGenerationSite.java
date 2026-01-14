@@ -32,25 +32,28 @@ import java.util.function.BooleanSupplier;
 
 import javax.swing.table.AbstractTableModel;
 
+import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.GenerationSiteCollection;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 
 public class StartGenerationSite implements ActionListener {
 	
+	private final CollectionAlbumContainer collectionAlbumContainer;
 	private final List<AbstractTableModel> tableModels;
 	private final List<AbstractColorableTabbedPane> colorableTabbedPanes;
-	private final ProgressInformationPanel pip;	
-	private final List<ActivableElement>  activableButtons;
+	private final ProgressInformationPanel progressInfoPanel;	
+	private final List<ActivableElement> activableButtons;
 	private CollectionProcessWaiter collectionProcWaiter;
 	
 	public static final BooleanSupplier activationPredicate = () -> MediaFilesInventories.areAllConnected();
 
-	public StartGenerationSite(ProgressInformationPanel progInfoPanel, List<ActivableElement> stList) {
+	public StartGenerationSite(CollectionAlbumContainer collectionAlbumContainer, ProgressInformationPanel progInfoPanel, List<ActivableElement> stList) {
 		
+		this.collectionAlbumContainer = collectionAlbumContainer;
 		this.tableModels = new ArrayList<>();
 		this.colorableTabbedPanes = new ArrayList<>();
-		pip = progInfoPanel;
-		activableButtons = stList;
+		this.progressInfoPanel = progInfoPanel;
+		this.activableButtons = stList;
 	}
 	
 	public void setCollectionProcWaiter(CollectionProcessWaiter collectionProcWaiter) {
@@ -71,7 +74,7 @@ public class StartGenerationSite implements ActionListener {
 		for (ActivableElement st : activableButtons ) {
 			st.deactivate();
 		}
-		GenerationSiteCollection gc = new GenerationSiteCollection(tableModels, colorableTabbedPanes, pip);
+		GenerationSiteCollection gc = new GenerationSiteCollection(collectionAlbumContainer, tableModels, colorableTabbedPanes, progressInfoPanel);
 		gc.addPropertyChangeListener(collectionProcWaiter);
 		gc.execute();
 	}

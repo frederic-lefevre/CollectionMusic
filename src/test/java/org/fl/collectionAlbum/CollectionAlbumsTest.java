@@ -119,7 +119,7 @@ class CollectionAlbumsTest {
 		assertThat(concertMetrics.getMetrics().get("nombreConcert")).isNotNull().isGreaterThan(183);
 		
 		// This is a singleton and it should be reset to empty
-		CollectionAlbumContainer albumsContainer2 = CollectionAlbumContainer.getEmptyInstance();
+		CollectionAlbumContainer albumsContainer2 = CollectionAlbumContainer.resetInstance();
 		assertThat(albumsContainer2).isEqualTo(albumsContainer);
 		TestUtils.assertEmptyCollection(albumsContainer);
 	}

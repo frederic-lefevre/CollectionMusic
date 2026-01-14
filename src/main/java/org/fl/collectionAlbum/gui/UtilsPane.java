@@ -39,6 +39,7 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
+import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.gui.listener.AlbumsSearchListener;
 import org.fl.collectionAlbum.gui.listener.OsActionListener;
@@ -65,10 +66,10 @@ public class UtilsPane extends JPanel implements ActivableElement {
 	private static final Integer[] numberOfAlbumsChoice = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 	private static final String[] albumChoiceMethod = {EQUI_REPARTI_PAR_ARTISTE, EQUI_REPARTI_PAR_ALBUM};
 	
-	public UtilsPane(GenerationPane generationPane) {
+	public UtilsPane(GenerationPane generationPane, CollectionAlbumContainer collectionAlbumContainer) {
 		
 		super();
-
+		
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.setBorder(BorderFactory.createMatteBorder(10,0,10,0,Color.BLACK));
 		
@@ -145,7 +146,7 @@ public class UtilsPane extends JPanel implements ActivableElement {
 		choixAleatoirePane.setBorder(new LineBorder(Color.BLACK));
 		choixAleatoirePane.add(choixMethodPane);
 		
-		RandomAlbumsPickListener pickRandomAlbumsListener = new RandomAlbumsPickListener(this, generationPane);
+		RandomAlbumsPickListener pickRandomAlbumsListener = new RandomAlbumsPickListener(this, generationPane, collectionAlbumContainer);
 		pickRandomAlbumsButton.addActionListener(pickRandomAlbumsListener);
 		
 		add(choixAleatoirePane);

@@ -42,10 +42,12 @@ public class RandomAlbumsPickListener implements java.awt.event.ActionListener {
 
 	private final GenerationPane generationPane;
 	private final UtilsPane utilsPane;
+	private final CollectionAlbumContainer collectionAlbumContainer;
 	
-	public RandomAlbumsPickListener(UtilsPane utilsPane, GenerationPane generationPane) {
+	public RandomAlbumsPickListener(UtilsPane utilsPane, GenerationPane generationPane, CollectionAlbumContainer collectionAlbumContainer) {
 		this.generationPane = generationPane;
 		this.utilsPane = utilsPane;
+		this.collectionAlbumContainer = collectionAlbumContainer;
 	}
 	
 	@Override
@@ -55,9 +57,9 @@ public class RandomAlbumsPickListener implements java.awt.event.ActionListener {
 		
 		List<Album> randomAlbums;
 		if ((methodForRandomAlbum != null) && (methodForRandomAlbum.equals(UtilsPane.EQUI_REPARTI_PAR_ALBUM))) {
-			randomAlbums = CollectionAlbumContainer.getInstance().pickRandomAlbums(utilsPane.getNumberOfAlbums());
+			randomAlbums = collectionAlbumContainer.pickRandomAlbums(utilsPane.getNumberOfAlbums());
 		} else {
-			randomAlbums = CollectionAlbumContainer.getInstance().pickRandomAlbumsViaArtiste(utilsPane.getNumberOfAlbums());
+			randomAlbums = collectionAlbumContainer.pickRandomAlbumsViaArtiste(utilsPane.getNumberOfAlbums());
 		}
 
 		// Table to display the chosen albums

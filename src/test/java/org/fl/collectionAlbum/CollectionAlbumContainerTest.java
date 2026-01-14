@@ -53,7 +53,7 @@ class CollectionAlbumContainerTest {
 	@Test
 	void testEmptyContainer() {
 		
-		CollectionAlbumContainer albumsContainer = CollectionAlbumContainer.getEmptyInstance();
+		CollectionAlbumContainer albumsContainer = CollectionAlbumContainer.resetInstance();
 		
 		TestUtils.assertEmptyCollection(albumsContainer);
 
@@ -73,7 +73,7 @@ class CollectionAlbumContainerTest {
 			.allSatisfy(contentNature -> assertThat(albumsContainer.getAlbumsWithOnlyContentNature(contentNature).getAlbums()).isEmpty());
 		
 		// This is a singleton and it should be reset to empty
-		CollectionAlbumContainer albumsContainer2 = CollectionAlbumContainer.getEmptyInstance();
+		CollectionAlbumContainer albumsContainer2 = CollectionAlbumContainer.resetInstance();
 		assertThat(albumsContainer2).isEqualTo(albumsContainer);
 		TestUtils.assertEmptyCollection(albumsContainer);
 		
@@ -121,7 +121,7 @@ class CollectionAlbumContainerTest {
 		MediaFilesInventories.scanMediaFilePaths();
 		DiscogsInventory.buildDiscogsInventory();
 		
-		CollectionAlbumContainer albumsContainer = CollectionAlbumContainer.getEmptyInstance();
+		CollectionAlbumContainer albumsContainer = CollectionAlbumContainer.resetInstance();
 
 		ObjectNode jAlbum = (ObjectNode)mapper.readTree(albumStr1);
 		

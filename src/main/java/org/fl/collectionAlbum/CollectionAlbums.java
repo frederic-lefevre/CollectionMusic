@@ -90,7 +90,7 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 		DiscogsInventory.buildDiscogsInventory();
 		
 		publish(new ProgressInformation(LECTURE_ALBUM, EN_EXAMEN, ""));
-		albumsContainer = CollectionAlbumContainer.getEmptyInstance();
+		albumsContainer = CollectionAlbumContainer.resetInstance();
 		buildAlbumsCollection();
 		
 		publish(new ProgressInformation(LECTURE_CONCERT, EN_EXAMEN, ""));

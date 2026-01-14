@@ -65,7 +65,7 @@ public class GenerationSiteCollection extends SwingWorker<String,ProgressInforma
 
 	private final static Logger albumLog = Logger.getLogger(GenerationSiteCollection.class.getName());
 	
-	private CollectionAlbumContainer collectionAlbumContainer;
+	private final CollectionAlbumContainer collectionAlbumContainer;
 	private final ProgressInformationPanel progressPanel;
 	private final List<AbstractTableModel> tableModels;
 	private final List<AbstractColorableTabbedPane> colorableTabbedPanes;
@@ -83,18 +83,22 @@ public class GenerationSiteCollection extends SwingWorker<String,ProgressInforma
 	// Status
 	private final static String GENERATION = "En cours de génération";
 
-	public GenerationSiteCollection(List<AbstractTableModel> tableModels, List<AbstractColorableTabbedPane> colorableTabbedPanes, ProgressInformationPanel pip) {
+	public GenerationSiteCollection(
+			CollectionAlbumContainer collectionAlbumContainer, 
+			List<AbstractTableModel> tableModels, 
+			List<AbstractColorableTabbedPane> colorableTabbedPanes, 
+			ProgressInformationPanel pip) {
 		
 		this.tableModels = tableModels;
 		this.colorableTabbedPanes = colorableTabbedPanes;
-		progressPanel = pip;
+		this.progressPanel = pip;
+		this.collectionAlbumContainer = collectionAlbumContainer;
 	}
 
 	@Override
 	public String doInBackground() {
 
 		try {
-			collectionAlbumContainer = CollectionAlbumContainer.getInstance();
 			publish(new ProgressInformation(GENERATION, "", ""));
 
 			RapportHtml.withCharset(Control.getCharset());

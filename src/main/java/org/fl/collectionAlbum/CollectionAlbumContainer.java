@@ -74,7 +74,7 @@ public class CollectionAlbumContainer {
 	
 	private static final CollectionAlbumContainer collectionAlbumContainer = new CollectionAlbumContainer();
 	
-	public static CollectionAlbumContainer getEmptyInstance() {
+	public static CollectionAlbumContainer resetInstance() {
 		return	collectionAlbumContainer.reset();
 	}
 	
