@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2025 Frederic Lefevre
+Copyright (c) 2017, 2026 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -53,7 +53,8 @@ class CollectionAlbumContainerTest {
 	@Test
 	void testEmptyContainer() {
 		
-		CollectionAlbumContainer albumsContainer = CollectionAlbumContainer.resetInstance();
+		CollectionAlbumContainer albumsContainer = CollectionAlbumContainer.getInstance();
+		albumsContainer.reset();
 		
 		TestUtils.assertEmptyCollection(albumsContainer);
 
@@ -73,7 +74,9 @@ class CollectionAlbumContainerTest {
 			.allSatisfy(contentNature -> assertThat(albumsContainer.getAlbumsWithOnlyContentNature(contentNature).getAlbums()).isEmpty());
 		
 		// This is a singleton and it should be reset to empty
-		CollectionAlbumContainer albumsContainer2 = CollectionAlbumContainer.resetInstance();
+		CollectionAlbumContainer albumsContainer2 = CollectionAlbumContainer.getInstance();
+		albumsContainer2.reset();
+		
 		assertThat(albumsContainer2).isEqualTo(albumsContainer);
 		TestUtils.assertEmptyCollection(albumsContainer);
 		
@@ -121,7 +124,8 @@ class CollectionAlbumContainerTest {
 		MediaFilesInventories.scanMediaFilePaths();
 		DiscogsInventory.buildDiscogsInventory();
 		
-		CollectionAlbumContainer albumsContainer = CollectionAlbumContainer.resetInstance();
+		CollectionAlbumContainer albumsContainer = CollectionAlbumContainer.getInstance();
+		albumsContainer.reset();
 
 		ObjectNode jAlbum = (ObjectNode)mapper.readTree(albumStr1);
 		

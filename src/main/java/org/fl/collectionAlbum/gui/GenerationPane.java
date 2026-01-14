@@ -87,7 +87,7 @@ public class GenerationPane extends JPanel {
 
 		List<ActivableElement> activableElements = List.of(readCollectionControl, utilsPane, generateSiteControl);
 
-		StartReadCollection startReadCollection = new StartReadCollection(readCollectionControl.getProgressInformationPanel(), activableElements);
+		StartReadCollection startReadCollection = new StartReadCollection(collectionAlbumContainer, readCollectionControl.getProgressInformationPanel(), activableElements);
 		startReadCollection.setCollectionProcWaiter(new CollectionProcessWaiter(activableElements));
 		startReadCollection.addTableModel(albumsTableModel);
 		readCollectionControl.getStartButton().addActionListener(startReadCollection);

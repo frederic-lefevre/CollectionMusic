@@ -74,10 +74,6 @@ public class CollectionAlbumContainer {
 	
 	private static final CollectionAlbumContainer collectionAlbumContainer = new CollectionAlbumContainer();
 	
-	public static CollectionAlbumContainer resetInstance() {
-		return	collectionAlbumContainer.reset();
-	}
-	
 	public static CollectionAlbumContainer getInstance() {
 		return collectionAlbumContainer;
 	}
@@ -242,7 +238,7 @@ public class CollectionAlbumContainer {
 		return getAlbumsSastisfying(Predicate.not(Album::hasArtiste));
 	}
 	
-	private CollectionAlbumContainer reset() {
+	public void reset() {
 		
    		collectionAlbumsMusiques.reset();
 		collectionArtistes.reset();
@@ -257,7 +253,6 @@ public class CollectionAlbumContainer {
    		allArtistes.clear();
    		allArtistes.add(collectionArtistes);
    		allArtistes.add(concertsArtistes);
-   		return this;
 	}
 	
 	public Artiste getArtisteKnown(String nom, String prenom) {
