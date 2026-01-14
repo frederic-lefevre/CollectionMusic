@@ -25,6 +25,7 @@ SOFTWARE.
 package org.fl.collectionAlbum.gui;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.DateTimeException;
@@ -53,6 +54,9 @@ public class DateChooser extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
+	private static final int PANEL_WIDTH = 240;
+	private static final int PANEL_HEIGHT = 30;
+	
 	private static final  Logger logger = Logger.getLogger(DateChooser.class.getName());
 	
 	private static final DateTimeFormatter monthFormatter = DateTimeFormatter.ofPattern("MMMM").localizedBy(Locale.FRENCH);
@@ -107,13 +111,17 @@ public class DateChooser extends JPanel {
 		dayField.addActionListener(dateListener);
 		monthField.addActionListener(dateListener);
 		yearField.addActionListener(dateListener);
+		
+		setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
+		setMaximumSize(getPreferredSize());
+		setMinimumSize(getPreferredSize());
 	}
 
 	public LocalDate getChoosenDate() {
 		return choosenDate;
 	}
 
-	public static Vector<DisplayableTemporal> getAllDaysOf(YearMonth yearMonth) {
+	private static Vector<DisplayableTemporal> getAllDaysOf(YearMonth yearMonth) {
 
 		return new Vector<>(IntStream.range(1, yearMonth.lengthOfMonth()+1)
 				.mapToObj(dayNumber -> new DisplayableTemporal(dayOfMonthFormatter, yearMonth.atDay(dayNumber)))
@@ -158,8 +166,6 @@ public class DateChooser extends JPanel {
 				logger.log(Level.SEVERE, "Exception parsing time field", ex);
 			}
 		}
-		
-		
 	}
 	
 	private int parseNumericTextField(JTextField field, String fieldName) {
