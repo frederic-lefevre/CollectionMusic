@@ -36,7 +36,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
-import org.fl.collectionAlbum.gui.DateChooser;
+import org.fl.collectionAlbum.gui.DateRangeChooser;
 import org.fl.collectionAlbum.gui.GenerationPane;
 
 public class AlbumsSearchListener implements java.awt.event.ActionListener {
@@ -59,8 +59,11 @@ public class AlbumsSearchListener implements java.awt.event.ActionListener {
 		JPanel searchCriteriaPanel = new JPanel();
 		searchCriteriaPanel.setLayout(new BoxLayout(searchCriteriaPanel, BoxLayout.X_AXIS));
 		
-		DateChooser dateChooser = new DateChooser(LocalDate.now());
-		searchCriteriaPanel.add(dateChooser);
+		DateRangeChooser dateEnregistrement = new DateRangeChooser("Dates d'enregistrement", LocalDate.now(), LocalDate.now());
+		searchCriteriaPanel.add(dateEnregistrement);
+		
+		DateRangeChooser dateComposition = new DateRangeChooser("Dates de composition", LocalDate.now(), LocalDate.now());
+		searchCriteriaPanel.add(dateComposition);
 		
 		JButton albumsSearchButton = new JButton("Rechercher");
 		
@@ -72,7 +75,7 @@ public class AlbumsSearchListener implements java.awt.event.ActionListener {
 		mainPane.add(searchCriteriaPanel);
 		
 		JScrollPane albumsScrollTable = new JScrollPane();
-		albumsScrollTable.setPreferredSize(new Dimension(1800,900));
+		albumsScrollTable.setPreferredSize(new Dimension(1800, 800));
 		
 		mainPane.add(albumsScrollTable);
 		

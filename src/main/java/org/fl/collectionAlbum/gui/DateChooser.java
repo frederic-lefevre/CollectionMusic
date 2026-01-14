@@ -74,7 +74,7 @@ public class DateChooser extends JPanel {
 	
 	private LocalDate choosenDate;
 	
-	public DateChooser(LocalDate  date) {
+	public DateChooser(LocalDate date) {
 		super();
 		
 		choosenDate = date;
