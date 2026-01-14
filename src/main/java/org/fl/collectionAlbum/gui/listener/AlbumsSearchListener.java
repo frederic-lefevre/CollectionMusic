@@ -66,10 +66,13 @@ public class AlbumsSearchListener implements java.awt.event.ActionListener {
 		DateRangeChooser dateEnregistrement = new DateRangeChooser(
 				"Dates d'enregistrement", 
 				TemporalUtils.getRoundedLocalDate(collectionAlbumContainer.getAlbumOldestRecordingDate()), 
-				LocalDate.now());
+				TemporalUtils.getRoundedLocalDate(collectionAlbumContainer.getAlbumMostRecentRecordingDate()));
 		searchCriteriaPanel.add(dateEnregistrement);
 		
-		DateRangeChooser dateComposition = new DateRangeChooser("Dates de composition", LocalDate.now(), LocalDate.now());
+		DateRangeChooser dateComposition = new DateRangeChooser(
+				"Dates de composition", 
+				TemporalUtils.getRoundedLocalDate(collectionAlbumContainer.getAlbumOldestCompositionDate()), 
+				TemporalUtils.getRoundedLocalDate(collectionAlbumContainer.getAlbumMostRecentCompositionDate()));
 		searchCriteriaPanel.add(dateComposition);
 		
 		JButton albumsSearchButton = new JButton("Rechercher");

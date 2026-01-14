@@ -104,12 +104,35 @@ public class ListeAlbum {
 		return ListUtils.pickRandomElement(albums);
 	}
 	
-	public TemporalAccessor getOldestRecordingDate() {
-		
+	public TemporalAccessor getOldestRecordingDate() {	
 		if (albums.isEmpty()) {
 			return null;
 		} else {
 			return Collections.min(albums, new AlbumEnregistrementComparator()).getDebutEnregistrement();
+		}
+	}
+	
+	public TemporalAccessor getOldestCompositionDate() {		
+		if (albums.isEmpty()) {
+			return null;
+		} else {
+			return Collections.min(albums, new AlbumCompositionComparator()).getDebutComposition();
+		}
+	}
+	
+	public TemporalAccessor getMostRecentRecordingDate() {	
+		if (albums.isEmpty()) {
+			return null;
+		} else {
+			return Collections.max(albums, new AlbumEnregistrementComparator()).getFinEnregistrement();
+		}
+	}
+	
+	public TemporalAccessor getMostRecentCompositionDate() {		
+		if (albums.isEmpty()) {
+			return null;
+		} else {
+			return Collections.max(albums, new AlbumCompositionComparator()).getFinComposition();
 		}
 	}
 	

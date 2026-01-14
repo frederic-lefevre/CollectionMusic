@@ -269,6 +269,18 @@ public class CollectionAlbumContainer {
 			return collectionAlbumsMusiques.getOldestRecordingDate();
 	}
 	
+	public TemporalAccessor getAlbumMostRecentRecordingDate() {
+		return collectionAlbumsMusiques.getMostRecentRecordingDate();
+	}
+	
+	public TemporalAccessor getAlbumOldestCompositionDate() {
+		return collectionAlbumsMusiques.getOldestCompositionDate();
+	}
+	
+	public TemporalAccessor getAlbumMostRecentCompositionDate() {
+		return collectionAlbumsMusiques.getMostRecentCompositionDate();
+	}
+	
 	public List<Album> pickRandomAlbums(int nbAlbum) {
 		return RandomAlbumPicker.pickRandomAlbums(collectionAlbumsMusiques, nbAlbum);
 	}

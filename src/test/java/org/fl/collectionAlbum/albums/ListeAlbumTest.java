@@ -132,6 +132,10 @@ class ListeAlbumTest {
   "enregistrement": [
     "1977-09-01",
     "1977-11-01"
+  ],
+  "composition": [
+    "1977-09-01",
+    "1977-10-03"
   ]
 }
 			""" ;
@@ -197,11 +201,29 @@ class ListeAlbumTest {
 		listeAlbumsAsserts(listeAlbum, 3);
 		
 		TemporalAccessor oldestRecordingDate = listeAlbum.getOldestRecordingDate();
+		TemporalAccessor mostRecentRecordingDate = listeAlbum.getMostRecentRecordingDate();
+		TemporalAccessor oldestCompositionDate = listeAlbum.getOldestCompositionDate();
+		TemporalAccessor mostRecentCompositionDate = listeAlbum.getMostRecentCompositionDate();
 		assertThat(oldestRecordingDate).isNotNull();
+		assertThat(mostRecentRecordingDate).isNotNull();
+		assertThat(oldestCompositionDate).isNotNull();
+		assertThat(mostRecentCompositionDate).isNotNull();
 		
 		assertThat(oldestRecordingDate.get(ChronoField.YEAR)).isEqualTo(1959);
 		assertThat(oldestRecordingDate.get(ChronoField.MONTH_OF_YEAR)).isEqualTo(12);
 		assertThat(oldestRecordingDate.get(ChronoField.DAY_OF_MONTH)).isEqualTo(28);
+
+		assertThat(mostRecentRecordingDate.get(ChronoField.YEAR)).isEqualTo(1977);
+		assertThat(mostRecentRecordingDate.get(ChronoField.MONTH_OF_YEAR)).isEqualTo(11);
+		assertThat(mostRecentRecordingDate.get(ChronoField.DAY_OF_MONTH)).isEqualTo(01);
+		
+		assertThat(oldestCompositionDate.get(ChronoField.YEAR)).isEqualTo(1959);
+		assertThat(oldestCompositionDate.get(ChronoField.MONTH_OF_YEAR)).isEqualTo(12);
+		assertThat(oldestCompositionDate.get(ChronoField.DAY_OF_MONTH)).isEqualTo(28);
+		
+		assertThat(mostRecentCompositionDate.get(ChronoField.YEAR)).isEqualTo(1977);
+		assertThat(mostRecentCompositionDate.get(ChronoField.MONTH_OF_YEAR)).isEqualTo(10);
+		assertThat(mostRecentCompositionDate.get(ChronoField.DAY_OF_MONTH)).isEqualTo(03);
 	}
 	
 	@Test
@@ -261,6 +283,9 @@ class ListeAlbumTest {
 		assertThat(emptyListe.getNombreAlbums()).isZero();
 		
 		assertThat(emptyListe.getOldestRecordingDate()).isNull();
+		assertThat(emptyListe.getMostRecentRecordingDate()).isNull();
+		assertThat(emptyListe.getOldestCompositionDate()).isNull();
+		assertThat(emptyListe.getMostRecentCompositionDate()).isNull();
 		
 		Format format = emptyListe.getFormatListeAlbum();
 		
