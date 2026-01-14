@@ -28,13 +28,14 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
-import java.time.LocalDate;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.border.EtchedBorder;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.gui.DateRangeChooser;
@@ -67,12 +68,15 @@ public class AlbumsSearchListener implements java.awt.event.ActionListener {
 				"Dates d'enregistrement", 
 				TemporalUtils.getRoundedLocalDate(collectionAlbumContainer.getAlbumOldestRecordingDate()), 
 				TemporalUtils.getRoundedLocalDate(collectionAlbumContainer.getAlbumMostRecentRecordingDate()));
+		dateEnregistrement.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
+		
 		searchCriteriaPanel.add(dateEnregistrement);
 		
 		DateRangeChooser dateComposition = new DateRangeChooser(
 				"Dates de composition", 
 				TemporalUtils.getRoundedLocalDate(collectionAlbumContainer.getAlbumOldestCompositionDate()), 
 				TemporalUtils.getRoundedLocalDate(collectionAlbumContainer.getAlbumMostRecentCompositionDate()));
+		dateComposition.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
 		searchCriteriaPanel.add(dateComposition);
 		
 		JButton albumsSearchButton = new JButton("Rechercher");
