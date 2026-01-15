@@ -24,27 +24,15 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui.listener;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.border.EtchedBorder;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
-import org.fl.collectionAlbum.gui.DateRangeChooser;
+import org.fl.collectionAlbum.gui.AlbumsSearchPanel;
 import org.fl.collectionAlbum.gui.GenerationPane;
-import org.fl.collectionAlbum.utils.TemporalUtils;
 
 public class AlbumsSearchListener implements java.awt.event.ActionListener {
-
-	private static final Font buttonFont = new Font("Verdana", Font.BOLD, 14);
 	
 	private final GenerationPane generationPane;
 	private final CollectionAlbumContainer collectionAlbumContainer;
@@ -58,42 +46,7 @@ public class AlbumsSearchListener implements java.awt.event.ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
-		JPanel mainPane = new JPanel();
-		mainPane.setLayout(new BoxLayout(mainPane, BoxLayout.Y_AXIS));
-		
-		JPanel searchCriteriaPanel = new JPanel();
-		searchCriteriaPanel.setLayout(new BoxLayout(searchCriteriaPanel, BoxLayout.X_AXIS));
-		
-		DateRangeChooser dateEnregistrement = new DateRangeChooser(
-				"Dates d'enregistrement", 
-				TemporalUtils.getRoundedLocalDate(collectionAlbumContainer.getAlbumOldestRecordingDate()), 
-				TemporalUtils.getRoundedLocalDate(collectionAlbumContainer.getAlbumMostRecentRecordingDate()));
-		dateEnregistrement.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
-		
-		searchCriteriaPanel.add(dateEnregistrement);
-		
-		DateRangeChooser dateComposition = new DateRangeChooser(
-				"Dates de composition", 
-				TemporalUtils.getRoundedLocalDate(collectionAlbumContainer.getAlbumOldestCompositionDate()), 
-				TemporalUtils.getRoundedLocalDate(collectionAlbumContainer.getAlbumMostRecentCompositionDate()));
-		dateComposition.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
-		searchCriteriaPanel.add(dateComposition);
-		
-		JButton albumsSearchButton = new JButton("Rechercher");
-		
-		searchCriteriaPanel.add(albumsSearchButton);
-		
-		albumsSearchButton.setFont(buttonFont);
-		albumsSearchButton.setBackground(Color.GREEN);
-		
-		mainPane.add(searchCriteriaPanel);
-		
-		JScrollPane albumsScrollTable = new JScrollPane();
-		albumsScrollTable.setPreferredSize(new Dimension(1800, 800));
-		
-		mainPane.add(albumsScrollTable);
-		
+		AlbumsSearchPanel mainPane = new AlbumsSearchPanel(generationPane, collectionAlbumContainer);
 		JOptionPane.showMessageDialog(null, mainPane, "Recherche d'albums", JOptionPane.INFORMATION_MESSAGE);
 	}
-
 }
