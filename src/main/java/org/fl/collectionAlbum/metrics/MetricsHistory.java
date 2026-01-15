@@ -131,8 +131,8 @@ public abstract class MetricsHistory {
 	}
 	
 	protected Metrics addPresentMetricsToHistory(Metrics metrics) {
-		addAndWriteNewMetricsToHistory(presentMetrics);
-		setPresentMetricsIfNew(null);
+		addAndWriteNewMetricsToHistory(metrics);
+		this.presentMetrics = null;
 		return metrics;
 	}
 	
