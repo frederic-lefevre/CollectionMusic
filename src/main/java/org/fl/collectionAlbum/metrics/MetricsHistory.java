@@ -131,9 +131,13 @@ public abstract class MetricsHistory {
 	}
 	
 	protected Metrics addPresentMetricsToHistory(Metrics metrics) {
-		addAndWriteNewMetricsToHistory(metrics);
-		this.presentMetrics = null;
-		return metrics;
+		if (addAndWriteNewMetricsToHistory(metrics)) {
+			this.presentMetrics = null;
+			return metrics;
+		} else {
+			return null;
+		}
+		
 	}
 	
 	private boolean hasMetricsCompatibleWithMetricNames(Metrics metrics) {
