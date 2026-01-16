@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2025 Frederic Lefevre
+Copyright (c) 2017, 2026 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -37,10 +37,10 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 public class Concert extends MusicArtefact {
 
-    private TemporalAccessor dateConcert;   
-    private LieuConcert	lieuConcert;     
-    private List<String> titres;    
-    private List<URI> ticketImages;
+    private final TemporalAccessor dateConcert;   
+    private final LieuConcert	lieuConcert;     
+    private final List<String> titres;    
+    private final List<URI> ticketImages;
     
 	public Concert(ObjectNode concertJson, List<ListeArtiste> knownArtistes, LieuxDesConcerts lieuxDesConcerts,
 			Path jsonFilePath) {
