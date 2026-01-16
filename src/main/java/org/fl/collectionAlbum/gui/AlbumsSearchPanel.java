@@ -148,14 +148,15 @@ public class AlbumsSearchPanel extends JPanel {
 			
 			ListeAlbum listeAlbumsFound = collectionAlbumContainer.getAlbumsSastisfying(getAlbumsPredicates());
 			
-			System.out.println("Found albums number = " + listeAlbumsFound.getNombreAlbums());
-			
 			searchResultAlbums.clear();
 			searchResultAlbums.addAll(listeAlbumsFound.getAlbums());
 			albumsTableModel.fireTableDataChanged();
 		}
 		
 		private List<Predicate<Album>> getAlbumsPredicates() {
+			
+			String titreSearchTextEntry = titreAlbumSearchedText.getText();
+			String auteursTextEntry = auteursAlbumSearchedText.getText();
 			
 			LocalDate minRecordingDate = dateEnregistrement.getMinChoosenDate();
 			LocalDate maxRecordingDate = dateEnregistrement.getMaxChoosenDate();
@@ -164,6 +165,16 @@ public class AlbumsSearchPanel extends JPanel {
 			LocalDate maxCompositionDate = dateComposition.getMaxChoosenDate();
 			
 			List<Predicate<Album>> predicates = new ArrayList<>();
+			
+			if ((titreSearchTextEntry != null) && !titreSearchTextEntry.isBlank()) {
+				String titreSearchText = titreSearchTextEntry.strip().toLowerCase();
+				predicates.add(album -> album.getTitre().toLowerCase().contains(titreSearchText));
+			}
+
+			if ((auteursTextEntry != null) && !auteursTextEntry.isBlank()) {
+				String auteursText = auteursTextEntry.strip().toLowerCase();
+				predicates.add(album -> album.getAuteurs().stream().anyMatch(artiste -> artiste.getNomComplet().toLowerCase().contains(auteursText)));
+			}
 			
 			if ((minRecordingDate != null) && (maxRecordingDate != null) && 
 					(minCompositionDate != null) && (maxCompositionDate != null)) {
@@ -182,8 +193,6 @@ public class AlbumsSearchPanel extends JPanel {
 			} else {
 				predicates.add(album -> false);
 			}
-			
-			System.out.println("Predicate number = " + predicates.size());
 			
 			return predicates;
 		}
