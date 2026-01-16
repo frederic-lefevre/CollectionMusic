@@ -49,12 +49,11 @@ public class ProgressInformationPanel extends JPanel {
 	private static final Font font = new Font("Verdana", Font.BOLD, 14);
 	
 	private static final String dateFrancePattern = " EEEE dd MMMM yyyy à HH:mm:ss";
-	private final DateTimeFormatter dateTimeFormatter;
+	private static final DateTimeFormatter dateTimeFormatter= DateTimeFormatter.ofPattern(dateFrancePattern, Locale.FRANCE);
 	
 	public ProgressInformationPanel() {
 		
 		super();
-		dateTimeFormatter = DateTimeFormatter.ofPattern(dateFrancePattern, Locale.FRANCE);
 
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		setBorder(new EmptyBorder(10, 10, 10, 10));
