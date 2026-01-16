@@ -351,7 +351,7 @@ class MetricsHistoryTest {
 		
 		assertThat(metricsHistory).isNotNull();	
 		assertThat(metricsHistory.getMetricsHistory()).isEmpty();
-		assertThat(historyPath6).isEmptyDirectory();
+		assertThat(historyPath7).isEmptyDirectory();
 		
 		final Metrics addedMetrics = new Metrics(now, Map.of("albums", 10.0, "Artiste", 5.0));
 		final Metrics resultMetrics = metricsHistory.addPresentMetricsToHistory(addedMetrics);
