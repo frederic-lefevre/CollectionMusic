@@ -47,16 +47,16 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 public class MusicArtefactParser {
 	
-	private final static Logger albumLog = Logger.getLogger(MusicArtefactParser.class.getName());
+	private static final Logger albumLog = Logger.getLogger(MusicArtefactParser.class.getName());
 	
-	private List<ListeArtiste> knownArtistes;
-	private JsonNode arteFactJson;
+	private final List<ListeArtiste> knownArtistes;
+	private final JsonNode arteFactJson;
 
-	private ListeArtiste auteurs;
-	private ListeArtiste interpretes;
-	private ListeArtiste chefs;
-	private ListeArtiste ensembles;
-	private ListeArtiste groupes;
+	private final ListeArtiste auteurs;
+	private final ListeArtiste interpretes;
+	private final ListeArtiste chefs;
+	private final ListeArtiste ensembles;
+	private final ListeArtiste groupes;
 	
 	public MusicArtefactParser(JsonNode j, List<ListeArtiste> currentKnownArtistes) {
 		super();
