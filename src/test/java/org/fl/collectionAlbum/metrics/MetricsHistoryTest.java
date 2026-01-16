@@ -44,7 +44,7 @@ import org.junit.jupiter.api.Test;
 
 class MetricsHistoryTest {
 	
-	private final static Logger mLog = Logger.getLogger(MetricsHistoryTest.class.getName());
+	private static final Logger mLog = Logger.getLogger(MetricsHistoryTest.class.getName());
 	
 	private static Path historyFolderBase;
 

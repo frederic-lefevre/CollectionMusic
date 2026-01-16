@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2025 Frederic Lefevre
+Copyright (c) 2017, 2026 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -53,7 +53,7 @@ class DiscogsAlbumReleaseMatcherTest {
 
 	private static final ObjectMapper mapper = new ObjectMapper();
 	
-	private final static String softMachineThird = """
+	private static final String softMachineThird = """
 {
 "titre": "Third",
 "format": {
@@ -83,7 +83,7 @@ class DiscogsAlbumReleaseMatcherTest {
 }
 			""" ;
 	
-	private final static String electricLadylandDoubleCD = """
+	private static final String electricLadylandDoubleCD = """
 {
   "titre": "Electric ladyland",
   "format": {
@@ -119,7 +119,7 @@ class DiscogsAlbumReleaseMatcherTest {
 }			
 			""";
 	
-	private final static String electricLadylandSingleCD = """
+	private static final String electricLadylandSingleCD = """
 {
   "titre": "Electric ladyland",
   "format": {
@@ -156,7 +156,7 @@ class DiscogsAlbumReleaseMatcherTest {
 }			
 			""";
 	
-	private final static String softMachineThirdK7 = """
+	private static final String softMachineThirdK7 = """
 {
 "titre": "Third",
 "format": {
@@ -186,7 +186,7 @@ class DiscogsAlbumReleaseMatcherTest {
 }
 			""" ;
 	
-	private final static String nonExistentAlbum = """
+	private static final String nonExistentAlbum = """
 {
 "titre": "Third",
 "format": {

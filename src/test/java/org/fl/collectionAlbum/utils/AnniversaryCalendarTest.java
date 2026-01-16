@@ -44,16 +44,16 @@ class AnniversaryCalendarTest {
 
 	private static class Personne {
 		
-		public TemporalAccessor getBirthDate() {
-			return birthDate; 
-		}
+		private final TemporalAccessor birthDate;
 		
 		public Personne(String birthDate) {
 			super();
 			this.birthDate = dateTimeParser.parseBest(birthDate, LocalDate::from, YearMonth::from, Year::from);
 		}
 
-		private TemporalAccessor birthDate;
+		public TemporalAccessor getBirthDate() {
+			return birthDate; 
+		}
 	}
 
 	private static final Personne toto = new Personne("2000-01-30");
