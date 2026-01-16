@@ -55,7 +55,7 @@ public class DateChooser extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private static final int PANEL_WIDTH = 240;
-	private static final int PANEL_HEIGHT = 30;
+	private static final int PANEL_HEIGHT = 50;
 	
 	private static final  Logger logger = Logger.getLogger(DateChooser.class.getName());
 	
@@ -85,7 +85,7 @@ public class DateChooser extends JPanel {
 		
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-		infoLabel = new JLabel();
+		infoLabel = new JLabel(" ");
 		add(infoLabel);
 		
 		JPanel dateEntryPanel = new JPanel();
@@ -144,7 +144,7 @@ public class DateChooser extends JPanel {
 			
 			yearField.setForeground(Color.BLACK);
 			infoLabel.setForeground(Color.BLACK);
-			infoLabel.setText("");
+			infoLabel.setText(" ");
 			
 			// Update day field
 			dayField.removeActionListener(dateListener);
@@ -159,8 +159,10 @@ public class DateChooser extends JPanel {
 			logger.log(Level.FINE, "Invalid date time entered", ex);
 			infoLabel.setForeground(Color.RED);
 			infoLabel.setText("Rentrez un nombre valide: " + ex.getMessage());
+			choosenDate = null;
 		} catch (Exception ex) {
 			logger.log(Level.SEVERE, "Exception parsing time field", ex);
+			choosenDate = null;
 		}
 		return choosenDate;
 	}
