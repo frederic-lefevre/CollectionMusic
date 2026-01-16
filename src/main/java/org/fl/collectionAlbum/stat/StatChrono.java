@@ -34,7 +34,7 @@ import java.util.logging.Logger;
 
 public class StatChrono {
 	
-	private final static Logger statLogger = Logger.getLogger(StatChrono.class.getName());
+	private static final Logger statLogger = Logger.getLogger(StatChrono.class.getName());
 
 	private final List<StatAnnee> statAnnuelle;
 	private final List<StatAnnee> statDecennale;

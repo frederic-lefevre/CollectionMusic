@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2025 Frederic Lefevre
+Copyright (c) 2017, 2026 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -42,7 +42,7 @@ public class FragmentIntervenants {
 			if (musicArtefact.getChefsOrchestre() != null) {
 				for (Artiste unChef : musicArtefact.getChefsOrchestre()) {
 					fragment.append("        <li>Direction: ");
-					appendLinkAlbumArtiste(unChef, musicArtefact.getClass(), fragment, urlOffset) ;
+					appendLinkAlbumArtiste(unChef, musicArtefact.getClass(), fragment, urlOffset);
 					fragment.append("</li>\n");
 				}
 			}
@@ -50,7 +50,7 @@ public class FragmentIntervenants {
 			if (musicArtefact.getInterpretes() != null) {
 				for (Artiste unInterprete : musicArtefact.getInterpretes()) {
 					fragment.append("        <li>Interpr&egrave;te: ");
-					appendLinkAlbumArtiste(unInterprete,  musicArtefact.getClass(), fragment, urlOffset) ;
+					appendLinkAlbumArtiste(unInterprete,  musicArtefact.getClass(), fragment, urlOffset);
 					fragment.append("</li>\n");
 				}
 			}	
@@ -58,7 +58,7 @@ public class FragmentIntervenants {
 			if (musicArtefact.getEnsembles() != null) {
 				for (Artiste unGroupe : musicArtefact.getEnsembles()) {
 					fragment.append("        <li>Ensemble: ");
-					appendLinkAlbumArtiste(unGroupe,  musicArtefact.getClass(), fragment, urlOffset) ;
+					appendLinkAlbumArtiste(unGroupe,  musicArtefact.getClass(), fragment, urlOffset);
 					fragment.append("</li>\n");
 				}
 			}

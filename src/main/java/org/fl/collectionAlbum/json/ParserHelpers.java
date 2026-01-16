@@ -35,7 +35,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 public class ParserHelpers {
 
-	private final static Logger albumLog = Logger.getLogger(ParserHelpers.class.getName());
+	private static final Logger albumLog = Logger.getLogger(ParserHelpers.class.getName());
 	
 	private ParserHelpers() {
 	}

@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2025 Frederic Lefevre
+Copyright (c) 2017, 2026 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -35,15 +35,15 @@ public class DisocgsReleaseTableModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 1L;
 
-	public final static int ID_COL_IDX = 0;
-	public final static int ARTISTS_COL_IDX = 1;
-	public final static int TITLE_COL_IDX = 2;
-	public final static int FORMAT_COL_IDX = 3;
-	public final static int DATE_ADDED_COL_IDX = 4;
-	public final static int ALBUM_LINK_COL_IDX = 5;
-	public final static int FORMAT_MATCH_COL_IDX = 6;
+	public static final int ID_COL_IDX = 0;
+	public static final int ARTISTS_COL_IDX = 1;
+	public static final int TITLE_COL_IDX = 2;
+	public static final int FORMAT_COL_IDX = 3;
+	public static final int DATE_ADDED_COL_IDX = 4;
+	public static final int ALBUM_LINK_COL_IDX = 5;
+	public static final int FORMAT_MATCH_COL_IDX = 6;
 			
-	private final static String[] entetes = {"Id", "Auteurs", "Titre de l'album", "Formats", "Date ajout", "Lié à un album", "Format Ok"};
+	private static final String[] entetes = {"Id", "Auteurs", "Titre de l'album", "Formats", "Date ajout", "Lié à un album", "Format Ok"};
 	
 	private final List<DiscogsAlbumRelease> discogsAlbumReleases;
 	
