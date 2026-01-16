@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2025 Frederic Lefevre
+Copyright (c) 2017, 2026 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -30,10 +30,12 @@ import java.util.List;
 
 public class ListeConcert {
 
-	private final List<Concert> concerts ;
+	private static final ConcertChronoComparator CONCERT_CHRONO_COMPARATOR = new ConcertChronoComparator();
+	
+	private final List<Concert> concerts;
 	
 	public ListeConcert() {
-		concerts = new ArrayList<Concert>() ;
+		concerts = new ArrayList<Concert>();
 	}
 	
 	public void reset() {
@@ -41,21 +43,19 @@ public class ListeConcert {
 	}
 	
 	public void addConcert(Concert a) {
-		concerts.add(a) ;
+		concerts.add(a);
 	}
 	
 	public int getNombreConcerts() {
-		return concerts.size() ;
+		return concerts.size();
 	}
 	
-	public ListeConcert sortChrono() {
-		ConcertChronoComparator compConcert = new ConcertChronoComparator();
-		Collections.sort(concerts, compConcert) ;
+	public ListeConcert sortChrono() {	
+		Collections.sort(concerts, CONCERT_CHRONO_COMPARATOR);
 		return this;
 	}
 
 	public List<Concert> getConcerts() {
 		return concerts;
-	}
-	
+	}	
 }

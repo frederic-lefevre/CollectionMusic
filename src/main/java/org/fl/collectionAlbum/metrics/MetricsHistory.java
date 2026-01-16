@@ -48,7 +48,7 @@ public abstract class MetricsHistory {
 
 	private static final MetricsDateComparator metricsDateComparator = new MetricsDateComparator();
 	private static final ObjectMapper mapper = new ObjectMapper();
-	private final static Logger mLog = Logger.getLogger(MetricsHistory.class.getName());
+	private static final Logger mLog = Logger.getLogger(MetricsHistory.class.getName());
 			
 	private final Path storagePath;
 	private final String name;
@@ -131,9 +131,13 @@ public abstract class MetricsHistory {
 	}
 	
 	protected Metrics addPresentMetricsToHistory(Metrics metrics) {
-		addAndWriteNewMetricsToHistory(presentMetrics);
-		setPresentMetricsIfNew(null);
-		return metrics;
+		if (addAndWriteNewMetricsToHistory(metrics)) {
+			this.presentMetrics = null;
+			return metrics;
+		} else {
+			return null;
+		}
+		
 	}
 	
 	private boolean hasMetricsCompatibleWithMetricNames(Metrics metrics) {

@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2025 Frederic Lefevre
+Copyright (c) 2017, 2026 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -108,6 +108,12 @@ public class TemporalUtils {
 			}
 
 		}
+	}
+	
+	public static LocalDate getRoundedLocalDate(TemporalAccessor temporalAccessor) {
+		
+		LocalDateTime localDateTime = getRoundedLocalDateTime(temporalAccessor);
+		return LocalDate.of(localDateTime.getYear(), localDateTime.getMonth(), localDateTime.getDayOfMonth());
 	}
 	
 	private static LocalDateTime getRoundedLocalDateTime(TemporalAccessor temporalAccessor) {

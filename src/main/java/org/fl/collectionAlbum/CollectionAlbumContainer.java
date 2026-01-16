@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2025 Frederic Lefevre
+Copyright (c) 2017, 2026 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +25,7 @@ SOFTWARE.
 package org.fl.collectionAlbum;
 
 import java.nio.file.Path;
+import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -72,23 +73,9 @@ public class CollectionAlbumContainer {
 	
 	private final LieuxDesConcerts lieuxDesConcerts ;
 	
-	private static CollectionAlbumContainer collectionAlbumContainer;
-	
-	public static CollectionAlbumContainer getEmptyInstance() {
-		
-		if (collectionAlbumContainer == null) {
-			collectionAlbumContainer = new CollectionAlbumContainer();
-		} else {
-			collectionAlbumContainer.reset();
-		}
-		return collectionAlbumContainer;
-	}
+	private static final CollectionAlbumContainer collectionAlbumContainer = new CollectionAlbumContainer();
 	
 	public static CollectionAlbumContainer getInstance() {
-		
-		if (collectionAlbumContainer == null) {
-			collectionAlbumContainer = new CollectionAlbumContainer();
-		}
 		return collectionAlbumContainer;
 	}
 	
@@ -153,9 +140,14 @@ public class CollectionAlbumContainer {
     	}
 	}
 	
+	public ListeAlbum getAlbumsSastisfying(List<Predicate<Album>> albumPredicates) {
+		 return ListeAlbum.Builder.getBuilderFrom(collectionAlbumsMusiques.getAlbums())
+				 .withAlbumSatisfying(albumPredicates)
+				 .build();
+	}
+	
 	private ListeAlbum getAlbumsSastisfying(Predicate<Album> albumPredicate) {
-		 return ListeAlbum.Builder.getBuilder()
-				 .from(collectionAlbumsMusiques.getAlbums())
+		 return ListeAlbum.Builder.getBuilderFrom(collectionAlbumsMusiques.getAlbums())
 				 .withAlbumSatisfying(albumPredicate)
 				 .build();
 	}
@@ -253,7 +245,7 @@ public class CollectionAlbumContainer {
 		return getAlbumsSastisfying(Predicate.not(Album::hasArtiste));
 	}
 	
-	private void reset() {
+	public void reset() {
 		
    		collectionAlbumsMusiques.reset();
 		collectionArtistes.reset();
@@ -277,6 +269,22 @@ public class CollectionAlbumContainer {
 			a = concertsArtistes.getArtisteKnown(nom, prenom);
 		}
 		return a;		
+	}
+	
+	public TemporalAccessor getAlbumOldestRecordingDate() {
+			return collectionAlbumsMusiques.getOldestRecordingDate();
+	}
+	
+	public TemporalAccessor getAlbumMostRecentRecordingDate() {
+		return collectionAlbumsMusiques.getMostRecentRecordingDate();
+	}
+	
+	public TemporalAccessor getAlbumOldestCompositionDate() {
+		return collectionAlbumsMusiques.getOldestCompositionDate();
+	}
+	
+	public TemporalAccessor getAlbumMostRecentCompositionDate() {
+		return collectionAlbumsMusiques.getMostRecentCompositionDate();
 	}
 	
 	public List<Album> pickRandomAlbums(int nbAlbum) {

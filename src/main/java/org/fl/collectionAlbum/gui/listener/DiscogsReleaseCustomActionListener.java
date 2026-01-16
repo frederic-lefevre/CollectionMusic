@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2025 Frederic Lefevre
+Copyright (c) 2017, 2026 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -63,9 +63,9 @@ public class DiscogsReleaseCustomActionListener implements java.awt.event.Action
 	
 	public enum CustomAction {
 		
-		SHOW_INFO("Informations détaillées", Objects::nonNull),
-		ALBUM_SEARCH("Chercher les albums", isNotLinkedToAlbum),
-		FORMAT_VALIDATION("Valider le format discogs", isLinkedToAlbumWithFormatProblem);
+		SHOW_INFO("Informations détaillées de la release", Objects::nonNull),
+		ALBUM_SEARCH("Recherche des albums", isNotLinkedToAlbum),
+		FORMAT_VALIDATION("Validation du format discogs", isLinkedToAlbumWithFormatProblem);
 		
 		private final String actionTitle;
 		private final Predicate<DiscogsAlbumRelease> displayable;
@@ -110,7 +110,7 @@ public class DiscogsReleaseCustomActionListener implements java.awt.event.Action
 				case SHOW_INFO:
 					
 					// Show informations in popup message
-					JOptionPane.showMessageDialog(null, new DetailedAlbumAndDiscogsInfoPane(release), "Informations", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, new DetailedAlbumAndDiscogsInfoPane(release), customAction.getActionTitle(), JOptionPane.INFORMATION_MESSAGE);
 				
 					break;
 					
@@ -141,7 +141,7 @@ public class DiscogsReleaseCustomActionListener implements java.awt.event.Action
 					
 					JScrollPane infoAlbumsScroll = new JScrollPane(potentialAlbumsPane);
 					infoAlbumsScroll.setPreferredSize(new Dimension(1650,850));
-					JOptionPane.showMessageDialog(null, infoAlbumsScroll, "Recherche d'albums", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, infoAlbumsScroll, customAction.getActionTitle(), JOptionPane.INFORMATION_MESSAGE);
 					
 					break;
 					
@@ -156,14 +156,14 @@ public class DiscogsReleaseCustomActionListener implements java.awt.event.Action
 					infoFormats.setFont(monospaced);
 					formatValidationPane.add(infoFormats);
 					
-					JButton formatsValidate = new JButton("Valider les formats");
+					JButton formatsValidate = new JButton(customAction.getActionTitle());
 					formatsValidate.setBackground(Color.GREEN);
 					formatsValidate.setFont(verdana);
 					formatsValidate.addActionListener(new DiscogsFormatValidationListener(release, formatValidationPane, generationPane));
 					formatValidationPane.add(formatsValidate);
 					
 					JScrollPane formatValidationScroll = new JScrollPane(formatValidationPane);
-					JOptionPane.showMessageDialog(null, formatValidationScroll, "Validation des formats", JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, formatValidationScroll, customAction.getActionTitle(), JOptionPane.INFORMATION_MESSAGE);
 					
 					break;
 					
@@ -172,6 +172,8 @@ public class DiscogsReleaseCustomActionListener implements java.awt.event.Action
 			}
 		}
 	}
+	
+	private static final String VALIDATE_ALBUM = "Valider cet album";
 	
 	private JPanel potentialAlbumPane(DiscogsAlbumRelease release, Album album, JPanel potentialAlbumsPane) {
 		
@@ -185,7 +187,7 @@ public class DiscogsReleaseCustomActionListener implements java.awt.event.Action
 		infoPotentialAlbum.setFont(monospaced);
 		potentialAlbumPane.add(infoPotentialAlbum);
 		
-		JButton albumValidate = new JButton("Valider cet album");
+		JButton albumValidate = new JButton(VALIDATE_ALBUM);
 		albumValidate.setBackground(Color.GREEN);
 		albumValidate.setFont(verdana);
 		albumValidate.addActionListener(new ReleaseValidationListener(release, album, potentialAlbumsPane, generationPane));

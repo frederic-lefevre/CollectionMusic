@@ -40,11 +40,13 @@ class CollectionAlbumsTest {
 	@Test
 	void testGlobalBuild() {
 		
-		CollectionAlbums collectionAlbums = new CollectionAlbums(List.of(), List.of(), new ProgressInformationPanel());
+		CollectionAlbumContainer albumsContainer = CollectionAlbumContainer.getInstance();
+		albumsContainer.reset();
+		CollectionAlbums collectionAlbums = new CollectionAlbums(albumsContainer, List.of(), List.of(), new ProgressInformationPanel());
 		
-		CollectionAlbumContainer albumsContainer = collectionAlbums.doInBackground();
+		CollectionAlbumContainer albumsContainer2 = collectionAlbums.doInBackground();
 		
-		assertThat(albumsContainer).isNotNull();
+		assertThat(albumsContainer).isNotNull().isEqualTo(albumsContainer2);
 		
 		assertThat(albumsContainer.getCollectionAlbumsMusiques()).isNotNull();
 		assertThat(albumsContainer.getConcerts()).isNotNull();
@@ -119,8 +121,9 @@ class CollectionAlbumsTest {
 		assertThat(concertMetrics.getMetrics().get("nombreConcert")).isNotNull().isGreaterThan(183);
 		
 		// This is a singleton and it should be reset to empty
-		CollectionAlbumContainer albumsContainer2 = CollectionAlbumContainer.getEmptyInstance();
-		assertThat(albumsContainer2).isEqualTo(albumsContainer);
+		CollectionAlbumContainer albumsContainer3 = CollectionAlbumContainer.getInstance();
+		albumsContainer3.reset();
+		assertThat(albumsContainer3).isEqualTo(albumsContainer);
 		TestUtils.assertEmptyCollection(albumsContainer);
 	}
 	

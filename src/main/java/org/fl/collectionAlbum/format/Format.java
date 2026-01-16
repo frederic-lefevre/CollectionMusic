@@ -1,7 +1,7 @@
 /*
  MIT License
 
-Copyright (c) 2017, 2025 Frederic Lefevre
+Copyright (c) 2017, 2026 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -54,7 +54,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
  */
 public class Format {
 
-	private final static Logger albumLog = Logger.getLogger(Format.class.getName());
+	private static final Logger albumLog = Logger.getLogger(Format.class.getName());
 	
 	private static final String ORDRE_PREFIX = "Ordre de rangement des ";
 	
@@ -98,7 +98,7 @@ public class Format {
 	// Supports de l'album et leur nombre correspondant
 	private final EnumMap<MediaSupports, Double> tableFormat ;
 	
-	private Map<ContentNature, List<AbstractMediaFile>> mediaFiles;
+	private final Map<ContentNature, List<AbstractMediaFile>> mediaFiles;
 	
 	private boolean hasError;
 

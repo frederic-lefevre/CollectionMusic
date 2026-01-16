@@ -71,7 +71,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 
 class AlbumTest {
 
-	private final static Logger albumLog = Logger.getLogger(AlbumTest.class.getName());
+	private static final Logger albumLog = Logger.getLogger(AlbumTest.class.getName());
 	
 	private static final ObjectMapper mapper = new ObjectMapper();
 	
@@ -89,7 +89,6 @@ class AlbumTest {
 		LogRecordCounter albumFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.albums.Album"));	
 		LogRecordCounter formatFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.format.Format"));	
 		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
-
 		
 		ListeArtiste la = new ListeArtiste();
 		List<ListeArtiste> lla = new ArrayList<ListeArtiste>();
@@ -564,6 +563,5 @@ class AlbumTest {
 		
 		assertThat(MediaSupports.values()).allSatisfy((mediaSupport -> 
 			assertThat(album.hasMediaSupport(mediaSupport)).isEqualTo(mediaSupports.contains(mediaSupport))));
-
 	}
 }

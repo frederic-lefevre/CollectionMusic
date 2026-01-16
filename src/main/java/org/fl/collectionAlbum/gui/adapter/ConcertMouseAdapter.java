@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2025 Frederic Lefevre
+Copyright (c) 2017, 2026 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -36,17 +36,19 @@ import org.fl.collectionAlbum.osAction.OsAction;
 
 public class ConcertMouseAdapter extends MusicArtefactMouseAdapter<Concert>  {
 	
+	private static final String TITLE = "Informations détaillées du concert";
+	
 	public ConcertMouseAdapter(MusicArtefactTable<Concert> concertsTable, List<OsAction<Concert>> osActions) {
 		super(concertsTable, osActions);
 		
-		musicArtefactMenuItems.addMenuItem("Informations détaillées", new ConcertCustomActionListener(), (concert) -> concert != null, localJPopupMenu);
+		musicArtefactMenuItems.addMenuItem(TITLE, new ConcertCustomActionListener(), (concert) -> concert != null, localJPopupMenu);
 	}
 	
 	private class ConcertCustomActionListener implements java.awt.event.ActionListener {
 	
 		@Override
 		public void actionPerformed(ActionEvent e) {			
-			JOptionPane.showMessageDialog(null, new DetailedConcertInfoPane(musicArtefactTable.getSelectedMusicArtefact()), "Informations détaillées", JOptionPane.INFORMATION_MESSAGE);			
+			JOptionPane.showMessageDialog(null, new DetailedConcertInfoPane(musicArtefactTable.getSelectedMusicArtefact()), TITLE, JOptionPane.INFORMATION_MESSAGE);			
 		}	
 	}
 }

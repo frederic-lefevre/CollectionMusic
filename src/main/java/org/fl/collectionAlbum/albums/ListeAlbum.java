@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2025 Frederic Lefevre
+Copyright (c) 2017, 2026 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -24,6 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.albums;
 
+import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -35,6 +36,11 @@ import org.fl.collectionAlbum.format.Format;
 import org.fl.collectionAlbum.utils.ListUtils;
 
 public class ListeAlbum {
+	
+	private static final AlbumAlphaComparator ALBUM_ALPHA_COMPARATOR = new AlbumAlphaComparator();
+	private static final AlbumEnregistrementComparator ALBUM_ENREGISTREMENT_COMPARATOR = new AlbumEnregistrementComparator();
+	private static final AlbumCompositionComparator ALBUM_COMPOSITION_COMPARATOR = new AlbumCompositionComparator();
+	private static final RangementComparator RANGEMENT_COMPARATOR = new RangementComparator();
 	
 	private final List<Album> albums;
 
@@ -59,22 +65,22 @@ public class ListeAlbum {
 	}
 	
 	public ListeAlbum sortAlphaOnTitle() {
-		Collections.sort(albums, new AlbumAlphaComparator());
+		Collections.sort(albums, ALBUM_ALPHA_COMPARATOR);
 		return this;
 	}
 	
 	public ListeAlbum sortChronoEnregistrement() {
-		Collections.sort(albums, new AlbumEnregistrementComparator());
+		Collections.sort(albums, ALBUM_ENREGISTREMENT_COMPARATOR);
 		return this;
 	}
 
 	public ListeAlbum sortChronoComposition() {
-		Collections.sort(albums, new AlbumCompositionComparator());
+		Collections.sort(albums, ALBUM_COMPOSITION_COMPARATOR);
 		return this;
 	}
 
 	public ListeAlbum sortRangementAlbum() {
-		Collections.sort(albums, new RangementComparator());
+		Collections.sort(albums, RANGEMENT_COMPARATOR);
 		return this;
 	}
 
@@ -98,34 +104,76 @@ public class ListeAlbum {
 		return ListUtils.pickRandomElement(albums);
 	}
 	
+	public TemporalAccessor getOldestRecordingDate() {	
+		if (albums.isEmpty()) {
+			return null;
+		} else {
+			return Collections.min(albums, new AlbumEnregistrementComparator()).getDebutEnregistrement();
+		}
+	}
+	
+	public TemporalAccessor getOldestCompositionDate() {		
+		if (albums.isEmpty()) {
+			return null;
+		} else {
+			return Collections.min(albums, new AlbumCompositionComparator()).getDebutComposition();
+		}
+	}
+	
+	public TemporalAccessor getMostRecentRecordingDate() {	
+		if (albums.isEmpty()) {
+			return null;
+		} else {
+			return Collections.max(albums, new AlbumEnregistrementComparator()).getFinEnregistrement();
+		}
+	}
+	
+	public TemporalAccessor getMostRecentCompositionDate() {		
+		if (albums.isEmpty()) {
+			return null;
+		} else {
+			return Collections.max(albums, new AlbumCompositionComparator()).getFinComposition();
+		}
+	}
+	
 	public static class Builder {
 		
-		private final ListeAlbum listeAlbum;
+		private List<Album> albums;
 		
 		private Builder() {
-			listeAlbum = new ListeAlbum();
+			albums = new ArrayList<>();	
+		}
+		
+		private Builder(List<Album> la) {
+			albums = new ArrayList<>(la);
+
 		}
 		
 		public static Builder getBuilder() {
 			return new Builder();
 		}
 		
-		public Builder from(List<Album> la) {
-			listeAlbum.reset();
-			if (la != null) {
-				la.forEach(album -> listeAlbum.addAlbum(album));
-			}
-			return this;
+		public static Builder getBuilderFrom(List<Album> la) {
+			return new Builder(la);
 		}
 		
 		public Builder withAlbumSatisfying(Predicate<Album> albumPredicate) {
-			
-			return from(listeAlbum.getAlbums().stream()
-					.filter(albumPredicate)
-					.collect(Collectors.toList()));
+			albums = albums.stream()
+				.filter(albumPredicate)
+				.collect(Collectors.toList());		
+			return this;
+		}
+		
+		public Builder withAlbumSatisfying(List<Predicate<Album>> albumPredicates) {
+			albums = albums.stream()
+				.filter(album -> albumPredicates.stream().allMatch(p -> p.test(album)))
+				.collect(Collectors.toList());		
+			return this;
 		}
 		
 		public ListeAlbum build() {
+			ListeAlbum listeAlbum = new ListeAlbum();
+			albums.forEach(album -> listeAlbum.addAlbum(album));
 			return listeAlbum;
 		}
 	}

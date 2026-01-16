@@ -22,11 +22,31 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.gui;
+package org.fl.collectionAlbum.gui.listener;
 
-import org.fl.collectionAlbum.MusicArtefact;
+import java.awt.event.ActionEvent;
 
-public interface MusicArtefactTable<T extends MusicArtefact> {
+import javax.swing.JOptionPane;
 
-	public T getSelectedMusicArtefact();
+import org.fl.collectionAlbum.CollectionAlbumContainer;
+import org.fl.collectionAlbum.gui.AlbumsSearchPanel;
+import org.fl.collectionAlbum.gui.GenerationPane;
+
+public class AlbumsSearchListener implements java.awt.event.ActionListener {
+	
+	private final GenerationPane generationPane;
+	private final CollectionAlbumContainer collectionAlbumContainer;
+	
+	public AlbumsSearchListener(GenerationPane generationPane, CollectionAlbumContainer collectionAlbumContainer) {
+		super();
+		this.generationPane = generationPane;
+		this.collectionAlbumContainer = collectionAlbumContainer;
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		
+		AlbumsSearchPanel mainPane = new AlbumsSearchPanel(generationPane, collectionAlbumContainer);
+		JOptionPane.showMessageDialog(null, mainPane, "Recherche d'albums", JOptionPane.INFORMATION_MESSAGE);
+	}
 }

@@ -24,9 +24,40 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui;
 
-import org.fl.collectionAlbum.MusicArtefact;
+import java.awt.Component;
+import java.time.LocalDate;
 
-public interface MusicArtefactTable<T extends MusicArtefact> {
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
-	public T getSelectedMusicArtefact();
+public class DateRangeChooser extends JPanel {
+
+	private static final long serialVersionUID = 1L;
+	
+	private final DateChooser minDateChooser;
+	private final DateChooser maxDateChooser;
+	
+	public DateRangeChooser(String title, LocalDate dateMin, LocalDate dateMax) {
+		super();
+		
+		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		
+		JLabel titleLabel = new JLabel(title);
+		titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+		add(titleLabel);
+		
+		minDateChooser = new DateChooser(dateMin);
+		maxDateChooser = new DateChooser(dateMax);
+		add(minDateChooser);
+		add(maxDateChooser);
+	}
+	
+	public LocalDate getMinChoosenDate() {
+		return minDateChooser.getChoosenDate();
+	}
+	
+	public LocalDate getMaxChoosenDate() {
+		return maxDateChooser.getChoosenDate();
+	}
 }

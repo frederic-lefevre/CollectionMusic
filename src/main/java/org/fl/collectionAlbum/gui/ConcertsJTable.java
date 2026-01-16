@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2025 Frederic Lefevre
+Copyright (c) 2017, 2026 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -47,6 +47,9 @@ public class ConcertsJTable extends JTable implements MusicArtefactTable<Concert
 
 	private static final Logger logger = Logger.getLogger(ConcertsJTable.class.getName());
 	
+	private static final ConcertAuteurComparator CONCERT_AUTEUR_COMPARATOR = new ConcertAuteurComparator();
+	private static final TemporalUtils.TemporalAccessorComparator TEMPORAL_ACCESSOR_COMPARATOR = new TemporalUtils.TemporalAccessorComparator();
+	
 	private static final Function<TemporalAccessor, String> concertDateFormatter = t -> TemporalUtils.formatDate((TemporalAccessor)t);
 	
 	public ConcertsJTable(ConcertTableModel concertTableModel) {
@@ -77,8 +80,8 @@ public class ConcertsJTable extends JTable implements MusicArtefactTable<Concert
 		TableRowSorter<ConcertTableModel> sorter = new TableRowSorter<>(concertTableModel);
 		setRowSorter(sorter);
 		
-		sorter.setComparator(ConcertTableModel.DATE_COL_IDX, new TemporalUtils.TemporalAccessorComparator());
-		sorter.setComparator(ConcertTableModel.ARTISTE_COL_IDX, new ConcertAuteurComparator());
+		sorter.setComparator(ConcertTableModel.DATE_COL_IDX, TEMPORAL_ACCESSOR_COMPARATOR);
+		sorter.setComparator(ConcertTableModel.ARTISTE_COL_IDX, CONCERT_AUTEUR_COMPARATOR);
 	}
 	
 	// Get the selected concert

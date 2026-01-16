@@ -52,7 +52,7 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 	
 	private static final Logger albumLog = Logger.getLogger(CollectionAlbums.class.getName());
 	
-	private CollectionAlbumContainer albumsContainer;
+	private final CollectionAlbumContainer albumsContainer;
 	private final ProgressInformationPanel progressPanel;
 	private final List<AbstractTableModel> tableModels;
 	private final List<AbstractColorableTabbedPane> colorableTabbedPanes;
@@ -73,9 +73,14 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 	private static final String FIN_LECTURE = "Collection chargée";
 	private static final String FIN_LECTURE_EN_EVOLUTION = FIN_LECTURE + " et en évolution";
 	
-	public CollectionAlbums(List<AbstractTableModel> tableModels, List<AbstractColorableTabbedPane> colorableTabbedPanes, ProgressInformationPanel pip) {
+	public CollectionAlbums(
+			CollectionAlbumContainer collectionAlbumContainer, 
+			List<AbstractTableModel> tableModels, 
+			List<AbstractColorableTabbedPane> colorableTabbedPanes, 
+			ProgressInformationPanel pip) {
 
-		progressPanel = pip;
+		this.albumsContainer = collectionAlbumContainer;
+		this.progressPanel = pip;
 		this.tableModels = tableModels;
 		this.colorableTabbedPanes = colorableTabbedPanes;
 	}
@@ -90,7 +95,7 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 		DiscogsInventory.buildDiscogsInventory();
 		
 		publish(new ProgressInformation(LECTURE_ALBUM, EN_EXAMEN, ""));
-		albumsContainer = CollectionAlbumContainer.getEmptyInstance();
+		albumsContainer.reset();
 		buildAlbumsCollection();
 		
 		publish(new ProgressInformation(LECTURE_CONCERT, EN_EXAMEN, ""));

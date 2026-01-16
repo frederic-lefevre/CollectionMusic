@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2025 Frederic Lefevre
+Copyright (c) 2017, 2026 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -49,6 +49,8 @@ public class DiscogsReleaseJTable extends JTable {
 
 	private static final Logger tLog = Logger.getLogger(DiscogsReleaseJTable.class.getName());
 	
+	private static final FormatCompatibilityResult.FormatCompatibilityComparator FORMAT_COMPATIBILITY_COMPARATOR = new FormatCompatibilityResult.FormatCompatibilityComparator();
+	
 	private static final Function<TemporalAccessor, String> discogsDateFormatter = t -> TemporalUtils.formatDateNumeric((TemporalAccessor)t);
 	
 	public DiscogsReleaseJTable(DisocgsReleaseTableModel discogsTableModel, CollectionAlbumContainer albumsContainer, GenerationPane generationPane) {
@@ -83,7 +85,7 @@ public class DiscogsReleaseJTable extends JTable {
 		TableRowSorter<DisocgsReleaseTableModel> sorter = new TableRowSorter<>(discogsTableModel);
 		setRowSorter(sorter);
 		
-		sorter.setComparator(DisocgsReleaseTableModel.FORMAT_MATCH_COL_IDX, new FormatCompatibilityResult.FormatCompatibilityComparator());
+		sorter.setComparator(DisocgsReleaseTableModel.FORMAT_MATCH_COL_IDX, FORMAT_COMPATIBILITY_COMPARATOR);
 	}
 
 	public DiscogsAlbumRelease getSelectedDisocgsRelease(){

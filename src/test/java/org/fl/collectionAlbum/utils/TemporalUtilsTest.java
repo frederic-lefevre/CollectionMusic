@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2025 Frederic Lefevre
+Copyright (c) 2017, 2026 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -95,5 +95,30 @@ class TemporalUtilsTest {
 		
 		String dRes1 = TemporalUtils.formatDateNumeric(ta1);
 		assertThat(dRes1).isEqualTo("16-06-2019");
+	}
+	
+	@Test
+	void test6() {
+		
+		TemporalAccessor ta1 = TemporalUtils.parseDate("2019-06-16");	
+		assertThat(TemporalUtils.compareTemporal(ta1, ta1)).isZero();
+	}
+	
+	@Test
+	void test7() {
+		
+		TemporalAccessor ta1 = TemporalUtils.parseDate("2019-06-16");
+		TemporalAccessor ta2 = TemporalUtils.parseDate("2019-06-17");
+		
+		assertThat(TemporalUtils.compareTemporal(ta1, ta2)).isNegative();
+	}
+	
+	@Test
+	void test8() {
+		
+		TemporalAccessor ta1 = TemporalUtils.parseDate("2019-06-18");
+		TemporalAccessor ta2 = TemporalUtils.parseDate("2019-06-17");
+		
+		assertThat(TemporalUtils.compareTemporal(ta1, ta2)).isPositive();
 	}
 }

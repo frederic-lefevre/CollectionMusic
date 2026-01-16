@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2025 Frederic Lefevre
+Copyright (c) 2017, 2026 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -41,6 +41,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 public class ListeArtiste {
 	
 	private static final Logger albumLog = Logger.getLogger(ListeArtiste.class.getName());
+	
+	private static final AuteurComparator AUTEUR_COMPARATOR = new AuteurComparator();
+	private static final PoidsComparator POIDS_COMPARATOR = new PoidsComparator();
+	private static final ConcertPoidsComparator CONCERT_POIDS_COMPARATOR = new ConcertPoidsComparator();
+	private static final AuteurDateComparator AUTEUR_DATE_COMPARATOR = new AuteurDateComparator();
 	
 	private final List<Artiste> artistes;
 
@@ -87,26 +92,22 @@ public class ListeArtiste {
 	}
 		
 	public ListeArtiste sortArtistesAlpha() {
-		AuteurComparator compAuteur = new AuteurComparator();
-		Collections.sort(artistes, compAuteur) ;
+		Collections.sort(artistes, AUTEUR_COMPARATOR) ;
 		return this;
 	}
 
 	public ListeArtiste sortArtistesPoidsAlbums() {
-		PoidsComparator compPoids = new PoidsComparator();
-		Collections.sort(artistes, compPoids) ;
+		Collections.sort(artistes, POIDS_COMPARATOR) ;
 		return this;
 	}
 
 	public ListeArtiste sortArtistesPoidsConcerts() {
-		ConcertPoidsComparator compConcertPoids = new ConcertPoidsComparator();
-		Collections.sort(artistes, compConcertPoids) ;
+		Collections.sort(artistes, CONCERT_POIDS_COMPARATOR) ;
 		return this;
 	}
 	
 	public ListeArtiste sortArtistesChrono() {
-		AuteurDateComparator compChrono = new AuteurDateComparator();
-		Collections.sort(artistes, compChrono) ;
+		Collections.sort(artistes, AUTEUR_DATE_COMPARATOR) ;
 		return this;
 	}
 	

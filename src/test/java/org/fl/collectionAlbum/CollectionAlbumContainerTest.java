@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2025 Frederic Lefevre
+Copyright (c) 2017, 2026 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -29,6 +29,7 @@ import static org.assertj.core.api.Assertions.*;
 import java.net.URI;
 import java.nio.file.Paths;
 import java.util.AbstractMap.SimpleEntry;
+import java.util.List;
 
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.Artiste;
@@ -53,7 +54,8 @@ class CollectionAlbumContainerTest {
 	@Test
 	void testEmptyContainer() {
 		
-		CollectionAlbumContainer albumsContainer = CollectionAlbumContainer.getEmptyInstance();
+		CollectionAlbumContainer albumsContainer = CollectionAlbumContainer.getInstance();
+		albumsContainer.reset();
 		
 		TestUtils.assertEmptyCollection(albumsContainer);
 
@@ -72,8 +74,12 @@ class CollectionAlbumContainerTest {
 		assertThat(ContentNature.values())
 			.allSatisfy(contentNature -> assertThat(albumsContainer.getAlbumsWithOnlyContentNature(contentNature).getAlbums()).isEmpty());
 		
+		assertThat(albumsContainer.getAlbumsSastisfying(List.of(a -> true)).getAlbums()).isEmpty();
+		
 		// This is a singleton and it should be reset to empty
-		CollectionAlbumContainer albumsContainer2 = CollectionAlbumContainer.getEmptyInstance();
+		CollectionAlbumContainer albumsContainer2 = CollectionAlbumContainer.getInstance();
+		albumsContainer2.reset();
+		
 		assertThat(albumsContainer2).isEqualTo(albumsContainer);
 		TestUtils.assertEmptyCollection(albumsContainer);
 		
@@ -121,7 +127,8 @@ class CollectionAlbumContainerTest {
 		MediaFilesInventories.scanMediaFilePaths();
 		DiscogsInventory.buildDiscogsInventory();
 		
-		CollectionAlbumContainer albumsContainer = CollectionAlbumContainer.getEmptyInstance();
+		CollectionAlbumContainer albumsContainer = CollectionAlbumContainer.getInstance();
+		albumsContainer.reset();
 
 		ObjectNode jAlbum = (ObjectNode)mapper.readTree(albumStr1);
 		
@@ -207,6 +214,16 @@ class CollectionAlbumContainerTest {
 					new SimpleEntry<>("xnbVinyl", (double)0),
 					new SimpleEntry<>("xnbdvd", (double)0)
 					);
+		
+		assertThat(albumsContainer.getAlbumsSastisfying(List.of(a -> true)).getAlbums())
+			.singleElement()
+			.satisfies(alb -> assertThat(alb.getTitre()).isEqualTo("Portrait in jazz"));
+		
+		assertThat(albumsContainer.getAlbumsSastisfying(List.of(
+				a -> a.getTitre().contains("jazz"), 
+				a -> !a.getAuteurs().isEmpty())).getAlbums())
+			.singleElement()
+			.satisfies(alb -> assertThat(alb.getTitre()).isEqualTo("Portrait in jazz"));
 		
 		Metrics concertMatrics = Control.getConcertMetricsHsitory().getConcertMetrics(0, albumsContainer);
 		assertThat(concertMatrics.getMetricTimeStamp()).isZero();

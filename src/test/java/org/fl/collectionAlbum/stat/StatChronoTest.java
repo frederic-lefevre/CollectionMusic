@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2024 Frederic Lefevre
+Copyright (c) 2017, 2026 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -66,5 +66,4 @@ class StatChronoTest {
 		assertThat(sc1.getStatForYear(1970)).isEqualTo("5");
 		assertThat(sc1.getStatForDecennie(1970)).isEqualTo("5");
 	}
-
 }

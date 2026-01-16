@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2025 Frederic Lefevre
+Copyright (c) 2017, 2026 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -34,7 +34,7 @@ import java.util.logging.Logger;
 
 public class StatChrono {
 	
-	private final static Logger statLogger = Logger.getLogger(StatChrono.class.getName());
+	private static final Logger statLogger = Logger.getLogger(StatChrono.class.getName());
 
 	private final List<StatAnnee> statAnnuelle;
 	private final List<StatAnnee> statDecennale;

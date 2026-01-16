@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2025 Frederic Lefevre
+Copyright (c) 2017, 2026 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -42,10 +42,12 @@ public class RandomAlbumsPickListener implements java.awt.event.ActionListener {
 
 	private final GenerationPane generationPane;
 	private final UtilsPane utilsPane;
+	private final CollectionAlbumContainer collectionAlbumContainer;
 	
-	public RandomAlbumsPickListener(UtilsPane utilsPane, GenerationPane generationPane) {
+	public RandomAlbumsPickListener(UtilsPane utilsPane, GenerationPane generationPane, CollectionAlbumContainer collectionAlbumContainer) {
 		this.generationPane = generationPane;
 		this.utilsPane = utilsPane;
+		this.collectionAlbumContainer = collectionAlbumContainer;
 	}
 	
 	@Override
@@ -55,9 +57,9 @@ public class RandomAlbumsPickListener implements java.awt.event.ActionListener {
 		
 		List<Album> randomAlbums;
 		if ((methodForRandomAlbum != null) && (methodForRandomAlbum.equals(UtilsPane.EQUI_REPARTI_PAR_ALBUM))) {
-			randomAlbums = CollectionAlbumContainer.getInstance().pickRandomAlbums(utilsPane.getNumberOfAlbums());
+			randomAlbums = collectionAlbumContainer.pickRandomAlbums(utilsPane.getNumberOfAlbums());
 		} else {
-			randomAlbums = CollectionAlbumContainer.getInstance().pickRandomAlbumsViaArtiste(utilsPane.getNumberOfAlbums());
+			randomAlbums = collectionAlbumContainer.pickRandomAlbumsViaArtiste(utilsPane.getNumberOfAlbums());
 		}
 
 		// Table to display the chosen albums
@@ -67,7 +69,7 @@ public class RandomAlbumsPickListener implements java.awt.event.ActionListener {
 		JScrollPane albumsScrollTable = new JScrollPane(albumsJTable);
 		albumsScrollTable.setPreferredSize(new Dimension(1800,700));
 		
-		JOptionPane.showMessageDialog(null, albumsScrollTable, "Informations", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(null, albumsScrollTable, "Albums choisis aléatoirement", JOptionPane.INFORMATION_MESSAGE);
 	}
 	
 

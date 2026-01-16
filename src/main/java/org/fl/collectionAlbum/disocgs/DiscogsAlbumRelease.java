@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2025 Frederic Lefevre
+Copyright (c) 2017, 2026 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -54,8 +54,8 @@ public class DiscogsAlbumRelease {
 			new AbstractMap.SimpleEntry<MediaSupportCategories,String>(MediaSupportCategories.DVD, "DVD"),
 			new AbstractMap.SimpleEntry<MediaSupportCategories,String>(MediaSupportCategories.BluRay, "Blu-ray")));
 	
-	private InventoryCsvAlbum inventoryCsvAlbum;
-	private Set<Album> collectionAlbums;
+	private final InventoryCsvAlbum inventoryCsvAlbum;
+	private final Set<Album> collectionAlbums;
 	
 	protected DiscogsAlbumRelease(InventoryCsvAlbum inventoryCsvAlbum) {
 		this.inventoryCsvAlbum = inventoryCsvAlbum;

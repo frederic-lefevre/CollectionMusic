@@ -43,21 +43,25 @@ public class GenerationPane extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	private final static String rText = "Lecture des fichiers albums et concerts";
-	private final static String gText = "Génération du nouveau site collection";
-	private final static String iText = "Arrêt";
-	private final static String sText = "Aucune collection lue";
-	private final static String s1Text = "Aucun site généré";
+	private static final String rText = "Lecture des fichiers albums et concerts";
+	private static final String gText = "Génération du nouveau site collection";
+	private static final String iText = "Arrêt";
+	private static final String sText = "Aucune collection lue";
+	private static final String s1Text = "Aucun site généré";
 
+	private static final int CONTROL_PANEL_HEIGHT = 224;
+	private static final int START_CONTROL_PANEL_WIDTH = 680;
+	private static final int UTILS_PANEL_WIDTH = 300;
+	
 	private final StartControl readCollectionControl;
 	private final StartControl generateSiteControl;
 	
-	public GenerationPane() {
+	public GenerationPane(CollectionAlbumContainer collectionAlbumContainer) {
 
 		super();
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-		AlbumsTableModel albumsTableModel = new AlbumsTableModel(CollectionAlbumContainer.getInstance().getCollectionAlbumsMusiques().getAlbums());
+		AlbumsTableModel albumsTableModel = new AlbumsTableModel(collectionAlbumContainer.getCollectionAlbumsMusiques().getAlbums());
 		
 		AlbumsJTable albumsJTable = new AlbumsJTable(albumsTableModel, this);
 		
@@ -66,24 +70,29 @@ public class GenerationPane extends JPanel {
 		controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.X_AXIS));
 		
 		readCollectionControl = new StartControl(rText, iText, sText, () -> true);
-		controlPanel.add(readCollectionControl.getProcCtrl());
+		JPanel readCollectionControlPanel = readCollectionControl.getProcessControlPanel();
+		readCollectionControlPanel.setPreferredSize(new Dimension(START_CONTROL_PANEL_WIDTH, CONTROL_PANEL_HEIGHT));
+		controlPanel.add(readCollectionControlPanel);
 
-		UtilsPane utilsPane = new UtilsPane(this);
+		UtilsPane utilsPane = new UtilsPane(this, collectionAlbumContainer);
+		utilsPane.setPreferredSize(new Dimension(UTILS_PANEL_WIDTH, CONTROL_PANEL_HEIGHT));
 		utilsPane.deactivate();
 		controlPanel.add(utilsPane);
 		
 		generateSiteControl = new StartControl(gText, iText, s1Text, StartGenerationSite.activationPredicate);
 		generateSiteControl.deactivate();
-		controlPanel.add(generateSiteControl.getProcCtrl());
+		JPanel generateSiteControlPanel = generateSiteControl.getProcessControlPanel();
+		generateSiteControlPanel.setPreferredSize(new Dimension(START_CONTROL_PANEL_WIDTH, CONTROL_PANEL_HEIGHT));
+		controlPanel.add(generateSiteControlPanel);
 
 		List<ActivableElement> activableElements = List.of(readCollectionControl, utilsPane, generateSiteControl);
 
-		StartReadCollection startReadCollection = new StartReadCollection(readCollectionControl.getProgressInformationPanel(), activableElements);
+		StartReadCollection startReadCollection = new StartReadCollection(collectionAlbumContainer, readCollectionControl.getProgressInformationPanel(), activableElements);
 		startReadCollection.setCollectionProcWaiter(new CollectionProcessWaiter(activableElements));
 		startReadCollection.addTableModel(albumsTableModel);
 		readCollectionControl.getStartButton().addActionListener(startReadCollection);
 
-		StartGenerationSite startGenerationSite = new StartGenerationSite(generateSiteControl.getProgressInformationPanel(), activableElements);
+		StartGenerationSite startGenerationSite = new StartGenerationSite(collectionAlbumContainer, generateSiteControl.getProgressInformationPanel(), activableElements);
 		startGenerationSite.setCollectionProcWaiter(new CollectionProcessWaiter(activableElements));
 		generateSiteControl.getStartButton().addActionListener(startGenerationSite);
 		
@@ -118,7 +127,7 @@ public class GenerationPane extends JPanel {
 		DisocgsReleaseTableModel dtm = new DisocgsReleaseTableModel(DiscogsInventory.getDiscogsInventory());
 		startReadCollection.addTableModel(dtm);
 		
-		DiscogsReleaseJTable discogsReleaseJTable = new DiscogsReleaseJTable(dtm, CollectionAlbumContainer.getInstance(), this);
+		DiscogsReleaseJTable discogsReleaseJTable = new DiscogsReleaseJTable(dtm, collectionAlbumContainer, this);
 		
 		// Scroll pane to contain the discogs releases pane
 		JScrollPane discogsReleasesScrollPane = new JScrollPane(discogsReleaseJTable);
@@ -127,7 +136,7 @@ public class GenerationPane extends JPanel {
 		collectionTabPanes.add(discogsReleasesScrollPane, "Discogs releases");
 		
 		// Concert pane
-		ConcertTableModel concertTableModel = new ConcertTableModel(CollectionAlbumContainer.getInstance().getConcerts().getConcerts());
+		ConcertTableModel concertTableModel = new ConcertTableModel(collectionAlbumContainer.getConcerts().getConcerts());
 		startReadCollection.addTableModel(concertTableModel);
 		
 		ConcertsJTable concertsJTable = new ConcertsJTable(concertTableModel);

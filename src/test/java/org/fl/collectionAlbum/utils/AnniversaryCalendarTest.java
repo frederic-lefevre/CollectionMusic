@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2025 Frederic Lefevre
+Copyright (c) 2017, 2026 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -44,16 +44,16 @@ class AnniversaryCalendarTest {
 
 	private static class Personne {
 		
-		public TemporalAccessor getBirthDate() {
-			return birthDate; 
-		}
+		private final TemporalAccessor birthDate;
 		
 		public Personne(String birthDate) {
 			super();
 			this.birthDate = dateTimeParser.parseBest(birthDate, LocalDate::from, YearMonth::from, Year::from);
 		}
 
-		private TemporalAccessor birthDate;
+		public TemporalAccessor getBirthDate() {
+			return birthDate; 
+		}
 	}
 
 	private static final Personne toto = new Personne("2000-01-30");

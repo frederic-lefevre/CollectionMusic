@@ -31,21 +31,24 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
+import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.CollectionAlbums;
 
 public class StartReadCollection implements ActionListener {
 
+	private final CollectionAlbumContainer collectionAlbumContainer;
 	private final List<AbstractTableModel> tableModels;
 	private final List<AbstractColorableTabbedPane> colorableTabbedPanes;
-	private final ProgressInformationPanel pip;
+	private final ProgressInformationPanel progressInfoPanel;
 	private CollectionProcessWaiter collectionProcWaiter;
 	private final List<ActivableElement> activableButtons;
 
-	public StartReadCollection(ProgressInformationPanel progInfoPanel, List<ActivableElement> stList) {
+	public StartReadCollection(CollectionAlbumContainer collectionAlbumContainer, ProgressInformationPanel progInfoPanel, List<ActivableElement> stList) {
 
+		this.collectionAlbumContainer = collectionAlbumContainer;
 		this.tableModels = new ArrayList<>();
 		this.colorableTabbedPanes = new ArrayList<>();
-		pip = progInfoPanel;
+		progressInfoPanel = progInfoPanel;
 		activableButtons = stList;
 	}
 
@@ -67,7 +70,7 @@ public class StartReadCollection implements ActionListener {
 		for (ActivableElement st : activableButtons) {
 			st.deactivate();
 		}
-		CollectionAlbums ca = new CollectionAlbums(tableModels, colorableTabbedPanes, pip);
+		CollectionAlbums ca = new CollectionAlbums(collectionAlbumContainer, tableModels, colorableTabbedPanes, progressInfoPanel);
 		ca.addPropertyChangeListener(collectionProcWaiter);
 		ca.execute();
 	}

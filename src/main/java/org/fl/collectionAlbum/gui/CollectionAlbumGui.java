@@ -30,6 +30,7 @@ import java.util.logging.Logger;
 
 import javax.swing.JFrame;
 
+import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.util.RunningContext;
 import org.fl.util.swing.ApplicationTabbedPane;
 
@@ -67,13 +68,13 @@ public class CollectionAlbumGui extends JFrame {
    		// init main window
    		setBounds(20, 20, WINDOW_WIDTH, WINDOW_HEIGHT);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setTitle("Collection d'albums") ;
+		setTitle("Collection d'albums et concerts") ;
 		
 		ApplicationTabbedPane collectionTabs = new ApplicationTabbedPane(getRunningContext());
 		
 		try {
 			// init panel de lecture et génération de site
-			collectionTabs.add(new GenerationPane(), "Analyse et génération des rapports de la collection", 0);
+			collectionTabs.add(new GenerationPane(CollectionAlbumContainer.getInstance()), "Analyse et génération des rapports de la collection", 0);
 
 			collectionTabs.setSelectedIndex(0);
 		} catch (Exception e) {

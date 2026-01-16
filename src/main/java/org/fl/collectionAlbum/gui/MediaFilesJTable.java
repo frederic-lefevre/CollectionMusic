@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2025 Frederic Lefevre
+Copyright (c) 2017, 2026 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -45,6 +45,9 @@ public class MediaFilesJTable extends JTable {
 
 	private static final Logger tLog = Logger.getLogger(MediaFilesJTable.class.getName());
 	
+	private static final MediaFilePathAlbumComparator MEDIA_FILE_PATH_ALBUM_COMPARATOR = new MediaFilePathAlbumComparator();
+	private static final CollectionUtils.LongComparator LONG_COMPARATOR = new CollectionUtils.LongComparator();
+	
 	public MediaFilesJTable(MediaFilesTableModel mediaFilesTableModel) {
 		super(mediaFilesTableModel);
 		
@@ -71,8 +74,8 @@ public class MediaFilesJTable extends JTable {
 		TableRowSorter<MediaFilesTableModel> sorter = new TableRowSorter<>(mediaFilesTableModel);
 		setRowSorter(sorter);
 				
-		sorter.setComparator(MediaFilesTableModel.ALBUMS_COL_IDX, new MediaFilePathAlbumComparator());
-		sorter.setComparator(MediaFilesTableModel.NB_FILES_COL_IDX, new CollectionUtils.LongComparator());
+		sorter.setComparator(MediaFilesTableModel.ALBUMS_COL_IDX, MEDIA_FILE_PATH_ALBUM_COMPARATOR);
+		sorter.setComparator(MediaFilesTableModel.NB_FILES_COL_IDX, LONG_COMPARATOR);
 	}
 
 	public MediaFilePath getSelectedMediaFile() {

@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2025 Frederic Lefevre
+Copyright (c) 2017, 2026 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -35,10 +35,12 @@ import javax.swing.JPanel;
 
 public class StartControl implements ActivableElement {
 
-	private final JPanel procCtrl;
-	private final JButton pStart;
+	private static final Font font = new Font("Verdana", Font.BOLD, 14);
+	
+	private final JPanel processControlPanel;
+	private final JButton processStartButton;
 	private final BooleanSupplier activationCondition;
-
+	
 	private final ProgressInformationPanel progressInformationPanel;
 	
 	public StartControl(String bText, String iText, String sText, BooleanSupplier activationCondition) {
@@ -47,30 +49,29 @@ public class StartControl implements ActivableElement {
 		
 		String buttonText = "<html><p>" + bText + "</p></html>";
 		
-		procCtrl = new JPanel();
-		procCtrl.setLayout(new BoxLayout(procCtrl, BoxLayout.Y_AXIS));
-		procCtrl.setBorder(BorderFactory.createMatteBorder(10,10,10,10,Color.BLACK));
+		processControlPanel = new JPanel();
+		processControlPanel.setLayout(new BoxLayout(processControlPanel, BoxLayout.Y_AXIS));
+		processControlPanel.setBorder(BorderFactory.createMatteBorder(10,10,10,10,Color.BLACK));
 		
-		pStart = new JButton(buttonText);
+		processStartButton = new JButton(buttonText);
 		
-		Font font = new Font("Verdana", Font.BOLD, 14);
-		pStart.setFont(font);
-		pStart.setBackground(Color.GREEN);		
+		processStartButton.setFont(font);
+		processStartButton.setBackground(Color.GREEN);		
 		
-		procCtrl.add(pStart);
+		processControlPanel.add(processStartButton);
 		
 		progressInformationPanel = new ProgressInformationPanel();
 		progressInformationPanel.setProgressInformation(new ProgressInformation(sText, iText, ""));
 
-		procCtrl.add(progressInformationPanel);		
+		processControlPanel.add(progressInformationPanel);		
 	}
 
-	public JPanel getProcCtrl() {
-		return procCtrl;
+	public JPanel getProcessControlPanel() {
+		return processControlPanel;
 	}
 
 	public JButton getStartButton() {
-		return pStart;
+		return processStartButton;
 	}
 
 	public ProgressInformationPanel getProgressInformationPanel() {
@@ -80,13 +81,13 @@ public class StartControl implements ActivableElement {
 	@Override
 	public void activate() {
 		if (activationCondition.getAsBoolean()) {
-			pStart.setEnabled(true);
+			processStartButton.setEnabled(true);
 		}
 	}
 	
 	@Override
 	public void deactivate() {
-		pStart.setEnabled(false);
+		processStartButton.setEnabled(false);
 	}
 
 }

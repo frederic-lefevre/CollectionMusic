@@ -1,7 +1,7 @@
 /*
  * MIT License
 
-Copyright (c) 2017, 2025 Frederic Lefevre
+Copyright (c) 2017, 2026 Frederic Lefevre
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -47,16 +47,16 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 public class MusicArtefactParser {
 	
-	private final static Logger albumLog = Logger.getLogger(MusicArtefactParser.class.getName());
+	private static final Logger albumLog = Logger.getLogger(MusicArtefactParser.class.getName());
 	
-	private List<ListeArtiste> knownArtistes;
-	private JsonNode arteFactJson;
+	private final List<ListeArtiste> knownArtistes;
+	private final JsonNode arteFactJson;
 
-	private ListeArtiste auteurs;
-	private ListeArtiste interpretes;
-	private ListeArtiste chefs;
-	private ListeArtiste ensembles;
-	private ListeArtiste groupes;
+	private final ListeArtiste auteurs;
+	private final ListeArtiste interpretes;
+	private final ListeArtiste chefs;
+	private final ListeArtiste ensembles;
+	private final ListeArtiste groupes;
 	
 	public MusicArtefactParser(JsonNode j, List<ListeArtiste> currentKnownArtistes) {
 		super();

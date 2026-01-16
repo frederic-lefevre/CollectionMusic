@@ -22,11 +22,28 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.gui;
+package org.fl.collectionAlbum.utils;
 
-import org.fl.collectionAlbum.MusicArtefact;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAccessor;
 
-public interface MusicArtefactTable<T extends MusicArtefact> {
+public class DisplayableTemporal {
 
-	public T getSelectedMusicArtefact();
+	private final DateTimeFormatter dateTimeFormatter;
+	private final TemporalAccessor temporalAccessor;
+
+	public DisplayableTemporal(DateTimeFormatter d, TemporalAccessor t) {
+		dateTimeFormatter = d;
+		temporalAccessor = t;
+	}
+
+	@Override
+	public String toString() {
+		return dateTimeFormatter.format(temporalAccessor);
+	}
+
+	public TemporalAccessor getTemporalAccessor() {
+		return temporalAccessor;
+	}
+
 }
