@@ -35,6 +35,9 @@ public class DateRangeChooser extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	
+	private final DateChooser minDateChooser;
+	private final DateChooser maxDateChooser;
+	
 	public DateRangeChooser(String title, LocalDate dateMin, LocalDate dateMax) {
 		super();
 		
@@ -44,10 +47,17 @@ public class DateRangeChooser extends JPanel {
 		titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		add(titleLabel);
 		
-		DateChooser minDateChooser = new DateChooser(dateMin);
-		DateChooser maxDateChooser = new DateChooser(dateMax);
+		minDateChooser = new DateChooser(dateMin);
+		maxDateChooser = new DateChooser(dateMax);
 		add(minDateChooser);
 		add(maxDateChooser);
 	}
-
+	
+	public LocalDate getMinChoosenDate() {
+		return minDateChooser.getChoosenDate();
+	}
+	
+	public LocalDate getMaxChoosenDate() {
+		return maxDateChooser.getChoosenDate();
+	}
 }

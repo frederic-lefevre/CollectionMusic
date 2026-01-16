@@ -118,7 +118,7 @@ public class DateChooser extends JPanel {
 	}
 
 	public LocalDate getChoosenDate() {
-		return choosenDate;
+		return readChoosenDate();
 	}
 
 	private static Vector<DisplayableTemporal> getAllDaysOf(YearMonth yearMonth) {
@@ -128,43 +128,49 @@ public class DateChooser extends JPanel {
 				.toList());
 	}
 	
+	private LocalDate readChoosenDate() {
+
+		try {
+			int year = parseNumericTextField(yearField, "une année");
+			int month = ((DisplayableTemporal) monthField.getSelectedItem()).getTemporalAccessor().get(ChronoField.MONTH_OF_YEAR);
+			int day = ((DisplayableTemporal) dayField.getSelectedItem()).getTemporalAccessor().get(ChronoField.DAY_OF_MONTH);
+			
+			YearMonth yearMonth = YearMonth.of(year, month);
+			if (day > yearMonth.lengthOfMonth()) {
+				day = yearMonth.lengthOfMonth();
+			}
+			
+			choosenDate = LocalDate.of(year, month, day);
+			
+			yearField.setForeground(Color.BLACK);
+			infoLabel.setForeground(Color.BLACK);
+			infoLabel.setText("");
+			
+			// Update day field
+			dayField.removeActionListener(dateListener);
+			dayField.removeAllItems();
+			dayFieldModel.addAll(getAllDaysOf(yearMonth));
+			dayField.setSelectedIndex(day - 1);
+			dayField.addActionListener(dateListener);
+			
+		} catch(NumberFormatException ex) {
+			choosenDate = null;
+		} catch (DateTimeException ex) {
+			logger.log(Level.FINE, "Invalid date time entered", ex);
+			infoLabel.setForeground(Color.RED);
+			infoLabel.setText("Rentrez un nombre valide: " + ex.getMessage());
+		} catch (Exception ex) {
+			logger.log(Level.SEVERE, "Exception parsing time field", ex);
+		}
+		return choosenDate;
+	}
+	
 	private class DateListener implements ActionListener {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			
-			try {
-				int year = parseNumericTextField(yearField, "une année");
-				int month = ((DisplayableTemporal) monthField.getSelectedItem()).getTemporalAccessor().get(ChronoField.MONTH_OF_YEAR);
-				int day = ((DisplayableTemporal) dayField.getSelectedItem()).getTemporalAccessor().get(ChronoField.DAY_OF_MONTH);
-				
-				YearMonth yearMonth = YearMonth.of(year, month);
-				if (day > yearMonth.lengthOfMonth()) {
-					day = yearMonth.lengthOfMonth();
-				}
-				
-				choosenDate = LocalDate.of(year, month, day);
-				
-				yearField.setForeground(Color.BLACK);
-				infoLabel.setForeground(Color.BLACK);
-				infoLabel.setText("");
-				
-				// Update day field
-				dayField.removeActionListener(dateListener);
-				dayField.removeAllItems();
-				dayFieldModel.addAll(getAllDaysOf(yearMonth));
-				dayField.setSelectedIndex(day - 1);
-				dayField.addActionListener(dateListener);
-				
-			} catch(NumberFormatException ex) {
-				choosenDate = null;
-			} catch (DateTimeException ex) {
-				logger.log(Level.FINE, "Invalid date time entered", ex);
-				infoLabel.setForeground(Color.RED);
-				infoLabel.setText("Rentrez un nombre valide: " + ex.getMessage());
-			} catch (Exception ex) {
-				logger.log(Level.SEVERE, "Exception parsing time field", ex);
-			}
+			readChoosenDate();
 		}
 	}
 	

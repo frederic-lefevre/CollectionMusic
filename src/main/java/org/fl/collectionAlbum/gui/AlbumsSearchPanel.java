@@ -27,6 +27,11 @@ package org.fl.collectionAlbum.gui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -36,6 +41,8 @@ import javax.swing.JScrollPane;
 import javax.swing.border.EtchedBorder;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
+import org.fl.collectionAlbum.albums.Album;
+import org.fl.collectionAlbum.albums.ListeAlbum;
 import org.fl.collectionAlbum.utils.TemporalUtils;
 
 public class AlbumsSearchPanel extends JPanel {
@@ -44,33 +51,38 @@ public class AlbumsSearchPanel extends JPanel {
 
 	private static final Font buttonFont = new Font("Verdana", Font.BOLD, 14);
 	
-	private final GenerationPane generationPane;
 	private final CollectionAlbumContainer collectionAlbumContainer;
+	private final DateRangeChooser dateEnregistrement;
+	private final DateRangeChooser dateComposition;
+	private final List<Album> searchResultAlbums;
+	private final AlbumsTableModel albumsTableModel;
+	
+	private final LocalDate albumOldestRecordingDate;
+	private final LocalDate albumMostRecentRecordingDate;
+	private final LocalDate albumOldestCompositionDate;
+	private final LocalDate albumMostRecentCompositionDate;
 	
 	public AlbumsSearchPanel(GenerationPane generationPane, CollectionAlbumContainer collectionAlbumContainer) {
 		super();
 		
-		this.generationPane = generationPane;
 		this.collectionAlbumContainer = collectionAlbumContainer;
+		searchResultAlbums = new ArrayList<>();
+		
+		this.albumOldestRecordingDate = TemporalUtils.getRoundedLocalDate(collectionAlbumContainer.getAlbumOldestRecordingDate());
+		this.albumMostRecentRecordingDate = TemporalUtils.getRoundedLocalDate(collectionAlbumContainer.getAlbumMostRecentRecordingDate());
+		this.albumOldestCompositionDate = TemporalUtils.getRoundedLocalDate(collectionAlbumContainer.getAlbumOldestCompositionDate());
+		this.albumMostRecentCompositionDate = TemporalUtils.getRoundedLocalDate(collectionAlbumContainer.getAlbumMostRecentCompositionDate());
 		
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
 		JPanel searchCriteriaPanel = new JPanel();
 		searchCriteriaPanel.setLayout(new BoxLayout(searchCriteriaPanel, BoxLayout.X_AXIS));
 		
-		DateRangeChooser dateEnregistrement = new DateRangeChooser(
-				"Dates d'enregistrement", 
-				TemporalUtils.getRoundedLocalDate(collectionAlbumContainer.getAlbumOldestRecordingDate()), 
-				TemporalUtils.getRoundedLocalDate(collectionAlbumContainer.getAlbumMostRecentRecordingDate()));
+		dateEnregistrement = new DateRangeChooser("Dates d'enregistrement", albumOldestRecordingDate, albumMostRecentRecordingDate);
 		dateEnregistrement.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
-		
-		searchCriteriaPanel.add(dateEnregistrement);
-		
-		DateRangeChooser dateComposition = new DateRangeChooser(
-				"Dates de composition", 
-				TemporalUtils.getRoundedLocalDate(collectionAlbumContainer.getAlbumOldestCompositionDate()), 
-				TemporalUtils.getRoundedLocalDate(collectionAlbumContainer.getAlbumMostRecentCompositionDate()));
+		dateComposition = new DateRangeChooser("Dates de composition", albumOldestCompositionDate, albumMostRecentCompositionDate);
 		dateComposition.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
+		searchCriteriaPanel.add(dateEnregistrement);
 		searchCriteriaPanel.add(dateComposition);
 		
 		JButton albumsSearchButton = new JButton("Rechercher");
@@ -82,9 +94,58 @@ public class AlbumsSearchPanel extends JPanel {
 		
 		add(searchCriteriaPanel);
 		
-		JScrollPane albumsScrollTable = new JScrollPane();
+		// Table to display the result albums
+		albumsTableModel = new AlbumsTableModel(searchResultAlbums);
+		AlbumsJTable albumsJTable = new AlbumsJTable(albumsTableModel, generationPane);
+				
+		JScrollPane albumsScrollTable = new JScrollPane(albumsJTable);
 		albumsScrollTable.setPreferredSize(new Dimension(1800, 800));
 		
 		add(albumsScrollTable);
+		
+		albumsSearchButton.addActionListener(new AlbumSearchListener());
+	}
+	
+	private class AlbumSearchListener implements java.awt.event.ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+			ListeAlbum listeAlbumsFound = collectionAlbumContainer.getAlbumsSastisfying(getAlbumsPredicates());
+			
+			System.out.println("Found albums number = " + listeAlbumsFound.getNombreAlbums());
+			
+			searchResultAlbums.clear();
+			searchResultAlbums.addAll(listeAlbumsFound.getAlbums());
+			albumsTableModel.fireTableDataChanged();
+		}
+		
+		private List<Predicate<Album>> getAlbumsPredicates() {
+			
+			LocalDate minRecordingDate = dateEnregistrement.getMinChoosenDate();
+			LocalDate maxRecordingDate = dateEnregistrement.getMaxChoosenDate();
+			
+			LocalDate minCompositionDate = dateComposition.getMinChoosenDate();
+			LocalDate maxCompositionDate = dateComposition.getMaxChoosenDate();
+			
+			List<Predicate<Album>> predicates = new ArrayList<>();
+			
+			if (TemporalUtils.compareTemporal(minRecordingDate, albumOldestRecordingDate) > 0) {
+				predicates.add(album -> (TemporalUtils.compareTemporal(minRecordingDate, album.getDebutEnregistrement()) <= 0));
+			}
+			if (TemporalUtils.compareTemporal(maxRecordingDate, albumMostRecentRecordingDate) < 0) {
+				predicates.add(album -> (TemporalUtils.compareTemporal(maxRecordingDate, album.getFinEnregistrement()) >= 0));
+			}
+			if (TemporalUtils.compareTemporal(minCompositionDate, albumOldestCompositionDate) > 0) {
+				predicates.add(album -> (TemporalUtils.compareTemporal(minCompositionDate, album.getDebutComposition()) <= 0));
+			}
+			if (TemporalUtils.compareTemporal(maxCompositionDate, albumMostRecentCompositionDate) < 0) {
+				predicates.add(album -> (TemporalUtils.compareTemporal(maxCompositionDate, album.getFinComposition()) >= 0));
+			}
+			
+			System.out.println("Predicate number = " + predicates.size());
+			
+			return predicates;
+		}
 	}
 }

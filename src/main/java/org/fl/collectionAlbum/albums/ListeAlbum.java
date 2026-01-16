@@ -164,6 +164,13 @@ public class ListeAlbum {
 			return this;
 		}
 		
+		public Builder withAlbumSatisfying(List<Predicate<Album>> albumPredicates) {
+			albums = albums.stream()
+				.filter(album -> albumPredicates.stream().allMatch(p -> p.test(album)))
+				.collect(Collectors.toList());		
+			return this;
+		}
+		
 		public ListeAlbum build() {
 			ListeAlbum listeAlbum = new ListeAlbum();
 			albums.forEach(album -> listeAlbum.addAlbum(album));

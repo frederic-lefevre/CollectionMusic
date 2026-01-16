@@ -140,6 +140,12 @@ public class CollectionAlbumContainer {
     	}
 	}
 	
+	public ListeAlbum getAlbumsSastisfying(List<Predicate<Album>> albumPredicates) {
+		 return ListeAlbum.Builder.getBuilderFrom(collectionAlbumsMusiques.getAlbums())
+				 .withAlbumSatisfying(albumPredicates)
+				 .build();
+	}
+	
 	private ListeAlbum getAlbumsSastisfying(Predicate<Album> albumPredicate) {
 		 return ListeAlbum.Builder.getBuilderFrom(collectionAlbumsMusiques.getAlbums())
 				 .withAlbumSatisfying(albumPredicate)

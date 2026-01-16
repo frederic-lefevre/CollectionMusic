@@ -27,6 +27,7 @@ package org.fl.collectionAlbum.albums;
 import static org.assertj.core.api.Assertions.*;
 
 import java.nio.file.Path;
+import java.time.LocalDate;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
@@ -38,6 +39,7 @@ import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.format.Format;
 import org.fl.collectionAlbum.format.MediaSupportCategories;
+import org.fl.collectionAlbum.utils.TemporalUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -273,6 +275,29 @@ class ListeAlbumTest {
 				.build();
 		
 		emptyListeAlbumsAsserts(listeAlbum);
+	}
+	
+	@Test
+	void testListeBuild7() {
+		
+		ListeAlbum listeAlbum =  ListeAlbum.Builder.getBuilderFrom(buildAlbumList(albumStr1, albumStr2, albumStr3))
+				.withAlbumSatisfying(List.of(album -> album.getTitre().contains("Peu importe")))
+				.build();
+		
+		emptyListeAlbumsAsserts(listeAlbum);
+	}
+	
+	@Test
+	void testListeBuild8() {
+		
+		ListeAlbum listeAlbum =  ListeAlbum.Builder.getBuilderFrom(buildAlbumList(albumStr1, albumStr2, albumStr3))
+				.withAlbumSatisfying(List.of(
+						album -> !album.getTitre().contains("Van"), 
+						album -> (TemporalUtils.compareTemporal(LocalDate.of(1960, 1, 1), album.getDebutEnregistrement()) <= 0),
+						album -> album.getTitre().contains("mystery")))
+				.build();
+		
+		listeAlbumsAsserts(listeAlbum, 1);
 	}
 	
 	private void emptyListeAlbumsAsserts(ListeAlbum emptyListe) {
