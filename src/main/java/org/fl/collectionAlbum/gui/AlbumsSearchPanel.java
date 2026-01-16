@@ -139,6 +139,8 @@ public class AlbumsSearchPanel extends JPanel {
 		add(albumsScrollTable);
 		
 		albumsSearchButton.addActionListener(new AlbumSearchListener());
+		titreAlbumSearchedText.addActionListener(new AlbumTextFieldListener());
+		auteursAlbumSearchedText.addActionListener(new AlbumTextFieldListener());
 	}
 	
 	private class AlbumSearchListener implements java.awt.event.ActionListener {
@@ -196,5 +198,13 @@ public class AlbumsSearchPanel extends JPanel {
 			
 			return predicates;
 		}
+	}
+	
+	private class AlbumTextFieldListener implements java.awt.event.ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// just to capture the ENTER char and avoid the closing of the JOptionPane containing this panel
+		}	
 	}
 }
