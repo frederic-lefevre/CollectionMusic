@@ -36,8 +36,10 @@ import java.util.function.Predicate;
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
@@ -51,11 +53,18 @@ public class AlbumsSearchPanel extends JPanel {
 
 	private static final Font buttonFont = new Font("Verdana", Font.BOLD, 14);
 	
+	private static final int TEXT_WIDTH = 400;
+	private static final int TEXT_LABEL_HEIGHT = 80;
+	private static final int TEXT_HEIGHT = 30;
+	
 	private final CollectionAlbumContainer collectionAlbumContainer;
 	private final DateRangeChooser dateEnregistrement;
 	private final DateRangeChooser dateComposition;
 	private final List<Album> searchResultAlbums;
 	private final AlbumsTableModel albumsTableModel;
+	
+	private final JTextField titreAlbumSearchedText;
+	private final JTextField auteursAlbumSearchedText;
 	
 	private final LocalDate albumOldestRecordingDate;
 	private final LocalDate albumMostRecentRecordingDate;
@@ -77,6 +86,32 @@ public class AlbumsSearchPanel extends JPanel {
 		
 		JPanel searchCriteriaPanel = new JPanel();
 		searchCriteriaPanel.setLayout(new BoxLayout(searchCriteriaPanel, BoxLayout.X_AXIS));
+		
+		JPanel titreAlbumSearchPanel = new JPanel();
+		titreAlbumSearchPanel.setLayout(new BoxLayout(titreAlbumSearchPanel, BoxLayout.Y_AXIS));
+		
+		JLabel titreAlbumSearchLabel = new JLabel("Titre incluant les caractères");
+		titreAlbumSearchLabel.setPreferredSize(new Dimension(TEXT_WIDTH, TEXT_LABEL_HEIGHT));
+		titreAlbumSearchedText = new JTextField();
+		titreAlbumSearchedText.setPreferredSize(new Dimension(TEXT_WIDTH, TEXT_HEIGHT));
+		
+		titreAlbumSearchPanel.add(titreAlbumSearchLabel);
+		titreAlbumSearchPanel.add(titreAlbumSearchedText);
+		titreAlbumSearchPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
+		searchCriteriaPanel.add(titreAlbumSearchPanel);
+		
+		JPanel auteursAlbumSearchPanel = new JPanel();
+		auteursAlbumSearchPanel.setLayout(new BoxLayout(auteursAlbumSearchPanel, BoxLayout.Y_AXIS));
+		
+		JLabel auteursAlbumSearchLabel = new JLabel("Auteurs incluant les caractères");
+		auteursAlbumSearchLabel.setPreferredSize(new Dimension(TEXT_WIDTH, TEXT_LABEL_HEIGHT));
+		auteursAlbumSearchedText = new JTextField();
+		auteursAlbumSearchedText.setPreferredSize(new Dimension(TEXT_WIDTH, TEXT_HEIGHT));
+		
+		auteursAlbumSearchPanel.add(auteursAlbumSearchLabel);
+		auteursAlbumSearchPanel.add(auteursAlbumSearchedText);
+		auteursAlbumSearchPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
+		searchCriteriaPanel.add(auteursAlbumSearchPanel);
 		
 		dateEnregistrement = new DateRangeChooser("Dates d'enregistrement", albumOldestRecordingDate, albumMostRecentRecordingDate);
 		dateEnregistrement.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
@@ -130,17 +165,22 @@ public class AlbumsSearchPanel extends JPanel {
 			
 			List<Predicate<Album>> predicates = new ArrayList<>();
 			
-			if (TemporalUtils.compareTemporal(minRecordingDate, albumOldestRecordingDate) > 0) {
-				predicates.add(album -> (TemporalUtils.compareTemporal(minRecordingDate, album.getDebutEnregistrement()) <= 0));
-			}
-			if (TemporalUtils.compareTemporal(maxRecordingDate, albumMostRecentRecordingDate) < 0) {
-				predicates.add(album -> (TemporalUtils.compareTemporal(maxRecordingDate, album.getFinEnregistrement()) >= 0));
-			}
-			if (TemporalUtils.compareTemporal(minCompositionDate, albumOldestCompositionDate) > 0) {
-				predicates.add(album -> (TemporalUtils.compareTemporal(minCompositionDate, album.getDebutComposition()) <= 0));
-			}
-			if (TemporalUtils.compareTemporal(maxCompositionDate, albumMostRecentCompositionDate) < 0) {
-				predicates.add(album -> (TemporalUtils.compareTemporal(maxCompositionDate, album.getFinComposition()) >= 0));
+			if ((minRecordingDate != null) && (maxRecordingDate != null) && 
+					(minCompositionDate != null) && (maxCompositionDate != null)) {
+				if (TemporalUtils.compareTemporal(minRecordingDate, albumOldestRecordingDate) > 0) {
+					predicates.add(album -> (TemporalUtils.compareTemporal(minRecordingDate, album.getDebutEnregistrement()) <= 0));
+				}
+				if (TemporalUtils.compareTemporal(maxRecordingDate, albumMostRecentRecordingDate) < 0) {
+					predicates.add(album -> (TemporalUtils.compareTemporal(maxRecordingDate, album.getFinEnregistrement()) >= 0));
+				}
+				if (TemporalUtils.compareTemporal(minCompositionDate, albumOldestCompositionDate) > 0) {
+					predicates.add(album -> (TemporalUtils.compareTemporal(minCompositionDate, album.getDebutComposition()) <= 0));
+				}
+				if (TemporalUtils.compareTemporal(maxCompositionDate, albumMostRecentCompositionDate) < 0) {
+					predicates.add(album -> (TemporalUtils.compareTemporal(maxCompositionDate, album.getFinComposition()) >= 0));
+				}
+			} else {
+				predicates.add(album -> false);
 			}
 			
 			System.out.println("Predicate number = " + predicates.size());
