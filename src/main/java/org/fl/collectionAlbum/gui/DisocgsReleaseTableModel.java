@@ -66,11 +66,6 @@ public class DisocgsReleaseTableModel extends AbstractTableModel {
 	public String getColumnName(int col) {
 	    return entetes[col];
 	}
-	
-    @Override
-    public boolean isCellEditable(int row, int col) {
-        return true;
-    }
     
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
