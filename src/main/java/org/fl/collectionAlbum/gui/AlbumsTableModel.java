@@ -66,11 +66,6 @@ public class AlbumsTableModel extends AbstractTableModel {
 	public String getColumnName(int col) {
 	    return entetes[col];
 	}
-	
-    @Override
-    public boolean isCellEditable(int row, int col) {
-        return true;
-    }
     
     @Override
     public Class<?> getColumnClass(int columnIndex) {
