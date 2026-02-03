@@ -24,7 +24,6 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.albums;
 
-import java.time.temporal.TemporalAccessor;
 import java.util.Comparator;
 
 import org.fl.collectionAlbum.utils.TemporalUtils;
@@ -35,17 +34,10 @@ public class AlbumCompositionComparator implements Comparator<Album> {
 	
 	public int compare(Album arg0, Album arg1) {
 
-		TemporalAccessor d0 = arg0.getDebutComposition();
-		TemporalAccessor d1 = arg1.getDebutComposition();
-
-		int comp = TemporalUtils.compareTemporal(d0, d1);
-
-		if (comp == 0) {
-			TemporalAccessor d2 = arg0.getFinComposition();
-			TemporalAccessor d3 = arg1.getFinComposition();
-			comp = TemporalUtils.compareTemporal(d2, d3);
-		}
-
+		int comp = TemporalUtils.compareTemporalInterval(
+				arg0.getDebutComposition(), arg0.getFinComposition(), 
+				arg1.getDebutComposition(),  arg1.getFinComposition());
+		
 		if (comp == 0) {
 			comp = albumEnregistrementComparator.compare(arg0, arg1);
 		}
