@@ -37,7 +37,7 @@ import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.concerts.Concert;
 import org.fl.collectionAlbum.concerts.ConcertAuteurComparator;
 import org.fl.collectionAlbum.gui.adapter.ConcertMouseAdapter;
-import org.fl.collectionAlbum.gui.renderer.AuteursRenderer;
+import org.fl.collectionAlbum.gui.renderer.AuteurListRenderer;
 import org.fl.collectionAlbum.gui.renderer.DateRenderer;
 import org.fl.collectionAlbum.utils.TemporalUtils;
 
@@ -61,7 +61,7 @@ public class ConcertsJTable extends JTable implements MusicArtefactTable<Concert
 		setRowHeight(50);
 		
 		getColumnModel().getColumn(ConcertTableModel.DATE_COL_IDX).setCellRenderer(new DateRenderer(concertDateFormatter));
-		getColumnModel().getColumn(ConcertTableModel.ARTISTE_COL_IDX).setCellRenderer(new AuteursRenderer());
+		getColumnModel().getColumn(ConcertTableModel.ARTISTE_COL_IDX).setCellRenderer(new AuteurListRenderer());
 		
 		getColumnModel().getColumn(ConcertTableModel.DATE_COL_IDX).setPreferredWidth(200);
 		getColumnModel().getColumn(ConcertTableModel.ARTISTE_COL_IDX).setPreferredWidth(700);

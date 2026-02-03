@@ -29,34 +29,31 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingConstants;
 
-import org.fl.collectionAlbum.MusicArtefact;
-import org.fl.collectionAlbum.utils.CollectionUtils;
+import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.util.swing.CustomTableCellRenderer;
 
-public class AuteursRenderer extends CustomTableCellRenderer {
+public class AuteurRenderer extends CustomTableCellRenderer {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger mLog = Logger.getLogger(AuteursRenderer.class.getName());
+	private static final Logger mLog = Logger.getLogger(AuteurRenderer.class.getName());
 	
 	private static final Font font = new Font("Dialog", Font.PLAIN, 12);
 	
-	public AuteursRenderer() {
+	public AuteurRenderer() {
 		super(font, SwingConstants.LEFT);
 	}
 
 	@Override
 	public void valueProcessor(Object value) {
-		
 		if (value == null) {
 			// This may happen when rescanning the album collection
-			mLog.fine("Null value in Auteurs cell. Should be an Album");
+			mLog.fine("Null value in MediaFiles cell. Should be an MediaFilePath");
 			setText("Valeur null");
-		} else if (MusicArtefact.class.isAssignableFrom(value.getClass())) {
-			setText(CollectionUtils.getHtmlForArtistes((MusicArtefact)value));
+		} else if (value instanceof Artiste artiste) {
+			setText(artiste.getNomComplet());
 		} else {
-			mLog.severe("Invalid value type in Auteurs cell. Should be Album or Concert but is " + value.getClass().getName());
-		}	
+			mLog.severe("Invalid value type in Artiste cell. Should be Artiste but is " + value.getClass().getName());
+		}			
 	}
-
 }

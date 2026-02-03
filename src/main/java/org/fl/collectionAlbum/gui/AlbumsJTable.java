@@ -37,7 +37,7 @@ import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.albums.AlbumMediaFilesStatusComparator;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.gui.adapter.AlbumMouseAdapter;
-import org.fl.collectionAlbum.gui.renderer.AuteursRenderer;
+import org.fl.collectionAlbum.gui.renderer.AuteurListRenderer;
 import org.fl.collectionAlbum.gui.renderer.CollectionBooleanRenderer;
 import org.fl.collectionAlbum.gui.renderer.MediaFilesRenderer;
 
@@ -57,7 +57,7 @@ public class AlbumsJTable extends JTable implements MusicArtefactTable<Album> {
 		
 		setRowHeight(ContentNature.values().length*25);
 		
-		getColumnModel().getColumn(AlbumsTableModel.AUTEUR_COL_IDX).setCellRenderer(new AuteursRenderer());
+		getColumnModel().getColumn(AlbumsTableModel.AUTEUR_COL_IDX).setCellRenderer(new AuteurListRenderer());
 		getColumnModel().getColumn(AlbumsTableModel.MEDIA_FILES_COL_IDX).setCellRenderer(new MediaFilesRenderer());
 		getColumnModel().getColumn(AlbumsTableModel.PROBLEM_COL_IDX).setCellRenderer(new CollectionBooleanRenderer());
 		

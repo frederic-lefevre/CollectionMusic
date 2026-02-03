@@ -92,10 +92,10 @@ public class TemporalUtils {
 	public static int compareTemporal(TemporalAccessor t1, TemporalAccessor t2) {
 		
 		if (t1 == null) {
-			if (t2 == null) return 0 ;
-			return 1 ;
+			if (t2 == null) return 0;
+			return 1;
 		} else if (t2 == null) {
-			return -1 ;
+			return -1;
 		} else {
 
 			LocalDateTime d1 = getRoundedLocalDateTime(t1);

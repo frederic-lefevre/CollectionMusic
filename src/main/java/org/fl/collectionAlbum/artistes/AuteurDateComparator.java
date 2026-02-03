@@ -28,7 +28,7 @@ import java.util.Comparator;
 
 import org.fl.collectionAlbum.utils.TemporalUtils;
 
-public class AuteurDateComparator  implements Comparator<Artiste> {
+public class AuteurDateComparator implements Comparator<Artiste> {
 
 	public int compare(Artiste arg0, Artiste arg1) {
 		return TemporalUtils.compareTemporalInterval(

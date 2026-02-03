@@ -71,9 +71,9 @@ public class ArtistesTableModel extends AbstractTableModel {
 			return null;
 		} else {
 			return switch(columnIndex){
-				case NOM_COL_IDX -> artistesList.get(rowIndex).getNomComplet();
-				case NAISSANCE_COL_IDX -> artistesList.get(rowIndex).getDateNaissance();
-				case DECES_COL_IDX -> artistesList.get(rowIndex).getDateMort();
+				case NOM_COL_IDX -> artistesList.get(rowIndex);
+				case NAISSANCE_COL_IDX -> artistesList.get(rowIndex).getNaissance();
+				case DECES_COL_IDX -> artistesList.get(rowIndex).getMort();
 				case NB_ALBUMS_COL_IDX -> artistesList.get(rowIndex).getNbAlbum();
 				case NB_CONCERTS_COL_IDX -> artistesList.get(rowIndex).getNbConcert();
 				default -> null;

@@ -24,18 +24,38 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui;
 
+import java.time.temporal.TemporalAccessor;
+import java.util.function.Function;
+
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.table.TableRowSorter;
+
+import org.fl.collectionAlbum.artistes.AuteurComparator;
+import org.fl.collectionAlbum.gui.renderer.AuteurRenderer;
+import org.fl.collectionAlbum.gui.renderer.DateRenderer;
+import org.fl.collectionAlbum.utils.CollectionUtils;
+import org.fl.collectionAlbum.utils.TemporalUtils;
 
 public class ArtistesJTable extends JTable {
 
 	private static final long serialVersionUID = 1L;
 
+	private static final AuteurComparator AUTEUR_COMPARATOR = new AuteurComparator();
+	private static final TemporalUtils.TemporalAccessorComparator TEMPORAL_ACCESSOR_COMPARATOR = new TemporalUtils.TemporalAccessorComparator();
+	private static final CollectionUtils.IntegerComparator INTEGER_COMPARATOR = new CollectionUtils.IntegerComparator();
+	
+	private static final Function<TemporalAccessor, String> dateFormatterFunction = t -> TemporalUtils.formatDate((TemporalAccessor)t);
+	
 	public ArtistesJTable(ArtistesTableModel artistesTableModel) {
 		super(artistesTableModel);
 		
 		setFillsViewportHeight(true);
+		
+		getColumnModel().getColumn(ArtistesTableModel.NOM_COL_IDX).setCellRenderer(new AuteurRenderer());
+		getColumnModel().getColumn(ArtistesTableModel.NAISSANCE_COL_IDX).setCellRenderer(new DateRenderer(dateFormatterFunction));
+		getColumnModel().getColumn(ArtistesTableModel.DECES_COL_IDX).setCellRenderer(new DateRenderer(dateFormatterFunction));
 		
 		getColumnModel().getColumn(ArtistesTableModel.NOM_COL_IDX).setPreferredWidth(400);
 		getColumnModel().getColumn(ArtistesTableModel.NAISSANCE_COL_IDX).setPreferredWidth(150);
@@ -49,5 +69,15 @@ public class ArtistesJTable extends JTable {
 		setSelectionModel(listSelectionModel);
 		
 		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		
+		// Row sorter
+		TableRowSorter<ArtistesTableModel> sorter = new TableRowSorter<>(artistesTableModel);
+		setRowSorter(sorter);
+		
+		sorter.setComparator(ArtistesTableModel.NOM_COL_IDX, AUTEUR_COMPARATOR);
+		sorter.setComparator(ArtistesTableModel.NAISSANCE_COL_IDX, TEMPORAL_ACCESSOR_COMPARATOR);
+		sorter.setComparator(ArtistesTableModel.DECES_COL_IDX, TEMPORAL_ACCESSOR_COMPARATOR);
+		sorter.setComparator(ArtistesTableModel.NB_ALBUMS_COL_IDX, INTEGER_COMPARATOR);
+		sorter.setComparator(ArtistesTableModel.NB_CONCERTS_COL_IDX, INTEGER_COMPARATOR);
 	}
 }

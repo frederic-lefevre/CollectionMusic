@@ -250,6 +250,14 @@ public class CollectionUtils {
 		}	
 	}
 	
+	public static class IntegerComparator implements Comparator<Integer> {
+
+		@Override
+		public int compare(Integer o1, Integer o2) {		
+			return Integer.compare(o1, o2);
+		}	
+	}
+	
 	public static JLabel getAdjustedImageLabel(Path imagePath, int maxWidth, int maxHeight) {
 		try {
 			ImageIcon image = new ImageIcon(ImageIO.read(imagePath.toFile()));
