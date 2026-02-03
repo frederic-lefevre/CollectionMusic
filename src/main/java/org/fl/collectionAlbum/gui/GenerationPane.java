@@ -67,6 +67,9 @@ public class GenerationPane extends JPanel {
 		ArtistesTableModel artistesTableModel = new ArtistesTableModel(collectionAlbumContainer.getCollectionArtistes().getArtistes());
 		ArtistesJTable artistesJTable = new ArtistesJTable(artistesTableModel);
 		
+		ArtistesTableModel artistesConcertsTableModel = new ArtistesTableModel(collectionAlbumContainer.getConcertsArtistes().getArtistes());
+		ArtistesJTable artistesConcertsJTable = new ArtistesJTable(artistesConcertsTableModel);
+		
 		// Control buttons panel
 		JPanel controlPanel = new JPanel();
 		controlPanel.setLayout(new BoxLayout(controlPanel, BoxLayout.X_AXIS));
@@ -110,11 +113,11 @@ public class GenerationPane extends JPanel {
 		
 		collectionTabPanes.add(albumsScrollTable, "Collection d'albums");
 		
-		// Artistes tab
+		// Artistes collection tab
 		JScrollPane artistesScrollTable = new JScrollPane(artistesJTable);
 		artistesScrollTable.setPreferredSize(new Dimension(1800,700));
 		
-		collectionTabPanes.add(artistesScrollTable, "Artistes");
+		collectionTabPanes.add(artistesScrollTable, "Artistes des albums");
 		
 		// Media files tabs
 		Stream.of(ContentNature.values()).forEachOrdered(contentNature -> {
@@ -153,6 +156,12 @@ public class GenerationPane extends JPanel {
 		concertsScrollPane.setPreferredSize(new Dimension(1800,700));
 		
 		collectionTabPanes.add(concertsScrollPane, "Concerts");
+		
+		// Artistes concert tab
+		JScrollPane artistesConcertsScrollTable = new JScrollPane(artistesConcertsJTable);
+		artistesScrollTable.setPreferredSize(new Dimension(1800,700));
+		
+		collectionTabPanes.add(artistesConcertsScrollTable, "Artistes des concerts");
 		
 		// Collection metrics history
 		CollectionMetricsTabbedPane collectionMetricsTabPanes = new CollectionMetricsTabbedPane(List.of(Control.getCollectionMetricsHsitory(), Control.getConcertMetricsHsitory()));
