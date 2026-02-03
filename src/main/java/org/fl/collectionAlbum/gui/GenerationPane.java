@@ -108,7 +108,7 @@ public class GenerationPane extends JPanel {
 		JScrollPane albumsScrollTable = new JScrollPane(albumsJTable);
 		albumsScrollTable.setPreferredSize(new Dimension(1800,700));
 		
-		collectionTabPanes.add(albumsScrollTable, "Collection d'albums", 0);
+		collectionTabPanes.add(albumsScrollTable, "Collection d'albums");
 		
 		// Artistes tab
 		JScrollPane artistesScrollTable = new JScrollPane(artistesJTable);
