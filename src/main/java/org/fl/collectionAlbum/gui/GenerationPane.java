@@ -61,9 +61,11 @@ public class GenerationPane extends JPanel {
 		super();
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-		AlbumsTableModel albumsTableModel = new AlbumsTableModel(collectionAlbumContainer.getCollectionAlbumsMusiques().getAlbums());
-		
+		AlbumsTableModel albumsTableModel = new AlbumsTableModel(collectionAlbumContainer.getCollectionAlbumsMusiques().getAlbums());		
 		AlbumsJTable albumsJTable = new AlbumsJTable(albumsTableModel, this);
+		
+		ArtistesTableModel artistesTableModel = new ArtistesTableModel(collectionAlbumContainer.getCollectionArtistes().getArtistes());
+		ArtistesJTable artistesJTable = new ArtistesJTable(artistesTableModel);
 		
 		// Control buttons panel
 		JPanel controlPanel = new JPanel();
@@ -107,6 +109,12 @@ public class GenerationPane extends JPanel {
 		albumsScrollTable.setPreferredSize(new Dimension(1800,700));
 		
 		collectionTabPanes.add(albumsScrollTable, "Collection d'albums", 0);
+		
+		// Artistes tab
+		JScrollPane artistesScrollTable = new JScrollPane(artistesJTable);
+		artistesScrollTable.setPreferredSize(new Dimension(1800,700));
+		
+		collectionTabPanes.add(artistesScrollTable, "Artistes");
 		
 		// Media files tabs
 		Stream.of(ContentNature.values()).forEachOrdered(contentNature -> {
