@@ -121,4 +121,55 @@ class TemporalUtilsTest {
 		
 		assertThat(TemporalUtils.compareTemporal(ta1, ta2)).isPositive();
 	}
+	
+	@Test
+	void test9() {
+
+		TemporalAccessor ta1 = TemporalUtils.parseDate("2019-06-18");
+		
+		assertThat(TemporalUtils.compareTemporalInterval(ta1, ta1, ta1, ta1)).isZero();
+	}
+	
+	@Test
+	void test10() {
+		
+		TemporalAccessor ta1Begin = TemporalUtils.parseDate("2019-06-18");
+		TemporalAccessor ta1End = TemporalUtils.parseDate("2019-06-19");
+		TemporalAccessor ta2Begin = TemporalUtils.parseDate("2019-06-17");
+		TemporalAccessor ta2End = TemporalUtils.parseDate("2019-06-18");
+		
+		assertThat(TemporalUtils.compareTemporalInterval(ta1Begin, ta1End, ta2Begin, ta2End)).isPositive();
+	}
+	
+	@Test
+	void test11() {
+		
+		TemporalAccessor ta1Begin = TemporalUtils.parseDate("2019-06-18");
+		TemporalAccessor ta1End = TemporalUtils.parseDate("2019-06-19");
+		TemporalAccessor ta2End = TemporalUtils.parseDate("2019-06-18");
+		
+		assertThat(TemporalUtils.compareTemporalInterval(ta1Begin, ta1End, ta1Begin, ta2End)).isPositive();
+	}
+	
+	@Test
+	void test12() {
+		
+		TemporalAccessor ta1Begin = TemporalUtils.parseDate("2019-06-17");
+		TemporalAccessor ta1End = TemporalUtils.parseDate("2019-06-18");
+		TemporalAccessor ta2Begin = TemporalUtils.parseDate("2019-06-18");
+		TemporalAccessor ta2End = TemporalUtils.parseDate("2019-06-19");
+		
+		assertThat(TemporalUtils.compareTemporalInterval(ta1Begin, ta1End, ta2Begin, ta2End)).isNegative();
+	}
+	
+	
+	@Test
+	void test13() {
+		
+		TemporalAccessor ta1Begin = TemporalUtils.parseDate("2019-06-17");
+		TemporalAccessor ta1End = TemporalUtils.parseDate("2019-06-18");
+		TemporalAccessor ta2End = TemporalUtils.parseDate("2019-06-19");
+		
+		assertThat(TemporalUtils.compareTemporalInterval(ta1Begin, ta1End, ta1Begin, ta2End)).isNegative();
+	}
 }

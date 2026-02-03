@@ -110,6 +110,17 @@ public class TemporalUtils {
 		}
 	}
 	
+	// (Try to) compare 2 TemporalAccessors interval
+	public static int compareTemporalInterval(TemporalAccessor t1Begin, TemporalAccessor t1End, TemporalAccessor t2Begin, TemporalAccessor t2End) {
+		
+		int comp = compareTemporal(t1Begin, t2Begin);
+		if (comp == 0) {
+			comp = compareTemporal(t1End, t2End);
+		}
+		
+		return comp;
+	}
+	
 	public static LocalDate getRoundedLocalDate(TemporalAccessor temporalAccessor) {
 		
 		LocalDateTime localDateTime = getRoundedLocalDateTime(temporalAccessor);
