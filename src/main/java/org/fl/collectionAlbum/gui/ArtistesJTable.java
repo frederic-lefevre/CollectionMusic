@@ -37,9 +37,9 @@ public class ArtistesJTable extends JTable {
 		
 		setFillsViewportHeight(true);
 		
-		getColumnModel().getColumn(ArtistesTableModel.NOM_COL_IDX).setPreferredWidth(600);
-		getColumnModel().getColumn(ArtistesTableModel.NAISSANCE_COL_IDX).setPreferredWidth(300);
-		getColumnModel().getColumn(ArtistesTableModel.DECES_COL_IDX).setPreferredWidth(300);
+		getColumnModel().getColumn(ArtistesTableModel.NOM_COL_IDX).setPreferredWidth(400);
+		getColumnModel().getColumn(ArtistesTableModel.NAISSANCE_COL_IDX).setPreferredWidth(150);
+		getColumnModel().getColumn(ArtistesTableModel.DECES_COL_IDX).setPreferredWidth(150);
 		getColumnModel().getColumn(ArtistesTableModel.NB_ALBUMS_COL_IDX).setPreferredWidth(100);
 		getColumnModel().getColumn(ArtistesTableModel.NB_CONCERTS_COL_IDX).setPreferredWidth(100);
 		
