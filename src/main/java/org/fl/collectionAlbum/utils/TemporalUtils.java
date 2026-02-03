@@ -106,7 +106,6 @@ public class TemporalUtils {
 			} else {
 				throw new DateTimeException("Cannot convert to LocalDate comparing 2 TemporalAccessor");
 			}
-
 		}
 	}
 	
@@ -117,7 +116,6 @@ public class TemporalUtils {
 		if (comp == 0) {
 			comp = compareTemporal(t1End, t2End);
 		}
-		
 		return comp;
 	}
 	
