@@ -69,6 +69,20 @@ public class MediaFilesTableModel extends AbstractTableModel {
 	    return entetes[col];
 	}
     
+	// AbstractTableModel.getColumnClass is overridden because it interprets numbers as string
+	// So they are left aligned instead of right aligned
+	@Override
+	public Class<?> getColumnClass(int columnIndex) {
+		return switch(columnIndex){
+			case PATH_COL_IDX -> String.class;
+			case ALBUMS_COL_IDX -> MediaFilePath.class;
+			case NB_FILES_COL_IDX -> Long.class;
+			case COVER_IMAGE_COL_IDX -> Boolean.class;
+			case EXTENSION_COL_IDX -> String.class;
+			default -> Object.class;
+		};
+	}
+	
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 
