@@ -64,6 +64,18 @@ public class ArtistesTableModel extends AbstractTableModel {
 	    return entetes[col];
 	}
 	
+	// AbstractTableModel.getColumnClass is overridden because it interprets numbers as string
+	// So they are left aligned instead of right aligned
+	@Override
+	public Class<?> getColumnClass(int columnIndex) {
+
+		return switch(columnIndex){
+			case NOM_COL_IDX, NAISSANCE_COL_IDX,DECES_COL_IDX -> Artiste.class;
+			case NB_ALBUMS_COL_IDX, NB_CONCERTS_COL_IDX -> Number.class;
+			default -> Object.class;
+		};
+	}
+	
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		if (artistesList.size() < rowIndex + 1) {

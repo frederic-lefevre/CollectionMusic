@@ -47,7 +47,7 @@ public class AuteurDateRenderer extends CustomTableCellRenderer {
 	private final Function<TemporalAccessor, String> dateFormatter;
 	
 	public AuteurDateRenderer(Function<Artiste, TemporalAccessor> artisteDateGetter, Function<TemporalAccessor, String> dateFormatter) {
-		super(font, SwingConstants.LEFT);
+		super(font, SwingConstants.RIGHT);
 		this.artisteDateGetter = artisteDateGetter;
 		this.dateFormatter = dateFormatter;
 	}
