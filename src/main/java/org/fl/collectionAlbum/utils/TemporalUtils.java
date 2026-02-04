@@ -40,7 +40,7 @@ public class TemporalUtils {
 
    	// Pattern pour les dates (parse et format)
    	private static final String datePatternParse  = "uuuu[-MM[-dd]]";  	
-   	private static final String datePatternFormat = "[[dd ]MMMM] uuuu";
+   	private static final String datePatternFormat = "[[dd ]MMMM ]uuuu";
    	private static final String numericDatePatternFormat = "[[dd-]MM-]uuuu";
    	private static final String yearPatternFormat = "uuuu";
    	
