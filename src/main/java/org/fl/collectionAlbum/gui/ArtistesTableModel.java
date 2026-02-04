@@ -24,11 +24,14 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 import javax.swing.table.AbstractTableModel;
 
 import org.fl.collectionAlbum.artistes.Artiste;
+import org.fl.collectionAlbum.format.MediaSupportCategories;
 
 public class ArtistesTableModel extends AbstractTableModel {
 
@@ -40,13 +43,18 @@ public class ArtistesTableModel extends AbstractTableModel {
 	
 	private static final long serialVersionUID = 1L;
 
-	private static final String[] entetes = {"Noms", "Naissance", "Décès", "Concerts", "Albums"};
+	private static final List<String> firstEntetes = List.of("Noms", "Naissance", "Décès", "Concerts", "Albums");
+	private static final List<String> entetes = new ArrayList<String>(firstEntetes);
 	
 	private final List<Artiste> artistesList;
 	
+	static {
+		entetes.addAll(Stream.of(MediaSupportCategories.values()).map(MediaSupportCategories::getNom).toList());
+	}
+	
 	public ArtistesTableModel(List<Artiste> artistesList) {
 		super();
-		this.artistesList = artistesList;
+		this.artistesList = artistesList;	
 	}
 	
 	@Override
@@ -56,12 +64,12 @@ public class ArtistesTableModel extends AbstractTableModel {
 
 	@Override
 	public int getColumnCount() {
-		return entetes.length;
+		return entetes.size();
 	}
 
 	@Override
 	public String getColumnName(int col) {
-	    return entetes[col];
+	    return entetes.get(col);
 	}
 	
 	// AbstractTableModel.getColumnClass is overridden because it interprets numbers as string
@@ -71,8 +79,7 @@ public class ArtistesTableModel extends AbstractTableModel {
 
 		return switch(columnIndex){
 			case NOM_COL_IDX, NAISSANCE_COL_IDX,DECES_COL_IDX -> Artiste.class;
-			case NB_ALBUMS_COL_IDX, NB_CONCERTS_COL_IDX -> Number.class;
-			default -> Object.class;
+			default -> Number.class;
 		};
 	}
 	
@@ -88,7 +95,8 @@ public class ArtistesTableModel extends AbstractTableModel {
 				case DECES_COL_IDX -> artistesList.get(rowIndex);
 				case NB_CONCERTS_COL_IDX -> artistesList.get(rowIndex).getNbConcert();
 				case NB_ALBUMS_COL_IDX -> artistesList.get(rowIndex).getNbAlbum();
-				default -> null;
+				default -> artistesList.get(rowIndex).getAlbumsFormat().getSupportsPhysiquesNumbers()
+					.get(MediaSupportCategories.values()[columnIndex-firstEntetes.size()]);
 			};
 		}
 	}
