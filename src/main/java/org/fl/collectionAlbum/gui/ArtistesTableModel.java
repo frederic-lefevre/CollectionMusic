@@ -72,6 +72,10 @@ public class ArtistesTableModel extends AbstractTableModel {
 	    return entetes.get(col);
 	}
 	
+	public int getFirstEntetesNumber() {
+		return firstEntetes.size();
+	}
+	
 	// AbstractTableModel.getColumnClass is overridden because it interprets numbers as string
 	// So they are left aligned instead of right aligned
 	@Override

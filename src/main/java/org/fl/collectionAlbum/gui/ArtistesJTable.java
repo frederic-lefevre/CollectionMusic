@@ -38,6 +38,7 @@ import org.fl.collectionAlbum.artistes.AuteurDateComparator;
 import org.fl.collectionAlbum.artistes.AuteurDateDecesComparator;
 import org.fl.collectionAlbum.gui.renderer.AuteurDateRenderer;
 import org.fl.collectionAlbum.gui.renderer.AuteurRenderer;
+import org.fl.collectionAlbum.gui.renderer.CollectionNumberRenderer;
 import org.fl.collectionAlbum.utils.CollectionUtils;
 import org.fl.collectionAlbum.utils.TemporalUtils;
 
@@ -49,6 +50,7 @@ public class ArtistesJTable extends JTable {
 	private static final AuteurDateComparator AUTEUR_DATE_COMPARATOR = new AuteurDateComparator();
 	private static final AuteurDateDecesComparator AUTEUR_DECES_COMPARATOR = new AuteurDateDecesComparator();
 	private static final CollectionUtils.IntegerComparator INTEGER_COMPARATOR = new CollectionUtils.IntegerComparator();
+	private static final CollectionUtils.DoubleComparator DOUBLE_COMPARATOR = new CollectionUtils.DoubleComparator();
 	
 	private static final Function<Artiste, TemporalAccessor> artisteNaissanceGetter = a -> a.getNaissance();
 	private static final Function<Artiste, TemporalAccessor> artisteDecesGetter = a -> a.getMort();
@@ -69,6 +71,11 @@ public class ArtistesJTable extends JTable {
 		getColumnModel().getColumn(ArtistesTableModel.NB_ALBUMS_COL_IDX).setPreferredWidth(100);
 		getColumnModel().getColumn(ArtistesTableModel.NB_CONCERTS_COL_IDX).setPreferredWidth(100);
 		
+		for (int columnIndex = artistesTableModel.getFirstEntetesNumber(); columnIndex < artistesTableModel.getColumnCount(); columnIndex++) {
+			getColumnModel().getColumn(columnIndex).setCellRenderer(new CollectionNumberRenderer());
+			getColumnModel().getColumn(columnIndex).setPreferredWidth(80);
+		}
+		
 		// Allow single row selection only
 		ListSelectionModel listSelectionModel = new DefaultListSelectionModel();
 		listSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -85,5 +92,8 @@ public class ArtistesJTable extends JTable {
 		sorter.setComparator(ArtistesTableModel.DECES_COL_IDX, AUTEUR_DECES_COMPARATOR);
 		sorter.setComparator(ArtistesTableModel.NB_ALBUMS_COL_IDX, INTEGER_COMPARATOR);
 		sorter.setComparator(ArtistesTableModel.NB_CONCERTS_COL_IDX, INTEGER_COMPARATOR);
+		for (int columnIndex = artistesTableModel.getFirstEntetesNumber(); columnIndex < artistesTableModel.getColumnCount(); columnIndex++) {
+			sorter.setComparator(columnIndex, DOUBLE_COMPARATOR);
+		}
 	}
 }

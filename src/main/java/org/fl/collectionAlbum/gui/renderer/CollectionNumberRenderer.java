@@ -25,27 +25,21 @@ SOFTWARE.
 package org.fl.collectionAlbum.gui.renderer;
 
 import java.awt.Font;
-import java.time.temporal.TemporalAccessor;
-import java.util.function.Function;
-import java.util.logging.Logger;
+import java.util.Objects;
 
 import javax.swing.SwingConstants;
 
+import org.fl.collectionAlbum.format.Format;
 import org.fl.util.swing.CustomTableCellRenderer;
 
-public class DateRenderer extends CustomTableCellRenderer {
+public class CollectionNumberRenderer extends CustomTableCellRenderer {
 
 	private static final long serialVersionUID = 1L;
 	
-	private static final Logger logger = Logger.getLogger(AuteurListRenderer.class.getName());
-	
 	private static final Font font = new Font("Dialog", Font.PLAIN, 12);
 	
-	private final Function<TemporalAccessor, String> dateFormatter;
-	
-	public DateRenderer(Function<TemporalAccessor, String> dateFormatter) {
-		super(font, SwingConstants.LEFT);
-		this.dateFormatter = dateFormatter;
+	public CollectionNumberRenderer() {
+		super(font, SwingConstants.RIGHT);
 	}
 
 	@Override
@@ -53,10 +47,10 @@ public class DateRenderer extends CustomTableCellRenderer {
 		
 		if (value == null) {
 			setText("");
-		} else if (TemporalAccessor.class.isAssignableFrom(value.getClass())) {
-			setText(dateFormatter.apply((TemporalAccessor)value));
+		} else if (value instanceof Double doubleNumber) {
+			setText(Format.poidsToString(doubleNumber));
 		} else {
-			logger.severe("Invalid value type in Date cell. Should be assignable to TemporalAccessor but is " + value.getClass().getName());
+			setText(Objects.toString(value));
 		}
 	}
 
