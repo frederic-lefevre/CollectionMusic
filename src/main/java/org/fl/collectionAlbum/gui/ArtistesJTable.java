@@ -32,9 +32,12 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.TableRowSorter;
 
+import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.AuteurComparator;
+import org.fl.collectionAlbum.artistes.AuteurDateComparator;
+import org.fl.collectionAlbum.artistes.AuteurDateDecesComparator;
+import org.fl.collectionAlbum.gui.renderer.AuteurDateRenderer;
 import org.fl.collectionAlbum.gui.renderer.AuteurRenderer;
-import org.fl.collectionAlbum.gui.renderer.DateRenderer;
 import org.fl.collectionAlbum.utils.CollectionUtils;
 import org.fl.collectionAlbum.utils.TemporalUtils;
 
@@ -43,9 +46,12 @@ public class ArtistesJTable extends JTable {
 	private static final long serialVersionUID = 1L;
 
 	private static final AuteurComparator AUTEUR_COMPARATOR = new AuteurComparator();
-	private static final TemporalUtils.TemporalAccessorComparator TEMPORAL_ACCESSOR_COMPARATOR = new TemporalUtils.TemporalAccessorComparator();
+	private static final AuteurDateComparator AUTEUR_DATE_COMPARATOR = new AuteurDateComparator();
+	private static final AuteurDateDecesComparator AUTEUR_DECES_COMPARATOR = new AuteurDateDecesComparator();
 	private static final CollectionUtils.IntegerComparator INTEGER_COMPARATOR = new CollectionUtils.IntegerComparator();
 	
+	private static final Function<Artiste, TemporalAccessor> artisteNaissanceGetter = a -> a.getNaissance();
+	private static final Function<Artiste, TemporalAccessor> artisteDecesGetter = a -> a.getMort();
 	private static final Function<TemporalAccessor, String> dateFormatterFunction = t -> TemporalUtils.formatDate((TemporalAccessor)t);
 	
 	public ArtistesJTable(ArtistesTableModel artistesTableModel) {
@@ -54,8 +60,8 @@ public class ArtistesJTable extends JTable {
 		setFillsViewportHeight(true);
 		
 		getColumnModel().getColumn(ArtistesTableModel.NOM_COL_IDX).setCellRenderer(new AuteurRenderer());
-		getColumnModel().getColumn(ArtistesTableModel.NAISSANCE_COL_IDX).setCellRenderer(new DateRenderer(dateFormatterFunction));
-		getColumnModel().getColumn(ArtistesTableModel.DECES_COL_IDX).setCellRenderer(new DateRenderer(dateFormatterFunction));
+		getColumnModel().getColumn(ArtistesTableModel.NAISSANCE_COL_IDX).setCellRenderer(new AuteurDateRenderer(artisteNaissanceGetter, dateFormatterFunction));
+		getColumnModel().getColumn(ArtistesTableModel.DECES_COL_IDX).setCellRenderer(new AuteurDateRenderer(artisteDecesGetter, dateFormatterFunction));
 		
 		getColumnModel().getColumn(ArtistesTableModel.NOM_COL_IDX).setPreferredWidth(400);
 		getColumnModel().getColumn(ArtistesTableModel.NAISSANCE_COL_IDX).setPreferredWidth(150);
@@ -75,8 +81,8 @@ public class ArtistesJTable extends JTable {
 		setRowSorter(sorter);
 		
 		sorter.setComparator(ArtistesTableModel.NOM_COL_IDX, AUTEUR_COMPARATOR);
-		sorter.setComparator(ArtistesTableModel.NAISSANCE_COL_IDX, TEMPORAL_ACCESSOR_COMPARATOR);
-		sorter.setComparator(ArtistesTableModel.DECES_COL_IDX, TEMPORAL_ACCESSOR_COMPARATOR);
+		sorter.setComparator(ArtistesTableModel.NAISSANCE_COL_IDX, AUTEUR_DATE_COMPARATOR);
+		sorter.setComparator(ArtistesTableModel.DECES_COL_IDX, AUTEUR_DECES_COMPARATOR);
 		sorter.setComparator(ArtistesTableModel.NB_ALBUMS_COL_IDX, INTEGER_COMPARATOR);
 		sorter.setComparator(ArtistesTableModel.NB_CONCERTS_COL_IDX, INTEGER_COMPARATOR);
 	}
