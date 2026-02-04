@@ -35,12 +35,12 @@ public class ArtistesTableModel extends AbstractTableModel {
 	public static final int NOM_COL_IDX = 0;
 	public static final int NAISSANCE_COL_IDX = 1;
 	public static final int DECES_COL_IDX = 2;
-	public static final int NB_ALBUMS_COL_IDX = 3;
-	public static final int NB_CONCERTS_COL_IDX = 4;
+	public static final int NB_CONCERTS_COL_IDX = 3;
+	public static final int NB_ALBUMS_COL_IDX = 4;
 	
 	private static final long serialVersionUID = 1L;
 
-	private static final String[] entetes = {"Noms", "Naissance", "Décès", "Albums", "Concerts"};
+	private static final String[] entetes = {"Noms", "Naissance", "Décès", "Concerts", "Albums"};
 	
 	private final List<Artiste> artistesList;
 	
@@ -86,8 +86,8 @@ public class ArtistesTableModel extends AbstractTableModel {
 				case NOM_COL_IDX -> artistesList.get(rowIndex);
 				case NAISSANCE_COL_IDX -> artistesList.get(rowIndex);  // Returning a TemporalAccessor makes the sorting wrong: null value are put at the beginning
 				case DECES_COL_IDX -> artistesList.get(rowIndex);
-				case NB_ALBUMS_COL_IDX -> artistesList.get(rowIndex).getNbAlbum();
 				case NB_CONCERTS_COL_IDX -> artistesList.get(rowIndex).getNbConcert();
+				case NB_ALBUMS_COL_IDX -> artistesList.get(rowIndex).getNbAlbum();
 				default -> null;
 			};
 		}
