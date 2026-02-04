@@ -49,9 +49,14 @@ public class CollectionNumberRenderer extends CustomTableCellRenderer {
 			setText("");
 		} else if (value instanceof Double doubleNumber) {
 			setText(Format.poidsToString(doubleNumber));
+		} else if (Number.class.isAssignableFrom(value.getClass())) {
+			if ((Number)value == (Number)0) {
+				setText("");
+			} else {
+				setText(Objects.toString(value));
+			}
 		} else {
 			setText(Objects.toString(value));
 		}
 	}
-
 }
