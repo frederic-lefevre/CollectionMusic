@@ -40,27 +40,41 @@ public class ArtisteInformationPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	public ArtisteInformationPanel(Artiste artiste, GenerationPane generationPane) {
+			
+		JScrollPane albumsScrollTable = getAlbumsScrollPane(artiste.getAlbums().getAlbums(), generationPane);
+		JScrollPane concertScrollTable = getConcertsScrollPane(artiste.getConcerts().getConcerts());
+		if (concertScrollTable == null) {
+			add(albumsScrollTable);
+		} else if (albumsScrollTable == null) {
+			add(concertScrollTable);
+		} else {
+			JTabbedPane albumsEtConcertsTabs = new JTabbedPane();
+			albumsEtConcertsTabs.add(albumsScrollTable, "Albums");
+			albumsEtConcertsTabs.add(concertScrollTable, "Concerts");
+			
+			add(albumsEtConcertsTabs);
+		}
+	}
+	
+	private JScrollPane getAlbumsScrollPane(List<Album> albums, GenerationPane generationPane) {
 		
-		List<Album> albums = artiste.getAlbums().getAlbums();
-		List<Concert> concerts = artiste.getConcerts().getConcerts();
+		if (albums.isEmpty()) {
+			return null;
+		} else {
+			JScrollPane albumsScrollTable = new JScrollPane(new AlbumsJTable(new AlbumsTableModel(albums), generationPane));
+			albumsScrollTable.setPreferredSize(new Dimension(1800, 800));
+			return albumsScrollTable;
+		}
+	}
+	
+	private JScrollPane getConcertsScrollPane(List<Concert> concerts) {
 		
-		JTabbedPane albumsEtConcertsTabs = new JTabbedPane();
-		
-		AlbumsTableModel albumsTableModel = new AlbumsTableModel(albums);
-		ConcertTableModel concertTableModel = new ConcertTableModel(concerts);
-		
-		AlbumsJTable albumsJTable = new AlbumsJTable(albumsTableModel, generationPane);
-		ConcertsJTable concertsJTable = new ConcertsJTable(concertTableModel);
-		
-		JScrollPane albumsScrollTable = new JScrollPane(albumsJTable);
-		albumsScrollTable.setPreferredSize(new Dimension(1800, 800));
-		
-		JScrollPane concertScrollTable = new JScrollPane(concertsJTable);
-		concertScrollTable.setPreferredSize(new Dimension(1800, 800));
-		
-		albumsEtConcertsTabs.add(albumsScrollTable, "Albums");
-		albumsEtConcertsTabs.add(concertScrollTable, "Concerts");
-		
-		add(albumsEtConcertsTabs);
+		if (concerts.isEmpty()) {
+			return null;
+		} else {			
+			JScrollPane concertScrollTable = new JScrollPane(new ConcertsJTable(new ConcertTableModel(concerts)));
+			concertScrollTable.setPreferredSize(new Dimension(1800, 800));
+			return concertScrollTable;
+		}
 	}
 }
