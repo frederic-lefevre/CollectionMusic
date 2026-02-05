@@ -71,6 +71,4 @@ public class RandomAlbumsPickListener implements java.awt.event.ActionListener {
 		
 		JOptionPane.showMessageDialog(null, albumsScrollTable, "Albums choisis aléatoirement", JOptionPane.INFORMATION_MESSAGE);
 	}
-	
-
 }

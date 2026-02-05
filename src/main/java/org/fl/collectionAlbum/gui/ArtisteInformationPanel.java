@@ -35,11 +35,11 @@ public class ArtisteInformationPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	public ArtisteInformationPanel(Artiste artiste) {
+	public ArtisteInformationPanel(Artiste artiste, GenerationPane generationPane) {
 		
 		AlbumsTableModel albumsTableModel = new AlbumsTableModel(artiste.getAlbums().getAlbums());
 		
-		AlbumsJTable albumsJTable = new AlbumsJTable(albumsTableModel, null);
+		AlbumsJTable albumsJTable = new AlbumsJTable(albumsTableModel, generationPane);
 		
 		JScrollPane albumsScrollTable = new JScrollPane(albumsJTable);
 		albumsScrollTable.setPreferredSize(new Dimension(1800, 800));

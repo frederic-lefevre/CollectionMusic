@@ -65,10 +65,10 @@ public class GenerationPane extends JPanel {
 		AlbumsJTable albumsJTable = new AlbumsJTable(albumsTableModel, this);
 		
 		ArtistesTableModel artistesTableModel = new ArtistesTableModel(collectionAlbumContainer.getCollectionArtistes().getArtistes());
-		ArtistesJTable artistesJTable = new ArtistesJTable(artistesTableModel);
+		ArtistesJTable artistesJTable = new ArtistesJTable(artistesTableModel, this);
 		
 		ArtistesTableModel artistesConcertsTableModel = new ArtistesTableModel(collectionAlbumContainer.getConcertsArtistes().getArtistes());
-		ArtistesJTable artistesConcertsJTable = new ArtistesJTable(artistesConcertsTableModel);
+		ArtistesJTable artistesConcertsJTable = new ArtistesJTable(artistesConcertsTableModel, this);
 		
 		// Control buttons panel
 		JPanel controlPanel = new JPanel();

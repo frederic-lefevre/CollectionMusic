@@ -35,17 +35,18 @@ import javax.swing.JPopupMenu;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.gui.ArtisteInformationPanel;
 import org.fl.collectionAlbum.gui.ArtistesJTable;
+import org.fl.collectionAlbum.gui.GenerationPane;
 
 public class ArtisteMouseAdapter extends MouseAdapter {
 
 	private final JPopupMenu localJPopupMenu;
 	private final JMenuItem showArtisteInfo;
 	
-	public ArtisteMouseAdapter(ArtistesJTable artistesJTable) {
+	public ArtisteMouseAdapter(ArtistesJTable artistesJTable, GenerationPane generationPane) {
 		
 		localJPopupMenu = new JPopupMenu();
 		showArtisteInfo = new JMenuItem("Informations sur l'artiste");
-		showArtisteInfo.addActionListener(new ArtisteActionListener(artistesJTable));
+		showArtisteInfo.addActionListener(new ArtisteActionListener(artistesJTable, generationPane));
 		localJPopupMenu.add(showArtisteInfo);
 	}
 	
@@ -66,9 +67,11 @@ public class ArtisteMouseAdapter extends MouseAdapter {
 	private static class ArtisteActionListener implements java.awt.event.ActionListener {
 
 		private final ArtistesJTable artistesJTable;
+		private final GenerationPane generationPane;
 		
-		public ArtisteActionListener(ArtistesJTable artistesJTable) {
+		public ArtisteActionListener(ArtistesJTable artistesJTable, GenerationPane generationPane) {
 			this.artistesJTable = artistesJTable;
+			this.generationPane = generationPane;
 		}
 
 		@Override
@@ -76,8 +79,7 @@ public class ArtisteMouseAdapter extends MouseAdapter {
 			
 			Artiste selectedArtiste = artistesJTable.getSelectedArtiste();
 			
-			JOptionPane.showMessageDialog(null, new ArtisteInformationPanel(selectedArtiste), selectedArtiste.getNomComplet(), JOptionPane.INFORMATION_MESSAGE);
-		}
-		
+			JOptionPane.showMessageDialog(null, new ArtisteInformationPanel(selectedArtiste, generationPane), selectedArtiste.getNomComplet(), JOptionPane.INFORMATION_MESSAGE);
+		}		
 	}
 }

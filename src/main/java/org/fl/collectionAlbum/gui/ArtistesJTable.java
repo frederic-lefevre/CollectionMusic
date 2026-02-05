@@ -60,7 +60,7 @@ public class ArtistesJTable extends JTable {
 	private static final Function<Artiste, TemporalAccessor> artisteDecesGetter = a -> a.getMort();
 	private static final Function<TemporalAccessor, String> dateFormatterFunction = t -> TemporalUtils.formatDate((TemporalAccessor)t);
 	
-	public ArtistesJTable(ArtistesTableModel artistesTableModel) {
+	public ArtistesJTable(ArtistesTableModel artistesTableModel, GenerationPane generationPane) {
 		super(artistesTableModel);
 		
 		setFillsViewportHeight(true);
@@ -89,7 +89,7 @@ public class ArtistesJTable extends JTable {
 		
 		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		
-		addMouseListener(new ArtisteMouseAdapter(this));
+		addMouseListener(new ArtisteMouseAdapter(this, generationPane));
 		
 		// Row sorter
 		TableRowSorter<ArtistesTableModel> sorter = new TableRowSorter<>(artistesTableModel);	
