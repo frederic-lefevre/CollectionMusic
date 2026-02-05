@@ -31,7 +31,7 @@ import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.gui.GenerationPane;
 import org.fl.collectionAlbum.gui.MusicArtefactTable;
 import org.fl.collectionAlbum.gui.listener.AlbumCustomActionListener;
-import org.fl.collectionAlbum.gui.listener.AlbumCustomActionListener.CustomAction;
+import org.fl.collectionAlbum.gui.listener.AlbumCustomActionListener.CustomAlbumAction;
 import org.fl.collectionAlbum.osAction.OsAction;
 
 public class AlbumMouseAdapter extends MusicArtefactMouseAdapter<Album> {
@@ -40,7 +40,7 @@ public class AlbumMouseAdapter extends MusicArtefactMouseAdapter<Album> {
 		
 		super(albumsTable, osActions);
 
-		Stream.of(CustomAction.values()).forEachOrdered(customAction -> 
+		Stream.of(CustomAlbumAction.values()).forEachOrdered(customAction -> 
 			musicArtefactMenuItems.addMenuItem(
 						customAction.getActionTitle(), 
 						new AlbumCustomActionListener(albumsTable, customAction, generationPane), 

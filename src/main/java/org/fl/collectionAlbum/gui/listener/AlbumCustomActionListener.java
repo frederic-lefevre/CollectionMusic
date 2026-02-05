@@ -63,7 +63,7 @@ public class AlbumCustomActionListener implements java.awt.event.ActionListener 
 			(album) -> Stream.of(ContentNature.values())
 				.anyMatch(contentNature -> album.hasMediaFilePathNotFound(contentNature) || album.hasMissingOrInvalidMediaFilePath(contentNature)); 
 	
-	public enum CustomAction {
+	public enum CustomAlbumAction {
 		
 		DETAILED_INFO_DISPLAY("Informations détaillées de l'album", Objects::nonNull), 
 		DISCOGS_RELEASE_SEARCH("Chercher la release discogs", isLinkedToDiscogsRelease.negate()),
@@ -72,7 +72,7 @@ public class AlbumCustomActionListener implements java.awt.event.ActionListener 
 		private final String actionTitle;
 		private final Predicate<Album> displayable;
 		
-		private CustomAction(String actionTitle, Predicate<Album> displayable) {
+		private CustomAlbumAction(String actionTitle, Predicate<Album> displayable) {
 			this.actionTitle = actionTitle;
 			this.displayable = displayable;
 		}
@@ -87,10 +87,10 @@ public class AlbumCustomActionListener implements java.awt.event.ActionListener 
 	};
 	
 	private final MusicArtefactTable<Album> albumsJTable;
-	private final CustomAction customAction;
+	private final CustomAlbumAction customAction;
 	private final GenerationPane generationPane;
 	
-	public AlbumCustomActionListener(MusicArtefactTable<Album> ajt, CustomAction ca, GenerationPane generationPane) {
+	public AlbumCustomActionListener(MusicArtefactTable<Album> ajt, CustomAlbumAction ca, GenerationPane generationPane) {
 		
 		albumsJTable = ajt;
 		customAction = ca;
