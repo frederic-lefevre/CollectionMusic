@@ -86,9 +86,7 @@ public class ArtistesJTable extends JTable {
 		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		
 		// Row sorter
-		TableRowSorter<ArtistesTableModel> sorter = new TableRowSorter<>(artistesTableModel);
-		setRowSorter(sorter);
-		
+		TableRowSorter<ArtistesTableModel> sorter = new TableRowSorter<>(artistesTableModel);	
 		sorter.setComparator(ArtistesTableModel.NOM_COL_IDX, AUTEUR_COMPARATOR);
 		sorter.setComparator(ArtistesTableModel.NAISSANCE_COL_IDX, AUTEUR_DATE_COMPARATOR);
 		sorter.setComparator(ArtistesTableModel.DECES_COL_IDX, AUTEUR_DECES_COMPARATOR);
@@ -97,5 +95,6 @@ public class ArtistesJTable extends JTable {
 		for (int columnIndex = artistesTableModel.getFirstEntetesNumber(); columnIndex < artistesTableModel.getColumnCount(); columnIndex++) {
 			sorter.setComparator(columnIndex, DOUBLE_COMPARATOR);
 		}
+		setRowSorter(sorter);
 	}
 }

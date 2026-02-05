@@ -79,10 +79,9 @@ public class AlbumsJTable extends JTable implements MusicArtefactTable<Album> {
 		
 		// Row sorter
 		TableRowSorter<AlbumsTableModel> sorter = new TableRowSorter<>(albumsTableModel);
-		setRowSorter(sorter);
-		
 		sorter.setComparator(AlbumsTableModel.AUTEUR_COL_IDX, RANGEMENT_COMPARATOR);
 		sorter.setComparator(AlbumsTableModel.MEDIA_FILES_COL_IDX, ALBUM_MEDIA_FILES_STATUS_COMPARATOR);
+		setRowSorter(sorter);
 	}
 
 	// Get the selected album

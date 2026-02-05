@@ -83,9 +83,8 @@ public class DiscogsReleaseJTable extends JTable {
 		
 		// Row sorter
 		TableRowSorter<DisocgsReleaseTableModel> sorter = new TableRowSorter<>(discogsTableModel);
-		setRowSorter(sorter);
-		
 		sorter.setComparator(DisocgsReleaseTableModel.FORMAT_MATCH_COL_IDX, FORMAT_COMPATIBILITY_COMPARATOR);
+		setRowSorter(sorter);
 	}
 
 	public DiscogsAlbumRelease getSelectedDisocgsRelease(){

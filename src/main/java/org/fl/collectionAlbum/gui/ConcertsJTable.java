@@ -78,10 +78,9 @@ public class ConcertsJTable extends JTable implements MusicArtefactTable<Concert
 		
 		// Row sorter
 		TableRowSorter<ConcertTableModel> sorter = new TableRowSorter<>(concertTableModel);
-		setRowSorter(sorter);
-		
 		sorter.setComparator(ConcertTableModel.DATE_COL_IDX, TEMPORAL_ACCESSOR_COMPARATOR);
 		sorter.setComparator(ConcertTableModel.ARTISTE_COL_IDX, CONCERT_AUTEUR_COMPARATOR);
+		setRowSorter(sorter);
 	}
 	
 	// Get the selected concert
