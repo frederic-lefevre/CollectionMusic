@@ -25,11 +25,15 @@ SOFTWARE.
 package org.fl.collectionAlbum.gui;
 
 import java.awt.Dimension;
+import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 
+import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.Artiste;
+import org.fl.collectionAlbum.concerts.Concert;
 
 public class ArtisteInformationPanel extends JPanel {
 
@@ -37,13 +41,26 @@ public class ArtisteInformationPanel extends JPanel {
 
 	public ArtisteInformationPanel(Artiste artiste, GenerationPane generationPane) {
 		
-		AlbumsTableModel albumsTableModel = new AlbumsTableModel(artiste.getAlbums().getAlbums());
+		List<Album> albums = artiste.getAlbums().getAlbums();
+		List<Concert> concerts = artiste.getConcerts().getConcerts();
+		
+		JTabbedPane albumsEtConcertsTabs = new JTabbedPane();
+		
+		AlbumsTableModel albumsTableModel = new AlbumsTableModel(albums);
+		ConcertTableModel concertTableModel = new ConcertTableModel(concerts);
 		
 		AlbumsJTable albumsJTable = new AlbumsJTable(albumsTableModel, generationPane);
+		ConcertsJTable concertsJTable = new ConcertsJTable(concertTableModel);
 		
 		JScrollPane albumsScrollTable = new JScrollPane(albumsJTable);
 		albumsScrollTable.setPreferredSize(new Dimension(1800, 800));
 		
-		add(albumsScrollTable);
+		JScrollPane concertScrollTable = new JScrollPane(concertsJTable);
+		concertScrollTable.setPreferredSize(new Dimension(1800, 800));
+		
+		albumsEtConcertsTabs.add(albumsScrollTable, "Albums");
+		albumsEtConcertsTabs.add(concertScrollTable, "Concerts");
+		
+		add(albumsEtConcertsTabs);
 	}
 }
