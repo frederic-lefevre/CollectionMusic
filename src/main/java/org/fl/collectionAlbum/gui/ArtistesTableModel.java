@@ -105,4 +105,7 @@ public class ArtistesTableModel extends AbstractTableModel {
 		}
 	}
 
+	public Artiste getArtisteAt(int rowIndex) {
+		return artistesList.get(rowIndex);
+	}
 }

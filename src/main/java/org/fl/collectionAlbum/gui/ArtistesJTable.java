@@ -26,6 +26,7 @@ package org.fl.collectionAlbum.gui;
 
 import java.time.temporal.TemporalAccessor;
 import java.util.function.Function;
+import java.util.logging.Logger;
 
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JTable;
@@ -36,6 +37,7 @@ import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.AuteurComparator;
 import org.fl.collectionAlbum.artistes.AuteurDateComparator;
 import org.fl.collectionAlbum.artistes.AuteurDateDecesComparator;
+import org.fl.collectionAlbum.gui.adapter.ArtisteMouseAdapter;
 import org.fl.collectionAlbum.gui.renderer.AuteurDateRenderer;
 import org.fl.collectionAlbum.gui.renderer.AuteurRenderer;
 import org.fl.collectionAlbum.gui.renderer.CollectionNumberRenderer;
@@ -46,6 +48,8 @@ public class ArtistesJTable extends JTable {
 
 	private static final long serialVersionUID = 1L;
 
+	private static Logger logger = Logger.getLogger(ArtistesJTable.class.getName());
+	
 	private static final AuteurComparator AUTEUR_COMPARATOR = new AuteurComparator();
 	private static final AuteurDateComparator AUTEUR_DATE_COMPARATOR = new AuteurDateComparator();
 	private static final AuteurDateDecesComparator AUTEUR_DECES_COMPARATOR = new AuteurDateDecesComparator();
@@ -85,6 +89,8 @@ public class ArtistesJTable extends JTable {
 		
 		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		
+		addMouseListener(new ArtisteMouseAdapter(this));
+		
 		// Row sorter
 		TableRowSorter<ArtistesTableModel> sorter = new TableRowSorter<>(artistesTableModel);	
 		sorter.setComparator(ArtistesTableModel.NOM_COL_IDX, AUTEUR_COMPARATOR);
@@ -96,5 +102,16 @@ public class ArtistesJTable extends JTable {
 			sorter.setComparator(columnIndex, DOUBLE_COMPARATOR);
 		}
 		setRowSorter(sorter);
+	}
+	
+	public Artiste getSelectedArtiste() {
+		
+		int[] rowIdxs = getSelectedRows();
+		if (rowIdxs.length == 0) {
+			return null;
+		} else if (rowIdxs.length > 1) {
+			logger.severe("Found several selected rows for ArtistesJTable. Number of selected rows: " + rowIdxs.length);
+		}
+		return ((ArtistesTableModel)getModel()).getArtisteAt(convertRowIndexToModel(rowIdxs[0]));
 	}
 }
