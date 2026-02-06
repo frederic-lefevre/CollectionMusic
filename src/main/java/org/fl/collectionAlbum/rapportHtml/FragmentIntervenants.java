@@ -85,7 +85,7 @@ public class FragmentIntervenants {
 			artefactsUri = RapportStructuresAndNames.getArtisteConcertRapportRelativeUri(unArtiste);
 		}
 		if (artefactsUri != null) {
-			fragment.append("<a href=\"").append(urlOffset).append(artefactsUri.toString()).append("\">").append(unArtiste.getPrenoms()).append(" ").append(unArtiste.getNom()).append("</a><br/>");
+			fragment.append("<a href=\"").append(urlOffset).append(artefactsUri.toString()).append("\">").append(unArtiste.getNomComplet()).append("</a><br/>");
 		}
 	}
 

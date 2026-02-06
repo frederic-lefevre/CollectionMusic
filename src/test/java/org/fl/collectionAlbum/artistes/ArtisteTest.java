@@ -56,6 +56,8 @@ class ArtisteTest {
 
 		assertThat(artiste.getDateNaissance()).isEqualTo(TemporalUtils.formatDate(artiste.getNaissance()));
 		assertThat(artiste.getDateMort()).isEqualTo(TemporalUtils.formatDate(artiste.getMort()));
+		String expectedDates = " (" + TemporalUtils.formatDate(artiste.getNaissance()) + " - " + TemporalUtils.formatDate(artiste.getMort()) + ")";
+		assertThat(artiste.getDates()).isEqualTo(expectedDates);
 		
 		assertThat(artiste.getNbAlbum()).isZero();
 		assertThat(artiste.getNbConcert()).isZero();
@@ -93,7 +95,7 @@ class ArtisteTest {
 		jArt2.put("naissance", "1929-08-16");
 		jArt2.put("mort", "1980-09-15");
 		
-		artiste.update(jArt2, ArtistRole.AUTEUR);
+		artiste.updateArtistRoleAndDates(jArt2, ArtistRole.AUTEUR);
 		
 		assertThat(artiste.getArtistRoles()).hasSameElementsAs(Set.of(ArtistRole.AUTEUR));
 		
@@ -114,7 +116,7 @@ class ArtisteTest {
 		jArt2.put("nom", "Evans");
 		jArt2.put("prenom", "Bill");
 		
-		artiste.update(jArt2, ArtistRole.INTERPRETE);
+		artiste.updateArtistRoleAndDates(jArt2, ArtistRole.INTERPRETE);
 		
 		assertThat(artiste.getArtistRoles()).hasSameElementsAs(Set.of(ArtistRole.AUTEUR, ArtistRole.INTERPRETE));
 		
@@ -142,7 +144,7 @@ class ArtisteTest {
 		LogRecordCounter logCounter = 
 				FilterCounter.getLogRecordCounter(Logger.getLogger(Artiste.class.getName()));
 		
-		artiste.update(jArt2, ArtistRole.AUTEUR);
+		artiste.updateArtistRoleAndDates(jArt2, ArtistRole.AUTEUR);
 		
 		assertThat(logCounter.getLogRecordCount()).isEqualTo(2);
 		assertThat(logCounter.getLogRecordCount(Level.WARNING)).isEqualTo(2);

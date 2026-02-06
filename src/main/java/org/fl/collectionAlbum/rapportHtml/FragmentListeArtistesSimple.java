@@ -52,7 +52,7 @@ public class FragmentListeArtistesSimple {
 			}
 			fragment.append(artisteUri.toString());
 
-			fragment.append("\">").append(unArtiste.getPrenoms()).append(" ").append(unArtiste.getNom())
+			fragment.append("\">").append(unArtiste.getNomComplet())
 					.append("</a></td>\n");
 			fragment.append("    <td class=\"an\">").append(unArtiste.getDateNaissance()).append("</td>\n");
 			fragment.append("    <td class=\"an\">").append(unArtiste.getDateMort()).append("</td>\n");

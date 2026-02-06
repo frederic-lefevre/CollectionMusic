@@ -91,9 +91,7 @@ public class FragmentListeConcerts {
 				.append(urlOffset)
 				.append(concertUri.toString())
 				.append("\">")
-				.append(unArtiste.getPrenoms())
-				.append(" ")
-				.append(unArtiste.getNom())
+				.append(unArtiste.getNomComplet())
 				.append("</a><br/>\n");
 
 		}

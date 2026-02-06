@@ -42,7 +42,7 @@ public class RapportAlbumsDunArtiste extends RapportHtml {
 		withOffset(offset);
 		artiste = a;
 
-		withTitle(artiste.getPrenoms() + " " + artiste.getNom() + ALBUMS);
+		withTitle(artiste.getNomComplet() + ALBUMS);
 		HtmlLinkList concertLink = new HtmlLinkList(RapportStructuresAndNames.getAccueils());
 
 		if (artiste.getNbConcert() > 0) {
@@ -56,14 +56,10 @@ public class RapportAlbumsDunArtiste extends RapportHtml {
 	protected void corpsRapport() {
 		
 		write("<table class=\"auteurTab\">\n  <tr>\n    <td rowspan=\"2\" class=\"auteurTitre\"><span class=\"auteurTitre\">");
-		write(artiste.getPrenoms());
-		write(" ");
-		write(artiste.getNom());
-		write("</span> (");
-		write(artiste.getDateNaissance());
-		write(" - ");
-		write(artiste.getDateMort());
-		write(")<br/>Nombre d'albums: ");
+		write(artiste.getNomComplet());
+		write("</span>");
+		write(artiste.getDates());
+		write("<br/>Nombre d'albums: ");
 		write(artiste.getAlbums().getNombreAlbums());
 		write("</td>\n");
 		Format.enteteFormat(rBuilder, "total", 1, DONT_APPEND_AUDIO_FILE);
