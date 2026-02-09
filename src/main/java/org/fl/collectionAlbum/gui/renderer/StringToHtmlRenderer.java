@@ -29,34 +29,30 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingConstants;
 
-import org.fl.collectionAlbum.MusicArtefact;
 import org.fl.collectionAlbum.utils.CollectionUtils;
 import org.fl.util.swing.CustomTableCellRenderer;
 
-public class AuteurListRenderer extends CustomTableCellRenderer {
+public class StringToHtmlRenderer extends CustomTableCellRenderer {
 
 	private static final long serialVersionUID = 1L;
-
-	private static final Logger mLog = Logger.getLogger(AuteurListRenderer.class.getName());
+	
+	private static final Logger mLog = Logger.getLogger(StringToHtmlRenderer.class.getName());
 	
 	private static final Font font = new Font("Dialog", Font.PLAIN, 12);
 	
-	public AuteurListRenderer() {
+	public StringToHtmlRenderer() {
 		super(font, SwingConstants.LEFT);
 		setVerticalAlignment(SwingConstants.TOP);
 	}
 
 	@Override
 	public void valueProcessor(Object value) {
-		
 		if (value == null) {
 			// This may happen when rescanning the album collection
 			mLog.fine("Null value in Auteurs cell. Should be an Album");
 			setText("Valeur null");
-		} else if (MusicArtefact.class.isAssignableFrom(value.getClass())) {
-			setText(CollectionUtils.getHtmlForArtistes((MusicArtefact)value));
 		} else {
-			mLog.severe("Invalid value type in Auteurs cell. Should be Album or Concert but is " + value.getClass().getName());
+			setText(CollectionUtils.getHtmlForString((String)value));
 		}	
 	}
 

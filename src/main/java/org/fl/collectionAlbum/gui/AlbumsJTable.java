@@ -40,6 +40,7 @@ import org.fl.collectionAlbum.gui.adapter.AlbumMouseAdapter;
 import org.fl.collectionAlbum.gui.renderer.AuteurListRenderer;
 import org.fl.collectionAlbum.gui.renderer.CollectionBooleanRenderer;
 import org.fl.collectionAlbum.gui.renderer.MediaFilesRenderer;
+import org.fl.collectionAlbum.gui.renderer.StringToHtmlRenderer;
 
 public class AlbumsJTable extends JTable implements MusicArtefactTable<Album> {
 
@@ -57,16 +58,17 @@ public class AlbumsJTable extends JTable implements MusicArtefactTable<Album> {
 		
 		setRowHeight(ContentNature.values().length*25);
 		
+		getColumnModel().getColumn(AlbumsTableModel.TITRE_COL_IDX).setCellRenderer(new StringToHtmlRenderer());
 		getColumnModel().getColumn(AlbumsTableModel.AUTEUR_COL_IDX).setCellRenderer(new AuteurListRenderer());
 		getColumnModel().getColumn(AlbumsTableModel.MEDIA_FILES_COL_IDX).setCellRenderer(new MediaFilesRenderer());
 		getColumnModel().getColumn(AlbumsTableModel.PROBLEM_COL_IDX).setCellRenderer(new CollectionBooleanRenderer());
 		
-		getColumnModel().getColumn(AlbumsTableModel.TITRE_COL_IDX).setPreferredWidth(500);
-		getColumnModel().getColumn(AlbumsTableModel.AUTEUR_COL_IDX).setPreferredWidth(600);
-		getColumnModel().getColumn(AlbumsTableModel.FORMAT_COL_IDX).setPreferredWidth(150);
-		getColumnModel().getColumn(AlbumsTableModel.MEDIA_FILES_COL_IDX).setPreferredWidth(250);
-		getColumnModel().getColumn(AlbumsTableModel.PROBLEM_COL_IDX).setPreferredWidth(80);
-		getColumnModel().getColumn(AlbumsTableModel.DISCOGS_COL_IDX).setPreferredWidth(120);
+		getColumnModel().getColumn(AlbumsTableModel.TITRE_COL_IDX).setPreferredWidth(250);
+		getColumnModel().getColumn(AlbumsTableModel.AUTEUR_COL_IDX).setPreferredWidth(550);
+		getColumnModel().getColumn(AlbumsTableModel.FORMAT_COL_IDX).setPreferredWidth(100);
+		getColumnModel().getColumn(AlbumsTableModel.MEDIA_FILES_COL_IDX).setPreferredWidth(140);
+		getColumnModel().getColumn(AlbumsTableModel.PROBLEM_COL_IDX).setPreferredWidth(70);
+		getColumnModel().getColumn(AlbumsTableModel.DISCOGS_COL_IDX).setPreferredWidth(110);
 		
 		// Allow single row selection only
 		ListSelectionModel listSelectionModel = new DefaultListSelectionModel();

@@ -56,6 +56,15 @@ public class CollectionUtils {
 	
 	private static final String VIRGULE = ", ";
 	
+	public static String getHtmlForString(String s) {
+		
+		return getStringBuilderWithHtmlBegin()
+				.append("<p>")
+				.append(s)
+				.append("</body></html>")
+				.toString();
+	}
+	
 	public static String getHtmlForArtistes(MusicArtefact musicArtefact) {
 		
 		StringBuilder buf = getStringBuilderWithHtmlBegin();

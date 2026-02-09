@@ -43,7 +43,7 @@ public class AlbumsTableModel extends AbstractTableModel {
 	
 	private static final long serialVersionUID = 1L;
 	
-	private static final String[] entetes = {"Titres", "Auteurs", "Formats", "Chemins des fichiers media", "Problème", "Discogs release"};
+	private static final String[] entetes = {"Titres", "Auteurs", "Formats", "Fichiers media", "Problème", "Discogs release"};
 	
 	private final List<Album> albumsList;
 	
