@@ -34,7 +34,6 @@ import javax.swing.SwingConstants;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.util.swing.CustomTableCellRenderer;
 
-
 public class AuteurDateRenderer extends CustomTableCellRenderer {
 
 	private static final long serialVersionUID = 1L;
@@ -56,12 +55,12 @@ public class AuteurDateRenderer extends CustomTableCellRenderer {
 	public void valueProcessor(Object value) {
 		if (value == null) {
 			// This may happen when rescanning the album collection
-			mLog.fine("Null value in MediaFiles cell. Should be an MediaFilePath");
+			mLog.fine("Null value in Artiste Date cell. Should be an Artiste");
 			setText("Valeur null");
 		} else if (value instanceof Artiste artiste) {
 			setText(dateFormatter.compose(artisteDateGetter).apply(artiste));
 		} else {
-			mLog.severe("Invalid value type in Artiste cell. Should be Artiste but is " + value.getClass().getName());
+			mLog.severe("Invalid value type in Artiste Date cell. Should be Artiste but is " + value.getClass().getName());
 		}			
 	}
 }
