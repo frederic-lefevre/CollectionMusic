@@ -39,8 +39,10 @@ import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.gui.adapter.AlbumMouseAdapter;
 import org.fl.collectionAlbum.gui.renderer.AuteurListRenderer;
 import org.fl.collectionAlbum.gui.renderer.CollectionBooleanRenderer;
+import org.fl.collectionAlbum.gui.renderer.CollectionNumberRenderer;
 import org.fl.collectionAlbum.gui.renderer.MediaFilesRenderer;
 import org.fl.collectionAlbum.gui.renderer.StringToHtmlRenderer;
+import org.fl.collectionAlbum.utils.CollectionUtils;
 
 public class AlbumsJTable extends JTable implements MusicArtefactTable<Album> {
 
@@ -50,6 +52,7 @@ public class AlbumsJTable extends JTable implements MusicArtefactTable<Album> {
 	
 	private static final RangementComparator RANGEMENT_COMPARATOR = new RangementComparator();
 	private static final AlbumMediaFilesStatusComparator ALBUM_MEDIA_FILES_STATUS_COMPARATOR = new AlbumMediaFilesStatusComparator();
+	private static final CollectionUtils.DoubleComparator DOUBLE_COMPARATOR = new CollectionUtils.DoubleComparator();
 	
 	public AlbumsJTable(AlbumsTableModel albumsTableModel, GenerationPane generationPane) {
 		super(albumsTableModel);
@@ -62,6 +65,7 @@ public class AlbumsJTable extends JTable implements MusicArtefactTable<Album> {
 		getColumnModel().getColumn(AlbumsTableModel.AUTEUR_COL_IDX).setCellRenderer(new AuteurListRenderer());
 		getColumnModel().getColumn(AlbumsTableModel.MEDIA_FILES_COL_IDX).setCellRenderer(new MediaFilesRenderer());
 		getColumnModel().getColumn(AlbumsTableModel.PROBLEM_COL_IDX).setCellRenderer(new CollectionBooleanRenderer());
+		getColumnModel().getColumn(AlbumsTableModel.POIDS_COL_IDX).setCellRenderer(new CollectionNumberRenderer());
 		
 		getColumnModel().getColumn(AlbumsTableModel.TITRE_COL_IDX).setPreferredWidth(250);
 		getColumnModel().getColumn(AlbumsTableModel.AUTEUR_COL_IDX).setPreferredWidth(550);
@@ -69,6 +73,7 @@ public class AlbumsJTable extends JTable implements MusicArtefactTable<Album> {
 		getColumnModel().getColumn(AlbumsTableModel.MEDIA_FILES_COL_IDX).setPreferredWidth(140);
 		getColumnModel().getColumn(AlbumsTableModel.PROBLEM_COL_IDX).setPreferredWidth(70);
 		getColumnModel().getColumn(AlbumsTableModel.DISCOGS_COL_IDX).setPreferredWidth(110);
+		getColumnModel().getColumn(AlbumsTableModel.POIDS_COL_IDX).setPreferredWidth(50);
 		
 		// Allow single row selection only
 		ListSelectionModel listSelectionModel = new DefaultListSelectionModel();
@@ -83,6 +88,7 @@ public class AlbumsJTable extends JTable implements MusicArtefactTable<Album> {
 		TableRowSorter<AlbumsTableModel> sorter = new TableRowSorter<>(albumsTableModel);
 		sorter.setComparator(AlbumsTableModel.AUTEUR_COL_IDX, RANGEMENT_COMPARATOR);
 		sorter.setComparator(AlbumsTableModel.MEDIA_FILES_COL_IDX, ALBUM_MEDIA_FILES_STATUS_COMPARATOR);
+		sorter.setComparator(AlbumsTableModel.POIDS_COL_IDX, DOUBLE_COMPARATOR);
 		setRowSorter(sorter);
 	}
 

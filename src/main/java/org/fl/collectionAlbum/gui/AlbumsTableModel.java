@@ -40,10 +40,11 @@ public class AlbumsTableModel extends AbstractTableModel {
 	public static final int MEDIA_FILES_COL_IDX = 3;
 	public static final int PROBLEM_COL_IDX = 4;
 	public static final int DISCOGS_COL_IDX = 5;
+	public static final int POIDS_COL_IDX = 6;
 	
 	private static final long serialVersionUID = 1L;
 	
-	private static final String[] entetes = {"Titres", "Auteurs", "Formats", "Fichiers media", "Problème", "Discogs release"};
+	private static final String[] entetes = {"Titres", "Auteurs", "Formats", "Fichiers media", "Problème", "Discogs release", "Poids"};
 	
 	private final List<Album> albumsList;
 	
@@ -97,6 +98,7 @@ public class AlbumsTableModel extends AbstractTableModel {
 				case MEDIA_FILES_COL_IDX -> albumsList.get(rowIndex);
 				case PROBLEM_COL_IDX -> albumsList.get(rowIndex).hasProblem();
 				case DISCOGS_COL_IDX -> Optional.ofNullable(albumsList.get(rowIndex).getDiscogsLink()).orElse("");
+				case POIDS_COL_IDX -> albumsList.get(rowIndex).getFormatAlbum().getPoids();
 				default -> null;
 			};
 		}
