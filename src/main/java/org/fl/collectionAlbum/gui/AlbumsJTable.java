@@ -24,6 +24,8 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui;
 
+import java.time.temporal.TemporalAccessor;
+import java.util.function.Function;
 import java.util.logging.Logger;
 
 import javax.swing.DefaultListSelectionModel;
@@ -40,9 +42,11 @@ import org.fl.collectionAlbum.gui.adapter.AlbumMouseAdapter;
 import org.fl.collectionAlbum.gui.renderer.AuteurListRenderer;
 import org.fl.collectionAlbum.gui.renderer.CollectionBooleanRenderer;
 import org.fl.collectionAlbum.gui.renderer.CollectionNumberRenderer;
+import org.fl.collectionAlbum.gui.renderer.DatesAlbumRenderer;
 import org.fl.collectionAlbum.gui.renderer.MediaFilesRenderer;
 import org.fl.collectionAlbum.gui.renderer.StringToHtmlRenderer;
 import org.fl.collectionAlbum.utils.CollectionUtils;
+import org.fl.collectionAlbum.utils.TemporalUtils;
 
 public class AlbumsJTable extends JTable implements MusicArtefactTable<Album> {
 
@@ -53,6 +57,12 @@ public class AlbumsJTable extends JTable implements MusicArtefactTable<Album> {
 	private static final RangementComparator RANGEMENT_COMPARATOR = new RangementComparator();
 	private static final AlbumMediaFilesStatusComparator ALBUM_MEDIA_FILES_STATUS_COMPARATOR = new AlbumMediaFilesStatusComparator();
 	private static final CollectionUtils.DoubleComparator DOUBLE_COMPARATOR = new CollectionUtils.DoubleComparator();
+	
+	private static final Function<TemporalAccessor, String> dateFormatterFunction = t -> TemporalUtils.formatDate((TemporalAccessor)t);
+	private static final Function<Album, TemporalAccessor> beginEnregistrementGetter = a -> a.getDebutEnregistrement();
+	private static final Function<Album, TemporalAccessor> finEnregistrementGetter = a -> a.getFinEnregistrement();
+	private static final Function<Album, TemporalAccessor> beginCompositionGetter = a -> a.getDebutComposition();
+	private static final Function<Album, TemporalAccessor> endCompositionGetter = a -> a.getFinComposition();
 	
 	public AlbumsJTable(AlbumsTableModel albumsTableModel, GenerationPane generationPane) {
 		super(albumsTableModel);
@@ -66,6 +76,10 @@ public class AlbumsJTable extends JTable implements MusicArtefactTable<Album> {
 		getColumnModel().getColumn(AlbumsTableModel.MEDIA_FILES_COL_IDX).setCellRenderer(new MediaFilesRenderer());
 		getColumnModel().getColumn(AlbumsTableModel.PROBLEM_COL_IDX).setCellRenderer(new CollectionBooleanRenderer());
 		getColumnModel().getColumn(AlbumsTableModel.POIDS_COL_IDX).setCellRenderer(new CollectionNumberRenderer());
+		getColumnModel().getColumn(AlbumsTableModel.ENREGISTREMENT_COL_IDX)
+			.setCellRenderer(new DatesAlbumRenderer(beginEnregistrementGetter, finEnregistrementGetter, dateFormatterFunction));
+		getColumnModel().getColumn(AlbumsTableModel.COMPOSITION_COL_IDX)
+			.setCellRenderer(new DatesAlbumRenderer(beginCompositionGetter, endCompositionGetter, dateFormatterFunction));
 		
 		getColumnModel().getColumn(AlbumsTableModel.TITRE_COL_IDX).setPreferredWidth(250);
 		getColumnModel().getColumn(AlbumsTableModel.AUTEUR_COL_IDX).setPreferredWidth(550);
@@ -74,6 +88,8 @@ public class AlbumsJTable extends JTable implements MusicArtefactTable<Album> {
 		getColumnModel().getColumn(AlbumsTableModel.PROBLEM_COL_IDX).setPreferredWidth(70);
 		getColumnModel().getColumn(AlbumsTableModel.DISCOGS_COL_IDX).setPreferredWidth(110);
 		getColumnModel().getColumn(AlbumsTableModel.POIDS_COL_IDX).setPreferredWidth(50);
+		getColumnModel().getColumn(AlbumsTableModel.ENREGISTREMENT_COL_IDX).setPreferredWidth(200);
+		getColumnModel().getColumn(AlbumsTableModel.COMPOSITION_COL_IDX).setPreferredWidth(200);
 		
 		// Allow single row selection only
 		ListSelectionModel listSelectionModel = new DefaultListSelectionModel();

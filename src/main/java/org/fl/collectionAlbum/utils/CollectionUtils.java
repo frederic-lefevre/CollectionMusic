@@ -65,6 +65,15 @@ public class CollectionUtils {
 				.toString();
 	}
 	
+	public static String getHtmlForList(List<String> items) {
+		
+		return getStringBuilderWithHtmlBegin()
+				.append("<ul>")
+				.append(items.stream().map(item -> "<li>" + item + "</li>").collect(Collectors.joining()))
+				.append("</ul></body></html>")
+				.toString();
+	}
+	
 	public static String getHtmlForArtistes(MusicArtefact musicArtefact) {
 		
 		StringBuilder buf = getStringBuilderWithHtmlBegin();
