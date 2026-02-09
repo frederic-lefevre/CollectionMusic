@@ -73,7 +73,7 @@ public class Artiste {
 		}
 
 		if (prenoms.isBlank()) {
-			albumLog.info("Prénoms d'artiste null pour le nom " + nom);
+			albumLog.fine(() -> "Prénoms d'artiste null pour le nom " + nom);
 		}
 
 		if ((prenoms == null) || (prenoms.isBlank())) {
