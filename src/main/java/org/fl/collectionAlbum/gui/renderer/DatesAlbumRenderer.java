@@ -26,11 +26,12 @@ package org.fl.collectionAlbum.gui.renderer;
 
 import java.awt.Font;
 import java.time.temporal.TemporalAccessor;
-import java.util.List;
 import java.util.function.Function;
 import java.util.logging.Logger;
 
 import javax.swing.SwingConstants;
+import javax.swing.border.AbstractBorder;
+import javax.swing.border.EmptyBorder;
 
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.utils.CollectionUtils;
@@ -43,6 +44,7 @@ public class DatesAlbumRenderer extends CustomTableCellRenderer {
 	private static final Logger mLog = Logger.getLogger(DatesAlbumRenderer.class.getName());
 	
 	private static final Font font = new Font("Dialog", Font.PLAIN, 12);
+	private static final AbstractBorder BORDER = new EmptyBorder(0, 10, 0, 0);
 	
 	private final Function<TemporalAccessor, String> dateFormatter;
 	private final Function<Album, TemporalAccessor> beginDateGetter;
@@ -57,18 +59,18 @@ public class DatesAlbumRenderer extends CustomTableCellRenderer {
 
 	@Override
 	public void valueProcessor(Object value) {
+		setBorder(BORDER);
 		if (value == null) {
 			// This may happen when rescanning the album collection
 			mLog.fine("Null value in Dates Album cell. Should be an Album");
 			setText("Valeur null");
 		} else if (value instanceof Album album) {
-			setText(CollectionUtils.getHtmlForList(
-					List.of(dateFormatter.compose(beginDateGetter).apply(album), 
-							dateFormatter.compose(endDateGetter).apply(album))));
-		}else {
+			setText(CollectionUtils.getHtmlForInterval(
+					dateFormatter.compose(beginDateGetter).apply(album), 
+					dateFormatter.compose(endDateGetter).apply(album)));
+		} else {
 			mLog.severe("Invalid value type in Dates Album cell. Should be Album but is " + value.getClass().getName());
-		}	
-		
+		}		
 	}
 
 }

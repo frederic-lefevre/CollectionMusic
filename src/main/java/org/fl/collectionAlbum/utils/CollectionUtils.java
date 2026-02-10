@@ -55,6 +55,7 @@ import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 public class CollectionUtils {
 	
 	private static final String VIRGULE = ", ";
+	private static final String TIRET = " - ";
 	
 	public static String getHtmlForString(String s) {
 		
@@ -65,12 +66,12 @@ public class CollectionUtils {
 				.toString();
 	}
 	
-	public static String getHtmlForList(List<String> items) {
+	public static String getHtmlForInterval(String v1, String v2) {
 		
 		return getStringBuilderWithHtmlBegin()
-				.append("<ul>")
-				.append(items.stream().map(item -> "<li>" + item + "</li>").collect(Collectors.joining()))
-				.append("</ul></body></html>")
+				.append("<p>[")
+				.append(v1).append(TIRET).append(v2)
+				.append("]</p></body></html>")
 				.toString();
 	}
 	

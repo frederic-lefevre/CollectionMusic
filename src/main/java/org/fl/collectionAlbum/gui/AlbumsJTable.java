@@ -88,8 +88,8 @@ public class AlbumsJTable extends JTable implements MusicArtefactTable<Album> {
 		getColumnModel().getColumn(AlbumsTableModel.PROBLEM_COL_IDX).setPreferredWidth(70);
 		getColumnModel().getColumn(AlbumsTableModel.DISCOGS_COL_IDX).setPreferredWidth(110);
 		getColumnModel().getColumn(AlbumsTableModel.POIDS_COL_IDX).setPreferredWidth(50);
-		getColumnModel().getColumn(AlbumsTableModel.ENREGISTREMENT_COL_IDX).setPreferredWidth(200);
-		getColumnModel().getColumn(AlbumsTableModel.COMPOSITION_COL_IDX).setPreferredWidth(200);
+		getColumnModel().getColumn(AlbumsTableModel.ENREGISTREMENT_COL_IDX).setPreferredWidth(260);
+		getColumnModel().getColumn(AlbumsTableModel.COMPOSITION_COL_IDX).setPreferredWidth(260);
 		
 		// Allow single row selection only
 		ListSelectionModel listSelectionModel = new DefaultListSelectionModel();
