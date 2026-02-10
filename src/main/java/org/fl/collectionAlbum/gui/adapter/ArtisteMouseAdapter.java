@@ -79,7 +79,7 @@ public class ArtisteMouseAdapter extends MouseAdapter {
 			
 			Artiste selectedArtiste = artistesJTable.getSelectedArtiste();
 			
-			JOptionPane.showMessageDialog(null, new ArtisteInformationPanel(selectedArtiste, generationPane), selectedArtiste.getNomComplet(), JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null, new ArtisteInformationPanel(selectedArtiste, generationPane), selectedArtiste.getNomComplet(), JOptionPane.PLAIN_MESSAGE);
 		}		
 	}
 }

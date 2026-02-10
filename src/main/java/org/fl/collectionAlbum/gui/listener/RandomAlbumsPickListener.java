@@ -69,6 +69,6 @@ public class RandomAlbumsPickListener implements java.awt.event.ActionListener {
 		JScrollPane albumsScrollTable = new JScrollPane(albumsJTable);
 		albumsScrollTable.setPreferredSize(new Dimension(1800,700));
 		
-		JOptionPane.showMessageDialog(null, albumsScrollTable, "Albums choisis aléatoirement", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(null, albumsScrollTable, "Albums choisis aléatoirement", JOptionPane.PLAIN_MESSAGE);
 	}
 }

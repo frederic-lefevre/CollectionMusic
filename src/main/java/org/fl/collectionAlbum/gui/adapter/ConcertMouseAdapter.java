@@ -48,7 +48,7 @@ public class ConcertMouseAdapter extends MusicArtefactMouseAdapter<Concert>  {
 	
 		@Override
 		public void actionPerformed(ActionEvent e) {			
-			JOptionPane.showMessageDialog(null, new DetailedConcertInfoPane(musicArtefactTable.getSelectedMusicArtefact()), TITLE, JOptionPane.INFORMATION_MESSAGE);			
+			JOptionPane.showMessageDialog(null, new DetailedConcertInfoPane(musicArtefactTable.getSelectedMusicArtefact()), TITLE, JOptionPane.PLAIN_MESSAGE);			
 		}	
 	}
 }
