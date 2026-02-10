@@ -36,6 +36,8 @@ import javax.swing.table.TableRowSorter;
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.RangementComparator;
 import org.fl.collectionAlbum.albums.Album;
+import org.fl.collectionAlbum.albums.AlbumCompositionComparator;
+import org.fl.collectionAlbum.albums.AlbumEnregistrementComparator;
 import org.fl.collectionAlbum.albums.AlbumMediaFilesStatusComparator;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.gui.adapter.AlbumMouseAdapter;
@@ -57,6 +59,9 @@ public class AlbumsJTable extends JTable implements MusicArtefactTable<Album> {
 	private static final RangementComparator RANGEMENT_COMPARATOR = new RangementComparator();
 	private static final AlbumMediaFilesStatusComparator ALBUM_MEDIA_FILES_STATUS_COMPARATOR = new AlbumMediaFilesStatusComparator();
 	private static final CollectionUtils.DoubleComparator DOUBLE_COMPARATOR = new CollectionUtils.DoubleComparator();
+	private static final AlbumEnregistrementComparator ENREGISTREMENT_COMPARATOR = new AlbumEnregistrementComparator();
+	private static final AlbumCompositionComparator COMPOSITION_COMPARATOR = new AlbumCompositionComparator();
+	
 	
 	private static final Function<TemporalAccessor, String> dateFormatterFunction = t -> TemporalUtils.formatDate((TemporalAccessor)t);
 	private static final Function<Album, TemporalAccessor> beginEnregistrementGetter = a -> a.getDebutEnregistrement();
@@ -105,6 +110,8 @@ public class AlbumsJTable extends JTable implements MusicArtefactTable<Album> {
 		sorter.setComparator(AlbumsTableModel.AUTEUR_COL_IDX, RANGEMENT_COMPARATOR);
 		sorter.setComparator(AlbumsTableModel.MEDIA_FILES_COL_IDX, ALBUM_MEDIA_FILES_STATUS_COMPARATOR);
 		sorter.setComparator(AlbumsTableModel.POIDS_COL_IDX, DOUBLE_COMPARATOR);
+		sorter.setComparator(AlbumsTableModel.ENREGISTREMENT_COL_IDX, ENREGISTREMENT_COMPARATOR);
+		sorter.setComparator(AlbumsTableModel.COMPOSITION_COL_IDX, COMPOSITION_COMPARATOR);
 		setRowSorter(sorter);
 	}
 
