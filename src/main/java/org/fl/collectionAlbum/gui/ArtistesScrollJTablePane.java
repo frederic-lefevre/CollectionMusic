@@ -29,23 +29,23 @@ import java.util.List;
 import javax.swing.JScrollPane;
 
 import org.fl.collectionAlbum.Control;
-import org.fl.collectionAlbum.albums.Album;
+import org.fl.collectionAlbum.artistes.Artiste;
 
-public class AlbumsScrollJTablePane extends JScrollPane {
+public class ArtistesScrollJTablePane extends JScrollPane {
 
 	private static final long serialVersionUID = 1L;
+
+	private final ArtistesTableModel artistesTableModel;
 	
-	private final AlbumsTableModel albumsTableModel;
-	 
-	public AlbumsScrollJTablePane(List<Album> albums, GenerationPane generationPane) {
+	public ArtistesScrollJTablePane(List<Artiste> artistes, GenerationPane generationPane) {
 		super();
 		
-		albumsTableModel = new AlbumsTableModel(albums);
-		setViewportView(new AlbumsJTable(albumsTableModel, generationPane));		
+		artistesTableModel = new ArtistesTableModel(artistes);
+		setViewportView(new ArtistesJTable(artistesTableModel, generationPane));
 		setPreferredSize(Control.getMainSubPaneDimension());
 	}
-
-	public AlbumsTableModel getAlbumsTableModel() {
-		return albumsTableModel;
+	
+	public ArtistesTableModel getArtistesTableModel() {
+		return artistesTableModel;
 	}
 }

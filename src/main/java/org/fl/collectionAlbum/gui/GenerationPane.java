@@ -64,11 +64,8 @@ public class GenerationPane extends JPanel {
 		// collection tab: Scroll pane to contain the collection table
 		AlbumsScrollJTablePane albumsScrollJTablePane = new AlbumsScrollJTablePane(collectionAlbumContainer.getCollectionAlbumsMusiques().getAlbums(), this);	
 		
-		ArtistesTableModel artistesTableModel = new ArtistesTableModel(collectionAlbumContainer.getCollectionArtistes().getArtistes());
-		ArtistesJTable artistesJTable = new ArtistesJTable(artistesTableModel, this);
-		
-		ArtistesTableModel artistesConcertsTableModel = new ArtistesTableModel(collectionAlbumContainer.getConcertsArtistes().getArtistes());
-		ArtistesJTable artistesConcertsJTable = new ArtistesJTable(artistesConcertsTableModel, this);
+		ArtistesScrollJTablePane artistesScrollJTablePane = new ArtistesScrollJTablePane(collectionAlbumContainer.getCollectionArtistes().getArtistes(), this);
+		ArtistesScrollJTablePane artistesConcertsScrollJTablePane = new ArtistesScrollJTablePane(collectionAlbumContainer.getConcertsArtistes().getArtistes(), this);
 		
 		// Control buttons panel
 		JPanel controlPanel = new JPanel();
@@ -95,6 +92,8 @@ public class GenerationPane extends JPanel {
 		StartReadCollection startReadCollection = new StartReadCollection(collectionAlbumContainer, readCollectionControl.getProgressInformationPanel(), activableElements);
 		startReadCollection.setCollectionProcWaiter(new CollectionProcessWaiter(activableElements));
 		startReadCollection.addTableModel(albumsScrollJTablePane.getAlbumsTableModel());
+		startReadCollection.addTableModel(artistesScrollJTablePane.getArtistesTableModel());
+		startReadCollection.addTableModel(artistesConcertsScrollJTablePane.getArtistesTableModel());
 		readCollectionControl.getStartButton().addActionListener(startReadCollection);
 
 		StartGenerationSite startGenerationSite = new StartGenerationSite(collectionAlbumContainer, generateSiteControl.getProgressInformationPanel(), activableElements);
@@ -106,13 +105,8 @@ public class GenerationPane extends JPanel {
 		// Tab pane for generation of collection
 		CollectionTabPanes collectionTabPanes = new CollectionTabPanes();
 		
-		collectionTabPanes.add(albumsScrollJTablePane, "Collection d'albums");
-		
-		// Artistes collection tab
-		JScrollPane artistesScrollTable = new JScrollPane(artistesJTable);
-		artistesScrollTable.setPreferredSize(new Dimension(1800,700));
-		
-		collectionTabPanes.add(artistesScrollTable, "Artistes des albums");
+		collectionTabPanes.add(albumsScrollJTablePane, "Collection d'albums");	
+		collectionTabPanes.add(artistesScrollJTablePane, "Artistes des albums");
 		
 		// Media files tabs
 		Stream.of(ContentNature.values()).forEachOrdered(contentNature -> {
@@ -153,10 +147,7 @@ public class GenerationPane extends JPanel {
 		collectionTabPanes.add(concertsScrollPane, "Concerts");
 		
 		// Artistes concert tab
-		JScrollPane artistesConcertsScrollTable = new JScrollPane(artistesConcertsJTable);
-		artistesScrollTable.setPreferredSize(new Dimension(1800,700));
-		
-		collectionTabPanes.add(artistesConcertsScrollTable, "Artistes des concerts");
+		collectionTabPanes.add(artistesConcertsScrollJTablePane, "Artistes des concerts");
 		
 		// Collection metrics history
 		CollectionMetricsTabbedPane collectionMetricsTabPanes = new CollectionMetricsTabbedPane(List.of(Control.getCollectionMetricsHsitory(), Control.getConcertMetricsHsitory()));
