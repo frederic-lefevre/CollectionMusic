@@ -104,10 +104,7 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 		infoRelease.setFont(monospaced);
 		infoRelease.setBorder(BorderFactory.createMatteBorder(1,1,1,1,Color.BLACK));
 		
-		JScrollPane discogsReleasesScrollPane = new JScrollPane(infoRelease);
-//		discogsReleasesScrollPane.setPreferredSize(new Dimension(RELEASE_INFO_PREFERRED_WIDTH,RELEASE_INFO_PREFERRED_HEIGHT));
-		
-		releasePane.add(discogsReleasesScrollPane);
+		releasePane.add(new JScrollPane(infoRelease));
 		
 		JButton showDiscogsRelease = new JButton("Montrer la release sur le site Discogs"); 
 		showDiscogsRelease.setFont(verdana);
