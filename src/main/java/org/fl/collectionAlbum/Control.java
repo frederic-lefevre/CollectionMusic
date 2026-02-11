@@ -92,6 +92,7 @@ public class Control {
 	private String discogsBaseUrlForRelease;
 	private String cssForGui;
 	private Dimension mainSubPaneDimension;
+	private Dimension infoWindowDimension;
    	
 	private Control() {
 	}
@@ -113,6 +114,7 @@ public class Control {
 			}
 			
 			mainSubPaneDimension = new Dimension(1820, 800);
+			infoWindowDimension = new Dimension(1750, 900);
 			
 			// Get the root directory for the album collection and concert
 			collectionDirectoryName = FilesUtils.uriStringToAbsolutePath(collectionProperties.getProperty("album.rootDir.name"));
@@ -224,6 +226,10 @@ public class Control {
 		return getInstance().mainSubPaneDimension;
 	}
 
+	public static Dimension getInfoWindowDimension() {
+		return getInstance().infoWindowDimension;
+	}
+	
 	public static RunningContext getMusicRunningContext() {
 		return getInstance().musicRunningContext; 
 	}

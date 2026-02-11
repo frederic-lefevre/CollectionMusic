@@ -26,7 +26,6 @@ package org.fl.collectionAlbum.gui;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.nio.file.Path;
 import java.util.Collection;
@@ -57,19 +56,13 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 	private static final Font verdana = new Font("Verdana", Font.BOLD, 14);
 	private static final Font monospaced = new Font("monospaced", Font.BOLD, 14);
 	
-	private static final int PREFERRED_WIDTH = 1700;
-	private static final int PREFERRED_HEIGHT = 900;
-	
 	private static final int MAX_COVER_WIDTH = 400;
 	private static final int MAX_COVER_HEIGHT = 400;
-	
-	private static final int RELEASE_INFO_PREFERRED_WIDTH = PREFERRED_WIDTH - 450;
-	private static final int RELEASE_INFO_PREFERRED_HEIGHT = PREFERRED_HEIGHT - 575;
 	
 	public DetailedAlbumAndDiscogsInfoPane(DiscogsAlbumRelease release) {
 		
 		super();
-		setPreferredSize(new Dimension(PREFERRED_WIDTH, PREFERRED_HEIGHT));
+		setPreferredSize(Control.getInfoWindowDimension());
 		JPanel infosPane = new JPanel();
 		infosPane.setLayout(new BoxLayout(infosPane, BoxLayout.Y_AXIS));
 		
@@ -81,7 +74,7 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 	public DetailedAlbumAndDiscogsInfoPane(Album album) {
 		
 		super();
-		setPreferredSize(new Dimension(PREFERRED_WIDTH, PREFERRED_HEIGHT));
+		setPreferredSize(Control.getInfoWindowDimension());
 		JPanel infosPane = new JPanel();
 		infosPane.setLayout(new BoxLayout(infosPane, BoxLayout.Y_AXIS));
 		
@@ -112,7 +105,7 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 		infoRelease.setBorder(BorderFactory.createMatteBorder(1,1,1,1,Color.BLACK));
 		
 		JScrollPane discogsReleasesScrollPane = new JScrollPane(infoRelease);
-		discogsReleasesScrollPane.setPreferredSize(new Dimension(RELEASE_INFO_PREFERRED_WIDTH,RELEASE_INFO_PREFERRED_HEIGHT));
+//		discogsReleasesScrollPane.setPreferredSize(new Dimension(RELEASE_INFO_PREFERRED_WIDTH,RELEASE_INFO_PREFERRED_HEIGHT));
 		
 		releasePane.add(discogsReleasesScrollPane);
 		

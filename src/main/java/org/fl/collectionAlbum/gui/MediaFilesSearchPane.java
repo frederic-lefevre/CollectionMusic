@@ -51,8 +51,7 @@ public class MediaFilesSearchPane extends JScrollPane {
 	
 	private static final ContentNature[] CONTENT_NATURES = ContentNature.values();
 	
-	private static final int PREFERRED_WIDTH = 1000;
-	private static final int PREFERRED_HEIGHT = 50*CONTENT_NATURES.length;
+	private static final Dimension PANEL_DIMENSION = new Dimension(1000, 50*CONTENT_NATURES.length);
 	
 	private Map<ContentNature, JLabel> mediaFilesStatuses;
 	private Map<ContentNature, JButton> mediaFilesSearches;
@@ -78,8 +77,7 @@ public class MediaFilesSearchPane extends JScrollPane {
 			mediaFilesValidationListeners.put(contentNature, new MediaFileValidationListener(album, contentNature, generationPane));
 		});
 		
-		
-		setPreferredSize(new Dimension(PREFERRED_WIDTH, PREFERRED_HEIGHT));
+		setPreferredSize(PANEL_DIMENSION);
 		
 		JPanel mediaFilesSearchPane = new JPanel();
 		mediaFilesSearchPane.setLayout(new BoxLayout(mediaFilesSearchPane, BoxLayout.Y_AXIS));

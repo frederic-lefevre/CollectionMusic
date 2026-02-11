@@ -54,9 +54,8 @@ public class AlbumsSearchPanel extends JPanel {
 
 	private static final Font buttonFont = new Font("Verdana", Font.BOLD, 14);
 	
-	private static final int TEXT_WIDTH = 400;
-	private static final int TEXT_LABEL_HEIGHT = 80;
-	private static final int TEXT_HEIGHT = 30;
+	private static final Dimension SEARCH_LABEL_DIMENSION = new Dimension(400, 80);
+	private static final Dimension SEARCH_TEXT_DIMENSION = new Dimension(400, 30);
 	
 	private final CollectionAlbumContainer collectionAlbumContainer;
 	private final DateRangeChooser dateEnregistrement;
@@ -92,9 +91,9 @@ public class AlbumsSearchPanel extends JPanel {
 		titreAlbumSearchPanel.setLayout(new BoxLayout(titreAlbumSearchPanel, BoxLayout.Y_AXIS));
 		
 		JLabel titreAlbumSearchLabel = new JLabel("Titre incluant les caractères");
-		titreAlbumSearchLabel.setPreferredSize(new Dimension(TEXT_WIDTH, TEXT_LABEL_HEIGHT));
+		titreAlbumSearchLabel.setPreferredSize(SEARCH_LABEL_DIMENSION);
 		titreAlbumSearchedText = new JTextField();
-		titreAlbumSearchedText.setPreferredSize(new Dimension(TEXT_WIDTH, TEXT_HEIGHT));
+		titreAlbumSearchedText.setPreferredSize(SEARCH_TEXT_DIMENSION);
 		
 		titreAlbumSearchPanel.add(titreAlbumSearchLabel);
 		titreAlbumSearchPanel.add(titreAlbumSearchedText);
@@ -105,9 +104,9 @@ public class AlbumsSearchPanel extends JPanel {
 		auteursAlbumSearchPanel.setLayout(new BoxLayout(auteursAlbumSearchPanel, BoxLayout.Y_AXIS));
 		
 		JLabel auteursAlbumSearchLabel = new JLabel("Auteurs incluant les caractères");
-		auteursAlbumSearchLabel.setPreferredSize(new Dimension(TEXT_WIDTH, TEXT_LABEL_HEIGHT));
+		auteursAlbumSearchLabel.setPreferredSize(SEARCH_LABEL_DIMENSION);
 		auteursAlbumSearchedText = new JTextField();
-		auteursAlbumSearchedText.setPreferredSize(new Dimension(TEXT_WIDTH, TEXT_HEIGHT));
+		auteursAlbumSearchedText.setPreferredSize(SEARCH_TEXT_DIMENSION);
 		
 		auteursAlbumSearchPanel.add(auteursAlbumSearchLabel);
 		auteursAlbumSearchPanel.add(auteursAlbumSearchedText);

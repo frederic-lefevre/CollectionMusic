@@ -56,9 +56,8 @@ public class GenerationPane extends JPanel {
 	private static final String sText = "Aucune collection lue";
 	private static final String s1Text = "Aucun site généré";
 
-	private static final int CONTROL_PANEL_HEIGHT = 224;
-	private static final int START_CONTROL_PANEL_WIDTH = 680;
-	private static final int UTILS_PANEL_WIDTH = 300;
+	private static final Dimension CONTROL_PANEL_DIMENSION = new Dimension(680, 224);
+	private static final Dimension UTILS_PANEL_DIMENSION = new Dimension(300, 224);
 	
 	private final StartControl readCollectionControl;
 	private final StartControl generateSiteControl;
@@ -80,18 +79,18 @@ public class GenerationPane extends JPanel {
 		
 		readCollectionControl = new StartControl(rText, iText, sText, () -> true);
 		JPanel readCollectionControlPanel = readCollectionControl.getProcessControlPanel();
-		readCollectionControlPanel.setPreferredSize(new Dimension(START_CONTROL_PANEL_WIDTH, CONTROL_PANEL_HEIGHT));
+		readCollectionControlPanel.setPreferredSize(CONTROL_PANEL_DIMENSION);
 		controlPanel.add(readCollectionControlPanel);
 
 		UtilsPane utilsPane = new UtilsPane(this, collectionAlbumContainer);
-		utilsPane.setPreferredSize(new Dimension(UTILS_PANEL_WIDTH, CONTROL_PANEL_HEIGHT));
+		utilsPane.setPreferredSize(UTILS_PANEL_DIMENSION);
 		utilsPane.deactivate();
 		controlPanel.add(utilsPane);
 		
 		generateSiteControl = new StartControl(gText, iText, s1Text, StartGenerationSite.activationPredicate);
 		generateSiteControl.deactivate();
 		JPanel generateSiteControlPanel = generateSiteControl.getProcessControlPanel();
-		generateSiteControlPanel.setPreferredSize(new Dimension(START_CONTROL_PANEL_WIDTH, CONTROL_PANEL_HEIGHT));
+		generateSiteControlPanel.setPreferredSize(CONTROL_PANEL_DIMENSION);
 		controlPanel.add(generateSiteControlPanel);
 
 		List<ActivableElement> activableElements = List.of(readCollectionControl, utilsPane, generateSiteControl);
