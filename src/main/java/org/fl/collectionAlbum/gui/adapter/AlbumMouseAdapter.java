@@ -29,9 +29,9 @@ import java.util.stream.Stream;
 
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.gui.GenerationPane;
-import org.fl.collectionAlbum.gui.MusicArtefactTable;
 import org.fl.collectionAlbum.gui.listener.AlbumCustomActionListener;
 import org.fl.collectionAlbum.gui.listener.AlbumCustomActionListener.CustomAlbumAction;
+import org.fl.collectionAlbum.gui.table.MusicArtefactTable;
 import org.fl.collectionAlbum.osAction.OsAction;
 
 public class AlbumMouseAdapter extends MusicArtefactMouseAdapter<Album> {

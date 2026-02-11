@@ -34,8 +34,8 @@ import javax.swing.JPopupMenu;
 
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.gui.ArtisteInformationPanel;
-import org.fl.collectionAlbum.gui.ArtistesJTable;
 import org.fl.collectionAlbum.gui.GenerationPane;
+import org.fl.collectionAlbum.gui.table.ArtistesJTable;
 
 public class ArtisteMouseAdapter extends MouseAdapter {
 

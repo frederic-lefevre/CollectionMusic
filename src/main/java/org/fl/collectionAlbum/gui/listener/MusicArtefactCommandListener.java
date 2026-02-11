@@ -27,7 +27,7 @@ package org.fl.collectionAlbum.gui.listener;
 import java.awt.event.ActionEvent;
 
 import org.fl.collectionAlbum.MusicArtefact;
-import org.fl.collectionAlbum.gui.MusicArtefactTable;
+import org.fl.collectionAlbum.gui.table.MusicArtefactTable;
 import org.fl.collectionAlbum.osAction.OsAction;
 
 public class MusicArtefactCommandListener<T extends MusicArtefact> implements java.awt.event.ActionListener {

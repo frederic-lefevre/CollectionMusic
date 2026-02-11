@@ -33,8 +33,8 @@ import javax.swing.JPopupMenu;
 
 import org.fl.collectionAlbum.MusicArtefact;
 import org.fl.collectionAlbum.gui.CollectionMenuItems;
-import org.fl.collectionAlbum.gui.MusicArtefactTable;
 import org.fl.collectionAlbum.gui.listener.MusicArtefactCommandListener;
+import org.fl.collectionAlbum.gui.table.MusicArtefactTable;
 import org.fl.collectionAlbum.osAction.OsAction;
 
 public class MusicArtefactMouseAdapter<T extends MusicArtefact> extends MouseAdapter {

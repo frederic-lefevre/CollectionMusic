@@ -49,7 +49,7 @@ import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.gui.DetailedAlbumAndDiscogsInfoPane;
 import org.fl.collectionAlbum.gui.GenerationPane;
 import org.fl.collectionAlbum.gui.MediaFilesSearchPane;
-import org.fl.collectionAlbum.gui.MusicArtefactTable;
+import org.fl.collectionAlbum.gui.table.MusicArtefactTable;
 
 public class AlbumCustomActionListener implements java.awt.event.ActionListener {
 

@@ -37,6 +37,14 @@ import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory;
 import org.fl.collectionAlbum.format.ContentNature;
+import org.fl.collectionAlbum.gui.table.AlbumsScrollJTablePane;
+import org.fl.collectionAlbum.gui.table.ArtistesScrollJTablePane;
+import org.fl.collectionAlbum.gui.table.ConcertTableModel;
+import org.fl.collectionAlbum.gui.table.ConcertsJTable;
+import org.fl.collectionAlbum.gui.table.DiscogsReleaseJTable;
+import org.fl.collectionAlbum.gui.table.DisocgsReleaseTableModel;
+import org.fl.collectionAlbum.gui.table.MediaFilesJTable;
+import org.fl.collectionAlbum.gui.table.MediaFilesTableModel;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 
 public class GenerationPane extends JPanel {

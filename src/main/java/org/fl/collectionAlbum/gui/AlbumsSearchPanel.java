@@ -44,6 +44,8 @@ import javax.swing.border.EtchedBorder;
 import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.albums.ListeAlbum;
+import org.fl.collectionAlbum.gui.table.AlbumsScrollJTablePane;
+import org.fl.collectionAlbum.gui.table.AlbumsTableModel;
 import org.fl.collectionAlbum.utils.TemporalUtils;
 
 public class AlbumsSearchPanel extends JPanel {

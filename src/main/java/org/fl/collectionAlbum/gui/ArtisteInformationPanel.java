@@ -38,6 +38,9 @@ import javax.swing.border.EmptyBorder;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.concerts.Concert;
+import org.fl.collectionAlbum.gui.table.AlbumsScrollJTablePane;
+import org.fl.collectionAlbum.gui.table.ConcertTableModel;
+import org.fl.collectionAlbum.gui.table.ConcertsJTable;
 
 public class ArtisteInformationPanel extends JPanel {
 

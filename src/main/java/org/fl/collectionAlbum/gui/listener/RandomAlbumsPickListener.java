@@ -31,9 +31,9 @@ import javax.swing.JOptionPane;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.albums.Album;
-import org.fl.collectionAlbum.gui.AlbumsScrollJTablePane;
 import org.fl.collectionAlbum.gui.GenerationPane;
 import org.fl.collectionAlbum.gui.UtilsPane;
+import org.fl.collectionAlbum.gui.table.AlbumsScrollJTablePane;
 
 public class RandomAlbumsPickListener implements java.awt.event.ActionListener {
 

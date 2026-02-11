@@ -47,8 +47,8 @@ import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.AlbumMatchResult;
 import org.fl.collectionAlbum.disocgs.FormatCompatibilityResult;
 import org.fl.collectionAlbum.gui.DetailedAlbumAndDiscogsInfoPane;
-import org.fl.collectionAlbum.gui.DiscogsReleaseJTable;
 import org.fl.collectionAlbum.gui.GenerationPane;
+import org.fl.collectionAlbum.gui.table.DiscogsReleaseJTable;
 
 public class DiscogsReleaseCustomActionListener implements java.awt.event.ActionListener {
 

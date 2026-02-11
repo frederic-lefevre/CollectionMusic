@@ -31,7 +31,7 @@ import javax.swing.JOptionPane;
 
 import org.fl.collectionAlbum.concerts.Concert;
 import org.fl.collectionAlbum.gui.DetailedConcertInfoPane;
-import org.fl.collectionAlbum.gui.MusicArtefactTable;
+import org.fl.collectionAlbum.gui.table.MusicArtefactTable;
 import org.fl.collectionAlbum.osAction.OsAction;
 
 public class ConcertMouseAdapter extends MusicArtefactMouseAdapter<Concert>  {

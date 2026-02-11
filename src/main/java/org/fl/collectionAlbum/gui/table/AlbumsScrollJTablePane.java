@@ -22,30 +22,31 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.gui;
+package org.fl.collectionAlbum.gui.table;
 
 import java.util.List;
 
 import javax.swing.JScrollPane;
 
 import org.fl.collectionAlbum.Control;
-import org.fl.collectionAlbum.artistes.Artiste;
+import org.fl.collectionAlbum.albums.Album;
+import org.fl.collectionAlbum.gui.GenerationPane;
 
-public class ArtistesScrollJTablePane extends JScrollPane {
+public class AlbumsScrollJTablePane extends JScrollPane {
 
 	private static final long serialVersionUID = 1L;
-
-	private final ArtistesTableModel artistesTableModel;
 	
-	public ArtistesScrollJTablePane(List<Artiste> artistes, GenerationPane generationPane) {
+	private final AlbumsTableModel albumsTableModel;
+	 
+	public AlbumsScrollJTablePane(List<Album> albums, GenerationPane generationPane) {
 		super();
 		
-		artistesTableModel = new ArtistesTableModel(artistes);
-		setViewportView(new ArtistesJTable(artistesTableModel, generationPane));
+		albumsTableModel = new AlbumsTableModel(albums);
+		setViewportView(new AlbumsJTable(albumsTableModel, generationPane));		
 		setPreferredSize(Control.getMainSubPaneDimension());
 	}
-	
-	public ArtistesTableModel getArtistesTableModel() {
-		return artistesTableModel;
+
+	public AlbumsTableModel getAlbumsTableModel() {
+		return albumsTableModel;
 	}
 }

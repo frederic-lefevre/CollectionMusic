@@ -34,6 +34,7 @@ import java.util.Map;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
+import org.fl.collectionAlbum.gui.table.MetricsHistoryTableModel;
 import org.fl.collectionAlbum.metrics.MetricsHistory;
 import org.fl.collectionAlbum.metrics.MetricsHistory.MetricAttributes;
 
