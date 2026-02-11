@@ -38,7 +38,6 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.EtchedBorder;
 
@@ -130,13 +129,10 @@ public class AlbumsSearchPanel extends JPanel {
 		add(searchCriteriaPanel);
 		
 		// Table to display the result albums
-		albumsTableModel = new AlbumsTableModel(searchResultAlbums);
-		AlbumsJTable albumsJTable = new AlbumsJTable(albumsTableModel, generationPane);
-				
-		JScrollPane albumsScrollTable = new JScrollPane(albumsJTable);
-		albumsScrollTable.setPreferredSize(new Dimension(1800, 800));
+		AlbumsScrollJTablePane albumsScrollJTablePane = new AlbumsScrollJTablePane(searchResultAlbums, generationPane);
+		albumsTableModel = albumsScrollJTablePane.getAlbumsTableModel();
 		
-		add(albumsScrollTable);
+		add(albumsScrollJTablePane);
 		
 		albumsSearchButton.addActionListener(new AlbumSearchListener());
 		titreAlbumSearchedText.addActionListener(new AlbumTextFieldListener());

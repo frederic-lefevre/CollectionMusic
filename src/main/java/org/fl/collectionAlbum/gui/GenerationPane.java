@@ -61,8 +61,8 @@ public class GenerationPane extends JPanel {
 		super();
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-		AlbumsTableModel albumsTableModel = new AlbumsTableModel(collectionAlbumContainer.getCollectionAlbumsMusiques().getAlbums());		
-		AlbumsJTable albumsJTable = new AlbumsJTable(albumsTableModel, this);
+		// collection tab: Scroll pane to contain the collection table
+		AlbumsScrollJTablePane albumsScrollJTablePane = new AlbumsScrollJTablePane(collectionAlbumContainer.getCollectionAlbumsMusiques().getAlbums(), this);	
 		
 		ArtistesTableModel artistesTableModel = new ArtistesTableModel(collectionAlbumContainer.getCollectionArtistes().getArtistes());
 		ArtistesJTable artistesJTable = new ArtistesJTable(artistesTableModel, this);
@@ -94,7 +94,7 @@ public class GenerationPane extends JPanel {
 
 		StartReadCollection startReadCollection = new StartReadCollection(collectionAlbumContainer, readCollectionControl.getProgressInformationPanel(), activableElements);
 		startReadCollection.setCollectionProcWaiter(new CollectionProcessWaiter(activableElements));
-		startReadCollection.addTableModel(albumsTableModel);
+		startReadCollection.addTableModel(albumsScrollJTablePane.getAlbumsTableModel());
 		readCollectionControl.getStartButton().addActionListener(startReadCollection);
 
 		StartGenerationSite startGenerationSite = new StartGenerationSite(collectionAlbumContainer, generateSiteControl.getProgressInformationPanel(), activableElements);
@@ -106,12 +106,7 @@ public class GenerationPane extends JPanel {
 		// Tab pane for generation of collection
 		CollectionTabPanes collectionTabPanes = new CollectionTabPanes();
 		
-		// collection tab
-		// Scroll pane to contain the collection table
-		JScrollPane albumsScrollTable = new JScrollPane(albumsJTable);
-		albumsScrollTable.setPreferredSize(new Dimension(1800,700));
-		
-		collectionTabPanes.add(albumsScrollTable, "Collection d'albums");
+		collectionTabPanes.add(albumsScrollJTablePane, "Collection d'albums");
 		
 		// Artistes collection tab
 		JScrollPane artistesScrollTable = new JScrollPane(artistesJTable);
