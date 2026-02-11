@@ -24,18 +24,16 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui;
 
-import java.awt.Dimension;
 import java.util.List;
 
 import javax.swing.JScrollPane;
 
+import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
 
 public class AlbumsScrollJTablePane extends JScrollPane {
 
 	private static final long serialVersionUID = 1L;
-	
-	private static final Dimension PANE_DIMENSION = new Dimension(1820, 800);
 	
 	private final AlbumsTableModel albumsTableModel;
 	 
@@ -46,7 +44,7 @@ public class AlbumsScrollJTablePane extends JScrollPane {
 		AlbumsJTable albumsJTable = new AlbumsJTable(albumsTableModel, generationPane);
 		setViewportView(albumsJTable);
 		
-		setPreferredSize(PANE_DIMENSION);
+		setPreferredSize(Control.getMainSubPaneDimension());
 	}
 
 	public AlbumsTableModel getAlbumsTableModel() {

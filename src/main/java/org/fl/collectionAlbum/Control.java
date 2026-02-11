@@ -24,6 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum;
 
+import java.awt.Dimension;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -90,6 +91,7 @@ public class Control {
 	private Path discogsCollectionCsvExportPath;
 	private String discogsBaseUrlForRelease;
 	private String cssForGui;
+	private Dimension mainSubPaneDimension;
    	
 	private Control() {
 	}
@@ -109,6 +111,8 @@ public class Control {
 				charset = Charset.defaultCharset();
 				albumLog.severe("Unsupported charset: " + cs + ". Default JVM charset assumed: " + charset);				
 			}
+			
+			mainSubPaneDimension = new Dimension(1820, 800);
 			
 			// Get the root directory for the album collection and concert
 			collectionDirectoryName = FilesUtils.uriStringToAbsolutePath(collectionProperties.getProperty("album.rootDir.name"));
@@ -216,6 +220,10 @@ public class Control {
 		return getInstance().charset; 
 	}
 	
+	public static Dimension getMainSubPaneDimension() {
+		return getInstance().mainSubPaneDimension;
+	}
+
 	public static RunningContext getMusicRunningContext() {
 		return getInstance().musicRunningContext; 
 	}
