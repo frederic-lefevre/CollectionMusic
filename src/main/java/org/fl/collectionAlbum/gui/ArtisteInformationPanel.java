@@ -24,7 +24,6 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui;
 
-import java.awt.Dimension;
 import java.awt.Font;
 import java.util.List;
 
@@ -39,8 +38,7 @@ import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.concerts.Concert;
 import org.fl.collectionAlbum.gui.table.AlbumsScrollJTablePane;
-import org.fl.collectionAlbum.gui.table.ConcertTableModel;
-import org.fl.collectionAlbum.gui.table.ConcertsJTable;
+import org.fl.collectionAlbum.gui.table.ConcertsScrollJTablePane;
 
 public class ArtisteInformationPanel extends JPanel {
 
@@ -99,9 +97,7 @@ public class ArtisteInformationPanel extends JPanel {
 		if (concerts.isEmpty()) {
 			return null;
 		} else {			
-			JScrollPane concertScrollTable = new JScrollPane(new ConcertsJTable(new ConcertTableModel(concerts)));
-			concertScrollTable.setPreferredSize(new Dimension(1800, 800));
-			return concertScrollTable;
+			return new ConcertsScrollJTablePane(concerts);
 		}
 	}
 }

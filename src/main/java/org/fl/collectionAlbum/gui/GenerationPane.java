@@ -39,8 +39,7 @@ import org.fl.collectionAlbum.disocgs.DiscogsInventory;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.gui.table.AlbumsScrollJTablePane;
 import org.fl.collectionAlbum.gui.table.ArtistesScrollJTablePane;
-import org.fl.collectionAlbum.gui.table.ConcertTableModel;
-import org.fl.collectionAlbum.gui.table.ConcertsJTable;
+import org.fl.collectionAlbum.gui.table.ConcertsScrollJTablePane;
 import org.fl.collectionAlbum.gui.table.DiscogsReleaseJTable;
 import org.fl.collectionAlbum.gui.table.DisocgsReleaseTableModel;
 import org.fl.collectionAlbum.gui.table.MediaFilesJTable;
@@ -144,15 +143,9 @@ public class GenerationPane extends JPanel {
 		collectionTabPanes.add(discogsReleasesScrollPane, "Discogs releases");
 		
 		// Concert pane
-		ConcertTableModel concertTableModel = new ConcertTableModel(collectionAlbumContainer.getConcerts().getConcerts());
-		startReadCollection.addTableModel(concertTableModel);
-		
-		ConcertsJTable concertsJTable = new ConcertsJTable(concertTableModel);
-		
-		JScrollPane concertsScrollPane = new JScrollPane(concertsJTable);
-		concertsScrollPane.setPreferredSize(new Dimension(1800,700));
-		
-		collectionTabPanes.add(concertsScrollPane, "Concerts");
+		ConcertsScrollJTablePane concertsScrollJTablePane = new ConcertsScrollJTablePane(collectionAlbumContainer.getConcerts().getConcerts());
+		startReadCollection.addTableModel(concertsScrollJTablePane.getConcertTableModel());		
+		collectionTabPanes.add(concertsScrollJTablePane, "Concerts");
 		
 		// Artistes concert tab
 		collectionTabPanes.add(artistesConcertsScrollJTablePane, "Artistes des concerts");
