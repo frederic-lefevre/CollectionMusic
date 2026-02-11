@@ -125,7 +125,7 @@ public class GenerationPane extends JPanel {
 			
 			// Scroll pane to contain the media path table
 			JScrollPane mediaFilesScrollTable = new JScrollPane(mediaFilesJTable);
-			mediaFilesScrollTable.setPreferredSize(new Dimension(1800,700));
+			mediaFilesScrollTable.setPreferredSize(Control.getMainSubPaneDimension());
 			
 			collectionTabPanes.add(mediaFilesScrollTable, "Chemins des fichiers " + contentNature.getNom());
 		});
@@ -138,7 +138,7 @@ public class GenerationPane extends JPanel {
 		
 		// Scroll pane to contain the discogs releases pane
 		JScrollPane discogsReleasesScrollPane = new JScrollPane(discogsReleaseJTable);
-		discogsReleasesScrollPane.setPreferredSize(new Dimension(1800,700));
+		discogsReleasesScrollPane.setPreferredSize(Control.getMainSubPaneDimension());
 
 		collectionTabPanes.add(discogsReleasesScrollPane, "Discogs releases");
 		
