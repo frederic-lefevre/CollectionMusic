@@ -33,6 +33,7 @@ import org.fl.collectionAlbum.MusicArtefact;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.gui.ArtisteInformationPanel;
 import org.fl.collectionAlbum.gui.GenerationPane;
+import org.fl.collectionAlbum.gui.table.ArtistesScrollJTablePane;
 import org.fl.collectionAlbum.gui.table.MusicArtefactTable;
 
 public class MusicArtefactArtistListener<T extends MusicArtefact> implements java.awt.event.ActionListener {
@@ -56,6 +57,8 @@ public class MusicArtefactArtistListener<T extends MusicArtefact> implements jav
 				if (artistes.size() == 1) {
 					Artiste selectedArtiste = artistes.get(0);
 					JOptionPane.showMessageDialog(null, new ArtisteInformationPanel(selectedArtiste, generationPane), selectedArtiste.getNomComplet(), JOptionPane.PLAIN_MESSAGE);
+				} else {
+					JOptionPane.showMessageDialog(null, new ArtistesScrollJTablePane(artistes, generationPane), "Artistes", JOptionPane.PLAIN_MESSAGE);
 				}
 			}
 		}
