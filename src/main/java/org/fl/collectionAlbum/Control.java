@@ -172,7 +172,7 @@ public class Control {
 				
 			mapOfOsCommandsAndOptions = getMapOfOsCommandsAndOptions("osCommandAndOptions.");
 			
-			// OsAaction identiques qur Album et Concert
+			// OsAaction identiques sur Album et Concert
 			osActionsOnAlbum = getOsActionsOnAlbum("album.command.");
 			osActionsOnConcert = getOsActionsOnConcert("album.command.");
 			
