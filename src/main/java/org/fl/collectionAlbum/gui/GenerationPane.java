@@ -142,7 +142,7 @@ public class GenerationPane extends JPanel {
 		collectionTabPanes.add(discogsReleasesScrollPane, "Discogs releases");
 		
 		// Concert pane
-		ConcertsScrollJTablePane concertsScrollJTablePane = new ConcertsScrollJTablePane(collectionAlbumContainer.getConcerts().getConcerts());
+		ConcertsScrollJTablePane concertsScrollJTablePane = new ConcertsScrollJTablePane(collectionAlbumContainer.getConcerts().getConcerts(), this);
 		startReadCollection.addTableModel(concertsScrollJTablePane.getConcertTableModel());		
 		collectionTabPanes.add(concertsScrollJTablePane, "Concerts");
 		

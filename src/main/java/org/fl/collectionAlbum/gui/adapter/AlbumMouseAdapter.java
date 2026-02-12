@@ -38,7 +38,7 @@ public class AlbumMouseAdapter extends MusicArtefactMouseAdapter<Album> {
 	
 	public AlbumMouseAdapter(MusicArtefactTable<Album> albumsTable, List<OsAction<Album>>  osActions, GenerationPane generationPane) {
 		
-		super(albumsTable, osActions);
+		super(albumsTable, osActions, generationPane);
 
 		Stream.of(CustomAlbumAction.values()).forEachOrdered(customAction -> 
 			musicArtefactMenuItems.addMenuItem(

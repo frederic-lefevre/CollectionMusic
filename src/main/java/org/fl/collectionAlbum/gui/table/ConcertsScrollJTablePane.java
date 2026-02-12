@@ -30,6 +30,7 @@ import javax.swing.JScrollPane;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.concerts.Concert;
+import org.fl.collectionAlbum.gui.GenerationPane;
 
 public class ConcertsScrollJTablePane extends JScrollPane {
 
@@ -37,11 +38,11 @@ public class ConcertsScrollJTablePane extends JScrollPane {
 	
 	private final ConcertTableModel concertTableModel;
 	
-	public ConcertsScrollJTablePane(List<Concert> concerts) {
+	public ConcertsScrollJTablePane(List<Concert> concerts, GenerationPane generationPane) {
 		super();
 		
 		this.concertTableModel = new ConcertTableModel(concerts);
-		setViewportView(new ConcertsJTable(concertTableModel));
+		setViewportView(new ConcertsJTable(concertTableModel, generationPane));
 		setPreferredSize(Control.getMainSubPaneDimension());
 	}
 

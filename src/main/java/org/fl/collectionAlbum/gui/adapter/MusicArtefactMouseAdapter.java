@@ -33,6 +33,7 @@ import javax.swing.JPopupMenu;
 
 import org.fl.collectionAlbum.MusicArtefact;
 import org.fl.collectionAlbum.gui.CollectionMenuItems;
+import org.fl.collectionAlbum.gui.GenerationPane;
 import org.fl.collectionAlbum.gui.listener.MusicArtefactArtistListener;
 import org.fl.collectionAlbum.gui.listener.MusicArtefactCommandListener;
 import org.fl.collectionAlbum.gui.table.MusicArtefactTable;
@@ -44,7 +45,7 @@ public class MusicArtefactMouseAdapter<T extends MusicArtefact> extends MouseAda
 	protected final JPopupMenu localJPopupMenu;
 	protected final MusicArtefactTable<T> musicArtefactTable;
 	
-	public MusicArtefactMouseAdapter(MusicArtefactTable<T> musicArtefactTable, List<OsAction<T>> osActions) {
+	public MusicArtefactMouseAdapter(MusicArtefactTable<T> musicArtefactTable, List<OsAction<T>> osActions, GenerationPane generationPane) {
 
 		super();
 
@@ -52,7 +53,9 @@ public class MusicArtefactMouseAdapter<T extends MusicArtefact> extends MouseAda
 		musicArtefactMenuItems = new CollectionMenuItems<>();
 		this.musicArtefactTable = musicArtefactTable;
 
-		musicArtefactMenuItems.addMenuItem("Informations sur les artistes", new MusicArtefactArtistListener<>(musicArtefactTable, null), a -> !a.getAllArtists().isEmpty(), localJPopupMenu);
+		musicArtefactMenuItems.addMenuItem("Informations sur les artistes", 
+				new MusicArtefactArtistListener<>(musicArtefactTable, generationPane), a -> !a.getAllArtists().isEmpty(), localJPopupMenu);
+		
 		osActions.forEach(osAction -> musicArtefactMenuItems.addMenuItem(osAction.getActionTitle(),
 				new MusicArtefactCommandListener<T>(musicArtefactTable, osAction),
 				osAction.getCommandParameter().getActionValidityPredicate(), localJPopupMenu));

@@ -69,7 +69,7 @@ public class ArtisteInformationPanel extends JPanel {
 		add(nomEtDatePanel);
 		
 		JScrollPane albumsScrollTable = getAlbumsScrollPane(artiste.getAlbums().getAlbums(), generationPane);
-		JScrollPane concertScrollTable = getConcertsScrollPane(artiste.getConcerts().getConcerts());
+		JScrollPane concertScrollTable = getConcertsScrollPane(artiste.getConcerts().getConcerts(), generationPane);
 		if (concertScrollTable == null) {
 			add(albumsScrollTable);
 		} else if (albumsScrollTable == null) {
@@ -92,12 +92,12 @@ public class ArtisteInformationPanel extends JPanel {
 		}
 	}
 	
-	private JScrollPane getConcertsScrollPane(List<Concert> concerts) {
+	private JScrollPane getConcertsScrollPane(List<Concert> concerts, GenerationPane generationPane) {
 		
 		if (concerts.isEmpty()) {
 			return null;
 		} else {			
-			return new ConcertsScrollJTablePane(concerts);
+			return new ConcertsScrollJTablePane(concerts, generationPane);
 		}
 	}
 }
