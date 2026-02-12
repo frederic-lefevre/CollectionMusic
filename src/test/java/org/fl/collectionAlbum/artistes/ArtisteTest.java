@@ -268,6 +268,12 @@ class ArtisteTest {
 			assertThat(artiste.getDates()).isEmpty();
 		});
 		
+		assertThat(album.getAllArtists()).hasSize(5);
+		assertThat(album.getAllArtists())
+			.containsAll(album.getAuteurs())
+			.containsAll(album.getInterpretes())
+			.containsAll(album.getChefsOrchestre())
+			.containsAll(album.getEnsembles());
 	}
 	
 	private static final String albumStr2 = """
