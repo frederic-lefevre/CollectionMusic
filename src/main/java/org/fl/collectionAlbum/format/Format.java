@@ -222,7 +222,7 @@ public class Format {
     	
     }
     
-	private double getNb(MediaSupports support) {
+	public double getNb(MediaSupports support) {
 		Double nb = tableFormat.get(support) ;
 		if (nb == null) {
 			return 0 ;

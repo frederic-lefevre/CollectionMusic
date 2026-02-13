@@ -68,6 +68,8 @@ public class ArtisteInformationPanel extends JPanel {
 		
 		add(nomEtDatePanel);
 		
+		add(new CollectionFormatPane(artiste.getAlbumsFormat()));
+		
 		JScrollPane albumsScrollTable = getAlbumsScrollPane(artiste.getAlbums().getAlbums(), generationPane);
 		JScrollPane concertScrollTable = getConcertsScrollPane(artiste.getConcerts().getConcerts(), generationPane);
 		if (concertScrollTable == null) {
