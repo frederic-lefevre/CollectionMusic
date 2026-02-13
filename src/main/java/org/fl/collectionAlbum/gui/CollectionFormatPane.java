@@ -24,6 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -34,6 +35,7 @@ import java.util.Set;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 import org.fl.collectionAlbum.format.Format;
 import org.fl.collectionAlbum.format.MediaSupportCategories;
@@ -64,6 +66,8 @@ public class CollectionFormatPane extends JPanel {
 		GridBagLayout layout = new GridBagLayout();
 		
 		setLayout(layout);
+		setBackground(Color.WHITE);
+		setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
 		
 		MediaSupports[] mediaSupports = MediaSupports.values();
 		for (int colIdx = 0; colIdx < mediaSupports.length; colIdx++) {
@@ -74,22 +78,20 @@ public class CollectionFormatPane extends JPanel {
 			constraints.gridheight = 1;
 			constraints.gridwidth = 1;
 			
-			JLabel lbl = new JLabel(mediaSupports[colIdx].toString());
+			JLabel lbl = new JLabel(mediaSupports[colIdx].toString(), SwingConstants.CENTER);
 			lbl.setPreferredSize(new Dimension(120,30));
 			lbl.setBorder(BorderFactory.createLineBorder(getForeground()));
+			lbl.setOpaque(true);
+			lbl.setBackground(Color.LIGHT_GRAY);
 			layout.setConstraints(lbl, constraints);
 			add(lbl);
+
+			constraints.gridy = 1;
 			
-			GridBagConstraints constraints2 = new GridBagConstraints();
-			constraints2.gridx = colIdx;
-			constraints2.gridy = 1;
-			constraints2.gridheight = 1;
-			constraints2.gridwidth = 1;
-			
-			JLabel lbl2 = new JLabel(Format.poidsToString(format.getNb(mediaSupports[colIdx])));
+			JLabel lbl2 = new JLabel(Format.poidsToString(format.getNb(mediaSupports[colIdx])), SwingConstants.CENTER);
 			lbl2.setPreferredSize(new Dimension(120,30));
 			lbl2.setBorder(BorderFactory.createLineBorder(getForeground()));
-			layout.setConstraints(lbl2, constraints2);
+			layout.setConstraints(lbl2, constraints);
 			add(lbl2);
 		}
 		
@@ -106,22 +108,20 @@ public class CollectionFormatPane extends JPanel {
 			constraints.gridheight = 1;
 			constraints.gridwidth = numberMediaSupport;
 			
-			JLabel lbl = new JLabel(mediaSupportCategory.toString());
+			JLabel lbl = new JLabel(mediaSupportCategory.toString(), SwingConstants.CENTER);
 			lbl.setPreferredSize(new Dimension(120*numberMediaSupport,30));
 			lbl.setBorder(BorderFactory.createLineBorder(getForeground()));
+			lbl.setOpaque(true);
+			lbl.setBackground(Color.LIGHT_GRAY);
 			layout.setConstraints(lbl, constraints);
 			add(lbl);
+
+			constraints.gridy =3;
 			
-			GridBagConstraints constraints2 = new GridBagConstraints();
-			constraints2.gridx = colIdx;
-			constraints2.gridy =3;
-			constraints2.gridheight = 1;
-			constraints2.gridwidth =numberMediaSupport;
-			
-			JLabel lbl2 = new JLabel(Format.poidsToString(format.getSupportsPhysiquesNumbers().get(mediaSupportCategory)));
+			JLabel lbl2 = new JLabel(Format.poidsToString(format.getSupportsPhysiquesNumbers().get(mediaSupportCategory)), SwingConstants.CENTER);
 			lbl2.setPreferredSize(new Dimension(120*numberMediaSupport,30));
 			lbl2.setBorder(BorderFactory.createLineBorder(getForeground()));
-			layout.setConstraints(lbl2, constraints2);
+			layout.setConstraints(lbl2, constraints);
 			add(lbl2);
 			
 			colIdx = colIdx + numberMediaSupport;

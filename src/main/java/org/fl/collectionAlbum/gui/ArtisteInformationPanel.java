@@ -24,6 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui;
 
+import java.awt.Dimension;
 import java.awt.Font;
 import java.util.List;
 
@@ -46,6 +47,8 @@ public class ArtisteInformationPanel extends JPanel {
 
 	private static final Font fontNom = new Font("Verdana", Font.BOLD, 18);
 	private static final Font fontDates = new Font("Verdana", Font.BOLD, 14);
+	
+	private static final Dimension SCROLL_TABLE_DIMENSION = new Dimension(1820, 650);
 	
 	public ArtisteInformationPanel(Artiste artiste, GenerationPane generationPane) {
 		
@@ -79,8 +82,7 @@ public class ArtisteInformationPanel extends JPanel {
 		} else {
 			JTabbedPane albumsEtConcertsTabs = new JTabbedPane();
 			albumsEtConcertsTabs.add(albumsScrollTable, "Albums");
-			albumsEtConcertsTabs.add(concertScrollTable, "Concerts");
-			
+			albumsEtConcertsTabs.add(concertScrollTable, "Concerts");		
 			add(albumsEtConcertsTabs);
 		}
 	}
@@ -90,7 +92,9 @@ public class ArtisteInformationPanel extends JPanel {
 		if (albums.isEmpty()) {
 			return null;
 		} else {
-			return new AlbumsScrollJTablePane(albums, generationPane);
+			JScrollPane albumsScrollJTablePane = new AlbumsScrollJTablePane(albums, generationPane);
+			albumsScrollJTablePane.setPreferredSize(SCROLL_TABLE_DIMENSION);
+			return albumsScrollJTablePane;
 		}
 	}
 	
@@ -98,8 +102,10 @@ public class ArtisteInformationPanel extends JPanel {
 		
 		if (concerts.isEmpty()) {
 			return null;
-		} else {			
-			return new ConcertsScrollJTablePane(concerts, generationPane);
+		} else {
+			JScrollPane concertScrollTable = new ConcertsScrollJTablePane(concerts, generationPane);
+			concertScrollTable.setPreferredSize(SCROLL_TABLE_DIMENSION);
+			return concertScrollTable;
 		}
 	}
 }
