@@ -38,6 +38,7 @@ import javax.swing.border.EmptyBorder;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.concerts.Concert;
+import org.fl.collectionAlbum.format.Format;
 import org.fl.collectionAlbum.gui.table.AlbumsScrollJTablePane;
 import org.fl.collectionAlbum.gui.table.ConcertsScrollJTablePane;
 
@@ -59,15 +60,31 @@ public class ArtisteInformationPanel extends JPanel {
 		nomEtDatePanel.setLayout(new BoxLayout(nomEtDatePanel, BoxLayout.X_AXIS));
 		nomEtDatePanel.setBorder(new EmptyBorder(10, 0, 10, 0));
 		
-		JLabel nomLabel = new JLabel();
+		JLabel nomLabel = new JLabel(artiste.getNomComplet());
 		nomLabel.setFont(fontNom);
-		nomLabel.setText(artiste.getNomComplet());
 		nomEtDatePanel.add(nomLabel);
 		
-		JLabel dateLabel = new JLabel();
+		JLabel dateLabel = new JLabel(artiste.getDates());
 		dateLabel.setFont(fontDates);
-		dateLabel.setText(artiste.getDates());
 		nomEtDatePanel.add(dateLabel);
+		
+		int nbAlbums = artiste.getNbAlbum();
+		int nbConcerts = artiste.getNbConcert();
+		double poids = artiste.getAlbumsFormat().getPoids();
+		StringBuilder chiffres = new StringBuilder();
+		if (poids > 0) {
+			chiffres.append("  Poids total: ").append(Format.poidsToString(poids));
+		}
+		if (nbAlbums > 0) {
+			chiffres.append("  Nombre d'albums: ").append(nbAlbums);
+		}
+		if (nbConcerts > 0) {
+			chiffres.append("  Nombre de concerts: ").append(nbConcerts);
+		}
+		
+		JLabel nbAlbumsLabel = new JLabel(chiffres.toString());
+		
+		nomEtDatePanel.add(nbAlbumsLabel);
 		
 		add(nomEtDatePanel);
 		
