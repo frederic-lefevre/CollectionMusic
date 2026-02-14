@@ -55,6 +55,25 @@ import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 public class CollectionUtils {
 	
 	private static final String VIRGULE = ", ";
+	private static final String TIRET = " - ";
+	
+	public static String getHtmlForString(String s) {
+		
+		return getStringBuilderWithHtmlBegin()
+				.append("<p>")
+				.append(s)
+				.append("</body></html>")
+				.toString();
+	}
+	
+	public static String getHtmlForInterval(String v1, String v2) {
+		
+		return getStringBuilderWithHtmlBegin()
+				.append("<p>[")
+				.append(v1).append(TIRET).append(v2)
+				.append("]</p></body></html>")
+				.toString();
+	}
 	
 	public static String getHtmlForArtistes(MusicArtefact musicArtefact) {
 		
@@ -247,6 +266,22 @@ public class CollectionUtils {
 		@Override
 		public int compare(Long o1, Long o2) {		
 			return Long.compare(o1, o2);
+		}	
+	}
+	
+	public static class DoubleComparator implements Comparator<Double> {
+
+		@Override
+		public int compare(Double o1, Double o2) {		
+			return Double.compare(o1, o2);
+		}	
+	}
+	
+	public static class IntegerComparator implements Comparator<Integer> {
+
+		@Override
+		public int compare(Integer o1, Integer o2) {		
+			return Integer.compare(o1, o2);
 		}	
 	}
 	

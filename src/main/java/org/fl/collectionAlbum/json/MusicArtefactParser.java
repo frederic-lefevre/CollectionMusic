@@ -135,7 +135,7 @@ public class MusicArtefactParser {
 			artiste = new Artiste(jArtiste, artisteRole);
 		} else {
 			artiste = eventualArtiste.get();
-			artiste.update(jArtiste, artisteRole);
+			artiste.updateArtistRoleAndDates(jArtiste, artisteRole);
 		}
 		return artiste;
 	}

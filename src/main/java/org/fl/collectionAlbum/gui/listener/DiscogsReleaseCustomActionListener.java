@@ -47,8 +47,8 @@ import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.AlbumMatchResult;
 import org.fl.collectionAlbum.disocgs.FormatCompatibilityResult;
 import org.fl.collectionAlbum.gui.DetailedAlbumAndDiscogsInfoPane;
-import org.fl.collectionAlbum.gui.DiscogsReleaseJTable;
 import org.fl.collectionAlbum.gui.GenerationPane;
+import org.fl.collectionAlbum.gui.table.DiscogsReleaseJTable;
 
 public class DiscogsReleaseCustomActionListener implements java.awt.event.ActionListener {
 
@@ -56,6 +56,9 @@ public class DiscogsReleaseCustomActionListener implements java.awt.event.Action
 	
 	private static final Font verdana = new Font("Verdana", Font.BOLD, 12);
 	private static final Font monospaced = new Font("monospaced", Font.BOLD, 14);
+	
+	private static final Dimension MESSAGE_DIMENSION = new Dimension(1600,50);
+	private static final Dimension ALBUMS_DIMENSION = new Dimension(1650,850);
 	
 	private static final Predicate<DiscogsAlbumRelease> isNotLinkedToAlbum = (release) -> (release != null) && !release.isLinkedToAlbum();
 	private static final Predicate<DiscogsAlbumRelease> isLinkedToAlbumWithFormatProblem = 
@@ -120,8 +123,8 @@ public class DiscogsReleaseCustomActionListener implements java.awt.event.Action
 					potentialAlbumsPane.setLayout(new BoxLayout(potentialAlbumsPane, BoxLayout.Y_AXIS));
 					
 					JTextArea infoPotentialAlbums = new JTextArea(0, 200);
-					infoPotentialAlbums.setPreferredSize(new Dimension(1600,50));
-					infoPotentialAlbums.setMaximumSize(new Dimension(1600,50));
+					infoPotentialAlbums.setPreferredSize(MESSAGE_DIMENSION);
+					infoPotentialAlbums.setMaximumSize(MESSAGE_DIMENSION);
 					infoPotentialAlbums.setEditable(false);
 					
 					AlbumMatchResult albumMatchResult = release.getPotentialAlbumMatch(albumsContainer.getAlbumsMissingDiscogsRelease().getAlbums());
@@ -140,7 +143,7 @@ public class DiscogsReleaseCustomActionListener implements java.awt.event.Action
 					potentialAlbums.forEach(album -> potentialAlbumsPane.add(potentialAlbumPane(release, album, potentialAlbumsPane)));
 					
 					JScrollPane infoAlbumsScroll = new JScrollPane(potentialAlbumsPane);
-					infoAlbumsScroll.setPreferredSize(new Dimension(1650,850));
+					infoAlbumsScroll.setPreferredSize(ALBUMS_DIMENSION);
 					JOptionPane.showMessageDialog(null, infoAlbumsScroll, customAction.getActionTitle(), JOptionPane.INFORMATION_MESSAGE);
 					
 					break;

@@ -28,6 +28,7 @@ import java.io.BufferedWriter;
 import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -50,6 +51,7 @@ public abstract class MusicArtefact {
 	private final List<Artiste> interpretes;
 	private final List<Artiste> ensembles;
 	private final List<Artiste> chefsOrchestres;
+	private final List<Artiste> allArtists;
 
 	// Additional information (optional)
 	private final List<String> notes;
@@ -75,6 +77,11 @@ public abstract class MusicArtefact {
 
 		auteurs.addAll(musicParser.getListeGroupes());
 
+		allArtists = new ArrayList<>(auteurs);
+		allArtists.addAll(interpretes);
+		allArtists.addAll(ensembles);
+		allArtists.addAll(chefsOrchestres);
+		
 		notes = musicParser.getNotes();
 		urlLinks = musicParser.getUrlLinks(CheckPathOption.EXISTS);
 		discogsLink = musicParser.getDisocgs();
@@ -110,6 +117,10 @@ public abstract class MusicArtefact {
 		return chefsOrchestres;
 	}
 
+	public List<Artiste> getAllArtists() {
+		return allArtists;
+	}
+	
 	public List<String> getNotes() {
 		return notes;
 	}

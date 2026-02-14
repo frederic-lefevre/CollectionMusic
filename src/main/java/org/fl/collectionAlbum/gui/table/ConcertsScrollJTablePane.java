@@ -22,33 +22,31 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.gui.listener;
+package org.fl.collectionAlbum.gui.table;
 
-import java.awt.event.ActionEvent;
+import java.util.List;
 
-import org.fl.collectionAlbum.MusicArtefact;
-import org.fl.collectionAlbum.gui.table.MusicArtefactTable;
-import org.fl.collectionAlbum.osAction.OsAction;
+import javax.swing.JScrollPane;
 
-public class MusicArtefactCommandListener<T extends MusicArtefact> implements java.awt.event.ActionListener {
+import org.fl.collectionAlbum.Control;
+import org.fl.collectionAlbum.concerts.Concert;
+import org.fl.collectionAlbum.gui.GenerationPane;
+
+public class ConcertsScrollJTablePane extends JScrollPane {
+
+	private static final long serialVersionUID = 1L;
 	
-	private final MusicArtefactTable<T> musicArtefactTable;
-	private final OsAction<T> osAction;
+	private final ConcertTableModel concertTableModel;
 	
-	public MusicArtefactCommandListener(MusicArtefactTable<T> musicArtefactTable, OsAction<T> osAction) {
+	public ConcertsScrollJTablePane(List<Concert> concerts, GenerationPane generationPane) {
+		super();
 		
-		this.musicArtefactTable = musicArtefactTable;
-		this.osAction = osAction;
+		this.concertTableModel = new ConcertTableModel(concerts);
+		setViewportView(new ConcertsJTable(concertTableModel, generationPane));
+		setPreferredSize(Control.getMainSubPaneDimension());
 	}
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		
-		T selectedMusicArtefact = musicArtefactTable.getSelectedMusicArtefact();
-		
-		if (selectedMusicArtefact != null) {		
-			osAction.runOsAction(selectedMusicArtefact);
-		}		
+	public ConcertTableModel getConcertTableModel() {
+		return concertTableModel;
 	}
-
 }

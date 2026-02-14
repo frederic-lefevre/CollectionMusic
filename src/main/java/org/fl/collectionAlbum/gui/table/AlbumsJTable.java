@@ -22,8 +22,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.gui;
+package org.fl.collectionAlbum.gui.table;
 
+import java.time.temporal.TemporalAccessor;
+import java.util.function.Function;
 import java.util.logging.Logger;
 
 import javax.swing.DefaultListSelectionModel;
@@ -34,12 +36,20 @@ import javax.swing.table.TableRowSorter;
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.RangementComparator;
 import org.fl.collectionAlbum.albums.Album;
+import org.fl.collectionAlbum.albums.AlbumCompositionComparator;
+import org.fl.collectionAlbum.albums.AlbumEnregistrementComparator;
 import org.fl.collectionAlbum.albums.AlbumMediaFilesStatusComparator;
 import org.fl.collectionAlbum.format.ContentNature;
+import org.fl.collectionAlbum.gui.GenerationPane;
 import org.fl.collectionAlbum.gui.adapter.AlbumMouseAdapter;
-import org.fl.collectionAlbum.gui.renderer.AuteursRenderer;
+import org.fl.collectionAlbum.gui.renderer.AuteurListRenderer;
 import org.fl.collectionAlbum.gui.renderer.CollectionBooleanRenderer;
+import org.fl.collectionAlbum.gui.renderer.CollectionNumberRenderer;
+import org.fl.collectionAlbum.gui.renderer.DatesAlbumRenderer;
 import org.fl.collectionAlbum.gui.renderer.MediaFilesRenderer;
+import org.fl.collectionAlbum.gui.renderer.StringToHtmlRenderer;
+import org.fl.collectionAlbum.utils.CollectionUtils;
+import org.fl.collectionAlbum.utils.TemporalUtils;
 
 public class AlbumsJTable extends JTable implements MusicArtefactTable<Album> {
 
@@ -49,6 +59,16 @@ public class AlbumsJTable extends JTable implements MusicArtefactTable<Album> {
 	
 	private static final RangementComparator RANGEMENT_COMPARATOR = new RangementComparator();
 	private static final AlbumMediaFilesStatusComparator ALBUM_MEDIA_FILES_STATUS_COMPARATOR = new AlbumMediaFilesStatusComparator();
+	private static final CollectionUtils.DoubleComparator DOUBLE_COMPARATOR = new CollectionUtils.DoubleComparator();
+	private static final AlbumEnregistrementComparator ENREGISTREMENT_COMPARATOR = new AlbumEnregistrementComparator();
+	private static final AlbumCompositionComparator COMPOSITION_COMPARATOR = new AlbumCompositionComparator();
+	
+	
+	private static final Function<TemporalAccessor, String> dateFormatterFunction = t -> TemporalUtils.formatDate((TemporalAccessor)t);
+	private static final Function<Album, TemporalAccessor> beginEnregistrementGetter = a -> a.getDebutEnregistrement();
+	private static final Function<Album, TemporalAccessor> finEnregistrementGetter = a -> a.getFinEnregistrement();
+	private static final Function<Album, TemporalAccessor> beginCompositionGetter = a -> a.getDebutComposition();
+	private static final Function<Album, TemporalAccessor> endCompositionGetter = a -> a.getFinComposition();
 	
 	public AlbumsJTable(AlbumsTableModel albumsTableModel, GenerationPane generationPane) {
 		super(albumsTableModel);
@@ -57,16 +77,25 @@ public class AlbumsJTable extends JTable implements MusicArtefactTable<Album> {
 		
 		setRowHeight(ContentNature.values().length*25);
 		
-		getColumnModel().getColumn(AlbumsTableModel.AUTEUR_COL_IDX).setCellRenderer(new AuteursRenderer());
+		getColumnModel().getColumn(AlbumsTableModel.TITRE_COL_IDX).setCellRenderer(new StringToHtmlRenderer());
+		getColumnModel().getColumn(AlbumsTableModel.AUTEUR_COL_IDX).setCellRenderer(new AuteurListRenderer());
 		getColumnModel().getColumn(AlbumsTableModel.MEDIA_FILES_COL_IDX).setCellRenderer(new MediaFilesRenderer());
 		getColumnModel().getColumn(AlbumsTableModel.PROBLEM_COL_IDX).setCellRenderer(new CollectionBooleanRenderer());
+		getColumnModel().getColumn(AlbumsTableModel.POIDS_COL_IDX).setCellRenderer(new CollectionNumberRenderer());
+		getColumnModel().getColumn(AlbumsTableModel.ENREGISTREMENT_COL_IDX)
+			.setCellRenderer(new DatesAlbumRenderer(beginEnregistrementGetter, finEnregistrementGetter, dateFormatterFunction));
+		getColumnModel().getColumn(AlbumsTableModel.COMPOSITION_COL_IDX)
+			.setCellRenderer(new DatesAlbumRenderer(beginCompositionGetter, endCompositionGetter, dateFormatterFunction));
 		
-		getColumnModel().getColumn(AlbumsTableModel.TITRE_COL_IDX).setPreferredWidth(500);
-		getColumnModel().getColumn(AlbumsTableModel.AUTEUR_COL_IDX).setPreferredWidth(600);
-		getColumnModel().getColumn(AlbumsTableModel.FORMAT_COL_IDX).setPreferredWidth(150);
-		getColumnModel().getColumn(AlbumsTableModel.MEDIA_FILES_COL_IDX).setPreferredWidth(250);
-		getColumnModel().getColumn(AlbumsTableModel.PROBLEM_COL_IDX).setPreferredWidth(80);
-		getColumnModel().getColumn(AlbumsTableModel.DISCOGS_COL_IDX).setPreferredWidth(120);
+		getColumnModel().getColumn(AlbumsTableModel.TITRE_COL_IDX).setPreferredWidth(250);
+		getColumnModel().getColumn(AlbumsTableModel.AUTEUR_COL_IDX).setPreferredWidth(550);
+		getColumnModel().getColumn(AlbumsTableModel.FORMAT_COL_IDX).setPreferredWidth(100);
+		getColumnModel().getColumn(AlbumsTableModel.MEDIA_FILES_COL_IDX).setPreferredWidth(140);
+		getColumnModel().getColumn(AlbumsTableModel.PROBLEM_COL_IDX).setPreferredWidth(70);
+		getColumnModel().getColumn(AlbumsTableModel.DISCOGS_COL_IDX).setPreferredWidth(110);
+		getColumnModel().getColumn(AlbumsTableModel.POIDS_COL_IDX).setPreferredWidth(50);
+		getColumnModel().getColumn(AlbumsTableModel.ENREGISTREMENT_COL_IDX).setPreferredWidth(260);
+		getColumnModel().getColumn(AlbumsTableModel.COMPOSITION_COL_IDX).setPreferredWidth(260);
 		
 		// Allow single row selection only
 		ListSelectionModel listSelectionModel = new DefaultListSelectionModel();
@@ -79,10 +108,12 @@ public class AlbumsJTable extends JTable implements MusicArtefactTable<Album> {
 		
 		// Row sorter
 		TableRowSorter<AlbumsTableModel> sorter = new TableRowSorter<>(albumsTableModel);
-		setRowSorter(sorter);
-		
 		sorter.setComparator(AlbumsTableModel.AUTEUR_COL_IDX, RANGEMENT_COMPARATOR);
 		sorter.setComparator(AlbumsTableModel.MEDIA_FILES_COL_IDX, ALBUM_MEDIA_FILES_STATUS_COMPARATOR);
+		sorter.setComparator(AlbumsTableModel.POIDS_COL_IDX, DOUBLE_COMPARATOR);
+		sorter.setComparator(AlbumsTableModel.ENREGISTREMENT_COL_IDX, ENREGISTREMENT_COMPARATOR);
+		sorter.setComparator(AlbumsTableModel.COMPOSITION_COL_IDX, COMPOSITION_COMPARATOR);
+		setRowSorter(sorter);
 	}
 
 	// Get the selected album

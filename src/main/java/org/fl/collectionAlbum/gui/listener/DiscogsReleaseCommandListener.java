@@ -27,7 +27,7 @@ package org.fl.collectionAlbum.gui.listener;
 import java.awt.event.ActionEvent;
 
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
-import org.fl.collectionAlbum.gui.DiscogsReleaseJTable;
+import org.fl.collectionAlbum.gui.table.DiscogsReleaseJTable;
 import org.fl.collectionAlbum.osAction.OsAction;
 
 public class DiscogsReleaseCommandListener implements java.awt.event.ActionListener {

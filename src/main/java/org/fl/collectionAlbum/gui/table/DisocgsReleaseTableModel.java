@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.gui;
+package org.fl.collectionAlbum.gui.table;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -66,11 +66,6 @@ public class DisocgsReleaseTableModel extends AbstractTableModel {
 	public String getColumnName(int col) {
 	    return entetes[col];
 	}
-	
-    @Override
-    public boolean isCellEditable(int row, int col) {
-        return true;
-    }
     
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {

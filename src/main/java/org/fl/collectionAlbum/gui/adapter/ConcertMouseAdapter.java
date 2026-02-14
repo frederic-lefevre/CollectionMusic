@@ -31,15 +31,16 @@ import javax.swing.JOptionPane;
 
 import org.fl.collectionAlbum.concerts.Concert;
 import org.fl.collectionAlbum.gui.DetailedConcertInfoPane;
-import org.fl.collectionAlbum.gui.MusicArtefactTable;
+import org.fl.collectionAlbum.gui.GenerationPane;
+import org.fl.collectionAlbum.gui.table.MusicArtefactTable;
 import org.fl.collectionAlbum.osAction.OsAction;
 
 public class ConcertMouseAdapter extends MusicArtefactMouseAdapter<Concert>  {
 	
 	private static final String TITLE = "Informations détaillées du concert";
 	
-	public ConcertMouseAdapter(MusicArtefactTable<Concert> concertsTable, List<OsAction<Concert>> osActions) {
-		super(concertsTable, osActions);
+	public ConcertMouseAdapter(MusicArtefactTable<Concert> concertsTable, List<OsAction<Concert>> osActions, GenerationPane generationPane) {
+		super(concertsTable, osActions, generationPane);
 		
 		musicArtefactMenuItems.addMenuItem(TITLE, new ConcertCustomActionListener(), (concert) -> concert != null, localJPopupMenu);
 	}
@@ -48,7 +49,7 @@ public class ConcertMouseAdapter extends MusicArtefactMouseAdapter<Concert>  {
 	
 		@Override
 		public void actionPerformed(ActionEvent e) {			
-			JOptionPane.showMessageDialog(null, new DetailedConcertInfoPane(musicArtefactTable.getSelectedMusicArtefact()), TITLE, JOptionPane.INFORMATION_MESSAGE);			
+			JOptionPane.showMessageDialog(null, new DetailedConcertInfoPane(musicArtefactTable.getSelectedMusicArtefact()), TITLE, JOptionPane.PLAIN_MESSAGE);			
 		}	
 	}
 }

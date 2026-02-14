@@ -22,33 +22,42 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.gui.listener;
+package org.fl.collectionAlbum.gui.renderer;
 
-import java.awt.event.ActionEvent;
+import java.awt.Font;
+import java.util.logging.Logger;
+
+import javax.swing.SwingConstants;
 
 import org.fl.collectionAlbum.MusicArtefact;
-import org.fl.collectionAlbum.gui.table.MusicArtefactTable;
-import org.fl.collectionAlbum.osAction.OsAction;
+import org.fl.collectionAlbum.utils.CollectionUtils;
+import org.fl.util.swing.CustomTableCellRenderer;
 
-public class MusicArtefactCommandListener<T extends MusicArtefact> implements java.awt.event.ActionListener {
+public class AuteurListRenderer extends CustomTableCellRenderer {
+
+	private static final long serialVersionUID = 1L;
+
+	private static final Logger mLog = Logger.getLogger(AuteurListRenderer.class.getName());
 	
-	private final MusicArtefactTable<T> musicArtefactTable;
-	private final OsAction<T> osAction;
+	private static final Font font = new Font("Dialog", Font.PLAIN, 12);
 	
-	public MusicArtefactCommandListener(MusicArtefactTable<T> musicArtefactTable, OsAction<T> osAction) {
-		
-		this.musicArtefactTable = musicArtefactTable;
-		this.osAction = osAction;
+	public AuteurListRenderer() {
+		super(font, SwingConstants.LEFT);
+		setVerticalAlignment(SwingConstants.TOP);
 	}
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
+	public void valueProcessor(Object value) {
 		
-		T selectedMusicArtefact = musicArtefactTable.getSelectedMusicArtefact();
-		
-		if (selectedMusicArtefact != null) {		
-			osAction.runOsAction(selectedMusicArtefact);
-		}		
+		if (value == null) {
+			// This may happen when rescanning the album collection
+			mLog.fine("Null value in Auteurs cell. Should be an Album");
+			setText("Valeur null");
+		} else if (MusicArtefact.class.isAssignableFrom(value.getClass())) {
+			setText(CollectionUtils.getHtmlForArtistes((MusicArtefact)value));
+		} else {
+			mLog.severe("Invalid value type in Auteurs cell. Should be Album or Concert but is " + value.getClass().getName());
+		}	
 	}
 
 }

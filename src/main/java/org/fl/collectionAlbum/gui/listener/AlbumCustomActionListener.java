@@ -49,7 +49,7 @@ import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.gui.DetailedAlbumAndDiscogsInfoPane;
 import org.fl.collectionAlbum.gui.GenerationPane;
 import org.fl.collectionAlbum.gui.MediaFilesSearchPane;
-import org.fl.collectionAlbum.gui.MusicArtefactTable;
+import org.fl.collectionAlbum.gui.table.MusicArtefactTable;
 
 public class AlbumCustomActionListener implements java.awt.event.ActionListener {
 
@@ -58,12 +58,15 @@ public class AlbumCustomActionListener implements java.awt.event.ActionListener 
 	private static final Font verdana = new Font("Verdana", Font.BOLD, 12);
 	private static final Font monospaced = new Font("monospaced", Font.BOLD, 14);
 	
+	private static final Dimension MESSAGE_DIMENSION = new Dimension(1600,50);
+	private static final Dimension RELEASES_DIMENSION = new Dimension(1650,850);
+	
 	private static final Predicate<Album> isLinkedToDiscogsRelease = (album) -> (album.getDiscogsLink() != null) && !album.getDiscogsLink().isEmpty();
 	private static final Predicate<Album> hasMissingOrInvalidMediaFiles = 
 			(album) -> Stream.of(ContentNature.values())
 				.anyMatch(contentNature -> album.hasMediaFilePathNotFound(contentNature) || album.hasMissingOrInvalidMediaFilePath(contentNature)); 
 	
-	public enum CustomAction {
+	public enum CustomAlbumAction {
 		
 		DETAILED_INFO_DISPLAY("Informations détaillées de l'album", Objects::nonNull), 
 		DISCOGS_RELEASE_SEARCH("Chercher la release discogs", isLinkedToDiscogsRelease.negate()),
@@ -72,7 +75,7 @@ public class AlbumCustomActionListener implements java.awt.event.ActionListener 
 		private final String actionTitle;
 		private final Predicate<Album> displayable;
 		
-		private CustomAction(String actionTitle, Predicate<Album> displayable) {
+		private CustomAlbumAction(String actionTitle, Predicate<Album> displayable) {
 			this.actionTitle = actionTitle;
 			this.displayable = displayable;
 		}
@@ -87,10 +90,10 @@ public class AlbumCustomActionListener implements java.awt.event.ActionListener 
 	};
 	
 	private final MusicArtefactTable<Album> albumsJTable;
-	private final CustomAction customAction;
+	private final CustomAlbumAction customAction;
 	private final GenerationPane generationPane;
 	
-	public AlbumCustomActionListener(MusicArtefactTable<Album> ajt, CustomAction ca, GenerationPane generationPane) {
+	public AlbumCustomActionListener(MusicArtefactTable<Album> ajt, CustomAlbumAction ca, GenerationPane generationPane) {
 		
 		albumsJTable = ajt;
 		customAction = ca;
@@ -118,8 +121,8 @@ public class AlbumCustomActionListener implements java.awt.event.ActionListener 
 					potentialReleasesPane.setLayout(new BoxLayout(potentialReleasesPane, BoxLayout.Y_AXIS));
 					
 					JTextArea infoPotentialRelease = new JTextArea(0, 200);
-					infoPotentialRelease.setPreferredSize(new Dimension(1600,50));
-					infoPotentialRelease.setMaximumSize(new Dimension(1600,50));
+					infoPotentialRelease.setPreferredSize(MESSAGE_DIMENSION);
+					infoPotentialRelease.setMaximumSize(MESSAGE_DIMENSION);
 					infoPotentialRelease.setEditable(false);
 					
 					ReleaseMatchResult releaseMatchResult = selectedAlbum.searchPotentialDiscogsReleases();
@@ -138,7 +141,7 @@ public class AlbumCustomActionListener implements java.awt.event.ActionListener 
 					potentialReleases.forEach(release -> potentialReleasesPane.add(discogsPotentialReleasePane(release, selectedAlbum, potentialReleasesPane)));
 					
 					JScrollPane infoReleaseScroll = new JScrollPane(potentialReleasesPane);
-					infoReleaseScroll.setPreferredSize(new Dimension(1650,850));
+					infoReleaseScroll.setPreferredSize(RELEASES_DIMENSION);
 					JOptionPane.showMessageDialog(null, infoReleaseScroll, customAction.getActionTitle(), JOptionPane.INFORMATION_MESSAGE);
 					
 					break;

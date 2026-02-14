@@ -25,38 +25,38 @@ SOFTWARE.
 package org.fl.collectionAlbum.gui.renderer;
 
 import java.awt.Font;
-import java.util.logging.Logger;
+import java.util.Objects;
 
 import javax.swing.SwingConstants;
 
-import org.fl.collectionAlbum.MusicArtefact;
-import org.fl.collectionAlbum.utils.CollectionUtils;
+import org.fl.collectionAlbum.format.Format;
 import org.fl.util.swing.CustomTableCellRenderer;
 
-public class AuteursRenderer extends CustomTableCellRenderer {
+public class CollectionNumberRenderer extends CustomTableCellRenderer {
 
 	private static final long serialVersionUID = 1L;
-
-	private static final Logger mLog = Logger.getLogger(AuteursRenderer.class.getName());
 	
 	private static final Font font = new Font("Dialog", Font.PLAIN, 12);
 	
-	public AuteursRenderer() {
-		super(font, SwingConstants.LEFT);
+	public CollectionNumberRenderer() {
+		super(font, SwingConstants.RIGHT);
 	}
 
 	@Override
 	public void valueProcessor(Object value) {
 		
 		if (value == null) {
-			// This may happen when rescanning the album collection
-			mLog.fine("Null value in Auteurs cell. Should be an Album");
-			setText("Valeur null");
-		} else if (MusicArtefact.class.isAssignableFrom(value.getClass())) {
-			setText(CollectionUtils.getHtmlForArtistes((MusicArtefact)value));
+			setText("");
+		} else if (value instanceof Double doubleNumber) {
+			setText(Format.poidsToString(doubleNumber));
+		} else if (Number.class.isAssignableFrom(value.getClass())) {
+			if ((Number)value == (Number)0) {
+				setText("");
+			} else {
+				setText(Objects.toString(value));
+			}
 		} else {
-			mLog.severe("Invalid value type in Auteurs cell. Should be Album or Concert but is " + value.getClass().getName());
-		}	
+			setText(Objects.toString(value));
+		}
 	}
-
 }

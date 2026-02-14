@@ -54,8 +54,7 @@ public class DateChooser extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final int PANEL_WIDTH = 240;
-	private static final int PANEL_HEIGHT = 50;
+	private static final Dimension DATE_PANEL_DIMENSION = new Dimension(240, 50);
 	
 	private static final  Logger logger = Logger.getLogger(DateChooser.class.getName());
 	
@@ -112,7 +111,7 @@ public class DateChooser extends JPanel {
 		monthField.addActionListener(dateListener);
 		yearField.addActionListener(dateListener);
 		
-		setPreferredSize(new Dimension(PANEL_WIDTH, PANEL_HEIGHT));
+		setPreferredSize(DATE_PANEL_DIMENSION);
 		setMaximumSize(getPreferredSize());
 		setMinimumSize(getPreferredSize());
 	}

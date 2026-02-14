@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.gui;
+package org.fl.collectionAlbum.gui.table;
 
 import java.time.temporal.TemporalAccessor;
 import java.util.function.Function;
@@ -36,8 +36,9 @@ import javax.swing.table.TableRowSorter;
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.concerts.Concert;
 import org.fl.collectionAlbum.concerts.ConcertAuteurComparator;
+import org.fl.collectionAlbum.gui.GenerationPane;
 import org.fl.collectionAlbum.gui.adapter.ConcertMouseAdapter;
-import org.fl.collectionAlbum.gui.renderer.AuteursRenderer;
+import org.fl.collectionAlbum.gui.renderer.AuteurListRenderer;
 import org.fl.collectionAlbum.gui.renderer.DateRenderer;
 import org.fl.collectionAlbum.utils.TemporalUtils;
 
@@ -52,7 +53,7 @@ public class ConcertsJTable extends JTable implements MusicArtefactTable<Concert
 	
 	private static final Function<TemporalAccessor, String> concertDateFormatter = t -> TemporalUtils.formatDate((TemporalAccessor)t);
 	
-	public ConcertsJTable(ConcertTableModel concertTableModel) {
+	public ConcertsJTable(ConcertTableModel concertTableModel, GenerationPane generationPane) {
 		
 		super(concertTableModel);
 		
@@ -61,7 +62,7 @@ public class ConcertsJTable extends JTable implements MusicArtefactTable<Concert
 		setRowHeight(50);
 		
 		getColumnModel().getColumn(ConcertTableModel.DATE_COL_IDX).setCellRenderer(new DateRenderer(concertDateFormatter));
-		getColumnModel().getColumn(ConcertTableModel.ARTISTE_COL_IDX).setCellRenderer(new AuteursRenderer());
+		getColumnModel().getColumn(ConcertTableModel.ARTISTE_COL_IDX).setCellRenderer(new AuteurListRenderer());
 		
 		getColumnModel().getColumn(ConcertTableModel.DATE_COL_IDX).setPreferredWidth(200);
 		getColumnModel().getColumn(ConcertTableModel.ARTISTE_COL_IDX).setPreferredWidth(700);
@@ -74,14 +75,13 @@ public class ConcertsJTable extends JTable implements MusicArtefactTable<Concert
 		
 		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		
-		addMouseListener(new ConcertMouseAdapter(this, Control.getOsActionsOnConcert()));
+		addMouseListener(new ConcertMouseAdapter(this, Control.getOsActionsOnConcert(), generationPane));
 		
 		// Row sorter
 		TableRowSorter<ConcertTableModel> sorter = new TableRowSorter<>(concertTableModel);
-		setRowSorter(sorter);
-		
 		sorter.setComparator(ConcertTableModel.DATE_COL_IDX, TEMPORAL_ACCESSOR_COMPARATOR);
 		sorter.setComparator(ConcertTableModel.ARTISTE_COL_IDX, CONCERT_AUTEUR_COMPARATOR);
+		setRowSorter(sorter);
 	}
 	
 	// Get the selected concert

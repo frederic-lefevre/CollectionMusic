@@ -25,30 +25,44 @@ SOFTWARE.
 package org.fl.collectionAlbum.gui.listener;
 
 import java.awt.event.ActionEvent;
+import java.util.List;
+
+import javax.swing.JOptionPane;
 
 import org.fl.collectionAlbum.MusicArtefact;
+import org.fl.collectionAlbum.artistes.Artiste;
+import org.fl.collectionAlbum.gui.ArtisteInformationPanel;
+import org.fl.collectionAlbum.gui.GenerationPane;
+import org.fl.collectionAlbum.gui.table.ArtistesScrollJTablePane;
 import org.fl.collectionAlbum.gui.table.MusicArtefactTable;
-import org.fl.collectionAlbum.osAction.OsAction;
 
-public class MusicArtefactCommandListener<T extends MusicArtefact> implements java.awt.event.ActionListener {
-	
+public class MusicArtefactArtistListener<T extends MusicArtefact> implements java.awt.event.ActionListener {
+
 	private final MusicArtefactTable<T> musicArtefactTable;
-	private final OsAction<T> osAction;
+	private final GenerationPane generationPane;
 	
-	public MusicArtefactCommandListener(MusicArtefactTable<T> musicArtefactTable, OsAction<T> osAction) {
-		
+	public MusicArtefactArtistListener(MusicArtefactTable<T> musicArtefactTable, GenerationPane generationPane) {
 		this.musicArtefactTable = musicArtefactTable;
-		this.osAction = osAction;
+		this.generationPane = generationPane;
 	}
-
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
 		T selectedMusicArtefact = musicArtefactTable.getSelectedMusicArtefact();
 		
-		if (selectedMusicArtefact != null) {		
-			osAction.runOsAction(selectedMusicArtefact);
-		}		
+		if (selectedMusicArtefact != null) {
+			List<Artiste> artistes = selectedMusicArtefact.getAllArtists();
+			if (! artistes.isEmpty()) {
+				if (artistes.size() == 1) {
+					Artiste selectedArtiste = artistes.get(0);
+					JOptionPane.showMessageDialog(null, new ArtisteInformationPanel(selectedArtiste, generationPane), selectedArtiste.getNomComplet(), JOptionPane.PLAIN_MESSAGE);
+				} else {
+					JOptionPane.showMessageDialog(null, new ArtistesScrollJTablePane(artistes, generationPane), "Artistes", JOptionPane.PLAIN_MESSAGE);
+				}
+			}
+		}
+		
 	}
 
 }

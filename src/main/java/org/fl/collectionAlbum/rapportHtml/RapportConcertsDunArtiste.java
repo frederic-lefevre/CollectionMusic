@@ -38,7 +38,7 @@ public class RapportConcertsDunArtiste extends RapportHtml {
 		super("", null);
 		withOffset(offset);
 		artiste = a;
-		withTitle(artiste.getPrenoms() + " " + artiste.getNom() + CONCERTS);
+		withTitle(artiste.getNomComplet() + CONCERTS);
 		HtmlLinkList albumLink = new HtmlLinkList(RapportStructuresAndNames.getAccueils());
 
 		if (artiste.getNbAlbum() > 0) {
@@ -52,9 +52,8 @@ public class RapportConcertsDunArtiste extends RapportHtml {
 	protected void corpsRapport() {
 
 		write("<table class=\"auteurTab\">\n  <tr>\n    <td class=\"auteurTitre\"><span class=\"auteurTitre\">");
-		write(artiste.getPrenoms()).write(" ").write(artiste.getNom());
-		write("</span> (").write(artiste.getDateNaissance()).write(" - ").write(artiste.getDateMort());
-		write(")</td>\n  </tr>\n</table>\n");
-		FragmentListeConcerts.buildTable(artiste.getConcerts().sortChrono(), rBuilder, "../../");		
+		write(artiste.getNomComplet()).write("</span>").write(artiste.getDates());
+		write("</td>\n  </tr>\n</table>\n");
+		FragmentListeConcerts.buildTable(artiste.getConcerts(), rBuilder, "../../");		
 	}
 }

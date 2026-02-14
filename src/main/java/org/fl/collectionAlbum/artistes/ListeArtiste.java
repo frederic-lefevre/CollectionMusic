@@ -63,7 +63,7 @@ public class ListeArtiste {
 		if (! artistes.contains(a)) {
 			artistes.add(a) ;
 		}
-		albumLog.finest(() -> "  Nom: " + a.getNom() + "  Prenoms: " + a.getPrenoms());
+		albumLog.finest(() -> a.getNomComplet());
 	}
 	
 	public void addAllArtistes(List<Artiste> artistes, MusicArtefact musicArtefact) {

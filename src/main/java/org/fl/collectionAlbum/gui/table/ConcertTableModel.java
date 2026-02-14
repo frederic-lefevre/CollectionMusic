@@ -22,41 +22,34 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.gui;
+package org.fl.collectionAlbum.gui.table;
 
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
-import org.fl.collectionAlbum.mediaPath.MediaFileInventory;
-import org.fl.collectionAlbum.mediaPath.MediaFilePath;
+import org.fl.collectionAlbum.concerts.Concert;
 
-public class MediaFilesTableModel extends AbstractTableModel {
+public class ConcertTableModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 1L;
-
-	public static final int PATH_COL_IDX = 0;
-	public static final int ALBUMS_COL_IDX = 1;
-	public static final int NB_FILES_COL_IDX = 2;
-	public static final int COVER_IMAGE_COL_IDX = 3;
-	public static final int EXTENSION_COL_IDX = 4;
 	
-	private static final String[] entetes = {"Chemins", "Albums", "Nombre de medias", "Image de la pochette", "Type de media"};
+	public static final int DATE_COL_IDX = 0;
+	public static final int ARTISTE_COL_IDX = 1;
+	public static final int LIEU_COL_IDX = 2;
 	
-	private final List<MediaFilePath> mediaFilePaths;
+	private static final String[] entetes = {"Dates", "Artistes", "Lieu"};
 	
-	public MediaFilesTableModel(MediaFileInventory mediaFileInventory) {
+	private final List<Concert> listeConcert;
+	
+	public ConcertTableModel(List<Concert> listeConcert) {
 		super();
-		this.mediaFilePaths = mediaFileInventory.getMediaFilePathList();
+		this.listeConcert = listeConcert;
 	}
-
+	
 	@Override
 	public int getRowCount() {
-		if (mediaFilePaths == null) {
-			return 0;
-		} else {
-			return mediaFilePaths.size();
-		}
+		return listeConcert.size();
 	}
 
 	@Override
@@ -69,25 +62,25 @@ public class MediaFilesTableModel extends AbstractTableModel {
 	    return entetes[col];
 	}
 	
-    @Override
-    public boolean isCellEditable(int row, int col) {
-        return true;
-    }
-    
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
+		
+		if (listeConcert.size() < rowIndex + 1) {
+			// This may happen when triggering a rescan of the collection
+			return null;
+		} else {
+			
+			return switch(columnIndex) {
+				case DATE_COL_IDX -> listeConcert.get(rowIndex).getDateConcert();
+				case ARTISTE_COL_IDX -> listeConcert.get(rowIndex);
+				case LIEU_COL_IDX -> listeConcert.get(rowIndex).getLieuConcert().getLieu();
+				default -> null;
+			};
+		}
 
-		return switch(columnIndex){
-			case PATH_COL_IDX -> mediaFilePaths.get(rowIndex).getPath().toString();
-			case ALBUMS_COL_IDX -> mediaFilePaths.get(rowIndex);
-			case NB_FILES_COL_IDX -> mediaFilePaths.get(rowIndex).getMediaFileNumber();
-			case COVER_IMAGE_COL_IDX -> mediaFilePaths.get(rowIndex).hasCover();
-			case EXTENSION_COL_IDX -> mediaFilePaths.get(rowIndex).getMediaFileExtension();
-			default -> null;
-		};
 	}
 
-	public MediaFilePath getMediaFileAt(int rowIndex) {
-		return mediaFilePaths.get(rowIndex);
+	public Concert getConcertAt(int rowIndex) {
+		return listeConcert.get(rowIndex);
 	}
 }

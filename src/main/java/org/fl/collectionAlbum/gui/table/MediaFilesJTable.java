@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.gui;
+package org.fl.collectionAlbum.gui.table;
 
 import java.util.logging.Logger;
 
@@ -72,10 +72,10 @@ public class MediaFilesJTable extends JTable {
 		
 		// Row sorter
 		TableRowSorter<MediaFilesTableModel> sorter = new TableRowSorter<>(mediaFilesTableModel);
-		setRowSorter(sorter);
-				
 		sorter.setComparator(MediaFilesTableModel.ALBUMS_COL_IDX, MEDIA_FILE_PATH_ALBUM_COMPARATOR);
 		sorter.setComparator(MediaFilesTableModel.NB_FILES_COL_IDX, LONG_COMPARATOR);
+		setRowSorter(sorter);
+				
 	}
 
 	public MediaFilePath getSelectedMediaFile() {

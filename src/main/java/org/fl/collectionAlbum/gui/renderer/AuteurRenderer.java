@@ -22,11 +22,38 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.gui;
+package org.fl.collectionAlbum.gui.renderer;
 
-import org.fl.collectionAlbum.MusicArtefact;
+import java.awt.Font;
+import java.util.logging.Logger;
 
-public interface MusicArtefactTable<T extends MusicArtefact> {
+import javax.swing.SwingConstants;
 
-	public T getSelectedMusicArtefact();
+import org.fl.collectionAlbum.artistes.Artiste;
+import org.fl.util.swing.CustomTableCellRenderer;
+
+public class AuteurRenderer extends CustomTableCellRenderer {
+
+	private static final long serialVersionUID = 1L;
+
+	private static final Logger mLog = Logger.getLogger(AuteurRenderer.class.getName());
+	
+	private static final Font font = new Font("Dialog", Font.PLAIN, 12);
+	
+	public AuteurRenderer() {
+		super(font, SwingConstants.LEFT);
+	}
+
+	@Override
+	public void valueProcessor(Object value) {
+		if (value == null) {
+			// This may happen when rescanning the album collection
+			mLog.fine("Null value in MediaFiles cell. Should be an MediaFilePath");
+			setText("Valeur null");
+		} else if (value instanceof Artiste artiste) {
+			setText(artiste.getNomComplet());
+		} else {
+			mLog.severe("Invalid value type in Artiste cell. Should be Artiste but is " + value.getClass().getName());
+		}			
+	}
 }

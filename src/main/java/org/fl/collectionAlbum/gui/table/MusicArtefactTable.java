@@ -22,33 +22,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.gui.listener;
-
-import java.awt.event.ActionEvent;
+package org.fl.collectionAlbum.gui.table;
 
 import org.fl.collectionAlbum.MusicArtefact;
-import org.fl.collectionAlbum.gui.table.MusicArtefactTable;
-import org.fl.collectionAlbum.osAction.OsAction;
 
-public class MusicArtefactCommandListener<T extends MusicArtefact> implements java.awt.event.ActionListener {
-	
-	private final MusicArtefactTable<T> musicArtefactTable;
-	private final OsAction<T> osAction;
-	
-	public MusicArtefactCommandListener(MusicArtefactTable<T> musicArtefactTable, OsAction<T> osAction) {
-		
-		this.musicArtefactTable = musicArtefactTable;
-		this.osAction = osAction;
-	}
+public interface MusicArtefactTable<T extends MusicArtefact> {
 
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		
-		T selectedMusicArtefact = musicArtefactTable.getSelectedMusicArtefact();
-		
-		if (selectedMusicArtefact != null) {		
-			osAction.runOsAction(selectedMusicArtefact);
-		}		
-	}
-
+	public T getSelectedMusicArtefact();
 }

@@ -61,18 +61,6 @@ public enum MediaSupports {
 			Set.of(ContentNature.AUDIO), 					  
 			SupportMaterial.VINYL,
 			"Vinyle 45 tours, 18 cm"),
-	MiniCD(		
-			MediaSupportCategories.MiniCD, 	  
-			JsonMusicProperties.MINI_CD, 		
-			Set.of(ContentNature.AUDIO), 					  
-			SupportMaterial.OPTICAL_DISC,
-			"Mini CD, court, moins de 25 minutes"),
-	MiniDVD(	
-			MediaSupportCategories.MiniDVD,   
-			JsonMusicProperties.MINI_DVD, 	
-			Set.of(ContentNature.VIDEO), 					 
-			SupportMaterial.OPTICAL_DISC,
-			"Mini DVD, court, moins de 25 minutes"),
 	Mini33T(	
 			MediaSupportCategories.MiniVinyl, 
 			JsonMusicProperties.MINI_33T, 	
@@ -91,6 +79,18 @@ public enum MediaSupports {
 			Set.of(ContentNature.AUDIO), 					  
 			SupportMaterial.VINYL,
 			"Vinyle 45 tours, 30 cm, moins de 25 minutes"),
+	MiniCD(		
+			MediaSupportCategories.MiniCD, 	  
+			JsonMusicProperties.MINI_CD, 		
+			Set.of(ContentNature.AUDIO), 					  
+			SupportMaterial.OPTICAL_DISC,
+			"Mini CD, court, moins de 25 minutes"),
+	MiniDVD(	
+			MediaSupportCategories.MiniDVD,   
+			JsonMusicProperties.MINI_DVD, 	
+			Set.of(ContentNature.VIDEO), 					 
+			SupportMaterial.OPTICAL_DISC,
+			"Mini DVD, court, moins de 25 minutes"),
 	VHS(		
 			MediaSupportCategories.VHS, 	  
 			JsonMusicProperties.VHS, 			
@@ -136,7 +136,7 @@ public enum MediaSupports {
 		description = desc;
 	}
 
-	MediaSupportCategories getSupportPhysique() {
+	public MediaSupportCategories getSupportPhysique() {
 		return supportPhysique;
 	}
 

@@ -31,33 +31,36 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingConstants;
 
+import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.util.swing.CustomTableCellRenderer;
 
-public class DateRenderer extends CustomTableCellRenderer {
+public class AuteurDateRenderer extends CustomTableCellRenderer {
 
 	private static final long serialVersionUID = 1L;
-	
-	private static final Logger logger = Logger.getLogger(AuteurListRenderer.class.getName());
+
+	private static final Logger mLog = Logger.getLogger(AuteurRenderer.class.getName());
 	
 	private static final Font font = new Font("Dialog", Font.PLAIN, 12);
 	
+	private final Function<Artiste, TemporalAccessor> artisteDateGetter;
 	private final Function<TemporalAccessor, String> dateFormatter;
 	
-	public DateRenderer(Function<TemporalAccessor, String> dateFormatter) {
-		super(font, SwingConstants.LEFT);
+	public AuteurDateRenderer(Function<Artiste, TemporalAccessor> artisteDateGetter, Function<TemporalAccessor, String> dateFormatter) {
+		super(font, SwingConstants.RIGHT);
+		this.artisteDateGetter = artisteDateGetter;
 		this.dateFormatter = dateFormatter;
 	}
 
 	@Override
 	public void valueProcessor(Object value) {
-		
 		if (value == null) {
-			setText("");
-		} else if (TemporalAccessor.class.isAssignableFrom(value.getClass())) {
-			setText(dateFormatter.apply((TemporalAccessor)value));
+			// This may happen when rescanning the album collection
+			mLog.fine("Null value in Artiste Date cell. Should be an Artiste");
+			setText("Valeur null");
+		} else if (value instanceof Artiste artiste) {
+			setText(dateFormatter.compose(artisteDateGetter).apply(artiste));
 		} else {
-			logger.severe("Invalid value type in Date cell. Should be assignable to TemporalAccessor but is " + value.getClass().getName());
-		}
+			mLog.severe("Invalid value type in Artiste Date cell. Should be Artiste but is " + value.getClass().getName());
+		}			
 	}
-
 }

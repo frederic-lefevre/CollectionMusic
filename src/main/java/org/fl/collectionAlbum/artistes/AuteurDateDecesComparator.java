@@ -22,33 +22,18 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.gui.listener;
+package org.fl.collectionAlbum.artistes;
 
-import java.awt.event.ActionEvent;
+import java.util.Comparator;
 
-import org.fl.collectionAlbum.MusicArtefact;
-import org.fl.collectionAlbum.gui.table.MusicArtefactTable;
-import org.fl.collectionAlbum.osAction.OsAction;
+import org.fl.collectionAlbum.utils.TemporalUtils;
 
-public class MusicArtefactCommandListener<T extends MusicArtefact> implements java.awt.event.ActionListener {
-	
-	private final MusicArtefactTable<T> musicArtefactTable;
-	private final OsAction<T> osAction;
-	
-	public MusicArtefactCommandListener(MusicArtefactTable<T> musicArtefactTable, OsAction<T> osAction) {
-		
-		this.musicArtefactTable = musicArtefactTable;
-		this.osAction = osAction;
-	}
+public class AuteurDateDecesComparator implements Comparator<Artiste> {
 
 	@Override
-	public void actionPerformed(ActionEvent e) {
-		
-		T selectedMusicArtefact = musicArtefactTable.getSelectedMusicArtefact();
-		
-		if (selectedMusicArtefact != null) {		
-			osAction.runOsAction(selectedMusicArtefact);
-		}		
+	public int compare(Artiste arg0, Artiste arg1) {
+		return TemporalUtils.compareTemporalInterval(
+				arg0.getMort(), arg0.getNaissance(), 
+				arg1.getMort(), arg1.getNaissance());
 	}
-
 }

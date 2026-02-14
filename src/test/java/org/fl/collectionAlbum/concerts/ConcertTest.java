@@ -147,6 +147,8 @@ class ConcertTest {
 					.isEqualTo(concert);
 			});
 
+		assertThat(concert.getAllArtists()).hasSameElementsAs(lDeeDee);
+		
 		if (parserHelpersFilterCounter.isLoggable(Level.INFO)) {
 			assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(3);
 			assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.INFO)).isEqualTo(3);

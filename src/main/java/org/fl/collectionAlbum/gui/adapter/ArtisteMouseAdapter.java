@@ -22,49 +22,37 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-
 package org.fl.collectionAlbum.gui.adapter;
 
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.List;
 
+import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 
-import org.fl.collectionAlbum.MusicArtefact;
-import org.fl.collectionAlbum.gui.CollectionMenuItems;
+import org.fl.collectionAlbum.artistes.Artiste;
+import org.fl.collectionAlbum.gui.ArtisteInformationPanel;
 import org.fl.collectionAlbum.gui.GenerationPane;
-import org.fl.collectionAlbum.gui.listener.MusicArtefactArtistListener;
-import org.fl.collectionAlbum.gui.listener.MusicArtefactCommandListener;
-import org.fl.collectionAlbum.gui.table.MusicArtefactTable;
-import org.fl.collectionAlbum.osAction.OsAction;
+import org.fl.collectionAlbum.gui.table.ArtistesJTable;
 
-public class MusicArtefactMouseAdapter<T extends MusicArtefact> extends MouseAdapter {
+public class ArtisteMouseAdapter extends MouseAdapter {
 
-	protected final CollectionMenuItems<T> musicArtefactMenuItems;
-	protected final JPopupMenu localJPopupMenu;
-	protected final MusicArtefactTable<T> musicArtefactTable;
+	private final JPopupMenu localJPopupMenu;
+	private final JMenuItem showArtisteInfo;
 	
-	public MusicArtefactMouseAdapter(MusicArtefactTable<T> musicArtefactTable, List<OsAction<T>> osActions, GenerationPane generationPane) {
-
-		super();
-
-		localJPopupMenu = new JPopupMenu();
-		musicArtefactMenuItems = new CollectionMenuItems<>();
-		this.musicArtefactTable = musicArtefactTable;
-
-		musicArtefactMenuItems.addMenuItem("Informations sur les artistes", 
-				new MusicArtefactArtistListener<>(musicArtefactTable, generationPane), a -> !a.getAllArtists().isEmpty(), localJPopupMenu);
+	public ArtisteMouseAdapter(ArtistesJTable artistesJTable, GenerationPane generationPane) {
 		
-		osActions.forEach(osAction -> musicArtefactMenuItems.addMenuItem(osAction.getActionTitle(),
-				new MusicArtefactCommandListener<T>(musicArtefactTable, osAction),
-				osAction.getCommandParameter().getActionValidityPredicate(), localJPopupMenu));
+		localJPopupMenu = new JPopupMenu();
+		showArtisteInfo = new JMenuItem("Informations sur l'artiste");
+		showArtisteInfo.addActionListener(new ArtisteActionListener(artistesJTable, generationPane));
+		localJPopupMenu.add(showArtisteInfo);
 	}
 	
 	@Override
 	public void mousePressed(MouseEvent evt) {
 		if (evt.isPopupTrigger()) {
-			enableMenuItems();
 			localJPopupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
 		}
 	}
@@ -72,13 +60,26 @@ public class MusicArtefactMouseAdapter<T extends MusicArtefact> extends MouseAda
 	@Override
 	public void mouseReleased(MouseEvent evt) {
 		if (evt.isPopupTrigger()) {
-			enableMenuItems();
 			localJPopupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
 		}
 	}
+	
+	private static class ArtisteActionListener implements java.awt.event.ActionListener {
 
-	private void enableMenuItems() {
-		musicArtefactMenuItems.enableMenuItems(musicArtefactTable.getSelectedMusicArtefact());
+		private final ArtistesJTable artistesJTable;
+		private final GenerationPane generationPane;
+		
+		public ArtisteActionListener(ArtistesJTable artistesJTable, GenerationPane generationPane) {
+			this.artistesJTable = artistesJTable;
+			this.generationPane = generationPane;
+		}
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+			Artiste selectedArtiste = artistesJTable.getSelectedArtiste();
+			
+			JOptionPane.showMessageDialog(null, new ArtisteInformationPanel(selectedArtiste, generationPane), selectedArtiste.getNomComplet(), JOptionPane.PLAIN_MESSAGE);
+		}		
 	}
-
 }

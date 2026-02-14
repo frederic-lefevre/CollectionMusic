@@ -24,19 +24,16 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui.listener;
 
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.util.List;
 
 import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.albums.Album;
-import org.fl.collectionAlbum.gui.AlbumsJTable;
-import org.fl.collectionAlbum.gui.AlbumsTableModel;
 import org.fl.collectionAlbum.gui.GenerationPane;
 import org.fl.collectionAlbum.gui.UtilsPane;
+import org.fl.collectionAlbum.gui.table.AlbumsScrollJTablePane;
 
 public class RandomAlbumsPickListener implements java.awt.event.ActionListener {
 
@@ -62,15 +59,9 @@ public class RandomAlbumsPickListener implements java.awt.event.ActionListener {
 			randomAlbums = collectionAlbumContainer.pickRandomAlbumsViaArtiste(utilsPane.getNumberOfAlbums());
 		}
 
-		// Table to display the chosen albums
-		AlbumsTableModel albumsTableModel = new AlbumsTableModel(randomAlbums);
-		AlbumsJTable albumsJTable = new AlbumsJTable(albumsTableModel, generationPane);
+		// Table to display the result albums
+		AlbumsScrollJTablePane albumsScrollJTablePane = new AlbumsScrollJTablePane(randomAlbums, generationPane);
 		
-		JScrollPane albumsScrollTable = new JScrollPane(albumsJTable);
-		albumsScrollTable.setPreferredSize(new Dimension(1800,700));
-		
-		JOptionPane.showMessageDialog(null, albumsScrollTable, "Albums choisis aléatoirement", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(null, albumsScrollJTablePane, "Albums choisis aléatoirement", JOptionPane.PLAIN_MESSAGE);
 	}
-	
-
 }

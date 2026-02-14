@@ -47,6 +47,6 @@ public class AlbumsSearchListener implements java.awt.event.ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		
 		AlbumsSearchPanel mainPane = new AlbumsSearchPanel(generationPane, collectionAlbumContainer);
-		JOptionPane.showMessageDialog(null, mainPane, "Recherche d'albums", JOptionPane.INFORMATION_MESSAGE);
+		JOptionPane.showMessageDialog(null, mainPane, "Recherche d'albums", JOptionPane.PLAIN_MESSAGE);
 	}
 }

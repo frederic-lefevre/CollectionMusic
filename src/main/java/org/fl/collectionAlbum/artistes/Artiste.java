@@ -46,8 +46,12 @@ public class Artiste {
 	
 	private final String nom;
 	private final String prenoms;
+	private final String nomComplet;
 	private TemporalAccessor naissance;
 	private TemporalAccessor mort;
+	private String dateNaissance;
+	private String dateDeces;
+	private String dateNaissanceEtDeces;
 	private final ListeAlbum albums;
 	private final ListeConcert concerts;
 	private final Set<ArtistRole> artistRoles;
@@ -60,7 +64,6 @@ public class Artiste {
 		albums = ListeAlbum.Builder.getBuilder().build();
 		concerts = new ListeConcert();
 		artistRoles = new HashSet<>();
-		artistRoles.add(artisteRole);
 		
 		nom = JsonUtils.getAsStringOrBlank(jArtiste.get(JsonMusicProperties.NOM));
 		prenoms = getFirstNameOrArticle(jArtiste);
@@ -70,14 +73,22 @@ public class Artiste {
 		}
 
 		if (prenoms.isBlank()) {
-			albumLog.info("Prénoms d'artiste null pour le nom " + nom);
+			albumLog.fine(() -> "Prénoms d'artiste null pour le nom " + nom);
 		}
 
-		naissance = getTemporalAccessor(JsonUtils.getAsStringOrNull(jArtiste.get(JsonMusicProperties.NAISSANCE)));
-		mort = getTemporalAccessor(JsonUtils.getAsStringOrNull(jArtiste.get(JsonMusicProperties.MORT)));
+		if ((prenoms == null) || (prenoms.isBlank())) {
+			nomComplet = nom;
+		} else {
+			nomComplet = prenoms + " " + nom;
+		}
+		
+		dateNaissance = "";
+		dateDeces = "";
+		dateNaissanceEtDeces = "";
+		
+		updateArtistRoleAndDates(jArtiste, artisteRole);
 
-		albumLog.finest(() -> "Nouvel artiste: " + nom + " " + prenoms + " (" + getDateNaissance() + " - "
-				+ getDateMort() + ")");
+		albumLog.finest(() -> "Nouvel artiste: " + getNomCompletEtDates());
 	}
 	
 	public boolean isSameArtiste(JsonNode jArtiste) {
@@ -97,41 +108,49 @@ public class Artiste {
 		}
 	}
     
-	public void update(JsonNode jArtiste, ArtistRole artisteRole) {
+	public void updateArtistRoleAndDates(JsonNode jArtiste, ArtistRole artisteRole) {
 
 		String birth = JsonUtils.getAsStringOrNull(jArtiste.get(JsonMusicProperties.NAISSANCE));
 		String death = JsonUtils.getAsStringOrNull(jArtiste.get(JsonMusicProperties.MORT));
-		update(birth, death);
+		updateDatesNaissanceEtDeces(birth, death);
 		
 		artistRoles.add(artisteRole);
 	}
 	
-    private void update(String newNaissance, String newMort) {
-    	if ((newNaissance != null) && (! newNaissance.isEmpty())) {
-    		if (this.naissance != null) {
-    			albumLog.warning("Date de naissance définie 2 fois pour " + prenoms + " " + nom) ;
-    		} else {
-    			this.naissance = getTemporalAccessor(newNaissance);
-    		}
-    	}
-    	if ((newMort != null) && (! newMort.isEmpty())) {
+    private void updateDatesNaissanceEtDeces(String newNaissance, String newMort) {
+
+    	if (newMort != null) {
     		if (this.mort != null) {
-    			albumLog.warning("Date de décés définie 2 fois pour " + prenoms + " " + nom) ;
+    			albumLog.warning("Date de décés définie 2 fois pour " + nomComplet);
+    		} else if (newMort.isBlank()) {
+    			albumLog.warning("Date de décès définie à blanc pour " + nomComplet);
     		} else {
     			 this.mort = getTemporalAccessor(newMort);
+    			 dateDeces = TemporalUtils.formatDate(this.mort);
+    			 if ((newNaissance == null) || (newNaissance.isBlank())) {
+    				 albumLog.warning("Date de décès définie sans date de naissance pour " + nomComplet);
+    			 }
+    		}
+    	}
+    	if (newNaissance != null) {
+    		if (this.naissance != null) {
+    			albumLog.warning("Date de naissance définie 2 fois pour " + nomComplet);
+    		} else if (newNaissance.isBlank()) {
+    			albumLog.warning("Date de naissance définie à blanc pour " + nomComplet);
+    		} else {
+    			this.naissance = getTemporalAccessor(newNaissance);
+    			dateNaissance = TemporalUtils.formatDate(this.naissance);
+    			dateNaissanceEtDeces = " (" + dateNaissance + " - " + dateDeces + ")";
     		}
     	}
     }
 
     private TemporalAccessor getTemporalAccessor(String temporalString) {
     	
-    	if ((temporalString == null) || temporalString.isBlank()) {
-    		return null;
-    	}
     	try {
             return TemporalUtils.parseDate(temporalString);
         } catch (Exception e) {
-        	albumLog.severe("Erreur dans les dates de " + prenoms + " " + nom);
+        	albumLog.severe("Erreur dans les dates de " + nomComplet);
         	return null;
         }
     }
@@ -159,11 +178,11 @@ public class Artiste {
 	}
 
 	public String getDateNaissance() {
-		return TemporalUtils.formatDate(naissance);
+		return dateNaissance;
 	}
 
 	public String getDateMort() {
-		return TemporalUtils.formatDate(mort);
+		return dateDeces;
 	}
 
 	public ListeAlbum getAlbums() {
@@ -199,15 +218,18 @@ public class Artiste {
 	}
 	
 	public ListeConcert getConcerts() {
-		return concerts;
+		return concerts.sortChrono();
 	}
 
 	public String getNomComplet() {
-		if ((getPrenoms() == null) || (getPrenoms().isEmpty())) {
-			return getNom();
-		} else {
-			return getPrenoms() + " " + getNom();
-		}
+		return nomComplet;
 	}
 
+	public String getDates() {
+		return dateNaissanceEtDeces;
+	}
+	
+	public String getNomCompletEtDates() {
+		return getNomComplet() + getDates();
+	}
 }

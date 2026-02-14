@@ -29,18 +29,18 @@ import java.util.stream.Stream;
 
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.gui.GenerationPane;
-import org.fl.collectionAlbum.gui.MusicArtefactTable;
 import org.fl.collectionAlbum.gui.listener.AlbumCustomActionListener;
-import org.fl.collectionAlbum.gui.listener.AlbumCustomActionListener.CustomAction;
+import org.fl.collectionAlbum.gui.listener.AlbumCustomActionListener.CustomAlbumAction;
+import org.fl.collectionAlbum.gui.table.MusicArtefactTable;
 import org.fl.collectionAlbum.osAction.OsAction;
 
 public class AlbumMouseAdapter extends MusicArtefactMouseAdapter<Album> {
 	
 	public AlbumMouseAdapter(MusicArtefactTable<Album> albumsTable, List<OsAction<Album>>  osActions, GenerationPane generationPane) {
 		
-		super(albumsTable, osActions);
+		super(albumsTable, osActions, generationPane);
 
-		Stream.of(CustomAction.values()).forEachOrdered(customAction -> 
+		Stream.of(CustomAlbumAction.values()).forEachOrdered(customAction -> 
 			musicArtefactMenuItems.addMenuItem(
 						customAction.getActionTitle(), 
 						new AlbumCustomActionListener(albumsTable, customAction, generationPane), 

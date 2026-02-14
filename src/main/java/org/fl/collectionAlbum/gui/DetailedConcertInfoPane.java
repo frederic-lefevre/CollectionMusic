@@ -24,7 +24,6 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui;
 
-import java.awt.Dimension;
 import java.awt.Font;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
@@ -38,6 +37,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.concerts.Concert;
 import org.fl.collectionAlbum.utils.CollectionUtils;
 import org.fl.util.file.FilesUtils;
@@ -45,9 +45,6 @@ import org.fl.util.file.FilesUtils;
 public class DetailedConcertInfoPane extends JScrollPane {
 
 	private static final long serialVersionUID = 1L;
-
-	private static final int PREFERRED_WIDTH = 1700;
-	private static final int PREFERRED_HEIGHT = 900;
 	
 	private static final int MAX_TICKET_WIDTH = 1400;
 	private static final int MAX_TICKET_HEIGHT = 800;
@@ -59,7 +56,7 @@ public class DetailedConcertInfoPane extends JScrollPane {
 	public DetailedConcertInfoPane(Concert concert) {
 		super();
 		
-		setPreferredSize(new Dimension(PREFERRED_WIDTH, PREFERRED_HEIGHT));
+		setPreferredSize(Control.getInfoWindowDimension());
 		JPanel infosPane = new JPanel();
 		infosPane.setLayout(new BoxLayout(infosPane, BoxLayout.Y_AXIS));
 		

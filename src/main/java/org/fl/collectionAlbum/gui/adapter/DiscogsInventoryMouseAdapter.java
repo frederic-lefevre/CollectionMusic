@@ -34,11 +34,11 @@ import org.apache.commons.lang3.stream.Streams;
 import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
 import org.fl.collectionAlbum.gui.CollectionMenuItems;
-import org.fl.collectionAlbum.gui.DiscogsReleaseJTable;
 import org.fl.collectionAlbum.gui.GenerationPane;
 import org.fl.collectionAlbum.gui.listener.DiscogsReleaseCommandListener;
 import org.fl.collectionAlbum.gui.listener.DiscogsReleaseCustomActionListener;
 import org.fl.collectionAlbum.gui.listener.DiscogsReleaseCustomActionListener.CustomAction;
+import org.fl.collectionAlbum.gui.table.DiscogsReleaseJTable;
 import org.fl.collectionAlbum.osAction.OsAction;
 
 public class DiscogsInventoryMouseAdapter extends MouseAdapter {

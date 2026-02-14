@@ -73,7 +73,7 @@ public class RapportListeArtistesConcert extends RapportHtml {
 				write("<a href=\"").write(concertUri.toString()).write("\">");
 			}
 
-			write(unArtiste.getPrenoms()).write(" ").write(unArtiste.getNom()).write("</a></td>\n");
+			write(unArtiste.getNomComplet()).write("</a></td>\n");
 			write("    <td class=\"an\">").write(unArtiste.getDateNaissance()).write("</td>\n");
 			write("    <td class=\"an\">").write(unArtiste.getDateMort()).write("</td>\n");
 

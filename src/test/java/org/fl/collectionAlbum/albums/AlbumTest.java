@@ -110,6 +110,8 @@ class AlbumTest {
 		assertThat(album.hasSpecificCompositionDates()).isFalse();
 		assertThat(album.hasUrlLinks()).isFalse();
 		
+		assertThat(album.getAllArtists()).isEmpty();
+		
 		assertThat(album.getAllMediaFiles()).isEmpty();
 		
 		assertMediaSupports(album, Collections.emptySet());
@@ -405,6 +407,19 @@ class AlbumTest {
 
 		Album album = new Album(jAlbum, lla, Path.of("dummyPath"));
 		
+		List<Artiste> auteurs = album.getAuteurs();
+		assertThat(auteurs).isNotNull().singleElement().satisfies(beatles -> {
+			assertThat(beatles).isNotNull();
+			assertThat(beatles.getPrenoms()).isEqualTo("The");
+			assertThat(beatles.getNom()).isEqualTo("Beatles");
+			assertThat(beatles.hasRole(ArtistRole.GROUPE));
+		});
+		
+		assertThat(album.getAllArtists()).hasSameElementsAs(auteurs);
+		assertThat(album.getChefsOrchestre()).isEmpty();
+		assertThat(album.getEnsembles()).isEmpty();
+		assertThat(album.getInterpretes()).isEmpty();
+		
 		ReleaseMatchResult releaseMatchResult = album.searchPotentialDiscogsReleases();
 		
 		assertThat(releaseMatchResult.getMatchResultType()).isEqualTo(MatchResultType.MATCH);
@@ -459,6 +474,19 @@ class AlbumTest {
 
 		Album album = new Album(jAlbum, lla, Path.of("dummyPath"));
 
+		List<Artiste> auteurs = album.getAuteurs();
+		assertThat(auteurs).isNotNull().singleElement().satisfies(vh -> {
+			assertThat(vh).isNotNull();
+			assertThat(vh.getPrenoms()).isEqualTo("");
+			assertThat(vh.getNom()).isEqualTo("Van Halen");
+			assertThat(vh.hasRole(ArtistRole.GROUPE));
+		});
+		
+		assertThat(album.getAllArtists()).hasSameElementsAs(auteurs);
+		assertThat(album.getChefsOrchestre()).isEmpty();
+		assertThat(album.getEnsembles()).isEmpty();
+		assertThat(album.getInterpretes()).isEmpty();
+		
 		Set<MediaFilePath> potentialPaths = album.searchPotentialMediaFilesPaths(ContentNature.AUDIO);
 
 		assertThat(potentialPaths).isNotNull().singleElement()
@@ -534,10 +562,19 @@ class AlbumTest {
 		assertThat(album.missesAudioFile()).isFalse();
 		assertThat(album.missesVideoFile()).isFalse();
 		
+		List<Artiste> auteurs = album.getAuteurs();
+		assertThat(auteurs).isNotNull().singleElement().satisfies(bill -> {
+			assertThat(bill).isNotNull();
+			assertThat(bill.getPrenoms()).isEqualTo("Bill");
+			assertThat(bill.getNom()).isEqualTo("Evans");
+		});
+		
+		assertThat(album.getAllArtists()).hasSameElementsAs(auteurs);
+		assertThat(album.getChefsOrchestre()).isEmpty();
+		assertThat(album.getEnsembles()).isEmpty();
+		assertThat(album.getInterpretes()).isEmpty();
+		
 		Artiste bill = album.getAuteurs().get(0);
-		assertThat(bill).isNotNull();
-		assertThat(bill.getPrenoms()).isEqualTo("Bill");
-		assertThat(bill.getNom()).isEqualTo("Evans");
 		
 		assertThat(bill.getNbAlbum()).isZero();
 		

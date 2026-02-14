@@ -40,7 +40,7 @@ public class TemporalUtils {
 
    	// Pattern pour les dates (parse et format)
    	private static final String datePatternParse  = "uuuu[-MM[-dd]]";  	
-   	private static final String datePatternFormat = "[[dd ]MMMM] uuuu";
+   	private static final String datePatternFormat = "[[dd ]MMMM ]uuuu";
    	private static final String numericDatePatternFormat = "[[dd-]MM-]uuuu";
    	private static final String yearPatternFormat = "uuuu";
    	
@@ -92,10 +92,10 @@ public class TemporalUtils {
 	public static int compareTemporal(TemporalAccessor t1, TemporalAccessor t2) {
 		
 		if (t1 == null) {
-			if (t2 == null) return 0 ;
-			return 1 ;
+			if (t2 == null) return 0;
+			return 1;
 		} else if (t2 == null) {
-			return -1 ;
+			return -1;
 		} else {
 
 			LocalDateTime d1 = getRoundedLocalDateTime(t1);
@@ -106,8 +106,17 @@ public class TemporalUtils {
 			} else {
 				throw new DateTimeException("Cannot convert to LocalDate comparing 2 TemporalAccessor");
 			}
-
 		}
+	}
+	
+	// (Try to) compare 2 TemporalAccessors interval
+	public static int compareTemporalInterval(TemporalAccessor t1Begin, TemporalAccessor t1End, TemporalAccessor t2Begin, TemporalAccessor t2End) {
+		
+		int comp = compareTemporal(t1Begin, t2Begin);
+		if (comp == 0) {
+			comp = compareTemporal(t1End, t2End);
+		}
+		return comp;
 	}
 	
 	public static LocalDate getRoundedLocalDate(TemporalAccessor temporalAccessor) {
