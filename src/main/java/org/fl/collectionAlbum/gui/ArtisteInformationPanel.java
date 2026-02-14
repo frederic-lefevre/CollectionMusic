@@ -33,6 +33,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import org.fl.collectionAlbum.albums.Album;
@@ -47,8 +48,9 @@ public class ArtisteInformationPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private static final Font fontNom = new Font("Verdana", Font.BOLD, 18);
-	private static final Font fontDates = new Font("Verdana", Font.BOLD, 14);
+	private static final Font fontDatesEtChiffres = new Font("Verdana", Font.BOLD, 14);
 	
+	private static final Dimension ARTIST_ALL_HEADERS_DIMENSION = new Dimension(1800, 40);
 	private static final Dimension SCROLL_TABLE_DIMENSION = new Dimension(1820, 650);
 	
 	public ArtisteInformationPanel(Artiste artiste, GenerationPane generationPane) {
@@ -56,37 +58,25 @@ public class ArtisteInformationPanel extends JPanel {
 		super();
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
-		JPanel nomEtDatePanel = new JPanel();
-		nomEtDatePanel.setLayout(new BoxLayout(nomEtDatePanel, BoxLayout.X_AXIS));
-		nomEtDatePanel.setBorder(new EmptyBorder(10, 0, 10, 0));
+		JPanel artistHeaderPanel = new JPanel();
+		artistHeaderPanel.setLayout(new BoxLayout(artistHeaderPanel, BoxLayout.X_AXIS));
+		artistHeaderPanel.setMaximumSize(ARTIST_ALL_HEADERS_DIMENSION);
+		artistHeaderPanel.setBorder(new EmptyBorder(10, 0, 10, 0));
 		
-		JLabel nomLabel = new JLabel(artiste.getNomComplet());
+		JLabel nomLabel = new JLabel(artiste.getNomComplet(), SwingConstants.LEFT);
 		nomLabel.setFont(fontNom);
-		nomEtDatePanel.add(nomLabel);
+		artistHeaderPanel.add(nomLabel);
 		
-		JLabel dateLabel = new JLabel(artiste.getDates());
-		dateLabel.setFont(fontDates);
-		nomEtDatePanel.add(dateLabel);
+		JLabel dateLabel = new JLabel(artiste.getDates(), SwingConstants.LEFT);
+		dateLabel.setFont(fontDatesEtChiffres);
+		artistHeaderPanel.add(dateLabel);
 		
-		int nbAlbums = artiste.getNbAlbum();
-		int nbConcerts = artiste.getNbConcert();
-		double poids = artiste.getAlbumsFormat().getPoids();
-		StringBuilder chiffres = new StringBuilder();
-		if (poids > 0) {
-			chiffres.append("  Poids total: ").append(Format.poidsToString(poids));
-		}
-		if (nbAlbums > 0) {
-			chiffres.append("  Nombre d'albums: ").append(nbAlbums);
-		}
-		if (nbConcerts > 0) {
-			chiffres.append("  Nombre de concerts: ").append(nbConcerts);
-		}
+		JLabel nbAlbumsLabel = new JLabel(getArtistFigures(artiste), SwingConstants.RIGHT);
+		nbAlbumsLabel.setFont(fontDatesEtChiffres);
+		nbAlbumsLabel.setMaximumSize(ARTIST_ALL_HEADERS_DIMENSION);
+		artistHeaderPanel.add(nbAlbumsLabel);
 		
-		JLabel nbAlbumsLabel = new JLabel(chiffres.toString());
-		
-		nomEtDatePanel.add(nbAlbumsLabel);
-		
-		add(nomEtDatePanel);
+		add(artistHeaderPanel);
 		
 		add(new CollectionFormatPane(artiste.getAlbumsFormat()));
 		
@@ -102,6 +92,24 @@ public class ArtisteInformationPanel extends JPanel {
 			albumsEtConcertsTabs.add(concertScrollTable, "Concerts");		
 			add(albumsEtConcertsTabs);
 		}
+	}
+	
+	private String getArtistFigures(Artiste artiste) {
+		
+		int nbAlbums = artiste.getNbAlbum();
+		int nbConcerts = artiste.getNbConcert();
+		double poids = artiste.getAlbumsFormat().getPoids();
+		StringBuilder chiffres = new StringBuilder();
+		if (poids > 0) {
+			chiffres.append("Poids total: ").append(Format.poidsToString(poids));
+		}
+		if (nbAlbums > 0) {
+			chiffres.append("  -  Nombre d'albums: ").append(nbAlbums);
+		}
+		if (nbConcerts > 0) {
+			chiffres.append("  -  Nombre de concerts: ").append(nbConcerts);
+		}
+		return chiffres.toString();
 	}
 	
 	private JScrollPane getAlbumsScrollPane(List<Album> albums, GenerationPane generationPane) {
