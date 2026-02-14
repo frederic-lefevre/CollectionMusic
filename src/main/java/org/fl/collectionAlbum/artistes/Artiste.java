@@ -218,7 +218,7 @@ public class Artiste {
 	}
 	
 	public ListeConcert getConcerts() {
-		return concerts;
+		return concerts.sortChrono();
 	}
 
 	public String getNomComplet() {

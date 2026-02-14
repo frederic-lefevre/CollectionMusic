@@ -54,6 +54,6 @@ public class RapportConcertsDunArtiste extends RapportHtml {
 		write("<table class=\"auteurTab\">\n  <tr>\n    <td class=\"auteurTitre\"><span class=\"auteurTitre\">");
 		write(artiste.getNomComplet()).write("</span>").write(artiste.getDates());
 		write("</td>\n  </tr>\n</table>\n");
-		FragmentListeConcerts.buildTable(artiste.getConcerts().sortChrono(), rBuilder, "../../");		
+		FragmentListeConcerts.buildTable(artiste.getConcerts(), rBuilder, "../../");		
 	}
 }
