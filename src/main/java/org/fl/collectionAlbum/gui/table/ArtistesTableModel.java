@@ -40,10 +40,11 @@ public class ArtistesTableModel extends AbstractTableModel {
 	public static final int DECES_COL_IDX = 2;
 	public static final int NB_CONCERTS_COL_IDX = 3;
 	public static final int NB_ALBUMS_COL_IDX = 4;
+	public static final int POIDS_COL_IDX = 5;
 	
 	private static final long serialVersionUID = 1L;
 
-	private static final List<String> firstEntetes = List.of("Noms", "Naissance", "Décès", "Concerts", "Albums");
+	private static final List<String> firstEntetes = List.of("Noms", "Naissance", "Décès", "Concerts", "Albums", "Poids");
 	private static final List<String> entetes = new ArrayList<String>(firstEntetes);
 	
 	private final List<Artiste> artistesList;
@@ -99,6 +100,7 @@ public class ArtistesTableModel extends AbstractTableModel {
 				case DECES_COL_IDX -> artistesList.get(rowIndex);
 				case NB_CONCERTS_COL_IDX -> artistesList.get(rowIndex).getNbConcert();
 				case NB_ALBUMS_COL_IDX -> artistesList.get(rowIndex).getNbAlbum();
+				case POIDS_COL_IDX -> artistesList.get(rowIndex).getAlbumsFormat().getPoids();
 				default -> artistesList.get(rowIndex).getAlbumsFormat().getSupportsPhysiquesNumbers()
 					.get(MediaSupportCategories.values()[columnIndex-firstEntetes.size()]);
 			};

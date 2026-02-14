@@ -71,12 +71,14 @@ public class ArtistesJTable extends JTable {
 		getColumnModel().getColumn(ArtistesTableModel.DECES_COL_IDX).setCellRenderer(new AuteurDateRenderer(artisteDecesGetter, dateFormatterFunction));
 		getColumnModel().getColumn(ArtistesTableModel.NB_CONCERTS_COL_IDX).setCellRenderer(new CollectionNumberRenderer());
 		getColumnModel().getColumn(ArtistesTableModel.NB_ALBUMS_COL_IDX).setCellRenderer(new CollectionNumberRenderer());
+		getColumnModel().getColumn(ArtistesTableModel.POIDS_COL_IDX).setCellRenderer(new CollectionNumberRenderer());
 		
 		getColumnModel().getColumn(ArtistesTableModel.NOM_COL_IDX).setPreferredWidth(400);
 		getColumnModel().getColumn(ArtistesTableModel.NAISSANCE_COL_IDX).setPreferredWidth(150);
 		getColumnModel().getColumn(ArtistesTableModel.DECES_COL_IDX).setPreferredWidth(150);
 		getColumnModel().getColumn(ArtistesTableModel.NB_CONCERTS_COL_IDX).setPreferredWidth(100);
 		getColumnModel().getColumn(ArtistesTableModel.NB_ALBUMS_COL_IDX).setPreferredWidth(100);
+		getColumnModel().getColumn(ArtistesTableModel.POIDS_COL_IDX).setPreferredWidth(100);
 				
 		for (int columnIndex = artistesTableModel.getFirstEntetesNumber(); columnIndex < artistesTableModel.getColumnCount(); columnIndex++) {
 			getColumnModel().getColumn(columnIndex).setCellRenderer(new CollectionNumberRenderer());
