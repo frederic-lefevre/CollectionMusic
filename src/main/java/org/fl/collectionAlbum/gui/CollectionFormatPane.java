@@ -45,11 +45,11 @@ public class CollectionFormatPane extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	private static EnumMap<MediaSupportCategories, Set<MediaSupports>> supportCategoriesMap;
+	private static final Dimension SIMPLE_CELL_DIMENSION = new Dimension(120,30);
+	
+	private static final EnumMap<MediaSupportCategories, Set<MediaSupports>> supportCategoriesMap = new EnumMap<>(MediaSupportCategories.class);
 	
 	static {
-		
-		supportCategoriesMap = new EnumMap<>(MediaSupportCategories.class);
 		
 		for (MediaSupportCategories mediaSupportCategory : MediaSupportCategories.values()) {
 			supportCategoriesMap.put(mediaSupportCategory, new HashSet<>());
@@ -64,6 +64,8 @@ public class CollectionFormatPane extends JPanel {
 		super();
 		
 		GridBagLayout layout = new GridBagLayout();
+		GridBagConstraints constraints = new GridBagConstraints();
+		constraints.gridheight = 1;
 		
 		setLayout(layout);
 		setBackground(Color.WHITE);
@@ -72,25 +74,18 @@ public class CollectionFormatPane extends JPanel {
 		MediaSupports[] mediaSupports = MediaSupports.values();
 		for (int colIdx = 0; colIdx < mediaSupports.length; colIdx++) {
 			
-			GridBagConstraints constraints = new GridBagConstraints();
+			
 			constraints.gridx = colIdx;
 			constraints.gridy = 0;
-			constraints.gridheight = 1;
 			constraints.gridwidth = 1;
 			
-			JLabel lbl = new JLabel(mediaSupports[colIdx].toString(), SwingConstants.CENTER);
-			lbl.setPreferredSize(new Dimension(120,30));
-			lbl.setBorder(BorderFactory.createLineBorder(getForeground()));
-			lbl.setOpaque(true);
-			lbl.setBackground(Color.LIGHT_GRAY);
+			JLabel lbl = createCellLabel(mediaSupports[colIdx].toString(), SIMPLE_CELL_DIMENSION, Color.LIGHT_GRAY);
 			layout.setConstraints(lbl, constraints);
 			add(lbl);
 
 			constraints.gridy = 1;
 			
-			JLabel lbl2 = new JLabel(Format.poidsToString(format.getNb(mediaSupports[colIdx])), SwingConstants.CENTER);
-			lbl2.setPreferredSize(new Dimension(120,30));
-			lbl2.setBorder(BorderFactory.createLineBorder(getForeground()));
+			JLabel lbl2 = createCellLabel(Format.poidsToString(format.getNb(mediaSupports[colIdx])), SIMPLE_CELL_DIMENSION, Color.WHITE);
 			layout.setConstraints(lbl2, constraints);
 			add(lbl2);
 		}
@@ -100,31 +95,33 @@ public class CollectionFormatPane extends JPanel {
 		for (int mediaIdx = 0; mediaIdx < mediaSupportCategories.length; mediaIdx++) {
 			
 			MediaSupportCategories mediaSupportCategory = mediaSupportCategories[mediaIdx];
-			int numberMediaSupport = supportCategoriesMap.get(mediaSupportCategory).size();
 			
-			GridBagConstraints constraints = new GridBagConstraints();
 			constraints.gridx = colIdx;
 			constraints.gridy = 2;
-			constraints.gridheight = 1;
-			constraints.gridwidth = numberMediaSupport;
+			constraints.gridwidth = supportCategoriesMap.get(mediaSupportCategory).size();
+			Dimension cellDimension = new Dimension(120*constraints.gridwidth,30);
 			
-			JLabel lbl = new JLabel(mediaSupportCategory.toString(), SwingConstants.CENTER);
-			lbl.setPreferredSize(new Dimension(120*numberMediaSupport,30));
-			lbl.setBorder(BorderFactory.createLineBorder(getForeground()));
-			lbl.setOpaque(true);
-			lbl.setBackground(Color.LIGHT_GRAY);
+			JLabel lbl = createCellLabel(mediaSupportCategory.toString(), cellDimension, Color.LIGHT_GRAY);
 			layout.setConstraints(lbl, constraints);
 			add(lbl);
 
-			constraints.gridy =3;
+			constraints.gridy = 3;
 			
-			JLabel lbl2 = new JLabel(Format.poidsToString(format.getSupportsPhysiquesNumbers().get(mediaSupportCategory)), SwingConstants.CENTER);
-			lbl2.setPreferredSize(new Dimension(120*numberMediaSupport,30));
-			lbl2.setBorder(BorderFactory.createLineBorder(getForeground()));
+			JLabel lbl2 = createCellLabel(Format.poidsToString(format.getSupportsPhysiquesNumbers().get(mediaSupportCategory)), cellDimension, Color.WHITE);
 			layout.setConstraints(lbl2, constraints);
 			add(lbl2);
 			
-			colIdx = colIdx + numberMediaSupport;
+			colIdx = colIdx + constraints.gridwidth;
 		}
+	}
+	
+	private JLabel createCellLabel(String labelText, Dimension labelDimension, Color backgroundColor) {
+		
+		JLabel lbl = new JLabel(labelText, SwingConstants.CENTER);
+		lbl.setPreferredSize(labelDimension);
+		lbl.setBorder(BorderFactory.createLineBorder(getForeground()));
+		lbl.setOpaque(true);
+		lbl.setBackground(backgroundColor);
+		return lbl;
 	}
 }
