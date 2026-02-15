@@ -42,7 +42,7 @@ import org.fl.collectionAlbum.gui.renderer.AuteurListRenderer;
 import org.fl.collectionAlbum.gui.renderer.DateRenderer;
 import org.fl.collectionAlbum.utils.TemporalUtils;
 
-public class ConcertsJTable extends JTable implements MusicArtefactTable<Concert> {
+public class ConcertsJTable extends MusicArtefactTable<Concert> {
 
 	private static final long serialVersionUID = 1L;
 

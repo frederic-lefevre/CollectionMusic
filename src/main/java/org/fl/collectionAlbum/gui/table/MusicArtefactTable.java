@@ -24,9 +24,18 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui.table;
 
+import javax.swing.JTable;
+import javax.swing.table.TableModel;
+
 import org.fl.collectionAlbum.MusicArtefact;
 
-public interface MusicArtefactTable<T extends MusicArtefact> {
+public abstract class MusicArtefactTable<T extends MusicArtefact> extends JTable {
 
-	public T getSelectedMusicArtefact();
+	private static final long serialVersionUID = 1L;
+
+	public MusicArtefactTable(TableModel dm) {
+		super(dm);
+	}
+	
+	public abstract T getSelectedMusicArtefact();
 }

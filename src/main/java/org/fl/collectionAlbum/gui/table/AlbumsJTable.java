@@ -51,7 +51,7 @@ import org.fl.collectionAlbum.gui.renderer.StringToHtmlRenderer;
 import org.fl.collectionAlbum.utils.CollectionUtils;
 import org.fl.collectionAlbum.utils.TemporalUtils;
 
-public class AlbumsJTable extends JTable implements MusicArtefactTable<Album> {
+public class AlbumsJTable extends MusicArtefactTable<Album> {
 
 	private static final long serialVersionUID = 1L;
 
