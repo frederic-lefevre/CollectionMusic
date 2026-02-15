@@ -113,10 +113,11 @@ public abstract class MusicArtefactMouseAdapter<T extends MusicArtefact> extends
 	
 	private void doubleClickAction() {
 		
-		if (musicArtefactTable.getSelectedColumn() == musicArtefactTable.getArtistsColumn()) {
+		int selectedColumn = musicArtefactTable.getSelectedColumn();
+		if (selectedColumn == musicArtefactTable.getArtistsColumn()) {
 			displayArtistesTable();
 		} else {
-			specificDoubleClickAction();
+			specificDoubleClickAction(selectedColumn);
 		}
 	}
 	
@@ -124,6 +125,6 @@ public abstract class MusicArtefactMouseAdapter<T extends MusicArtefact> extends
 		musicArtefactMenuItems.enableMenuItems(musicArtefactTable.getSelectedMusicArtefact());
 	}
 	
-	abstract void specificDoubleClickAction();
+	abstract void specificDoubleClickAction(int selectedColumn);
 	
 }
