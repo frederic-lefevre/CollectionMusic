@@ -64,7 +64,7 @@ public class ConcertMouseAdapter extends MusicArtefactMouseAdapter<Concert>  {
 	}
 	
 	@Override
-	void doubleClickAction() {
+	void specificDoubleClickAction() {
 		concertAction();
 	}
 }

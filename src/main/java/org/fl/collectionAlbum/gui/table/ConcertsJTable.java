@@ -96,4 +96,9 @@ public class ConcertsJTable extends MusicArtefactTable<Concert> {
 		}
 		return ((ConcertTableModel)getModel()).getConcertAt(convertRowIndexToModel(rowIdxs[0]));
 	}
+
+	@Override
+	public int getArtistsColumn() {
+		return ConcertTableModel.ARTISTE_COL_IDX;
+	}
 }

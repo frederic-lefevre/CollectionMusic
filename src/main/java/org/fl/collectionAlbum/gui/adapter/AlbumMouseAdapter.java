@@ -52,7 +52,7 @@ public class AlbumMouseAdapter extends MusicArtefactMouseAdapter<Album> {
 	}
 
 	@Override
-	void doubleClickAction() {
+	void specificDoubleClickAction() {
 		
 		Album selectedAlbum = musicArtefactTable.getSelectedMusicArtefact();
 		

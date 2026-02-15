@@ -38,4 +38,5 @@ public abstract class MusicArtefactTable<T extends MusicArtefact> extends JTable
 	}
 	
 	public abstract T getSelectedMusicArtefact();
+	public abstract int getArtistsColumn();
 }

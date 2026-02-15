@@ -128,4 +128,9 @@ public class AlbumsJTable extends MusicArtefactTable<Album> {
 		}
 		return ((AlbumsTableModel)getModel()).getAlbumAt(convertRowIndexToModel(rowIdxs[0]));
 	}
+
+	@Override
+	public int getArtistsColumn() {
+		return AlbumsTableModel.AUTEUR_COL_IDX;
+	}
 }
