@@ -40,6 +40,7 @@ public class ConcertMouseAdapter extends MusicArtefactMouseAdapter<Concert>  {
 	private static final String TITLE = "Informations détaillées du concert";
 	
 	public ConcertMouseAdapter(MusicArtefactTable<Concert> concertsTable, List<OsAction<Concert>> osActions, GenerationPane generationPane) {
+		
 		super(concertsTable, osActions, generationPane);
 		
 		musicArtefactMenuItems.addMenuItem(TITLE, new ConcertCustomActionListener(), (concert) -> concert != null, localJPopupMenu);
@@ -49,7 +50,21 @@ public class ConcertMouseAdapter extends MusicArtefactMouseAdapter<Concert>  {
 	
 		@Override
 		public void actionPerformed(ActionEvent e) {			
-			JOptionPane.showMessageDialog(null, new DetailedConcertInfoPane(musicArtefactTable.getSelectedMusicArtefact()), TITLE, JOptionPane.PLAIN_MESSAGE);			
+			concertAction();
 		}	
+	}
+
+	private void concertAction() {
+		
+		Concert selectedConcert = musicArtefactTable.getSelectedMusicArtefact();
+		
+		if (selectedConcert != null) {
+			JOptionPane.showMessageDialog(null, new DetailedConcertInfoPane(selectedConcert), TITLE, JOptionPane.PLAIN_MESSAGE);
+		}
+	}
+	
+	@Override
+	void doubleClickAction() {
+		concertAction();
 	}
 }

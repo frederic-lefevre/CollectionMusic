@@ -27,7 +27,10 @@ package org.fl.collectionAlbum.gui.adapter;
 import java.util.List;
 import java.util.stream.Stream;
 
+import javax.swing.JOptionPane;
+
 import org.fl.collectionAlbum.albums.Album;
+import org.fl.collectionAlbum.gui.DetailedAlbumAndDiscogsInfoPane;
 import org.fl.collectionAlbum.gui.GenerationPane;
 import org.fl.collectionAlbum.gui.listener.AlbumCustomActionListener;
 import org.fl.collectionAlbum.gui.listener.AlbumCustomActionListener.CustomAlbumAction;
@@ -39,12 +42,25 @@ public class AlbumMouseAdapter extends MusicArtefactMouseAdapter<Album> {
 	public AlbumMouseAdapter(MusicArtefactTable<Album> albumsTable, List<OsAction<Album>>  osActions, GenerationPane generationPane) {
 		
 		super(albumsTable, osActions, generationPane);
-
+		
 		Stream.of(CustomAlbumAction.values()).forEachOrdered(customAction -> 
 			musicArtefactMenuItems.addMenuItem(
 						customAction.getActionTitle(), 
 						new AlbumCustomActionListener(albumsTable, customAction, generationPane), 
 						customAction.getDisplayable(),
 						localJPopupMenu));
+	}
+
+	@Override
+	void doubleClickAction() {
+		
+		Album selectedAlbum = musicArtefactTable.getSelectedMusicArtefact();
+		
+		if (CustomAlbumAction.DETAILED_INFO_DISPLAY.getDisplayable().test(selectedAlbum)) {
+			JOptionPane.showMessageDialog(null, 
+					new DetailedAlbumAndDiscogsInfoPane(selectedAlbum),
+					CustomAlbumAction.DETAILED_INFO_DISPLAY.getActionTitle(), 
+					JOptionPane.INFORMATION_MESSAGE);
+		}
 	}
 }

@@ -39,7 +39,7 @@ import org.fl.collectionAlbum.gui.listener.MusicArtefactCommandListener;
 import org.fl.collectionAlbum.gui.table.MusicArtefactTable;
 import org.fl.collectionAlbum.osAction.OsAction;
 
-public class MusicArtefactMouseAdapter<T extends MusicArtefact> extends MouseAdapter {
+public abstract class MusicArtefactMouseAdapter<T extends MusicArtefact> extends MouseAdapter {
 
 	protected final CollectionMenuItems<T> musicArtefactMenuItems;
 	protected final JPopupMenu localJPopupMenu;
@@ -63,20 +63,25 @@ public class MusicArtefactMouseAdapter<T extends MusicArtefact> extends MouseAda
 	
 	@Override
 	public void mousePressed(MouseEvent evt) {
-		if (evt.isPopupTrigger()) {
-			enableMenuItems();
-			localJPopupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
-		}
+		actionOnMousePressedOrReleased(evt);
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent evt) {
+		actionOnMousePressedOrReleased(evt);
+	}
+
+	private void actionOnMousePressedOrReleased(MouseEvent evt) {
 		if (evt.isPopupTrigger()) {
 			enableMenuItems();
 			localJPopupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
+		} else if ((evt.getButton() == 1) && (evt.getClickCount() > 1)) {
+			doubleClickAction();
 		}
 	}
-
+	
+	abstract void doubleClickAction();
+	
 	private void enableMenuItems() {
 		musicArtefactMenuItems.enableMenuItems(musicArtefactTable.getSelectedMusicArtefact());
 	}
