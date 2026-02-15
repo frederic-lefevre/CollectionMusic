@@ -29,11 +29,16 @@ import java.util.stream.Stream;
 
 import javax.swing.JOptionPane;
 
+import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
+import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
+import org.fl.collectionAlbum.disocgs.DiscogsInventory;
 import org.fl.collectionAlbum.gui.DetailedAlbumAndDiscogsInfoPane;
 import org.fl.collectionAlbum.gui.GenerationPane;
 import org.fl.collectionAlbum.gui.listener.AlbumCustomActionListener;
+import org.fl.collectionAlbum.gui.listener.OsActionListener;
 import org.fl.collectionAlbum.gui.listener.AlbumCustomActionListener.CustomAlbumAction;
+import org.fl.collectionAlbum.gui.table.AlbumsTableModel;
 import org.fl.collectionAlbum.gui.table.MusicArtefactTable;
 import org.fl.collectionAlbum.osAction.OsAction;
 
@@ -55,8 +60,16 @@ public class AlbumMouseAdapter extends MusicArtefactMouseAdapter<Album> {
 	void specificDoubleClickAction(int selectedColumn) {
 		
 		Album selectedAlbum = musicArtefactTable.getSelectedMusicArtefact();
+		String discogsReleaseId = selectedAlbum.getDiscogsLink();
 		
-		if (CustomAlbumAction.DETAILED_INFO_DISPLAY.getDisplayable().test(selectedAlbum)) {
+		if ((selectedColumn == AlbumsTableModel.DISCOGS_COL_IDX) && (discogsReleaseId != null) && !discogsReleaseId.isEmpty()) {
+				
+			DiscogsAlbumRelease release = DiscogsInventory.getDiscogsAlbumRelease(discogsReleaseId);
+ 
+			(new OsActionListener<>(List.of(Control.getDiscogsBaseUrlForRelease() + release.getInventoryCsvAlbum().getReleaseId()), Control.getDisplayUrlAction()))
+				.actionPerformed(null);
+
+		} else if (CustomAlbumAction.DETAILED_INFO_DISPLAY.getDisplayable().test(selectedAlbum)) {
 			JOptionPane.showMessageDialog(null, 
 					new DetailedAlbumAndDiscogsInfoPane(selectedAlbum),
 					CustomAlbumAction.DETAILED_INFO_DISPLAY.getActionTitle(), 
