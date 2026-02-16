@@ -30,8 +30,12 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import org.fl.collectionAlbum.concerts.Concert;
+import org.fl.collectionAlbum.concerts.LieuConcert;
+import org.fl.collectionAlbum.concerts.ListeConcert;
 import org.fl.collectionAlbum.gui.DetailedConcertInfoPane;
 import org.fl.collectionAlbum.gui.GenerationPane;
+import org.fl.collectionAlbum.gui.table.ConcertTableModel;
+import org.fl.collectionAlbum.gui.table.ConcertsScrollJTablePane;
 import org.fl.collectionAlbum.gui.table.MusicArtefactTable;
 import org.fl.collectionAlbum.osAction.OsAction;
 
@@ -68,6 +72,20 @@ public class ConcertMouseAdapter extends MusicArtefactMouseAdapter<Concert>  {
 	
 	@Override
 	void specificDoubleClickAction(int selectedColumn, Concert selectedConcert) {
-		concertAction(selectedConcert);
+		
+		if (selectedColumn == ConcertTableModel.LIEU_COL_IDX) {
+			LieuConcert lieuConcert = selectedConcert.getLieuConcert();
+			if (lieuConcert != null) {
+				List<Concert> concertsDuMemeLieu = ListeConcert.Builder
+						.getBuilderFrom(((ConcertTableModel)musicArtefactTable.getModel()).getListeConcert())
+						.withConcertSatisfying(concert -> lieuConcert.equals(concert.getLieuConcert()))
+						.build()
+						.getConcerts();
+
+				JOptionPane.showMessageDialog(null, new ConcertsScrollJTablePane(concertsDuMemeLieu, generationPane), lieuConcert.getLieu(), JOptionPane.PLAIN_MESSAGE);
+			}			 
+		} else {
+			concertAction(selectedConcert);
+		}
 	}
 }
