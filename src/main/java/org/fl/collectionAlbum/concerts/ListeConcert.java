@@ -27,14 +27,15 @@ package org.fl.collectionAlbum.concerts;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 public class ListeConcert {
 
 	private static final ConcertChronoComparator CONCERT_CHRONO_COMPARATOR = new ConcertChronoComparator();
 	
 	private final List<Concert> concerts;
 	
-	public ListeConcert() {
+	private ListeConcert() {
 		concerts = new ArrayList<Concert>();
 	}
 	
@@ -57,5 +58,37 @@ public class ListeConcert {
 
 	public List<Concert> getConcerts() {
 		return concerts;
-	}	
+	}
+	
+	public static class Builder {
+		
+		private List<Concert> concerts;
+		
+		private Builder() {
+			concerts = new ArrayList<>();
+		}
+		
+		private Builder(List<Concert> lc) {
+			concerts = new ArrayList<>(lc);
+		}
+		
+		public static Builder getBuilder() {
+			return new Builder();
+		}
+		
+		public static Builder getBuilderFrom(List<Concert> lc) {
+			return new Builder(lc);
+		}
+		
+		public Builder withConcertSatisfying(Predicate<Concert> concertPredicate) {
+			concerts = concerts.stream().filter(concertPredicate).collect(Collectors.toList());
+			return this;
+		}
+		
+		public ListeConcert build() {
+			ListeConcert listeConcert = new ListeConcert();
+			concerts.forEach(concert -> listeConcert.addConcert(concert));
+			return listeConcert;
+		}
+	}
 }
