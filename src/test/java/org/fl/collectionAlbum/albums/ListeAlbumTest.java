@@ -32,8 +32,8 @@ import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
-import org.assertj.core.util.Arrays;
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.format.ContentNature;
@@ -177,7 +177,7 @@ class ListeAlbumTest {
 
 	private List<Album> buildAlbumList(String ...albumJsons) {
 		
-		return Arrays.asList(albumJsons).stream()
+		return Stream.of(albumJsons)
 			.map(albumJson -> {
 				try {
 					return (ObjectNode)mapper.readTree((String)albumJson);
@@ -193,6 +193,11 @@ class ListeAlbumTest {
 
 				return new Album(jAlbum, lla, Path.of("dummyPath"));
 			}).toList();
+	}
+	
+	@Test
+	void testBuildFromNullListe() {
+		assertThatNullPointerException().isThrownBy(() -> ListeAlbum.Builder.getBuilderFrom(null).build());
 	}
 	
 	@Test
