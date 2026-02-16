@@ -57,10 +57,9 @@ public class AlbumMouseAdapter extends MusicArtefactMouseAdapter<Album> {
 	}
 
 	@Override
-	void specificDoubleClickAction(int selectedColumn) {
+	void specificDoubleClickAction(int selectedColumn, Album selectedMusicArtefact) {
 		
-		Album selectedAlbum = musicArtefactTable.getSelectedMusicArtefact();
-		String discogsReleaseId = selectedAlbum.getDiscogsLink();
+		String discogsReleaseId = selectedMusicArtefact.getDiscogsLink();
 		
 		if ((selectedColumn == AlbumsTableModel.DISCOGS_COL_IDX) && (discogsReleaseId != null) && !discogsReleaseId.isEmpty()) {
 				
@@ -69,9 +68,9 @@ public class AlbumMouseAdapter extends MusicArtefactMouseAdapter<Album> {
 			(new OsActionListener<>(List.of(Control.getDiscogsBaseUrlForRelease() + release.getInventoryCsvAlbum().getReleaseId()), Control.getDisplayUrlAction()))
 				.actionPerformed(null);
 
-		} else if (CustomAlbumAction.DETAILED_INFO_DISPLAY.getDisplayable().test(selectedAlbum)) {
+		} else if (CustomAlbumAction.DETAILED_INFO_DISPLAY.getDisplayable().test(selectedMusicArtefact)) {
 			JOptionPane.showMessageDialog(null, 
-					new DetailedAlbumAndDiscogsInfoPane(selectedAlbum),
+					new DetailedAlbumAndDiscogsInfoPane(selectedMusicArtefact),
 					CustomAlbumAction.DETAILED_INFO_DISPLAY.getActionTitle(), 
 					JOptionPane.INFORMATION_MESSAGE);
 		}

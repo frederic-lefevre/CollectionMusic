@@ -56,15 +56,18 @@ public class ConcertMouseAdapter extends MusicArtefactMouseAdapter<Concert>  {
 
 	private void concertAction() {
 		
-		Concert selectedConcert = musicArtefactTable.getSelectedMusicArtefact();
-		
+		Concert selectedConcert = musicArtefactTable.getSelectedMusicArtefact();	
 		if (selectedConcert != null) {
-			JOptionPane.showMessageDialog(null, new DetailedConcertInfoPane(selectedConcert), TITLE, JOptionPane.PLAIN_MESSAGE);
+			concertAction(selectedConcert);
 		}
 	}
 	
+	private void concertAction(Concert selectedConcert) {
+		JOptionPane.showMessageDialog(null, new DetailedConcertInfoPane(selectedConcert), TITLE, JOptionPane.PLAIN_MESSAGE);
+	}
+	
 	@Override
-	void specificDoubleClickAction(int selectedColumn) {
-		concertAction();
+	void specificDoubleClickAction(int selectedColumn, Concert selectedConcert) {
+		concertAction(selectedConcert);
 	}
 }

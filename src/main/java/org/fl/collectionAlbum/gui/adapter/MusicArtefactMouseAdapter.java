@@ -97,27 +97,37 @@ public abstract class MusicArtefactMouseAdapter<T extends MusicArtefact> extends
 	private void displayArtistesTable() {
 		
 		T selectedMusicArtefact = musicArtefactTable.getSelectedMusicArtefact();
-		
 		if (selectedMusicArtefact != null) {
 			List<Artiste> artistes = selectedMusicArtefact.getAllArtists();
 			if (! artistes.isEmpty()) {
-				if (artistes.size() == 1) {
-					Artiste selectedArtiste = artistes.get(0);
-					JOptionPane.showMessageDialog(null, new ArtisteInformationPanel(selectedArtiste, generationPane), selectedArtiste.getNomComplet(), JOptionPane.PLAIN_MESSAGE);
-				} else {
-					JOptionPane.showMessageDialog(null, new ArtistesScrollJTablePane(artistes, generationPane), "Artistes", JOptionPane.PLAIN_MESSAGE);
-				}
+				displayArtistesTable(artistes);
 			}
-		}	
+		}		
+	}
+	
+	private void displayArtistesTable(List<Artiste> artistes) {
+
+		if (artistes.size() == 1) {
+			Artiste selectedArtiste = artistes.get(0);
+			JOptionPane.showMessageDialog(null, new ArtisteInformationPanel(selectedArtiste, generationPane), selectedArtiste.getNomComplet(), JOptionPane.PLAIN_MESSAGE);
+		} else {
+			JOptionPane.showMessageDialog(null, new ArtistesScrollJTablePane(artistes, generationPane), "Artistes", JOptionPane.PLAIN_MESSAGE);
+		}
 	}
 	
 	private void doubleClickAction() {
 		
-		int selectedColumn = musicArtefactTable.getSelectedColumn();
-		if (selectedColumn == musicArtefactTable.getArtistsColumn()) {
-			displayArtistesTable();
-		} else {
-			specificDoubleClickAction(selectedColumn);
+		T selectedMusicArtefact = musicArtefactTable.getSelectedMusicArtefact();
+		
+		if (selectedMusicArtefact != null) {
+			
+			int selectedColumn = musicArtefactTable.getSelectedColumn();
+			List<Artiste> artistes = selectedMusicArtefact.getAllArtists();
+			if ((selectedColumn == musicArtefactTable.getArtistsColumn()) && !artistes.isEmpty()) {
+				displayArtistesTable(artistes);
+			} else {
+				specificDoubleClickAction(selectedColumn, selectedMusicArtefact);
+			}
 		}
 	}
 	
@@ -125,6 +135,6 @@ public abstract class MusicArtefactMouseAdapter<T extends MusicArtefact> extends
 		musicArtefactMenuItems.enableMenuItems(musicArtefactTable.getSelectedMusicArtefact());
 	}
 	
-	abstract void specificDoubleClickAction(int selectedColumn);
+	abstract void specificDoubleClickAction(int selectedColumn, T selectedMusicArtefact);
 	
 }
