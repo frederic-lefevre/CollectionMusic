@@ -98,7 +98,17 @@ public class ConcertsJTable extends MusicArtefactTable<Concert> {
 	}
 
 	@Override
-	public int getArtistsColumn() {
-		return ConcertTableModel.ARTISTE_COL_IDX;
+	public boolean isLieuColumnSelected() {
+		return isColumnSelected(ConcertTableModel.LIEU_COL_IDX);
+	}
+	
+	@Override
+	public boolean isArtistsColumnSelected() {
+		return isColumnSelected(ConcertTableModel.ARTISTE_COL_IDX);
+	}
+
+	@Override
+	public boolean isDiscogsReleaseColumnSelected() {
+		return false;
 	}
 }

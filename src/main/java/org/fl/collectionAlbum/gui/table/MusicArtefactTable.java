@@ -38,5 +38,7 @@ public abstract class MusicArtefactTable<T extends MusicArtefact> extends JTable
 	}
 	
 	public abstract T getSelectedMusicArtefact();
-	public abstract int getArtistsColumn();
+	public abstract boolean isArtistsColumnSelected();
+	public abstract boolean isDiscogsReleaseColumnSelected();
+	public abstract boolean isLieuColumnSelected();
 }

@@ -46,7 +46,7 @@ public class ConcertMouseAdapter extends MusicArtefactMouseAdapter<Concert>  {
 	public ConcertMouseAdapter(MusicArtefactTable<Concert> concertsTable, List<OsAction<Concert>> osActions, GenerationPane generationPane) {
 		
 		super(concertsTable, osActions, generationPane);
-		
+
 		musicArtefactMenuItems.addMenuItem(TITLE, new ConcertCustomActionListener(), (concert) -> concert != null, localJPopupMenu);
 	}
 	
@@ -71,9 +71,9 @@ public class ConcertMouseAdapter extends MusicArtefactMouseAdapter<Concert>  {
 	}
 	
 	@Override
-	void specificDoubleClickAction(int selectedColumn, Concert selectedConcert) {
+	void specificDoubleClickAction(Concert selectedConcert) {
 		
-		if (selectedColumn == ConcertTableModel.LIEU_COL_IDX) {
+		if (musicArtefactTable.isLieuColumnSelected()) {
 			LieuConcert lieuConcert = selectedConcert.getLieuConcert();
 			if (lieuConcert != null) {
 				List<Concert> concertsDuMemeLieu = ListeConcert.Builder

@@ -115,7 +115,7 @@ public class AlbumsJTable extends MusicArtefactTable<Album> {
 		sorter.setComparator(AlbumsTableModel.COMPOSITION_COL_IDX, COMPOSITION_COMPARATOR);
 		setRowSorter(sorter);
 	}
-
+	
 	// Get the selected album
 	@Override
 	public Album getSelectedMusicArtefact() {
@@ -128,9 +128,19 @@ public class AlbumsJTable extends MusicArtefactTable<Album> {
 		}
 		return ((AlbumsTableModel)getModel()).getAlbumAt(convertRowIndexToModel(rowIdxs[0]));
 	}
+	
+	@Override
+	public boolean isArtistsColumnSelected() {
+		return isColumnSelected(AlbumsTableModel.AUTEUR_COL_IDX);
+	}
 
 	@Override
-	public int getArtistsColumn() {
-		return AlbumsTableModel.AUTEUR_COL_IDX;
+	public boolean isDiscogsReleaseColumnSelected() {
+		return isColumnSelected(AlbumsTableModel.DISCOGS_COL_IDX);
+	}
+
+	@Override
+	public boolean isLieuColumnSelected() {
+		return false;
 	}
 }

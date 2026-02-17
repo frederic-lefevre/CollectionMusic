@@ -38,7 +38,6 @@ import org.fl.collectionAlbum.gui.GenerationPane;
 import org.fl.collectionAlbum.gui.listener.AlbumCustomActionListener;
 import org.fl.collectionAlbum.gui.listener.OsActionListener;
 import org.fl.collectionAlbum.gui.listener.AlbumCustomActionListener.CustomAlbumAction;
-import org.fl.collectionAlbum.gui.table.AlbumsTableModel;
 import org.fl.collectionAlbum.gui.table.MusicArtefactTable;
 import org.fl.collectionAlbum.osAction.OsAction;
 
@@ -57,11 +56,11 @@ public class AlbumMouseAdapter extends MusicArtefactMouseAdapter<Album> {
 	}
 
 	@Override
-	void specificDoubleClickAction(int selectedColumn, Album selectedMusicArtefact) {
+	void specificDoubleClickAction(Album selectedMusicArtefact) {
 		
 		String discogsReleaseId = selectedMusicArtefact.getDiscogsLink();
 		
-		if ((selectedColumn == AlbumsTableModel.DISCOGS_COL_IDX) && (discogsReleaseId != null) && !discogsReleaseId.isEmpty()) {
+		if (musicArtefactTable.isDiscogsReleaseColumnSelected() && (discogsReleaseId != null) && !discogsReleaseId.isEmpty()) {
 				
 			DiscogsAlbumRelease release = DiscogsInventory.getDiscogsAlbumRelease(discogsReleaseId);
  
