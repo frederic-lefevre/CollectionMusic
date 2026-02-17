@@ -32,6 +32,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.TableRowSorter;
 
 import org.fl.collectionAlbum.Control;
+import org.fl.collectionAlbum.gui.GenerationPane;
 import org.fl.collectionAlbum.gui.adapter.MediaFileMouseAdapter;
 import org.fl.collectionAlbum.gui.renderer.AlbumsRenderer;
 import org.fl.collectionAlbum.gui.renderer.CollectionBooleanRenderer;
@@ -48,7 +49,7 @@ public class MediaFilesJTable extends JTable {
 	private static final MediaFilePathAlbumComparator MEDIA_FILE_PATH_ALBUM_COMPARATOR = new MediaFilePathAlbumComparator();
 	private static final CollectionUtils.LongComparator LONG_COMPARATOR = new CollectionUtils.LongComparator();
 	
-	public MediaFilesJTable(MediaFilesTableModel mediaFilesTableModel) {
+	public MediaFilesJTable(MediaFilesTableModel mediaFilesTableModel, GenerationPane generationPane) {
 		super(mediaFilesTableModel);
 		
 		setFillsViewportHeight(true);
@@ -68,7 +69,7 @@ public class MediaFilesJTable extends JTable {
 		
 		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		
-		addMouseListener(new MediaFileMouseAdapter(this, Control.getOsActionOnMediaFilePath()));
+		addMouseListener(new MediaFileMouseAdapter(this, Control.getOsActionOnMediaFilePath(), generationPane));
 		
 		// Row sorter
 		TableRowSorter<MediaFilesTableModel> sorter = new TableRowSorter<>(mediaFilesTableModel);
@@ -87,5 +88,9 @@ public class MediaFilesJTable extends JTable {
 			tLog.severe("Found several selected rows for MediaFilesJTable. Number of selected rows: " + rowIdxs.length);
 		}
 		return ((MediaFilesTableModel)getModel()).getMediaFileAt(convertRowIndexToModel(rowIdxs[0]));
+	}
+	
+	public boolean isAlbumsColumnSelected() {
+		return  isColumnSelected(MediaFilesTableModel.ALBUMS_COL_IDX);
 	}
 }

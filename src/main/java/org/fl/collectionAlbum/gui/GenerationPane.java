@@ -120,7 +120,7 @@ public class GenerationPane extends JPanel {
 			MediaFilesTableModel tm = new MediaFilesTableModel(MediaFilesInventories.getMediaFileInventory(contentNature));
 			startReadCollection.addTableModel(tm);
 			
-			MediaFilesJTable mediaFilesJTable = new MediaFilesJTable(tm);
+			MediaFilesJTable mediaFilesJTable = new MediaFilesJTable(tm, this);
 			
 			// Scroll pane to contain the media path table
 			JScrollPane mediaFilesScrollTable = new JScrollPane(mediaFilesJTable);
