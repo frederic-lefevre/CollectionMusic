@@ -31,6 +31,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
+import javax.swing.SwingUtilities;
 
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.gui.ArtisteInformationPanel;
@@ -72,10 +73,19 @@ public class ArtisteMouseAdapter extends MouseAdapter {
 		actionOnMousePressedOrReleased(evt);
 	}
 	
+	@Override
+	public void mouseClicked(MouseEvent evt) {
+		actionOnMouseClicked(evt);
+	}
+	
 	private void actionOnMousePressedOrReleased(MouseEvent evt) {
 		if (evt.isPopupTrigger()) {
 			localJPopupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
-		} else if ((evt.getButton() == 1) && (evt.getClickCount() > 1)) {
+		}
+	}
+	
+	private void actionOnMouseClicked(MouseEvent evt) {
+		if (SwingUtilities.isLeftMouseButton(evt) && (evt.getClickCount() > 1)) {
 			displayArtistInfo(artistesJTable, generationPane);
 		}
 	}

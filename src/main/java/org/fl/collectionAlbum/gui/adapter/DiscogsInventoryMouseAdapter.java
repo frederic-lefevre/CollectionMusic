@@ -30,6 +30,7 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
+import javax.swing.SwingUtilities;
 
 import org.apache.commons.lang3.stream.Streams;
 import org.fl.collectionAlbum.CollectionAlbumContainer;
@@ -84,11 +85,20 @@ public class DiscogsInventoryMouseAdapter extends MouseAdapter {
 		actionOnMousePressedOrReleased(evt);
 	}
 	
+	@Override
+	public void mouseClicked(MouseEvent evt) {
+		actionOnMouseClicked(evt);
+	}
+	
 	private void actionOnMousePressedOrReleased(MouseEvent evt) {
 		if (evt.isPopupTrigger()) {
 			enableMenuItems();
 			localJPopupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
-		} else if ((evt.getButton() == 1) && (evt.getClickCount() > 1)) {
+		}
+	}
+	
+	private void actionOnMouseClicked(MouseEvent evt) {
+		if (SwingUtilities.isLeftMouseButton(evt) && (evt.getClickCount() > 1)) {
 			doubleClickAction();
 		}
 	}

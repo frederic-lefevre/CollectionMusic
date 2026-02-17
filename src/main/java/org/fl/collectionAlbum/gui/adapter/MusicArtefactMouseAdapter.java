@@ -32,6 +32,7 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
+import javax.swing.SwingUtilities;
 
 import org.fl.collectionAlbum.MusicArtefact;
 import org.fl.collectionAlbum.artistes.Artiste;
@@ -77,12 +78,15 @@ public abstract class MusicArtefactMouseAdapter<T extends MusicArtefact> extends
 		actionOnMousePressedOrReleased(evt);
 	}
 
+	@Override
+	public void mouseClicked(MouseEvent evt) {
+		actionOnMouseClicked(evt);
+	}
+	
 	private void actionOnMousePressedOrReleased(MouseEvent evt) {
 		if (evt.isPopupTrigger()) {
 			enableMenuItems();
 			localJPopupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
-		} else if ((evt.getButton() == 1) && (evt.getClickCount() > 1)) {
-			doubleClickAction();
 		}
 	}
 	
@@ -112,6 +116,12 @@ public abstract class MusicArtefactMouseAdapter<T extends MusicArtefact> extends
 			JOptionPane.showMessageDialog(null, new ArtisteInformationPanel(selectedArtiste, generationPane), selectedArtiste.getNomComplet(), JOptionPane.PLAIN_MESSAGE);
 		} else {
 			JOptionPane.showMessageDialog(null, new ArtistesScrollJTablePane(artistes, generationPane), "Artistes", JOptionPane.PLAIN_MESSAGE);
+		}
+	}
+	
+	private void actionOnMouseClicked(MouseEvent evt) {
+		if (SwingUtilities.isLeftMouseButton(evt) && (evt.getClickCount() > 1)) {
+			doubleClickAction();
 		}
 	}
 	
