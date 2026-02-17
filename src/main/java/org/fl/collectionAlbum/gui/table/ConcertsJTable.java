@@ -42,7 +42,7 @@ import org.fl.collectionAlbum.gui.renderer.AuteurListRenderer;
 import org.fl.collectionAlbum.gui.renderer.DateRenderer;
 import org.fl.collectionAlbum.utils.TemporalUtils;
 
-public class ConcertsJTable extends JTable implements MusicArtefactTable<Concert> {
+public class ConcertsJTable extends MusicArtefactTable<Concert> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -95,5 +95,20 @@ public class ConcertsJTable extends JTable implements MusicArtefactTable<Concert
 			logger.severe("Found several selected rows for ConcertsJTable. Number of selected rows: " + rowIdxs.length);
 		}
 		return ((ConcertTableModel)getModel()).getConcertAt(convertRowIndexToModel(rowIdxs[0]));
+	}
+
+	@Override
+	public boolean isLieuColumnSelected() {
+		return isColumnSelected(ConcertTableModel.LIEU_COL_IDX);
+	}
+	
+	@Override
+	public boolean isArtistsColumnSelected() {
+		return isColumnSelected(ConcertTableModel.ARTISTE_COL_IDX);
+	}
+
+	@Override
+	public boolean isDiscogsReleaseColumnSelected() {
+		return false;
 	}
 }

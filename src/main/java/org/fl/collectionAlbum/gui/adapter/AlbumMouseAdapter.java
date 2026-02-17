@@ -27,9 +27,16 @@ package org.fl.collectionAlbum.gui.adapter;
 import java.util.List;
 import java.util.stream.Stream;
 
+import javax.swing.JOptionPane;
+
+import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
+import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
+import org.fl.collectionAlbum.disocgs.DiscogsInventory;
+import org.fl.collectionAlbum.gui.DetailedAlbumAndDiscogsInfoPane;
 import org.fl.collectionAlbum.gui.GenerationPane;
 import org.fl.collectionAlbum.gui.listener.AlbumCustomActionListener;
+import org.fl.collectionAlbum.gui.listener.OsActionListener;
 import org.fl.collectionAlbum.gui.listener.AlbumCustomActionListener.CustomAlbumAction;
 import org.fl.collectionAlbum.gui.table.MusicArtefactTable;
 import org.fl.collectionAlbum.osAction.OsAction;
@@ -39,12 +46,32 @@ public class AlbumMouseAdapter extends MusicArtefactMouseAdapter<Album> {
 	public AlbumMouseAdapter(MusicArtefactTable<Album> albumsTable, List<OsAction<Album>>  osActions, GenerationPane generationPane) {
 		
 		super(albumsTable, osActions, generationPane);
-
+		
 		Stream.of(CustomAlbumAction.values()).forEachOrdered(customAction -> 
 			musicArtefactMenuItems.addMenuItem(
 						customAction.getActionTitle(), 
 						new AlbumCustomActionListener(albumsTable, customAction, generationPane), 
 						customAction.getDisplayable(),
 						localJPopupMenu));
+	}
+
+	@Override
+	void specificDoubleClickAction(Album selectedMusicArtefact) {
+		
+		String discogsReleaseId = selectedMusicArtefact.getDiscogsLink();
+		
+		if (musicArtefactTable.isDiscogsReleaseColumnSelected() && (discogsReleaseId != null) && !discogsReleaseId.isEmpty()) {
+				
+			DiscogsAlbumRelease release = DiscogsInventory.getDiscogsAlbumRelease(discogsReleaseId);
+ 
+			(new OsActionListener<>(List.of(Control.getDiscogsBaseUrlForRelease() + release.getInventoryCsvAlbum().getReleaseId()), Control.getDisplayUrlAction()))
+				.actionPerformed(null);
+
+		} else if (CustomAlbumAction.DETAILED_INFO_DISPLAY.getDisplayable().test(selectedMusicArtefact)) {
+			JOptionPane.showMessageDialog(null, 
+					new DetailedAlbumAndDiscogsInfoPane(selectedMusicArtefact),
+					CustomAlbumAction.DETAILED_INFO_DISPLAY.getActionTitle(), 
+					JOptionPane.INFORMATION_MESSAGE);
+		}
 	}
 }

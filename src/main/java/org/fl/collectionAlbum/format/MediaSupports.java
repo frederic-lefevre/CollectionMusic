@@ -84,13 +84,13 @@ public enum MediaSupports {
 			JsonMusicProperties.MINI_CD, 		
 			Set.of(ContentNature.AUDIO), 					  
 			SupportMaterial.OPTICAL_DISC,
-			"Mini CD, court, moins de 25 minutes"),
+			"Mini CD moins de 25 minutes"),
 	MiniDVD(	
 			MediaSupportCategories.MiniDVD,   
 			JsonMusicProperties.MINI_DVD, 	
 			Set.of(ContentNature.VIDEO), 					 
 			SupportMaterial.OPTICAL_DISC,
-			"Mini DVD, court, moins de 25 minutes"),
+			"Mini DVD moins de 25 minutes"),
 	VHS(		
 			MediaSupportCategories.VHS, 	  
 			JsonMusicProperties.VHS, 			

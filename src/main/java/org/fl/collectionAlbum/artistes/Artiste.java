@@ -62,7 +62,7 @@ public class Artiste {
 
 		super();
 		albums = ListeAlbum.Builder.getBuilder().build();
-		concerts = new ListeConcert();
+		concerts = ListeConcert.Builder.getBuilder().build();
 		artistRoles = new HashSet<>();
 		
 		nom = JsonUtils.getAsStringOrBlank(jArtiste.get(JsonMusicProperties.NOM));

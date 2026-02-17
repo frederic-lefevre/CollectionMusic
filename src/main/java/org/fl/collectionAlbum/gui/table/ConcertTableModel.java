@@ -24,6 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui.table;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
@@ -82,5 +83,9 @@ public class ConcertTableModel extends AbstractTableModel {
 
 	public Concert getConcertAt(int rowIndex) {
 		return listeConcert.get(rowIndex);
+	}
+	
+	public List<Concert> getListeConcert() {
+		return Collections.unmodifiableList(listeConcert);
 	}
 }

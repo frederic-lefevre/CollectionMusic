@@ -51,7 +51,7 @@ import org.fl.collectionAlbum.gui.renderer.StringToHtmlRenderer;
 import org.fl.collectionAlbum.utils.CollectionUtils;
 import org.fl.collectionAlbum.utils.TemporalUtils;
 
-public class AlbumsJTable extends JTable implements MusicArtefactTable<Album> {
+public class AlbumsJTable extends MusicArtefactTable<Album> {
 
 	private static final long serialVersionUID = 1L;
 
@@ -115,7 +115,7 @@ public class AlbumsJTable extends JTable implements MusicArtefactTable<Album> {
 		sorter.setComparator(AlbumsTableModel.COMPOSITION_COL_IDX, COMPOSITION_COMPARATOR);
 		setRowSorter(sorter);
 	}
-
+	
 	// Get the selected album
 	@Override
 	public Album getSelectedMusicArtefact() {
@@ -127,5 +127,20 @@ public class AlbumsJTable extends JTable implements MusicArtefactTable<Album> {
 			tLog.severe("Found several selected rows for AlbumJTable. Number of selected rows: " + rowIdxs.length);
 		}
 		return ((AlbumsTableModel)getModel()).getAlbumAt(convertRowIndexToModel(rowIdxs[0]));
+	}
+	
+	@Override
+	public boolean isArtistsColumnSelected() {
+		return isColumnSelected(AlbumsTableModel.AUTEUR_COL_IDX);
+	}
+
+	@Override
+	public boolean isDiscogsReleaseColumnSelected() {
+		return isColumnSelected(AlbumsTableModel.DISCOGS_COL_IDX);
+	}
+
+	@Override
+	public boolean isLieuColumnSelected() {
+		return false;
 	}
 }

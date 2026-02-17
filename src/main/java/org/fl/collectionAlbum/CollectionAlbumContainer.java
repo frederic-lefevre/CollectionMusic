@@ -84,7 +84,7 @@ public class CollectionAlbumContainer {
 		collectionAlbumsMusiques = ListeAlbum.Builder.getBuilder().build();
 		collectionArtistes = new ListeArtiste();
 		concertsArtistes = new ListeArtiste();
-		concerts = new ListeConcert();
+		concerts = ListeConcert.Builder.getBuilder().build();
 		statChronoEnregistrement = new StatChrono();
 		statChronoComposition = new StatChrono();
 		calendrierAlbumArtistes = new ChronoArtistes();

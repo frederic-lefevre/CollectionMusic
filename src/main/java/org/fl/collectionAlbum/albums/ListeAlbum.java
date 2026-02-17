@@ -146,7 +146,6 @@ public class ListeAlbum {
 		
 		private Builder(List<Album> la) {
 			albums = new ArrayList<>(la);
-
 		}
 		
 		public static Builder getBuilder() {

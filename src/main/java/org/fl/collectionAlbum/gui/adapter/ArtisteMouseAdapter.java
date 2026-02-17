@@ -31,6 +31,7 @@ import java.awt.event.MouseEvent;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
+import javax.swing.SwingUtilities;
 
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.gui.ArtisteInformationPanel;
@@ -41,6 +42,8 @@ public class ArtisteMouseAdapter extends MouseAdapter {
 
 	private final JPopupMenu localJPopupMenu;
 	private final JMenuItem showArtisteInfo;
+	private final ArtistesJTable artistesJTable; 
+	private final GenerationPane generationPane;
 	
 	public ArtisteMouseAdapter(ArtistesJTable artistesJTable, GenerationPane generationPane) {
 		
@@ -48,19 +51,42 @@ public class ArtisteMouseAdapter extends MouseAdapter {
 		showArtisteInfo = new JMenuItem("Informations sur l'artiste");
 		showArtisteInfo.addActionListener(new ArtisteActionListener(artistesJTable, generationPane));
 		localJPopupMenu.add(showArtisteInfo);
+		this.artistesJTable = artistesJTable;
+		this.generationPane = generationPane;
+	}
+	
+	private static void displayArtistInfo(ArtistesJTable artistesJTable, GenerationPane generationPane) {
+		
+		Artiste selectedArtiste = artistesJTable.getSelectedArtiste();
+		if (selectedArtiste != null) {
+			JOptionPane.showMessageDialog(null, new ArtisteInformationPanel(selectedArtiste, generationPane), selectedArtiste.getNomComplet(), JOptionPane.PLAIN_MESSAGE);
+		}
 	}
 	
 	@Override
 	public void mousePressed(MouseEvent evt) {
-		if (evt.isPopupTrigger()) {
-			localJPopupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
-		}
+		actionOnMousePressedOrReleased(evt);
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent evt) {
+		actionOnMousePressedOrReleased(evt);
+	}
+	
+	@Override
+	public void mouseClicked(MouseEvent evt) {
+		actionOnMouseClicked(evt);
+	}
+	
+	private void actionOnMousePressedOrReleased(MouseEvent evt) {
 		if (evt.isPopupTrigger()) {
 			localJPopupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
+		}
+	}
+	
+	private void actionOnMouseClicked(MouseEvent evt) {
+		if (SwingUtilities.isLeftMouseButton(evt) && (evt.getClickCount() > 1)) {
+			displayArtistInfo(artistesJTable, generationPane);
 		}
 	}
 	
@@ -76,10 +102,7 @@ public class ArtisteMouseAdapter extends MouseAdapter {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			
-			Artiste selectedArtiste = artistesJTable.getSelectedArtiste();
-			
-			JOptionPane.showMessageDialog(null, new ArtisteInformationPanel(selectedArtiste, generationPane), selectedArtiste.getNomComplet(), JOptionPane.PLAIN_MESSAGE);
+			displayArtistInfo(artistesJTable, generationPane);
 		}		
 	}
 }

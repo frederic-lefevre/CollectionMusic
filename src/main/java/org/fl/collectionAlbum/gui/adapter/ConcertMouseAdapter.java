@@ -30,8 +30,12 @@ import java.util.List;
 import javax.swing.JOptionPane;
 
 import org.fl.collectionAlbum.concerts.Concert;
+import org.fl.collectionAlbum.concerts.LieuConcert;
+import org.fl.collectionAlbum.concerts.ListeConcert;
 import org.fl.collectionAlbum.gui.DetailedConcertInfoPane;
 import org.fl.collectionAlbum.gui.GenerationPane;
+import org.fl.collectionAlbum.gui.table.ConcertTableModel;
+import org.fl.collectionAlbum.gui.table.ConcertsScrollJTablePane;
 import org.fl.collectionAlbum.gui.table.MusicArtefactTable;
 import org.fl.collectionAlbum.osAction.OsAction;
 
@@ -40,8 +44,9 @@ public class ConcertMouseAdapter extends MusicArtefactMouseAdapter<Concert>  {
 	private static final String TITLE = "Informations détaillées du concert";
 	
 	public ConcertMouseAdapter(MusicArtefactTable<Concert> concertsTable, List<OsAction<Concert>> osActions, GenerationPane generationPane) {
-		super(concertsTable, osActions, generationPane);
 		
+		super(concertsTable, osActions, generationPane);
+
 		musicArtefactMenuItems.addMenuItem(TITLE, new ConcertCustomActionListener(), (concert) -> concert != null, localJPopupMenu);
 	}
 	
@@ -49,7 +54,38 @@ public class ConcertMouseAdapter extends MusicArtefactMouseAdapter<Concert>  {
 	
 		@Override
 		public void actionPerformed(ActionEvent e) {			
-			JOptionPane.showMessageDialog(null, new DetailedConcertInfoPane(musicArtefactTable.getSelectedMusicArtefact()), TITLE, JOptionPane.PLAIN_MESSAGE);			
+			concertAction();
 		}	
+	}
+
+	private void concertAction() {
+		
+		Concert selectedConcert = musicArtefactTable.getSelectedMusicArtefact();	
+		if (selectedConcert != null) {
+			concertAction(selectedConcert);
+		}
+	}
+	
+	private void concertAction(Concert selectedConcert) {
+		JOptionPane.showMessageDialog(null, new DetailedConcertInfoPane(selectedConcert), TITLE, JOptionPane.PLAIN_MESSAGE);
+	}
+	
+	@Override
+	void specificDoubleClickAction(Concert selectedConcert) {
+		
+		if (musicArtefactTable.isLieuColumnSelected()) {
+			LieuConcert lieuConcert = selectedConcert.getLieuConcert();
+			if (lieuConcert != null) {
+				List<Concert> concertsDuMemeLieu = ListeConcert.Builder
+						.getBuilderFrom(((ConcertTableModel)musicArtefactTable.getModel()).getListeConcert())
+						.withConcertSatisfying(concert -> lieuConcert.equals(concert.getLieuConcert()))
+						.build()
+						.getConcerts();
+
+				JOptionPane.showMessageDialog(null, new ConcertsScrollJTablePane(concertsDuMemeLieu, generationPane), "Concerts à " + lieuConcert.getLieu(), JOptionPane.PLAIN_MESSAGE);
+			}			 
+		} else {
+			concertAction(selectedConcert);
+		}
 	}
 }

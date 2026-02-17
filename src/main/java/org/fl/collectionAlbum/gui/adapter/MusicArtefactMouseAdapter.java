@@ -25,25 +25,31 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui.adapter;
 
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
+import javax.swing.SwingUtilities;
 
 import org.fl.collectionAlbum.MusicArtefact;
+import org.fl.collectionAlbum.artistes.Artiste;
+import org.fl.collectionAlbum.gui.ArtisteInformationPanel;
 import org.fl.collectionAlbum.gui.CollectionMenuItems;
 import org.fl.collectionAlbum.gui.GenerationPane;
-import org.fl.collectionAlbum.gui.listener.MusicArtefactArtistListener;
 import org.fl.collectionAlbum.gui.listener.MusicArtefactCommandListener;
+import org.fl.collectionAlbum.gui.table.ArtistesScrollJTablePane;
 import org.fl.collectionAlbum.gui.table.MusicArtefactTable;
 import org.fl.collectionAlbum.osAction.OsAction;
 
-public class MusicArtefactMouseAdapter<T extends MusicArtefact> extends MouseAdapter {
+public abstract class MusicArtefactMouseAdapter<T extends MusicArtefact> extends MouseAdapter {
 
 	protected final CollectionMenuItems<T> musicArtefactMenuItems;
 	protected final JPopupMenu localJPopupMenu;
 	protected final MusicArtefactTable<T> musicArtefactTable;
+	protected final  GenerationPane generationPane;
 	
 	public MusicArtefactMouseAdapter(MusicArtefactTable<T> musicArtefactTable, List<OsAction<T>> osActions, GenerationPane generationPane) {
 
@@ -52,9 +58,10 @@ public class MusicArtefactMouseAdapter<T extends MusicArtefact> extends MouseAda
 		localJPopupMenu = new JPopupMenu();
 		musicArtefactMenuItems = new CollectionMenuItems<>();
 		this.musicArtefactTable = musicArtefactTable;
+		this.generationPane = generationPane;
 
 		musicArtefactMenuItems.addMenuItem("Informations sur les artistes", 
-				new MusicArtefactArtistListener<>(musicArtefactTable, generationPane), a -> !a.getAllArtists().isEmpty(), localJPopupMenu);
+				new MusicArtefactArtistListener<>(), a -> !a.getAllArtists().isEmpty(), localJPopupMenu);
 		
 		osActions.forEach(osAction -> musicArtefactMenuItems.addMenuItem(osAction.getActionTitle(),
 				new MusicArtefactCommandListener<T>(musicArtefactTable, osAction),
@@ -63,22 +70,80 @@ public class MusicArtefactMouseAdapter<T extends MusicArtefact> extends MouseAda
 	
 	@Override
 	public void mousePressed(MouseEvent evt) {
-		if (evt.isPopupTrigger()) {
-			enableMenuItems();
-			localJPopupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
-		}
+		actionOnMousePressedOrReleased(evt);
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent evt) {
+		actionOnMousePressedOrReleased(evt);
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent evt) {
+		actionOnMouseClicked(evt);
+	}
+	
+	private void actionOnMousePressedOrReleased(MouseEvent evt) {
 		if (evt.isPopupTrigger()) {
 			enableMenuItems();
 			localJPopupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
 		}
 	}
+	
+	private class MusicArtefactArtistListener<V extends MusicArtefact> implements java.awt.event.ActionListener {
+	
+		@Override
+		public void actionPerformed(ActionEvent e) {		
+			displayArtistesTable();
+		}
+	}
+	
+	private void displayArtistesTable() {
+		
+		T selectedMusicArtefact = musicArtefactTable.getSelectedMusicArtefact();
+		if (selectedMusicArtefact != null) {
+			List<Artiste> artistes = selectedMusicArtefact.getAllArtists();
+			if (! artistes.isEmpty()) {
+				displayArtistesTable(artistes);
+			}
+		}		
+	}
+	
+	private void displayArtistesTable(List<Artiste> artistes) {
 
+		if (artistes.size() == 1) {
+			Artiste selectedArtiste = artistes.get(0);
+			JOptionPane.showMessageDialog(null, new ArtisteInformationPanel(selectedArtiste, generationPane), selectedArtiste.getNomComplet(), JOptionPane.PLAIN_MESSAGE);
+		} else {
+			JOptionPane.showMessageDialog(null, new ArtistesScrollJTablePane(artistes, generationPane), "Artistes", JOptionPane.PLAIN_MESSAGE);
+		}
+	}
+	
+	private void actionOnMouseClicked(MouseEvent evt) {
+		if (SwingUtilities.isLeftMouseButton(evt) && (evt.getClickCount() > 1)) {
+			doubleClickAction();
+		}
+	}
+	
+	private void doubleClickAction() {
+		
+		T selectedMusicArtefact = musicArtefactTable.getSelectedMusicArtefact();
+		
+		if (selectedMusicArtefact != null) {
+			
+			List<Artiste> artistes = selectedMusicArtefact.getAllArtists();
+			if ((musicArtefactTable.isArtistsColumnSelected()) && !artistes.isEmpty()) {
+				displayArtistesTable(artistes);
+			} else {
+				specificDoubleClickAction(selectedMusicArtefact);
+			}
+		}
+	}
+	
 	private void enableMenuItems() {
 		musicArtefactMenuItems.enableMenuItems(musicArtefactTable.getSelectedMusicArtefact());
 	}
-
+	
+	abstract void specificDoubleClickAction(T selectedMusicArtefact);
+	
 }

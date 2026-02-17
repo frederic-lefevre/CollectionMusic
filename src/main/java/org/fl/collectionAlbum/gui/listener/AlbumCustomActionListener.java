@@ -61,9 +61,9 @@ public class AlbumCustomActionListener implements java.awt.event.ActionListener 
 	private static final Dimension MESSAGE_DIMENSION = new Dimension(1600,50);
 	private static final Dimension RELEASES_DIMENSION = new Dimension(1650,850);
 	
-	private static final Predicate<Album> isLinkedToDiscogsRelease = (album) -> (album.getDiscogsLink() != null) && !album.getDiscogsLink().isEmpty();
+	private static final Predicate<Album> isLinkedToDiscogsRelease = (album) -> (album != null) && (album.getDiscogsLink() != null) && !album.getDiscogsLink().isEmpty();
 	private static final Predicate<Album> hasMissingOrInvalidMediaFiles = 
-			(album) -> Stream.of(ContentNature.values())
+			(album) -> (album != null) && Stream.of(ContentNature.values())
 				.anyMatch(contentNature -> album.hasMediaFilePathNotFound(contentNature) || album.hasMissingOrInvalidMediaFilePath(contentNature)); 
 	
 	public enum CustomAlbumAction {
@@ -105,7 +105,7 @@ public class AlbumCustomActionListener implements java.awt.event.ActionListener 
 
 		Album selectedAlbum = albumsJTable.getSelectedMusicArtefact();
 		
-		if (selectedAlbum != null) {
+		if (customAction.getDisplayable().test(selectedAlbum)) {
 			
 			switch (customAction) {
 			

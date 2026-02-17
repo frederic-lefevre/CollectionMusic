@@ -31,7 +31,7 @@ public class LieuConcert {
 
 	public LieuConcert(String l) {
 		lieu = l;
-		concerts = new ListeConcert();
+		concerts = ListeConcert.Builder.getBuilder().build();
 	}
 
 	public String getLieu() {
