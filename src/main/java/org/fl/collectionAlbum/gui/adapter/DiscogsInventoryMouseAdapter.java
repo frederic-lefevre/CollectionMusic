@@ -28,12 +28,14 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 
 import org.apache.commons.lang3.stream.Streams;
 import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
 import org.fl.collectionAlbum.gui.CollectionMenuItems;
+import org.fl.collectionAlbum.gui.DetailedAlbumAndDiscogsInfoPane;
 import org.fl.collectionAlbum.gui.GenerationPane;
 import org.fl.collectionAlbum.gui.listener.DiscogsReleaseCommandListener;
 import org.fl.collectionAlbum.gui.listener.DiscogsReleaseCustomActionListener;
@@ -74,17 +76,30 @@ public class DiscogsInventoryMouseAdapter extends MouseAdapter {
 
 	@Override
 	public void mousePressed(MouseEvent evt) {
-		if (evt.isPopupTrigger()) {
-			enableMenuItems();
-			localJPopupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
-		}
+		actionOnMousePressedOrReleased(evt);
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent evt) {
+		actionOnMousePressedOrReleased(evt);
+	}
+	
+	private void actionOnMousePressedOrReleased(MouseEvent evt) {
 		if (evt.isPopupTrigger()) {
 			enableMenuItems();
 			localJPopupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
+		} else if ((evt.getButton() == 1) && (evt.getClickCount() > 1)) {
+			doubleClickAction();
+		}
+	}
+	
+	private void doubleClickAction() {
+		
+		DiscogsAlbumRelease release = discogsReleaseJTable.getSelectedDisocgsRelease();
+		if (release != null) {
+			JOptionPane.showMessageDialog(null, 
+				new DetailedAlbumAndDiscogsInfoPane(release),
+				DiscogsReleaseCustomActionListener.CustomAction.SHOW_INFO.getActionTitle(), JOptionPane.INFORMATION_MESSAGE);
 		}
 	}
 	
