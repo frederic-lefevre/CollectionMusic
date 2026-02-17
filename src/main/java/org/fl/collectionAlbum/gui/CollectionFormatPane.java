@@ -104,7 +104,7 @@ public class CollectionFormatPane extends JPanel {
 			constraints.gridwidth = supportCategoriesMap.get(mediaSupportCategory).size();
 			Dimension cellDimension = new Dimension(120*constraints.gridwidth,30);
 			
-			JLabel lbl = createCellLabel(mediaSupportCategory.toString(), cellDimension, Color.LIGHT_GRAY);
+			JLabel lbl = createCellLabel(mediaSupportCategory.getDescription(), cellDimension, Color.LIGHT_GRAY);
 			layout.setConstraints(lbl, constraints);
 			add(lbl);
 
