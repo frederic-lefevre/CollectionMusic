@@ -82,7 +82,7 @@ public class ConcertMouseAdapter extends MusicArtefactMouseAdapter<Concert>  {
 						.build()
 						.getConcerts();
 
-				JOptionPane.showMessageDialog(null, new ConcertsScrollJTablePane(concertsDuMemeLieu, generationPane), lieuConcert.getLieu(), JOptionPane.PLAIN_MESSAGE);
+				JOptionPane.showMessageDialog(null, new ConcertsScrollJTablePane(concertsDuMemeLieu, generationPane), "Concerts à " + lieuConcert.getLieu(), JOptionPane.PLAIN_MESSAGE);
 			}			 
 		} else {
 			concertAction(selectedConcert);
