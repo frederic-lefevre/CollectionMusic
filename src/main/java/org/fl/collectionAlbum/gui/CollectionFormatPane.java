@@ -40,12 +40,14 @@ import javax.swing.SwingConstants;
 import org.fl.collectionAlbum.format.Format;
 import org.fl.collectionAlbum.format.MediaSupportCategories;
 import org.fl.collectionAlbum.format.MediaSupports;
+import org.fl.collectionAlbum.utils.CollectionUtils;
 
 public class CollectionFormatPane extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
 	private static final Dimension SIMPLE_CELL_DIMENSION = new Dimension(120,30);
+	private static final Dimension DOUBLE_CELL_DIMENSION = new Dimension(120,60);
 	
 	private static final EnumMap<MediaSupportCategories, Set<MediaSupports>> supportCategoriesMap = new EnumMap<>(MediaSupportCategories.class);
 	
@@ -65,7 +67,6 @@ public class CollectionFormatPane extends JPanel {
 		
 		GridBagLayout layout = new GridBagLayout();
 		GridBagConstraints constraints = new GridBagConstraints();
-		constraints.gridheight = 1;
 		
 		setLayout(layout);
 		setBackground(Color.WHITE);
@@ -78,12 +79,14 @@ public class CollectionFormatPane extends JPanel {
 			constraints.gridx = colIdx;
 			constraints.gridy = 0;
 			constraints.gridwidth = 1;
+			constraints.gridheight = 2;
 			
-			JLabel lbl = createCellLabel(mediaSupports[colIdx].toString(), SIMPLE_CELL_DIMENSION, Color.LIGHT_GRAY);
+			JLabel lbl = createCellLabel(CollectionUtils.getHtmlForString(mediaSupports[colIdx].getDescription()), DOUBLE_CELL_DIMENSION, Color.LIGHT_GRAY);
 			layout.setConstraints(lbl, constraints);
 			add(lbl);
 
-			constraints.gridy = 1;
+			constraints.gridy = 2;
+			constraints.gridheight = 1;
 			
 			JLabel lbl2 = createCellLabel(Format.poidsToString(format.getNb(mediaSupports[colIdx])), SIMPLE_CELL_DIMENSION, Color.WHITE);
 			layout.setConstraints(lbl2, constraints);
@@ -97,7 +100,7 @@ public class CollectionFormatPane extends JPanel {
 			MediaSupportCategories mediaSupportCategory = mediaSupportCategories[mediaIdx];
 			
 			constraints.gridx = colIdx;
-			constraints.gridy = 2;
+			constraints.gridy = 3;
 			constraints.gridwidth = supportCategoriesMap.get(mediaSupportCategory).size();
 			Dimension cellDimension = new Dimension(120*constraints.gridwidth,30);
 			
@@ -105,7 +108,7 @@ public class CollectionFormatPane extends JPanel {
 			layout.setConstraints(lbl, constraints);
 			add(lbl);
 
-			constraints.gridy = 3;
+			constraints.gridy = 4;
 			
 			JLabel lbl2 = createCellLabel(Format.poidsToString(format.getSupportsPhysiquesNumbers().get(mediaSupportCategory)), cellDimension, Color.WHITE);
 			layout.setConstraints(lbl2, constraints);
