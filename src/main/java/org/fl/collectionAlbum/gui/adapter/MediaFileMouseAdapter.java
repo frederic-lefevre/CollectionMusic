@@ -29,9 +29,12 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 
 import javax.swing.JPopupMenu;
+import javax.swing.SwingUtilities;
 
+import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.gui.CollectionMenuItems;
 import org.fl.collectionAlbum.gui.listener.MediaFileCommandListener;
+import org.fl.collectionAlbum.gui.listener.OsActionListener;
 import org.fl.collectionAlbum.gui.table.MediaFilesJTable;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.fl.collectionAlbum.osAction.OsAction;
@@ -61,22 +64,40 @@ public class MediaFileMouseAdapter extends MouseAdapter {
 
 	@Override
 	public void mousePressed(MouseEvent evt) {
-		if (evt.isPopupTrigger()) {
-			enableMenuItems();
-			localJPopupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
-		}
+		actionOnMousePressedOrReleased(evt);
 	}
 
 	@Override
 	public void mouseReleased(MouseEvent evt) {
+		actionOnMousePressedOrReleased(evt);
+	}
+	
+	@Override
+	public void mouseClicked(MouseEvent evt) {
+		actionOnMouseClicked(evt);
+	}
+	
+	private void actionOnMousePressedOrReleased(MouseEvent evt) {
 		if (evt.isPopupTrigger()) {
 			enableMenuItems();
 			localJPopupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
+		} 
+	}
+	
+	private void actionOnMouseClicked(MouseEvent evt) {
+		if (SwingUtilities.isLeftMouseButton(evt) && (evt.getClickCount() > 1)) {
+			doubleClickAction();
+		}
+	}
+	
+	private void doubleClickAction() {
+		MediaFilePath mediaFilePath = mediaFileTable.getSelectedMediaFile();
+		if (mediaFilePath != null) {
+			(new OsActionListener<>(mediaFilePath.getPath().toString(), Control.getDisplayFolderAction())).actionPerformed(null);
 		}
 	}
 	
 	private void enableMenuItems() {
 		mediaFileMenuItems.enableMenuItems(mediaFileTable.getSelectedMediaFile());
 	}
-
 }
