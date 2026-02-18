@@ -24,6 +24,8 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.stat;
 
+import org.fl.collectionAlbum.format.Format;
+
 public class StatAnnee {
 	
 	private final int an;
@@ -39,18 +41,7 @@ public class StatAnnee {
 	}
 
 	public String getNombre() {
-
-		if (nombre == 0) {
-			return "";
-		} else {
-			long poidsArrondi = Math.round(nombre);
-
-			if (nombre == poidsArrondi) {
-				return Long.toString(poidsArrondi);
-			} else {
-				return Double.toString(nombre);
-			}
-		}
+		return Format.poidsToString(nombre);
 	}
 
 	public void incrementNombre(double n) {
