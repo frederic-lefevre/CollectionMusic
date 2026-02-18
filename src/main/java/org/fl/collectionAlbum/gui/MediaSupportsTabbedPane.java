@@ -43,6 +43,7 @@ public class MediaSupportsTabbedPane extends JTabbedPane {
 	public MediaSupportsTabbedPane(CollectionAlbumContainer collectionAlbumContainer, GenerationPane generationPane) {
 		
 		super();
+		setTabPlacement(JTabbedPane.LEFT);
 		albumTableModels = new ArrayList<>();
 		
 		Stream.of(MediaSupports.values()).forEachOrdered(mediaSupport -> {
