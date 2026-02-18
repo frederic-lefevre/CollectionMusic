@@ -149,6 +149,13 @@ public class GenerationPane extends JPanel {
 		// Artistes concert tab
 		collectionTabPanes.add(artistesConcertsScrollJTablePane, "Artistes des concerts");
 		
+		// Media supports tab
+		MediaSupportsTabbedPane mediaSupportsTabbedPane = new MediaSupportsTabbedPane(collectionAlbumContainer, this);
+		collectionTabPanes.add(mediaSupportsTabbedPane, "Supports media");
+		mediaSupportsTabbedPane.getAlbumsTableModels().forEach(tableModel -> {
+			startReadCollection.addTableModel(tableModel);
+		});
+		
 		// Collection metrics history
 		CollectionMetricsTabbedPane collectionMetricsTabPanes = new CollectionMetricsTabbedPane(List.of(Control.getCollectionMetricsHsitory(), Control.getConcertMetricsHsitory()));
 

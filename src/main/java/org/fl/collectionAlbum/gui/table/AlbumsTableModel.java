@@ -25,28 +25,12 @@ SOFTWARE.
 package org.fl.collectionAlbum.gui.table;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-import javax.swing.table.AbstractTableModel;
 
 import org.fl.collectionAlbum.albums.Album;
 
-public class AlbumsTableModel extends AbstractTableModel {
-
-	public static final int TITRE_COL_IDX = 0;
-	public static final int AUTEUR_COL_IDX = 1;
-	public static final int FORMAT_COL_IDX = 2;
-	public static final int MEDIA_FILES_COL_IDX = 3;
-	public static final int PROBLEM_COL_IDX = 4;
-	public static final int DISCOGS_COL_IDX = 5;
-	public static final int POIDS_COL_IDX = 6;
-	public static final int ENREGISTREMENT_COL_IDX = 7;
-	public static final int COMPOSITION_COL_IDX = 8;
+public class AlbumsTableModel extends AbstractAlbumsTableModel {
 	
 	private static final long serialVersionUID = 1L;
-	
-	private static final String[] entetes = {"Titres", "Auteurs", "Formats", "Fichiers media", "Problème", "Discogs release", "Poids", "Enregistrement", "Composition"};
 	
 	private final List<Album> albumsList;
 	
@@ -56,59 +40,7 @@ public class AlbumsTableModel extends AbstractTableModel {
 	}
 
 	@Override
-	public int getRowCount() {
-		return albumsList.size();
-	}
-
-	@Override
-	public int getColumnCount() {
-		return entetes.length;
-	}
-
-	@Override
-	public String getColumnName(int col) {
-	    return entetes[col];
-	}
-    
-    @Override
-    public Class<?> getColumnClass(int columnIndex) {
-        if (albumsList.isEmpty()) {
-            return Object.class;
-        } else {
-        	return switch(columnIndex){
-				case MEDIA_FILES_COL_IDX, AUTEUR_COL_IDX, ENREGISTREMENT_COL_IDX, COMPOSITION_COL_IDX -> Album.class;
-				default ->  getValueAt(0, columnIndex).getClass();
-        	};
-        }
-    }
-    
-	@Override
-	public Object getValueAt(int rowIndex, int columnIndex) {
-		
-		if (albumsList.size() < rowIndex + 1) {
-			// This may happen when triggering a rescan of the collection
-			return null;
-		} else {
-			return switch(columnIndex){
-				case TITRE_COL_IDX -> albumsList.get(rowIndex).getTitre();
-				case AUTEUR_COL_IDX -> albumsList.get(rowIndex);
-				case FORMAT_COL_IDX -> albumsList.get(rowIndex)
-					.getFormatAlbum()
-					.getSupportsPhysiques().stream()
-					.map(f -> f.getNom())
-					.collect(Collectors.joining(","));
-				case MEDIA_FILES_COL_IDX -> albumsList.get(rowIndex);
-				case PROBLEM_COL_IDX -> albumsList.get(rowIndex).hasProblem();
-				case DISCOGS_COL_IDX -> Optional.ofNullable(albumsList.get(rowIndex).getDiscogsLink()).orElse("");
-				case POIDS_COL_IDX -> albumsList.get(rowIndex).getFormatAlbum().getPoids();
-				case ENREGISTREMENT_COL_IDX ->  albumsList.get(rowIndex);
-				case COMPOSITION_COL_IDX ->  albumsList.get(rowIndex);
-				default -> null;
-			};
-		}
-	}
-
-	public Album getAlbumAt(int rowIndex) {
-		return albumsList.get(rowIndex);
+	protected List<Album> getAlbumsList() {
+		return albumsList;
 	}
 }

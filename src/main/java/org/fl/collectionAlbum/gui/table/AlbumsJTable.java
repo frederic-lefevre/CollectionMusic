@@ -70,32 +70,32 @@ public class AlbumsJTable extends MusicArtefactTable<Album> {
 	private static final Function<Album, TemporalAccessor> beginCompositionGetter = a -> a.getDebutComposition();
 	private static final Function<Album, TemporalAccessor> endCompositionGetter = a -> a.getFinComposition();
 	
-	public AlbumsJTable(AlbumsTableModel albumsTableModel, GenerationPane generationPane) {
+	public AlbumsJTable(AbstractAlbumsTableModel albumsTableModel, GenerationPane generationPane) {
 		super(albumsTableModel);
 		
 		setFillsViewportHeight(true);
 		
 		setRowHeight(ContentNature.values().length*25);
 		
-		getColumnModel().getColumn(AlbumsTableModel.TITRE_COL_IDX).setCellRenderer(new StringToHtmlRenderer());
-		getColumnModel().getColumn(AlbumsTableModel.AUTEUR_COL_IDX).setCellRenderer(new AuteurListRenderer());
-		getColumnModel().getColumn(AlbumsTableModel.MEDIA_FILES_COL_IDX).setCellRenderer(new MediaFilesRenderer());
-		getColumnModel().getColumn(AlbumsTableModel.PROBLEM_COL_IDX).setCellRenderer(new CollectionBooleanRenderer());
-		getColumnModel().getColumn(AlbumsTableModel.POIDS_COL_IDX).setCellRenderer(new CollectionNumberRenderer());
-		getColumnModel().getColumn(AlbumsTableModel.ENREGISTREMENT_COL_IDX)
+		getColumnModel().getColumn(AbstractAlbumsTableModel.TITRE_COL_IDX).setCellRenderer(new StringToHtmlRenderer());
+		getColumnModel().getColumn(AbstractAlbumsTableModel.AUTEUR_COL_IDX).setCellRenderer(new AuteurListRenderer());
+		getColumnModel().getColumn(AbstractAlbumsTableModel.MEDIA_FILES_COL_IDX).setCellRenderer(new MediaFilesRenderer());
+		getColumnModel().getColumn(AbstractAlbumsTableModel.PROBLEM_COL_IDX).setCellRenderer(new CollectionBooleanRenderer());
+		getColumnModel().getColumn(AbstractAlbumsTableModel.POIDS_COL_IDX).setCellRenderer(new CollectionNumberRenderer());
+		getColumnModel().getColumn(AbstractAlbumsTableModel.ENREGISTREMENT_COL_IDX)
 			.setCellRenderer(new DatesAlbumRenderer(beginEnregistrementGetter, finEnregistrementGetter, dateFormatterFunction));
-		getColumnModel().getColumn(AlbumsTableModel.COMPOSITION_COL_IDX)
+		getColumnModel().getColumn(AbstractAlbumsTableModel.COMPOSITION_COL_IDX)
 			.setCellRenderer(new DatesAlbumRenderer(beginCompositionGetter, endCompositionGetter, dateFormatterFunction));
 		
-		getColumnModel().getColumn(AlbumsTableModel.TITRE_COL_IDX).setPreferredWidth(250);
-		getColumnModel().getColumn(AlbumsTableModel.AUTEUR_COL_IDX).setPreferredWidth(550);
-		getColumnModel().getColumn(AlbumsTableModel.FORMAT_COL_IDX).setPreferredWidth(100);
-		getColumnModel().getColumn(AlbumsTableModel.MEDIA_FILES_COL_IDX).setPreferredWidth(140);
-		getColumnModel().getColumn(AlbumsTableModel.PROBLEM_COL_IDX).setPreferredWidth(70);
-		getColumnModel().getColumn(AlbumsTableModel.DISCOGS_COL_IDX).setPreferredWidth(110);
-		getColumnModel().getColumn(AlbumsTableModel.POIDS_COL_IDX).setPreferredWidth(50);
-		getColumnModel().getColumn(AlbumsTableModel.ENREGISTREMENT_COL_IDX).setPreferredWidth(260);
-		getColumnModel().getColumn(AlbumsTableModel.COMPOSITION_COL_IDX).setPreferredWidth(260);
+		getColumnModel().getColumn(AbstractAlbumsTableModel.TITRE_COL_IDX).setPreferredWidth(250);
+		getColumnModel().getColumn(AbstractAlbumsTableModel.AUTEUR_COL_IDX).setPreferredWidth(550);
+		getColumnModel().getColumn(AbstractAlbumsTableModel.FORMAT_COL_IDX).setPreferredWidth(100);
+		getColumnModel().getColumn(AbstractAlbumsTableModel.MEDIA_FILES_COL_IDX).setPreferredWidth(140);
+		getColumnModel().getColumn(AbstractAlbumsTableModel.PROBLEM_COL_IDX).setPreferredWidth(70);
+		getColumnModel().getColumn(AbstractAlbumsTableModel.DISCOGS_COL_IDX).setPreferredWidth(110);
+		getColumnModel().getColumn(AbstractAlbumsTableModel.POIDS_COL_IDX).setPreferredWidth(50);
+		getColumnModel().getColumn(AbstractAlbumsTableModel.ENREGISTREMENT_COL_IDX).setPreferredWidth(260);
+		getColumnModel().getColumn(AbstractAlbumsTableModel.COMPOSITION_COL_IDX).setPreferredWidth(260);
 		
 		// Allow single row selection only
 		ListSelectionModel listSelectionModel = new DefaultListSelectionModel();
@@ -107,12 +107,12 @@ public class AlbumsJTable extends MusicArtefactTable<Album> {
 		addMouseListener(new AlbumMouseAdapter(this, Control.getOsActionsOnAlbum(), generationPane));
 		
 		// Row sorter
-		TableRowSorter<AlbumsTableModel> sorter = new TableRowSorter<>(albumsTableModel);
-		sorter.setComparator(AlbumsTableModel.AUTEUR_COL_IDX, RANGEMENT_COMPARATOR);
-		sorter.setComparator(AlbumsTableModel.MEDIA_FILES_COL_IDX, ALBUM_MEDIA_FILES_STATUS_COMPARATOR);
-		sorter.setComparator(AlbumsTableModel.POIDS_COL_IDX, DOUBLE_COMPARATOR);
-		sorter.setComparator(AlbumsTableModel.ENREGISTREMENT_COL_IDX, ENREGISTREMENT_COMPARATOR);
-		sorter.setComparator(AlbumsTableModel.COMPOSITION_COL_IDX, COMPOSITION_COMPARATOR);
+		TableRowSorter<AbstractAlbumsTableModel> sorter = new TableRowSorter<>(albumsTableModel);
+		sorter.setComparator(AbstractAlbumsTableModel.AUTEUR_COL_IDX, RANGEMENT_COMPARATOR);
+		sorter.setComparator(AbstractAlbumsTableModel.MEDIA_FILES_COL_IDX, ALBUM_MEDIA_FILES_STATUS_COMPARATOR);
+		sorter.setComparator(AbstractAlbumsTableModel.POIDS_COL_IDX, DOUBLE_COMPARATOR);
+		sorter.setComparator(AbstractAlbumsTableModel.ENREGISTREMENT_COL_IDX, ENREGISTREMENT_COMPARATOR);
+		sorter.setComparator(AbstractAlbumsTableModel.COMPOSITION_COL_IDX, COMPOSITION_COMPARATOR);
 		setRowSorter(sorter);
 	}
 	
@@ -126,17 +126,17 @@ public class AlbumsJTable extends MusicArtefactTable<Album> {
 		} else if (rowIdxs.length > 1) {
 			tLog.severe("Found several selected rows for AlbumJTable. Number of selected rows: " + rowIdxs.length);
 		}
-		return ((AlbumsTableModel)getModel()).getAlbumAt(convertRowIndexToModel(rowIdxs[0]));
+		return ((AbstractAlbumsTableModel)getModel()).getAlbumAt(convertRowIndexToModel(rowIdxs[0]));
 	}
 	
 	@Override
 	public boolean isArtistsColumnSelected() {
-		return isColumnSelected(AlbumsTableModel.AUTEUR_COL_IDX);
+		return isColumnSelected(AbstractAlbumsTableModel.AUTEUR_COL_IDX);
 	}
 
 	@Override
 	public boolean isDiscogsReleaseColumnSelected() {
-		return isColumnSelected(AlbumsTableModel.DISCOGS_COL_IDX);
+		return isColumnSelected(AbstractAlbumsTableModel.DISCOGS_COL_IDX);
 	}
 
 	@Override
