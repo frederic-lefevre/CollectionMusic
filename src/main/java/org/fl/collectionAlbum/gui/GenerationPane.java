@@ -156,6 +156,10 @@ public class GenerationPane extends JPanel {
 			startReadCollection.addTableModel(tableModel);
 		});
 		
+		// Calendriers
+		CalendarsTabbedPane calendarsTabbedPane = new CalendarsTabbedPane(collectionAlbumContainer, this);
+		collectionTabPanes.add(calendarsTabbedPane, "Calendriers");
+		
 		// Collection metrics history
 		CollectionMetricsTabbedPane collectionMetricsTabPanes = new CollectionMetricsTabbedPane(List.of(Control.getCollectionMetricsHsitory(), Control.getConcertMetricsHsitory()));
 
