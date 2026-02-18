@@ -46,7 +46,7 @@ public abstract class AbstractAlbumsTableModel extends AbstractTableModel {
 	protected static final int ENREGISTREMENT_COL_IDX = 7;
 	protected static final int COMPOSITION_COL_IDX = 8;
 	
-	protected static final String[] entetes = {"Titres", "Auteurs", "Formats", "Fichiers media", "Problème", "Discogs release", "Poids", "Enregistrement", "Composition"};
+	private static final String[] entetes = {"Titres", "Auteurs", "Formats", "Fichiers media", "Problème", "Discogs release", "Poids", "Enregistrement", "Composition"};
 
 	@Override
 	public int getColumnCount() {
