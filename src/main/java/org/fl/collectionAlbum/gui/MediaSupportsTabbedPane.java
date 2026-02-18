@@ -22,40 +22,39 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.gui.table;
+package org.fl.collectionAlbum.gui;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
+import java.util.stream.Stream;
 
-import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 
-import org.fl.collectionAlbum.Control;
-import org.fl.collectionAlbum.albums.Album;
-import org.fl.collectionAlbum.gui.GenerationPane;
+import org.fl.collectionAlbum.CollectionAlbumContainer;
+import org.fl.collectionAlbum.format.MediaSupports;
+import org.fl.collectionAlbum.gui.table.AbstractAlbumsTableModel;
+import org.fl.collectionAlbum.gui.table.AlbumsScrollJTablePane;
 
-public class AlbumsScrollJTablePane extends JScrollPane {
+public class MediaSupportsTabbedPane extends JTabbedPane {
 
 	private static final long serialVersionUID = 1L;
-	
-	private final AbstractAlbumsTableModel albumsTableModel;
-	 
-	public AlbumsScrollJTablePane(List<Album> albums, GenerationPane generationPane) {
-		super();
-		
-		albumsTableModel = new AlbumsTableModel(albums);
-		setViewportView(new AlbumsJTable(albumsTableModel, generationPane));		
-		setPreferredSize(Control.getMainSubPaneDimension());
-	}
+	private final List<AbstractAlbumsTableModel> albumTableModels;
 
-	public AlbumsScrollJTablePane(Supplier<List<Album>> albumsListSupplier, GenerationPane generationPane) {
-		super();
+	public MediaSupportsTabbedPane(CollectionAlbumContainer collectionAlbumContainer, GenerationPane generationPane) {
 		
-		albumsTableModel = new DynamicAlbumsTableModel(albumsListSupplier);
-		setViewportView(new AlbumsJTable(albumsTableModel, generationPane));		
-		setPreferredSize(Control.getMainSubPaneDimension());
+		super();
+		albumTableModels = new ArrayList<>();
+		
+		Stream.of(MediaSupports.values()).forEachOrdered(mediaSupport -> {
+			
+			AlbumsScrollJTablePane albumsScrollJTablePane =
+					new AlbumsScrollJTablePane(() -> collectionAlbumContainer.getAlbumsWithMediaSupport(mediaSupport).getAlbums(), generationPane);
+			albumTableModels.add(albumsScrollJTablePane.getAlbumsTableModel());
+			addTab(mediaSupport.getDescription(), albumsScrollJTablePane);
+		});
 	}
 	
-	public AbstractAlbumsTableModel getAlbumsTableModel() {
-		return albumsTableModel;
+	public List<AbstractAlbumsTableModel> getAlbumsTableModels() {
+		return albumTableModels;
 	}
 }

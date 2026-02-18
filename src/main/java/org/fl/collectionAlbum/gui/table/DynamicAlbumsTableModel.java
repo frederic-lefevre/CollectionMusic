@@ -21,41 +21,34 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
-
 package org.fl.collectionAlbum.gui.table;
 
 import java.util.List;
 import java.util.function.Supplier;
 
-import javax.swing.JScrollPane;
-
-import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
-import org.fl.collectionAlbum.gui.GenerationPane;
 
-public class AlbumsScrollJTablePane extends JScrollPane {
+public class DynamicAlbumsTableModel extends AbstractAlbumsTableModel {
 
 	private static final long serialVersionUID = 1L;
-	
-	private final AbstractAlbumsTableModel albumsTableModel;
-	 
-	public AlbumsScrollJTablePane(List<Album> albums, GenerationPane generationPane) {
-		super();
-		
-		albumsTableModel = new AlbumsTableModel(albums);
-		setViewportView(new AlbumsJTable(albumsTableModel, generationPane));		
-		setPreferredSize(Control.getMainSubPaneDimension());
-	}
 
-	public AlbumsScrollJTablePane(Supplier<List<Album>> albumsListSupplier, GenerationPane generationPane) {
+	private final Supplier<List<Album>> albumsListSupplier;
+	private List<Album> albumsList;
+	
+	public DynamicAlbumsTableModel(Supplier<List<Album>> albumsListSupplier) {
 		super();
-		
-		albumsTableModel = new DynamicAlbumsTableModel(albumsListSupplier);
-		setViewportView(new AlbumsJTable(albumsTableModel, generationPane));		
-		setPreferredSize(Control.getMainSubPaneDimension());
+		this.albumsListSupplier = albumsListSupplier;
+		this.albumsList = albumsListSupplier.get();
 	}
 	
-	public AbstractAlbumsTableModel getAlbumsTableModel() {
-		return albumsTableModel;
+	@Override
+	public void fireTableDataChanged() {
+		this.albumsList = albumsListSupplier.get();
+		super.fireTableDataChanged();
+	}
+	
+	@Override
+	protected List<Album> getAlbumsList() {
+		return albumsList;
 	}
 }
