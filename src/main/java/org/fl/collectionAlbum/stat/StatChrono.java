@@ -24,35 +24,43 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.stat;
 
+import java.time.Year;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.fl.collectionAlbum.format.Format;
 
 public class StatChrono {
 	
 	private static final Logger statLogger = Logger.getLogger(StatChrono.class.getName());
 
-	private final List<StatAnnee> statAnnuelle;
-	private final List<StatAnnee> statDecennale;
-	private final List<StatAnnee> statSiecle;
-
-	private static final StatAnComparator statComp = new StatAnComparator();
+	private final TreeMap<Integer, Double> statistiqueAnnuelle;
+	private final TreeMap<Integer, Double> statistiqueDecennale;
+	private final TreeMap<Integer, Double> statistiqueSiecle;
+	
+	private int minYear;
+	private int maxYear;
 
 	public StatChrono() {
 		super();
-		statAnnuelle = new ArrayList<StatAnnee>();
-		statDecennale = new ArrayList<StatAnnee>();
-		statSiecle = new ArrayList<StatAnnee>();
+		
+		statistiqueAnnuelle = new TreeMap<>();
+		statistiqueDecennale = new TreeMap<>();
+		statistiqueSiecle = new TreeMap<>();
+		
+		minYear = Year.MAX_VALUE;
+		maxYear = Year.MIN_VALUE;
 	}
 
 	public void reset() {
-		statAnnuelle.clear();
-		statDecennale.clear();
-		statSiecle.clear();
+		statistiqueAnnuelle.clear();
+		statistiqueDecennale.clear();
+		statistiqueSiecle.clear();	
 	}
 	
 	public void addAlbum(TemporalAccessor dateAlbum, double poidsAlbum) {
@@ -60,20 +68,25 @@ public class StatChrono {
 		int year = getYearFromDate(dateAlbum);
 		int decennie = getDecennie(year);
 		int siecle = getSiecle(year);
-
-		incrementStat(statAnnuelle, year, poidsAlbum);
-		incrementStat(statDecennale, decennie, poidsAlbum);
-		incrementStat(statSiecle, siecle, poidsAlbum);
+		
+		incrementStat(statistiqueAnnuelle, year, poidsAlbum);
+		incrementStat(statistiqueDecennale, decennie, poidsAlbum);
+		incrementStat(statistiqueSiecle, siecle, poidsAlbum);
+		
+		if (year < minYear) {
+			minYear = year;
+		}
+		if (year > maxYear) {
+			maxYear = year;
+		}
 	}
 
 	private int getDecennie(int year) {
 		return (year / 10) * 10;
-
 	}
 
 	private int getSiecle(int year) {
 		return (year / 100) * 100;
-
 	}
 
 	private int getYearFromDate(TemporalAccessor dd) {
@@ -91,42 +104,42 @@ public class StatChrono {
 		}
 	}
 
-	private void incrementStat(List<StatAnnee> stat, int an, double poids) {
-		for (StatAnnee sA : stat) {
-			if (sA.getAn() == an) {
-				sA.incrementNombre(poids);
-				return;
-			}
+	private void incrementStat(Map<Integer, Double> stat, int an, double poids) {
+		
+		if (stat.containsKey(an)) {
+			stat.put(an, stat.get(an) + poids);
+		} else {
+			stat.put(an, poids);
 		}
-		stat.add(new StatAnnee(an, poids));
+	}
+	
+	public TreeMap<Integer, Double> getStatistiqueDecennale() {
+		return statistiqueDecennale;
+	}
+
+	public TreeMap<Integer, Double> getStatistiqueSiecle() {
+		return statistiqueSiecle;
 	}
 
 	public String getStatForYear(int an) {
-		return getStat(statAnnuelle, an);
+		return getStat(statistiqueAnnuelle, an);
 	}
 
 	public String getStatForDecennie(int an) {
-		return getStat(statDecennale, getDecennie(an));
+		return getStat(statistiqueDecennale, getDecennie(an));
+	}
+	
+	private String getStat(Map<Integer, Double> statAns, int an) {
+		
+		return Optional.ofNullable(statAns.get(an)).map(poids -> Format.poidsToString(poids)).orElse("0");
 	}
 
-	private String getStat(List<StatAnnee> statAns, int an) {
-		return statAns.stream().filter(sA -> sA.getAn() == an).findFirst().map(sA -> sA.getNombre())
-				.orElse(new String("0"));
+	public int getMinYear() {
+		return minYear;
 	}
 
-	public List<StatAnnee> getStatAnnuelle() {
-		Collections.sort(statAnnuelle, statComp);
-		return statAnnuelle;
-	}
-
-	public List<StatAnnee> getStatDecennale() {
-		Collections.sort(statDecennale, statComp);
-		return statDecennale;
-	}
-
-	public List<StatAnnee> getStatSiecle() {
-		Collections.sort(statSiecle, statComp);
-		return statSiecle;
+	public int getMaxYear() {
+		return maxYear;
 	}
 
 }

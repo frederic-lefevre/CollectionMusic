@@ -24,10 +24,9 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.rapportHtml;
 
-import java.util.Iterator;
-import java.util.List;
+import java.util.TreeMap;
 
-import org.fl.collectionAlbum.stat.StatAnnee;
+import org.fl.collectionAlbum.format.Format;
 import org.fl.collectionAlbum.stat.StatChrono;
 
 public class RapportStat extends RapportHtml {
@@ -44,43 +43,38 @@ public class RapportStat extends RapportHtml {
 	// Return a html hyper to this rapport
 	protected void corpsRapport() {
 
-		List<StatAnnee> statDecennale = statChrono.getStatDecennale();
-		List<StatAnnee> statSiecle = statChrono.getStatSiecle();
+		TreeMap<Integer, Double> statisquesMap;
 
-		Iterator<StatAnnee> ed;
-		boolean plusieursSiecles = false;
-		if (statSiecle.size() > 2) {
-			plusieursSiecles = true;
-			ed = statSiecle.iterator();
+		boolean plusieursSiecles = (statChrono.getMaxYear() - statChrono.getMinYear()) > 199;
+		int pas;
+		if (plusieursSiecles) {
+			statisquesMap = statChrono.getStatistiqueSiecle();
+			pas = 10;
 		} else {
-			ed = statDecennale.iterator();
+			statisquesMap = statChrono.getStatistiqueDecennale();
+			pas = 1;
 		}
 
 		write("<table class=\"stat\">\n  <tr>\n    <td class=\"dece\"></td>\n    <td class=\"statotal\">Total</td>\n");
 		for (int i = 0; i < 10; i++) {
-			int sub = i;
-			if (plusieursSiecles)
-				sub = i * 10;
-			write("    <td class=\"anH\">").write(sub).write("</td>\n");
+			write("    <td class=\"anH\">").write(i*pas).write("</td>\n");
 		}
 		write("  </tr>\n");
-		String cssClass = "statan";
-		while (ed.hasNext()) {
+
+		statisquesMap.forEach((anDebut, poids) -> {
 			write("  <tr class=\"statan\">\n");
-			StatAnnee uneSubdivision = ed.next();
-			write("    <td class=\"dece\"><span class=\"dece\">").write(uneSubdivision.getAn()).write("</span></td>\n");
-			write("    <td class=\"statotal\">").write(uneSubdivision.getNombre()).write("</td>\n");
+			write("    <td class=\"dece\"><span class=\"dece\">").write(anDebut).write("</span></td>\n");
+			write("    <td class=\"statotal\">").write(Format.poidsToString(poids)).write("</td>\n");
 			for (int i = 0; i < 10; i++) {
-				int an = uneSubdivision.getAn();
 				String count;
+				int an = anDebut + i*pas;
 				if (plusieursSiecles) {
-					an = an + i * 10;
 					count = statChrono.getStatForDecennie(an);
 				} else {
-					an = an + i;
 					count = statChrono.getStatForYear(an);
 				}
-
+				
+				String cssClass;
 				if (count.length() == 0) {
 					cssClass = "statan0";
 				} else {
@@ -90,7 +84,7 @@ public class RapportStat extends RapportHtml {
 						.write(an).write("</span><span class=\"count\">").write(count).write("</span></td>\n");
 			}
 			write("  </tr>\n");
-		}
+		});
 		write("</table>\n");
 	}
 }
