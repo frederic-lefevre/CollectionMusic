@@ -28,6 +28,7 @@ import java.util.TreeMap;
 
 import org.fl.collectionAlbum.format.Format;
 import org.fl.collectionAlbum.stat.StatChrono;
+import org.fl.collectionAlbum.stat.StatistiquesView;
 
 public class RapportStat extends RapportHtml {
 		
@@ -43,17 +44,9 @@ public class RapportStat extends RapportHtml {
 	// Return a html hyper to this rapport
 	protected void corpsRapport() {
 
-		TreeMap<Integer, Double> statisquesMap;
-
-		boolean plusieursSiecles = (statChrono.getMaxYear() - statChrono.getMinYear()) > 199;
-		int pas;
-		if (plusieursSiecles) {
-			statisquesMap = statChrono.getStatistiqueSiecle();
-			pas = 10;
-		} else {
-			statisquesMap = statChrono.getStatistiqueDecennale();
-			pas = 1;
-		}
+		StatistiquesView statistiquesView = new StatistiquesView(statChrono, 200);
+		TreeMap<Integer, Double> statisquesMap = statistiquesView.getStatisquesMap();
+		int pas = statistiquesView.getPas();
 
 		write("<table class=\"stat\">\n  <tr>\n    <td class=\"dece\"></td>\n    <td class=\"statotal\">Total</td>\n");
 		for (int i = 0; i < 10; i++) {
@@ -66,13 +59,9 @@ public class RapportStat extends RapportHtml {
 			write("    <td class=\"dece\"><span class=\"dece\">").write(anDebut).write("</span></td>\n");
 			write("    <td class=\"statotal\">").write(Format.poidsToString(poids)).write("</td>\n");
 			for (int i = 0; i < 10; i++) {
-				String count;
+				
 				int an = anDebut + i*pas;
-				if (plusieursSiecles) {
-					count = statChrono.getStatForDecennie(an);
-				} else {
-					count = statChrono.getStatForYear(an);
-				}
+				String count = statistiquesView.getStatFor(an);
 				
 				String cssClass;
 				if (count.length() == 0) {
