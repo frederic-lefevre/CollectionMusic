@@ -36,12 +36,12 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.SwingWorker;
-import javax.swing.table.AbstractTableModel;
 
 import org.fl.collectionAlbum.disocgs.DiscogsInventory;
 import org.fl.collectionAlbum.gui.AbstractColorableTabbedPane;
 import org.fl.collectionAlbum.gui.ProgressInformation;
 import org.fl.collectionAlbum.gui.ProgressInformationPanel;
+import org.fl.collectionAlbum.gui.UpdatableElement;
 import org.fl.collectionAlbum.json.migrator.MusicArtefactMigrator;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 import org.fl.util.json.JsonUtils;
@@ -54,7 +54,7 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 	
 	private final CollectionAlbumContainer albumsContainer;
 	private final ProgressInformationPanel progressPanel;
-	private final List<AbstractTableModel> tableModels;
+	private final List<UpdatableElement> updatableElements;
 	private final List<AbstractColorableTabbedPane> colorableTabbedPanes;
 	
 	// Information prefix
@@ -75,13 +75,13 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 	
 	public CollectionAlbums(
 			CollectionAlbumContainer collectionAlbumContainer, 
-			List<AbstractTableModel> tableModels, 
+			List<UpdatableElement> updatableElements, 
 			List<AbstractColorableTabbedPane> colorableTabbedPanes, 
 			ProgressInformationPanel pip) {
 
 		this.albumsContainer = collectionAlbumContainer;
 		this.progressPanel = pip;
-		this.tableModels = tableModels;
+		this.updatableElements = updatableElements;
 		this.colorableTabbedPanes = colorableTabbedPanes;
 	}
 	
@@ -227,7 +227,7 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
     	}
     	
     	progressPanel.setProgressInformation(new ProgressInformation(status, ARRET, ""));
-    	tableModels.forEach(AbstractTableModel::fireTableDataChanged);
+    	updatableElements.forEach(UpdatableElement::updateElement);
     	colorableTabbedPanes.forEach(AbstractColorableTabbedPane::setTabColor);
     }
 

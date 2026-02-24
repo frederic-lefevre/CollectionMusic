@@ -28,10 +28,11 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
+import org.fl.collectionAlbum.gui.UpdatableElement;
 import org.fl.collectionAlbum.mediaPath.MediaFileInventory;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
-public class MediaFilesTableModel extends AbstractTableModel {
+public class MediaFilesTableModel extends AbstractTableModel implements UpdatableElement {
 
 	private static final long serialVersionUID = 1L;
 
@@ -98,5 +99,10 @@ public class MediaFilesTableModel extends AbstractTableModel {
 
 	public MediaFilePath getMediaFileAt(int rowIndex) {
 		return mediaFilePaths.get(rowIndex);
+	}
+
+	@Override
+	public void updateElement() {
+		fireTableDataChanged();
 	}
 }

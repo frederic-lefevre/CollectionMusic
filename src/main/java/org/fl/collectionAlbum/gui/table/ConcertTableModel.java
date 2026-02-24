@@ -30,8 +30,9 @@ import java.util.List;
 import javax.swing.table.AbstractTableModel;
 
 import org.fl.collectionAlbum.concerts.Concert;
+import org.fl.collectionAlbum.gui.UpdatableElement;
 
-public class ConcertTableModel extends AbstractTableModel {
+public class ConcertTableModel extends AbstractTableModel implements UpdatableElement {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -81,6 +82,11 @@ public class ConcertTableModel extends AbstractTableModel {
 
 	}
 
+	@Override
+	public void updateElement() {
+		fireTableDataChanged();
+	}
+	
 	public Concert getConcertAt(int rowIndex) {
 		return listeConcert.get(rowIndex);
 	}
