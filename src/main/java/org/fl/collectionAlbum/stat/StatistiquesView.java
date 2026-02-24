@@ -34,16 +34,29 @@ public class StatistiquesView {
 	private final StatChrono statChrono;
 	private final TreeMap<Integer, Double> statisquesMap;
 	private final int pas;
+	private final int lineNumber;
+	private final int lineSpanOfYears;
+	private final int beginYear;
 	
 	public StatistiquesView(StatChrono statChrono, int maxNumbers) {
 		this.statChrono = statChrono;
 		
 		if (statChrono.getMaxYear() - statChrono.getMinYear() > maxNumbers) {
 			statisquesMap = statChrono.getStatistiqueSiecle();
-			pas = 10;
+			pas = DIX_AN;
 		} else {
 			statisquesMap = statChrono.getStatistiqueDecennale();
 			pas = UN_AN;
+		}
+		
+		if (statisquesMap.isEmpty()) {
+			lineNumber = 0;
+			lineSpanOfYears = 0;
+			beginYear = 0;
+		} else {
+			lineSpanOfYears = 10*pas;
+			lineNumber = 1 + (statChrono.getMaxYear()/lineSpanOfYears - statChrono.getMinYear()/lineSpanOfYears);
+			beginYear = (statChrono.getMinYear() / lineSpanOfYears) * lineSpanOfYears;
 		}
 	}
 	
@@ -61,17 +74,23 @@ public class StatistiquesView {
 		} else if (pas == DIX_AN) {
 			return statChrono.getStatForDecennie(an);
 		} else {
-			return "";
+			throw new IllegalStateException("pas should be equal to 1 or 10. It is " + pas);
 		}
 	}
 	
 	public int getLineNumber() {
+		return lineNumber;
+	}
+	
+	public int getYearForLine(int lineIndex) {
 		
-		if (statisquesMap.isEmpty()) {
-			return 0;
+		if (lineNumber == 0) {
+			throw new IllegalArgumentException("The statistics is empty. There is no lines");
+		} else if ((lineNumber < lineIndex + 1) || (lineIndex < 0)) {
+			throw new IllegalArgumentException("Out of bound line index: " + lineIndex);
 		} else {
-			int lineSpanOfYears = 10*pas;
-			return 1 + (statChrono.getMaxYear()/lineSpanOfYears - statChrono.getMinYear()/lineSpanOfYears);
+			return beginYear + lineIndex*lineSpanOfYears;
 		}
 	}
+	
 }

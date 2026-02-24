@@ -40,6 +40,8 @@ class StatistiquesViewTest {
 		assertThat(statistiquesView.getPas()).isEqualTo(1);
 		assertThat(statistiquesView.getStatisquesMap()).isEmpty();
 		assertThat(statistiquesView.getStatFor(2001)).isEqualTo("0");
+		
+		assertThatIllegalArgumentException().isThrownBy(() -> statistiquesView.getYearForLine(0));
 	}
 	
 	@Test
@@ -62,6 +64,10 @@ class StatistiquesViewTest {
 		assertThat(statistiquesView.getStatFor(1970)).isEqualTo("5");
 		assertThat(statistiquesView.getStatFor(2001)).isEqualTo("0");
 		assertThat(statistiquesView.getLineNumber()).isEqualTo(2);
+		assertThat(statistiquesView.getYearForLine(0)).isEqualTo(1960);
+		assertThat(statistiquesView.getYearForLine(1)).isEqualTo(1970);
+		assertThatIllegalArgumentException().isThrownBy(() -> statistiquesView.getYearForLine(2));
+		assertThatIllegalArgumentException().isThrownBy(() -> statistiquesView.getYearForLine(-1));
 	}
 	
 	@Test
@@ -81,6 +87,8 @@ class StatistiquesViewTest {
 		assertThat(statistiquesView.getStatFor(1970)).isEqualTo("5");
 		assertThat(statistiquesView.getStatFor(2001)).isEqualTo("0");
 		assertThat(statistiquesView.getLineNumber()).isEqualTo(2);
+		assertThat(statistiquesView.getYearForLine(0)).isEqualTo(1960);
+		assertThat(statistiquesView.getYearForLine(1)).isEqualTo(1970);
 	}
 	
 	@Test
@@ -99,6 +107,7 @@ class StatistiquesViewTest {
 		assertThat(statistiquesView.getStatFor(1970)).isEqualTo("5");
 		assertThat(statistiquesView.getStatFor(2001)).isEqualTo("0");
 		assertThat(statistiquesView.getLineNumber()).isEqualTo(1);
+		assertThat(statistiquesView.getYearForLine(0)).isEqualTo(1970);
 	}
 	
 	@Test
@@ -126,6 +135,13 @@ class StatistiquesViewTest {
 		assertThat(statistiquesView.getStatFor(1970)).isEqualTo("0");
 		assertThat(statistiquesView.getStatFor(2001)).isEqualTo("0");
 		assertThat(statistiquesView.getLineNumber()).isEqualTo(5);
+		assertThat(statistiquesView.getYearForLine(0)).isEqualTo(1500);
+		assertThat(statistiquesView.getYearForLine(1)).isEqualTo(1600);
+		assertThat(statistiquesView.getYearForLine(2)).isEqualTo(1700);
+		assertThat(statistiquesView.getYearForLine(3)).isEqualTo(1800);
+		assertThat(statistiquesView.getYearForLine(4)).isEqualTo(1900);
+		assertThatIllegalArgumentException().isThrownBy(() -> statistiquesView.getYearForLine(5));
+		assertThatIllegalArgumentException().isThrownBy(() -> statistiquesView.getYearForLine(-1));
 	}
 	
 	@Test
@@ -147,5 +163,6 @@ class StatistiquesViewTest {
 		assertThat(statistiquesView.getStatFor(1960)).isEqualTo("9.5");
 		assertThat(statistiquesView.getStatFor(1970)).isEqualTo("0");
 		assertThat(statistiquesView.getLineNumber()).isEqualTo(1);
+		assertThat(statistiquesView.getYearForLine(0)).isEqualTo(1900);
 	}
 }
