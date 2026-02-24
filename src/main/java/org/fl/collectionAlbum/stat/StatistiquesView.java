@@ -31,6 +31,9 @@ public class StatistiquesView {
 	private static final int UN_AN = 1;
 	private static final int DIX_AN = 10;
 	
+	private static final String DECENNIE = "Décennie";
+	private static final String SIECLE = "Siecle";
+	
 	private final StatChrono statChrono;
 	private final TreeMap<Integer, Double> statisquesMap;
 	private final int pas;
@@ -66,6 +69,17 @@ public class StatistiquesView {
 	
 	public int getPas() {
 		return pas;
+	}
+	
+	public String getSubdivisionName() {
+		
+		if (pas == UN_AN) {
+			return DECENNIE;
+		} else if (pas == DIX_AN) {
+			return SIECLE;
+		} else {
+			throw new IllegalStateException("pas should be equal to 1 or 10. It is " + pas);
+		}
 	}
 	
 	public String getStatFor(int an) {

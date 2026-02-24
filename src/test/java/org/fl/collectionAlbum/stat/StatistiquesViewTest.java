@@ -41,6 +41,7 @@ class StatistiquesViewTest {
 		assertThat(statistiquesView.getStatisquesMap()).isEmpty();
 		assertThat(statistiquesView.getStatFor(2001)).isEqualTo("0");
 		assertThat(statistiquesView.getAccumulationStatFor(2001)).isEqualTo("0");
+		assertThat(statistiquesView.getSubdivisionName()).isEqualTo("Décennie");
 		
 		assertThatIllegalArgumentException().isThrownBy(() -> statistiquesView.getYearForLine(0));
 	}
@@ -74,6 +75,7 @@ class StatistiquesViewTest {
 		assertThat(statistiquesView.getAccumulationStatFor(1960)).isEqualTo("4.5");
 		assertThat(statistiquesView.getAccumulationStatFor(1965)).isEqualTo("4.5");
 		assertThat(statistiquesView.getAccumulationStatFor(1970)).isEqualTo("5");
+		assertThat(statistiquesView.getSubdivisionName()).isEqualTo("Décennie");
 	}
 	
 	@Test
@@ -98,6 +100,7 @@ class StatistiquesViewTest {
 		assertThat(statistiquesView.getAccumulationStatFor(1960)).isEqualTo("1.5");
 		assertThat(statistiquesView.getAccumulationStatFor(1965)).isEqualTo("1.5");
 		assertThat(statistiquesView.getAccumulationStatFor(1970)).isEqualTo("5");
+		assertThat(statistiquesView.getSubdivisionName()).isEqualTo("Décennie");
 	}
 	
 	@Test
@@ -117,6 +120,7 @@ class StatistiquesViewTest {
 		assertThat(statistiquesView.getStatFor(2001)).isEqualTo("0");
 		assertThat(statistiquesView.getLineNumber()).isEqualTo(1);
 		assertThat(statistiquesView.getYearForLine(0)).isEqualTo(1970);
+		assertThat(statistiquesView.getSubdivisionName()).isEqualTo("Décennie");
 	}
 	
 	@Test
@@ -154,6 +158,7 @@ class StatistiquesViewTest {
 		assertThat(statistiquesView.getAccumulationStatFor(1500)).isEqualTo("1");
 		assertThat(statistiquesView.getAccumulationStatFor(1710)).isEqualTo("1.5");
 		assertThat(statistiquesView.getAccumulationStatFor(1970)).isEqualTo("8");
+		assertThat(statistiquesView.getSubdivisionName()).isEqualTo("Siecle");
 	}
 	
 	@Test
@@ -176,5 +181,6 @@ class StatistiquesViewTest {
 		assertThat(statistiquesView.getStatFor(1970)).isEqualTo("0");
 		assertThat(statistiquesView.getLineNumber()).isEqualTo(1);
 		assertThat(statistiquesView.getYearForLine(0)).isEqualTo(1900);
+		assertThat(statistiquesView.getSubdivisionName()).isEqualTo("Siecle");
 	}
 }

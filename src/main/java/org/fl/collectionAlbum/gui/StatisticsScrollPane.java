@@ -60,7 +60,7 @@ public class StatisticsScrollPane extends JScrollPane implements UpdatableElemen
 		
 		statistiquesTablePanel.setLayout(new GridLayout(rowNumber,columnNumber));
 		
-		statistiquesTablePanel.add(new JLabel());
+		statistiquesTablePanel.add(new JLabel(statistiquesView.getSubdivisionName()));
 		statistiquesTablePanel.add(new JLabel("Total"));
 		for (int i = 0; i < 10; i++) {
 			statistiquesTablePanel.add(new JLabel(Integer.toString(i*pas)));
