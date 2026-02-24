@@ -167,7 +167,7 @@ public class GenerationPane extends JPanel {
 		startGenerationSite.addColorableTabbedPane(List.of(collectionMetricsTabPanes, collectionTabPanes));
 		collectionMetricsTabPanes.getTableModels().forEach(tableModel -> {
 			startReadCollection.addUpdatableElement(tableModel);
-			startGenerationSite.addTableModel(tableModel);
+			startGenerationSite.addUpdatableElement(tableModel);
 		});
 		
 		collectionTabPanes.add(collectionMetricsTabPanes, "Evolution de la collection");
