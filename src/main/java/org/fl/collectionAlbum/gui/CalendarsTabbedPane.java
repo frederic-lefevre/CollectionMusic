@@ -24,6 +24,9 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
@@ -33,11 +36,26 @@ public class CalendarsTabbedPane extends JTabbedPane {
 
 	private static final long serialVersionUID = 1L;
 
+	private final List<UpdatableElement> updatableElements;
+	
 	public CalendarsTabbedPane(CollectionAlbumContainer collectionAlbumContainer, GenerationPane generationPane) {
 		
 		super();
-		addTab("Composition des albums", new JPanel());
-		addTab("Enregistrement des albums", new JPanel());
+		
+		updatableElements = new ArrayList<>();
+		
+		StatisticsScrollPane compositionStatisticsPane = new StatisticsScrollPane(collectionAlbumContainer.getStatChronoComposition());
+		StatisticsScrollPane enregistrementStatisticsPane = new StatisticsScrollPane(collectionAlbumContainer.getStatChronoEnregistrement());
+		
+		updatableElements.add(compositionStatisticsPane);
+		updatableElements.add(enregistrementStatisticsPane);
+		
+		addTab("Composition des albums", compositionStatisticsPane);
+		addTab("Enregistrement des albums", enregistrementStatisticsPane);
 		addTab("Anniversaires", new JPanel());
+	}
+	
+	public List<UpdatableElement> getUpdatableElements() {
+		return updatableElements;
 	}
 }
