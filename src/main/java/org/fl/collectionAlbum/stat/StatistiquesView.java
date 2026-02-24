@@ -38,8 +38,7 @@ public class StatistiquesView {
 	public StatistiquesView(StatChrono statChrono, int maxNumbers) {
 		this.statChrono = statChrono;
 		
-		boolean plusieursSiecles = (statChrono.getMaxYear() - statChrono.getMinYear()) > maxNumbers;
-		if (plusieursSiecles) {
+		if (statChrono.getMaxYear() - statChrono.getMinYear() > maxNumbers) {
 			statisquesMap = statChrono.getStatistiqueSiecle();
 			pas = 10;
 		} else {
@@ -63,6 +62,16 @@ public class StatistiquesView {
 			return statChrono.getStatForDecennie(an);
 		} else {
 			return "";
+		}
+	}
+	
+	public int getLineNumber() {
+		
+		if (statisquesMap.isEmpty()) {
+			return 0;
+		} else {
+			int lineSpanOfYears = 10*pas;
+			return 1 + (statChrono.getMaxYear()/lineSpanOfYears - statChrono.getMinYear()/lineSpanOfYears);
 		}
 	}
 }

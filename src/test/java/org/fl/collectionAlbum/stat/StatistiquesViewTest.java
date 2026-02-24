@@ -61,6 +61,44 @@ class StatistiquesViewTest {
 		assertThat(statistiquesView.getStatFor(1960)).isEqualTo("1");
 		assertThat(statistiquesView.getStatFor(1970)).isEqualTo("5");
 		assertThat(statistiquesView.getStatFor(2001)).isEqualTo("0");
+		assertThat(statistiquesView.getLineNumber()).isEqualTo(2);
+	}
+	
+	@Test
+	void testStatChronoAn2() {
+		
+		StatChrono sc1 = new StatChrono();
+
+		sc1.addAlbum(TemporalUtils.parseDate("1969-09-03"), 1.5);
+		sc1.addAlbum(TemporalUtils.parseDate("1970-01-01"), 5);
+		
+		StatistiquesView statistiquesView = new StatistiquesView(sc1, 100);
+		assertThat(statistiquesView.getPas()).isEqualTo(1);
+		assertThat(statistiquesView.getStatisquesMap()).isNotEmpty().hasSize(2)
+			.containsEntry(1960, 1.5)
+			.containsEntry(1970, 5.0);
+		assertThat(statistiquesView.getStatFor(1969)).isEqualTo("1.5");
+		assertThat(statistiquesView.getStatFor(1970)).isEqualTo("5");
+		assertThat(statistiquesView.getStatFor(2001)).isEqualTo("0");
+		assertThat(statistiquesView.getLineNumber()).isEqualTo(2);
+	}
+	
+	@Test
+	void testStatChronoAn3() {
+		
+		StatChrono sc1 = new StatChrono();
+
+		sc1.addAlbum(TemporalUtils.parseDate("1979-09-03"), 1.5);
+		sc1.addAlbum(TemporalUtils.parseDate("1970-01-01"), 5);
+		
+		StatistiquesView statistiquesView = new StatistiquesView(sc1, 100);
+		assertThat(statistiquesView.getPas()).isEqualTo(1);
+		assertThat(statistiquesView.getStatisquesMap()).isNotEmpty().hasSize(1)
+			.containsEntry(1970, 6.5);
+		assertThat(statistiquesView.getStatFor(1979)).isEqualTo("1.5");
+		assertThat(statistiquesView.getStatFor(1970)).isEqualTo("5");
+		assertThat(statistiquesView.getStatFor(2001)).isEqualTo("0");
+		assertThat(statistiquesView.getLineNumber()).isEqualTo(1);
 	}
 	
 	@Test
@@ -87,5 +125,27 @@ class StatistiquesViewTest {
 		assertThat(statistiquesView.getStatFor(1960)).isEqualTo("7");
 		assertThat(statistiquesView.getStatFor(1970)).isEqualTo("0");
 		assertThat(statistiquesView.getStatFor(2001)).isEqualTo("0");
+		assertThat(statistiquesView.getLineNumber()).isEqualTo(5);
+	}
+	
+	@Test
+	void testStatChronoDecennie2() {
+		
+		StatChrono sc1 = new StatChrono();
+
+		sc1.addAlbum(TemporalUtils.parseDate("1969-09-03"), 1.5);
+		sc1.addAlbum(TemporalUtils.parseDate("1960-01-01"), 1);
+		sc1.addAlbum(TemporalUtils.parseDate("1955-12-31"), 1);
+		sc1.addAlbum(TemporalUtils.parseDate("1969-12-31"), 2);
+		sc1.addAlbum(TemporalUtils.parseDate("1968-01-01"), 5);
+		
+		StatistiquesView statistiquesView = new StatistiquesView(sc1, 10);
+		assertThat(statistiquesView.getPas()).isEqualTo(10);
+		assertThat(statistiquesView.getStatisquesMap()).isNotEmpty().hasSize(1)
+			.containsEntry(1900, 10.5);
+		assertThat(statistiquesView.getStatFor(1950)).isEqualTo("1");
+		assertThat(statistiquesView.getStatFor(1960)).isEqualTo("9.5");
+		assertThat(statistiquesView.getStatFor(1970)).isEqualTo("0");
+		assertThat(statistiquesView.getLineNumber()).isEqualTo(1);
 	}
 }
