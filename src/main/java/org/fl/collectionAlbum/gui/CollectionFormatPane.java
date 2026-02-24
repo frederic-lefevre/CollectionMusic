@@ -35,7 +35,6 @@ import java.util.Set;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 
 import org.fl.collectionAlbum.format.Format;
 import org.fl.collectionAlbum.format.MediaSupportCategories;
@@ -81,14 +80,14 @@ public class CollectionFormatPane extends JPanel {
 			constraints.gridwidth = 1;
 			constraints.gridheight = 2;
 			
-			JLabel lbl = createCellLabel(CollectionUtils.getHtmlForString(mediaSupports[colIdx].getDescription()), DOUBLE_CELL_DIMENSION, Color.LIGHT_GRAY);
+			JLabel lbl = CollectionUtils.createCellLabel(CollectionUtils.getHtmlForString(mediaSupports[colIdx].getDescription()), DOUBLE_CELL_DIMENSION, Color.LIGHT_GRAY, Color.BLACK);
 			layout.setConstraints(lbl, constraints);
 			add(lbl);
 
 			constraints.gridy = 2;
 			constraints.gridheight = 1;
 			
-			JLabel lbl2 = createCellLabel(Format.poidsToString(format.getNb(mediaSupports[colIdx])), SIMPLE_CELL_DIMENSION, Color.WHITE);
+			JLabel lbl2 = CollectionUtils.createCellLabel(Format.poidsToString(format.getNb(mediaSupports[colIdx])), SIMPLE_CELL_DIMENSION, Color.WHITE, Color.BLACK);
 			layout.setConstraints(lbl2, constraints);
 			add(lbl2);
 		}
@@ -104,13 +103,13 @@ public class CollectionFormatPane extends JPanel {
 			constraints.gridwidth = supportCategoriesMap.get(mediaSupportCategory).size();
 			Dimension cellDimension = new Dimension(120*constraints.gridwidth,30);
 			
-			JLabel lbl = createCellLabel(mediaSupportCategory.getDescription(), cellDimension, Color.LIGHT_GRAY);
+			JLabel lbl = CollectionUtils.createCellLabel(mediaSupportCategory.getDescription(), cellDimension, Color.LIGHT_GRAY, Color.BLACK);
 			layout.setConstraints(lbl, constraints);
 			add(lbl);
 
 			constraints.gridy = 4;
 			
-			JLabel lbl2 = createCellLabel(Format.poidsToString(format.getSupportsPhysiquesNumbers().get(mediaSupportCategory)), cellDimension, Color.WHITE);
+			JLabel lbl2 = CollectionUtils.createCellLabel(Format.poidsToString(format.getSupportsPhysiquesNumbers().get(mediaSupportCategory)), cellDimension, Color.WHITE, Color.BLACK);
 			layout.setConstraints(lbl2, constraints);
 			add(lbl2);
 			
@@ -118,13 +117,4 @@ public class CollectionFormatPane extends JPanel {
 		}
 	}
 	
-	private JLabel createCellLabel(String labelText, Dimension labelDimension, Color backgroundColor) {
-		
-		JLabel lbl = new JLabel(labelText, SwingConstants.CENTER);
-		lbl.setPreferredSize(labelDimension);
-		lbl.setBorder(BorderFactory.createLineBorder(getForeground()));
-		lbl.setOpaque(true);
-		lbl.setBackground(backgroundColor);
-		return lbl;
-	}
 }
