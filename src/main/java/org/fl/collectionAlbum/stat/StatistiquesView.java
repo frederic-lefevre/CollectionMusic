@@ -78,6 +78,16 @@ public class StatistiquesView {
 		}
 	}
 	
+	public String getAccumulationStatFor(int an) {
+		if (pas == UN_AN) {
+			return statChrono.getStatForDecennie(an);
+		} else if (pas == DIX_AN) {
+			return statChrono.getStatForSiecle(an);
+		} else {
+			throw new IllegalStateException("pas should be equal to 1 or 10. It is " + pas);
+		}
+	}
+	
 	public int getLineNumber() {
 		return lineNumber;
 	}

@@ -113,11 +113,11 @@ public class StatChrono {
 		}
 	}
 	
-	public TreeMap<Integer, Double> getStatistiqueDecennale() {
+	protected TreeMap<Integer, Double> getStatistiqueDecennale() {
 		return statistiqueDecennale;
 	}
 
-	public TreeMap<Integer, Double> getStatistiqueSiecle() {
+	protected TreeMap<Integer, Double> getStatistiqueSiecle() {
 		return statistiqueSiecle;
 	}
 
@@ -127,6 +127,10 @@ public class StatChrono {
 
 	public String getStatForDecennie(int an) {
 		return getStat(statistiqueDecennale, getDecennie(an));
+	}
+	
+	public String getStatForSiecle(int an) {
+		return getStat(statistiqueSiecle, getDecennie(an));
 	}
 	
 	private String getStat(Map<Integer, Double> statAns, int an) {
