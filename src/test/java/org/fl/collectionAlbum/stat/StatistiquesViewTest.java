@@ -40,6 +40,7 @@ class StatistiquesViewTest {
 		assertThat(statistiquesView.getPas()).isEqualTo(1);
 		assertThat(statistiquesView.getStatisquesMap()).isEmpty();
 		assertThat(statistiquesView.getStatFor(2001)).isEqualTo("0");
+		assertThat(statistiquesView.getAccumulationStatFor(2001)).isEqualTo("0");
 		
 		assertThatIllegalArgumentException().isThrownBy(() -> statistiquesView.getYearForLine(0));
 	}
@@ -68,6 +69,11 @@ class StatistiquesViewTest {
 		assertThat(statistiquesView.getYearForLine(1)).isEqualTo(1970);
 		assertThatIllegalArgumentException().isThrownBy(() -> statistiquesView.getYearForLine(2));
 		assertThatIllegalArgumentException().isThrownBy(() -> statistiquesView.getYearForLine(-1));
+		assertThat(statistiquesView.getAccumulationStatFor(2001)).isEqualTo("0");
+		assertThat(statistiquesView.getAccumulationStatFor(1969)).isEqualTo("4.5");
+		assertThat(statistiquesView.getAccumulationStatFor(1960)).isEqualTo("4.5");
+		assertThat(statistiquesView.getAccumulationStatFor(1965)).isEqualTo("4.5");
+		assertThat(statistiquesView.getAccumulationStatFor(1970)).isEqualTo("5");
 	}
 	
 	@Test
@@ -89,6 +95,9 @@ class StatistiquesViewTest {
 		assertThat(statistiquesView.getLineNumber()).isEqualTo(2);
 		assertThat(statistiquesView.getYearForLine(0)).isEqualTo(1960);
 		assertThat(statistiquesView.getYearForLine(1)).isEqualTo(1970);
+		assertThat(statistiquesView.getAccumulationStatFor(1960)).isEqualTo("1.5");
+		assertThat(statistiquesView.getAccumulationStatFor(1965)).isEqualTo("1.5");
+		assertThat(statistiquesView.getAccumulationStatFor(1970)).isEqualTo("5");
 	}
 	
 	@Test
@@ -142,6 +151,9 @@ class StatistiquesViewTest {
 		assertThat(statistiquesView.getYearForLine(4)).isEqualTo(1900);
 		assertThatIllegalArgumentException().isThrownBy(() -> statistiquesView.getYearForLine(5));
 		assertThatIllegalArgumentException().isThrownBy(() -> statistiquesView.getYearForLine(-1));
+		assertThat(statistiquesView.getAccumulationStatFor(1500)).isEqualTo("1");
+		assertThat(statistiquesView.getAccumulationStatFor(1710)).isEqualTo("1.5");
+		assertThat(statistiquesView.getAccumulationStatFor(1970)).isEqualTo("8");
 	}
 	
 	@Test

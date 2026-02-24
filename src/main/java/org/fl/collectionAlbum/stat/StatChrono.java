@@ -130,7 +130,7 @@ public class StatChrono {
 	}
 	
 	public String getStatForSiecle(int an) {
-		return getStat(statistiqueSiecle, getDecennie(an));
+		return getStat(statistiqueSiecle, getSiecle(an));
 	}
 	
 	private String getStat(Map<Integer, Double> statAns, int an) {

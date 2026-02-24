@@ -40,7 +40,8 @@ class StatChronoTest {
 		
 		assertThat(sc1.getStatForYear(0)).isEqualTo("0");
 		assertThat(sc1.getStatForYear(1969)).isEqualTo("0");
-		assertThat(sc1.getStatForDecennie(1969)).isEqualTo("0");	
+		assertThat(sc1.getStatForDecennie(1969)).isEqualTo("0");
+		assertThat(sc1.getStatForSiecle(1969)).isEqualTo("0");
 
 		assertThat(sc1.getStatistiqueDecennale()).isNotNull().isEmpty();
 		assertThat(sc1.getStatistiqueSiecle()).isNotNull().isEmpty();
@@ -64,6 +65,9 @@ class StatChronoTest {
 		assertThat(sc1.getStatForDecennie(1965)).isEqualTo("4.5");
 		assertThat(sc1.getStatForYear(1970)).isEqualTo("5");
 		assertThat(sc1.getStatForDecennie(1970)).isEqualTo("5");
+		assertThat(sc1.getStatForSiecle(1969)).isEqualTo("9.5");
+		assertThat(sc1.getStatForSiecle(1900)).isEqualTo("9.5");
+		assertThat(sc1.getStatForSiecle(2000)).isEqualTo("0");
 		
 		assertThat(sc1.getMinYear()).isEqualTo(1960);
 		assertThat(sc1.getMaxYear()).isEqualTo(1970);
