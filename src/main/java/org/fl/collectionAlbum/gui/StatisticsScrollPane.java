@@ -35,6 +35,7 @@ import javax.swing.JScrollPane;
 import org.fl.collectionAlbum.stat.StatChrono;
 import org.fl.collectionAlbum.stat.StatistiquesView;
 import org.fl.collectionAlbum.utils.CollectionUtils;
+import org.fl.collectionAlbum.utils.JLabelBuilder;
 
 public class StatisticsScrollPane extends JScrollPane implements UpdatableElement {
 
@@ -70,11 +71,30 @@ public class StatisticsScrollPane extends JScrollPane implements UpdatableElemen
 		constraints.gridx = 0;
 		constraints.gridy = 0;
 		
-		statistiquesTablePanel.add(CollectionUtils.createGridCellLabel(layout, constraints, statistiquesView.getSubdivisionName(), CELL_DIMENSION, Color.WHITE, Color.BLACK));
-		statistiquesTablePanel.add(CollectionUtils.createGridCellLabel(layout, setGridx(constraints, 1), "Total", CELL_DIMENSION, Color.WHITE, Color.BLACK));
+		statistiquesTablePanel.add(CollectionUtils.createGridCellLabel(layout, constraints,
+				JLabelBuilder.builder()
+					.text(statistiquesView.getSubdivisionName())
+					.preferredSize(CELL_DIMENSION)
+					.backgroundColor(Color.BLACK)
+					.foregroundColor(Color.WHITE)
+				));
+		
+		statistiquesTablePanel.add(CollectionUtils.createGridCellLabel(layout, setGridx(constraints, 1),
+				JLabelBuilder.builder()
+					.text("Total")
+					.preferredSize(CELL_DIMENSION)
+					.backgroundColor(Color.BLACK)
+					.foregroundColor(Color.WHITE)
+				));
 		
 		for (int i = 0; i < 10; i++) {
-			statistiquesTablePanel.add(CollectionUtils.createGridCellLabel(layout, setGridx(constraints, i+2), Integer.toString(i*pas), CELL_DIMENSION, Color.WHITE, Color.BLACK));
+			statistiquesTablePanel.add(CollectionUtils.createGridCellLabel(layout, setGridx(constraints, i+2), 
+					JLabelBuilder.builder()
+						.text(Integer.toString(i*pas))
+						.preferredSize(CELL_DIMENSION)
+						.backgroundColor(Color.BLACK)
+						.foregroundColor(Color.WHITE)
+					));
 		}
 		
 		int rowNumber = statistiquesView.getLineNumber() + 1;
@@ -84,14 +104,29 @@ public class StatisticsScrollPane extends JScrollPane implements UpdatableElemen
 			int subdivisionYear = statistiquesView.getYearForLine(i);
 			
 			statistiquesTablePanel.add(
-					CollectionUtils.createGridCellLabel(layout, setGridx(constraints, 0), Integer.toString(subdivisionYear), CELL_DIMENSION, Color.WHITE, Color.BLACK));
+					CollectionUtils.createGridCellLabel(layout, setGridx(constraints, 0), 
+							JLabelBuilder.builder()
+							.text(Integer.toString(subdivisionYear))
+							.preferredSize(CELL_DIMENSION)
+							.backgroundColor(Color.BLACK)
+							.foregroundColor(Color.WHITE)
+						));
+			
 			statistiquesTablePanel.add(
-					CollectionUtils.createGridCellLabel(layout, setGridx(constraints, 1), 
-							statistiquesView.getAccumulationStatFor(subdivisionYear), CELL_DIMENSION, Color.WHITE, Color.BLACK));
+					CollectionUtils.createGridCellLabel(layout, setGridx(constraints, 1),
+							JLabelBuilder.builder()
+								.text(statistiquesView.getAccumulationStatFor(subdivisionYear))
+								.preferredSize(CELL_DIMENSION)
+								.backgroundColor(Color.LIGHT_GRAY)
+							));
+			
 			for (int j = 0; j < 10; j++) {
 				statistiquesTablePanel.add(
 						CollectionUtils.createGridCellLabel(layout, setGridx(constraints, j+2), 
-								statistiquesView.getStatFor(subdivisionYear + j*pas), CELL_DIMENSION, Color.WHITE, Color.BLACK));
+								JLabelBuilder.builder()
+									.text(statistiquesView.getStatFor(subdivisionYear + j*pas))
+									.preferredSize(CELL_DIMENSION)
+								));
 			}
 		}
 	}

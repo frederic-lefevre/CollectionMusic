@@ -24,8 +24,6 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.utils;
 
-import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -40,13 +38,11 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import javax.imageio.ImageIO;
-import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import org.fl.collectionAlbum.Control;
@@ -343,16 +339,9 @@ public class CollectionUtils {
 	public static JLabel createGridCellLabel(
 			GridBagLayout layout, 
 			GridBagConstraints constraints, 
-			String labelText, 
-			Dimension labelDimension, 
-			Color backgroundColor, 
-			Color foregroundColor) {
+			JLabelBuilder.Builder jLabelBuilder) {
 		
-		JLabel lbl = new JLabel(labelText, SwingConstants.CENTER);
-		lbl.setPreferredSize(labelDimension);
-		lbl.setBorder(BorderFactory.createLineBorder(foregroundColor));
-		lbl.setOpaque(true);
-		lbl.setBackground(backgroundColor);
+		JLabel lbl = jLabelBuilder.build();
 		layout.setConstraints(lbl, constraints);
 		return lbl;
 	}

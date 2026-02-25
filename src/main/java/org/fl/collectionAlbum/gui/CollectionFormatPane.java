@@ -39,6 +39,7 @@ import org.fl.collectionAlbum.format.Format;
 import org.fl.collectionAlbum.format.MediaSupportCategories;
 import org.fl.collectionAlbum.format.MediaSupports;
 import org.fl.collectionAlbum.utils.CollectionUtils;
+import org.fl.collectionAlbum.utils.JLabelBuilder;
 
 public class CollectionFormatPane extends JPanel {
 
@@ -77,15 +78,22 @@ public class CollectionFormatPane extends JPanel {
 			constraints.gridy = 0;
 			constraints.gridwidth = 1;
 			constraints.gridheight = 2;
-			
+
 			add(CollectionUtils.createGridCellLabel(layout, constraints, 
-					CollectionUtils.getHtmlForString(mediaSupports[colIdx].getDescription()), DOUBLE_CELL_DIMENSION, Color.LIGHT_GRAY, Color.BLACK));
+					JLabelBuilder.builder()
+						.text(CollectionUtils.getHtmlForString(mediaSupports[colIdx].getDescription()))
+						.preferredSize(DOUBLE_CELL_DIMENSION)
+						.backgroundColor(Color.LIGHT_GRAY)
+					));
 
 			constraints.gridy = 2;
 			constraints.gridheight = 1;
 			
 			add(CollectionUtils.createGridCellLabel(layout, constraints, 
-					Format.poidsToString(format.getNb(mediaSupports[colIdx])), SIMPLE_CELL_DIMENSION, Color.WHITE, Color.BLACK));
+					JLabelBuilder.builder()
+						.text(Format.poidsToString(format.getNb(mediaSupports[colIdx])))
+						.preferredSize(SIMPLE_CELL_DIMENSION)
+					));
 		}
 		
 		MediaSupportCategories[] mediaSupportCategories = MediaSupportCategories.values();
@@ -99,12 +107,20 @@ public class CollectionFormatPane extends JPanel {
 			constraints.gridwidth = supportCategoriesMap.get(mediaSupportCategory).size();
 			Dimension cellDimension = new Dimension(120*constraints.gridwidth,30);
 
-			add(CollectionUtils.createGridCellLabel(layout, constraints, mediaSupportCategory.getDescription(), cellDimension, Color.LIGHT_GRAY, Color.BLACK));
+			add(CollectionUtils.createGridCellLabel(layout, constraints, 
+					JLabelBuilder.builder()
+						.text(mediaSupportCategory.getDescription())
+						.preferredSize(cellDimension)
+						.backgroundColor(Color.LIGHT_GRAY)
+					));
 
 			constraints.gridy = 4;
 			
 			add(CollectionUtils.createGridCellLabel(layout, constraints, 
-					Format.poidsToString(format.getSupportsPhysiquesNumbers().get(mediaSupportCategory)), cellDimension, Color.WHITE, Color.BLACK));
+					JLabelBuilder.builder()
+						.text(Format.poidsToString(format.getSupportsPhysiquesNumbers().get(mediaSupportCategory)))
+						.preferredSize(cellDimension)
+					));
 			
 			colIdx = colIdx + constraints.gridwidth;
 		}
