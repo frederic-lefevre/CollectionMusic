@@ -26,9 +26,14 @@ package org.fl.collectionAlbum.gui;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
 
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -42,15 +47,48 @@ public class StatisticsScrollPane extends JScrollPane implements UpdatableElemen
 	private static final long serialVersionUID = 1L;
 	
 	private static final Dimension CELL_DIMENSION = new Dimension(80,30);
+	private static final Dimension CURRENT_STAT_DIMENSION = new Dimension(350,250);
+	
+	private static final Font PERIOD_FONT = new Font("Verdana", Font.BOLD, 64);
+	private static final Font STAT_FONT = new Font("Verdana", Font.BOLD, 64);
 	
 	private final StatChrono statChrono;
+	private final JPanel statistiquesPanel;
+	private final JPanel currentStatistiquePanel;
+	private final JLabel currentPeriodLabel;
+	private final JLabel currentStatLabel;
 	private final JPanel statistiquesTablePanel;
 	
 	public StatisticsScrollPane(StatChrono statChrono) {
+		
 		super();
 		this.statChrono = statChrono;
+		this.statistiquesPanel =  new JPanel();
+		statistiquesPanel.setLayout(new BoxLayout(statistiquesPanel, BoxLayout.X_AXIS));
+		
 		this.statistiquesTablePanel = new JPanel();
-		setViewportView(statistiquesTablePanel);
+		
+		statistiquesPanel.add(statistiquesTablePanel);
+		
+		currentStatistiquePanel = new JPanel();
+		currentStatistiquePanel.setLayout(new BoxLayout(currentStatistiquePanel, BoxLayout.Y_AXIS));
+		
+		currentPeriodLabel = new JLabel();
+		currentPeriodLabel.setFont(PERIOD_FONT);
+		currentPeriodLabel.setPreferredSize(CURRENT_STAT_DIMENSION);
+		currentPeriodLabel.setForeground(new Color(0xFF, 0xA0, 0xA0));
+		
+		currentStatLabel = new JLabel();
+		currentStatLabel.setFont(STAT_FONT);
+		currentStatLabel.setPreferredSize(CURRENT_STAT_DIMENSION);
+		currentStatLabel.setForeground(new Color(0xA0, 0xA0, 0xFF));
+		
+		currentStatistiquePanel.add(currentPeriodLabel);
+		currentStatistiquePanel.add(currentStatLabel);
+		
+		statistiquesPanel.add(currentStatistiquePanel);
+		
+		setViewportView(statistiquesPanel);
 		
 		fillPanel();
 	}
@@ -121,11 +159,15 @@ public class StatisticsScrollPane extends JScrollPane implements UpdatableElemen
 							));
 			
 			for (int j = 0; j < 10; j++) {
+				int year = subdivisionYear + j*pas;
+				String period = Integer.toString(year);
+				String poids = statistiquesView.getStatFor(year);
 				statistiquesTablePanel.add(
 						CollectionUtils.createGridCellLabel(layout, setGridx(constraints, j+2), 
 								JLabelBuilder.builder()
-									.text(statistiquesView.getStatFor(subdivisionYear + j*pas))
+									.text(poids)
 									.preferredSize(CELL_DIMENSION)
+									.mouseMotionListener(new CurrentStatMouseMotionAdapter(period, poids))
 								));
 			}
 		}
@@ -139,5 +181,23 @@ public class StatisticsScrollPane extends JScrollPane implements UpdatableElemen
 	@Override
 	public void updateElement() {
 		fillPanel();
+	}
+	
+	private class CurrentStatMouseMotionAdapter extends MouseMotionAdapter {
+		
+		private final String period;
+		private final String poids;
+		
+		public CurrentStatMouseMotionAdapter(String period, String poids) {
+			super();
+			this.period = period;
+			this.poids = poids;
+		}
+		
+		@Override
+		public void mouseMoved(MouseEvent e) {
+			currentPeriodLabel.setText(period);
+			currentStatLabel.setText(poids);
+		}
 	}
 }
