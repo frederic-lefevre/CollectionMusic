@@ -33,7 +33,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.swing.BorderFactory;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.fl.collectionAlbum.format.Format;
@@ -74,22 +73,19 @@ public class CollectionFormatPane extends JPanel {
 		MediaSupports[] mediaSupports = MediaSupports.values();
 		for (int colIdx = 0; colIdx < mediaSupports.length; colIdx++) {
 			
-			
 			constraints.gridx = colIdx;
 			constraints.gridy = 0;
 			constraints.gridwidth = 1;
 			constraints.gridheight = 2;
 			
-			JLabel lbl = CollectionUtils.createCellLabel(CollectionUtils.getHtmlForString(mediaSupports[colIdx].getDescription()), DOUBLE_CELL_DIMENSION, Color.LIGHT_GRAY, Color.BLACK);
-			layout.setConstraints(lbl, constraints);
-			add(lbl);
+			add(CollectionUtils.createGridCellLabel(layout, constraints, 
+					CollectionUtils.getHtmlForString(mediaSupports[colIdx].getDescription()), DOUBLE_CELL_DIMENSION, Color.LIGHT_GRAY, Color.BLACK));
 
 			constraints.gridy = 2;
 			constraints.gridheight = 1;
 			
-			JLabel lbl2 = CollectionUtils.createCellLabel(Format.poidsToString(format.getNb(mediaSupports[colIdx])), SIMPLE_CELL_DIMENSION, Color.WHITE, Color.BLACK);
-			layout.setConstraints(lbl2, constraints);
-			add(lbl2);
+			add(CollectionUtils.createGridCellLabel(layout, constraints, 
+					Format.poidsToString(format.getNb(mediaSupports[colIdx])), SIMPLE_CELL_DIMENSION, Color.WHITE, Color.BLACK));
 		}
 		
 		MediaSupportCategories[] mediaSupportCategories = MediaSupportCategories.values();
@@ -102,19 +98,15 @@ public class CollectionFormatPane extends JPanel {
 			constraints.gridy = 3;
 			constraints.gridwidth = supportCategoriesMap.get(mediaSupportCategory).size();
 			Dimension cellDimension = new Dimension(120*constraints.gridwidth,30);
-			
-			JLabel lbl = CollectionUtils.createCellLabel(mediaSupportCategory.getDescription(), cellDimension, Color.LIGHT_GRAY, Color.BLACK);
-			layout.setConstraints(lbl, constraints);
-			add(lbl);
+
+			add(CollectionUtils.createGridCellLabel(layout, constraints, mediaSupportCategory.getDescription(), cellDimension, Color.LIGHT_GRAY, Color.BLACK));
 
 			constraints.gridy = 4;
 			
-			JLabel lbl2 = CollectionUtils.createCellLabel(Format.poidsToString(format.getSupportsPhysiquesNumbers().get(mediaSupportCategory)), cellDimension, Color.WHITE, Color.BLACK);
-			layout.setConstraints(lbl2, constraints);
-			add(lbl2);
+			add(CollectionUtils.createGridCellLabel(layout, constraints, 
+					Format.poidsToString(format.getSupportsPhysiquesNumbers().get(mediaSupportCategory)), cellDimension, Color.WHITE, Color.BLACK));
 			
 			colIdx = colIdx + constraints.gridwidth;
 		}
-	}
-	
+	}	
 }

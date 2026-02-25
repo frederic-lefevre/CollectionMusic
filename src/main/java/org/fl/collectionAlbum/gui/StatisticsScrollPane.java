@@ -24,18 +24,23 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui;
 
-import java.awt.GridLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import org.fl.collectionAlbum.stat.StatChrono;
 import org.fl.collectionAlbum.stat.StatistiquesView;
+import org.fl.collectionAlbum.utils.CollectionUtils;
 
 public class StatisticsScrollPane extends JScrollPane implements UpdatableElement {
 
 	private static final long serialVersionUID = 1L;
+	
+	private static final Dimension CELL_DIMENSION = new Dimension(80,30);
 	
 	private final StatChrono statChrono;
 	private final JPanel statistiquesTablePanel;
@@ -55,27 +60,47 @@ public class StatisticsScrollPane extends JScrollPane implements UpdatableElemen
 		StatistiquesView statistiquesView = new StatistiquesView(statChrono, 200);
 		int pas = statistiquesView.getPas();
 		
-		int columnNumber = 12;
-		int rowNumber = statistiquesView.getLineNumber() + 1;
+		GridBagLayout layout = new GridBagLayout();
+		GridBagConstraints constraints = new GridBagConstraints();
 		
-		statistiquesTablePanel.setLayout(new GridLayout(rowNumber,columnNumber));
+		statistiquesTablePanel.setLayout(layout);
 		
-		statistiquesTablePanel.add(new JLabel(statistiquesView.getSubdivisionName()));
-		statistiquesTablePanel.add(new JLabel("Total"));
+		constraints.gridwidth = 1;
+		constraints.gridheight = 1;
+		constraints.gridx = 0;
+		constraints.gridy = 0;
+		
+		statistiquesTablePanel.add(CollectionUtils.createGridCellLabel(layout, constraints, statistiquesView.getSubdivisionName(), CELL_DIMENSION, Color.WHITE, Color.BLACK));
+		statistiquesTablePanel.add(CollectionUtils.createGridCellLabel(layout, setGridx(constraints, 1), "Total", CELL_DIMENSION, Color.WHITE, Color.BLACK));
+		
 		for (int i = 0; i < 10; i++) {
-			statistiquesTablePanel.add(new JLabel(Integer.toString(i*pas)));
+			statistiquesTablePanel.add(CollectionUtils.createGridCellLabel(layout, setGridx(constraints, i+2), Integer.toString(i*pas), CELL_DIMENSION, Color.WHITE, Color.BLACK));
 		}
 		
+		int rowNumber = statistiquesView.getLineNumber() + 1;
 		for (int i = 0; i < rowNumber -1; i++) {
+			
+			constraints.gridy = i + 1;
 			int subdivisionYear = statistiquesView.getYearForLine(i);
-			statistiquesTablePanel.add(new JLabel(Integer.toString(subdivisionYear)));
-			statistiquesTablePanel.add(new JLabel(statistiquesView.getAccumulationStatFor(subdivisionYear)));
+			
+			statistiquesTablePanel.add(
+					CollectionUtils.createGridCellLabel(layout, setGridx(constraints, 0), Integer.toString(subdivisionYear), CELL_DIMENSION, Color.WHITE, Color.BLACK));
+			statistiquesTablePanel.add(
+					CollectionUtils.createGridCellLabel(layout, setGridx(constraints, 1), 
+							statistiquesView.getAccumulationStatFor(subdivisionYear), CELL_DIMENSION, Color.WHITE, Color.BLACK));
 			for (int j = 0; j < 10; j++) {
-				statistiquesTablePanel.add(new JLabel(statistiquesView.getStatFor(subdivisionYear + j*pas)));
+				statistiquesTablePanel.add(
+						CollectionUtils.createGridCellLabel(layout, setGridx(constraints, j+2), 
+								statistiquesView.getStatFor(subdivisionYear + j*pas), CELL_DIMENSION, Color.WHITE, Color.BLACK));
 			}
 		}
 	}
 
+	private GridBagConstraints setGridx(GridBagConstraints constraints, int x) {
+		constraints.gridx = x;
+		return constraints;
+	}
+	
 	@Override
 	public void updateElement() {
 		fillPanel();

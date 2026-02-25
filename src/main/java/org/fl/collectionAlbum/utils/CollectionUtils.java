@@ -27,6 +27,8 @@ package org.fl.collectionAlbum.utils;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.io.IOException;
 import java.net.URI;
@@ -338,13 +340,20 @@ public class CollectionUtils {
 		return urlLinkPanel;
 	}
 	
-	public static JLabel createCellLabel(String labelText, Dimension labelDimension, Color backgroundColor, Color foregroundColor) {
+	public static JLabel createGridCellLabel(
+			GridBagLayout layout, 
+			GridBagConstraints constraints, 
+			String labelText, 
+			Dimension labelDimension, 
+			Color backgroundColor, 
+			Color foregroundColor) {
 		
 		JLabel lbl = new JLabel(labelText, SwingConstants.CENTER);
 		lbl.setPreferredSize(labelDimension);
 		lbl.setBorder(BorderFactory.createLineBorder(foregroundColor));
 		lbl.setOpaque(true);
 		lbl.setBackground(backgroundColor);
+		layout.setConstraints(lbl, constraints);
 		return lbl;
 	}
 }
