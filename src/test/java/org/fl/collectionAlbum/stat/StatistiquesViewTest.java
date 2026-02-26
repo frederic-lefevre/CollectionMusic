@@ -31,6 +31,7 @@ import java.util.Optional;
 import java.util.function.Function;
 
 import org.fl.collectionAlbum.format.Format;
+import org.fl.collectionAlbum.stat.StatistiquesView.Granularite;
 import org.fl.collectionAlbum.utils.TemporalUtils;
 
 class StatistiquesViewTest {
@@ -40,7 +41,7 @@ class StatistiquesViewTest {
 	@Test
 	void testEmptyStatChrono() {
 		
-		StatistiquesView statistiquesView = new StatistiquesView(new StatChrono(), 100, statToStringFunction);
+		StatistiquesView statistiquesView = new StatistiquesView(new StatChrono(), Granularite.PAR_AN, statToStringFunction);
 		
 		assertThat(statistiquesView).isNotNull();
 		assertThat(statistiquesView.getPas()).isEqualTo(1);
@@ -62,7 +63,7 @@ class StatistiquesViewTest {
 		sc1.addToStatistic(TemporalUtils.parseDate("1969-12-31"), 2);
 		sc1.addToStatistic(TemporalUtils.parseDate("1970-01-01"), 5);
 		
-		StatistiquesView statistiquesView = new StatistiquesView(sc1, 100, statToStringFunction);
+		StatistiquesView statistiquesView = new StatistiquesView(sc1, Granularite.PAR_AN, statToStringFunction);
 		assertThat(statistiquesView.getPas()).isEqualTo(1);
 		assertThat(statistiquesView.getStatisquesMap()).isNotEmpty().hasSize(2)
 			.containsEntry(1960, 4.5)
@@ -92,7 +93,7 @@ class StatistiquesViewTest {
 		sc1.addToStatistic(TemporalUtils.parseDate("1969-09-03"), 1.5);
 		sc1.addToStatistic(TemporalUtils.parseDate("1970-01-01"), 5);
 		
-		StatistiquesView statistiquesView = new StatistiquesView(sc1, 100, statToStringFunction);
+		StatistiquesView statistiquesView = new StatistiquesView(sc1, Granularite.PAR_AN, statToStringFunction);
 		assertThat(statistiquesView.getPas()).isEqualTo(1);
 		assertThat(statistiquesView.getStatisquesMap()).isNotEmpty().hasSize(2)
 			.containsEntry(1960, 1.5)
@@ -117,7 +118,7 @@ class StatistiquesViewTest {
 		sc1.addToStatistic(TemporalUtils.parseDate("1979-09-03"), 1.5);
 		sc1.addToStatistic(TemporalUtils.parseDate("1970-01-01"), 5);
 		
-		StatistiquesView statistiquesView = new StatistiquesView(sc1, 100, statToStringFunction);
+		StatistiquesView statistiquesView = new StatistiquesView(sc1, Granularite.PAR_AN, statToStringFunction);
 		assertThat(statistiquesView.getPas()).isEqualTo(1);
 		assertThat(statistiquesView.getStatisquesMap()).isNotEmpty().hasSize(1)
 			.containsEntry(1970, 6.5);
@@ -140,7 +141,7 @@ class StatistiquesViewTest {
 		sc1.addToStatistic(TemporalUtils.parseDate("1969-12-31"), 2);
 		sc1.addToStatistic(TemporalUtils.parseDate("1968-01-01"), 5);
 		
-		StatistiquesView statistiquesView = new StatistiquesView(sc1, 100, statToStringFunction);
+		StatistiquesView statistiquesView = new StatistiquesView(sc1, Granularite.PAR_DECENNIE, statToStringFunction);
 		assertThat(statistiquesView.getPas()).isEqualTo(10);
 		assertThat(statistiquesView.getStatisquesMap()).isNotEmpty().hasSize(3)
 			.containsEntry(1500, 1.0)
@@ -178,7 +179,7 @@ class StatistiquesViewTest {
 		sc1.addToStatistic(TemporalUtils.parseDate("1969-12-31"), 2);
 		sc1.addToStatistic(TemporalUtils.parseDate("1968-01-01"), 5);
 		
-		StatistiquesView statistiquesView = new StatistiquesView(sc1, 10, statToStringFunction);
+		StatistiquesView statistiquesView = new StatistiquesView(sc1, Granularite.PAR_DECENNIE, statToStringFunction);
 		assertThat(statistiquesView.getPas()).isEqualTo(10);
 		assertThat(statistiquesView.getStatisquesMap()).isNotEmpty().hasSize(1)
 			.containsEntry(1900, 10.5);

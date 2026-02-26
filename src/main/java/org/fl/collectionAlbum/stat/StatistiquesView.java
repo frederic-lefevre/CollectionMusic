@@ -29,31 +29,45 @@ import java.util.function.Function;
 
 public class StatistiquesView {
 
-	private static final int UN_AN = 1;
-	private static final int DIX_AN = 10;
-	
-	private static final String DECENNIE = "Décennie";
-	private static final String SIECLE = "Siecle";
-	
+	public enum Granularite {
+		PAR_AN(1, "Décennie"),
+		PAR_DECENNIE(10, "Siecle");
+		
+		private final int pas;
+		private final String rowName;
+		
+		Granularite(int pas, String rowName) {
+			this.pas = pas;
+			this.rowName = rowName;
+		}
+
+		public int getPas() {
+			return pas;
+		}
+
+		public String getRowName() {
+			return rowName;
+		}
+	}
+
 	private final StatChrono statChrono;
 	private final TreeMap<Integer, Double> statisquesMap;
-	private final int pas;
+	private final Granularite granularite;
 	private final int lineNumber;
 	private final int lineSpanOfYears;
 	private final int beginYear;
 	private Function<Double, String> statToStringFunction;
 	
-	public StatistiquesView(StatChrono statChrono, int maxNumbers, Function<Double, String> statToStringFunction) {
+	public StatistiquesView(StatChrono statChrono, Granularite granularite, Function<Double, String> statToStringFunction) {
 		
 		this.statChrono = statChrono;
 		this.statToStringFunction = statToStringFunction;
+		this.granularite = granularite;
 		
-		if (statChrono.getMaxYear() - statChrono.getMinYear() > maxNumbers) {
+		if (granularite == Granularite.PAR_DECENNIE) {
 			statisquesMap = statChrono.getStatistiqueSiecle();
-			pas = DIX_AN;
 		} else {
 			statisquesMap = statChrono.getStatistiqueDecennale();
-			pas = UN_AN;
 		}
 		
 		if (statisquesMap.isEmpty()) {
@@ -61,7 +75,7 @@ public class StatistiquesView {
 			lineSpanOfYears = 0;
 			beginYear = 0;
 		} else {
-			lineSpanOfYears = 10*pas;
+			lineSpanOfYears = 10*granularite.getPas();
 			lineNumber = 1 + (statChrono.getMaxYear()/lineSpanOfYears - statChrono.getMinYear()/lineSpanOfYears);
 			beginYear = (statChrono.getMinYear() / lineSpanOfYears) * lineSpanOfYears;
 		}
@@ -72,38 +86,26 @@ public class StatistiquesView {
 	}
 	
 	public int getPas() {
-		return pas;
+		return granularite.getPas();
 	}
 	
+	
 	public String getSubdivisionName() {
-		
-		if (pas == UN_AN) {
-			return DECENNIE;
-		} else if (pas == DIX_AN) {
-			return SIECLE;
-		} else {
-			throw new IllegalStateException("pas should be equal to 1 or 10. It is " + pas);
-		}
+		return granularite.getRowName();
 	}
 	
 	public String getStatFor(int an) {
-		if (pas == UN_AN) {
-			return getStatAsString(statChrono.getStatForYear(an));
-		} else if (pas == DIX_AN) {
-			return getStatAsString(statChrono.getStatForDecennie(an));
-		} else {
-			throw new IllegalStateException("pas should be equal to 1 or 10. It is " + pas);
-		}
+		return switch (granularite) {
+			case PAR_AN -> getStatAsString(statChrono.getStatForYear(an));
+			case PAR_DECENNIE -> getStatAsString(statChrono.getStatForDecennie(an));
+		};
 	}
 	
 	public String getAccumulationStatFor(int an) {
-		if (pas == UN_AN) {
-			return getStatAsString(statChrono.getStatForDecennie(an));
-		} else if (pas == DIX_AN) {
-			return getStatAsString(statChrono.getStatForSiecle(an));
-		} else {
-			throw new IllegalStateException("pas should be equal to 1 or 10. It is " + pas);
-		}
+		return switch (granularite) {
+			case PAR_AN -> getStatAsString(statChrono.getStatForDecennie(an));
+			case PAR_DECENNIE -> getStatAsString(statChrono.getStatForSiecle(an));
+		};
 	}
 	
 	public int getLineNumber() {

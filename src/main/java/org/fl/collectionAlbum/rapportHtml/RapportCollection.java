@@ -32,6 +32,7 @@ import org.fl.collectionAlbum.albums.ListeAlbum;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.format.Format;
 import org.fl.collectionAlbum.format.MediaSupports;
+import org.fl.collectionAlbum.stat.StatistiquesView.Granularite;
 
 public class RapportCollection extends RapportHtml {
 
@@ -116,10 +117,10 @@ public class RapportCollection extends RapportHtml {
 		writeListeAlbumsRow(albumsContainer.getAlbumsMissingVideoFile().sortRangementAlbum(), "Albums manquant de fichier vidéo");	
 
 		write("</table>\n</td>\n</tr>\n<tr>\n<td class=\"mainpage\">\n<h3>Statistiques</h3>\n<ul>\n");
-		RapportStat rapportStat1 = new RapportStat(albumsContainer.getStatChronoEnregistrement(), "Statistiques par année d'enregistrement", LinkType.LIST);
+		RapportStat rapportStat1 = new RapportStat(albumsContainer.getStatChronoEnregistrement(), "Statistiques par année d'enregistrement", LinkType.LIST, Granularite.PAR_AN);
 		write(rapportStat1.printReport(getNextRapportFile(), CssStyles.stylesStat));
 
-		RapportStat rapportStat2 = new RapportStat(albumsContainer.getStatChronoComposition(), "Statistiques par décennie de composition", LinkType.LIST);
+		RapportStat rapportStat2 = new RapportStat(albumsContainer.getStatChronoComposition(), "Statistiques par décennie de composition", LinkType.LIST, Granularite.PAR_DECENNIE);
 		write(rapportStat2.printReport(getNextRapportFile(), CssStyles.stylesStat));
 
 		write("  <li>Nombre d'artistes, de groupes et d'ensembles: ");

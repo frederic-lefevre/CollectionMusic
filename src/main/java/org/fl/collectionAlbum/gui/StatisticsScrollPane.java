@@ -42,6 +42,7 @@ import javax.swing.JScrollPane;
 import org.fl.collectionAlbum.format.Format;
 import org.fl.collectionAlbum.stat.StatChrono;
 import org.fl.collectionAlbum.stat.StatistiquesView;
+import org.fl.collectionAlbum.stat.StatistiquesView.Granularite;
 import org.fl.collectionAlbum.utils.CollectionUtils;
 import org.fl.collectionAlbum.utils.JLabelBuilder;
 
@@ -58,16 +59,18 @@ public class StatisticsScrollPane extends JScrollPane implements UpdatableElemen
 	private static final Function<Double, String> statToStringFunction = (d) ->  Optional.ofNullable(d).map(poids -> Format.poidsToString(poids)).orElse("");
 	
 	private final StatChrono statChrono;
+	private final Granularite granularite;
 	private final JPanel statistiquesPanel;
 	private final JPanel currentStatistiquePanel;
 	private final JLabel currentPeriodLabel;
 	private final JLabel currentStatLabel;
 	private final JPanel statistiquesTablePanel;
 	
-	public StatisticsScrollPane(StatChrono statChrono) {
+	public StatisticsScrollPane(StatChrono statChrono, Granularite granularite) {
 		
 		super();
 		this.statChrono = statChrono;
+		this.granularite = granularite;
 		this.statistiquesPanel =  new JPanel();
 		statistiquesPanel.setLayout(new BoxLayout(statistiquesPanel, BoxLayout.X_AXIS));
 		
@@ -101,7 +104,7 @@ public class StatisticsScrollPane extends JScrollPane implements UpdatableElemen
 	private void fillPanel() {
 		
 		statistiquesTablePanel.removeAll();
-		StatistiquesView statistiquesView = new StatistiquesView(statChrono, 200, statToStringFunction);
+		StatistiquesView statistiquesView = new StatistiquesView(statChrono, granularite, statToStringFunction);
 		int pas = statistiquesView.getPas();
 		
 		GridBagLayout layout = new GridBagLayout();
