@@ -24,7 +24,9 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.rapportHtml;
 
+import java.util.Optional;
 import java.util.TreeMap;
+import java.util.function.Function;
 
 import org.fl.collectionAlbum.format.Format;
 import org.fl.collectionAlbum.stat.StatChrono;
@@ -32,6 +34,8 @@ import org.fl.collectionAlbum.stat.StatistiquesView;
 
 public class RapportStat extends RapportHtml {
 		
+	private static final Function<Double, String> statToStringFunction = (d) ->  Optional.ofNullable(d).map(poids -> Format.poidsToString(poids)).orElse("0");
+	
 	private final StatChrono statChrono;
 
 	public RapportStat(StatChrono sc, String titre, LinkType linkType) {
@@ -44,7 +48,7 @@ public class RapportStat extends RapportHtml {
 	// Return a html hyper to this rapport
 	protected void corpsRapport() {
 
-		StatistiquesView statistiquesView = new StatistiquesView(statChrono, 200);
+		StatistiquesView statistiquesView = new StatistiquesView(statChrono, 200, statToStringFunction);
 		TreeMap<Integer, Double> statisquesMap = statistiquesView.getStatisquesMap();
 		int pas = statistiquesView.getPas();
 

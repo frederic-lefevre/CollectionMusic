@@ -38,10 +38,10 @@ class StatChronoTest {
 		
 		StatChrono sc1 = new StatChrono();
 		
-		assertThat(sc1.getStatForYear(0)).isEqualTo("0");
-		assertThat(sc1.getStatForYear(1969)).isEqualTo("0");
-		assertThat(sc1.getStatForDecennie(1969)).isEqualTo("0");
-		assertThat(sc1.getStatForSiecle(1969)).isEqualTo("0");
+		assertThat(sc1.getStatForYear(0)).isNull();
+		assertThat(sc1.getStatForYear(1969)).isNull();
+		assertThat(sc1.getStatForDecennie(1969)).isNull();
+		assertThat(sc1.getStatForSiecle(1969)).isNull();
 
 		assertThat(sc1.getStatistiqueDecennale()).isNotNull().isEmpty();
 		assertThat(sc1.getStatistiqueSiecle()).isNotNull().isEmpty();
@@ -55,19 +55,19 @@ class StatChronoTest {
 		String d4 = "1970-01-01";
 		TemporalAccessor ta4 = TemporalUtils.parseDate(d4);
 
-		sc1.addAlbum(ta1, 1.5);
-		sc1.addAlbum(ta2, 1);
-		sc1.addAlbum(ta3, 2);
-		sc1.addAlbum(ta4, 5);
-		assertThat(sc1.getStatForYear(1969)).isEqualTo("3.5");
-		assertThat(sc1.getStatForYear(1960)).isEqualTo("1");
-		assertThat(sc1.getStatForDecennie(1960)).isEqualTo("4.5");
-		assertThat(sc1.getStatForDecennie(1965)).isEqualTo("4.5");
-		assertThat(sc1.getStatForYear(1970)).isEqualTo("5");
-		assertThat(sc1.getStatForDecennie(1970)).isEqualTo("5");
-		assertThat(sc1.getStatForSiecle(1969)).isEqualTo("9.5");
-		assertThat(sc1.getStatForSiecle(1900)).isEqualTo("9.5");
-		assertThat(sc1.getStatForSiecle(2000)).isEqualTo("0");
+		sc1.addToStatistic(ta1, 1.5);
+		sc1.addToStatistic(ta2, 1);
+		sc1.addToStatistic(ta3, 2);
+		sc1.addToStatistic(ta4, 5);
+		assertThat(sc1.getStatForYear(1969)).isEqualTo(3.5);
+		assertThat(sc1.getStatForYear(1960)).isEqualTo(1);
+		assertThat(sc1.getStatForDecennie(1960)).isEqualTo(4.5);
+		assertThat(sc1.getStatForDecennie(1965)).isEqualTo(4.5);
+		assertThat(sc1.getStatForYear(1970)).isEqualTo(5);
+		assertThat(sc1.getStatForDecennie(1970)).isEqualTo(5);
+		assertThat(sc1.getStatForSiecle(1969)).isEqualTo(9.5);
+		assertThat(sc1.getStatForSiecle(1900)).isEqualTo(9.5);
+		assertThat(sc1.getStatForSiecle(2000)).isNull();
 		
 		assertThat(sc1.getMinYear()).isEqualTo(1960);
 		assertThat(sc1.getMaxYear()).isEqualTo(1970);

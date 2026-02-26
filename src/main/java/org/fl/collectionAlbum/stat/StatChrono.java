@@ -28,12 +28,9 @@ import java.time.Year;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
 import java.util.Map;
-import java.util.Optional;
 import java.util.TreeMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import org.fl.collectionAlbum.format.Format;
 
 public class StatChrono {
 	
@@ -63,15 +60,15 @@ public class StatChrono {
 		statistiqueSiecle.clear();	
 	}
 	
-	public void addAlbum(TemporalAccessor dateAlbum, double poidsAlbum) {
+	public void addToStatistic(TemporalAccessor date, double poids) {
 
-		int year = getYearFromDate(dateAlbum);
+		int year = getYearFromDate(date);
 		int decennie = getDecennie(year);
 		int siecle = getSiecle(year);
 		
-		incrementStat(statistiqueAnnuelle, year, poidsAlbum);
-		incrementStat(statistiqueDecennale, decennie, poidsAlbum);
-		incrementStat(statistiqueSiecle, siecle, poidsAlbum);
+		incrementStat(statistiqueAnnuelle, year, poids);
+		incrementStat(statistiqueDecennale, decennie, poids);
+		incrementStat(statistiqueSiecle, siecle, poids);
 		
 		if (year < minYear) {
 			minYear = year;
@@ -121,21 +118,16 @@ public class StatChrono {
 		return statistiqueSiecle;
 	}
 
-	public String getStatForYear(int an) {
-		return getStat(statistiqueAnnuelle, an);
+	public Double getStatForYear(int an) {
+		return statistiqueAnnuelle.get(an);
 	}
 
-	public String getStatForDecennie(int an) {
-		return getStat(statistiqueDecennale, getDecennie(an));
+	public Double getStatForDecennie(int an) {
+		return statistiqueDecennale.get(getDecennie(an));
 	}
 	
-	public String getStatForSiecle(int an) {
-		return getStat(statistiqueSiecle, getSiecle(an));
-	}
-	
-	private String getStat(Map<Integer, Double> statAns, int an) {
-		
-		return Optional.ofNullable(statAns.get(an)).map(poids -> Format.poidsToString(poids)).orElse("0");
+	public Double getStatForSiecle(int an) {
+		return statistiqueSiecle.get(getSiecle(an));
 	}
 
 	public int getMinYear() {

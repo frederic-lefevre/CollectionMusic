@@ -31,12 +31,15 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.util.Optional;
+import java.util.function.Function;
 
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import org.fl.collectionAlbum.format.Format;
 import org.fl.collectionAlbum.stat.StatChrono;
 import org.fl.collectionAlbum.stat.StatistiquesView;
 import org.fl.collectionAlbum.utils.CollectionUtils;
@@ -51,6 +54,8 @@ public class StatisticsScrollPane extends JScrollPane implements UpdatableElemen
 	
 	private static final Font PERIOD_FONT = new Font("Verdana", Font.BOLD, 64);
 	private static final Font STAT_FONT = new Font("Verdana", Font.BOLD, 64);
+	
+	private static final Function<Double, String> statToStringFunction = (d) ->  Optional.ofNullable(d).map(poids -> Format.poidsToString(poids)).orElse("0");
 	
 	private final StatChrono statChrono;
 	private final JPanel statistiquesPanel;
@@ -96,7 +101,7 @@ public class StatisticsScrollPane extends JScrollPane implements UpdatableElemen
 	private void fillPanel() {
 		
 		statistiquesTablePanel.removeAll();
-		StatistiquesView statistiquesView = new StatistiquesView(statChrono, 200);
+		StatistiquesView statistiquesView = new StatistiquesView(statChrono, 200, statToStringFunction);
 		int pas = statistiquesView.getPas();
 		
 		GridBagLayout layout = new GridBagLayout();

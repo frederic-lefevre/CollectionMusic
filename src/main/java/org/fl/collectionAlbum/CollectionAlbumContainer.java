@@ -116,8 +116,8 @@ public class CollectionAlbumContainer {
 			DiscogsInventory.linkToAlbum(album.getDiscogsLink(), album);
 		} 
 		
-		statChronoEnregistrement.addAlbum(album.getDebutEnregistrement(), album.getFormatAlbum().getPoids());
-	    statChronoComposition.addAlbum(album.getDebutComposition(), album.getFormatAlbum().getPoids());
+		statChronoEnregistrement.addToStatistic(album.getDebutEnregistrement(), album.getFormatAlbum().getPoids());
+	    statChronoComposition.addToStatistic(album.getDebutComposition(), album.getFormatAlbum().getPoids());
 	}
 	
 	public void addConcert(ObjectNode arteFactJson, Path jsonFile) { 

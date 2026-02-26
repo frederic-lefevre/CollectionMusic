@@ -25,6 +25,7 @@ SOFTWARE.
 package org.fl.collectionAlbum.stat;
 
 import java.util.TreeMap;
+import java.util.function.Function;
 
 public class StatistiquesView {
 
@@ -40,9 +41,12 @@ public class StatistiquesView {
 	private final int lineNumber;
 	private final int lineSpanOfYears;
 	private final int beginYear;
+	private Function<Double, String> statToStringFunction;
 	
-	public StatistiquesView(StatChrono statChrono, int maxNumbers) {
+	public StatistiquesView(StatChrono statChrono, int maxNumbers, Function<Double, String> statToStringFunction) {
+		
 		this.statChrono = statChrono;
+		this.statToStringFunction = statToStringFunction;
 		
 		if (statChrono.getMaxYear() - statChrono.getMinYear() > maxNumbers) {
 			statisquesMap = statChrono.getStatistiqueSiecle();
@@ -84,9 +88,9 @@ public class StatistiquesView {
 	
 	public String getStatFor(int an) {
 		if (pas == UN_AN) {
-			return statChrono.getStatForYear(an);
+			return getStatAsString(statChrono.getStatForYear(an));
 		} else if (pas == DIX_AN) {
-			return statChrono.getStatForDecennie(an);
+			return getStatAsString(statChrono.getStatForDecennie(an));
 		} else {
 			throw new IllegalStateException("pas should be equal to 1 or 10. It is " + pas);
 		}
@@ -94,9 +98,9 @@ public class StatistiquesView {
 	
 	public String getAccumulationStatFor(int an) {
 		if (pas == UN_AN) {
-			return statChrono.getStatForDecennie(an);
+			return getStatAsString(statChrono.getStatForDecennie(an));
 		} else if (pas == DIX_AN) {
-			return statChrono.getStatForSiecle(an);
+			return getStatAsString(statChrono.getStatForSiecle(an));
 		} else {
 			throw new IllegalStateException("pas should be equal to 1 or 10. It is " + pas);
 		}
@@ -117,4 +121,7 @@ public class StatistiquesView {
 		}
 	}
 	
+	private String getStatAsString(Double statAn) {
+		return statToStringFunction.apply(statAn);
+	}
 }
