@@ -47,9 +47,15 @@ public class CalendarsTabbedPane extends JTabbedPane {
 		updatableElements = new ArrayList<>();
 		
 		StatisquesMouseAdapter.Builder stCompositionBuilder = 
-				StatisquesMouseAdapter.Builder.builder(collectionAlbumContainer, album -> album.getDebutComposition(), generationPane);
+				StatisquesMouseAdapter.Builder.builder(collectionAlbumContainer, 
+						album -> album.getDebutComposition(),
+						listeAlbum -> listeAlbum.sortChronoComposition(),
+						generationPane);
 		StatisquesMouseAdapter.Builder stEnregistrementBuilder = 
-				StatisquesMouseAdapter.Builder.builder(collectionAlbumContainer, album -> album.getDebutEnregistrement(), generationPane);
+				StatisquesMouseAdapter.Builder.builder(collectionAlbumContainer, 
+						album -> album.getDebutEnregistrement(), 
+						listeAlbum -> listeAlbum.sortChronoEnregistrement(), 
+						generationPane);
 		
 		StatisticsScrollPane compositionStatisticsPane = 
 				new StatisticsScrollPane(collectionAlbumContainer.getStatChronoComposition(), Granularite.PAR_DECENNIE, stCompositionBuilder);

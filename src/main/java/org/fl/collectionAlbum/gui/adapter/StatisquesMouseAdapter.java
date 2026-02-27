@@ -46,6 +46,7 @@ public class StatisquesMouseAdapter extends MouseAdapter {
 	private int anneeDebut;
 	private int anneeFin;
 	private Function<Album,TemporalAccessor> albumDateFunction;
+	private Function<ListeAlbum, ListeAlbum> albumListSorter;
 	private CollectionAlbumContainer collectionAlbumContainer;
 	private GenerationPane generationPane;
 	
@@ -53,12 +54,13 @@ public class StatisquesMouseAdapter extends MouseAdapter {
 	}
 	
 	
-	private StatisquesMouseAdapter(int anneeDebut, int anneeFin, Function<Album, TemporalAccessor> albumDateFunction,
+	private StatisquesMouseAdapter(int anneeDebut, int anneeFin, Function<Album, TemporalAccessor> albumDateFunction, Function<ListeAlbum, ListeAlbum> albumListSorter,
 			CollectionAlbumContainer collectionAlbumContainer, GenerationPane generationPane) {
 		super();
 		this.anneeDebut = anneeDebut;
 		this.anneeFin = anneeFin;
 		this.albumDateFunction = albumDateFunction;
+		this.albumListSorter = albumListSorter;
 		this.collectionAlbumContainer = collectionAlbumContainer;
 		this.generationPane = generationPane;
 	}
@@ -67,24 +69,32 @@ public class StatisquesMouseAdapter extends MouseAdapter {
 	public static class Builder {
 		
 		private Function<Album,TemporalAccessor> albumDateFunction;
+		private Function<ListeAlbum, ListeAlbum> albumListSorter;
 		private CollectionAlbumContainer collectionAlbumContainer;
 		private GenerationPane generationPane;
 		
 		private Builder() {
 		}
 		
-		private Builder(CollectionAlbumContainer collectionAlbumContainer, Function<Album,TemporalAccessor> albumDateFunction, GenerationPane generationPane) {
+		private Builder(CollectionAlbumContainer collectionAlbumContainer, 
+				Function<Album,TemporalAccessor> albumDateFunction, 
+				Function<ListeAlbum, ListeAlbum> albumListSorter, 
+				GenerationPane generationPane) {
 			this.collectionAlbumContainer = collectionAlbumContainer;
 			this.albumDateFunction = albumDateFunction;
+			this.albumListSorter = albumListSorter;
 			this.generationPane = generationPane;
 		}
 		
-		public static Builder builder(CollectionAlbumContainer collectionAlbumContainer, Function<Album,TemporalAccessor> albumDateFunction, GenerationPane generationPane) {
-			return new Builder(collectionAlbumContainer, albumDateFunction, generationPane);
+		public static Builder builder(CollectionAlbumContainer collectionAlbumContainer, 
+				Function<Album,TemporalAccessor> albumDateFunction, 
+				Function<ListeAlbum, ListeAlbum> albumListSorter,
+				GenerationPane generationPane) {
+			return new Builder(collectionAlbumContainer, albumDateFunction, albumListSorter, generationPane);
 		}
 		
 		public StatisquesMouseAdapter build(int anneeDebut, int anneeFin) {
-			return new StatisquesMouseAdapter(anneeDebut, anneeFin, albumDateFunction, collectionAlbumContainer, generationPane);
+			return new StatisquesMouseAdapter(anneeDebut, anneeFin, albumDateFunction, albumListSorter, collectionAlbumContainer, generationPane);
 		}
 	}
 	
@@ -93,8 +103,8 @@ public class StatisquesMouseAdapter extends MouseAdapter {
 		
 		if (SwingUtilities.isLeftMouseButton(evt) && (evt.getClickCount() > 1)) {
 
-			ListeAlbum listeAlbum = collectionAlbumContainer.getAlbumsSastisfying(
-						List.of(album -> isBetween(albumDateFunction.apply(album).get(ChronoField.YEAR), anneeDebut, anneeFin)));
+			ListeAlbum listeAlbum = albumListSorter.apply(collectionAlbumContainer.getAlbumsSastisfying(
+						List.of(album -> isBetween(albumDateFunction.apply(album).get(ChronoField.YEAR), anneeDebut, anneeFin))));
 			
 			// Table to display the result albums
 			AlbumsScrollJTablePane albumsScrollJTablePane = new AlbumsScrollJTablePane(listeAlbum.getAlbums(), generationPane);
