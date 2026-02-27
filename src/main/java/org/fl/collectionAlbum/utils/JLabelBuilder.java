@@ -27,6 +27,7 @@ package org.fl.collectionAlbum.utils;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +59,7 @@ public class JLabelBuilder {
 		private Dimension dimension;
 		private Font font;
 		private List<MouseMotionListener> mouseMotionListeners;
+		private List<MouseListener> mouseListeners;
 		
 		private Builder() {	
 			// Default value set/change
@@ -70,6 +72,7 @@ public class JLabelBuilder {
 			dimension = null;
 			font = null;
 			mouseMotionListeners = new ArrayList<>();
+			mouseListeners = new ArrayList<>();
 		}
 		
 		public Builder text(String text) {
@@ -117,6 +120,11 @@ public class JLabelBuilder {
 			return this;
 		}
 		
+		public Builder mouseListener(MouseListener listener) {
+			this.mouseListeners.add(listener);
+			return this;
+		}
+		
 		public JLabel build() {
 			jLabel = new JLabel();
 			jLabel.setOpaque(opaque);
@@ -133,6 +141,9 @@ public class JLabelBuilder {
 			}
 			if (! mouseMotionListeners.isEmpty()) {
 				mouseMotionListeners.forEach(m -> jLabel.addMouseMotionListener(m));
+			}
+			if (! mouseListeners.isEmpty()) {
+				mouseListeners.forEach(m -> jLabel.addMouseListener(m));
 			}
 			return jLabel;
 		}

@@ -40,6 +40,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import org.fl.collectionAlbum.format.Format;
+import org.fl.collectionAlbum.gui.adapter.StatisquesMouseAdapter;
 import org.fl.collectionAlbum.stat.StatChrono;
 import org.fl.collectionAlbum.stat.StatistiquesView;
 import org.fl.collectionAlbum.stat.StatistiquesView.Granularite;
@@ -60,17 +61,19 @@ public class StatisticsScrollPane extends JScrollPane implements UpdatableElemen
 	
 	private final StatChrono statChrono;
 	private final Granularite granularite;
+	private final StatisquesMouseAdapter.Builder mouseAdapterBuilder;
 	private final JPanel statistiquesPanel;
 	private final JPanel currentStatistiquePanel;
 	private final JLabel currentPeriodLabel;
 	private final JLabel currentStatLabel;
 	private final JPanel statistiquesTablePanel;
 	
-	public StatisticsScrollPane(StatChrono statChrono, Granularite granularite) {
+	public StatisticsScrollPane(StatChrono statChrono, Granularite granularite, StatisquesMouseAdapter.Builder mouseAdapterBuilder) {
 		
 		super();
 		this.statChrono = statChrono;
 		this.granularite = granularite;
+		this.mouseAdapterBuilder = mouseAdapterBuilder;
 		this.statistiquesPanel =  new JPanel();
 		statistiquesPanel.setLayout(new BoxLayout(statistiquesPanel, BoxLayout.X_AXIS));
 		
@@ -176,6 +179,7 @@ public class StatisticsScrollPane extends JScrollPane implements UpdatableElemen
 									.text(poids)
 									.preferredSize(CELL_DIMENSION)
 									.mouseMotionListener(new CurrentStatMouseMotionAdapter(period, poids))
+									.mouseListener(mouseAdapterBuilder.build(year, year+pas))
 								));
 			}
 		}

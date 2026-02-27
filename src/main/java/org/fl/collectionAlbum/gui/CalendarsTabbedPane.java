@@ -31,6 +31,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
+import org.fl.collectionAlbum.gui.adapter.StatisquesMouseAdapter;
 import org.fl.collectionAlbum.stat.StatistiquesView.Granularite;
 
 public class CalendarsTabbedPane extends JTabbedPane {
@@ -45,8 +46,15 @@ public class CalendarsTabbedPane extends JTabbedPane {
 		
 		updatableElements = new ArrayList<>();
 		
-		StatisticsScrollPane compositionStatisticsPane = new StatisticsScrollPane(collectionAlbumContainer.getStatChronoComposition(), Granularite.PAR_DECENNIE);
-		StatisticsScrollPane enregistrementStatisticsPane = new StatisticsScrollPane(collectionAlbumContainer.getStatChronoEnregistrement(), Granularite.PAR_AN);
+		StatisquesMouseAdapter.Builder stCompositionBuilder = 
+				StatisquesMouseAdapter.Builder.builder(collectionAlbumContainer, album -> album.getDebutComposition(), generationPane);
+		StatisquesMouseAdapter.Builder stEnregistrementBuilder = 
+				StatisquesMouseAdapter.Builder.builder(collectionAlbumContainer, album -> album.getDebutEnregistrement(), generationPane);
+		
+		StatisticsScrollPane compositionStatisticsPane = 
+				new StatisticsScrollPane(collectionAlbumContainer.getStatChronoComposition(), Granularite.PAR_DECENNIE, stCompositionBuilder);
+		StatisticsScrollPane enregistrementStatisticsPane = 
+				new StatisticsScrollPane(collectionAlbumContainer.getStatChronoEnregistrement(), Granularite.PAR_AN, stEnregistrementBuilder);
 		
 		updatableElements.add(compositionStatisticsPane);
 		updatableElements.add(enregistrementStatisticsPane);
