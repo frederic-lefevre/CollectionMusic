@@ -103,13 +103,20 @@ public class StatisquesMouseAdapter extends MouseAdapter {
 		
 		if (SwingUtilities.isLeftMouseButton(evt) && (evt.getClickCount() > 1)) {
 
-			ListeAlbum listeAlbum = albumListSorter.apply(collectionAlbumContainer.getAlbumsSastisfying(
-						List.of(album -> isBetween(albumDateFunction.apply(album).get(ChronoField.YEAR), anneeDebut, anneeFin))));
+			List<Album> albumList = albumListSorter.apply(collectionAlbumContainer.getAlbumsSastisfying(
+						List.of(album -> isBetween(albumDateFunction.apply(album).get(ChronoField.YEAR), anneeDebut, anneeFin))))
+					.getAlbums();
 			
-			// Table to display the result albums
-			AlbumsScrollJTablePane albumsScrollJTablePane = new AlbumsScrollJTablePane(listeAlbum.getAlbums(), generationPane);
+			if (! albumList.isEmpty()) {
+				// Table to display the result albums
+				AlbumsScrollJTablePane albumsScrollJTablePane = new AlbumsScrollJTablePane(albumList, generationPane);
 			
-			JOptionPane.showMessageDialog(null, albumsScrollJTablePane, "Albums choisis aléatoirement", JOptionPane.PLAIN_MESSAGE);
+				String windowTitle = "Albums " + anneeDebut;
+				if (anneeDebut + 1 < anneeFin) {
+					windowTitle = windowTitle + "-" + (anneeFin-1);
+				}
+				JOptionPane.showMessageDialog(null, albumsScrollJTablePane, windowTitle, JOptionPane.PLAIN_MESSAGE);
+			}
 		}
 	}
 	
