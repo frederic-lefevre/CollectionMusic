@@ -27,7 +27,6 @@ package org.fl.collectionAlbum.rapportHtml;
 import java.nio.file.Path;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
-import org.fl.collectionAlbum.rapportHtml.RapportHtml.LinkType;
 import org.fl.collectionAlbum.stat.StatistiquesView.Granularite;
 
 public class RapportDesConcerts extends RapportHtml {
