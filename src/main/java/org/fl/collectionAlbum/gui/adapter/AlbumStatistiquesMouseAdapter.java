@@ -24,7 +24,6 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui.adapter;
 
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
@@ -40,50 +39,34 @@ import org.fl.collectionAlbum.albums.ListeAlbum;
 import org.fl.collectionAlbum.gui.GenerationPane;
 import org.fl.collectionAlbum.gui.table.AlbumsScrollJTablePane;
 
-public class StatisquesMouseAdapter extends MouseAdapter {
+public class AlbumStatistiquesMouseAdapter extends StatistiquesMouseAdapter {
 	
-	
-	private int anneeDebut;
-	private int anneeFin;
 	private Function<Album,TemporalAccessor> albumDateFunction;
 	private Function<ListeAlbum, ListeAlbum> albumListSorter;
-	private CollectionAlbumContainer collectionAlbumContainer;
-	private GenerationPane generationPane;
 	
-	private StatisquesMouseAdapter() {
+	private AlbumStatistiquesMouseAdapter() {
+		super(0, 0, null, null);
 	}
 	
-	
-	private StatisquesMouseAdapter(int anneeDebut, int anneeFin, Function<Album, TemporalAccessor> albumDateFunction, Function<ListeAlbum, ListeAlbum> albumListSorter,
+	private AlbumStatistiquesMouseAdapter(int anneeDebut, int anneeFin, Function<Album, TemporalAccessor> albumDateFunction, Function<ListeAlbum, ListeAlbum> albumListSorter,
 			CollectionAlbumContainer collectionAlbumContainer, GenerationPane generationPane) {
-		super();
-		this.anneeDebut = anneeDebut;
-		this.anneeFin = anneeFin;
+		super(anneeDebut, anneeFin, collectionAlbumContainer, generationPane);
 		this.albumDateFunction = albumDateFunction;
 		this.albumListSorter = albumListSorter;
-		this.collectionAlbumContainer = collectionAlbumContainer;
-		this.generationPane = generationPane;
 	}
-
-
-	public static class Builder {
+	
+	public static class Builder extends AbstractStatistiquesMouseAdapterBuilder {
 		
 		private Function<Album,TemporalAccessor> albumDateFunction;
 		private Function<ListeAlbum, ListeAlbum> albumListSorter;
-		private CollectionAlbumContainer collectionAlbumContainer;
-		private GenerationPane generationPane;
-		
-		private Builder() {
-		}
-		
+
 		private Builder(CollectionAlbumContainer collectionAlbumContainer, 
 				Function<Album,TemporalAccessor> albumDateFunction, 
 				Function<ListeAlbum, ListeAlbum> albumListSorter, 
 				GenerationPane generationPane) {
-			this.collectionAlbumContainer = collectionAlbumContainer;
+			super(collectionAlbumContainer, generationPane);
 			this.albumDateFunction = albumDateFunction;
-			this.albumListSorter = albumListSorter;
-			this.generationPane = generationPane;
+			this.albumListSorter = albumListSorter;		
 		}
 		
 		public static Builder builder(CollectionAlbumContainer collectionAlbumContainer, 
@@ -93,8 +76,9 @@ public class StatisquesMouseAdapter extends MouseAdapter {
 			return new Builder(collectionAlbumContainer, albumDateFunction, albumListSorter, generationPane);
 		}
 		
-		public StatisquesMouseAdapter build(int anneeDebut, int anneeFin) {
-			return new StatisquesMouseAdapter(anneeDebut, anneeFin, albumDateFunction, albumListSorter, collectionAlbumContainer, generationPane);
+		@Override
+		public AlbumStatistiquesMouseAdapter build(int anneeDebut, int anneeFin) {
+			return new AlbumStatistiquesMouseAdapter(anneeDebut, anneeFin, albumDateFunction, albumListSorter, collectionAlbumContainer, generationPane);
 		}
 	}
 	
@@ -111,16 +95,9 @@ public class StatisquesMouseAdapter extends MouseAdapter {
 				// Table to display the result albums
 				AlbumsScrollJTablePane albumsScrollJTablePane = new AlbumsScrollJTablePane(albumList, generationPane);
 			
-				String windowTitle = "Albums " + anneeDebut;
-				if (anneeDebut + 1 < anneeFin) {
-					windowTitle = windowTitle + "-" + (anneeFin-1);
-				}
-				JOptionPane.showMessageDialog(null, albumsScrollJTablePane, windowTitle, JOptionPane.PLAIN_MESSAGE);
+				JOptionPane.showMessageDialog(null, albumsScrollJTablePane, getWindowsTitle("Albums "), JOptionPane.PLAIN_MESSAGE);
 			}
 		}
 	}
 	
-	private boolean isBetween(int val, int minInclusive, int maxExclusive) {
-		return (val >= minInclusive && val < maxExclusive);
-	}
 }

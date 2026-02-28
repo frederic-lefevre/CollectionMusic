@@ -31,7 +31,7 @@ import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
-import org.fl.collectionAlbum.gui.adapter.StatisquesMouseAdapter;
+import org.fl.collectionAlbum.gui.adapter.AlbumStatistiquesMouseAdapter;
 import org.fl.collectionAlbum.stat.StatistiquesView.Granularite;
 
 public class CalendarsTabbedPane extends JTabbedPane {
@@ -46,13 +46,13 @@ public class CalendarsTabbedPane extends JTabbedPane {
 		
 		updatableElements = new ArrayList<>();
 		
-		StatisquesMouseAdapter.Builder stCompositionBuilder = 
-				StatisquesMouseAdapter.Builder.builder(collectionAlbumContainer, 
+		AlbumStatistiquesMouseAdapter.Builder stCompositionBuilder = 
+				AlbumStatistiquesMouseAdapter.Builder.builder(collectionAlbumContainer, 
 						album -> album.getDebutComposition(),
 						listeAlbum -> listeAlbum.sortChronoComposition(),
 						generationPane);
-		StatisquesMouseAdapter.Builder stEnregistrementBuilder = 
-				StatisquesMouseAdapter.Builder.builder(collectionAlbumContainer, 
+		AlbumStatistiquesMouseAdapter.Builder stEnregistrementBuilder = 
+				AlbumStatistiquesMouseAdapter.Builder.builder(collectionAlbumContainer, 
 						album -> album.getDebutEnregistrement(), 
 						listeAlbum -> listeAlbum.sortChronoEnregistrement(), 
 						generationPane);

@@ -40,7 +40,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import org.fl.collectionAlbum.format.Format;
-import org.fl.collectionAlbum.gui.adapter.StatisquesMouseAdapter;
+import org.fl.collectionAlbum.gui.adapter.AbstractStatistiquesMouseAdapterBuilder;
 import org.fl.collectionAlbum.stat.StatChrono;
 import org.fl.collectionAlbum.stat.StatistiquesView;
 import org.fl.collectionAlbum.stat.StatistiquesView.Granularite;
@@ -61,14 +61,14 @@ public class StatisticsScrollPane extends JScrollPane implements UpdatableElemen
 	
 	private final StatChrono statChrono;
 	private final Granularite granularite;
-	private final StatisquesMouseAdapter.Builder mouseAdapterBuilder;
+	private final AbstractStatistiquesMouseAdapterBuilder mouseAdapterBuilder;
 	private final JPanel statistiquesPanel;
 	private final JPanel currentStatistiquePanel;
 	private final JLabel currentPeriodLabel;
 	private final JLabel currentStatLabel;
 	private final JPanel statistiquesTablePanel;
 	
-	public StatisticsScrollPane(StatChrono statChrono, Granularite granularite, StatisquesMouseAdapter.Builder mouseAdapterBuilder) {
+	public StatisticsScrollPane(StatChrono statChrono, Granularite granularite, AbstractStatistiquesMouseAdapterBuilder mouseAdapterBuilder) {
 		
 		super();
 		this.statChrono = statChrono;
