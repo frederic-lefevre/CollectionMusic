@@ -177,6 +177,12 @@ public class CollectionAlbumContainer {
 						(album.getContentNatures().size() > 1) ));
 	}
 	
+	public ListeConcert getConcertsSastisfying(List<Predicate<Concert>> concertPredicates) {
+		 return ListeConcert.Builder.getBuilderFrom(concerts.getConcerts())
+				 .withConcertSatisfying(concertPredicates)
+				 .build();
+	}
+	
 	public ListeArtiste getCollectionArtistes() {
 		return collectionArtistes;
 	}

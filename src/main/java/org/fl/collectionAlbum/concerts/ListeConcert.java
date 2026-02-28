@@ -85,6 +85,13 @@ public class ListeConcert {
 			return this;
 		}
 		
+		public Builder withConcertSatisfying(List<Predicate<Concert>> concertPredicates) {
+			concerts = concerts.stream()
+					.filter(concert -> concertPredicates.stream().allMatch(p -> p.test(concert)))
+					.collect(Collectors.toList());
+			return this;
+		}
+		
 		public ListeConcert build() {
 			ListeConcert listeConcert = new ListeConcert();
 			concerts.forEach(concert -> listeConcert.addConcert(concert));

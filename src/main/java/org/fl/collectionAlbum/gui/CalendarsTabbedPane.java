@@ -32,6 +32,7 @@ import javax.swing.JTabbedPane;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.gui.adapter.AlbumStatistiquesMouseAdapter;
+import org.fl.collectionAlbum.gui.adapter.ConcertStatistiquesMouseAdapter;
 import org.fl.collectionAlbum.stat.StatistiquesView.Granularite;
 
 public class CalendarsTabbedPane extends JTabbedPane {
@@ -57,16 +58,28 @@ public class CalendarsTabbedPane extends JTabbedPane {
 						listeAlbum -> listeAlbum.sortChronoEnregistrement(), 
 						generationPane);
 		
+		ConcertStatistiquesMouseAdapter.Builder stConcertBuilder =
+				ConcertStatistiquesMouseAdapter.Builder.builder(collectionAlbumContainer, 
+						concert -> concert.getDateConcert(), 
+						listeConcert -> listeConcert.sortChrono(), 
+						generationPane);
+		
 		StatisticsScrollPane compositionStatisticsPane = 
 				new StatisticsScrollPane(collectionAlbumContainer.getStatChronoComposition(), Granularite.PAR_DECENNIE, stCompositionBuilder);
 		StatisticsScrollPane enregistrementStatisticsPane = 
 				new StatisticsScrollPane(collectionAlbumContainer.getStatChronoEnregistrement(), Granularite.PAR_AN, stEnregistrementBuilder);
 		
+		StatisticsScrollPane concertStatisticsPane = 
+				new StatisticsScrollPane(collectionAlbumContainer.getStatChronoConcert(), Granularite.PAR_AN, stConcertBuilder);
+		
 		updatableElements.add(compositionStatisticsPane);
 		updatableElements.add(enregistrementStatisticsPane);
+		updatableElements.add(concertStatisticsPane);
 		
 		addTab("Composition des albums", compositionStatisticsPane);
 		addTab("Enregistrement des albums", enregistrementStatisticsPane);
+		addTab("Concerts", concertStatisticsPane);
+		
 		addTab("Anniversaires", new JPanel());
 	}
 	

@@ -24,6 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui.adapter;
 
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
@@ -34,69 +35,69 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
-import org.fl.collectionAlbum.albums.Album;
-import org.fl.collectionAlbum.albums.ListeAlbum;
+import org.fl.collectionAlbum.concerts.Concert;
+import org.fl.collectionAlbum.concerts.ListeConcert;
 import org.fl.collectionAlbum.gui.GenerationPane;
-import org.fl.collectionAlbum.gui.table.AlbumsScrollJTablePane;
+import org.fl.collectionAlbum.gui.table.ConcertsScrollJTablePane;
 
-public class AlbumStatistiquesMouseAdapter extends StatistiquesMouseAdapter {
+public class ConcertStatistiquesMouseAdapter extends StatistiquesMouseAdapter {
+
+	private Function<Concert, TemporalAccessor> concertDateFunction;
+	private Function<ListeConcert, ListeConcert> concertSorter;
 	
-	private Function<Album,TemporalAccessor> albumDateFunction;
-	private Function<ListeAlbum, ListeAlbum> albumListSorter;
-	
-	private AlbumStatistiquesMouseAdapter() {
-		super(0, 0, null, null);
+	private ConcertStatistiquesMouseAdapter() {
+		super(0,0, null, null);
 	}
 	
-	private AlbumStatistiquesMouseAdapter(int anneeDebut, int anneeFin, Function<Album, TemporalAccessor> albumDateFunction, Function<ListeAlbum, ListeAlbum> albumListSorter,
+	protected ConcertStatistiquesMouseAdapter(int anneeDebut, int anneeFin, 
+			Function<Concert, TemporalAccessor> concertDateFunction,  Function<ListeConcert, ListeConcert> concertSorter,
 			CollectionAlbumContainer collectionAlbumContainer, GenerationPane generationPane) {
 		super(anneeDebut, anneeFin, collectionAlbumContainer, generationPane);
-		this.albumDateFunction = albumDateFunction;
-		this.albumListSorter = albumListSorter;
+		this.concertDateFunction = concertDateFunction;
+		this.concertSorter = concertSorter;
 	}
-	
+
 	public static class Builder extends AbstractStatistiquesMouseAdapterBuilder {
 		
-		private Function<Album,TemporalAccessor> albumDateFunction;
-		private Function<ListeAlbum, ListeAlbum> albumListSorter;
-
-		private Builder(CollectionAlbumContainer collectionAlbumContainer, 
-				Function<Album,TemporalAccessor> albumDateFunction, 
-				Function<ListeAlbum, ListeAlbum> albumListSorter, 
+		private Function<Concert,TemporalAccessor> concertDateFunction;
+		private Function<ListeConcert, ListeConcert> concertSorter;
+		
+		protected Builder(CollectionAlbumContainer collectionAlbumContainer, 
+				Function<Concert, TemporalAccessor> concertDateFunction,  Function<ListeConcert, ListeConcert> concertSorter, 
 				GenerationPane generationPane) {
 			super(collectionAlbumContainer, generationPane);
-			this.albumDateFunction = albumDateFunction;
-			this.albumListSorter = albumListSorter;		
+			this.concertDateFunction = concertDateFunction;
+			this.concertSorter = concertSorter;
 		}
-		
+
 		public static Builder builder(CollectionAlbumContainer collectionAlbumContainer, 
-				Function<Album,TemporalAccessor> albumDateFunction, 
-				Function<ListeAlbum, ListeAlbum> albumListSorter,
+				Function<Concert, TemporalAccessor> concertDateFunction,  Function<ListeConcert, ListeConcert> concertSorter, 
 				GenerationPane generationPane) {
-			return new Builder(collectionAlbumContainer, albumDateFunction, albumListSorter, generationPane);
+			return new Builder(collectionAlbumContainer, concertDateFunction, concertSorter, generationPane);
+		}
+				
+		@Override
+		public MouseAdapter build(int anneeDebut, int anneeFin) {
+			return new ConcertStatistiquesMouseAdapter(anneeDebut, anneeFin, concertDateFunction, concertSorter, collectionAlbumContainer, generationPane);
 		}
 		
-		@Override
-		public AlbumStatistiquesMouseAdapter build(int anneeDebut, int anneeFin) {
-			return new AlbumStatistiquesMouseAdapter(anneeDebut, anneeFin, albumDateFunction, albumListSorter, collectionAlbumContainer, generationPane);
-		}
 	}
 	
 	@Override
 	public void mouseClicked(MouseEvent evt) {
 		
 		if (SwingUtilities.isLeftMouseButton(evt) && (evt.getClickCount() > 1)) {
-
-			List<Album> albumList = albumListSorter.apply(collectionAlbumContainer.getAlbumsSastisfying(
-						List.of(album -> isBetween(albumDateFunction.apply(album).get(ChronoField.YEAR), anneeDebut, anneeFin))))
-					.getAlbums();
 			
-			if (! albumList.isEmpty()) {
-				// Table to display the result albums
-				AlbumsScrollJTablePane albumsScrollJTablePane = new AlbumsScrollJTablePane(albumList, generationPane);
+			List<Concert> concertList = concertSorter.apply(collectionAlbumContainer.getConcertsSastisfying(
+					List.of(concert -> isBetween(concertDateFunction.apply(concert).get(ChronoField.YEAR), anneeDebut, anneeFin))))
+					.getConcerts();
 			
-				JOptionPane.showMessageDialog(null, albumsScrollJTablePane, getWindowsTitle("Albums "), JOptionPane.PLAIN_MESSAGE);
+			if (!concertList.isEmpty()) {
+				
+				ConcertsScrollJTablePane concertsScrollJTablePane = new ConcertsScrollJTablePane(concertList, generationPane);
+				
+				JOptionPane.showMessageDialog(null, concertsScrollJTablePane, getWindowsTitle("Concerts "), JOptionPane.PLAIN_MESSAGE);
 			}
 		}
-	}	
+	}
 }
