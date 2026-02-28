@@ -70,6 +70,7 @@ public class CollectionAlbumContainer {
 	
 	private final StatChrono statChronoEnregistrement;
 	private final StatChrono statChronoComposition;
+	private final StatChrono statChronoConcert;
 	
 	private final LieuxDesConcerts lieuxDesConcerts ;
 	
@@ -87,6 +88,7 @@ public class CollectionAlbumContainer {
 		concerts = ListeConcert.Builder.getBuilder().build();
 		statChronoEnregistrement = new StatChrono();
 		statChronoComposition = new StatChrono();
+		statChronoConcert = new StatChrono();
 		calendrierAlbumArtistes = new ChronoArtistes();
 		calendrierConcertArtistes = new ChronoArtistes();
 		lieuxDesConcerts = new LieuxDesConcerts();
@@ -127,7 +129,9 @@ public class CollectionAlbumContainer {
 		concert.getLieuConcert().addConcert(concert);
 		concert.addMusicArtfactArtistesToList(concertsArtistes);
 		
-		concerts.addConcert(concert); 	
+		concerts.addConcert(concert);
+		
+		statChronoConcert.addToStatistic(concert.getDateConcert(), 1);
 	}
 	
 	public void buildCalendriers() {
@@ -205,6 +209,10 @@ public class CollectionAlbumContainer {
 		return statChronoEnregistrement;
 	}
 
+	public StatChrono getStatChronoConcert() {
+		return statChronoConcert;
+	}
+	
 	public LieuxDesConcerts getLieuxDesConcerts() {
 		return lieuxDesConcerts;
 	}
@@ -252,7 +260,8 @@ public class CollectionAlbumContainer {
    		concertsArtistes.reset();   		
    		concerts.reset(); 		
    		statChronoEnregistrement.reset();
-   		statChronoComposition.reset();  		
+   		statChronoComposition.reset();
+   		statChronoConcert.reset();
    		calendrierAlbumArtistes.reset();
    		calendrierConcertArtistes.reset();
    		lieuxDesConcerts.reset();

@@ -38,6 +38,7 @@ public class TestUtils {
 		assertThat(albumsContainer.getCalendrierConcertArtistes()).isNotNull();
 		assertThat(albumsContainer.getStatChronoComposition()).isNotNull();
 		assertThat(albumsContainer.getStatChronoEnregistrement()).isNotNull();
+		assertThat(albumsContainer.getStatChronoConcert()).isNotNull();
 		
 		assertThat(albumsContainer.getCollectionAlbumsMusiques().getNombreAlbums()).isZero();
 		assertThat(albumsContainer.getConcerts().getNombreConcerts()).isZero();
