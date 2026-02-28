@@ -27,6 +27,8 @@ package org.fl.collectionAlbum.rapportHtml;
 import java.nio.file.Path;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
+import org.fl.collectionAlbum.rapportHtml.RapportHtml.LinkType;
+import org.fl.collectionAlbum.stat.StatistiquesView.Granularite;
 
 public class RapportDesConcerts extends RapportHtml {
 
@@ -68,6 +70,10 @@ public class RapportDesConcerts extends RapportHtml {
 		 
 		 RapportLieuxConcerts lieuxConcert = new RapportLieuxConcerts(albumsContainer.getLieuxDesConcerts(), "Classement par lieu", LinkType.LIST);
 		 write(lieuxConcert.printReport(getNextRapportFile(), CssStyles.stylesTableauMusicArtefact));
+		 
+		 write("</ul>\n<h3>Classement des concerts</h3>\n<ul>\n");
+		 RapportStat rapportStat = new RapportStat(albumsContainer.getStatChronoConcert(), "Statistiques par année", LinkType.LIST, Granularite.PAR_AN);
+		 write(rapportStat.printReport(getNextRapportFile(), CssStyles.stylesStat));
 		 
 		 write("  <li>Nombre de concerts: " + albumsContainer.getConcerts().getNombreConcerts());
 		 write("</li>\n  <li>Nombre d'artistes, de groupes et d'ensemble: " + albumsContainer.getConcertsArtistes().getNombreArtistes());
