@@ -27,7 +27,6 @@ package org.fl.collectionAlbum.gui;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
@@ -80,7 +79,7 @@ public class CalendarsTabbedPane extends JTabbedPane {
 		addTab("Enregistrement des albums", enregistrementStatisticsPane);
 		addTab("Concerts", concertStatisticsPane);
 		
-		addTab("Anniversaires", new JPanel());
+		addTab("Anniversaires", new CalendarPane(collectionAlbumContainer, generationPane));
 	}
 	
 	public List<UpdatableElement> getUpdatableElements() {
