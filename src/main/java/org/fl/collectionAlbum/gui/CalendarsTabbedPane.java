@@ -79,7 +79,9 @@ public class CalendarsTabbedPane extends JTabbedPane {
 		addTab("Enregistrement des albums", enregistrementStatisticsPane);
 		addTab("Concerts", concertStatisticsPane);
 		
-		addTab("Anniversaires", new CalendarPane(collectionAlbumContainer, generationPane));
+		CalendarPane calendarPane = new CalendarPane(collectionAlbumContainer, generationPane);
+		updatableElements.addAll(calendarPane.getUpdatableElements());
+		addTab("Anniversaires", calendarPane);
 	}
 	
 	public List<UpdatableElement> getUpdatableElements() {

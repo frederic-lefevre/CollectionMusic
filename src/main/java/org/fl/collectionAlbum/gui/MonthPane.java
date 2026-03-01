@@ -42,7 +42,7 @@ import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.utils.CollectionUtils;
 import org.fl.collectionAlbum.utils.JLabelBuilder;
 
-public class MonthPane extends JPanel {
+public class MonthPane extends JPanel implements UpdatableElement {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -52,8 +52,15 @@ public class MonthPane extends JPanel {
 	private static final Dimension CELL_DIMENSION = new Dimension(CELL_WIDTH, CELL_HEIGHT);
 	private static final Font MONTH_FONT = new Font("Verdana", Font.BOLD, 24);
 	
+	private final Month month;
+	private final CollectionAlbumContainer collectionAlbumContainer;
+	private final JPanel monthGridPane;
+	
 	public MonthPane(Month month, CollectionAlbumContainer collectionAlbumContainer, GenerationPane generationPane) {
 		super();
+		
+		this.collectionAlbumContainer = collectionAlbumContainer;
+		this.month = month;
 		
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		setBorder(BorderFactory.createLineBorder(Color.RED));
@@ -68,8 +75,23 @@ public class MonthPane extends JPanel {
 		monthName.setAlignmentX(CENTER_ALIGNMENT);
 		monthDisplayPane.add(monthName);
 		
-		JPanel monthGridPane = new JPanel();
+		monthGridPane = new JPanel();
 		monthGridPane.setBorder(BorderFactory.createLineBorder(Color.RED));
+		fillMonthGridOane();
+
+		monthDisplayPane.add(monthGridPane);
+		add(monthDisplayPane);
+		
+		JPanel artistesPane = new JPanel();
+		artistesPane.setBorder(BorderFactory.createLineBorder(Color.BLUE));
+		artistesPane.setAlignmentY(TOP_ALIGNMENT);
+		
+		add(artistesPane);
+	}
+
+	private void fillMonthGridOane() {
+		
+		monthGridPane.removeAll();
 		GridBagLayout layout = new GridBagLayout();
 		GridBagConstraints constraints = new GridBagConstraints();
 		monthGridPane.setLayout(layout);
@@ -90,14 +112,11 @@ public class MonthPane extends JPanel {
 					.font(MONTH_FONT)
 					.preferredSize(CELL_DIMENSION)));
 		}
-		monthDisplayPane.add(monthGridPane);
-		add(monthDisplayPane);
-		
-		JPanel artistesPane = new JPanel();
-		artistesPane.setBorder(BorderFactory.createLineBorder(Color.BLUE));
-		artistesPane.setAlignmentY(TOP_ALIGNMENT);
-		
-		add(artistesPane);
+	}
+	
+	@Override
+	public void updateElement() {
+		fillMonthGridOane();
 	}
 
 }
