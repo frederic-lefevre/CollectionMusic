@@ -70,8 +70,8 @@ public class GenerationPane extends JPanel {
 		// collection tab: Scroll pane to contain the collection table
 		AlbumsScrollJTablePane albumsScrollJTablePane = new AlbumsScrollJTablePane(collectionAlbumContainer.getCollectionAlbumsMusiques().getAlbums(), this);	
 		
-		ArtistesScrollJTablePane artistesScrollJTablePane = new ArtistesScrollJTablePane(collectionAlbumContainer.getCollectionArtistes().getArtistes(), this);
-		ArtistesScrollJTablePane artistesConcertsScrollJTablePane = new ArtistesScrollJTablePane(collectionAlbumContainer.getConcertsArtistes().getArtistes(), this);
+		ArtistesScrollJTablePane artistesScrollJTablePane = new ArtistesScrollJTablePane(collectionAlbumContainer.getCollectionArtistes().getArtistes(), this, true);
+		ArtistesScrollJTablePane artistesConcertsScrollJTablePane = new ArtistesScrollJTablePane(collectionAlbumContainer.getConcertsArtistes().getArtistes(), this, true);
 		
 		// Control buttons panel
 		JPanel controlPanel = new JPanel();

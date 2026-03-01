@@ -115,7 +115,7 @@ public abstract class MusicArtefactMouseAdapter<T extends MusicArtefact> extends
 			Artiste selectedArtiste = artistes.get(0);
 			JOptionPane.showMessageDialog(null, new ArtisteInformationPanel(selectedArtiste, generationPane), selectedArtiste.getNomComplet(), JOptionPane.PLAIN_MESSAGE);
 		} else {
-			JOptionPane.showMessageDialog(null, new ArtistesScrollJTablePane(artistes, generationPane), "Artistes", JOptionPane.PLAIN_MESSAGE);
+			JOptionPane.showMessageDialog(null, new ArtistesScrollJTablePane(artistes, generationPane, true), "Artistes", JOptionPane.PLAIN_MESSAGE);
 		}
 	}
 	

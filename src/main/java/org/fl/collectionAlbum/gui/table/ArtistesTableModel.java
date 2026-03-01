@@ -45,18 +45,25 @@ public class ArtistesTableModel extends AbstractTableModel implements UpdatableE
 	
 	private static final long serialVersionUID = 1L;
 
+	private static final List<String> minimalEntetes = List.of("Noms", "Naissance", "Décès");
 	private static final List<String> firstEntetes = List.of("Noms", "Naissance", "Décès", "Concerts", "Albums", "Poids");
-	private static final List<String> entetes = new ArrayList<String>(firstEntetes);
+	private static final List<String> fullEntetes = new ArrayList<String>(firstEntetes);
 	
 	private final List<Artiste> artistesList;
+	private final List<String> entetes;
 	
 	static {
-		entetes.addAll(Stream.of(MediaSupportCategories.values()).map(MediaSupportCategories::getNom).toList());
+		fullEntetes.addAll(Stream.of(MediaSupportCategories.values()).map(MediaSupportCategories::getNom).toList());
 	}
 	
-	public ArtistesTableModel(List<Artiste> artistesList) {
+	public ArtistesTableModel(List<Artiste> artistesList, boolean completeTable) {
 		super();
-		this.artistesList = artistesList;	
+		this.artistesList = artistesList;
+		if (completeTable) {
+			this.entetes = fullEntetes;
+		} else {
+			this.entetes = minimalEntetes;
+		}
 	}
 	
 	@Override

@@ -38,10 +38,10 @@ public class ArtistesScrollJTablePane extends JScrollPane {
 
 	private final ArtistesTableModel artistesTableModel;
 	
-	public ArtistesScrollJTablePane(List<Artiste> artistes, GenerationPane generationPane) {
+	public ArtistesScrollJTablePane(List<Artiste> artistes, GenerationPane generationPane, boolean completeTable) {
 		super();
 		
-		artistesTableModel = new ArtistesTableModel(artistes);
+		artistesTableModel = new ArtistesTableModel(artistes, completeTable);
 		setViewportView(new ArtistesJTable(artistesTableModel, generationPane));
 		setPreferredSize(Control.getMainSubPaneDimension());
 	}
