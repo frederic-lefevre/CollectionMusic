@@ -24,6 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui;
 
+import java.awt.Font;
 import java.time.Month;
 import java.time.format.TextStyle;
 import java.util.Locale;
@@ -36,15 +37,17 @@ import org.fl.collectionAlbum.CollectionAlbumContainer;
 public class CalendarPane extends JTabbedPane {
 
 	private static final long serialVersionUID = 1L;
+	private static final Font MONTH_FONT = new Font("Verdana", Font.BOLD, 14);
 	
 	public CalendarPane(CollectionAlbumContainer collectionAlbumContainer, GenerationPane generationPane) {
 		super();
 		
 		setTabPlacement(JTabbedPane.LEFT);
+		setFont(MONTH_FONT);
 		
 		Stream.of(Month.values()).forEachOrdered(month -> {
 			
-			MonthPane monthPane = new MonthPane(collectionAlbumContainer, generationPane);
+			MonthPane monthPane = new MonthPane(month, collectionAlbumContainer, generationPane);
 			addTab(month.getDisplayName(TextStyle.FULL_STANDALONE, Locale.FRANCE), monthPane);
 		});
 	}
