@@ -40,6 +40,7 @@ import java.util.Locale;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 import org.fl.collectionAlbum.ChronoArtistes;
 import org.fl.collectionAlbum.CollectionAlbumContainer;
@@ -60,6 +61,7 @@ public class MonthPane extends JPanel implements UpdatableElement {
 	private static final Font NO_ARTIST_FONT = new Font("Verdana", Font.ITALIC, 20);
 	
 	private final Month month;
+	private final GenerationPane generationPane;
 	private final ChronoArtistes calendrierAllArtistes;
 	private final JPanel monthGridPane;
 	private ArtistesScrollJTablePane artistesPane;
@@ -72,6 +74,7 @@ public class MonthPane extends JPanel implements UpdatableElement {
 		super();
 
 		this.month = month;
+		this.generationPane = generationPane;
 		this.calendrierAllArtistes = collectionAlbumContainer.getCalendrierAllArtistes();
 		this.currentArtisteList = new ArrayList<>();
 		artistesPaneNotFixed = true;
@@ -177,11 +180,15 @@ public class MonthPane extends JPanel implements UpdatableElement {
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			if ((artistesOfThatDay != null) && !artistesOfThatDay.isEmpty()) {
-				currentArtisteList.clear();
-				currentArtisteList.addAll(artistesOfThatDay);
-				artistesPane.getArtistesTableModel().fireTableDataChanged();
-				artistesPaneNotFixed = false;
-				dayMonthLabel.setText(dayString);
+				if (SwingUtilities.isLeftMouseButton(e) && (e.getClickCount() > 1)) {
+					CollectionUtils.displayArtistesTable(artistesOfThatDay, generationPane);
+				} else {
+					currentArtisteList.clear();
+					currentArtisteList.addAll(artistesOfThatDay);
+					artistesPane.getArtistesTableModel().fireTableDataChanged();
+					artistesPaneNotFixed = false;
+					dayMonthLabel.setText(dayString);
+				}
 			}
 		}
 	}

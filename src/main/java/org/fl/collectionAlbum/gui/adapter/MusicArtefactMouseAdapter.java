@@ -30,19 +30,17 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
-import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
 
 import org.fl.collectionAlbum.MusicArtefact;
 import org.fl.collectionAlbum.artistes.Artiste;
-import org.fl.collectionAlbum.gui.ArtisteInformationPanel;
 import org.fl.collectionAlbum.gui.CollectionMenuItems;
 import org.fl.collectionAlbum.gui.GenerationPane;
 import org.fl.collectionAlbum.gui.listener.MusicArtefactCommandListener;
-import org.fl.collectionAlbum.gui.table.ArtistesScrollJTablePane;
 import org.fl.collectionAlbum.gui.table.MusicArtefactTable;
 import org.fl.collectionAlbum.osAction.OsAction;
+import org.fl.collectionAlbum.utils.CollectionUtils;
 
 public abstract class MusicArtefactMouseAdapter<T extends MusicArtefact> extends MouseAdapter {
 
@@ -104,19 +102,9 @@ public abstract class MusicArtefactMouseAdapter<T extends MusicArtefact> extends
 		if (selectedMusicArtefact != null) {
 			List<Artiste> artistes = selectedMusicArtefact.getAllArtists();
 			if (! artistes.isEmpty()) {
-				displayArtistesTable(artistes);
+				CollectionUtils.displayArtistesTable(artistes, generationPane);
 			}
 		}		
-	}
-	
-	private void displayArtistesTable(List<Artiste> artistes) {
-
-		if (artistes.size() == 1) {
-			Artiste selectedArtiste = artistes.get(0);
-			JOptionPane.showMessageDialog(null, new ArtisteInformationPanel(selectedArtiste, generationPane), selectedArtiste.getNomComplet(), JOptionPane.PLAIN_MESSAGE);
-		} else {
-			JOptionPane.showMessageDialog(null, new ArtistesScrollJTablePane(artistes, generationPane, true), "Artistes", JOptionPane.PLAIN_MESSAGE);
-		}
 	}
 	
 	private void actionOnMouseClicked(MouseEvent evt) {
@@ -133,7 +121,7 @@ public abstract class MusicArtefactMouseAdapter<T extends MusicArtefact> extends
 			
 			List<Artiste> artistes = selectedMusicArtefact.getAllArtists();
 			if ((musicArtefactTable.isArtistsColumnSelected()) && !artistes.isEmpty()) {
-				displayArtistesTable(artistes);
+				CollectionUtils.displayArtistesTable(artistes, generationPane);
 			} else {
 				specificDoubleClickAction(selectedMusicArtefact);
 			}

@@ -42,6 +42,7 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -51,7 +52,10 @@ import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.concerts.Concert;
 import org.fl.collectionAlbum.format.ContentNature;
+import org.fl.collectionAlbum.gui.ArtisteInformationPanel;
+import org.fl.collectionAlbum.gui.GenerationPane;
 import org.fl.collectionAlbum.gui.listener.OsActionListener;
+import org.fl.collectionAlbum.gui.table.ArtistesScrollJTablePane;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 
 public class CollectionUtils {
@@ -344,5 +348,15 @@ public class CollectionUtils {
 		JLabel lbl = jLabelBuilder.build();
 		layout.setConstraints(lbl, constraints);
 		return lbl;
+	}
+	
+	public static void displayArtistesTable(List<Artiste> artistes, GenerationPane generationPane) {
+
+		if (artistes.size() == 1) {
+			Artiste selectedArtiste = artistes.get(0);
+			JOptionPane.showMessageDialog(null, new ArtisteInformationPanel(selectedArtiste, generationPane), selectedArtiste.getNomComplet(), JOptionPane.PLAIN_MESSAGE);
+		} else {
+			JOptionPane.showMessageDialog(null, new ArtistesScrollJTablePane(artistes, generationPane, true), "Artistes", JOptionPane.PLAIN_MESSAGE);
+		}
 	}
 }
