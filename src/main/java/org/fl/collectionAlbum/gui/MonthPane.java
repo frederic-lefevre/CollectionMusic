@@ -65,6 +65,7 @@ public class MonthPane extends JPanel implements UpdatableElement {
 	private final JPanel monthGridPane;
 	private ArtistesScrollJTablePane artistesPane;
 	private List<Artiste> currentArtisteList;
+	private boolean artistesPaneNotFixed;
 	
 	public MonthPane(Month month, CollectionAlbumContainer collectionAlbumContainer, GenerationPane generationPane) {
 		super();
@@ -72,6 +73,7 @@ public class MonthPane extends JPanel implements UpdatableElement {
 		this.month = month;
 		this.calendrierAllArtistes = collectionAlbumContainer.getCalendrierAllArtistes();
 		this.currentArtisteList = new ArrayList<>();
+		artistesPaneNotFixed = true;
 		
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		setBorder(BorderFactory.createLineBorder(Color.RED));
@@ -143,13 +145,25 @@ public class MonthPane extends JPanel implements UpdatableElement {
 		
 		@Override
 		public void mouseEntered(MouseEvent e) {
+			if (artistesPaneNotFixed) {
+				if ((artistesOfThatDay != null) && !artistesOfThatDay.isEmpty()) {
+					currentArtisteList.clear();
+					currentArtisteList.addAll(artistesOfThatDay);
+				} else {
+					currentArtisteList.clear();
+				}
+				artistesPane.getArtistesTableModel().fireTableDataChanged();
+			}
+		}
+		
+		@Override
+		public void mouseClicked(MouseEvent e) {
 			if ((artistesOfThatDay != null) && !artistesOfThatDay.isEmpty()) {
 				currentArtisteList.clear();
 				currentArtisteList.addAll(artistesOfThatDay);
-			} else {
-				currentArtisteList.clear();
+				artistesPane.getArtistesTableModel().fireTableDataChanged();
+				artistesPaneNotFixed = false;
 			}
-			artistesPane.getArtistesTableModel().fireTableDataChanged();
 		}
 	}
 }
