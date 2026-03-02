@@ -107,7 +107,10 @@ public class ArtisteInformationPanel extends JPanel {
 			chiffres.append("  -  Nombre d'albums: ").append(nbAlbums);
 		}
 		if (nbConcerts > 0) {
-			chiffres.append("  -  Nombre de concerts: ").append(nbConcerts);
+			if (chiffres.length() > 0) {
+				chiffres.append("  -  ");
+			}
+			chiffres.append("Nombre de concerts: ").append(nbConcerts);
 		}
 		return chiffres.toString();
 	}
