@@ -29,8 +29,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
 import java.util.Optional;
 import java.util.function.Function;
 
@@ -178,7 +178,7 @@ public class StatisticsScrollPane extends JScrollPane implements UpdatableElemen
 								JLabelBuilder.builder()
 									.text(poids)
 									.preferredSize(CELL_DIMENSION)
-									.mouseMotionListener(new CurrentStatMouseMotionAdapter(period, poids))
+									.mouseListener(new CurrentStatMouseAdapter(period, poids))
 									.mouseListener(mouseAdapterBuilder.build(year, year+pas))
 								));
 			}
@@ -195,19 +195,19 @@ public class StatisticsScrollPane extends JScrollPane implements UpdatableElemen
 		fillPanel();
 	}
 	
-	private class CurrentStatMouseMotionAdapter extends MouseMotionAdapter {
+	private class CurrentStatMouseAdapter extends MouseAdapter {
 		
 		private final String period;
 		private final String poids;
 		
-		public CurrentStatMouseMotionAdapter(String period, String poids) {
+		public CurrentStatMouseAdapter(String period, String poids) {
 			super();
 			this.period = period;
 			this.poids = poids;
 		}
 		
 		@Override
-		public void mouseMoved(MouseEvent e) {
+		public void mouseEntered(MouseEvent e) {
 			currentPeriodLabel.setText(period);
 			currentStatLabel.setText(poids);
 		}
