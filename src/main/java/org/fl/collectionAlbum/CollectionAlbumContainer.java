@@ -67,6 +67,7 @@ public class CollectionAlbumContainer {
 	private final ListeConcert concerts;	
 	private final ChronoArtistes calendrierAlbumArtistes;
 	private final ChronoArtistes calendrierConcertArtistes;
+	private final ChronoArtistes calendrierAllArtistes;
 	
 	private final StatChrono statChronoEnregistrement;
 	private final StatChrono statChronoComposition;
@@ -91,6 +92,7 @@ public class CollectionAlbumContainer {
 		statChronoConcert = new StatChrono();
 		calendrierAlbumArtistes = new ChronoArtistes();
 		calendrierConcertArtistes = new ChronoArtistes();
+		calendrierAllArtistes = new ChronoArtistes();
 		lieuxDesConcerts = new LieuxDesConcerts();
 		allArtistes = new ArrayList<ListeArtiste>();
    		
@@ -137,8 +139,14 @@ public class CollectionAlbumContainer {
 	public void buildCalendriers() {
 		
 		try {
-			collectionArtistes.getArtistes().forEach(artist -> calendrierAlbumArtistes.add(artist));
-			concertsArtistes.getArtistes().forEach(artist -> calendrierConcertArtistes.add(artist));
+			collectionArtistes.getArtistes().forEach(artist -> { 
+				calendrierAlbumArtistes.add(artist);
+				calendrierAllArtistes.add(artist);
+			});
+			concertsArtistes.getArtistes().forEach(artist -> {
+				calendrierConcertArtistes.add(artist);
+				calendrierAllArtistes.add(artist);
+			});
 		} catch (Exception e) {
     		albumLog.log(Level.SEVERE, "Exception in build calendrier ", e);
     	}
@@ -203,6 +211,10 @@ public class CollectionAlbumContainer {
 		return calendrierAlbumArtistes;
 	}
 
+	public ChronoArtistes getCalendrierAllArtistes() {
+		return calendrierAllArtistes;
+	}
+	
 	public ChronoArtistes getCalendrierConcertArtistes() {
 		return calendrierConcertArtistes;
 	}
@@ -269,6 +281,7 @@ public class CollectionAlbumContainer {
    		statChronoComposition.reset();
    		statChronoConcert.reset();
    		calendrierAlbumArtistes.reset();
+   		calendrierAllArtistes.reset();
    		calendrierConcertArtistes.reset();
    		lieuxDesConcerts.reset();
    		
