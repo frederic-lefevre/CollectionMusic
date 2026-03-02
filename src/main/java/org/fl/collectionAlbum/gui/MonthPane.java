@@ -24,7 +24,6 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -38,7 +37,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -65,8 +63,10 @@ public class MonthPane extends JPanel implements UpdatableElement {
 	private final ChronoArtistes calendrierAllArtistes;
 	private final JPanel monthGridPane;
 	private ArtistesScrollJTablePane artistesPane;
-	private List<Artiste> currentArtisteList;
+	private final List<Artiste> currentArtisteList;
 	private boolean artistesPaneNotFixed;
+	private final JLabel dayMonthLabel;
+	private final String monthName;
 	
 	public MonthPane(Month month, CollectionAlbumContainer collectionAlbumContainer, GenerationPane generationPane) {
 		super();
@@ -75,32 +75,39 @@ public class MonthPane extends JPanel implements UpdatableElement {
 		this.calendrierAllArtistes = collectionAlbumContainer.getCalendrierAllArtistes();
 		this.currentArtisteList = new ArrayList<>();
 		artistesPaneNotFixed = true;
+		monthName = month.getDisplayName(TextStyle.FULL_STANDALONE, Locale.FRANCE);
 		
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-		setBorder(BorderFactory.createLineBorder(Color.RED));
 		
 		JPanel monthDisplayPane = new JPanel();
-		monthDisplayPane.setLayout(new BoxLayout(monthDisplayPane,BoxLayout.Y_AXIS));
+		monthDisplayPane.setLayout(new BoxLayout(monthDisplayPane, BoxLayout.Y_AXIS));
 		monthDisplayPane.setAlignmentY(TOP_ALIGNMENT);
 		
-		JLabel monthName = new JLabel(month.getDisplayName(TextStyle.FULL_STANDALONE, Locale.FRANCE));
-		monthName.setFont(MONTH_FONT);
-		monthName.setAlignmentY(TOP_ALIGNMENT);
-		monthName.setAlignmentX(CENTER_ALIGNMENT);
-		monthDisplayPane.add(monthName);
+		JLabel monthNameLabel = new JLabel(monthName);
+		monthNameLabel.setFont(MONTH_FONT);
+		monthNameLabel.setAlignmentY(TOP_ALIGNMENT);
+		monthNameLabel.setAlignmentX(CENTER_ALIGNMENT);
+		monthDisplayPane.add(monthNameLabel);
 		
 		monthGridPane = new JPanel();
-		monthGridPane.setBorder(BorderFactory.createLineBorder(Color.RED));
 		fillMonthGridPane();
 
 		monthDisplayPane.add(monthGridPane);
 		add(monthDisplayPane);
 		
+		JPanel artistesOfTheDayPane = new JPanel();
+		artistesOfTheDayPane.setLayout(new BoxLayout(artistesOfTheDayPane, BoxLayout.Y_AXIS));
+		artistesOfTheDayPane.setAlignmentY(TOP_ALIGNMENT);
+		
+		dayMonthLabel =  new JLabel(month.getDisplayName(TextStyle.FULL_STANDALONE, Locale.FRANCE));
+		dayMonthLabel.setFont(MONTH_FONT);
+		artistesOfTheDayPane.add(dayMonthLabel);
+		
 		artistesPane = new ArtistesScrollJTablePane(currentArtisteList, generationPane, false);
-		artistesPane.setBorder(BorderFactory.createLineBorder(Color.BLUE));
 		artistesPane.setAlignmentY(TOP_ALIGNMENT);
 		
-		add(artistesPane);
+		artistesOfTheDayPane.add(artistesPane);
+		add(artistesOfTheDayPane);
 	}
 
 	private void fillMonthGridPane() {
@@ -121,6 +128,7 @@ public class MonthPane extends JPanel implements UpdatableElement {
 			constraints.gridy = (dayOfMonth-1) / 7;
 			constraints.gridx = (dayOfMonth % 7) - 1;
 			List<Artiste> artistesOfThatDay = calendrierAllArtistes.getChronoArtistes(MonthDay.of(month, dayOfMonth));
+			String dayMonth = dayOfMonth + " " + monthName;
 			
 			Font dayFont;
 			if ((artistesOfThatDay == null) || artistesOfThatDay.isEmpty()) {
@@ -133,7 +141,7 @@ public class MonthPane extends JPanel implements UpdatableElement {
 					.text(Integer.toString(dayOfMonth))
 					.font(dayFont)
 					.preferredSize(CELL_DIMENSION)
-					.mouseListener(new CurrentDayMouseAdapter(artistesOfThatDay))));
+					.mouseListener(new CurrentDayMouseAdapter(artistesOfThatDay, dayMonth))));
 		}
 	}
 	
@@ -145,9 +153,11 @@ public class MonthPane extends JPanel implements UpdatableElement {
 	private class CurrentDayMouseAdapter extends MouseAdapter {
 		
 		private final List<Artiste> artistesOfThatDay;
+		private final String dayString;
 		
-		public CurrentDayMouseAdapter(List<Artiste> artistesOfThatDay) {		
+		public CurrentDayMouseAdapter(List<Artiste> artistesOfThatDay, String dayString) {		
 			this.artistesOfThatDay = artistesOfThatDay;
+			this.dayString = dayString;
 		}
 		
 		@Override
@@ -159,6 +169,7 @@ public class MonthPane extends JPanel implements UpdatableElement {
 				} else {
 					currentArtisteList.clear();
 				}
+				dayMonthLabel.setText(dayString);
 				artistesPane.getArtistesTableModel().fireTableDataChanged();
 			}
 		}
@@ -170,6 +181,7 @@ public class MonthPane extends JPanel implements UpdatableElement {
 				currentArtisteList.addAll(artistesOfThatDay);
 				artistesPane.getArtistesTableModel().fireTableDataChanged();
 				artistesPaneNotFixed = false;
+				dayMonthLabel.setText(dayString);
 			}
 		}
 	}
