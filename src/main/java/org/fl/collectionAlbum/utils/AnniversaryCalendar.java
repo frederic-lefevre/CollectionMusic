@@ -52,7 +52,9 @@ public class AnniversaryCalendar<T> {
 				annivs = new ArrayList<T>();
 				anniversaires.put(monthDay, annivs);
 			}
-			annivs.add(a);
+			if (! annivs.contains(a)) {
+				annivs.add(a);
+			}
 			return monthDay;
 		} catch (Exception e) {
 			return null;

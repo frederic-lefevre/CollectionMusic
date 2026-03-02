@@ -61,7 +61,6 @@ public class MonthPane extends JPanel implements UpdatableElement {
 	private static final Font MONTH_FONT = new Font("Verdana", Font.BOLD, 24);
 	
 	private final Month month;
-	private final GenerationPane generationPane; 
 	private final ChronoArtistes calendrierAllArtistes;
 	private final JPanel monthGridPane;
 	private ArtistesScrollJTablePane artistesPane;
@@ -69,8 +68,7 @@ public class MonthPane extends JPanel implements UpdatableElement {
 	
 	public MonthPane(Month month, CollectionAlbumContainer collectionAlbumContainer, GenerationPane generationPane) {
 		super();
-		
-		this.generationPane = generationPane;
+
 		this.month = month;
 		this.calendrierAllArtistes = collectionAlbumContainer.getCalendrierAllArtistes();
 		this.currentArtisteList = new ArrayList<>();
@@ -146,7 +144,6 @@ public class MonthPane extends JPanel implements UpdatableElement {
 		@Override
 		public void mouseEntered(MouseEvent e) {
 			if ((artistesOfThatDay != null) && !artistesOfThatDay.isEmpty()) {
-				System.out.println("Move to Artiste of that day, number " + artistesOfThatDay.size());
 				currentArtisteList.clear();
 				currentArtisteList.addAll(artistesOfThatDay);
 			} else {
