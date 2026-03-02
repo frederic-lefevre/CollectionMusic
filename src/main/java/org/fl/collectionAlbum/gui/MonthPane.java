@@ -59,6 +59,7 @@ public class MonthPane extends JPanel implements UpdatableElement {
 	private static final Dimension GRID_PANE_DIMENSION = new Dimension(CELL_WIDTH*7 + 20, CELL_HEIGHT*5 + 20);
 	private static final Dimension CELL_DIMENSION = new Dimension(CELL_WIDTH, CELL_HEIGHT);
 	private static final Font MONTH_FONT = new Font("Verdana", Font.BOLD, 24);
+	private static final Font NO_ARTIST_FONT = new Font("Verdana", Font.ITALIC, 20);
 	
 	private final Month month;
 	private final ChronoArtistes calendrierAllArtistes;
@@ -121,10 +122,16 @@ public class MonthPane extends JPanel implements UpdatableElement {
 			constraints.gridx = (dayOfMonth % 7) - 1;
 			List<Artiste> artistesOfThatDay = calendrierAllArtistes.getChronoArtistes(MonthDay.of(month, dayOfMonth));
 			
+			Font dayFont;
+			if ((artistesOfThatDay == null) || artistesOfThatDay.isEmpty()) {
+				dayFont = NO_ARTIST_FONT;
+			} else {
+				dayFont = MONTH_FONT;
+			}
 			monthGridPane.add(CollectionUtils.createGridCellLabel(layout, constraints,
 				JLabelBuilder.builder()
 					.text(Integer.toString(dayOfMonth))
-					.font(MONTH_FONT)
+					.font(dayFont)
 					.preferredSize(CELL_DIMENSION)
 					.mouseListener(new CurrentDayMouseAdapter(artistesOfThatDay))));
 		}
