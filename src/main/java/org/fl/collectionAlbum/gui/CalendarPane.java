@@ -25,6 +25,7 @@ SOFTWARE.
 package org.fl.collectionAlbum.gui;
 
 import java.awt.Font;
+import java.time.LocalDate;
 import java.time.Month;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
@@ -57,6 +58,8 @@ public class CalendarPane extends JTabbedPane {
 			updatableElements.add(monthPane);
 			addTab(month.getDisplayName(TextStyle.FULL_STANDALONE, Locale.FRANCE), monthPane);
 		});
+		
+		setSelectedIndex(LocalDate.now().getMonthValue() - 1);
 	}
 	
 	public List<UpdatableElement> getUpdatableElements() {

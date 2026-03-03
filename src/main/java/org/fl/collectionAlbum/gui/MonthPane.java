@@ -24,12 +24,14 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.time.LocalDate;
 import java.time.Month;
 import java.time.MonthDay;
 import java.time.format.TextStyle;
@@ -93,7 +95,6 @@ public class MonthPane extends JPanel implements UpdatableElement {
 		monthDisplayPane.add(monthNameLabel);
 		
 		monthGridPane = new JPanel();
-		fillMonthGridPane();
 
 		monthDisplayPane.add(monthGridPane);
 		add(monthDisplayPane);
@@ -108,6 +109,8 @@ public class MonthPane extends JPanel implements UpdatableElement {
 		
 		artistesPane = new ArtistesScrollJTablePane(currentArtisteList, generationPane, false);
 		artistesPane.setAlignmentY(TOP_ALIGNMENT);
+		
+		fillMonthGridPane();
 		
 		artistesOfTheDayPane.add(artistesPane);
 		add(artistesOfTheDayPane);
@@ -126,6 +129,16 @@ public class MonthPane extends JPanel implements UpdatableElement {
 		constraints.gridwidth = 1;
 		constraints.gridheight = 1;
 		
+		LocalDate today = LocalDate.now();
+		if (today.getMonth() == month) {
+			dayMonthLabel.setText(Integer.toString(today.getDayOfMonth())  + " " + monthName);
+			List<Artiste> artistesOfToday = calendrierAllArtistes.getChronoArtistes(MonthDay.of(month, today.getDayOfMonth()));
+			if (artistesOfToday != null) {
+				currentArtisteList.clear();
+				currentArtisteList.addAll(artistesOfToday);
+			}
+		}
+		
 		for (int dayOfMonth = 1; dayOfMonth <= month.length(true); dayOfMonth++) {
 			
 			constraints.gridy = (dayOfMonth-1) / 7;
@@ -139,15 +152,26 @@ public class MonthPane extends JPanel implements UpdatableElement {
 			} else {
 				dayFont = MONTH_FONT;
 			}
+			Color dayColor;
+			if ((today.getMonth() == month) && (today.getDayOfMonth() == dayOfMonth)) {
+				dayColor = Color.MAGENTA;
+			} else {
+				dayColor = Color.BLACK;
+			}
+			
 			monthGridPane.add(CollectionUtils.createGridCellLabel(layout, constraints,
 				JLabelBuilder.builder()
 					.text(Integer.toString(dayOfMonth))
 					.font(dayFont)
+					.foregroundColor(dayColor)
 					.preferredSize(CELL_DIMENSION)
 					.mouseListener(new CurrentDayMouseAdapter(artistesOfThatDay, dayMonth))));
 		}
+		
+		artistesPane.getArtistesTableModel().fireTableDataChanged();
 	}
 	
+
 	@Override
 	public void updateElement() {
 		fillMonthGridPane();
