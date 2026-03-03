@@ -33,11 +33,12 @@ import java.util.Locale;
 import javax.swing.table.AbstractTableModel;
 
 import org.fl.collectionAlbum.format.Format;
+import org.fl.collectionAlbum.gui.UpdatableElement;
 import org.fl.collectionAlbum.metrics.Metrics;
 import org.fl.collectionAlbum.metrics.MetricsHistory;
 import org.fl.collectionAlbum.metrics.MetricsHistory.MetricAttributesList;
 
-public class MetricsHistoryTableModel extends AbstractTableModel {
+public class MetricsHistoryTableModel extends AbstractTableModel implements UpdatableElement {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -105,4 +106,8 @@ public class MetricsHistoryTableModel extends AbstractTableModel {
 		}
 	}
 
+	@Override
+	public void updateElement() {
+		fireTableDataChanged();
+	}
 }

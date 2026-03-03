@@ -70,8 +70,8 @@ public class GenerationPane extends JPanel {
 		// collection tab: Scroll pane to contain the collection table
 		AlbumsScrollJTablePane albumsScrollJTablePane = new AlbumsScrollJTablePane(collectionAlbumContainer.getCollectionAlbumsMusiques().getAlbums(), this);	
 		
-		ArtistesScrollJTablePane artistesScrollJTablePane = new ArtistesScrollJTablePane(collectionAlbumContainer.getCollectionArtistes().getArtistes(), this);
-		ArtistesScrollJTablePane artistesConcertsScrollJTablePane = new ArtistesScrollJTablePane(collectionAlbumContainer.getConcertsArtistes().getArtistes(), this);
+		ArtistesScrollJTablePane artistesScrollJTablePane = new ArtistesScrollJTablePane(collectionAlbumContainer.getCollectionArtistes().getArtistes(), this, true);
+		ArtistesScrollJTablePane artistesConcertsScrollJTablePane = new ArtistesScrollJTablePane(collectionAlbumContainer.getConcertsArtistes().getArtistes(), this, true);
 		
 		// Control buttons panel
 		JPanel controlPanel = new JPanel();
@@ -97,9 +97,9 @@ public class GenerationPane extends JPanel {
 
 		StartReadCollection startReadCollection = new StartReadCollection(collectionAlbumContainer, readCollectionControl.getProgressInformationPanel(), activableElements);
 		startReadCollection.setCollectionProcWaiter(new CollectionProcessWaiter(activableElements));
-		startReadCollection.addTableModel(albumsScrollJTablePane.getAlbumsTableModel());
-		startReadCollection.addTableModel(artistesScrollJTablePane.getArtistesTableModel());
-		startReadCollection.addTableModel(artistesConcertsScrollJTablePane.getArtistesTableModel());
+		startReadCollection.addUpdatableElement(albumsScrollJTablePane.getAlbumsTableModel());
+		startReadCollection.addUpdatableElement(artistesScrollJTablePane.getArtistesTableModel());
+		startReadCollection.addUpdatableElement(artistesConcertsScrollJTablePane.getArtistesTableModel());
 		readCollectionControl.getStartButton().addActionListener(startReadCollection);
 
 		StartGenerationSite startGenerationSite = new StartGenerationSite(collectionAlbumContainer, generateSiteControl.getProgressInformationPanel(), activableElements);
@@ -118,7 +118,7 @@ public class GenerationPane extends JPanel {
 		Stream.of(ContentNature.values()).forEachOrdered(contentNature -> {
 			
 			MediaFilesTableModel tm = new MediaFilesTableModel(MediaFilesInventories.getMediaFileInventory(contentNature));
-			startReadCollection.addTableModel(tm);
+			startReadCollection.addUpdatableElement(tm);
 			
 			MediaFilesJTable mediaFilesJTable = new MediaFilesJTable(tm, this);
 			
@@ -131,7 +131,7 @@ public class GenerationPane extends JPanel {
 		
 		// Discogs releases pane
 		DisocgsReleaseTableModel dtm = new DisocgsReleaseTableModel(DiscogsInventory.getDiscogsInventory());
-		startReadCollection.addTableModel(dtm);
+		startReadCollection.addUpdatableElement(dtm);
 		
 		DiscogsReleaseJTable discogsReleaseJTable = new DiscogsReleaseJTable(dtm, collectionAlbumContainer, this);
 		
@@ -143,7 +143,7 @@ public class GenerationPane extends JPanel {
 		
 		// Concert pane
 		ConcertsScrollJTablePane concertsScrollJTablePane = new ConcertsScrollJTablePane(collectionAlbumContainer.getConcerts().getConcerts(), this);
-		startReadCollection.addTableModel(concertsScrollJTablePane.getConcertTableModel());		
+		startReadCollection.addUpdatableElement(concertsScrollJTablePane.getConcertTableModel());		
 		collectionTabPanes.add(concertsScrollJTablePane, "Concerts");
 		
 		// Artistes concert tab
@@ -153,7 +153,14 @@ public class GenerationPane extends JPanel {
 		MediaSupportsTabbedPane mediaSupportsTabbedPane = new MediaSupportsTabbedPane(collectionAlbumContainer, this);
 		collectionTabPanes.add(mediaSupportsTabbedPane, "Supports media");
 		mediaSupportsTabbedPane.getAlbumsTableModels().forEach(tableModel -> {
-			startReadCollection.addTableModel(tableModel);
+			startReadCollection.addUpdatableElement(tableModel);
+		});
+		
+		// Calendriers
+		CalendarsTabbedPane calendarsTabbedPane = new CalendarsTabbedPane(collectionAlbumContainer, this);
+		collectionTabPanes.add(calendarsTabbedPane, "Statistiques et calendrier");
+		calendarsTabbedPane.getUpdatableElements().forEach(updatableElement -> {
+			startReadCollection.addUpdatableElement(updatableElement);
 		});
 		
 		// Collection metrics history
@@ -162,8 +169,8 @@ public class GenerationPane extends JPanel {
 		startReadCollection.addColorableTabbedPane(List.of(collectionMetricsTabPanes, collectionTabPanes));
 		startGenerationSite.addColorableTabbedPane(List.of(collectionMetricsTabPanes, collectionTabPanes));
 		collectionMetricsTabPanes.getTableModels().forEach(tableModel -> {
-			startReadCollection.addTableModel(tableModel);
-			startGenerationSite.addTableModel(tableModel);
+			startReadCollection.addUpdatableElement(tableModel);
+			startGenerationSite.addUpdatableElement(tableModel);
 		});
 		
 		collectionTabPanes.add(collectionMetricsTabPanes, "Evolution de la collection");

@@ -25,12 +25,15 @@ SOFTWARE.
 package org.fl.collectionAlbum.gui.table;
 
 import java.time.temporal.TemporalAccessor;
+import java.util.Comparator;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.logging.Logger;
 
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableRowSorter;
 
 import org.fl.collectionAlbum.artistes.Artiste;
@@ -66,20 +69,20 @@ public class ArtistesJTable extends JTable {
 		
 		setFillsViewportHeight(true);
 		
-		getColumnModel().getColumn(ArtistesTableModel.NOM_COL_IDX).setCellRenderer(new AuteurRenderer());
-		getColumnModel().getColumn(ArtistesTableModel.NAISSANCE_COL_IDX).setCellRenderer(new AuteurDateRenderer(artisteNaissanceGetter, dateFormatterFunction));
-		getColumnModel().getColumn(ArtistesTableModel.DECES_COL_IDX).setCellRenderer(new AuteurDateRenderer(artisteDecesGetter, dateFormatterFunction));
-		getColumnModel().getColumn(ArtistesTableModel.NB_CONCERTS_COL_IDX).setCellRenderer(new CollectionNumberRenderer());
-		getColumnModel().getColumn(ArtistesTableModel.NB_ALBUMS_COL_IDX).setCellRenderer(new CollectionNumberRenderer());
-		getColumnModel().getColumn(ArtistesTableModel.POIDS_COL_IDX).setCellRenderer(new CollectionNumberRenderer());
+		tableColumnAction(ArtistesTableModel.NOM_COL_IDX, c -> c.setCellRenderer(new AuteurRenderer()));
+		tableColumnAction(ArtistesTableModel.NAISSANCE_COL_IDX, c -> c.setCellRenderer(new AuteurDateRenderer(artisteNaissanceGetter, dateFormatterFunction)));
+		tableColumnAction(ArtistesTableModel.DECES_COL_IDX, c -> c.setCellRenderer(new AuteurDateRenderer(artisteDecesGetter, dateFormatterFunction)));
+		tableColumnAction(ArtistesTableModel.NB_CONCERTS_COL_IDX, c -> c.setCellRenderer(new CollectionNumberRenderer()));
+		tableColumnAction(ArtistesTableModel.NB_ALBUMS_COL_IDX, c -> c.setCellRenderer(new CollectionNumberRenderer()));
+		tableColumnAction(ArtistesTableModel.POIDS_COL_IDX, c -> c.setCellRenderer(new CollectionNumberRenderer()));
 		
-		getColumnModel().getColumn(ArtistesTableModel.NOM_COL_IDX).setPreferredWidth(400);
-		getColumnModel().getColumn(ArtistesTableModel.NAISSANCE_COL_IDX).setPreferredWidth(150);
-		getColumnModel().getColumn(ArtistesTableModel.DECES_COL_IDX).setPreferredWidth(150);
-		getColumnModel().getColumn(ArtistesTableModel.NB_CONCERTS_COL_IDX).setPreferredWidth(100);
-		getColumnModel().getColumn(ArtistesTableModel.NB_ALBUMS_COL_IDX).setPreferredWidth(100);
-		getColumnModel().getColumn(ArtistesTableModel.POIDS_COL_IDX).setPreferredWidth(100);
-				
+		tableColumnAction(ArtistesTableModel.NOM_COL_IDX, c -> c.setPreferredWidth(400));
+		tableColumnAction(ArtistesTableModel.NAISSANCE_COL_IDX, c -> c.setPreferredWidth(150));
+		tableColumnAction(ArtistesTableModel.DECES_COL_IDX, c -> c.setPreferredWidth(150));
+		tableColumnAction(ArtistesTableModel.NB_CONCERTS_COL_IDX, c -> c.setPreferredWidth(100));
+		tableColumnAction(ArtistesTableModel.NB_ALBUMS_COL_IDX, c -> c.setPreferredWidth(100));
+		tableColumnAction(ArtistesTableModel.POIDS_COL_IDX, c -> c.setPreferredWidth(100));
+		
 		for (int columnIndex = artistesTableModel.getFirstEntetesNumber(); columnIndex < artistesTableModel.getColumnCount(); columnIndex++) {
 			getColumnModel().getColumn(columnIndex).setCellRenderer(new CollectionNumberRenderer());
 			getColumnModel().getColumn(columnIndex).setPreferredWidth(80);
@@ -95,12 +98,14 @@ public class ArtistesJTable extends JTable {
 		addMouseListener(new ArtisteMouseAdapter(this, generationPane));
 		
 		// Row sorter
-		TableRowSorter<ArtistesTableModel> sorter = new TableRowSorter<>(artistesTableModel);	
-		sorter.setComparator(ArtistesTableModel.NOM_COL_IDX, AUTEUR_COMPARATOR);
-		sorter.setComparator(ArtistesTableModel.NAISSANCE_COL_IDX, AUTEUR_DATE_COMPARATOR);
-		sorter.setComparator(ArtistesTableModel.DECES_COL_IDX, AUTEUR_DECES_COMPARATOR);
-		sorter.setComparator(ArtistesTableModel.NB_ALBUMS_COL_IDX, INTEGER_COMPARATOR);
-		sorter.setComparator(ArtistesTableModel.NB_CONCERTS_COL_IDX, INTEGER_COMPARATOR);
+		TableRowSorter<ArtistesTableModel> sorter = new TableRowSorter<>(artistesTableModel);
+		sorterSetComparator(ArtistesTableModel.NOM_COL_IDX, sorter, AUTEUR_COMPARATOR);
+		sorterSetComparator(ArtistesTableModel.NAISSANCE_COL_IDX, sorter, AUTEUR_DATE_COMPARATOR);
+		sorterSetComparator(ArtistesTableModel.DECES_COL_IDX, sorter, AUTEUR_DECES_COMPARATOR);
+		sorterSetComparator(ArtistesTableModel.NB_ALBUMS_COL_IDX, sorter, INTEGER_COMPARATOR);
+		sorterSetComparator(ArtistesTableModel.NB_CONCERTS_COL_IDX, sorter, INTEGER_COMPARATOR);
+		sorterSetComparator(ArtistesTableModel.POIDS_COL_IDX, sorter, DOUBLE_COMPARATOR);
+		
 		for (int columnIndex = artistesTableModel.getFirstEntetesNumber(); columnIndex < artistesTableModel.getColumnCount(); columnIndex++) {
 			sorter.setComparator(columnIndex, DOUBLE_COMPARATOR);
 		}
@@ -116,5 +121,19 @@ public class ArtistesJTable extends JTable {
 			logger.severe("Found several selected rows for ArtistesJTable. Number of selected rows: " + rowIdxs.length);
 		}
 		return ((ArtistesTableModel)getModel()).getArtisteAt(convertRowIndexToModel(rowIdxs[0]));
+	}
+	
+	private void tableColumnAction(int columnIndex, Consumer<TableColumn> columnAction) {
+		
+		if (columnIndex < getColumnModel().getColumnCount()) {
+			columnAction.accept(getColumnModel().getColumn(columnIndex));
+		}
+	}
+	
+	private void sorterSetComparator(int columnIndex, TableRowSorter<ArtistesTableModel> sorter, Comparator<?> comparator) {
+		
+		if (columnIndex < getColumnModel().getColumnCount()) {
+			sorter.setComparator(columnIndex, comparator);
+		}
 	}
 }

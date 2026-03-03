@@ -70,7 +70,6 @@ public class RapportCalendrier  extends RapportHtml {
 
 			nbDays = thisMonthLd.lengthOfMonth();
 			for (day = 1; day <= nbDays; day++) {
-				rapportLog.fine("Print calendrier day=" + day);
 				LocalDate thisDay = LocalDate.of(year, month, day);
 				List<Artiste> artistesDuJour = rappochronoArtistes.getChronoArtistes(MonthDay.from(thisDay));
 				if (artistesDuJour != null) {

@@ -30,8 +30,9 @@ import java.util.stream.Collectors;
 import javax.swing.table.AbstractTableModel;
 
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
+import org.fl.collectionAlbum.gui.UpdatableElement;
 
-public class DisocgsReleaseTableModel extends AbstractTableModel {
+public class DisocgsReleaseTableModel extends AbstractTableModel implements UpdatableElement {
 
 	private static final long serialVersionUID = 1L;
 
@@ -85,5 +86,10 @@ public class DisocgsReleaseTableModel extends AbstractTableModel {
 
 	public DiscogsAlbumRelease getDiscogsReleaseAt(int rowIndex) {
 		return discogsAlbumReleases.get(rowIndex);
+	}
+
+	@Override
+	public void updateElement() {
+		fireTableDataChanged();
 	}
 }

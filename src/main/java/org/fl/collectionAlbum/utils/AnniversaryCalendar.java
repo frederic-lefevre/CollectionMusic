@@ -25,14 +25,20 @@ SOFTWARE.
 package org.fl.collectionAlbum.utils;
 
 import java.time.MonthDay;
+import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class AnniversaryCalendar<T> {
 
+	private static final Logger logger = Logger.getLogger(AnniversaryCalendar.class.getName());
+	
 	private final Map<MonthDay, List<T>> anniversaires;
 
 	public AnniversaryCalendar() {
@@ -46,15 +52,22 @@ public class AnniversaryCalendar<T> {
 	public MonthDay addAnniversary(T a, TemporalAccessor date) {
 
 		try {
-			MonthDay monthDay = MonthDay.from(date);
-			List<T> annivs = anniversaires.get(monthDay);
-			if (annivs == null) {
-				annivs = new ArrayList<T>();
-				anniversaires.put(monthDay, annivs);
+			if (date.isSupported(ChronoField.DAY_OF_MONTH)) {
+				MonthDay monthDay = MonthDay.from(date);
+				List<T> annivs = anniversaires.get(monthDay);
+				if (annivs == null) {
+					annivs = new ArrayList<T>();
+					anniversaires.put(monthDay, annivs);
+				}
+				if (! annivs.contains(a)) {
+					annivs.add(a);
+				}
+				return monthDay;
+			} else {
+				return null;
 			}
-			annivs.add(a);
-			return monthDay;
 		} catch (Exception e) {
+			logger.log(Level.SEVERE, "Exception adding anniversary for object " + Objects.toString(a), e);
 			return null;
 		}
 	}
@@ -64,6 +77,7 @@ public class AnniversaryCalendar<T> {
 			MonthDay monthDay = MonthDay.from(date);
 			return anniversaires.get(monthDay);
 		} catch (Exception e) {
+			logger.log(Level.SEVERE, "Exception getting anniversary for date " + Objects.toString(date), e);
 			return null;
 		}
 	}

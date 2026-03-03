@@ -29,15 +29,13 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.table.AbstractTableModel;
-
 import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.CollectionAlbums;
 
 public class StartReadCollection implements ActionListener {
 
 	private final CollectionAlbumContainer collectionAlbumContainer;
-	private final List<AbstractTableModel> tableModels;
+	private final List<UpdatableElement> updatableElements;
 	private final List<AbstractColorableTabbedPane> colorableTabbedPanes;
 	private final ProgressInformationPanel progressInfoPanel;
 	private CollectionProcessWaiter collectionProcWaiter;
@@ -46,7 +44,7 @@ public class StartReadCollection implements ActionListener {
 	public StartReadCollection(CollectionAlbumContainer collectionAlbumContainer, ProgressInformationPanel progInfoPanel, List<ActivableElement> stList) {
 
 		this.collectionAlbumContainer = collectionAlbumContainer;
-		this.tableModels = new ArrayList<>();
+		this.updatableElements = new ArrayList<>();
 		this.colorableTabbedPanes = new ArrayList<>();
 		progressInfoPanel = progInfoPanel;
 		activableButtons = stList;
@@ -56,8 +54,8 @@ public class StartReadCollection implements ActionListener {
 		this.collectionProcWaiter = collectionProcWaiter;
 	}
 
-	public void addTableModel(AbstractTableModel tableModel) {
-		tableModels.add(tableModel);
+	public void addUpdatableElement(UpdatableElement updatableElement) {
+		updatableElements.add(updatableElement);
 	}
 	
 	public void addColorableTabbedPane(List<AbstractColorableTabbedPane> pane) {
@@ -70,7 +68,7 @@ public class StartReadCollection implements ActionListener {
 		for (ActivableElement st : activableButtons) {
 			st.deactivate();
 		}
-		CollectionAlbums ca = new CollectionAlbums(collectionAlbumContainer, tableModels, colorableTabbedPanes, progressInfoPanel);
+		CollectionAlbums ca = new CollectionAlbums(collectionAlbumContainer, updatableElements, colorableTabbedPanes, progressInfoPanel);
 		ca.addPropertyChangeListener(collectionProcWaiter);
 		ca.execute();
 	}

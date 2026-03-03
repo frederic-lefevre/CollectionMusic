@@ -22,33 +22,37 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.gui.table;
+package org.fl.collectionAlbum.gui.adapter;
 
-import java.util.List;
+import java.awt.event.MouseAdapter;
 
-import javax.swing.JScrollPane;
-
-import org.fl.collectionAlbum.Control;
-import org.fl.collectionAlbum.artistes.Artiste;
+import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.gui.GenerationPane;
 
-public class ArtistesScrollJTablePane extends JScrollPane {
+public class StatistiquesMouseAdapter extends MouseAdapter {
 
-	private static final long serialVersionUID = 1L;
-
-	private final ArtistesTableModel artistesTableModel;
+	protected int anneeDebut;
+	protected int anneeFin;
+	protected CollectionAlbumContainer collectionAlbumContainer;
+	protected GenerationPane generationPane;
 	
-	public ArtistesScrollJTablePane(List<Artiste> artistes, GenerationPane generationPane, boolean completeTable) {
-		super();
-		
-		artistesTableModel = new ArtistesTableModel(artistes, completeTable);
-		setViewportView(new ArtistesJTable(artistesTableModel, generationPane));
-		if (completeTable) {
-			setPreferredSize(Control.getMainSubPaneDimension());
-		}
+	protected StatistiquesMouseAdapter(int anneeDebut, int anneeFin,
+			CollectionAlbumContainer collectionAlbumContainer, GenerationPane generationPane) {
+		this.anneeDebut = anneeDebut;
+		this.anneeFin = anneeFin;
+		this.collectionAlbumContainer = collectionAlbumContainer;
+		this.generationPane = generationPane;
 	}
 	
-	public ArtistesTableModel getArtistesTableModel() {
-		return artistesTableModel;
+	protected boolean isBetween(int val, int minInclusive, int maxExclusive) {
+		return (val >= minInclusive && val < maxExclusive);
+	}
+	
+	protected String getWindowsTitle(String name) {
+		String windowTitle = name + anneeDebut;
+		if (anneeDebut + 1 < anneeFin) {
+			windowTitle = windowTitle + "-" + (anneeFin-1);
+		}
+		return windowTitle;
 	}
 }

@@ -31,8 +31,9 @@ import java.util.stream.Collectors;
 import javax.swing.table.AbstractTableModel;
 
 import org.fl.collectionAlbum.albums.Album;
+import org.fl.collectionAlbum.gui.UpdatableElement;
 
-public abstract class AbstractAlbumsTableModel extends AbstractTableModel {
+public abstract class AbstractAlbumsTableModel extends AbstractTableModel implements UpdatableElement {
 
 	private static final long serialVersionUID = 1L;
 
@@ -100,6 +101,11 @@ public abstract class AbstractAlbumsTableModel extends AbstractTableModel {
 
 	public Album getAlbumAt(int rowIndex) {
 		return getAlbumsList().get(rowIndex);
+	}
+	
+	@Override
+	public void updateElement() {
+		fireTableDataChanged();
 	}
 	
 	protected abstract List<Album> getAlbumsList();

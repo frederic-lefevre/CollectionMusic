@@ -30,8 +30,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BooleanSupplier;
 
-import javax.swing.table.AbstractTableModel;
-
 import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.GenerationSiteCollection;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
@@ -39,7 +37,7 @@ import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 public class StartGenerationSite implements ActionListener {
 	
 	private final CollectionAlbumContainer collectionAlbumContainer;
-	private final List<AbstractTableModel> tableModels;
+	private final List<UpdatableElement> updatableElements;
 	private final List<AbstractColorableTabbedPane> colorableTabbedPanes;
 	private final ProgressInformationPanel progressInfoPanel;	
 	private final List<ActivableElement> activableButtons;
@@ -50,7 +48,7 @@ public class StartGenerationSite implements ActionListener {
 	public StartGenerationSite(CollectionAlbumContainer collectionAlbumContainer, ProgressInformationPanel progInfoPanel, List<ActivableElement> stList) {
 		
 		this.collectionAlbumContainer = collectionAlbumContainer;
-		this.tableModels = new ArrayList<>();
+		this.updatableElements = new ArrayList<>();
 		this.colorableTabbedPanes = new ArrayList<>();
 		this.progressInfoPanel = progInfoPanel;
 		this.activableButtons = stList;
@@ -60,8 +58,8 @@ public class StartGenerationSite implements ActionListener {
 		this.collectionProcWaiter = collectionProcWaiter;
 	}
 
-	public void addTableModel(AbstractTableModel tableModel) {
-		tableModels.add(tableModel);
+	public void addUpdatableElement(UpdatableElement updatableElement) {
+		updatableElements.add(updatableElement);
 	}
 	
 	public void addColorableTabbedPane(List<AbstractColorableTabbedPane> pane) {
@@ -74,7 +72,7 @@ public class StartGenerationSite implements ActionListener {
 		for (ActivableElement st : activableButtons ) {
 			st.deactivate();
 		}
-		GenerationSiteCollection gc = new GenerationSiteCollection(collectionAlbumContainer, tableModels, colorableTabbedPanes, progressInfoPanel);
+		GenerationSiteCollection gc = new GenerationSiteCollection(collectionAlbumContainer, updatableElements, colorableTabbedPanes, progressInfoPanel);
 		gc.addPropertyChangeListener(collectionProcWaiter);
 		gc.execute();
 	}

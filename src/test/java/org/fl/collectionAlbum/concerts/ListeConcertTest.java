@@ -167,6 +167,27 @@ public class ListeConcertTest {
 		});
 	}
 	
+	@Test
+	void testListe5() {
+		
+		ListeConcert listeConcert = ListeConcert.Builder.getBuilderFrom(buildConcertBuild(concertStr1, concertStr2))
+				.withConcertSatisfying(List.of(concert -> concert.getLieuConcert().getLieu().contains("Juan-les-Pins"),
+						concert -> concert.getAuteurs().get(0).getNom().contains("Bridge"))).build();
+		
+		assertThat(listeConcert).isNotNull();
+		assertThat(listeConcert.getNombreConcerts())
+			.isEqualTo(listeConcert.getConcerts().size())
+			.isEqualTo(1);
+
+		assertThat(listeConcert.getConcerts()).singleElement()
+		.satisfies(concert -> {
+			assertThat(concert.getAuteurs()).isNotNull().singleElement()
+				.satisfies(artiste -> {
+					assertThat(artiste.getNom()).isEqualTo("Bridgewater");
+				});
+		});
+	}
+	
 	private List<Concert> buildConcertBuild(String ...concertJsons) {
 		
 		return Stream.of(concertJsons)

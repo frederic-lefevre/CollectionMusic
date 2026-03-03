@@ -22,33 +22,47 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.gui.table;
+package org.fl.collectionAlbum.gui;
 
+import java.awt.Font;
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.format.TextStyle;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.stream.Stream;
 
-import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 
-import org.fl.collectionAlbum.Control;
-import org.fl.collectionAlbum.artistes.Artiste;
-import org.fl.collectionAlbum.gui.GenerationPane;
+import org.fl.collectionAlbum.CollectionAlbumContainer;
 
-public class ArtistesScrollJTablePane extends JScrollPane {
+public class CalendarPane extends JTabbedPane {
 
 	private static final long serialVersionUID = 1L;
-
-	private final ArtistesTableModel artistesTableModel;
+	private static final Font MONTH_FONT = new Font("Verdana", Font.BOLD, 14);
 	
-	public ArtistesScrollJTablePane(List<Artiste> artistes, GenerationPane generationPane, boolean completeTable) {
+	private final List<UpdatableElement> updatableElements;
+	
+	public CalendarPane(CollectionAlbumContainer collectionAlbumContainer, GenerationPane generationPane) {
 		super();
 		
-		artistesTableModel = new ArtistesTableModel(artistes, completeTable);
-		setViewportView(new ArtistesJTable(artistesTableModel, generationPane));
-		if (completeTable) {
-			setPreferredSize(Control.getMainSubPaneDimension());
-		}
+		updatableElements = new ArrayList<>();
+		
+		setTabPlacement(JTabbedPane.LEFT);
+		setFont(MONTH_FONT);
+		
+		Stream.of(Month.values()).forEachOrdered(month -> {
+			
+			MonthPane monthPane = new MonthPane(month, collectionAlbumContainer, generationPane);
+			updatableElements.add(monthPane);
+			addTab(month.getDisplayName(TextStyle.FULL_STANDALONE, Locale.FRANCE), monthPane);
+		});
+		
+		setSelectedIndex(LocalDate.now().getMonthValue() - 1);
 	}
 	
-	public ArtistesTableModel getArtistesTableModel() {
-		return artistesTableModel;
+	public List<UpdatableElement> getUpdatableElements() {
+		return updatableElements;
 	}
 }

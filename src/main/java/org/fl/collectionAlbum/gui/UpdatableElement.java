@@ -22,33 +22,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.gui.table;
+package org.fl.collectionAlbum.gui;
 
-import java.util.List;
+public interface UpdatableElement {
 
-import javax.swing.JScrollPane;
-
-import org.fl.collectionAlbum.Control;
-import org.fl.collectionAlbum.artistes.Artiste;
-import org.fl.collectionAlbum.gui.GenerationPane;
-
-public class ArtistesScrollJTablePane extends JScrollPane {
-
-	private static final long serialVersionUID = 1L;
-
-	private final ArtistesTableModel artistesTableModel;
-	
-	public ArtistesScrollJTablePane(List<Artiste> artistes, GenerationPane generationPane, boolean completeTable) {
-		super();
-		
-		artistesTableModel = new ArtistesTableModel(artistes, completeTable);
-		setViewportView(new ArtistesJTable(artistesTableModel, generationPane));
-		if (completeTable) {
-			setPreferredSize(Control.getMainSubPaneDimension());
-		}
-	}
-	
-	public ArtistesTableModel getArtistesTableModel() {
-		return artistesTableModel;
-	}
+	public void updateElement();
 }

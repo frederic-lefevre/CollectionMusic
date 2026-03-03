@@ -115,4 +115,17 @@ class AnniversaryCalendarTest {
 		ac.addAnniversary(bad1, bad1.getBirthDate());
 		assertThat(ac.getNbAnniversaryDate()).isZero();
 	}
+	
+	@Test
+	void avoidDuplicatesTest() {
+
+		AnniversaryCalendar<Personne> ac = new AnniversaryCalendar<Personne>();
+
+		ac.addAnniversary(titi, titi.getBirthDate());
+		ac.addAnniversary(toto, toto.getBirthDate());
+		ac.addAnniversary(titi, titi.getBirthDate());
+
+		List<Personne> annivs = ac.getAnniversaries(tutu.getBirthDate());
+		assertThat(annivs).hasSize(2).hasSameElementsAs(List.of(toto, titi));
+	}
 }

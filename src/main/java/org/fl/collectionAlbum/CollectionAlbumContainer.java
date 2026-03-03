@@ -67,9 +67,11 @@ public class CollectionAlbumContainer {
 	private final ListeConcert concerts;	
 	private final ChronoArtistes calendrierAlbumArtistes;
 	private final ChronoArtistes calendrierConcertArtistes;
+	private final ChronoArtistes calendrierAllArtistes;
 	
 	private final StatChrono statChronoEnregistrement;
 	private final StatChrono statChronoComposition;
+	private final StatChrono statChronoConcert;
 	
 	private final LieuxDesConcerts lieuxDesConcerts ;
 	
@@ -87,8 +89,10 @@ public class CollectionAlbumContainer {
 		concerts = ListeConcert.Builder.getBuilder().build();
 		statChronoEnregistrement = new StatChrono();
 		statChronoComposition = new StatChrono();
+		statChronoConcert = new StatChrono();
 		calendrierAlbumArtistes = new ChronoArtistes();
 		calendrierConcertArtistes = new ChronoArtistes();
+		calendrierAllArtistes = new ChronoArtistes();
 		lieuxDesConcerts = new LieuxDesConcerts();
 		allArtistes = new ArrayList<ListeArtiste>();
    		
@@ -116,8 +120,8 @@ public class CollectionAlbumContainer {
 			DiscogsInventory.linkToAlbum(album.getDiscogsLink(), album);
 		} 
 		
-		statChronoEnregistrement.addAlbum(album.getDebutEnregistrement(), album.getFormatAlbum().getPoids());
-	    statChronoComposition.addAlbum(album.getDebutComposition(), album.getFormatAlbum().getPoids());
+		statChronoEnregistrement.addToStatistic(album.getDebutEnregistrement(), album.getFormatAlbum().getPoids());
+	    statChronoComposition.addToStatistic(album.getDebutComposition(), album.getFormatAlbum().getPoids());
 	}
 	
 	public void addConcert(ObjectNode arteFactJson, Path jsonFile) { 
@@ -127,14 +131,22 @@ public class CollectionAlbumContainer {
 		concert.getLieuConcert().addConcert(concert);
 		concert.addMusicArtfactArtistesToList(concertsArtistes);
 		
-		concerts.addConcert(concert); 	
+		concerts.addConcert(concert);
+		
+		statChronoConcert.addToStatistic(concert.getDateConcert(), 1);
 	}
 	
 	public void buildCalendriers() {
 		
 		try {
-			collectionArtistes.getArtistes().forEach(artist -> calendrierAlbumArtistes.add(artist));
-			concertsArtistes.getArtistes().forEach(artist -> calendrierConcertArtistes.add(artist));
+			collectionArtistes.getArtistes().forEach(artist -> { 
+				calendrierAlbumArtistes.add(artist);
+				calendrierAllArtistes.add(artist);
+			});
+			concertsArtistes.getArtistes().forEach(artist -> {
+				calendrierConcertArtistes.add(artist);
+				calendrierAllArtistes.add(artist);
+			});
 		} catch (Exception e) {
     		albumLog.log(Level.SEVERE, "Exception in build calendrier ", e);
     	}
@@ -173,6 +185,12 @@ public class CollectionAlbumContainer {
 						(album.getContentNatures().size() > 1) ));
 	}
 	
+	public ListeConcert getConcertsSastisfying(List<Predicate<Concert>> concertPredicates) {
+		 return ListeConcert.Builder.getBuilderFrom(concerts.getConcerts())
+				 .withConcertSatisfying(concertPredicates)
+				 .build();
+	}
+	
 	public ListeArtiste getCollectionArtistes() {
 		return collectionArtistes;
 	}
@@ -193,6 +211,10 @@ public class CollectionAlbumContainer {
 		return calendrierAlbumArtistes;
 	}
 
+	public ChronoArtistes getCalendrierAllArtistes() {
+		return calendrierAllArtistes;
+	}
+	
 	public ChronoArtistes getCalendrierConcertArtistes() {
 		return calendrierConcertArtistes;
 	}
@@ -205,6 +227,10 @@ public class CollectionAlbumContainer {
 		return statChronoEnregistrement;
 	}
 
+	public StatChrono getStatChronoConcert() {
+		return statChronoConcert;
+	}
+	
 	public LieuxDesConcerts getLieuxDesConcerts() {
 		return lieuxDesConcerts;
 	}
@@ -252,8 +278,10 @@ public class CollectionAlbumContainer {
    		concertsArtistes.reset();   		
    		concerts.reset(); 		
    		statChronoEnregistrement.reset();
-   		statChronoComposition.reset();  		
+   		statChronoComposition.reset();
+   		statChronoConcert.reset();
    		calendrierAlbumArtistes.reset();
+   		calendrierAllArtistes.reset();
    		calendrierConcertArtistes.reset();
    		lieuxDesConcerts.reset();
    		

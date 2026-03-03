@@ -31,7 +31,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.SwingWorker;
-import javax.swing.table.AbstractTableModel;
 
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.albums.ListeAlbum;
@@ -44,6 +43,7 @@ import org.fl.collectionAlbum.concerts.ListeConcert;
 import org.fl.collectionAlbum.gui.AbstractColorableTabbedPane;
 import org.fl.collectionAlbum.gui.ProgressInformation;
 import org.fl.collectionAlbum.gui.ProgressInformationPanel;
+import org.fl.collectionAlbum.gui.UpdatableElement;
 import org.fl.collectionAlbum.rapportCsv.RapportCsv;
 import org.fl.collectionAlbum.rapportHtml.RapportCollection;
 import org.fl.collectionAlbum.rapportHtml.RapportConcert;
@@ -67,7 +67,7 @@ public class GenerationSiteCollection extends SwingWorker<String,ProgressInforma
 	
 	private final CollectionAlbumContainer collectionAlbumContainer;
 	private final ProgressInformationPanel progressPanel;
-	private final List<AbstractTableModel> tableModels;
+	private final List<UpdatableElement> updatableElements;
 	private final List<AbstractColorableTabbedPane> colorableTabbedPanes;
 
 	// Information prefix
@@ -85,11 +85,11 @@ public class GenerationSiteCollection extends SwingWorker<String,ProgressInforma
 
 	public GenerationSiteCollection(
 			CollectionAlbumContainer collectionAlbumContainer, 
-			List<AbstractTableModel> tableModels, 
+			List<UpdatableElement> updatableElements, 
 			List<AbstractColorableTabbedPane> colorableTabbedPanes, 
 			ProgressInformationPanel pip) {
 		
-		this.tableModels = tableModels;
+		this.updatableElements = updatableElements;
 		this.colorableTabbedPanes = colorableTabbedPanes;
 		this.progressPanel = pip;
 		this.collectionAlbumContainer = collectionAlbumContainer;
@@ -305,7 +305,7 @@ public class GenerationSiteCollection extends SwingWorker<String,ProgressInforma
 	public void done() {
 
 		progressPanel.setProgressInformation(new ProgressInformation(FIN_GENERATION, ARRET, ""));
-		tableModels.forEach(AbstractTableModel::fireTableDataChanged);
+		updatableElements.forEach(UpdatableElement::updateElement);
 		colorableTabbedPanes.forEach(AbstractColorableTabbedPane::setTabColor);
 	}
 

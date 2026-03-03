@@ -22,33 +22,22 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.gui.table;
+package org.fl.collectionAlbum.gui.adapter;
 
-import java.util.List;
+import java.awt.event.MouseAdapter;
 
-import javax.swing.JScrollPane;
-
-import org.fl.collectionAlbum.Control;
-import org.fl.collectionAlbum.artistes.Artiste;
+import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.gui.GenerationPane;
 
-public class ArtistesScrollJTablePane extends JScrollPane {
+public abstract class AbstractStatistiquesMouseAdapterBuilder {
 
-	private static final long serialVersionUID = 1L;
+	protected CollectionAlbumContainer collectionAlbumContainer;
+	protected GenerationPane generationPane;
 
-	private final ArtistesTableModel artistesTableModel;
-	
-	public ArtistesScrollJTablePane(List<Artiste> artistes, GenerationPane generationPane, boolean completeTable) {
-		super();
-		
-		artistesTableModel = new ArtistesTableModel(artistes, completeTable);
-		setViewportView(new ArtistesJTable(artistesTableModel, generationPane));
-		if (completeTable) {
-			setPreferredSize(Control.getMainSubPaneDimension());
-		}
+	protected AbstractStatistiquesMouseAdapterBuilder(CollectionAlbumContainer collectionAlbumContainer, GenerationPane generationPane) {
+		this.collectionAlbumContainer = collectionAlbumContainer;
+		this.generationPane = generationPane;
 	}
-	
-	public ArtistesTableModel getArtistesTableModel() {
-		return artistesTableModel;
-	}
+
+	public abstract MouseAdapter build(int anneeDebut, int anneeFin);
 }
