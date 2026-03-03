@@ -51,9 +51,10 @@ public class StatisticsScrollPane extends JScrollPane implements UpdatableElemen
 
 	private static final long serialVersionUID = 1L;
 	
-	private static final Dimension CELL_DIMENSION = new Dimension(80,30);
+	private static final Dimension CELL_DIMENSION = new Dimension(80,40);
 	private static final Dimension CURRENT_STAT_DIMENSION = new Dimension(350,250);
 	
+	private static final Font FONT = new Font("Verdana", Font.BOLD, 14);
 	private static final Font PERIOD_FONT = new Font("Verdana", Font.BOLD, 64);
 	private static final Font STAT_FONT = new Font("Verdana", Font.BOLD, 64);
 	
@@ -124,6 +125,7 @@ public class StatisticsScrollPane extends JScrollPane implements UpdatableElemen
 				JLabelBuilder.builder()
 					.text(statistiquesView.getSubdivisionName())
 					.preferredSize(CELL_DIMENSION)
+					.font(FONT)
 					.backgroundColor(Color.BLACK)
 					.foregroundColor(Color.WHITE)
 				));
@@ -132,6 +134,7 @@ public class StatisticsScrollPane extends JScrollPane implements UpdatableElemen
 				JLabelBuilder.builder()
 					.text("Total")
 					.preferredSize(CELL_DIMENSION)
+					.font(FONT)
 					.backgroundColor(Color.BLACK)
 					.foregroundColor(Color.WHITE)
 				));
@@ -141,6 +144,7 @@ public class StatisticsScrollPane extends JScrollPane implements UpdatableElemen
 					JLabelBuilder.builder()
 						.text(Integer.toString(i*pas))
 						.preferredSize(CELL_DIMENSION)
+						.font(FONT)
 						.backgroundColor(Color.BLACK)
 						.foregroundColor(Color.WHITE)
 					));
@@ -157,6 +161,7 @@ public class StatisticsScrollPane extends JScrollPane implements UpdatableElemen
 							JLabelBuilder.builder()
 							.text(Integer.toString(subdivisionYear))
 							.preferredSize(CELL_DIMENSION)
+							.font(FONT)
 							.backgroundColor(Color.BLACK)
 							.foregroundColor(Color.WHITE)
 						));
@@ -166,6 +171,7 @@ public class StatisticsScrollPane extends JScrollPane implements UpdatableElemen
 							JLabelBuilder.builder()
 								.text(statistiquesView.getAccumulationStatFor(subdivisionYear))
 								.preferredSize(CELL_DIMENSION)
+								.font(FONT)
 								.backgroundColor(Color.LIGHT_GRAY)
 							));
 			
@@ -178,6 +184,7 @@ public class StatisticsScrollPane extends JScrollPane implements UpdatableElemen
 								JLabelBuilder.builder()
 									.text(poids)
 									.preferredSize(CELL_DIMENSION)
+									.font(FONT)
 									.mouseListener(new CurrentStatMouseAdapter(period, poids))
 									.mouseListener(mouseAdapterBuilder.build(year, year+pas))
 								));
