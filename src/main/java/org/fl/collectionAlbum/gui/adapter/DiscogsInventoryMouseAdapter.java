@@ -61,9 +61,9 @@ public class DiscogsInventoryMouseAdapter extends MouseAdapter {
 		
 		osActions.forEach(osAction -> 
 			discogsReleaseMenuItems.addMenuItem(
-				osAction.getActionTitle(),
+				osAction.actionTitle(),
 				new DiscogsReleaseCommandListener(discogsReleaseJTable, osAction), 
-				osAction.getCommandParameter().getActionValidityPredicate(),
+				osAction.commandParameter().getActionValidityPredicate(),
 				localJPopupMenu
 		));
 		

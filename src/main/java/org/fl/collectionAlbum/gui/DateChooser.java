@@ -131,8 +131,8 @@ public class DateChooser extends JPanel {
 
 		try {
 			int year = parseNumericTextField(yearField, "une année");
-			int month = ((DisplayableTemporal) monthField.getSelectedItem()).getTemporalAccessor().get(ChronoField.MONTH_OF_YEAR);
-			int day = ((DisplayableTemporal) dayField.getSelectedItem()).getTemporalAccessor().get(ChronoField.DAY_OF_MONTH);
+			int month = ((DisplayableTemporal) monthField.getSelectedItem()).temporalAccessor().get(ChronoField.MONTH_OF_YEAR);
+			int day = ((DisplayableTemporal) dayField.getSelectedItem()).temporalAccessor().get(ChronoField.DAY_OF_MONTH);
 			
 			YearMonth yearMonth = YearMonth.of(year, month);
 			if (day > yearMonth.lengthOfMonth()) {

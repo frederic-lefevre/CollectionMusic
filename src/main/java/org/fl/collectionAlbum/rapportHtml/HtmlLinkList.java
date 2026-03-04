@@ -29,22 +29,14 @@ import java.util.List;
 
 public class HtmlLinkList {
 
-	private class HtmlLink {
+	private record HtmlLink(String title, String url) {
 		
 		private static final String AHREF1 = "  <a href=\"";
 		private static final String AHREF2 = "\">";
 		private static final String AHREF3 = "</a><br/>\n";
-		
-		private final String title;
-		private final String url;
-
-		public HtmlLink(String title, String url) {
-			this.title = title;
-			this.url = url;
-		}
 
 		// Print the hyper link
-		public void writeLink(StringBuilder rBuilder, String offset) {
+		void writeLink(StringBuilder rBuilder, String offset) {
 			rBuilder.append(AHREF1).append(offset).append(url).append(AHREF2).append(title).append(AHREF3);
 		}
 	}

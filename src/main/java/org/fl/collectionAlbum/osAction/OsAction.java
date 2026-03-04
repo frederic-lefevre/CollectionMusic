@@ -30,36 +30,18 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class OsAction<T> {
+public record OsAction<T>(String actionTitle, OsCommandAndOption osCommandAndOption, OsActionCommandParameter<T> commandParameter) {
 
 	private static final Logger oLog = Logger.getLogger(OsAction.class.getName());
-	
-	private final String actionTitle;
-	private final OsCommandAndOption osCommandAndOption;
-	private final OsActionCommandParameter<T> commandParameter;
-	
-	public OsAction(String t, OsCommandAndOption osCommandAndOption, OsActionCommandParameter<T> a) {
-		actionTitle   = t;
-		this.osCommandAndOption = osCommandAndOption;
-		commandParameter = a;
-	}
-
-	public String getActionTitle() {
-		return actionTitle;
-	}
-
-	public OsActionCommandParameter<T> getCommandParameter() {
-		return commandParameter;
-	}
 
 	public void runOsAction(T o) {
 		
 		List<String> cmdAndParams = new ArrayList<>();
-		cmdAndParams.add(osCommandAndOption.getActionCommand());
+		cmdAndParams.add(osCommandAndOption.actionCommand());
 		if (osCommandAndOption.hasOptions()) {
-			cmdAndParams.addAll(osCommandAndOption.getActionOptions());
+			cmdAndParams.addAll(osCommandAndOption.actionOptions());
 		}
-		cmdAndParams.addAll(getCommandParameter().getParametersGetter().apply(o));
+		cmdAndParams.addAll(commandParameter().getParametersGetter().apply(o));
 		
 		try {
 			Runtime.getRuntime().exec(cmdAndParams.toArray(new String[0]));

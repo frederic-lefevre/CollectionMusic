@@ -61,9 +61,9 @@ public abstract class MusicArtefactMouseAdapter<T extends MusicArtefact> extends
 		musicArtefactMenuItems.addMenuItem("Informations sur les artistes", 
 				new MusicArtefactArtistListener<>(), a -> !a.getAllArtists().isEmpty(), localJPopupMenu);
 		
-		osActions.forEach(osAction -> musicArtefactMenuItems.addMenuItem(osAction.getActionTitle(),
+		osActions.forEach(osAction -> musicArtefactMenuItems.addMenuItem(osAction.actionTitle(),
 				new MusicArtefactCommandListener<T>(musicArtefactTable, osAction),
-				osAction.getCommandParameter().getActionValidityPredicate(), localJPopupMenu));
+				osAction.commandParameter().getActionValidityPredicate(), localJPopupMenu));
 	}
 	
 	@Override
