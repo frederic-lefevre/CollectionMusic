@@ -37,9 +37,9 @@ public record OsAction<T>(String actionTitle, OsCommandAndOption osCommandAndOpt
 	public void runOsAction(T o) {
 		
 		List<String> cmdAndParams = new ArrayList<>();
-		cmdAndParams.add(osCommandAndOption.getActionCommand());
+		cmdAndParams.add(osCommandAndOption.actionCommand());
 		if (osCommandAndOption.hasOptions()) {
-			cmdAndParams.addAll(osCommandAndOption.getActionOptions());
+			cmdAndParams.addAll(osCommandAndOption.actionOptions());
 		}
 		cmdAndParams.addAll(commandParameter().getParametersGetter().apply(o));
 		

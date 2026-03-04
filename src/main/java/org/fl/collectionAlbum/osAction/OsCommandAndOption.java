@@ -26,23 +26,7 @@ package org.fl.collectionAlbum.osAction;
 
 import java.util.List;
 
-public class OsCommandAndOption {
-	
-	private final String actionCommand;
-	private final List<String> actionOptions;
-	
-	public OsCommandAndOption(String c, List<String> o) {
-		actionCommand = c;
-		actionOptions = o;
-	}
-
-	public String getActionCommand() {
-		return actionCommand;
-	}
-
-	public List<String> getActionOptions() {
-		return actionOptions;
-	}
+public record OsCommandAndOption(String actionCommand, List<String> actionOptions) {
 
 	public boolean hasOptions() {
 		return (actionOptions != null) && !actionOptions.isEmpty();
