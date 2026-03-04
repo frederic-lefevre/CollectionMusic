@@ -63,9 +63,9 @@ public class MediaFileMouseAdapter extends MouseAdapter {
 		
 		osActions.forEach(osAction -> 
 			mediaFileMenuItems.addMenuItem(
-				osAction.getActionTitle(),
+				osAction.actionTitle(),
 				new MediaFileCommandListener(mediaFileTable, osAction),
-				osAction.getCommandParameter().getActionValidityPredicate(),
+				osAction.commandParameter().getActionValidityPredicate(),
 				localJPopupMenu
 			)
 		);
