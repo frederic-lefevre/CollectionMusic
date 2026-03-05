@@ -39,11 +39,11 @@ import org.fl.util.FilterCounter;
 import org.fl.util.FilterCounter.LogRecordCounter;
 import org.junit.jupiter.api.Test;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.DatabindException;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.node.JsonNodeFactory;
+import tools.jackson.databind.node.ObjectNode;
 
 class ArtisteTest {
 	
@@ -231,7 +231,7 @@ class ArtisteTest {
 			""";
 	
 	@Test
-	void test4() throws JsonMappingException, JsonProcessingException {
+	void test4() throws DatabindException, JacksonException {
 		
 		
 		ObjectNode jAlbum = (ObjectNode)mapper.readTree(albumStr1);
@@ -300,7 +300,7 @@ class ArtisteTest {
 			""";
 	
 	@Test
-	void testGroupe() throws JsonMappingException, JsonProcessingException {
+	void testGroupe() throws DatabindException, JacksonException {
 		
 		ObjectNode jAlbum = (ObjectNode)mapper.readTree(albumStr2);
 		

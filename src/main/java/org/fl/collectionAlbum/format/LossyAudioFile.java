@@ -29,7 +29,7 @@ import java.util.function.BiConsumer;
 
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import tools.jackson.databind.node.ObjectNode;
 
 public class LossyAudioFile extends AbstractAudioFile {
 	

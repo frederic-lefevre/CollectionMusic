@@ -43,9 +43,9 @@ import org.fl.collectionAlbum.utils.TemporalUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 class ListeAlbumTest {
 
@@ -181,7 +181,7 @@ class ListeAlbumTest {
 			.map(albumJson -> {
 				try {
 					return (ObjectNode)mapper.readTree((String)albumJson);
-				} catch (JsonProcessingException e) {
+				} catch (JacksonException e) {
 					fail("Exception when parsing album json");
 					return null;
 				}

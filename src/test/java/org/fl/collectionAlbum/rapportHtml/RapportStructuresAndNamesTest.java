@@ -45,11 +45,11 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.DatabindException;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.node.JsonNodeFactory;
+import tools.jackson.databind.node.ObjectNode;
 
 class RapportStructuresAndNamesTest {
 
@@ -128,7 +128,7 @@ class RapportStructuresAndNamesTest {
 			""";
 
 	@Test
-	void test3() throws JsonMappingException, JsonProcessingException {
+	void test3() throws DatabindException, JacksonException {
 
 		ObjectNode jAlbum = (ObjectNode)mapper.readTree(albumStr1);
 
@@ -178,7 +178,7 @@ class RapportStructuresAndNamesTest {
 			 } 
 			 """;
 	@Test
-	void test4() throws JsonMappingException, JsonProcessingException {
+	void test4() throws DatabindException, JacksonException {
 		
 		ObjectNode jConcert = (ObjectNode)mapper.readTree(concertStr1);
 		

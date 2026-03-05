@@ -42,10 +42,10 @@ import org.fl.collectionAlbum.format.MediaSupports;
 import org.fl.collectionAlbum.rapportHtml.RapportStructuresAndNames;
 import org.junit.jupiter.api.Test;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.DatabindException;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 class CollectionAlbumContainerTest {
 	
@@ -120,7 +120,7 @@ class CollectionAlbumContainerTest {
 			""";
 	
 	@Test
-	void testAlbumContainer() throws JsonMappingException, JsonProcessingException {
+	void testAlbumContainer() throws DatabindException, JacksonException {
 
 		RapportStructuresAndNames.renew();
 		

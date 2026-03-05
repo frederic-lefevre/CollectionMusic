@@ -31,8 +31,8 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 
 class MetricsTest {
 
@@ -131,7 +131,7 @@ class MetricsTest {
 	}
 	
 	@Test
-	void testMetricsSerialization() throws JsonProcessingException {
+	void testMetricsSerialization() throws JacksonException {
 		
 		Metrics metrics = new Metrics(now, Map.of("albums", 10.0, "Artiste", 5.0, "cd", 1.0));
 		assertThat(metrics.getMetricTimeStamp()).isEqualTo(now);

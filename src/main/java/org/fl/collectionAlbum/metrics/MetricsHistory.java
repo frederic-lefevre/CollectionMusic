@@ -42,7 +42,7 @@ import java.util.stream.Stream;
 import org.fl.collectionAlbum.Control;
 import org.fl.util.json.JsonUtils;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 
 public abstract class MetricsHistory {
 

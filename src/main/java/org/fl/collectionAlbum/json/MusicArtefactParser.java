@@ -43,7 +43,7 @@ import org.fl.collectionAlbum.artistes.ArtistRole;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import tools.jackson.databind.JsonNode;
 
 public class MusicArtefactParser {
 	

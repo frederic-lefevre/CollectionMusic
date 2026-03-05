@@ -38,10 +38,10 @@ import org.fl.util.FilterCounter.LogRecordCounter;
 import org.fl.util.file.FilesUtils;
 import org.junit.jupiter.api.Test;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.DatabindException;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 class MusicArtefactMigratorTest {
 	
@@ -73,7 +73,7 @@ class MusicArtefactMigratorTest {
 			""" ;
 	
 	@Test
-	void shouldMigrateAlbum() throws JsonMappingException, JsonProcessingException, URISyntaxException {
+	void shouldMigrateAlbum() throws DatabindException, JacksonException, URISyntaxException {
 		
 		LogRecordCounter migratorFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.migrator.MusicArtefactMigrator"));
 		
@@ -126,7 +126,7 @@ class MusicArtefactMigratorTest {
 			""";
 	
 	@Test
-	void shouldMigrateAlbum2() throws JsonMappingException, JsonProcessingException, URISyntaxException {
+	void shouldMigrateAlbum2() throws DatabindException, JacksonException, URISyntaxException {
 		
 		LogRecordCounter migratorFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.migrator.MusicArtefactMigrator"));
 		
@@ -155,7 +155,7 @@ class MusicArtefactMigratorTest {
 	}
 
 	@Test
-	void testUnexpectedJsonVersion() throws JsonMappingException, JsonProcessingException, URISyntaxException {
+	void testUnexpectedJsonVersion() throws DatabindException, JacksonException, URISyntaxException {
 		
 		LogRecordCounter migratorFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.migrator.MusicArtefactMigrator"));
 		

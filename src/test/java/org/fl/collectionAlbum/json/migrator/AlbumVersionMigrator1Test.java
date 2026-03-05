@@ -30,10 +30,10 @@ import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.json.MusicArtefactParser;
 import org.junit.jupiter.api.Test;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.DatabindException;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 class AlbumVersionMigrator1Test {
 
@@ -71,7 +71,7 @@ class AlbumVersionMigrator1Test {
 	}
 	
 	@Test
-	void albumVersionShouldBeOk() throws JsonMappingException, JsonProcessingException {
+	void albumVersionShouldBeOk() throws DatabindException, JacksonException {
 		
 		AlbumVersionMigrator1 migrator = AlbumVersionMigrator1.getInstance();
 		
@@ -108,7 +108,7 @@ class AlbumVersionMigrator1Test {
 			""" ;
 	
 	@Test
-	void albumVersionShouldBeKo() throws JsonMappingException, JsonProcessingException {
+	void albumVersionShouldBeKo() throws DatabindException, JacksonException {
 		
 		AlbumVersionMigrator1 migrator = AlbumVersionMigrator1.getInstance();
 		
@@ -118,7 +118,7 @@ class AlbumVersionMigrator1Test {
 	}
 	
 	@Test
-	void shouldMigrateAlbum() throws JsonMappingException, JsonProcessingException {
+	void shouldMigrateAlbum() throws DatabindException, JacksonException {
 		
 		AlbumVersionMigrator1 migrator = AlbumVersionMigrator1.getInstance();
 		
@@ -164,7 +164,7 @@ class AlbumVersionMigrator1Test {
 			""" ;
 	
 	@Test
-	void shouldNotMigrateAlbum() throws JsonMappingException, JsonProcessingException {
+	void shouldNotMigrateAlbum() throws DatabindException, JacksonException {
 		
 		AlbumVersionMigrator1 migrator = AlbumVersionMigrator1.getInstance();
 		

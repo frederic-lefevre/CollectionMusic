@@ -52,7 +52,7 @@ import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 import org.fl.collectionAlbum.utils.FuzzyPeriod;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import tools.jackson.databind.node.ObjectNode;
 
 public class Album extends MusicArtefact {
 	

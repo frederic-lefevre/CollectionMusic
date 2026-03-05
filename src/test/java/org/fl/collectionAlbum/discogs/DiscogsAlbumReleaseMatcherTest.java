@@ -44,10 +44,10 @@ import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.DatabindException;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 class DiscogsAlbumReleaseMatcherTest {
 
@@ -231,7 +231,7 @@ class DiscogsAlbumReleaseMatcherTest {
 	
 	
 	@Test
-	void shouldGetPotentialReleaseAndAlbumMatches() throws JsonMappingException, JsonProcessingException {
+	void shouldGetPotentialReleaseAndAlbumMatches() throws DatabindException, JacksonException {
 		
 		ReleaseMatchResult releaseMatchResult = DiscogsAlbumReleaseMatcher.getPotentialReleaseMatch(getAlbumFromJson(softMachineThird));
 		
@@ -276,7 +276,7 @@ class DiscogsAlbumReleaseMatcherTest {
 	}
 	
 	@Test
-	void shouldGetSeveralPotentialReleaseMatch() throws JsonMappingException, JsonProcessingException {
+	void shouldGetSeveralPotentialReleaseMatch() throws DatabindException, JacksonException {
 		
 		ReleaseMatchResult releaseMatchResult = DiscogsAlbumReleaseMatcher.getPotentialReleaseMatch(getAlbumFromJson(electricLadylandSingleCD));
 		
@@ -292,7 +292,7 @@ class DiscogsAlbumReleaseMatcherTest {
 	}
 	
 	@Test
-	void shouldGetPotentialReleaseMatchOnAuteursAndTitleOnly() throws JsonMappingException, JsonProcessingException {
+	void shouldGetPotentialReleaseMatchOnAuteursAndTitleOnly() throws DatabindException, JacksonException {
 		
 		ReleaseMatchResult releaseMatchResult = DiscogsAlbumReleaseMatcher.getPotentialReleaseMatch(getAlbumFromJson(softMachineThirdK7));
 		
@@ -307,7 +307,7 @@ class DiscogsAlbumReleaseMatcherTest {
 	}
 	
 	@Test
-	void shouldNotGetPotentialReleaseMatch() throws JsonMappingException, JsonProcessingException {
+	void shouldNotGetPotentialReleaseMatch() throws DatabindException, JacksonException {
 		
 		ReleaseMatchResult releaseMatchResult = DiscogsAlbumReleaseMatcher.getPotentialReleaseMatch(getAlbumFromJson(nonExistentAlbum));
 		
@@ -324,7 +324,7 @@ class DiscogsAlbumReleaseMatcherTest {
 				);
 	}
 	
-	private static Album getAlbumFromJson(String albumStr) throws JsonMappingException, JsonProcessingException {
+	private static Album getAlbumFromJson(String albumStr) throws DatabindException, JacksonException {
 		
 		ObjectNode jAlbum = (ObjectNode)mapper.readTree(albumStr);
 

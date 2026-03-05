@@ -38,11 +38,11 @@ import org.fl.collectionAlbum.json.ParserHelpers;
 import org.fl.util.file.FilesUtils;
 import org.fl.util.json.JsonUtils;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.ArrayNode;
+import tools.jackson.databind.node.JsonNodeFactory;
+import tools.jackson.databind.node.ObjectNode;
 
 public class AlbumVersionMigrator4 implements VersionMigrator {
 
@@ -99,7 +99,7 @@ public class AlbumVersionMigrator4 implements VersionMigrator {
 			if (formatJson == null) {
 				try {
 					albumLog.severe("Format d'album null pour l'album " + JsonUtils.jsonPrettyPrint(albumJson));
-				} catch (JsonProcessingException e) {
+				} catch (JacksonException e) {
 					albumLog.log(Level.SEVERE, "Exception en loggant l'erreur de migration (format) et imprimant le json", e);
 				}
 			} else {
@@ -126,7 +126,7 @@ public class AlbumVersionMigrator4 implements VersionMigrator {
 				if (locations == null) {
 					try {
 						albumLog.severe("Media files location missing for " + JsonUtils.jsonPrettyPrint(albumJson));
-					} catch (JsonProcessingException e) {
+					} catch (JacksonException e) {
 						albumLog.log(Level.SEVERE, "Exception en loggant l'erreur de migration (locations) et imprimant le json", e);
 					}
 				} else {

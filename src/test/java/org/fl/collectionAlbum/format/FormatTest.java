@@ -37,10 +37,10 @@ import org.fl.util.FilterCounter;
 import org.fl.util.FilterCounter.LogRecordCounter;
 import org.junit.jupiter.api.Test;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.DatabindException;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 class FormatTest {
 	
@@ -69,7 +69,7 @@ class FormatTest {
 	}
 	
 	@Test
-	void test1() throws JsonMappingException, JsonProcessingException {
+	void test1() throws DatabindException, JacksonException {
 		
 		String formatStr1 = "{}" ;
 		ObjectNode jf1 = (ObjectNode)mapper.readTree(formatStr1);
@@ -85,7 +85,7 @@ class FormatTest {
 	}
 
 	@Test
-	void testPoidsNul() throws JsonMappingException, JsonProcessingException {
+	void testPoidsNul() throws DatabindException, JacksonException {
 		
 		String formatStr1 = "{\"cd\": 0 }" ;
 		ObjectNode jf1 = (ObjectNode)mapper.readTree(formatStr1);
@@ -103,7 +103,7 @@ class FormatTest {
 	}
 	
 	@Test
-	void test2() throws JsonMappingException, JsonProcessingException {
+	void test2() throws DatabindException, JacksonException {
 		
 		String formatStr1 = "{\"cd\": 3 }" ;
 		ObjectNode jf1 = (ObjectNode)mapper.readTree(formatStr1);
@@ -125,7 +125,7 @@ class FormatTest {
 	}
 	
 	@Test
-	void test3() throws JsonMappingException, JsonProcessingException {
+	void test3() throws DatabindException, JacksonException {
 		
 		String formatStr1 = "{\"cd\": 2 , \"45t\" : 1 }" ;
 		ObjectNode jf1 = (ObjectNode)mapper.readTree(formatStr1);
@@ -151,7 +151,7 @@ class FormatTest {
 	}
 	
 	@Test
-	void test3b() throws JsonMappingException, JsonProcessingException {
+	void test3b() throws DatabindException, JacksonException {
 		
 		String formatStr1 = "{\"cd\": 2 , \"dvd\" : 1 }" ;
 		ObjectNode jf1 = (ObjectNode)mapper.readTree(formatStr1);
@@ -174,7 +174,7 @@ class FormatTest {
 	}
 	
 	@Test
-	void test4() throws JsonMappingException, JsonProcessingException {
+	void test4() throws DatabindException, JacksonException {
 		
 		String formatStr1 = "{\"33t\": 2 , \"45t\" : 1 }" ;
 		ObjectNode jf1 = (ObjectNode)mapper.readTree(formatStr1);
@@ -213,7 +213,7 @@ class FormatTest {
 	}
 	
 	@Test
-	void test5() throws JsonMappingException, JsonProcessingException {
+	void test5() throws DatabindException, JacksonException {
 		
 		String formatStr1 = """
 				{"cd": 2 , 
@@ -260,7 +260,7 @@ class FormatTest {
 	}
 	
 	@Test
-	void test6() throws JsonMappingException, JsonProcessingException {
+	void test6() throws DatabindException, JacksonException {
 		
 		String formatStr1 = """
 				{"cd": 2 , 
@@ -303,7 +303,7 @@ class FormatTest {
 	}
 	
 	@Test
-	void test7() throws JsonMappingException, JsonProcessingException {
+	void test7() throws DatabindException, JacksonException {
 		
 		String formatStr1 = """
 				{"cd": 2 , 
@@ -375,7 +375,7 @@ class FormatTest {
 	}
 	
 	@Test
-	void test8() throws JsonMappingException, JsonProcessingException {
+	void test8() throws DatabindException, JacksonException {
 		
 		String formatStr1 = """
 				{"cd": 2 , 
@@ -442,7 +442,7 @@ class FormatTest {
 	}
 	
 	@Test
-	void test9() throws JsonMappingException, JsonProcessingException {
+	void test9() throws DatabindException, JacksonException {
 		
 		String formatStr1 = """
 				{"dvd": 2, 
@@ -501,7 +501,7 @@ class FormatTest {
 	}
 	
 	@Test
-	void test10() throws JsonMappingException, JsonProcessingException {
+	void test10() throws DatabindException, JacksonException {
 		
 		String formatStr1 = "{\"bluray\": 3 }" ;
 		ObjectNode jf1 = (ObjectNode)mapper.readTree(formatStr1);
@@ -519,7 +519,7 @@ class FormatTest {
 	}
 	
 	@Test
-	void test11() throws JsonMappingException, JsonProcessingException {
+	void test11() throws DatabindException, JacksonException {
 		
 		String formatStr1 = "{\"blueray\": 3 }" ;
 		ObjectNode jf1 = (ObjectNode)mapper.readTree(formatStr1);
@@ -543,7 +543,7 @@ class FormatTest {
 	}
 	
 	@Test
-	void test12() throws JsonMappingException, JsonProcessingException {
+	void test12() throws DatabindException, JacksonException {
 		
 		String formatStr1 = "{\"bluerayAudio\": 3 }" ;
 		ObjectNode jf1 = (ObjectNode)mapper.readTree(formatStr1);
@@ -569,7 +569,7 @@ class FormatTest {
 	}
 	
 	@Test
-	void test13() throws JsonMappingException, JsonProcessingException {
+	void test13() throws DatabindException, JacksonException {
 		
 		String formatStr1 = "{\"bluerayMixed\": 3 }" ;
 		ObjectNode jf1 = (ObjectNode)mapper.readTree(formatStr1);

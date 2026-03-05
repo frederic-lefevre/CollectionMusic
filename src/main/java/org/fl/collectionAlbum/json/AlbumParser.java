@@ -38,8 +38,8 @@ import org.fl.collectionAlbum.utils.FuzzyPeriod;
 import org.fl.collectionAlbum.utils.TemporalUtils;
 import org.fl.util.file.FilesUtils;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.ObjectNode;
 
 
 public class AlbumParser {
@@ -98,7 +98,7 @@ public class AlbumParser {
 		RangementSupportPhysique rangementAlbum;
 		JsonNode jElem = jAlbum.get(JsonMusicProperties.RANGEMENT) ;
 		if (jElem != null) {
-			String jsonProp = jElem.asText();
+			String jsonProp = jElem.asString();
 			rangementAlbum = RangementSupportPhysique.getRangement(jsonProp);
 			if (rangementAlbum == null) {
 				albumLog.warning("Rangement d'album " + jsonProp + "inconnu pour l'album " + jAlbum) ;
@@ -134,8 +134,8 @@ public class AlbumParser {
 				} else {
 
 					try {
-						String debut = jDates.get(0).asText();
-						String fin = jDates.get(1).asText();
+						String debut = jDates.get(0).asString();
+						String fin = jDates.get(1).asString();
 
 						period = new FuzzyPeriod(TemporalUtils.parseDate(debut), TemporalUtils.parseDate(fin)) ;
 						

@@ -47,7 +47,7 @@ import org.fl.collectionAlbum.format.Format;
 import org.fl.collectionAlbum.format.MediaSupports;
 import org.fl.collectionAlbum.stat.StatChrono;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import tools.jackson.databind.node.ObjectNode;
 
 public class CollectionAlbumContainer {
 	

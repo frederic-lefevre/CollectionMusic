@@ -35,11 +35,11 @@ import org.fl.util.FilterCounter;
 import org.fl.util.FilterCounter.LogRecordCounter;
 import org.junit.jupiter.api.Test;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.DatabindException;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 class AlbumVersionMigrator3Test {
 
@@ -95,7 +95,7 @@ class AlbumVersionMigrator3Test {
 	}
 	
 	@Test
-	void albumVersionShouldBeUptoDate() throws JsonMappingException, JsonProcessingException {
+	void albumVersionShouldBeUptoDate() throws DatabindException, JacksonException {
 		
 		AlbumVersionMigrator3 migrator = AlbumVersionMigrator3.getInstance();
 		
@@ -146,7 +146,7 @@ class AlbumVersionMigrator3Test {
 			""";
 
 	@Test
-	void albumVersionShouldNotBeUptoDate() throws JsonMappingException, JsonProcessingException {
+	void albumVersionShouldNotBeUptoDate() throws DatabindException, JacksonException {
 		
 		AlbumVersionMigrator3 migrator = AlbumVersionMigrator3.getInstance();
 		
@@ -156,7 +156,7 @@ class AlbumVersionMigrator3Test {
 	}
 	
 	@Test
-	void shouldMigrateAlbum() throws JsonMappingException, JsonProcessingException {
+	void shouldMigrateAlbum() throws DatabindException, JacksonException {
 		
 		AlbumVersionMigrator3 migrator = AlbumVersionMigrator3.getInstance();
 		
@@ -181,7 +181,7 @@ class AlbumVersionMigrator3Test {
 		
 		assertThat(migratedNode).isNotNull();
 		
-		String migratedNodeValue = migratedNode.asText();
+		String migratedNodeValue = migratedNode.asString();
 		
 		assertThat(migratedNodeValue).isEqualTo("b/BlackSabbath/SabbathBloodySabbathK7.jpg");
 		
@@ -229,7 +229,7 @@ class AlbumVersionMigrator3Test {
 			""";
 	
 	@Test
-	void shouldDetectWrongFolder() throws JsonMappingException, JsonProcessingException {
+	void shouldDetectWrongFolder() throws DatabindException, JacksonException {
 		
 		AlbumVersionMigrator3 migrator = AlbumVersionMigrator3.getInstance();
 		
@@ -261,7 +261,7 @@ class AlbumVersionMigrator3Test {
 		
 		assertThat(notMigratedNode).isNotNull();
 		
-		String migratedNodeValue = notMigratedNode.asText();
+		String migratedNodeValue = notMigratedNode.asString();
 		
 		assertThat(migratedNodeValue).isEqualTo("C:\\FredericPersonnel\\Loisirs\\musique\\BadFolder\\b\\BlackSabbath\\SabbathBloodySabbathK7.jpg");
 		
@@ -308,7 +308,7 @@ class AlbumVersionMigrator3Test {
 			""";
 	
 	@Test
-	void shouldMigrateAlbumWithNoSleeveProperty() throws JsonMappingException, JsonProcessingException {
+	void shouldMigrateAlbumWithNoSleeveProperty() throws DatabindException, JacksonException {
 		
 		AlbumVersionMigrator3 migrator = AlbumVersionMigrator3.getInstance();
 		
