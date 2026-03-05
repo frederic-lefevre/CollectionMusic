@@ -35,8 +35,8 @@ import org.fl.collectionAlbum.format.VideoFile;
 import org.fl.collectionAlbum.format.VideoFileType;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.ObjectNode;
 
 public class VideoFileParser extends AbstractMediaFileParser {
 
@@ -53,7 +53,7 @@ public class VideoFileParser extends AbstractMediaFileParser {
 		if (videoFileJson != null) {
 		
 			VideoFileType type = Optional.ofNullable(videoFileJson.get(JsonMusicProperties.TYPE))
-					.map(JsonNode::asText)
+					.map(JsonNode::asString)
 					.map(s -> findType(s))
 					.orElseGet(() -> {
 						rapportLog.severe("Json VideoFile null type parameter: " + videoFileJson);

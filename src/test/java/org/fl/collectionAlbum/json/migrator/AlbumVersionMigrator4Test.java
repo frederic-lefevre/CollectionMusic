@@ -35,11 +35,11 @@ import org.fl.util.FilterCounter;
 import org.fl.util.FilterCounter.LogRecordCounter;
 import org.junit.jupiter.api.Test;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.DatabindException;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 class AlbumVersionMigrator4Test {
 
@@ -95,7 +95,7 @@ class AlbumVersionMigrator4Test {
 			""";
 	
 	@Test
-	void albumVersionShouldBeUptoDate() throws JsonMappingException, JsonProcessingException {
+	void albumVersionShouldBeUptoDate() throws DatabindException, JacksonException {
 		
 		AlbumVersionMigrator4 migrator = AlbumVersionMigrator4.getInstance();
 		
@@ -146,7 +146,7 @@ class AlbumVersionMigrator4Test {
 			""";
 	
 	@Test
-	void albumVersionShouldNotBeUptoDate() throws JsonMappingException, JsonProcessingException {
+	void albumVersionShouldNotBeUptoDate() throws DatabindException, JacksonException {
 		
 		AlbumVersionMigrator4 migrator = AlbumVersionMigrator4.getInstance();
 		
@@ -156,7 +156,7 @@ class AlbumVersionMigrator4Test {
 	}
 	
 	@Test
-	void shouldMigrateAlbum() throws JsonMappingException, JsonProcessingException {
+	void shouldMigrateAlbum() throws DatabindException, JacksonException {
 
 		JsonNode formatJson = assertAndGetFormatJson(albumStr2);
 		
@@ -168,12 +168,12 @@ class AlbumVersionMigrator4Test {
 				jsonAudioFile -> { 
 					JsonNode locationsJson = jsonAudioFile.get( JsonMusicProperties.LOCATION);
 					assertThat(locationsJson).isNotNull().singleElement().satisfies(locationJson -> 
-						assertThat(locationJson.asText()).isEqualTo("b/Black Sabbath/Sabbath Bloody Sabbath/"));					
+						assertThat(locationJson.asString()).isEqualTo("b/Black Sabbath/Sabbath Bloody Sabbath/"));					
 				},
 				jsonAudioFile -> {
 					JsonNode locationsJson = jsonAudioFile.get( JsonMusicProperties.LOCATION);
 					assertThat(locationsJson).isNotNull().singleElement().satisfies(locationJson -> 
-						assertThat(locationJson.asText()).isEqualTo("b/Black Sabbath/Sabbath Bloody Sabbath [24 176]/"));		
+						assertThat(locationJson.asString()).isEqualTo("b/Black Sabbath/Sabbath Bloody Sabbath [24 176]/"));		
 				});
 		
 	}
@@ -204,7 +204,7 @@ class AlbumVersionMigrator4Test {
 			""";
 	
 	@Test
-	void shouldMigrateAlbum2() throws JsonMappingException, JsonProcessingException {
+	void shouldMigrateAlbum2() throws DatabindException, JacksonException {
 		
 		JsonNode formatJson = assertAndGetFormatJson(albumStr3);
 		
@@ -215,7 +215,7 @@ class AlbumVersionMigrator4Test {
 		JsonNode jsonAudioFile = jsonAudioFiles.get(0);
 		JsonNode locationsJson = jsonAudioFile.get( JsonMusicProperties.LOCATION);
 		assertThat(locationsJson).isNotNull().singleElement().satisfies(locationJson -> 
-			assertThat(locationJson.asText()).isEqualTo("a/Farid El Atrache/(Les plus belles chansons avec la plus belle voix) أخلد الألحان بأجمل الأصوات/"));	
+			assertThat(locationJson.asString()).isEqualTo("a/Farid El Atrache/(Les plus belles chansons avec la plus belle voix) أخلد الألحان بأجمل الأصوات/"));	
 
 		
 	}
@@ -285,7 +285,7 @@ class AlbumVersionMigrator4Test {
 	
 	
 	@Test
-	void shouldMigrateAlbum3() throws JsonMappingException, JsonProcessingException {
+	void shouldMigrateAlbum3() throws DatabindException, JacksonException {
 		
 		JsonNode formatJson = assertAndGetFormatJson(albumStr4);
 		
@@ -297,27 +297,27 @@ class AlbumVersionMigrator4Test {
 				jsonAudioFile -> { 
 					JsonNode locationsJson = jsonAudioFile.get( JsonMusicProperties.LOCATION);
 					assertThat(locationsJson).isNotNull().singleElement().satisfies(locationJson -> 
-						assertThat(locationJson.asText()).isEqualTo("h/Jimi Hendrix/Electric Ladyland/Electric Ladyland (50th, CD, 2018)/"));					
+						assertThat(locationJson.asString()).isEqualTo("h/Jimi Hendrix/Electric Ladyland/Electric Ladyland (50th, CD, 2018)/"));					
 				},
 				jsonAudioFile -> {
 					JsonNode locationsJson = jsonAudioFile.get( JsonMusicProperties.LOCATION);
 					assertThat(locationsJson).isNotNull().singleElement().satisfies(locationJson -> 
-						assertThat(locationJson.asText()).isEqualTo("h/Jimi Hendrix/Electric Ladyland/Electric Ladyland [Bluray 2_0, 2018 24-96]/"));		
+						assertThat(locationJson.asString()).isEqualTo("h/Jimi Hendrix/Electric Ladyland/Electric Ladyland [Bluray 2_0, 2018 24-96]/"));		
 				},
 				jsonAudioFile -> {
 					JsonNode locationsJson = jsonAudioFile.get( JsonMusicProperties.LOCATION);
 					assertThat(locationsJson).isNotNull().singleElement().satisfies(locationJson -> 
-						assertThat(locationJson.asText()).isEqualTo("h/Jimi Hendrix/Electric Ladyland/Electric Ladyland [Bluray 5_1, 2018, 24 176]/"));		
+						assertThat(locationJson.asString()).isEqualTo("h/Jimi Hendrix/Electric Ladyland/Electric Ladyland [Bluray 5_1, 2018, 24 176]/"));		
 				},
 				jsonAudioFile -> {
 					JsonNode locationsJson = jsonAudioFile.get( JsonMusicProperties.LOCATION);
 					assertThat(locationsJson).isNotNull().singleElement().satisfies(locationJson -> 
-						assertThat(locationJson.asText()).isEqualTo("h/Jimi Hendrix/Live At The Hollywood Bowl/"));		
+						assertThat(locationJson.asString()).isEqualTo("h/Jimi Hendrix/Live At The Hollywood Bowl/"));		
 				},
 				jsonAudioFile -> {
 					JsonNode locationsJson = jsonAudioFile.get( JsonMusicProperties.LOCATION);
 					assertThat(locationsJson).isNotNull().singleElement().satisfies(locationJson -> 
-						assertThat(locationJson.asText()).isEqualTo("h/Jimi Hendrix/The Making Of Electric Ladyland/"));		
+						assertThat(locationJson.asString()).isEqualTo("h/Jimi Hendrix/The Making Of Electric Ladyland/"));		
 				});
 		
 		JsonNode jsonVideoFiles = formatJson.get(JsonMusicProperties.VIDEO_FILE);
@@ -327,7 +327,7 @@ class AlbumVersionMigrator4Test {
 		JsonNode jsonVideoFile = jsonVideoFiles.get(0);
 		JsonNode locationsJson = jsonVideoFile.get( JsonMusicProperties.LOCATION);
 		assertThat(locationsJson).isNotNull().singleElement().satisfies(locationJson -> 
-			assertThat(locationJson.asText()).isEqualTo("h/Jimi Hendrix/Electric Ladyland 1968/"));	
+			assertThat(locationJson.asString()).isEqualTo("h/Jimi Hendrix/Electric Ladyland 1968/"));	
 	}
 	
 	private static final String albumStr5 = """
@@ -372,7 +372,7 @@ class AlbumVersionMigrator4Test {
 			""";
 	
 	@Test
-	void shouldDetectWrongFolder() throws JsonMappingException, JsonProcessingException {
+	void shouldDetectWrongFolder() throws DatabindException, JacksonException {
 		
 		AlbumVersionMigrator4 migrator = AlbumVersionMigrator4.getInstance();
 		
@@ -411,12 +411,12 @@ class AlbumVersionMigrator4Test {
 				jsonAudioFile -> { 
 					JsonNode locationsJson = jsonAudioFile.get( JsonMusicProperties.LOCATION);
 					assertThat(locationsJson).isNotNull().singleElement().satisfies(locationJson -> 
-						assertThat(locationJson.asText()).isEqualTo("E:\\MusiqueBad\\b\\Black Sabbath\\Sabbath Bloody Sabbath"));					
+						assertThat(locationJson.asString()).isEqualTo("E:\\MusiqueBad\\b\\Black Sabbath\\Sabbath Bloody Sabbath"));					
 				},
 				jsonAudioFile -> {
 					JsonNode locationsJson = jsonAudioFile.get( JsonMusicProperties.LOCATION);
 					assertThat(locationsJson).isNotNull().singleElement().satisfies(locationJson -> 
-						assertThat(locationJson.asText()).isEqualTo("b/Black Sabbath/Sabbath Bloody Sabbath [24 176]/"));		
+						assertThat(locationJson.asString()).isEqualTo("b/Black Sabbath/Sabbath Bloody Sabbath [24 176]/"));		
 				});
 	}
 	
@@ -438,7 +438,7 @@ class AlbumVersionMigrator4Test {
 			""";
 	
 	@Test
-	void shouldMigrateAlbumWithNoMedia() throws JsonMappingException, JsonProcessingException {
+	void shouldMigrateAlbumWithNoMedia() throws DatabindException, JacksonException {
 		
 		JsonNode formatJson = assertAndGetFormatJson(albumStr6);
 		
@@ -475,7 +475,7 @@ class AlbumVersionMigrator4Test {
 	
 	
 	@Test
-	void shouldMigrateAlbumWithMissingMediaLocation() throws JsonMappingException, JsonProcessingException {
+	void shouldMigrateAlbumWithMissingMediaLocation() throws DatabindException, JacksonException {
 		
 		AlbumVersionMigrator4 migrator = AlbumVersionMigrator4.getInstance();
 		
@@ -521,7 +521,7 @@ class AlbumVersionMigrator4Test {
 		assertThat(jsonAudioFile.get( JsonMusicProperties.LOCATION)).isNull();
 	}
 	
-	private JsonNode assertAndGetFormatJson(String albumStr) throws JsonMappingException, JsonProcessingException {
+	private JsonNode assertAndGetFormatJson(String albumStr) throws DatabindException, JacksonException {
 		
 		AlbumVersionMigrator4 migrator = AlbumVersionMigrator4.getInstance();
 		

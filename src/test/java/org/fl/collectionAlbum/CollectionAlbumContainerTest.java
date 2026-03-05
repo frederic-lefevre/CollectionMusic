@@ -42,10 +42,10 @@ import org.fl.collectionAlbum.format.MediaSupports;
 import org.fl.collectionAlbum.rapportHtml.RapportStructuresAndNames;
 import org.junit.jupiter.api.Test;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.DatabindException;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 class CollectionAlbumContainerTest {
 	
@@ -74,7 +74,7 @@ class CollectionAlbumContainerTest {
 		assertThat(ContentNature.values())
 			.allSatisfy(contentNature -> assertThat(albumsContainer.getAlbumsWithOnlyContentNature(contentNature).getAlbums()).isEmpty());
 		
-		assertThat(albumsContainer.getAlbumsSastisfying(List.of(a -> true)).getAlbums()).isEmpty();
+		assertThat(albumsContainer.getAlbumsSastisfying(List.of(_ -> true)).getAlbums()).isEmpty();
 		
 		// This is a singleton and it should be reset to empty
 		CollectionAlbumContainer albumsContainer2 = CollectionAlbumContainer.getInstance();
@@ -120,7 +120,7 @@ class CollectionAlbumContainerTest {
 			""";
 	
 	@Test
-	void testAlbumContainer() throws JsonMappingException, JsonProcessingException {
+	void testAlbumContainer() throws DatabindException, JacksonException {
 
 		RapportStructuresAndNames.renew();
 		
@@ -215,7 +215,7 @@ class CollectionAlbumContainerTest {
 					new SimpleEntry<>("xnbdvd", (double)0)
 					);
 		
-		assertThat(albumsContainer.getAlbumsSastisfying(List.of(a -> true)).getAlbums())
+		assertThat(albumsContainer.getAlbumsSastisfying(List.of(_ -> true)).getAlbums())
 			.singleElement()
 			.satisfies(alb -> assertThat(alb.getTitre()).isEqualTo("Portrait in jazz"));
 		

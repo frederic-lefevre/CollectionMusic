@@ -59,7 +59,7 @@ import org.fl.collectionAlbum.rapportHtml.RapportAlbumsDunArtiste;
 import org.fl.collectionAlbum.rapportHtml.RapportBuildInfo;
 import org.fl.util.file.FilesUtils;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
+import tools.jackson.core.JacksonException;
 
 public class GenerationSiteCollection extends SwingWorker<String,ProgressInformation> {
 
@@ -195,7 +195,7 @@ public class GenerationSiteCollection extends SwingWorker<String,ProgressInforma
 		 rapportBuildInfo();
 		 
 		 publish(new ProgressInformation(null, RAPPORT_MEDIA, null));
-		 RapportCsv.writeCsvAudioFile(collectionAlbumContainer.getAlbumsWithAudioFile(), (audioFile) -> true, RapportStructuresAndNames.getAbsoluteCsvAudioFiles());
+		 RapportCsv.writeCsvAudioFile(collectionAlbumContainer.getAlbumsWithAudioFile(), _ -> true, RapportStructuresAndNames.getAbsoluteCsvAudioFiles());
 		 RapportCsv.writeCsvAudioFile(collectionAlbumContainer.getAlbumsWithHighResAudio(), (audioFile) -> audioFile.isHighRes(), RapportStructuresAndNames.getAbsoluteCsvHdAudioFiles());
 	 }
 	   
@@ -292,7 +292,7 @@ public class GenerationSiteCollection extends SwingWorker<String,ProgressInforma
 		String buildInfo;
 		try {
 			buildInfo = Control.getMusicRunningContext().getBuildInformation();
-		} catch (JsonProcessingException e) {
+		} catch (JacksonException e) {
 			albumLog.log(Level.SEVERE, "Exception getting build information", e);
 			buildInfo = e.getMessage();
 			

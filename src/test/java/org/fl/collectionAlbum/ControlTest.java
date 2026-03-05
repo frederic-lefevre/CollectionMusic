@@ -38,7 +38,7 @@ import org.fl.util.RunningContext;
 import org.fl.util.file.FilesUtils;
 import org.junit.jupiter.api.Test;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import tools.jackson.databind.JsonNode;
 
 class ControlTest {
 	
@@ -108,21 +108,21 @@ class ControlTest {
 		.satisfiesExactlyInAnyOrder(
 				buildInfo -> { 
 					assertThat(buildInfo.get("moduleName")).isNotNull();
-					assertThat(buildInfo.get("moduleName").asText()).isEqualTo("org.fl.collectionAlbum");
+					assertThat(buildInfo.get("moduleName").asString()).isEqualTo("org.fl.collectionAlbum");
 					assertThat(buildInfo.get("version")).isNotNull();
-					assertThat(buildInfo.get("version").asText()).isNotEmpty();
+					assertThat(buildInfo.get("version").asString()).isNotEmpty();
 				},
 				buildInfo -> { 
 					assertThat(buildInfo.get("moduleName")).isNotNull();
-					assertThat(buildInfo.get("moduleName").asText()).isEqualTo("org.fl.util");
+					assertThat(buildInfo.get("moduleName").asString()).isEqualTo("org.fl.util");
 					assertThat(buildInfo.get("version")).isNotNull();
-					assertThat(buildInfo.get("version").asText()).isNotEmpty();
+					assertThat(buildInfo.get("version").asString()).isNotEmpty();
 				},
 				buildInfo -> { 
 					assertThat(buildInfo.get("moduleName")).isNotNull();
-					assertThat(buildInfo.get("moduleName").asText()).isEqualTo("org.fl.discogsInterface");
+					assertThat(buildInfo.get("moduleName").asString()).isEqualTo("org.fl.discogsInterface");
 					assertThat(buildInfo.get("version")).isNotNull();
-					assertThat(buildInfo.get("version").asText()).isNotEmpty();
+					assertThat(buildInfo.get("version").asString()).isNotEmpty();
 				}
 				);
 	}

@@ -31,7 +31,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Logger;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import tools.jackson.databind.JsonNode;
 
 public class ParserHelpers {
 
@@ -43,7 +43,7 @@ public class ParserHelpers {
 	public static String parseStringProperty(JsonNode json, String property, boolean mandatory) {
 		
 		return Optional.ofNullable(json.get(property))
-				.map(JsonNode::asText)
+				.map(JsonNode::asString)
 				.orElseGet(() -> {
 					if (mandatory) {
 						albumLog.severe("Mandatory property " + property + " not found in " + json);
@@ -71,7 +71,7 @@ public class ParserHelpers {
 			if (jElem.isArray()) {
 				List<String> result = new ArrayList<>();
 				for (JsonNode e : jElem) {
-					result.add(e.asText());
+					result.add(e.asString());
 				}
 				albumLog.finest(() -> "Nombre de " + jsonMusicProperty + " " + result.size());
 				return result;
@@ -90,7 +90,7 @@ public class ParserHelpers {
 		if (jElem != null) {
 			if (jElem.isArray()) {
 				Set<String> result = new HashSet<>();
-				jElem.forEach(e -> result.add(e.asText()));
+				jElem.forEach(e -> result.add(e.asString()));
 				return result;
 			} else {
 				albumLog.warning(jsonMusicProperty + " n'est pas un JsonArray pour l'artefact " + json);

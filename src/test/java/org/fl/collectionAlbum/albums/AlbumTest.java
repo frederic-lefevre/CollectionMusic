@@ -63,11 +63,11 @@ import org.fl.util.json.JsonUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.DatabindException;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.node.JsonNodeFactory;
+import tools.jackson.databind.node.ObjectNode;
 
 class AlbumTest {
 
@@ -155,7 +155,7 @@ class AlbumTest {
 			""" ;
 			  
 	@Test
-	void testAlbum1() throws JsonMappingException, JsonProcessingException, URISyntaxException {
+	void testAlbum1() throws DatabindException, JacksonException, URISyntaxException {
 		
 		ObjectNode jAlbum = (ObjectNode)mapper.readTree(albumStr1);
 
@@ -345,7 +345,7 @@ class AlbumTest {
 	}
 	
 	@Test
-	void testAlbumPotentialMediaFilesSearch() throws JsonMappingException, JsonProcessingException {
+	void testAlbumPotentialMediaFilesSearch() throws DatabindException, JacksonException {
 
 		ObjectNode jAlbum = (ObjectNode)mapper.readTree(albumStr1);
 
@@ -397,7 +397,7 @@ class AlbumTest {
 			""";
 	
 	@Test
-	void testAlbumPotentialDiscogsReleaseSearch() throws JsonMappingException, JsonProcessingException {
+	void testAlbumPotentialDiscogsReleaseSearch() throws DatabindException, JacksonException {
 		
 		ObjectNode jAlbum = (ObjectNode)mapper.readTree(albumStr3);
 
@@ -464,7 +464,7 @@ class AlbumTest {
 			""" ;
 	
 	@Test
-	void testAlbumPotentialMediaFilesSearch2() throws JsonMappingException, JsonProcessingException {
+	void testAlbumPotentialMediaFilesSearch2() throws DatabindException, JacksonException {
 
 		ObjectNode jAlbum = (ObjectNode)mapper.readTree(albumStr2);
 
@@ -499,7 +499,7 @@ class AlbumTest {
 	}
 	
 	@Test
-	void testDiscogsProperties() throws JsonMappingException, JsonProcessingException {
+	void testDiscogsProperties() throws DatabindException, JacksonException {
 
 		ObjectNode jAlbum = (ObjectNode)mapper.readTree(albumStr2);
 

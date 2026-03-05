@@ -39,8 +39,8 @@ import org.fl.collectionAlbum.json.MusicArtefactParser;
 import org.fl.collectionAlbum.json.MusicArtefactParser.CheckPathOption;
 import org.fl.util.json.JsonUtils;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.node.ObjectNode;
 
 public abstract class MusicArtefact {
 
@@ -148,7 +148,7 @@ public abstract class MusicArtefact {
 	public String getJsonString() {
 		try {
 			return JsonUtils.jsonPrettyPrint(arteFactJson);
-		} catch (JsonProcessingException e) {
+		} catch (JacksonException e) {
 			mLog.log(Level.SEVERE, "Exception pretty printing json for music artefact", e);
 			return null;
 		}

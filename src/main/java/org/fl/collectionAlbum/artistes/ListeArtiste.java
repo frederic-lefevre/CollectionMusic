@@ -36,7 +36,7 @@ import org.fl.collectionAlbum.MusicArtefact;
 import org.fl.collectionAlbum.PoidsComparator;
 import org.fl.collectionAlbum.concerts.ConcertPoidsComparator;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import tools.jackson.databind.JsonNode;
 
 public class ListeArtiste {
 	

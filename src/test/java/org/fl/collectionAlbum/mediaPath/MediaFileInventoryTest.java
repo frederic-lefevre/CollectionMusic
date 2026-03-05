@@ -40,10 +40,10 @@ import org.fl.collectionAlbum.format.ContentNature;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.DatabindException;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 class MediaFileInventoryTest {
 
@@ -62,7 +62,7 @@ class MediaFileInventoryTest {
 	}
 	
 	@Test
-	void shouldFindAudioPath() throws JsonMappingException, JsonProcessingException {
+	void shouldFindAudioPath() throws DatabindException, JacksonException {
 		
 		String albumStr1 = """
 				{ 
@@ -108,7 +108,7 @@ class MediaFileInventoryTest {
 	}
 
 	@Test
-	void shouldFindMediaPath() throws JsonMappingException, JsonProcessingException {
+	void shouldFindMediaPath() throws DatabindException, JacksonException {
 		
 		String albumStr1 = """
 				{

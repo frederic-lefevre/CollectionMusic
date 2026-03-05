@@ -31,11 +31,11 @@ import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.json.ParserHelpers;
 import org.fl.util.json.JsonUtils;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.JsonNodeFactory;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.ArrayNode;
+import tools.jackson.databind.node.JsonNodeFactory;
+import tools.jackson.databind.node.ObjectNode;
 
 public class AlbumVersionMigrator2 implements VersionMigrator {
 
@@ -69,7 +69,7 @@ public class AlbumVersionMigrator2 implements VersionMigrator {
 			if (jElem == null) {
 				try {
 					albumLog.severe("Format d'album null pour l'album " + JsonUtils.jsonPrettyPrint(albumJson));
-				} catch (JsonProcessingException e) {
+				} catch (JacksonException e) {
 					albumLog.log(Level.SEVERE, "Exception en loggant l'erreur de migration et imprimant le json", e);
 				}
 			} else {

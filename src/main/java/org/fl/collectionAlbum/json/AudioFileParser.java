@@ -37,8 +37,8 @@ import org.fl.collectionAlbum.format.LosslessAudioFile;
 import org.fl.collectionAlbum.format.LossyAudioFile;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.ObjectNode;
 
 public class AudioFileParser extends AbstractMediaFileParser {
 
@@ -63,7 +63,7 @@ public class AudioFileParser extends AbstractMediaFileParser {
 		if (audioFileJson != null) {
 			
 			AudioFileType type = Optional.ofNullable(audioFileJson.get(JsonMusicProperties.TYPE))
-					.map(JsonNode::asText)
+					.map(JsonNode::asString)
 					.map(s -> findType(s))
 					.orElseGet(() -> {
 						albumLog.severe("Json AudioFile null type parameter: " + audioFileJson);

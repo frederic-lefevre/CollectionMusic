@@ -190,7 +190,7 @@ public class AlbumsSearchPanel extends JPanel {
 					predicates.add(album -> (TemporalUtils.compareTemporal(maxCompositionDate, album.getFinComposition()) >= 0));
 				}
 			} else {
-				predicates.add(album -> false);
+				predicates.add(_ -> false);
 			}
 			
 			return predicates;

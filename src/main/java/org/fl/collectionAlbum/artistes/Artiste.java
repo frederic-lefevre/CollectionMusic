@@ -40,7 +40,7 @@ import org.fl.collectionAlbum.format.Format;
 import org.fl.collectionAlbum.utils.TemporalUtils;
 import org.fl.util.json.JsonUtils;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import tools.jackson.databind.JsonNode;
 
 public class Artiste {
 	

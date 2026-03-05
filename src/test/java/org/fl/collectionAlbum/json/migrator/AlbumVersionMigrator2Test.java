@@ -36,11 +36,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.DatabindException;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 class AlbumVersionMigrator2Test {
 
@@ -78,7 +78,7 @@ class AlbumVersionMigrator2Test {
 	}
 	
 	@Test
-	void albumVersionShouldBeKo() throws JsonMappingException, JsonProcessingException {
+	void albumVersionShouldBeKo() throws DatabindException, JacksonException {
 		
 		AlbumVersionMigrator2 migrator = AlbumVersionMigrator2.getInstance();
 		
@@ -219,7 +219,7 @@ class AlbumVersionMigrator2Test {
 			""";
 	
 	@Test
-	void albumVersionShouldBeOk() throws JsonMappingException, JsonProcessingException {
+	void albumVersionShouldBeOk() throws DatabindException, JacksonException {
 		
 		AlbumVersionMigrator2 migrator = AlbumVersionMigrator2.getInstance();
 		
@@ -231,7 +231,7 @@ class AlbumVersionMigrator2Test {
 	
 	@ParameterizedTest
 	@ValueSource(strings = {albumStr2, albumStr3, albumStr4, albumStr5})
-	void shouldMigrateAlbum(String albumStr) throws JsonMappingException, JsonProcessingException {
+	void shouldMigrateAlbum(String albumStr) throws DatabindException, JacksonException {
 		
 		AlbumVersionMigrator2 migrator = AlbumVersionMigrator2.getInstance();
 		
@@ -295,8 +295,8 @@ class AlbumVersionMigrator2Test {
 					if (jElem  == null) {
 						return null;
 					} else {
-						assertThat(jElem.isTextual()).isTrue();
-						return jElem.asText();
+						assertThat(jElem.isString()).isTrue();
+						return jElem.asString();
 					}		
 				})
 				.collect(Collectors.toList());
@@ -316,9 +316,9 @@ class AlbumVersionMigrator2Test {
 					} else {
 						assertThat(jElem.isArray()).isTrue();
 						assertThat(jElem).singleElement().satisfies(mediaPath -> 
-							assertThat(mediaPath.isTextual()).isTrue()
+							assertThat(mediaPath.isString()).isTrue()
 						);
-						return jElem.get(0).asText();
+						return jElem.get(0).asString();
 					}		
 				})
 				.collect(Collectors.toList());

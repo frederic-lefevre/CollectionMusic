@@ -36,10 +36,10 @@ import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.DatabindException;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 public class ListeConcertTest {
 
@@ -68,7 +68,7 @@ public class ListeConcertTest {
 	@Test
 	void testEmptyListe3() {
 		
-		emptyListAsserts(ListeConcert.Builder.getBuilderFrom(new ArrayList<>()).withConcertSatisfying(concert -> true).build());
+		emptyListAsserts(ListeConcert.Builder.getBuilderFrom(new ArrayList<>()).withConcertSatisfying(_ -> true).build());
 	}
 	
 	@Test
@@ -91,13 +91,13 @@ public class ListeConcertTest {
 		""" ;
 	
 	@Test
-	void testEmptyListe4() throws JsonMappingException, JsonProcessingException {
+	void testEmptyListe4() throws DatabindException, JacksonException {
 		
 		emptyListAsserts(ListeConcert.Builder.getBuilderFrom(buildConcertBuild(concertStr1)).withConcertSatisfying(c -> c.hasNotes()).build());
 	}
 	
 	@Test
-	void testListe1() throws JsonMappingException, JsonProcessingException {
+	void testListe1() throws DatabindException, JacksonException {
 		
 		ListeConcert listeConcert = ListeConcert.Builder.getBuilderFrom(buildConcertBuild(concertStr1)).build();
 		
@@ -129,7 +129,7 @@ public class ListeConcertTest {
 		""" ;
 	
 	@Test
-	void testListe4() throws JsonMappingException, JsonProcessingException {
+	void testListe4() throws DatabindException, JacksonException {
 		
 		ListeConcert listeConcert = ListeConcert.Builder.getBuilderFrom(buildConcertBuild(concertStr1, concertStr2)).build();
 		
@@ -148,7 +148,7 @@ public class ListeConcertTest {
 	}
 	
 	@Test
-	void testListe3() throws JsonMappingException, JsonProcessingException {
+	void testListe3() throws DatabindException, JacksonException {
 		
 		ListeConcert listeConcert = ListeConcert.Builder.getBuilderFrom(buildConcertBuild(concertStr1, concertStr2))
 				.withConcertSatisfying(concert -> concert.getLieuConcert().getLieu().contains("Juan-les-Pins")).build();
@@ -194,7 +194,7 @@ public class ListeConcertTest {
 				.map(concertJson -> {
 					try {
 						return (ObjectNode)mapper.readTree(concertJson);
-					} catch (JsonProcessingException e) {
+					} catch (JacksonException e) {
 						fail("Exception when parsing album json");
 						return null;
 					}

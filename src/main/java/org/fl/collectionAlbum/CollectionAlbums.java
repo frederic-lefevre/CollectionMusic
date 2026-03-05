@@ -46,7 +46,7 @@ import org.fl.collectionAlbum.json.migrator.MusicArtefactMigrator;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 import org.fl.util.json.JsonUtils;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import tools.jackson.databind.node.ObjectNode;
 
 public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,ProgressInformation> {
 	

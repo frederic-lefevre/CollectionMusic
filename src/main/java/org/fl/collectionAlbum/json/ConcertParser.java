@@ -35,7 +35,7 @@ import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.json.MusicArtefactParser.CheckPathOption;
 import org.fl.collectionAlbum.utils.TemporalUtils;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import tools.jackson.databind.JsonNode;
 
 public class ConcertParser {
 
@@ -49,7 +49,7 @@ public class ConcertParser {
 			albumLog.warning("Pas de date dans le concert " + arteFactJson);
 		} else {
 			try {
-				dateConcert = TemporalUtils.parseDate(jElem.asText()) ;
+				dateConcert = TemporalUtils.parseDate(jElem.asString()) ;
 			} catch (Exception e) {
 				albumLog.log(Level.SEVERE, "Erreur dans les dates du concert " + arteFactJson, e) ;
 			}

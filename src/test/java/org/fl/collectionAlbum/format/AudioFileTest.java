@@ -38,17 +38,17 @@ import org.fl.util.FilterCounter;
 import org.fl.util.FilterCounter.LogRecordCounter;
 import org.junit.jupiter.api.Test;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.DatabindException;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.node.ObjectNode;
 
 class AudioFileTest {
 	
 	private static final ObjectMapper mapper = new ObjectMapper();
 	
 	@Test
-	void shouldHaveAllValues() throws JsonMappingException, JsonProcessingException {
+	void shouldHaveAllValues() throws DatabindException, JacksonException {
 		
 		LogRecordCounter audioFileParserFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.AudioFileParser"));
 		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
@@ -86,7 +86,7 @@ class AudioFileTest {
 	}
 	
 	@Test
-	void shouldNotDeserializeToAudioFile() throws JsonMappingException, JsonProcessingException {
+	void shouldNotDeserializeToAudioFile() throws DatabindException, JacksonException {
 		
 		LogRecordCounter audioFileParserFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.AudioFileParser"));
 		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
@@ -114,7 +114,7 @@ class AudioFileTest {
 	}
 	
 	@Test
-	void shouldDeserializeToAudioFile2() throws JsonMappingException, JsonProcessingException {
+	void shouldDeserializeToAudioFile2() throws DatabindException, JacksonException {
 		
 		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
 		
@@ -167,7 +167,7 @@ class AudioFileTest {
 	}
 	
 	@Test
-	void shouldDeserializeToAudioFileWithInvalidPath() throws JsonMappingException, JsonProcessingException {
+	void shouldDeserializeToAudioFileWithInvalidPath() throws DatabindException, JacksonException {
 		
 		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
 		
@@ -205,7 +205,7 @@ class AudioFileTest {
 	}
 	
 	@Test
-	void shouldDeserializeToAudioFileWithPathNotFound() throws JsonMappingException, JsonProcessingException {
+	void shouldDeserializeToAudioFileWithPathNotFound() throws DatabindException, JacksonException {
 		
 		LogRecordCounter filterCounter1 = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.AbstractMediaFileParser"));
 		LogRecordCounter filterCounter2 = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.mediaPath.MediaFileInventory"));

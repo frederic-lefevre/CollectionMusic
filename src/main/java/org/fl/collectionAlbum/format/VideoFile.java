@@ -28,7 +28,7 @@ import java.util.Set;
 
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import tools.jackson.databind.node.ObjectNode;
 
 public class VideoFile extends AbstractMediaFile {
 

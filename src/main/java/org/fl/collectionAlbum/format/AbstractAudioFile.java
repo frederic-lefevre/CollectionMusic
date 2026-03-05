@@ -29,7 +29,7 @@ import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import tools.jackson.databind.node.ObjectNode;
 
 public abstract class AbstractAudioFile extends AbstractMediaFile {
 

@@ -26,7 +26,7 @@ package org.fl.collectionAlbum.json.migrator;
 
 import org.fl.collectionAlbum.JsonMusicProperties;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import tools.jackson.databind.node.ObjectNode;
 
 public class AlbumVersionMigrator1 implements VersionMigrator {
 	

@@ -36,9 +36,9 @@ import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.json.MusicArtefactParser;
 import org.fl.util.json.JsonUtils;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.node.ObjectNode;
 
 public class MusicArtefactMigrator {
 
@@ -99,7 +99,7 @@ public class MusicArtefactMigrator {
 		} catch (Exception e) {
 			try {
 				albumLog.log(Level.SEVERE, "Exception dans la migration de l'artefact " + JsonUtils.jsonPrettyPrint(artefactJson), e);
-			} catch (JsonProcessingException e1) {
+			} catch (JacksonException e1) {
 				albumLog.log(Level.SEVERE, 
 						"Exception dans la migration de l'artefact, puis dans le logging de l'erreur (json erroné) pour le fichier " + Objects.toString(jsonFilePath), e);
 			}
