@@ -352,7 +352,7 @@ class FormatTest {
 				assertThat(lossLessAudio.getNote()).isNull();
 			});
 		
-		List<String> csvParts = format1.printAudioFilesCsvParts(";", (af) -> true);
+		List<String> csvParts = format1.printAudioFilesCsvParts(";", _ -> true);
 		
 		assertThat(csvParts).isNotEmpty().hasSize(2)
 			.satisfiesExactly(
@@ -366,7 +366,7 @@ class FormatTest {
 		assertThat(format1.getContentNatures()).singleElement()
 			.matches(contentNature -> contentNature.equals(ContentNature.AUDIO));
 		
-		assertThat(format1.printAudioFilesCsvTitles(";", v -> true)).hasSize(2)
+		assertThat(format1.printAudioFilesCsvTitles(";", _ -> true)).hasSize(2)
 			.satisfiesExactlyInAnyOrder(
 					e -> assertThat(e).isEqualTo("Bit depth;Sampling Rate;Type;Source;Note"),
 					e -> assertThat(e).isEqualTo("Bit rate;Sampling Rate;Type;Source;Note"));
@@ -435,7 +435,7 @@ class FormatTest {
 		assertThat(format1.getSupportsPhysiquesNumbers()).isNotNull()
 			.containsOnly(entry(MediaSupportCategories.CD, 2.0), entry(MediaSupportCategories.MiniVinyl, 1.0));
 		
-		assertThat(format1.printAudioFilesCsvTitles(";", v -> true)).singleElement()
+		assertThat(format1.printAudioFilesCsvTitles(";", _ -> true)).singleElement()
 			.satisfies(e -> assertThat(e).isEqualTo("Bit depth;Sampling Rate;Type;Source;Note"));
 		
 		assertThat(format1.hasError()).isFalse();
@@ -495,7 +495,7 @@ class FormatTest {
 		assertThat(format1.getContentNatures()).singleElement()
 			.matches(contentNature -> contentNature.equals(ContentNature.VIDEO));
 		
-		assertThat(format1.printAudioFilesCsvTitles(";", v -> true)).isEmpty();
+		assertThat(format1.printAudioFilesCsvTitles(";", _ -> true)).isEmpty();
 		
 		assertThat(format1.hasError()).isFalse();
 	}

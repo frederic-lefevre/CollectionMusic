@@ -324,7 +324,7 @@ class ListeAlbumTest {
 		
 		assertThat(format.getContentNatures()).isEmpty();
 		assertThat(format.getSupportsPhysiques()).isNotNull().containsOnly(MediaSupportCategories.values());
-		assertThat(format.getSupportsPhysiquesNumbers()).allSatisfy((sp, number) -> assertThat(number).isZero());	
+		assertThat(format.getSupportsPhysiquesNumbers()).allSatisfy((_, number) -> assertThat(number).isZero());	
 	}
 	
 	private void listeAlbumsAsserts(ListeAlbum listeAlbum, int expectedNumber) {

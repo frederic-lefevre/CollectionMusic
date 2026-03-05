@@ -195,7 +195,7 @@ public class GenerationSiteCollection extends SwingWorker<String,ProgressInforma
 		 rapportBuildInfo();
 		 
 		 publish(new ProgressInformation(null, RAPPORT_MEDIA, null));
-		 RapportCsv.writeCsvAudioFile(collectionAlbumContainer.getAlbumsWithAudioFile(), (audioFile) -> true, RapportStructuresAndNames.getAbsoluteCsvAudioFiles());
+		 RapportCsv.writeCsvAudioFile(collectionAlbumContainer.getAlbumsWithAudioFile(), _ -> true, RapportStructuresAndNames.getAbsoluteCsvAudioFiles());
 		 RapportCsv.writeCsvAudioFile(collectionAlbumContainer.getAlbumsWithHighResAudio(), (audioFile) -> audioFile.isHighRes(), RapportStructuresAndNames.getAbsoluteCsvHdAudioFiles());
 	 }
 	   

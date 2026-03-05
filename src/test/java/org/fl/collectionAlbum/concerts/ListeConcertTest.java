@@ -68,7 +68,7 @@ public class ListeConcertTest {
 	@Test
 	void testEmptyListe3() {
 		
-		emptyListAsserts(ListeConcert.Builder.getBuilderFrom(new ArrayList<>()).withConcertSatisfying(concert -> true).build());
+		emptyListAsserts(ListeConcert.Builder.getBuilderFrom(new ArrayList<>()).withConcertSatisfying(_ -> true).build());
 	}
 	
 	@Test

@@ -43,7 +43,7 @@ public class MusicArtefactCommandParameter<T extends MusicArtefact> implements O
 		switch (parameterType) {
 		case JSON -> {
 			parametersGetter = (musicArtefact) -> List.of(musicArtefact.getJsonFilePath().toAbsolutePath().toString());
-			actionValidityPredicate = (musicArtefact) -> true;
+			actionValidityPredicate = _ -> true;
 		}
 		case DISCOGS_RELEASE_INFO -> {
 			parametersGetter = (musicArtefact) -> List.of(Control.getDiscogsBaseUrlForRelease() + musicArtefact.getDiscogsLink());

@@ -74,7 +74,7 @@ class CollectionAlbumContainerTest {
 		assertThat(ContentNature.values())
 			.allSatisfy(contentNature -> assertThat(albumsContainer.getAlbumsWithOnlyContentNature(contentNature).getAlbums()).isEmpty());
 		
-		assertThat(albumsContainer.getAlbumsSastisfying(List.of(a -> true)).getAlbums()).isEmpty();
+		assertThat(albumsContainer.getAlbumsSastisfying(List.of(_ -> true)).getAlbums()).isEmpty();
 		
 		// This is a singleton and it should be reset to empty
 		CollectionAlbumContainer albumsContainer2 = CollectionAlbumContainer.getInstance();
@@ -215,7 +215,7 @@ class CollectionAlbumContainerTest {
 					new SimpleEntry<>("xnbdvd", (double)0)
 					);
 		
-		assertThat(albumsContainer.getAlbumsSastisfying(List.of(a -> true)).getAlbums())
+		assertThat(albumsContainer.getAlbumsSastisfying(List.of(_ -> true)).getAlbums())
 			.singleElement()
 			.satisfies(alb -> assertThat(alb.getTitre()).isEqualTo("Portrait in jazz"));
 		
