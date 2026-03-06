@@ -24,34 +24,32 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui.table;
 
-import java.util.Collections;
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
-import org.fl.collectionAlbum.concerts.Concert;
+import org.fl.collectionAlbum.concerts.LieuConcert;
 import org.fl.collectionAlbum.gui.UpdatableElement;
 
-public class ConcertTableModel extends AbstractTableModel implements UpdatableElement {
+public class LieuConcertTableModel extends AbstractTableModel implements UpdatableElement {
 
 	private static final long serialVersionUID = 1L;
+
+	public static final int LIEU_COL_IDX = 0;
+	public static final int NUMBER_COL_IDX = 1;
 	
-	public static final int DATE_COL_IDX = 0;
-	public static final int ARTISTE_COL_IDX = 1;
-	public static final int LIEU_COL_IDX = 2;
+	private static final String[] entetes = {"Lieu", "Nombre"};
 	
-	private static final String[] entetes = {"Dates", "Artistes", "Lieu"};
+	private final List<LieuConcert> lieuxConcerts;
 	
-	private final List<Concert> listeConcert;
-	
-	public ConcertTableModel(List<Concert> listeConcert) {
+	public LieuConcertTableModel(List<LieuConcert> lieuxConcerts) {
 		super();
-		this.listeConcert = listeConcert;
+		this.lieuxConcerts = lieuxConcerts;
 	}
 	
 	@Override
 	public int getRowCount() {
-		return listeConcert.size();
+		return lieuxConcerts.size();
 	}
 
 	@Override
@@ -67,15 +65,14 @@ public class ConcertTableModel extends AbstractTableModel implements UpdatableEl
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		
-		if (listeConcert.size() < rowIndex + 1) {
+		if (lieuxConcerts.size() < rowIndex + 1) {
 			// This may happen when triggering a rescan of the collection
 			return null;
 		} else {
 			
 			return switch(columnIndex) {
-				case DATE_COL_IDX -> listeConcert.get(rowIndex).getDateConcert();
-				case ARTISTE_COL_IDX -> listeConcert.get(rowIndex);
-				case LIEU_COL_IDX -> listeConcert.get(rowIndex).getLieuConcert().getLieu();
+				case LIEU_COL_IDX -> lieuxConcerts.get(rowIndex).getLieu();
+				case NUMBER_COL_IDX -> lieuxConcerts.get(rowIndex).getNombreConcert();
 				default -> null;
 			};
 		}
@@ -86,11 +83,8 @@ public class ConcertTableModel extends AbstractTableModel implements UpdatableEl
 		fireTableDataChanged();
 	}
 	
-	public Concert getConcertAt(int rowIndex) {
-		return listeConcert.get(rowIndex);
+	public LieuConcert getLieuConcertAt(int rowIndex) {
+		return lieuxConcerts.get(rowIndex);
 	}
-	
-	public List<Concert> getListeConcert() {
-		return Collections.unmodifiableList(listeConcert);
-	}
+
 }

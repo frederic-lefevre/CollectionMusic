@@ -24,14 +24,25 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.concerts;
 
+import java.util.Objects;
+import java.util.logging.Logger;
+
 public class LieuConcert {
 
+	private static final Logger logger = Logger.getLogger(LieuConcert.class.getName());
+	
 	private final String lieu;
-	private final ListeConcert concerts;
+	private final ListeConcert listeConcert;
 
-	public LieuConcert(String l) {
-		lieu = l;
-		concerts = ListeConcert.Builder.getBuilder().build();
+	public LieuConcert(String lieu) {
+	
+		if ((lieu == null) || lieu.isBlank()) {
+			String cause = "Invalid lieu parameter (null or blank) " + Objects.toString(lieu);
+			logger.severe(cause);
+			throw new IllegalArgumentException(cause);
+		}
+		this.lieu = lieu;
+		listeConcert = ListeConcert.Builder.getBuilder().build();
 	}
 
 	public String getLieu() {
@@ -39,14 +50,19 @@ public class LieuConcert {
 	}
 
 	public int getNombreConcert() {
-		return concerts.getNombreConcerts();
+		return listeConcert.getNombreConcerts();
 	}
 
 	public void addConcert(Concert concert) {
-		concerts.addConcert(concert);
+		if (concert == null) {
+			String cause = "Invalid null concert parameter";
+			logger.severe(cause);
+			throw new IllegalArgumentException(cause);
+		}
+		listeConcert.addConcert(concert);
 	}
 
-	public ListeConcert getConcerts() {
-		return concerts;
+	public ListeConcert getListeConcert() {
+		return listeConcert;
 	}
 }

@@ -42,6 +42,8 @@ import org.fl.collectionAlbum.gui.table.ArtistesScrollJTablePane;
 import org.fl.collectionAlbum.gui.table.ConcertsScrollJTablePane;
 import org.fl.collectionAlbum.gui.table.DiscogsReleaseJTable;
 import org.fl.collectionAlbum.gui.table.DisocgsReleaseTableModel;
+import org.fl.collectionAlbum.gui.table.LieuConcertJTable;
+import org.fl.collectionAlbum.gui.table.LieuConcertTableModel;
 import org.fl.collectionAlbum.gui.table.MediaFilesJTable;
 import org.fl.collectionAlbum.gui.table.MediaFilesTableModel;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
@@ -148,6 +150,15 @@ public class GenerationPane extends JPanel {
 		
 		// Artistes concert tab
 		collectionTabPanes.add(artistesConcertsScrollJTablePane, "Artistes des concerts");
+		
+		// Lieux des concerts
+		LieuConcertTableModel lieuConcertTableModel = new LieuConcertTableModel(collectionAlbumContainer.getLieuxDesConcerts().getLieuxConcerts());
+		startReadCollection.addUpdatableElement(lieuConcertTableModel);
+		
+		LieuConcertJTable lieuConcertJTable = new LieuConcertJTable(lieuConcertTableModel, this);
+		JScrollPane lieuConcertScrollPane = new JScrollPane(lieuConcertJTable);
+		lieuConcertScrollPane.setPreferredSize(Control.getMainSubPaneDimension());
+		collectionTabPanes.add(lieuConcertScrollPane, "Lieux des concerts");
 		
 		// Media supports tab
 		MediaSupportsTabbedPane mediaSupportsTabbedPane = new MediaSupportsTabbedPane(collectionAlbumContainer, this);
