@@ -65,16 +65,15 @@ class ConcertTest {
 		
 		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
 		LogRecordCounter concertParserFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ConcertParser"));
+		LogRecordCounter lieuFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.concerts.LieuConcert"));
 		
 		ListeArtiste la = new ListeArtiste() ;
-		List<ListeArtiste> lla = new ArrayList<ListeArtiste>() ;
+		List<ListeArtiste> lla = new ArrayList<ListeArtiste>();
 		lla.add(la) ;
 		
-		LieuxDesConcerts lieuxDesConcerts = new LieuxDesConcerts() ;
-		Concert concert = new Concert(JsonNodeFactory.instance.objectNode(), lla, lieuxDesConcerts, Path.of("dummyPath")) ;
-		
-		assertThat(concert).isNotNull();
-		
+		LieuxDesConcerts lieuxDesConcerts = new LieuxDesConcerts();
+		assertThatIllegalArgumentException().isThrownBy(() -> new Concert(JsonNodeFactory.instance.objectNode(), lla, lieuxDesConcerts, Path.of("dummyPath")));
+
 		if (parserHelpersFilterCounter.isLoggable(Level.INFO)) {
 			assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(5);
 			assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.INFO)).isEqualTo(4);
@@ -86,6 +85,12 @@ class ConcertTest {
 		assertThat(concertParserFilterCounter.getLogRecordCount()).isEqualTo(1);
 		assertThat(concertParserFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
 		
+		assertThat(lieuFilterCounter.getLogRecordCount())
+			.isEqualTo(1)
+			.isEqualTo(lieuFilterCounter.getLogRecordCount(Level.SEVERE));
+	
+		lieuFilterCounter.stopLogCountAndFilter();
+		concertParserFilterCounter.stopLogCountAndFilter();
 		parserHelpersFilterCounter.stopLogCountAndFilter();
 	}
 	
