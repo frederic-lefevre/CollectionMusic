@@ -82,5 +82,9 @@ public class LieuConcertTableModel extends AbstractTableModel implements Updatab
 	public void updateElement() {
 		fireTableDataChanged();
 	}
+	
+	public LieuConcert getLieuConcertAt(int rowIndex) {
+		return lieuxConcerts.get(rowIndex);
+	}
 
 }

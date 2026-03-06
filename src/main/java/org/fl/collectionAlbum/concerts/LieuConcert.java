@@ -27,11 +27,11 @@ package org.fl.collectionAlbum.concerts;
 public class LieuConcert {
 
 	private final String lieu;
-	private final ListeConcert concerts;
+	private final ListeConcert listeConcert;
 
 	public LieuConcert(String l) {
 		lieu = l;
-		concerts = ListeConcert.Builder.getBuilder().build();
+		listeConcert = ListeConcert.Builder.getBuilder().build();
 	}
 
 	public String getLieu() {
@@ -39,14 +39,14 @@ public class LieuConcert {
 	}
 
 	public int getNombreConcert() {
-		return concerts.getNombreConcerts();
+		return listeConcert.getNombreConcerts();
 	}
 
 	public void addConcert(Concert concert) {
-		concerts.addConcert(concert);
+		listeConcert.addConcert(concert);
 	}
 
-	public ListeConcert getConcerts() {
-		return concerts;
+	public ListeConcert getListeConcert() {
+		return listeConcert;
 	}
 }

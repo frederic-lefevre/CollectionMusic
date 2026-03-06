@@ -253,7 +253,7 @@ public class GenerationSiteCollection extends SwingWorker<String,ProgressInforma
 			 Path absolutePath = RapportStructuresAndNames.getLieuRapportAbsolutePath(lieuConcert);
 			 if (! Files.exists(absolutePath)) {
 				 String offSet = getOffset(rapportPath, absolutePath.getParent());
-				 RapportListeConcerts concertDeCeLieu = new RapportListeConcerts(lieuConcert.getConcerts().sortChrono(), lieuConcert.getLieu(), LinkType.LIST);
+				 RapportListeConcerts concertDeCeLieu = new RapportListeConcerts(lieuConcert.getListeConcert().sortChrono(), lieuConcert.getLieu(), LinkType.LIST);
 				 concertDeCeLieu.withOffset(offSet);
 				 concertDeCeLieu.printReport(absolutePath, CssStyles.stylesTableauMusicArtefact);
 			 }
