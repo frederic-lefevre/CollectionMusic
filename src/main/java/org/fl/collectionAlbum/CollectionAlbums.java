@@ -112,6 +112,7 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 		albumsContainer.getConcerts().sortChrono();
 		albumsContainer.getCollectionArtistes().sortArtistesAlpha();
 		albumsContainer.getConcertsArtistes().sortArtistesAlpha();
+		albumsContainer.getLieuxDesConcerts().sortNumber();
 			
 		// Set present metrics
 		long now = System.currentTimeMillis();

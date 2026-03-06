@@ -25,7 +25,6 @@ SOFTWARE.
 package org.fl.collectionAlbum.concerts;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -35,13 +34,16 @@ public class LieuxDesConcerts {
 	private static final LieuxPoidsComparator LIEUX_POIDS_COMPARATOR = new LieuxPoidsComparator();
 	
 	private final Map<String, LieuConcert> lieuxConcerts;
+	private final List<LieuConcert> lieux;
 
 	public LieuxDesConcerts() {
 		lieuxConcerts = new HashMap<String, LieuConcert>();
+		lieux = new ArrayList<>();
 	}
 	
 	public void reset() {
 		lieuxConcerts.clear();
+		lieux.clear();
 	}
 	
 	public LieuConcert addLieuDunConcert(String lieu) {
@@ -49,13 +51,17 @@ public class LieuxDesConcerts {
 		if (lieuConcert == null) {
 			lieuConcert = new LieuConcert(lieu);
 			lieuxConcerts.put(lieu, lieuConcert);
+			lieux.add(lieuConcert);
 		}
 		return lieuConcert;
 	}
 	
 	public List<LieuConcert> getLieuxConcerts() {
-		List<LieuConcert> lieux = new ArrayList<LieuConcert>(lieuxConcerts.values());
-		Collections.sort(lieux, LIEUX_POIDS_COMPARATOR);
-		return lieux;
+		return sortNumber().lieux;
+	}
+	
+	public LieuxDesConcerts sortNumber() {
+		lieux.sort(LIEUX_POIDS_COMPARATOR);
+		return this;
 	}
 }
