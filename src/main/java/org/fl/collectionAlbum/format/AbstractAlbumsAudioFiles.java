@@ -31,9 +31,9 @@ import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
 import tools.jackson.databind.node.ObjectNode;
 
-public abstract class AbstractAudioFile extends AbstractMediaFile {
+public abstract class AbstractAlbumsAudioFiles extends AbstractAlbumMediaFiles {
 
-	private final static Logger albumLog = Logger.getLogger(AbstractAudioFile.class.getName());
+	private final static Logger albumLog = Logger.getLogger(AbstractAlbumsAudioFiles.class.getName());
 	
 	private final AudioFileType type;
 	private final double samplingRate;
@@ -41,7 +41,7 @@ public abstract class AbstractAudioFile extends AbstractMediaFile {
 	private static final String TYPE_TITLE = "Type";
 	private static final String SAMPLING_RATE_TITLE = "Sampling Rate";
 	
-	protected AbstractAudioFile(ObjectNode audioJson, AudioFileType type, String source, double samplingRate, String note, Set<MediaFilePath> mediaFilePaths) {
+	protected AbstractAlbumsAudioFiles(ObjectNode audioJson, AudioFileType type, String source, double samplingRate, String note, Set<MediaFilePath> mediaFilePaths) {
 		super(audioJson, source, note, mediaFilePaths);
 		this.type = type;
 		this.samplingRate = samplingRate;

@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.albums.ListeAlbum;
-import org.fl.collectionAlbum.format.AbstractAudioFile;
+import org.fl.collectionAlbum.format.AbstractAlbumsAudioFiles;
 
 public class RapportCsv {
 
@@ -46,7 +46,7 @@ public class RapportCsv {
 	
 	private static final String CSV_SEPARATOR = ";";
 	
-	public static void writeCsvAudioFile(ListeAlbum listeAlbum, Predicate<AbstractAudioFile> audioFileFilter, Path filePath) {
+	public static void writeCsvAudioFile(ListeAlbum listeAlbum, Predicate<AbstractAlbumsAudioFiles> audioFileFilter, Path filePath) {
 		
 		Path csvDir = filePath.getParent();
 		if (!Files.exists(csvDir)) {
@@ -90,7 +90,7 @@ public class RapportCsv {
 	
 	private static final String AUTEURS_ALBUM_TITLES = "Auteurs" + CSV_SEPARATOR + "Titres" + CSV_SEPARATOR;
 	
-	private static List<String> csvForOneAlbum(Album album, Predicate<AbstractAudioFile> audioFileFilter) {
+	private static List<String> csvForOneAlbum(Album album, Predicate<AbstractAlbumsAudioFiles> audioFileFilter) {
 		
 		String auteurs = album.getAuteurs().stream().map(auteur -> auteur.getNomComplet()).collect(Collectors.joining(" "));
 		String chefsOrchestre = album.getChefsOrchestre().stream().map(co -> co.getNomComplet()).collect(Collectors.joining(" "));
@@ -111,7 +111,7 @@ public class RapportCsv {
 		return "\"" + s.replace("\"", "\"\"") + "\"";
 	}
 	
-	private static List<String> csvTitlesForListeAlbum(ListeAlbum listeAlbum, Predicate<AbstractAudioFile> audioFileFilter) {
+	private static List<String> csvTitlesForListeAlbum(ListeAlbum listeAlbum, Predicate<AbstractAlbumsAudioFiles> audioFileFilter) {
 		
 		return listeAlbum.getAlbums().stream()
 			.map(Album::getFormatAlbum)

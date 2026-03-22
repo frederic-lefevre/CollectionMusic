@@ -53,7 +53,7 @@ public class VideoFileTest {
 		ObjectNode jf1 = (ObjectNode)mapper.readTree(videoFileStr1);
 		
 		VideoFileParser videoFileParser = new VideoFileParser();
-		VideoFile videoFile = videoFileParser.parseMediaFile(jf1);
+		AlbumVideoFiles videoFile = videoFileParser.parseMediaFile(jf1);
 		assertThat(videoFile).isNull();
 		
 		assertThat(videoFileParserFilterCounter.getLogRecordCount()).isEqualTo(3);
@@ -74,7 +74,7 @@ public class VideoFileTest {
 		LogRecordCounter videoFileParserFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.VideoFileParser"));
 		
 		VideoFileParser videoFileParser = new VideoFileParser();
-		VideoFile videoFile = videoFileParser.parseMediaFile(null);
+		AlbumVideoFiles videoFile = videoFileParser.parseMediaFile(null);
 		assertThat(videoFile).isNull();
 		
 		assertThat(videoFileParserFilterCounter.getLogRecordCount()).isEqualTo(1);
@@ -95,7 +95,7 @@ public class VideoFileTest {
 		ObjectNode jf1 = (ObjectNode)mapper.readTree(videoFileStr1);
 		
 		VideoFileParser videoFileParser = new VideoFileParser();
-		VideoFile videoFile = videoFileParser.parseMediaFile(jf1);
+		AlbumVideoFiles videoFile = videoFileParser.parseMediaFile(jf1);
 		assertThat(videoFile).isNull();
 		
 		assertThat(videoFileParserFilterCounter.getLogRecordCount()).isEqualTo(1);
@@ -123,7 +123,7 @@ public class VideoFileTest {
 		ObjectNode jf1 = (ObjectNode)mapper.readTree(videoFileStr1);
 		
 		VideoFileParser videoFileParser = new VideoFileParser();
-		VideoFile videoFile = videoFileParser.parseMediaFile(jf1);
+		AlbumVideoFiles videoFile = videoFileParser.parseMediaFile(jf1);
 		assertThat(videoFile).isNotNull();
 		assertThat(videoFile.getHeight()).isEqualTo(480);
 		assertThat(videoFile.getWidth()).isEqualTo(720);
@@ -154,7 +154,7 @@ public class VideoFileTest {
 		ObjectNode jf1 = (ObjectNode)mapper.readTree(videoFileStr1);
 		
 		VideoFileParser videoFileParser = new VideoFileParser();
-		VideoFile videoFile = videoFileParser.parseMediaFile(jf1);
+		AlbumVideoFiles videoFile = videoFileParser.parseMediaFile(jf1);
 		assertThat(videoFile).isNotNull();
 		assertThat(videoFile.getHeight()).isEqualTo(480);
 		assertThat(videoFile.getWidth()).isEqualTo(720);

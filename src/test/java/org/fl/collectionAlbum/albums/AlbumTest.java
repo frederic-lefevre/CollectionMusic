@@ -48,10 +48,10 @@ import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.MatchResultType;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.ReleaseMatchResult;
-import org.fl.collectionAlbum.format.AbstractAudioFile;
-import org.fl.collectionAlbum.format.AbstractMediaFile;
+import org.fl.collectionAlbum.format.AbstractAlbumsAudioFiles;
+import org.fl.collectionAlbum.format.AbstractAlbumMediaFiles;
 import org.fl.collectionAlbum.format.ContentNature;
-import org.fl.collectionAlbum.format.LosslessAudioFile;
+import org.fl.collectionAlbum.format.LosslessAlbumAudioFiles;
 import org.fl.collectionAlbum.format.MediaSupports;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
@@ -171,17 +171,17 @@ class AlbumTest {
 		assertThat(album.hasMediaFilePathNotFound(ContentNature.AUDIO)).isTrue();
 		assertThat(album.hasProblem()).isTrue();
 		
-		List<? extends AbstractMediaFile> audioFiles = album.getFormatAlbum().getMediaFiles(ContentNature.AUDIO);
+		List<? extends AbstractAlbumMediaFiles> audioFiles = album.getFormatAlbum().getMediaFiles(ContentNature.AUDIO);
 		assertThat(audioFiles).isNotNull()
 			.singleElement()
-			.asInstanceOf(InstanceOfAssertFactories.type(AbstractAudioFile.class))
+			.asInstanceOf(InstanceOfAssertFactories.type(AbstractAlbumsAudioFiles.class))
 			.satisfies(audio -> {
 				assertThat(audio.hasMissingOrInvalidMediaFilePath()).isTrue();
 				assertThat(audio.isLossLess()).isTrue();
 				
-				assertThat(audio).isNotNull().isInstanceOf(LosslessAudioFile.class);
+				assertThat(audio).isNotNull().isInstanceOf(LosslessAlbumAudioFiles.class);
 				
-				LosslessAudioFile lossLessAudio = (LosslessAudioFile)audio;
+				LosslessAlbumAudioFiles lossLessAudio = (LosslessAlbumAudioFiles)audio;
 				assertThat(lossLessAudio.getBitDepth()).isEqualTo(16);
 				assertThat(lossLessAudio.getSamplingRate()).isEqualTo(44.1);
 				assertThat(lossLessAudio.getType().name()).isEqualTo("FLAC");
@@ -194,7 +194,7 @@ class AlbumTest {
 		assertThat(album.getCoverImage()).isNull();
 		
 		// Add the audio file path
-		AbstractAudioFile audioFile = (AbstractAudioFile) audioFiles.get(0);
+		AbstractAlbumsAudioFiles audioFile = (AbstractAlbumsAudioFiles) audioFiles.get(0);
 		audioFile.setMediaFilePath(
 				Set.of(new MediaFilePath(Paths.get("E:/Musique/e/Bill Evans/Waltz for Debby/"), ContentNature.AUDIO, ContentNature.AUDIO.strictCheckings())),
 				Control.getMediaFileRootUri(ContentNature.AUDIO));
@@ -229,14 +229,14 @@ class AlbumTest {
 		
 		assertThat(album2.getFormatAlbum().getMediaFiles(ContentNature.AUDIO)).isNotNull()
 			.singleElement()
-			.asInstanceOf(InstanceOfAssertFactories.type(AbstractAudioFile.class))
+			.asInstanceOf(InstanceOfAssertFactories.type(AbstractAlbumsAudioFiles.class))
 			.satisfies(audio -> {
 				assertThat(audio.hasMissingOrInvalidMediaFilePath()).isFalse();
 				assertThat(audio.isLossLess()).isTrue();
 				
-				assertThat(audio).isNotNull().isInstanceOf(LosslessAudioFile.class);
+				assertThat(audio).isNotNull().isInstanceOf(LosslessAlbumAudioFiles.class);
 				
-				LosslessAudioFile lossLessAudio = (LosslessAudioFile)audio;
+				LosslessAlbumAudioFiles lossLessAudio = (LosslessAlbumAudioFiles)audio;
 				assertThat(lossLessAudio.getBitDepth()).isEqualTo(16);
 				assertThat(lossLessAudio.getSamplingRate()).isEqualTo(44.1);
 				assertThat(lossLessAudio.getType().name()).isEqualTo("FLAC");
@@ -248,7 +248,7 @@ class AlbumTest {
 			});
 		
 		// Fix the audio file path
-		AbstractAudioFile audioFile2 = (AbstractAudioFile) album2.getFormatAlbum().getMediaFiles(ContentNature.AUDIO).get(0);
+		AbstractAlbumsAudioFiles audioFile2 = (AbstractAlbumsAudioFiles) album2.getFormatAlbum().getMediaFiles(ContentNature.AUDIO).get(0);
 		audioFile2.setMediaFilePath(
 				Set.of(new MediaFilePath(Paths.get("E:/Musique/e/Bill Evans/Portrait In Jazz/"), ContentNature.AUDIO, ContentNature.AUDIO.strictCheckings())),
 				Control.getMediaFileRootUri(ContentNature.AUDIO));
@@ -281,14 +281,14 @@ class AlbumTest {
 		
 		assertThat(album3.getFormatAlbum().getMediaFiles(ContentNature.AUDIO)).isNotNull()
 			.singleElement()
-			.asInstanceOf(InstanceOfAssertFactories.type(AbstractAudioFile.class))
+			.asInstanceOf(InstanceOfAssertFactories.type(AbstractAlbumsAudioFiles.class))
 			.satisfies(audio -> {
 				assertThat(audio.hasMissingOrInvalidMediaFilePath()).isFalse();
 				assertThat(audio.isLossLess()).isTrue();
 				
-				assertThat(audio).isNotNull().isInstanceOf(LosslessAudioFile.class);
+				assertThat(audio).isNotNull().isInstanceOf(LosslessAlbumAudioFiles.class);
 				
-				LosslessAudioFile lossLessAudio = (LosslessAudioFile)audio;
+				LosslessAlbumAudioFiles lossLessAudio = (LosslessAlbumAudioFiles)audio;
 				assertThat(lossLessAudio.getBitDepth()).isEqualTo(16);
 				assertThat(lossLessAudio.getSamplingRate()).isEqualTo(44.1);
 				assertThat(lossLessAudio.getType().name()).isEqualTo("FLAC");
@@ -324,14 +324,14 @@ class AlbumTest {
 		
 		assertThat(album4.getFormatAlbum().getMediaFiles(ContentNature.AUDIO)).isNotNull()
 			.singleElement()
-			.asInstanceOf(InstanceOfAssertFactories.type(AbstractAudioFile.class))
+			.asInstanceOf(InstanceOfAssertFactories.type(AbstractAlbumsAudioFiles.class))
 			.satisfies(audio -> {
 				assertThat(audio.hasMissingOrInvalidMediaFilePath()).isFalse();
 				assertThat(audio.isLossLess()).isTrue();
 				
-				assertThat(audio).isNotNull().isInstanceOf(LosslessAudioFile.class);
+				assertThat(audio).isNotNull().isInstanceOf(LosslessAlbumAudioFiles.class);
 				
-				LosslessAudioFile lossLessAudio = (LosslessAudioFile)audio;
+				LosslessAlbumAudioFiles lossLessAudio = (LosslessAlbumAudioFiles)audio;
 				assertThat(lossLessAudio.getBitDepth()).isEqualTo(16);
 				assertThat(lossLessAudio.getSamplingRate()).isEqualTo(44.1);
 				assertThat(lossLessAudio.getType().name()).isEqualTo("FLAC");

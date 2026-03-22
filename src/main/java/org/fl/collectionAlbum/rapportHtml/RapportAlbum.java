@@ -32,7 +32,7 @@ import java.util.logging.Level;
 import java.util.stream.Stream;
 
 import org.fl.collectionAlbum.albums.Album;
-import org.fl.collectionAlbum.format.AbstractMediaFile;
+import org.fl.collectionAlbum.format.AbstractAlbumMediaFiles;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.format.Format;
 import org.fl.collectionAlbum.format.Format.RangementSupportPhysique;
@@ -116,7 +116,7 @@ public class RapportAlbum extends RapportMusicArtefact {
 		super.corpsRapport();
 	}
 	
-	private Consumer<AbstractMediaFile> detailInCell = mediaFile -> {
+	private Consumer<AbstractAlbumMediaFiles> detailInCell = mediaFile -> {
 		write("    <tr><td class=\"mediadetail\">\n");
 		write(mediaFile.displayMediaFileDetailWithFileLink("<br/>\n", true));
 		write("    </td></tr>\n");

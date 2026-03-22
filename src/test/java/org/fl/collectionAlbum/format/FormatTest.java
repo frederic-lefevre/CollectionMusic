@@ -236,9 +236,9 @@ class FormatTest {
 		
 		assertThat(format1.getMediaFiles(ContentNature.AUDIO)).singleElement()
 			.satisfies(audio -> {
-				assertThat(audio).isNotNull().isInstanceOf(LosslessAudioFile.class);
+				assertThat(audio).isNotNull().isInstanceOf(LosslessAlbumAudioFiles.class);
 				
-				LosslessAudioFile lossLessAudio = (LosslessAudioFile)audio;
+				LosslessAlbumAudioFiles lossLessAudio = (LosslessAlbumAudioFiles)audio;
 				assertThat(lossLessAudio.getBitDepth()).isEqualTo(32);
 				assertThat(lossLessAudio.getSamplingRate()).isEqualTo(192);
 				assertThat(lossLessAudio.getType().name()).isEqualTo("FLAC");
@@ -283,9 +283,9 @@ class FormatTest {
 
 		assertThat(format1.getMediaFiles(ContentNature.AUDIO)).singleElement()
 			.satisfies(audio -> {
-				assertThat(audio).isNotNull().isInstanceOf(LosslessAudioFile.class);
+				assertThat(audio).isNotNull().isInstanceOf(LosslessAlbumAudioFiles.class);
 				
-				LosslessAudioFile lossLessAudio = (LosslessAudioFile)audio;
+				LosslessAlbumAudioFiles lossLessAudio = (LosslessAlbumAudioFiles)audio;
 				assertThat(lossLessAudio.getBitDepth()).isEqualTo(16);
 				assertThat(lossLessAudio.getSamplingRate()).isEqualTo(44.1);
 				assertThat(lossLessAudio.getType().name()).isEqualTo("FLAC");
@@ -332,9 +332,9 @@ class FormatTest {
 
 		assertThat(format1.getMediaFiles(ContentNature.AUDIO)).hasSize(2)
 			.anySatisfy(audio -> {
-				assertThat(audio).isNotNull().isInstanceOf(LossyAudioFile.class);
+				assertThat(audio).isNotNull().isInstanceOf(LossyAlbumAudioFiles.class);
 				
-				LossyAudioFile lossyAudio = (LossyAudioFile)audio;
+				LossyAlbumAudioFiles lossyAudio = (LossyAlbumAudioFiles)audio;
 				assertThat(lossyAudio.getBitRate()).isEqualTo(320);
 				assertThat(lossyAudio.getSamplingRate()).isEqualTo(44.1);
 				assertThat(lossyAudio.getType().name()).isEqualTo("MP3");
@@ -342,9 +342,9 @@ class FormatTest {
 				assertThat(lossyAudio.getNote()).isEqualTo("Mix Bob Smith");
 			})
 			.anySatisfy(audio -> {
-				assertThat(audio).isNotNull().isInstanceOf(LosslessAudioFile.class);
+				assertThat(audio).isNotNull().isInstanceOf(LosslessAlbumAudioFiles.class);
 				
-				LosslessAudioFile lossLessAudio = (LosslessAudioFile)audio;
+				LosslessAlbumAudioFiles lossLessAudio = (LosslessAlbumAudioFiles)audio;
 				assertThat(lossLessAudio.getBitDepth()).isEqualTo(24);
 				assertThat(lossLessAudio.getSamplingRate()).isEqualTo(88);
 				assertThat(lossLessAudio.getType().name()).isEqualTo("FLAC");
@@ -403,9 +403,9 @@ class FormatTest {
 
 		assertThat(format1.getMediaFiles(ContentNature.AUDIO)).singleElement()
 			.satisfies(audio -> {
-				assertThat(audio).isNotNull().isInstanceOf(LosslessAudioFile.class);
+				assertThat(audio).isNotNull().isInstanceOf(LosslessAlbumAudioFiles.class);
 				
-				LosslessAudioFile lossLessAudio = (LosslessAudioFile)audio;
+				LosslessAlbumAudioFiles lossLessAudio = (LosslessAlbumAudioFiles)audio;
 				assertThat(lossLessAudio.getBitDepth()).isEqualTo(16);
 				assertThat(lossLessAudio.getSamplingRate()).isEqualTo(44.1);
 				assertThat(lossLessAudio.getType().name()).isEqualTo("FLAC");
@@ -413,7 +413,7 @@ class FormatTest {
 			});
 		
 		assertThat(format1.getMediaFiles(ContentNature.VIDEO)).singleElement()
-			.asInstanceOf(InstanceOfAssertFactories.type(VideoFile.class))
+			.asInstanceOf(InstanceOfAssertFactories.type(AlbumVideoFiles.class))
 			.satisfies(videoFile -> {
 				assertThat(videoFile.getHeight()).isEqualTo(480);
 				assertThat(videoFile.getWidth()).isEqualTo(720);
@@ -469,7 +469,7 @@ class FormatTest {
 		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isTrue();
 		
 		assertThat(format1.getMediaFiles(ContentNature.VIDEO)).hasSize(2)
-			.asInstanceOf(InstanceOfAssertFactories.list(VideoFile.class))
+			.asInstanceOf(InstanceOfAssertFactories.list(AlbumVideoFiles.class))
 			.anySatisfy(videoFile -> {
 				assertThat(videoFile.getHeight()).isEqualTo(1024);
 				assertThat(videoFile.getWidth()).isEqualTo(1920);

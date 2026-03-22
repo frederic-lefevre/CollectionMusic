@@ -57,7 +57,7 @@ class AudioFileTest {
 		ObjectNode jf1 = (ObjectNode)mapper.readTree(audioFileStr1);
 		
 		AudioFileParser audioFileParser = new AudioFileParser();
-		AbstractAudioFile audio = audioFileParser.parseMediaFile(jf1);
+		AbstractAlbumsAudioFiles audio = audioFileParser.parseMediaFile(jf1);
 		assertThat(audio).isNull();
 		
 		assertThat(audioFileParserFilterCounter.getLogRecordCount()).isEqualTo(2);
@@ -78,7 +78,7 @@ class AudioFileTest {
 		LogRecordCounter filterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.AudioFileParser"));
 		
 		AudioFileParser audioFileParser = new AudioFileParser();
-		AbstractAudioFile audio = audioFileParser.parseMediaFile(null);
+		AbstractAlbumsAudioFiles audio = audioFileParser.parseMediaFile(null);
 		assertThat(audio).isNull();
 		
 		assertThat(filterCounter.getLogRecordCount()).isEqualTo(1);
@@ -99,7 +99,7 @@ class AudioFileTest {
 		ObjectNode jf1 = (ObjectNode)mapper.readTree(audioFileStr1);
 		
 		AudioFileParser audioFileParser = new AudioFileParser();
-		AbstractAudioFile audio = audioFileParser.parseMediaFile(jf1);
+		AbstractAlbumsAudioFiles audio = audioFileParser.parseMediaFile(jf1);
 		assertThat(audio).isNull();
 
 		assertThat(audioFileParserFilterCounter.getLogRecordCount()).isEqualTo(1);
@@ -128,10 +128,10 @@ class AudioFileTest {
 		ObjectNode jf1 = (ObjectNode)mapper.readTree(audioFileStr1);
 		
 		AudioFileParser audioFileParser = new AudioFileParser();
-		AbstractAudioFile audio = audioFileParser.parseMediaFile(jf1);
-		assertThat(audio).isInstanceOf(LosslessAudioFile.class);
+		AbstractAlbumsAudioFiles audio = audioFileParser.parseMediaFile(jf1);
+		assertThat(audio).isInstanceOf(LosslessAlbumAudioFiles.class);
 
-		LosslessAudioFile losslessAudio = (LosslessAudioFile)audio;
+		LosslessAlbumAudioFiles losslessAudio = (LosslessAlbumAudioFiles)audio;
 		
 		assertThat(losslessAudio.getBitDepth()).isEqualTo(32);
 		assertThat(losslessAudio.getSamplingRate()).isEqualTo(192);
@@ -182,10 +182,10 @@ class AudioFileTest {
 		ObjectNode jf1 = (ObjectNode)mapper.readTree(audioFileStr1);
 		
 		AudioFileParser audioFileParser = new AudioFileParser();
-		AbstractAudioFile audio = audioFileParser.parseMediaFile(jf1);
-		assertThat(audio).isInstanceOf(LosslessAudioFile.class);
+		AbstractAlbumsAudioFiles audio = audioFileParser.parseMediaFile(jf1);
+		assertThat(audio).isInstanceOf(LosslessAlbumAudioFiles.class);
 
-		LosslessAudioFile losslessAudio = (LosslessAudioFile)audio;
+		LosslessAlbumAudioFiles losslessAudio = (LosslessAlbumAudioFiles)audio;
 		
 		assertThat(losslessAudio.getBitDepth()).isEqualTo(32);
 		assertThat(losslessAudio.getSamplingRate()).isEqualTo(192);
@@ -221,10 +221,10 @@ class AudioFileTest {
 		ObjectNode jf1 = (ObjectNode)mapper.readTree(audioFileStr1);
 		
 		AudioFileParser audioFileParser = new AudioFileParser();
-		AbstractAudioFile audio = audioFileParser.parseMediaFile(jf1);
-		assertThat(audio).isInstanceOf(LosslessAudioFile.class);
+		AbstractAlbumsAudioFiles audio = audioFileParser.parseMediaFile(jf1);
+		assertThat(audio).isInstanceOf(LosslessAlbumAudioFiles.class);
 
-		LosslessAudioFile losslessAudio = (LosslessAudioFile)audio;
+		LosslessAlbumAudioFiles losslessAudio = (LosslessAlbumAudioFiles)audio;
 		
 		assertThat(losslessAudio.getBitDepth()).isEqualTo(32);
 		assertThat(losslessAudio.getSamplingRate()).isEqualTo(192);
