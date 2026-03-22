@@ -39,7 +39,7 @@ import tools.jackson.databind.DatabindException;
 import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.node.ObjectNode;
 
-public class VideoFileTest {
+public class AlbumVideoFilesTest {
 	
 	private static final ObjectMapper mapper = new ObjectMapper();
 	

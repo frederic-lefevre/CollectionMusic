@@ -43,7 +43,7 @@ import tools.jackson.databind.DatabindException;
 import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.node.ObjectNode;
 
-class AudioFileTest {
+class AlbumAudioFilesTest {
 	
 	private static final ObjectMapper mapper = new ObjectMapper();
 	
