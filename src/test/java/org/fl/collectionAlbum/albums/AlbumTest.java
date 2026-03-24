@@ -582,6 +582,50 @@ class AlbumTest {
 		assertThat(TemporalUtils.formatDate(acquisitionDate)).isEqualTo("03 décembre 2023");
 	}
 	
+	private static final String albumStr5 = """
+{ 
+  "titre": "Van Halen",
+  "format": {
+    "cd": 1,
+    "audioFiles": [
+      {
+        "bitDepth": 24,
+        "samplingRate": 192,
+        "source": "File",
+        "type": "FLAC"
+      }
+    ]
+  },
+  "groupe": [
+    {
+      "nom": "Van Halen"
+    }
+  ],
+  "enregistrement": [
+    "1977-09-01",
+    "1977-11-01"
+  ],
+  "notes" : ["Note 1","Note 2"]
+}
+			""" ;
+	
+	
+	@Test
+	void testNote() throws DatabindException, JacksonException {
+
+		ObjectNode jAlbum = (ObjectNode)mapper.readTree(albumStr5);
+
+		ListeArtiste la = new ListeArtiste();
+		List<ListeArtiste> lla = new ArrayList<ListeArtiste>();
+		lla.add(la);
+
+		Album album = new Album(jAlbum, lla, Path.of("dummyPath"));
+		
+		assertThat(album.getNotes()).isNotNull().hasSize(2).satisfiesExactlyInAnyOrder(
+				note -> assertThat(note).isEqualTo("Note 1"),
+				note -> assertThat(note).isEqualTo("Note 2"));
+	}
+	
 	private void testAlbumProperties(Album album, ListeArtiste la) {
 		
 		assertThat(album.getTitre()).isEqualTo("Portrait in jazz");
