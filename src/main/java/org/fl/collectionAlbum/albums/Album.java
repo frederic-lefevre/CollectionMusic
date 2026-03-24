@@ -59,17 +59,13 @@ public class Album extends MusicArtefact {
 	protected static final Logger albumLog = Logger.getLogger(Album.class.getName());
 	
     private final String titre;
-    
     private final FuzzyPeriod periodeEnregistrement;
     private final FuzzyPeriod periodeComposition;
-    
     private final Format formatAlbum;
-    private final RangementSupportPhysique rangement;
-    
-    private final boolean specificCompositionDates;
-    
+    private final RangementSupportPhysique rangement;  
+    private final boolean specificCompositionDates;   
     private final Path sleevePath;
-    
+    private final TemporalAccessor acquisitionDate;
     private final Map<ContentNature, Set<MediaFilePath>> potentialMediaFilesPath;
     
 	public Album(ObjectNode albumJson, List<ListeArtiste> knownArtistes, Path jsonFilePath) {
@@ -96,6 +92,7 @@ public class Album extends MusicArtefact {
 		}
 		
 		sleevePath = AlbumParser.getAlbumSleevePath(albumJson);
+		acquisitionDate = AlbumParser.getAcquisitionDate(albumJson);
 	}
     
     public String getTitre() {
@@ -299,7 +296,11 @@ public class Album extends MusicArtefact {
 		}
 	}
 	
-    @Override
+    public TemporalAccessor getAcquisitionDate() {
+		return acquisitionDate;
+	}
+
+	@Override
     public boolean hasAdditionnalInfo() {
     	return hasAudioFiles() || hasVideoFiles() || super.hasAdditionnalInfo();
     }

@@ -32,6 +32,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -55,6 +56,7 @@ import org.fl.collectionAlbum.format.LosslessAlbumAudioFiles;
 import org.fl.collectionAlbum.format.MediaSupports;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
+import org.fl.collectionAlbum.utils.TemporalUtils;
 import org.fl.discogsInterface.inventory.InventoryCsvAlbum;
 import org.fl.util.FilterCounter;
 import org.fl.util.FilterCounter.LogRecordCounter;
@@ -117,6 +119,9 @@ class AlbumTest {
 		assertMediaSupports(album, Collections.emptySet());
 		
 		assertThat(album.getContentNatures()).isEmpty();
+		
+		assertThat(album.getAcquisitionDate()).isNull();
+		assertThat(album.getNotes()).isEmpty();
 		
 		assertThat(albumParserFilterCounter.getLogRecordCount()).isEqualTo(2);
 		assertThat(albumParserFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(2);
@@ -533,6 +538,50 @@ class AlbumTest {
 		assertThat(album.getJson().get(JsonMusicProperties.DISCOGS_VALID)).isNotNull();
 	}
 	
+	private static final String albumStr4 = """
+{ 
+  "titre": "Van Halen",
+  "format": {
+    "cd": 1,
+    "audioFiles": [
+      {
+        "bitDepth": 24,
+        "samplingRate": 192,
+        "source": "File",
+        "type": "FLAC"
+      }
+    ]
+  },
+  "groupe": [
+    {
+      "nom": "Van Halen"
+    }
+  ],
+  "enregistrement": [
+    "1977-09-01",
+    "1977-11-01"
+  ],
+  "acquisition" : "2023-12-03"
+}
+			""" ;
+	
+	
+	@Test
+	void testAcquisitionDate() throws DatabindException, JacksonException {
+
+		ObjectNode jAlbum = (ObjectNode)mapper.readTree(albumStr4);
+
+		ListeArtiste la = new ListeArtiste();
+		List<ListeArtiste> lla = new ArrayList<ListeArtiste>();
+		lla.add(la);
+
+		Album album = new Album(jAlbum, lla, Path.of("dummyPath"));
+		
+		TemporalAccessor acquisitionDate = album.getAcquisitionDate();
+		assertThat(acquisitionDate).isNotNull();
+		assertThat(TemporalUtils.formatDate(acquisitionDate)).isEqualTo("03 décembre 2023");
+	}
+	
 	private void testAlbumProperties(Album album, ListeArtiste la) {
 		
 		assertThat(album.getTitre()).isEqualTo("Portrait in jazz");
@@ -594,6 +643,9 @@ class AlbumTest {
 		assertMediaSupports(album, Set.of(MediaSupports.CD));
 		
 		assertThat(album.getContentNatures()).containsExactly(ContentNature.AUDIO);
+		
+		assertThat(album.getAcquisitionDate()).isNull();
+		assertThat(album.getNotes()).isEmpty();
 	}
 	
 	private void assertMediaSupports(Album album, Set<MediaSupports> mediaSupports) {
