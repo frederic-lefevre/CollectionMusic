@@ -40,6 +40,7 @@ import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.concerts.Concert;
 import org.fl.collectionAlbum.format.Format;
+import org.fl.collectionAlbum.gui.table.AbstractAlbumsTableModel;
 import org.fl.collectionAlbum.gui.table.AlbumsScrollJTablePane;
 import org.fl.collectionAlbum.gui.table.ConcertsScrollJTablePane;
 
@@ -120,7 +121,9 @@ public class ArtisteInformationPanel extends JPanel {
 		if (albums.isEmpty()) {
 			return null;
 		} else {
-			JScrollPane albumsScrollJTablePane = new AlbumsScrollJTablePane(albums, generationPane);
+			JScrollPane albumsScrollJTablePane = new AlbumsScrollJTablePane(albums, 
+					AbstractAlbumsTableModel.REGULAR_COLUMN_LIST,
+					generationPane);
 			albumsScrollJTablePane.setPreferredSize(SCROLL_TABLE_DIMENSION);
 			return albumsScrollJTablePane;
 		}

@@ -87,4 +87,24 @@ public abstract class AbstractAlbumsTableModel extends AbstractTableModel implem
 	}
 	
 	protected abstract List<Album> getAlbumsList();
+	
+	public static final List<AlbumTableColumn> REGULAR_COLUMN_LIST = List.of(
+			AlbumTableColumn.TITRE, 
+			AlbumTableColumn.AUTEURS, 
+			AlbumTableColumn.FORMAT, 
+			AlbumTableColumn.DISCOGS,
+			AlbumTableColumn.POIDS,
+			AlbumTableColumn.ENREGISTREMENT,
+			AlbumTableColumn.COMPOSITION);
+	
+	public static final List<AlbumTableColumn> AUGMENTED_COLUMN_LIST = List.of(
+			AlbumTableColumn.TITRE, 
+			AlbumTableColumn.AUTEURS, 
+			AlbumTableColumn.FORMAT,
+			AlbumTableColumn.MEDIA_FILES, 
+			AlbumTableColumn.PROBLEM,
+			AlbumTableColumn.DISCOGS,
+			AlbumTableColumn.POIDS,
+			AlbumTableColumn.ENREGISTREMENT,
+			AlbumTableColumn.COMPOSITION);
 }

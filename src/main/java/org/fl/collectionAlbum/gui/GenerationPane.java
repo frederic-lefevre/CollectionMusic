@@ -37,6 +37,7 @@ import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory;
 import org.fl.collectionAlbum.format.ContentNature;
+import org.fl.collectionAlbum.gui.table.AbstractAlbumsTableModel;
 import org.fl.collectionAlbum.gui.table.AlbumsScrollJTablePane;
 import org.fl.collectionAlbum.gui.table.ArtistesScrollJTablePane;
 import org.fl.collectionAlbum.gui.table.ConcertsScrollJTablePane;
@@ -70,7 +71,8 @@ public class GenerationPane extends JPanel {
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
 		// collection tab: Scroll pane to contain the collection table
-		AlbumsScrollJTablePane albumsScrollJTablePane = new AlbumsScrollJTablePane(collectionAlbumContainer.getCollectionAlbumsMusiques().getAlbums(), this);	
+		AlbumsScrollJTablePane albumsScrollJTablePane = 
+				new AlbumsScrollJTablePane(collectionAlbumContainer.getCollectionAlbumsMusiques().getAlbums(), AbstractAlbumsTableModel.AUGMENTED_COLUMN_LIST, this);	
 		
 		ArtistesScrollJTablePane artistesScrollJTablePane = new ArtistesScrollJTablePane(collectionAlbumContainer.getCollectionArtistes().getArtistes(), this, true);
 		ArtistesScrollJTablePane artistesConcertsScrollJTablePane = new ArtistesScrollJTablePane(collectionAlbumContainer.getConcertsArtistes().getArtistes(), this, true);

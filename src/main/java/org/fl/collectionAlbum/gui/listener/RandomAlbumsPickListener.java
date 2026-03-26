@@ -33,6 +33,7 @@ import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.gui.GenerationPane;
 import org.fl.collectionAlbum.gui.UtilsPane;
+import org.fl.collectionAlbum.gui.table.AbstractAlbumsTableModel;
 import org.fl.collectionAlbum.gui.table.AlbumsScrollJTablePane;
 
 public class RandomAlbumsPickListener implements java.awt.event.ActionListener {
@@ -60,7 +61,8 @@ public class RandomAlbumsPickListener implements java.awt.event.ActionListener {
 		}
 
 		// Table to display the result albums
-		AlbumsScrollJTablePane albumsScrollJTablePane = new AlbumsScrollJTablePane(randomAlbums, generationPane);
+		AlbumsScrollJTablePane albumsScrollJTablePane = 
+				new AlbumsScrollJTablePane(randomAlbums, AbstractAlbumsTableModel.REGULAR_COLUMN_LIST, generationPane);
 		
 		JOptionPane.showMessageDialog(null, albumsScrollJTablePane, "Albums choisis aléatoirement", JOptionPane.PLAIN_MESSAGE);
 	}

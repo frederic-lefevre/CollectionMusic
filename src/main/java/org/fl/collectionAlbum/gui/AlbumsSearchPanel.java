@@ -130,7 +130,9 @@ public class AlbumsSearchPanel extends JPanel {
 		add(searchCriteriaPanel);
 		
 		// Table to display the result albums
-		AlbumsScrollJTablePane albumsScrollJTablePane = new AlbumsScrollJTablePane(searchResultAlbums, generationPane);
+		AlbumsScrollJTablePane albumsScrollJTablePane = new AlbumsScrollJTablePane(searchResultAlbums,
+				AbstractAlbumsTableModel.AUGMENTED_COLUMN_LIST,
+				generationPane);
 		albumsTableModel = albumsScrollJTablePane.getAlbumsTableModel();
 		
 		add(albumsScrollJTablePane);
