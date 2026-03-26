@@ -68,7 +68,8 @@ public enum AlbumTableColumn {
 			new DatesAlbumRenderer(Album::getDebutComposition, Album::getFinComposition, t -> TemporalUtils.formatDate((TemporalAccessor)t)),
 			new AlbumCompositionComparator(),
 			Album.class,
-			(a) -> a);
+			(a) -> a),
+	ACQUISITION("Date d'acquisition", 140, null, null, String.class, (a) -> TemporalUtils.formatDate(a.getAcquisitionDate()));
 		
 	private final String name;
 	private final int width;
