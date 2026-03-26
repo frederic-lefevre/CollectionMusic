@@ -24,32 +24,21 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui.table;
 
-import java.time.temporal.TemporalAccessor;
-import java.util.function.Function;
+import java.util.Comparator;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableRowSorter;
 
 import org.fl.collectionAlbum.Control;
-import org.fl.collectionAlbum.RangementComparator;
 import org.fl.collectionAlbum.albums.Album;
-import org.fl.collectionAlbum.albums.AlbumCompositionComparator;
-import org.fl.collectionAlbum.albums.AlbumEnregistrementComparator;
-import org.fl.collectionAlbum.albums.AlbumMediaFilesStatusComparator;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.gui.GenerationPane;
 import org.fl.collectionAlbum.gui.adapter.AlbumMouseAdapter;
-import org.fl.collectionAlbum.gui.renderer.AuteurListRenderer;
-import org.fl.collectionAlbum.gui.renderer.CollectionBooleanRenderer;
-import org.fl.collectionAlbum.gui.renderer.CollectionNumberRenderer;
-import org.fl.collectionAlbum.gui.renderer.DatesAlbumRenderer;
-import org.fl.collectionAlbum.gui.renderer.MediaFilesRenderer;
-import org.fl.collectionAlbum.gui.renderer.StringToHtmlRenderer;
-import org.fl.collectionAlbum.utils.CollectionUtils;
-import org.fl.collectionAlbum.utils.TemporalUtils;
 
 public class AlbumsJTable extends MusicArtefactTable<Album> {
 
@@ -57,45 +46,27 @@ public class AlbumsJTable extends MusicArtefactTable<Album> {
 
 	private static final Logger tLog = Logger.getLogger(AlbumsJTable.class.getName());
 	
-	private static final RangementComparator RANGEMENT_COMPARATOR = new RangementComparator();
-	private static final AlbumMediaFilesStatusComparator ALBUM_MEDIA_FILES_STATUS_COMPARATOR = new AlbumMediaFilesStatusComparator();
-	private static final CollectionUtils.DoubleComparator DOUBLE_COMPARATOR = new CollectionUtils.DoubleComparator();
-	private static final AlbumEnregistrementComparator ENREGISTREMENT_COMPARATOR = new AlbumEnregistrementComparator();
-	private static final AlbumCompositionComparator COMPOSITION_COMPARATOR = new AlbumCompositionComparator();
-	
-	
-	private static final Function<TemporalAccessor, String> dateFormatterFunction = t -> TemporalUtils.formatDate((TemporalAccessor)t);
-	private static final Function<Album, TemporalAccessor> beginEnregistrementGetter = a -> a.getDebutEnregistrement();
-	private static final Function<Album, TemporalAccessor> finEnregistrementGetter = a -> a.getFinEnregistrement();
-	private static final Function<Album, TemporalAccessor> beginCompositionGetter = a -> a.getDebutComposition();
-	private static final Function<Album, TemporalAccessor> endCompositionGetter = a -> a.getFinComposition();
+	private final List<AlbumTableColumn> albumTableColumns;
 	
 	public AlbumsJTable(AbstractAlbumsTableModel albumsTableModel, GenerationPane generationPane) {
 		super(albumsTableModel);
+		
+		this.albumTableColumns = albumsTableModel.getAlbumTableColumns();
 		
 		setFillsViewportHeight(true);
 		
 		setRowHeight(ContentNature.values().length*25);
 		
-		getColumnModel().getColumn(AbstractAlbumsTableModel.TITRE_COL_IDX).setCellRenderer(new StringToHtmlRenderer());
-		getColumnModel().getColumn(AbstractAlbumsTableModel.AUTEUR_COL_IDX).setCellRenderer(new AuteurListRenderer());
-		getColumnModel().getColumn(AbstractAlbumsTableModel.MEDIA_FILES_COL_IDX).setCellRenderer(new MediaFilesRenderer());
-		getColumnModel().getColumn(AbstractAlbumsTableModel.PROBLEM_COL_IDX).setCellRenderer(new CollectionBooleanRenderer());
-		getColumnModel().getColumn(AbstractAlbumsTableModel.POIDS_COL_IDX).setCellRenderer(new CollectionNumberRenderer());
-		getColumnModel().getColumn(AbstractAlbumsTableModel.ENREGISTREMENT_COL_IDX)
-			.setCellRenderer(new DatesAlbumRenderer(beginEnregistrementGetter, finEnregistrementGetter, dateFormatterFunction));
-		getColumnModel().getColumn(AbstractAlbumsTableModel.COMPOSITION_COL_IDX)
-			.setCellRenderer(new DatesAlbumRenderer(beginCompositionGetter, endCompositionGetter, dateFormatterFunction));
-		
-		getColumnModel().getColumn(AbstractAlbumsTableModel.TITRE_COL_IDX).setPreferredWidth(250);
-		getColumnModel().getColumn(AbstractAlbumsTableModel.AUTEUR_COL_IDX).setPreferredWidth(550);
-		getColumnModel().getColumn(AbstractAlbumsTableModel.FORMAT_COL_IDX).setPreferredWidth(100);
-		getColumnModel().getColumn(AbstractAlbumsTableModel.MEDIA_FILES_COL_IDX).setPreferredWidth(140);
-		getColumnModel().getColumn(AbstractAlbumsTableModel.PROBLEM_COL_IDX).setPreferredWidth(70);
-		getColumnModel().getColumn(AbstractAlbumsTableModel.DISCOGS_COL_IDX).setPreferredWidth(110);
-		getColumnModel().getColumn(AbstractAlbumsTableModel.POIDS_COL_IDX).setPreferredWidth(50);
-		getColumnModel().getColumn(AbstractAlbumsTableModel.ENREGISTREMENT_COL_IDX).setPreferredWidth(260);
-		getColumnModel().getColumn(AbstractAlbumsTableModel.COMPOSITION_COL_IDX).setPreferredWidth(260);
+		for (int colIdx = 0; colIdx < albumTableColumns.size(); colIdx++) {
+			TableCellRenderer renderer =  albumTableColumns.get(colIdx).getCellRenderer();
+			if (renderer != null) {
+				 getColumnModel().getColumn(colIdx).setCellRenderer(renderer);
+			}
+		}
+
+		for (int colIdx = 0; colIdx < albumTableColumns.size(); colIdx++) {
+			 getColumnModel().getColumn(colIdx).setPreferredWidth(albumTableColumns.get(colIdx).getWidth());
+		}
 		
 		// Allow single row selection only
 		ListSelectionModel listSelectionModel = new DefaultListSelectionModel();
@@ -108,11 +79,12 @@ public class AlbumsJTable extends MusicArtefactTable<Album> {
 		
 		// Row sorter
 		TableRowSorter<AbstractAlbumsTableModel> sorter = new TableRowSorter<>(albumsTableModel);
-		sorter.setComparator(AbstractAlbumsTableModel.AUTEUR_COL_IDX, RANGEMENT_COMPARATOR);
-		sorter.setComparator(AbstractAlbumsTableModel.MEDIA_FILES_COL_IDX, ALBUM_MEDIA_FILES_STATUS_COMPARATOR);
-		sorter.setComparator(AbstractAlbumsTableModel.POIDS_COL_IDX, DOUBLE_COMPARATOR);
-		sorter.setComparator(AbstractAlbumsTableModel.ENREGISTREMENT_COL_IDX, ENREGISTREMENT_COMPARATOR);
-		sorter.setComparator(AbstractAlbumsTableModel.COMPOSITION_COL_IDX, COMPOSITION_COMPARATOR);
+		for (int colIdx = 0; colIdx < albumTableColumns.size(); colIdx++) {
+			Comparator<?> comparator =  albumTableColumns.get(colIdx).getComparator();
+			if (comparator != null) {
+				sorter.setComparator(colIdx, comparator);
+			}
+		}
 		setRowSorter(sorter);
 	}
 	
@@ -131,12 +103,12 @@ public class AlbumsJTable extends MusicArtefactTable<Album> {
 	
 	@Override
 	public boolean isArtistsColumnSelected() {
-		return isColumnSelected(AbstractAlbumsTableModel.AUTEUR_COL_IDX);
+		return albumTableColumns.get(getSelectedColumn()) == AlbumTableColumn.AUTEURS;
 	}
 
 	@Override
 	public boolean isDiscogsReleaseColumnSelected() {
-		return isColumnSelected(AbstractAlbumsTableModel.DISCOGS_COL_IDX);
+		return albumTableColumns.get(getSelectedColumn()) == AlbumTableColumn.DISCOGS;
 	}
 
 	@Override

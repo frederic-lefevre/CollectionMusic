@@ -35,7 +35,16 @@ public class AlbumsTableModel extends AbstractAlbumsTableModel {
 	private final List<Album> albumsList;
 	
 	public AlbumsTableModel(List<Album> albumsList) {
-		super();
+		super(List.of(
+				AlbumTableColumn.TITRE, 
+				AlbumTableColumn.AUTEURS, 
+				AlbumTableColumn.FORMAT, 
+				AlbumTableColumn.MEDIA_FILES, 
+				AlbumTableColumn.PROBLEM,
+				AlbumTableColumn.DISCOGS,
+				AlbumTableColumn.POIDS,
+				AlbumTableColumn.ENREGISTREMENT,
+				AlbumTableColumn.COMPOSITION));
 		this.albumsList = albumsList;
 	}
 
