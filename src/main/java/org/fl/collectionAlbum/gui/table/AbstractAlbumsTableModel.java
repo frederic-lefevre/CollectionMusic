@@ -107,4 +107,14 @@ public abstract class AbstractAlbumsTableModel extends AbstractTableModel implem
 			AlbumTableColumn.POIDS,
 			AlbumTableColumn.ENREGISTREMENT,
 			AlbumTableColumn.COMPOSITION);
+	
+	public static final List<AlbumTableColumn> ACQUISITION_COLUMN_LIST = List.of(
+			AlbumTableColumn.TITRE, 
+			AlbumTableColumn.AUTEURS, 
+			AlbumTableColumn.FORMAT, 
+			AlbumTableColumn.DISCOGS,
+			AlbumTableColumn.POIDS,
+			AlbumTableColumn.ENREGISTREMENT,
+			AlbumTableColumn.COMPOSITION,
+			AlbumTableColumn.ACQUISITION);
 }
