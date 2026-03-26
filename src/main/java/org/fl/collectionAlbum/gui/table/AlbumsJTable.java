@@ -57,12 +57,20 @@ public class AlbumsJTable extends MusicArtefactTable<Album> {
 		
 		setRowHeight(ContentNature.values().length*25);
 		
+		// Row sorter
+		TableRowSorter<AbstractAlbumsTableModel> sorter = new TableRowSorter<>(albumsTableModel);
+		
 		for (int colIdx = 0; colIdx < albumTableColumns.size(); colIdx++) {
 			TableCellRenderer renderer =  albumTableColumns.get(colIdx).getCellRenderer();
 			if (renderer != null) {
 				 getColumnModel().getColumn(colIdx).setCellRenderer(renderer);
 			}
 			getColumnModel().getColumn(colIdx).setPreferredWidth(albumTableColumns.get(colIdx).getWidth());
+			
+			Comparator<?> comparator =  albumTableColumns.get(colIdx).getComparator();
+			if (comparator != null) {
+				sorter.setComparator(colIdx, comparator);
+			}
 		}
 		
 		// Allow single row selection only
@@ -73,15 +81,7 @@ public class AlbumsJTable extends MusicArtefactTable<Album> {
 		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		
 		addMouseListener(new AlbumMouseAdapter(this, Control.getOsActionsOnAlbum(), generationPane));
-		
-		// Row sorter
-		TableRowSorter<AbstractAlbumsTableModel> sorter = new TableRowSorter<>(albumsTableModel);
-		for (int colIdx = 0; colIdx < albumTableColumns.size(); colIdx++) {
-			Comparator<?> comparator =  albumTableColumns.get(colIdx).getComparator();
-			if (comparator != null) {
-				sorter.setComparator(colIdx, comparator);
-			}
-		}
+
 		setRowSorter(sorter);
 	}
 	
