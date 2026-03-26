@@ -62,10 +62,7 @@ public class AlbumsJTable extends MusicArtefactTable<Album> {
 			if (renderer != null) {
 				 getColumnModel().getColumn(colIdx).setCellRenderer(renderer);
 			}
-		}
-
-		for (int colIdx = 0; colIdx < albumTableColumns.size(); colIdx++) {
-			 getColumnModel().getColumn(colIdx).setPreferredWidth(albumTableColumns.get(colIdx).getWidth());
+			getColumnModel().getColumn(colIdx).setPreferredWidth(albumTableColumns.get(colIdx).getWidth());
 		}
 		
 		// Allow single row selection only
