@@ -40,6 +40,7 @@ import org.fl.collectionAlbum.albums.AlbumMediaFilesStatusComparator;
 import org.fl.collectionAlbum.gui.renderer.AuteurListRenderer;
 import org.fl.collectionAlbum.gui.renderer.CollectionBooleanRenderer;
 import org.fl.collectionAlbum.gui.renderer.CollectionNumberRenderer;
+import org.fl.collectionAlbum.gui.renderer.DateRenderer;
 import org.fl.collectionAlbum.gui.renderer.DatesAlbumRenderer;
 import org.fl.collectionAlbum.gui.renderer.MediaFilesRenderer;
 import org.fl.collectionAlbum.gui.renderer.StringToHtmlRenderer;
@@ -69,7 +70,10 @@ public enum AlbumTableColumn {
 			new AlbumCompositionComparator(),
 			Album.class,
 			(a) -> a),
-	ACQUISITION("Date d'acquisition", 140, null, null, String.class, (a) -> TemporalUtils.formatDate(a.getAcquisitionDate()));
+	ACQUISITION("Date d'acquisition", 140, 
+			new DateRenderer(t -> TemporalUtils.formatDate((TemporalAccessor)t)), 
+					new TemporalUtils.TemporalAccessorComparator(), TemporalAccessor.class, 
+					(a) -> a.getAcquisitionDate());
 		
 	private final String name;
 	private final int width;
