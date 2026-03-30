@@ -120,6 +120,16 @@ public class ListeAlbum {
 		}
 	}
 	
+	public TemporalAccessor getOldestAcquisitionDate() {	
+		if (albums.isEmpty()) {
+			return null;
+		} else {
+			return Collections.min(
+					Builder.getBuilderFrom(albums).withAlbumSatisfying(a -> a.getAcquisitionDate() != null).build().albums, 
+					new AlbumAcquisitionDateComparator()).getAcquisitionDate();
+		}
+	}
+	
 	public TemporalAccessor getMostRecentRecordingDate() {	
 		if (albums.isEmpty()) {
 			return null;
@@ -133,6 +143,17 @@ public class ListeAlbum {
 			return null;
 		} else {
 			return Collections.max(albums, new AlbumCompositionComparator()).getFinComposition();
+		}
+	}
+	
+	
+	public TemporalAccessor getMostRecentAcquisitionDate() {	
+		if (albums.isEmpty()) {
+			return null;
+		} else {
+			return Collections.max(
+					Builder.getBuilderFrom(albums).withAlbumSatisfying(a -> a.getAcquisitionDate() != null).build().albums, 
+					new AlbumAcquisitionDateComparator()).getAcquisitionDate();
 		}
 	}
 	

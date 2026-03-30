@@ -34,13 +34,13 @@ import javax.swing.table.TableCellRenderer;
 
 import org.fl.collectionAlbum.RangementComparator;
 import org.fl.collectionAlbum.albums.Album;
+import org.fl.collectionAlbum.albums.AlbumAcquisitionDateComparator;
 import org.fl.collectionAlbum.albums.AlbumCompositionComparator;
 import org.fl.collectionAlbum.albums.AlbumEnregistrementComparator;
 import org.fl.collectionAlbum.albums.AlbumMediaFilesStatusComparator;
 import org.fl.collectionAlbum.gui.renderer.AuteurListRenderer;
 import org.fl.collectionAlbum.gui.renderer.CollectionBooleanRenderer;
 import org.fl.collectionAlbum.gui.renderer.CollectionNumberRenderer;
-import org.fl.collectionAlbum.gui.renderer.DateRenderer;
 import org.fl.collectionAlbum.gui.renderer.DatesAlbumRenderer;
 import org.fl.collectionAlbum.gui.renderer.MediaFilesRenderer;
 import org.fl.collectionAlbum.gui.renderer.StringToHtmlRenderer;
@@ -71,9 +71,10 @@ public enum AlbumTableColumn {
 			Album.class,
 			(a) -> a),
 	ACQUISITION("Date d'acquisition", 140, 
-			new DateRenderer(t -> TemporalUtils.formatDate((TemporalAccessor)t)), 
-					new TemporalUtils.TemporalAccessorComparator(), TemporalAccessor.class, 
-					(a) -> a.getAcquisitionDate());
+			new DatesAlbumRenderer(Album::getAcquisitionDate, null, t -> TemporalUtils.formatDate((TemporalAccessor)t)), 
+			new AlbumAcquisitionDateComparator(), 
+			Album.class, 
+			(a) -> a);
 		
 	private final String name;
 	private final int width;

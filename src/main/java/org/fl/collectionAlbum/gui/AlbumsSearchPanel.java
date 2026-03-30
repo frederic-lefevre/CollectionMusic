@@ -54,12 +54,13 @@ public class AlbumsSearchPanel extends JPanel {
 
 	private static final Font buttonFont = new Font("Verdana", Font.BOLD, 14);
 	
-	private static final Dimension SEARCH_LABEL_DIMENSION = new Dimension(400, 80);
+	private static final Dimension SEARCH_LABEL_DIMENSION = new Dimension(400, 25);
 	private static final Dimension SEARCH_TEXT_DIMENSION = new Dimension(400, 30);
 	
 	private final CollectionAlbumContainer collectionAlbumContainer;
 	private final DateRangeChooser dateEnregistrement;
 	private final DateRangeChooser dateComposition;
+	private final DateRangeChooser dateAcquisition;
 	private final List<Album> searchResultAlbums;
 	private final AbstractAlbumsTableModel albumsTableModel;
 	
@@ -70,6 +71,8 @@ public class AlbumsSearchPanel extends JPanel {
 	private final LocalDate albumMostRecentRecordingDate;
 	private final LocalDate albumOldestCompositionDate;
 	private final LocalDate albumMostRecentCompositionDate;
+	private final LocalDate albumOldestAcquisitionDate;
+	private final LocalDate albumMostRecentAcquisitionDate;
 	
 	public AlbumsSearchPanel(GenerationPane generationPane, CollectionAlbumContainer collectionAlbumContainer) {
 		super();
@@ -81,11 +84,16 @@ public class AlbumsSearchPanel extends JPanel {
 		this.albumMostRecentRecordingDate = TemporalUtils.getRoundedLocalDate(collectionAlbumContainer.getAlbumMostRecentRecordingDate());
 		this.albumOldestCompositionDate = TemporalUtils.getRoundedLocalDate(collectionAlbumContainer.getAlbumOldestCompositionDate());
 		this.albumMostRecentCompositionDate = TemporalUtils.getRoundedLocalDate(collectionAlbumContainer.getAlbumMostRecentCompositionDate());
+		this.albumOldestAcquisitionDate = TemporalUtils.getRoundedLocalDate(collectionAlbumContainer.getAlbumOldestAcquisitionDate());
+		this.albumMostRecentAcquisitionDate = TemporalUtils.getRoundedLocalDate(collectionAlbumContainer.getAlbumMostRecentAcquisitionnDate());
 		
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
 		JPanel searchCriteriaPanel = new JPanel();
 		searchCriteriaPanel.setLayout(new BoxLayout(searchCriteriaPanel, BoxLayout.X_AXIS));
+		
+		JPanel textSearchPanel = new JPanel();
+		textSearchPanel.setLayout(new BoxLayout(textSearchPanel, BoxLayout.Y_AXIS));
 		
 		JPanel titreAlbumSearchPanel = new JPanel();
 		titreAlbumSearchPanel.setLayout(new BoxLayout(titreAlbumSearchPanel, BoxLayout.Y_AXIS));
@@ -98,7 +106,7 @@ public class AlbumsSearchPanel extends JPanel {
 		titreAlbumSearchPanel.add(titreAlbumSearchLabel);
 		titreAlbumSearchPanel.add(titreAlbumSearchedText);
 		titreAlbumSearchPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
-		searchCriteriaPanel.add(titreAlbumSearchPanel);
+		textSearchPanel.add(titreAlbumSearchPanel);
 		
 		JPanel auteursAlbumSearchPanel = new JPanel();
 		auteursAlbumSearchPanel.setLayout(new BoxLayout(auteursAlbumSearchPanel, BoxLayout.Y_AXIS));
@@ -111,14 +119,19 @@ public class AlbumsSearchPanel extends JPanel {
 		auteursAlbumSearchPanel.add(auteursAlbumSearchLabel);
 		auteursAlbumSearchPanel.add(auteursAlbumSearchedText);
 		auteursAlbumSearchPanel.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
-		searchCriteriaPanel.add(auteursAlbumSearchPanel);
+		textSearchPanel.add(auteursAlbumSearchPanel);
+		
+		searchCriteriaPanel.add(textSearchPanel);
 		
 		dateEnregistrement = new DateRangeChooser("Dates d'enregistrement", albumOldestRecordingDate, albumMostRecentRecordingDate);
 		dateEnregistrement.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
 		dateComposition = new DateRangeChooser("Dates de composition", albumOldestCompositionDate, albumMostRecentCompositionDate);
 		dateComposition.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
+		dateAcquisition = new DateRangeChooser("Dates d'acquisition", LocalDate.MIN, albumMostRecentAcquisitionDate);
+		dateAcquisition.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
 		searchCriteriaPanel.add(dateEnregistrement);
 		searchCriteriaPanel.add(dateComposition);
+		searchCriteriaPanel.add(dateAcquisition);
 		
 		JButton albumsSearchButton = new JButton("Rechercher");
 		
@@ -131,7 +144,7 @@ public class AlbumsSearchPanel extends JPanel {
 		
 		// Table to display the result albums
 		AlbumsScrollJTablePane albumsScrollJTablePane = new AlbumsScrollJTablePane(searchResultAlbums,
-				AbstractAlbumsTableModel.AUGMENTED_COLUMN_LIST,
+				AbstractAlbumsTableModel.ACQUISITION_COLUMN_LIST,
 				generationPane);
 		albumsTableModel = albumsScrollJTablePane.getAlbumsTableModel();
 		
@@ -165,6 +178,9 @@ public class AlbumsSearchPanel extends JPanel {
 			LocalDate minCompositionDate = dateComposition.getMinChoosenDate();
 			LocalDate maxCompositionDate = dateComposition.getMaxChoosenDate();
 			
+			LocalDate minAcquisitionDate = dateAcquisition.getMinChoosenDate();
+			LocalDate maxAcquisitionDate = dateAcquisition.getMaxChoosenDate();
+			
 			List<Predicate<Album>> predicates = new ArrayList<>();
 			
 			if ((titreSearchTextEntry != null) && !titreSearchTextEntry.isBlank()) {
@@ -178,7 +194,8 @@ public class AlbumsSearchPanel extends JPanel {
 			}
 			
 			if ((minRecordingDate != null) && (maxRecordingDate != null) && 
-					(minCompositionDate != null) && (maxCompositionDate != null)) {
+					(minCompositionDate != null) && (maxCompositionDate != null) &&
+					(minAcquisitionDate != null) && (maxAcquisitionDate != null)) {
 				if (TemporalUtils.compareTemporal(minRecordingDate, albumOldestRecordingDate) > 0) {
 					predicates.add(album -> (TemporalUtils.compareTemporal(minRecordingDate, album.getDebutEnregistrement()) <= 0));
 				}
@@ -190,6 +207,16 @@ public class AlbumsSearchPanel extends JPanel {
 				}
 				if (TemporalUtils.compareTemporal(maxCompositionDate, albumMostRecentCompositionDate) < 0) {
 					predicates.add(album -> (TemporalUtils.compareTemporal(maxCompositionDate, album.getFinComposition()) >= 0));
+				}
+				if (! minAcquisitionDate.equals(LocalDate.MIN)) {
+					if (TemporalUtils.compareTemporal(minAcquisitionDate, albumOldestAcquisitionDate) > 0) {
+						predicates.add(album -> (album.getAcquisitionDate() != null));
+					} 
+					predicates.add(album -> (TemporalUtils.compareTemporal(minAcquisitionDate, album.getAcquisitionDate()) <= 0));
+					
+				}
+				if (TemporalUtils.compareTemporal(maxAcquisitionDate, albumMostRecentAcquisitionDate) < 0) {
+					predicates.add(album -> (album.getAcquisitionDate() == null) || (TemporalUtils.compareTemporal(maxAcquisitionDate, album.getAcquisitionDate()) >= 0));
 				}
 			} else {
 				predicates.add(_ -> false);
