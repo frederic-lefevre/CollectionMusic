@@ -28,6 +28,7 @@ import java.awt.event.MouseEvent;
 import java.time.temporal.ChronoField;
 import java.time.temporal.TemporalAccessor;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 
 import javax.swing.JOptionPane;
@@ -89,13 +90,16 @@ public class AlbumStatistiquesMouseAdapter extends StatistiquesMouseAdapter {
 		if (SwingUtilities.isLeftMouseButton(evt) && (evt.getClickCount() > 1)) {
 
 			List<Album> albumList = albumListSorter.apply(collectionAlbumContainer.getAlbumsSastisfying(
-						List.of(album -> isBetween(albumDateFunction.apply(album).get(ChronoField.YEAR), anneeDebut, anneeFin))))
+						List.of(album -> isBetween(
+								Optional.ofNullable(albumDateFunction.apply(album)).map(date -> date.get(ChronoField.YEAR)).orElse(null), 
+								anneeDebut, 
+								anneeFin))))
 					.getAlbums();
 			
 			if (! albumList.isEmpty()) {
 				// Table to display the result albums
 				AlbumsScrollJTablePane albumsScrollJTablePane = new AlbumsScrollJTablePane(albumList, 
-						AbstractAlbumsTableModel.REGULAR_COLUMN_LIST,
+						AbstractAlbumsTableModel.ACQUISITION_COLUMN_LIST,
 						generationPane);
 			
 				JOptionPane.showMessageDialog(null, albumsScrollJTablePane, getWindowsTitle("Albums "), JOptionPane.PLAIN_MESSAGE);

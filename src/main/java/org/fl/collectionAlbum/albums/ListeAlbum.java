@@ -40,6 +40,7 @@ public class ListeAlbum {
 	private static final AlbumAlphaComparator ALBUM_ALPHA_COMPARATOR = new AlbumAlphaComparator();
 	private static final AlbumEnregistrementComparator ALBUM_ENREGISTREMENT_COMPARATOR = new AlbumEnregistrementComparator();
 	private static final AlbumCompositionComparator ALBUM_COMPOSITION_COMPARATOR = new AlbumCompositionComparator();
+	private static final AlbumAcquisitionDateComparator ALBUM_ACQUISITION_COMPARATOR = new AlbumAcquisitionDateComparator();
 	private static final RangementComparator RANGEMENT_COMPARATOR = new RangementComparator();
 	
 	private final List<Album> albums;
@@ -79,6 +80,11 @@ public class ListeAlbum {
 		return this;
 	}
 
+	public ListeAlbum sortChronoAcquisition() {
+		Collections.sort(albums, ALBUM_ACQUISITION_COMPARATOR);
+		return this;
+	}
+	
 	public ListeAlbum sortRangementAlbum() {
 		Collections.sort(albums, RANGEMENT_COMPARATOR);
 		return this;

@@ -44,7 +44,8 @@ public class StatistiquesMouseAdapter extends MouseAdapter {
 		this.generationPane = generationPane;
 	}
 	
-	protected boolean isBetween(int val, int minInclusive, int maxExclusive) {
+	protected boolean isBetween(Integer val, int minInclusive, int maxExclusive) {
+		if (val == null) return false;
 		return (val >= minInclusive && val < maxExclusive);
 	}
 	
