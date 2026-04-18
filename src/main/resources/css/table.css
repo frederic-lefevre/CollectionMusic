@@ -52,7 +52,7 @@ table { vertical-align : top ;
 div.mhc {
         display: table-row;
         overflow: hidden;
-        height: 3em;
+        height: 6em;
         position: fixed;
         top: auto;
         left: auto;
