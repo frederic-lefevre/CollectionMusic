@@ -67,21 +67,20 @@ public class RapportMusicArtefact extends RapportHtml {
 			write(DISCOGS_LINK3);
 		}
 		
-		if ( musicArtefact.hasNotes()) {
-			write("  <h3>Notes</h3>\n");
-			for (String note : musicArtefact.getNotes()) {
-				write("<p>").write(note).write("</p>\n");
-			}
+		if (musicArtefact.hasNotes()) {
+			write("  <h3>Notes:</h3>\n  <ul>\n");
+			musicArtefact.getNotes().forEach(note -> write("    <li>").write(note).write("</li>\n"));
+			write("  </ul>\n");
 		}
 		
 		if (musicArtefact.hasUrlLinks()) {
 			write("  <h3>Autres liens</h3>\n");
-			write("<ul>\n");
+			write("  <ul>\n");
 			musicArtefact.getUrlLinks().forEach(infosUri -> {
 				String uriString = infosUri.toString();
-				write("  <li><a href=\"").write(uriString).write("\">").write(uriString).write("</a></li>\n");			
+				write("    <li><a href=\"").write(uriString).write("\">").write(uriString).write("</a></li>\n");			
 			});
-			write("</ul>\n");
+			write("  </ul>\n");
 		}		
 	}
 
