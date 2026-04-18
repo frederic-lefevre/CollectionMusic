@@ -32,7 +32,7 @@ import org.fl.collectionAlbum.artistes.Artiste;
 
 public class RapportMusicArtefact extends RapportHtml {
 
-	private static final String DISCOGS_LINK1 = "<p><a href=\"";
+	private static final String DISCOGS_LINK1 = "    <p><a href=\"";
 	private static final String DISCOGS_LINK2 = "\">";
 	private static final String DISCOGS_LINK3 = "</a></p>\n";
 	
