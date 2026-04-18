@@ -241,8 +241,9 @@ public class CollectionUtils {
 	private static void appendNotes(StringBuilder buf, MusicArtefact musicArtefact) {
 		
 		if (musicArtefact.hasNotes()) {
-			buf.append("<h3>Notes:</h3>");
-			musicArtefact.getNotes().forEach(note -> buf.append("<p>").append(note).append("</p>"));
+			buf.append("<h3>Notes:</h3>\n<ul>\n");
+			musicArtefact.getNotes().forEach(note -> buf.append("  <li>").append(note).append("</li>\n"));
+			buf.append("</ul>\n");
 		}	
 	}
 	
