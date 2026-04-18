@@ -26,6 +26,7 @@ package org.fl.collectionAlbum.rapportHtml;
 
 
 import java.nio.file.Path;
+import java.time.temporal.TemporalAccessor;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.logging.Level;
@@ -97,7 +98,6 @@ public class RapportAlbum extends RapportMusicArtefact {
 		write(format.mediaSupportsHtmlList());
 
 		write("  <h3>Fichiers media</h3>\n");
-		
 
 		if (format.hasMediaFiles()) {
 			
@@ -114,6 +114,13 @@ public class RapportAlbum extends RapportMusicArtefact {
 		}
 		
 		super.corpsRapport();
+		
+		TemporalAccessor acquisitionDate = album.getAcquisitionDate();
+		if (acquisitionDate != null) {
+			write("  <h4>Date d'acquisition: ")
+				.write(TemporalUtils.formatDate(acquisitionDate))
+				.write("</h4>\n");
+		}
 	}
 	
 	private Consumer<AbstractAlbumMediaFiles> detailInCell = mediaFile -> {
