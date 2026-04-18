@@ -47,25 +47,23 @@ public class AlbumAcquisitionDateComparator implements Comparator<Album> {
 				boolean album2hasCD = album2.getFormatAlbum().getSupportsPhysiques().contains(MediaSupportCategories.CD);
 				
 				if (album1hasK7 && !album2hasK7) {
-					return -1;
+					return 1;
 				} else if (!album1hasK7 && album2hasK7) {
-					return 1;
-				} else if (album1hasCD && !album2hasCD) {
-					return 1;
-				} else if (!album1hasCD && album2hasCD) {
 					return -1;
+				} else if (album1hasCD && !album2hasCD) {
+					return -1;
+				} else if (!album1hasCD && album2hasCD) {
+					return 1;
 				} else {
 					return 0;
 				}
 			} else {
-				return -1;
+				return 1;
 			}
 		} else if (date2 == null) {
-			return 1;
+			return -1;
 		} else {
-			return TemporalUtils.getRoundedLocalDate(date1).compareTo(TemporalUtils.getRoundedLocalDate(date2));
+			return TemporalUtils.getRoundedLocalDate(date2).compareTo(TemporalUtils.getRoundedLocalDate(date1));
 		}
 	}
-
-	
 }
