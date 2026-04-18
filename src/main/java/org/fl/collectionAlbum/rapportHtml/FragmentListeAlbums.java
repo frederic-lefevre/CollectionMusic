@@ -102,13 +102,13 @@ public class FragmentListeAlbums {
 				URI aPath = RapportStructuresAndNames.getAlbumRapportRelativeUri(unAlbum);			
 				fragment.append("<a href=\"").append(urlOffSet).append(aPath.toString()).append("\">");
 				fragment.append(unAlbum.getTitre());			
-				fragment.append("</a>\n");
+				fragment.append("</a>");
 			} else {
 				fragment.append(unAlbum.getTitre());
 			}
 
 			FragmentIntervenants.printIntervenant(unAlbum, fragment, urlOffSet);
-			fragment.append("\n    </td>\n");
+			fragment.append("    </td>\n");
 			
 			fragment.append("    <td class=\"an\">");
 			fragment.append(Optional.ofNullable(unAlbum.getAcquisitionDate()).map(t -> TemporalUtils.formatDate(t)).orElse(""));
