@@ -152,7 +152,7 @@ public class TemporalUtils {
 				return LocalDateTime.of(year, month, day, hour, minute,second, nanoOfsecond);
 				
 			} else {
-				return null;
+				throw new IllegalArgumentException("Cannot get rounded LocalDateTime because field YEAR is not supported by TemporalAccessor parameter");
 			}
 		}
 	}

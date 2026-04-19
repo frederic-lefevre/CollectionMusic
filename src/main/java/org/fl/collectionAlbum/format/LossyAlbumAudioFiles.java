@@ -1,5 +1,5 @@
 /*
- MIT License
+ * MIT License
 
 Copyright (c) 2017, 2026 Frederic Lefevre
 
@@ -20,7 +20,7 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
- */
+*/
 
 package org.fl.collectionAlbum.format;
 
@@ -31,34 +31,38 @@ import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
 import tools.jackson.databind.node.ObjectNode;
 
-public class LosslessAudioFile extends AbstractAudioFile {
+public class LossyAlbumAudioFiles extends AbstractAlbumsAudioFiles {
+	
+	private final double bitRate;
 
-	private final int bitDepth;
+	private static final String BIT_RATE_TITLE = "Bit rate";
 	
-	private static final String BIT_DEPTH_TITLE = "Bit depth";
-	
-	private static final int HIGH_RES_BIT_DEPTH_THRESHOLD = 16;
-	private static final double HIGH_RES_SAMPLING_RATE_THRESHOLD = 48;
-	
-	public LosslessAudioFile(ObjectNode audioJson, AudioFileType type, String source, int bitDepth, double samplingRate, String note, Set<MediaFilePath> mediaFilePaths) {
+	public LossyAlbumAudioFiles(ObjectNode audioJson, AudioFileType type, String source, double bitRate, double samplingRate, String note, Set<MediaFilePath> mediaFilePaths) {
 		
 		super(audioJson, type, source, samplingRate, note, mediaFilePaths);
-
-		this.bitDepth = bitDepth;
+		this.bitRate = bitRate;
 	}
 
-	public int getBitDepth() {
-		return bitDepth;
+	public double getBitRate() {
+		return bitRate;
 	}
 	
 	@Override
 	public boolean isHighRes() {
-		return (bitDepth > HIGH_RES_BIT_DEPTH_THRESHOLD) || (getSamplingRate() > HIGH_RES_SAMPLING_RATE_THRESHOLD);
+		return false;
 	}
 	
 	@Override
 	public boolean isLossLess() {
-		return true;
+		return false;
+	}
+	
+	@Override
+	public String displayMediaFileSummary() {
+		StringBuilder audioFilesSummary = new StringBuilder();
+		audioFilesSummary.append(getType().name()).append(" ");
+		audioFilesSummary.append(Double.valueOf(getBitRate()).intValue());
+		return audioFilesSummary.toString();
 	}
 	
 	@Override
@@ -71,22 +75,13 @@ public class LosslessAudioFile extends AbstractAudioFile {
 		return fileDetail(separator, particularDetail, (sb, s) -> appendCommonAudioFileDetailWithLink(sb, s, withPrefix));
 	}
 	
-	BiConsumer<StringBuilder, String> particularDetail = (sb, s) -> sb.append(getBitDepth()).append(" bits").append(s);
-	
-	@Override
-	public String displayMediaFileSummary() {
-		StringBuilder audioFilesSummary = new StringBuilder();
-		audioFilesSummary.append(getBitDepth()).append("-");
-		audioFilesSummary.append(Double.valueOf(getSamplingRate()).intValue());
-		return audioFilesSummary.toString();
-	}
+	BiConsumer<StringBuilder, String> particularDetail = (sb, s) -> sb.append(getBitRate()).append(" kbit/s").append(s);
 
 	@Override
 	public String displayMediaFileDetailTitles(String separator) {
 		StringBuilder audioFilesDetailTitles = new StringBuilder();
-		audioFilesDetailTitles.append(BIT_DEPTH_TITLE).append(separator);
+		audioFilesDetailTitles.append(BIT_RATE_TITLE).append(separator);
 		appendCommonAudioFileDetailTitles(audioFilesDetailTitles, separator);
 		return audioFilesDetailTitles.toString();
 	}
-
 }

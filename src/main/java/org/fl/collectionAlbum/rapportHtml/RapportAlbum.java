@@ -26,13 +26,14 @@ package org.fl.collectionAlbum.rapportHtml;
 
 
 import java.nio.file.Path;
+import java.time.temporal.TemporalAccessor;
 import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.logging.Level;
 import java.util.stream.Stream;
 
 import org.fl.collectionAlbum.albums.Album;
-import org.fl.collectionAlbum.format.AbstractMediaFile;
+import org.fl.collectionAlbum.format.AbstractAlbumMediaFiles;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.format.Format;
 import org.fl.collectionAlbum.format.Format.RangementSupportPhysique;
@@ -97,7 +98,6 @@ public class RapportAlbum extends RapportMusicArtefact {
 		write(format.mediaSupportsHtmlList());
 
 		write("  <h3>Fichiers media</h3>\n");
-		
 
 		if (format.hasMediaFiles()) {
 			
@@ -114,12 +114,19 @@ public class RapportAlbum extends RapportMusicArtefact {
 		}
 		
 		super.corpsRapport();
+		
+		TemporalAccessor acquisitionDate = album.getAcquisitionDate();
+		if (acquisitionDate != null) {
+			write("  <h4>Date d'acquisition: ")
+				.write(TemporalUtils.formatDate(acquisitionDate))
+				.write("</h4>\n");
+		}
 	}
 	
-	private Consumer<AbstractMediaFile> detailInCell = mediaFile -> {
+	private Consumer<AbstractAlbumMediaFiles> detailInCell = mediaFile -> {
 		write("    <tr><td class=\"mediadetail\">\n");
 		write(mediaFile.displayMediaFileDetailWithFileLink("<br/>\n", true));
-		write("    </td></tr>\n");
+		write("\n    </td></tr>\n");
 	};
 	
 	public static RapportAlbum createRapportAlbum(Album a) {

@@ -37,7 +37,7 @@ public class FragmentIntervenants {
 
 		if (musicArtefact.hasIntervenant()) {
 		
-			fragment.append("      <ul class=\"interv\">\n");
+			fragment.append("\n      <ul class=\"interv\">\n");
 
 			if (musicArtefact.getChefsOrchestre() != null) {
 				for (Artiste unChef : musicArtefact.getChefsOrchestre()) {
@@ -62,7 +62,7 @@ public class FragmentIntervenants {
 					fragment.append("</li>\n");
 				}
 			}
-			fragment.append("      </ul>");
+			fragment.append("      </ul>\n");
 		}
 	}
 	

@@ -48,7 +48,7 @@ public abstract class RapportHtml {
 	private static final String H2_B = "<h2>";
 	private static final String H2_E = "</h2>\n";
 	private static final String L_LIST1 = "<div class=\"home\">\n";
-	private static final String IMG_1 = "  <img  class=\"cover\" src=\"";
+	private static final String IMG_1 = "  <img class=\"cover\" src=\"";
 	private static final String L_LIST4 = "</div>\n";
 	private static final String END = "</body>\n</html>";
 

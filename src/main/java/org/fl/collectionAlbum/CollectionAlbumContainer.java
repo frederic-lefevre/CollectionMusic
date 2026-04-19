@@ -29,6 +29,7 @@ import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -71,6 +72,7 @@ public class CollectionAlbumContainer {
 	
 	private final StatChrono statChronoEnregistrement;
 	private final StatChrono statChronoComposition;
+	private final StatChrono statChronoAcquisition;
 	private final StatChrono statChronoConcert;
 	
 	private final LieuxDesConcerts lieuxDesConcerts ;
@@ -89,6 +91,7 @@ public class CollectionAlbumContainer {
 		concerts = ListeConcert.Builder.getBuilder().build();
 		statChronoEnregistrement = new StatChrono();
 		statChronoComposition = new StatChrono();
+		statChronoAcquisition = new StatChrono();
 		statChronoConcert = new StatChrono();
 		calendrierAlbumArtistes = new ChronoArtistes();
 		calendrierConcertArtistes = new ChronoArtistes();
@@ -122,6 +125,8 @@ public class CollectionAlbumContainer {
 		
 		statChronoEnregistrement.addToStatistic(album.getDebutEnregistrement(), album.getFormatAlbum().getPoids());
 	    statChronoComposition.addToStatistic(album.getDebutComposition(), album.getFormatAlbum().getPoids());
+	    
+	    Optional.ofNullable(album.getAcquisitionDate()).ifPresent(date -> statChronoAcquisition.addToStatistic(date, album.getFormatAlbum().getPoids()));
 	}
 	
 	public void addConcert(ObjectNode arteFactJson, Path jsonFile) { 
@@ -222,6 +227,10 @@ public class CollectionAlbumContainer {
 	public StatChrono getStatChronoComposition() {
 		return statChronoComposition;
 	}
+	
+	public StatChrono getStatChronoAcquisition() {
+		return statChronoAcquisition;
+	}
 
 	public StatChrono getStatChronoEnregistrement() {
 		return statChronoEnregistrement;
@@ -279,6 +288,7 @@ public class CollectionAlbumContainer {
    		concerts.reset(); 		
    		statChronoEnregistrement.reset();
    		statChronoComposition.reset();
+   		statChronoAcquisition.reset();
    		statChronoConcert.reset();
    		calendrierAlbumArtistes.reset();
    		calendrierAllArtistes.reset();
@@ -313,6 +323,14 @@ public class CollectionAlbumContainer {
 	
 	public TemporalAccessor getAlbumMostRecentCompositionDate() {
 		return collectionAlbumsMusiques.getMostRecentCompositionDate();
+	}
+	
+	public TemporalAccessor getAlbumOldestAcquisitionDate() {
+		return collectionAlbumsMusiques.getOldestAcquisitionDate();
+	}
+	
+	public TemporalAccessor getAlbumMostRecentAcquisitionnDate() {
+		return collectionAlbumsMusiques.getMostRecentAcquisitionDate();
 	}
 	
 	public List<Album> pickRandomAlbums(int nbAlbum) {

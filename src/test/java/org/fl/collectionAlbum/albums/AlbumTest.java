@@ -32,6 +32,7 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.temporal.TemporalAccessor;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -48,13 +49,14 @@ import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.MatchResultType;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.ReleaseMatchResult;
-import org.fl.collectionAlbum.format.AbstractAudioFile;
-import org.fl.collectionAlbum.format.AbstractMediaFile;
+import org.fl.collectionAlbum.format.AbstractAlbumsAudioFiles;
+import org.fl.collectionAlbum.format.AbstractAlbumMediaFiles;
 import org.fl.collectionAlbum.format.ContentNature;
-import org.fl.collectionAlbum.format.LosslessAudioFile;
+import org.fl.collectionAlbum.format.LosslessAlbumAudioFiles;
 import org.fl.collectionAlbum.format.MediaSupports;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
+import org.fl.collectionAlbum.utils.TemporalUtils;
 import org.fl.discogsInterface.inventory.InventoryCsvAlbum;
 import org.fl.util.FilterCounter;
 import org.fl.util.FilterCounter.LogRecordCounter;
@@ -118,6 +120,9 @@ class AlbumTest {
 		
 		assertThat(album.getContentNatures()).isEmpty();
 		
+		assertThat(album.getAcquisitionDate()).isNull();
+		assertThat(album.getNotes()).isEmpty();
+		
 		assertThat(albumParserFilterCounter.getLogRecordCount()).isEqualTo(2);
 		assertThat(albumParserFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(2);
 		
@@ -171,17 +176,17 @@ class AlbumTest {
 		assertThat(album.hasMediaFilePathNotFound(ContentNature.AUDIO)).isTrue();
 		assertThat(album.hasProblem()).isTrue();
 		
-		List<? extends AbstractMediaFile> audioFiles = album.getFormatAlbum().getMediaFiles(ContentNature.AUDIO);
+		List<? extends AbstractAlbumMediaFiles> audioFiles = album.getFormatAlbum().getMediaFiles(ContentNature.AUDIO);
 		assertThat(audioFiles).isNotNull()
 			.singleElement()
-			.asInstanceOf(InstanceOfAssertFactories.type(AbstractAudioFile.class))
+			.asInstanceOf(InstanceOfAssertFactories.type(AbstractAlbumsAudioFiles.class))
 			.satisfies(audio -> {
 				assertThat(audio.hasMissingOrInvalidMediaFilePath()).isTrue();
 				assertThat(audio.isLossLess()).isTrue();
 				
-				assertThat(audio).isNotNull().isInstanceOf(LosslessAudioFile.class);
+				assertThat(audio).isNotNull().isInstanceOf(LosslessAlbumAudioFiles.class);
 				
-				LosslessAudioFile lossLessAudio = (LosslessAudioFile)audio;
+				LosslessAlbumAudioFiles lossLessAudio = (LosslessAlbumAudioFiles)audio;
 				assertThat(lossLessAudio.getBitDepth()).isEqualTo(16);
 				assertThat(lossLessAudio.getSamplingRate()).isEqualTo(44.1);
 				assertThat(lossLessAudio.getType().name()).isEqualTo("FLAC");
@@ -194,7 +199,7 @@ class AlbumTest {
 		assertThat(album.getCoverImage()).isNull();
 		
 		// Add the audio file path
-		AbstractAudioFile audioFile = (AbstractAudioFile) audioFiles.get(0);
+		AbstractAlbumsAudioFiles audioFile = (AbstractAlbumsAudioFiles) audioFiles.get(0);
 		audioFile.setMediaFilePath(
 				Set.of(new MediaFilePath(Paths.get("E:/Musique/e/Bill Evans/Waltz for Debby/"), ContentNature.AUDIO, ContentNature.AUDIO.strictCheckings())),
 				Control.getMediaFileRootUri(ContentNature.AUDIO));
@@ -229,14 +234,14 @@ class AlbumTest {
 		
 		assertThat(album2.getFormatAlbum().getMediaFiles(ContentNature.AUDIO)).isNotNull()
 			.singleElement()
-			.asInstanceOf(InstanceOfAssertFactories.type(AbstractAudioFile.class))
+			.asInstanceOf(InstanceOfAssertFactories.type(AbstractAlbumsAudioFiles.class))
 			.satisfies(audio -> {
 				assertThat(audio.hasMissingOrInvalidMediaFilePath()).isFalse();
 				assertThat(audio.isLossLess()).isTrue();
 				
-				assertThat(audio).isNotNull().isInstanceOf(LosslessAudioFile.class);
+				assertThat(audio).isNotNull().isInstanceOf(LosslessAlbumAudioFiles.class);
 				
-				LosslessAudioFile lossLessAudio = (LosslessAudioFile)audio;
+				LosslessAlbumAudioFiles lossLessAudio = (LosslessAlbumAudioFiles)audio;
 				assertThat(lossLessAudio.getBitDepth()).isEqualTo(16);
 				assertThat(lossLessAudio.getSamplingRate()).isEqualTo(44.1);
 				assertThat(lossLessAudio.getType().name()).isEqualTo("FLAC");
@@ -248,7 +253,7 @@ class AlbumTest {
 			});
 		
 		// Fix the audio file path
-		AbstractAudioFile audioFile2 = (AbstractAudioFile) album2.getFormatAlbum().getMediaFiles(ContentNature.AUDIO).get(0);
+		AbstractAlbumsAudioFiles audioFile2 = (AbstractAlbumsAudioFiles) album2.getFormatAlbum().getMediaFiles(ContentNature.AUDIO).get(0);
 		audioFile2.setMediaFilePath(
 				Set.of(new MediaFilePath(Paths.get("E:/Musique/e/Bill Evans/Portrait In Jazz/"), ContentNature.AUDIO, ContentNature.AUDIO.strictCheckings())),
 				Control.getMediaFileRootUri(ContentNature.AUDIO));
@@ -281,14 +286,14 @@ class AlbumTest {
 		
 		assertThat(album3.getFormatAlbum().getMediaFiles(ContentNature.AUDIO)).isNotNull()
 			.singleElement()
-			.asInstanceOf(InstanceOfAssertFactories.type(AbstractAudioFile.class))
+			.asInstanceOf(InstanceOfAssertFactories.type(AbstractAlbumsAudioFiles.class))
 			.satisfies(audio -> {
 				assertThat(audio.hasMissingOrInvalidMediaFilePath()).isFalse();
 				assertThat(audio.isLossLess()).isTrue();
 				
-				assertThat(audio).isNotNull().isInstanceOf(LosslessAudioFile.class);
+				assertThat(audio).isNotNull().isInstanceOf(LosslessAlbumAudioFiles.class);
 				
-				LosslessAudioFile lossLessAudio = (LosslessAudioFile)audio;
+				LosslessAlbumAudioFiles lossLessAudio = (LosslessAlbumAudioFiles)audio;
 				assertThat(lossLessAudio.getBitDepth()).isEqualTo(16);
 				assertThat(lossLessAudio.getSamplingRate()).isEqualTo(44.1);
 				assertThat(lossLessAudio.getType().name()).isEqualTo("FLAC");
@@ -324,14 +329,14 @@ class AlbumTest {
 		
 		assertThat(album4.getFormatAlbum().getMediaFiles(ContentNature.AUDIO)).isNotNull()
 			.singleElement()
-			.asInstanceOf(InstanceOfAssertFactories.type(AbstractAudioFile.class))
+			.asInstanceOf(InstanceOfAssertFactories.type(AbstractAlbumsAudioFiles.class))
 			.satisfies(audio -> {
 				assertThat(audio.hasMissingOrInvalidMediaFilePath()).isFalse();
 				assertThat(audio.isLossLess()).isTrue();
 				
-				assertThat(audio).isNotNull().isInstanceOf(LosslessAudioFile.class);
+				assertThat(audio).isNotNull().isInstanceOf(LosslessAlbumAudioFiles.class);
 				
-				LosslessAudioFile lossLessAudio = (LosslessAudioFile)audio;
+				LosslessAlbumAudioFiles lossLessAudio = (LosslessAlbumAudioFiles)audio;
 				assertThat(lossLessAudio.getBitDepth()).isEqualTo(16);
 				assertThat(lossLessAudio.getSamplingRate()).isEqualTo(44.1);
 				assertThat(lossLessAudio.getType().name()).isEqualTo("FLAC");
@@ -533,6 +538,94 @@ class AlbumTest {
 		assertThat(album.getJson().get(JsonMusicProperties.DISCOGS_VALID)).isNotNull();
 	}
 	
+	private static final String albumStr4 = """
+{ 
+  "titre": "Van Halen",
+  "format": {
+    "cd": 1,
+    "audioFiles": [
+      {
+        "bitDepth": 24,
+        "samplingRate": 192,
+        "source": "File",
+        "type": "FLAC"
+      }
+    ]
+  },
+  "groupe": [
+    {
+      "nom": "Van Halen"
+    }
+  ],
+  "enregistrement": [
+    "1977-09-01",
+    "1977-11-01"
+  ],
+  "acquisition" : "2023-12-03"
+}
+			""" ;
+	
+	
+	@Test
+	void testAcquisitionDate() throws DatabindException, JacksonException {
+
+		ObjectNode jAlbum = (ObjectNode)mapper.readTree(albumStr4);
+
+		ListeArtiste la = new ListeArtiste();
+		List<ListeArtiste> lla = new ArrayList<ListeArtiste>();
+		lla.add(la);
+
+		Album album = new Album(jAlbum, lla, Path.of("dummyPath"));
+		
+		TemporalAccessor acquisitionDate = album.getAcquisitionDate();
+		assertThat(acquisitionDate).isNotNull();
+		assertThat(TemporalUtils.formatDate(acquisitionDate)).isEqualTo("03 décembre 2023");
+	}
+	
+	private static final String albumStr5 = """
+{ 
+  "titre": "Van Halen",
+  "format": {
+    "cd": 1,
+    "audioFiles": [
+      {
+        "bitDepth": 24,
+        "samplingRate": 192,
+        "source": "File",
+        "type": "FLAC"
+      }
+    ]
+  },
+  "groupe": [
+    {
+      "nom": "Van Halen"
+    }
+  ],
+  "enregistrement": [
+    "1977-09-01",
+    "1977-11-01"
+  ],
+  "notes" : ["Note 1","Note 2"]
+}
+			""" ;
+	
+	
+	@Test
+	void testNote() throws DatabindException, JacksonException {
+
+		ObjectNode jAlbum = (ObjectNode)mapper.readTree(albumStr5);
+
+		ListeArtiste la = new ListeArtiste();
+		List<ListeArtiste> lla = new ArrayList<ListeArtiste>();
+		lla.add(la);
+
+		Album album = new Album(jAlbum, lla, Path.of("dummyPath"));
+		
+		assertThat(album.getNotes()).isNotNull().hasSize(2).satisfiesExactlyInAnyOrder(
+				note -> assertThat(note).isEqualTo("Note 1"),
+				note -> assertThat(note).isEqualTo("Note 2"));
+	}
+	
 	private void testAlbumProperties(Album album, ListeArtiste la) {
 		
 		assertThat(album.getTitre()).isEqualTo("Portrait in jazz");
@@ -594,6 +687,9 @@ class AlbumTest {
 		assertMediaSupports(album, Set.of(MediaSupports.CD));
 		
 		assertThat(album.getContentNatures()).containsExactly(ContentNature.AUDIO);
+		
+		assertThat(album.getAcquisitionDate()).isNull();
+		assertThat(album.getNotes()).isEmpty();
 	}
 	
 	private void assertMediaSupports(Album album, Set<MediaSupports> mediaSupports) {

@@ -63,7 +63,7 @@ public class UtilsPane extends JPanel implements ActivableElement {
 	public static final String EQUI_REPARTI_PAR_ARTISTE = "artiste";
 	public static final String EQUI_REPARTI_PAR_ALBUM = "album";
 	
-	private static final Integer[] numberOfAlbumsChoice = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+	private static final Integer[] numberOfAlbumsChoice = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 16, 18, 20};
 	private static final String[] albumChoiceMethod = {EQUI_REPARTI_PAR_ARTISTE, EQUI_REPARTI_PAR_ALBUM};
 	
 	public UtilsPane(GenerationPane generationPane, CollectionAlbumContainer collectionAlbumContainer) {

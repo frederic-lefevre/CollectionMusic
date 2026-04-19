@@ -28,6 +28,7 @@ import java.net.URI;
 import java.time.temporal.TemporalAccessor;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.fl.collectionAlbum.PoidsComparator;
 import org.fl.collectionAlbum.albums.Album;
@@ -39,9 +40,11 @@ import org.fl.collectionAlbum.utils.TemporalUtils;
 public class FragmentListeAlbums {
 
 	// HTML fragments
-	private static final String TABLE1 = "<div class=\"mhc\">\n  <table>\n  <tr>\n    <td colspan=\"2\" class=\"an2\">Dates de composition /<br/>Dates d'enregistrement</td>\n    <td rowspan=\"2\" class=\"auteur\">Auteurs</td>\n    <td rowspan=\"2\" class=\"album\">Titres</td>\n" ;
-	private static final String TABLE2 = "  </tr>\n  <tr>\n    <td class=\"an\">Début</td>\n    <td class=\"an\">Fin</td>\n  </tr>\n\n  </table>\n</div>\n<table>\n <tr class=\"head\">\n    <td colspan=\"2\" class=\"an2\">Dates de composition /<br/>Dates d'enregistrement</td>\n    <td rowspan=\"2\" class=\"auteur\">Auteurs</td>\n    <td rowspan=\"2\" class=\"album\">Titres</td>\n" ;
-	private static final String TABLE3 = "  </tr>\n  <tr class=\"head\">\n    <td class=\"an\">Début</td>\n    <td class=\"an\">Fin</td>\n  </tr>\n" ;
+	private static final String TABLE_COLUMNS = "    <td colspan=\"2\" class=\"an2\">Dates de composition /<br/>Dates d'enregistrement</td>\n    <td rowspan=\"2\" class=\"auteur\">Auteurs</td>\n    <td rowspan=\"2\" class=\"album\">Titres</td>\n    <td rowspan=\"2\" class=\"an\">Date d'acquisition</td>\n";
+	private static final String TABLE_COLUMNS2 = "    <td class=\"an\">Début</td>\n    <td class=\"an\">Fin</td>\n  </tr>\n";
+	private static final String TABLE1 = "<div class=\"mhc\">\n  <table>\n  <tr>\n" + TABLE_COLUMNS;
+	private static final String TABLE2 = "  </tr>\n  <tr>\n" + TABLE_COLUMNS2 + "  </table>\n</div>\n<table>\n <tr class=\"head\">\n" + TABLE_COLUMNS;
+	private static final String TABLE3 = "  </tr>\n  <tr class=\"head\">\n" + TABLE_COLUMNS2;
 
 	private static final boolean APPEND_AUDIO_FILE = true;
 	
@@ -49,29 +52,29 @@ public class FragmentListeAlbums {
 	
 	public static void buildTable(ListeAlbum listeAlbums, StringBuilder fragment, String urlOffSet, Balises balises) {
 		
-		fragment.append(TABLE1) ;
+		fragment.append(TABLE1);
 		Format.enteteFormat(fragment, null, 2, APPEND_AUDIO_FILE);
-		fragment.append(TABLE2) ;
+		fragment.append(TABLE2);
         Format.enteteFormat(fragment, null, 2, APPEND_AUDIO_FILE);
-        fragment.append(TABLE3) ;
+        fragment.append(TABLE3);
 		for (Album unAlbum : listeAlbums.getAlbums()) {
 			
-			fragment.append("  <tr>\n") ;
-			TemporalAccessor debutComp = unAlbum.getDebutComposition() ;
-			TemporalAccessor finComp   = unAlbum.getFinComposition() ;
-			TemporalAccessor debutEnr  = unAlbum.getDebutEnregistrement() ;
-			TemporalAccessor finEnr    = unAlbum.getFinEnregistrement() ;
+			fragment.append("  <tr>\n");
+			TemporalAccessor debutComp = unAlbum.getDebutComposition();
+			TemporalAccessor finComp = unAlbum.getFinComposition();
+			TemporalAccessor debutEnr = unAlbum.getDebutEnregistrement();
+			TemporalAccessor finEnr = unAlbum.getFinEnregistrement();
 			
 			boolean displayDateEnregistrement =  unAlbum.hasSpecificCompositionDates();
 			
-			fragment.append("    <td class=\"an\">") ;
+			fragment.append("    <td class=\"an\">");
 			if (balises != null) {
 				if (balises.getBalisesType() == Balises.BalisesType.TEMPORAL) {
 					balises.addCheckBaliseTemporal(fragment, debutEnr);
 				} else if (balises.getBalisesType() == Balises.BalisesType.TEMPORAL_COMPOSITION) {
-					balises.addCheckBaliseTemporal(fragment, debutComp) ;
+					balises.addCheckBaliseTemporal(fragment, debutComp);
 				} else if (balises.getBalisesType() == Balises.BalisesType.ALPHA) {
-					balises.addCheckBaliseString(fragment, unAlbum.getTitre()) ;
+					balises.addCheckBaliseString(fragment, unAlbum.getTitre());
 				} else if (balises.getBalisesType() == Balises.BalisesType.ALPHA_ARTIST) {
 					if (unAlbum.hasArtiste()) {
 						List<Artiste> artists = unAlbum.getAuteurs();					
@@ -80,36 +83,41 @@ public class FragmentListeAlbums {
 					}
 				}
 			}
-			fragment.append(TemporalUtils.formatDate(debutComp)) ;
+			fragment.append(TemporalUtils.formatDate(debutComp));
 			if (displayDateEnregistrement) {
-				fragment.append("<br/>").append( TemporalUtils.formatDate(debutEnr)) ;
+				fragment.append("<br/>").append( TemporalUtils.formatDate(debutEnr));
 			}
-			fragment.append("</td>\n") ;
+			fragment.append("</td>\n");
 			
-			fragment.append("    <td class=\"an\">").append(TemporalUtils.formatDate(finComp)) ;
+			fragment.append("    <td class=\"an\">").append(TemporalUtils.formatDate(finComp));
 			if (displayDateEnregistrement) {
-				fragment.append("<br/>").append(TemporalUtils.formatDate(finEnr)) ;
+				fragment.append("<br/>").append(TemporalUtils.formatDate(finEnr));
 			}
-			fragment.append("</td>\n    <td class=\"auteur\">\n") ;
+			fragment.append("</td>\n    <td class=\"auteur\">\n");
 			
 			FragmentIntervenants.printAuteurs(unAlbum, fragment, urlOffSet);
-			fragment.append("    </td>\n    <td class=\"album\">") ; 
+			fragment.append("    </td>\n    <td class=\"album\">"); 
 			
 			if (unAlbum.hasAdditionnalInfo()) {
-				URI aPath = RapportStructuresAndNames.getAlbumRapportRelativeUri(unAlbum) ;			
-				fragment.append("<a href=\"").append(urlOffSet).append(aPath.toString()).append("\">") ;
-				fragment.append(unAlbum.getTitre()) ;			
-				fragment.append("</a>\n") ;
+				URI aPath = RapportStructuresAndNames.getAlbumRapportRelativeUri(unAlbum);			
+				fragment.append("<a href=\"").append(urlOffSet).append(aPath.toString()).append("\">");
+				fragment.append(unAlbum.getTitre());			
+				fragment.append("</a>");
 			} else {
-				fragment.append(unAlbum.getTitre()) ;
+				fragment.append(unAlbum.getTitre());
 			}
+
+			FragmentIntervenants.printIntervenant(unAlbum, fragment, urlOffSet);
+			fragment.append("    </td>\n");
 			
-			FragmentIntervenants.printIntervenant(unAlbum, fragment, urlOffSet) ;
-			fragment.append("\n    </td>\n") ;
-			unAlbum.getFormatAlbum().rowFormat(fragment, null, APPEND_AUDIO_FILE) ;
-			fragment.append("  </tr>\n") ;
+			fragment.append("    <td class=\"an\">");
+			fragment.append(Optional.ofNullable(unAlbum.getAcquisitionDate()).map(t -> TemporalUtils.formatDate(t)).orElse(""));
+			fragment.append("</td>\n");
+			
+			unAlbum.getFormatAlbum().rowFormat(fragment, null, APPEND_AUDIO_FILE);
+			fragment.append("  </tr>\n");
 		}
-		fragment.append("</table>\n") ;
+		fragment.append("</table>\n");
 	}
 	
 }

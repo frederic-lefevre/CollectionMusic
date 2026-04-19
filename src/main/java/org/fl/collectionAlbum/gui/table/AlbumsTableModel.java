@@ -34,8 +34,8 @@ public class AlbumsTableModel extends AbstractAlbumsTableModel {
 	
 	private final List<Album> albumsList;
 	
-	public AlbumsTableModel(List<Album> albumsList) {
-		super();
+	public AlbumsTableModel(List<Album> albumsList, List<AlbumTableColumn> albumTableColumns) {
+		super(albumTableColumns);
 		this.albumsList = albumsList;
 	}
 

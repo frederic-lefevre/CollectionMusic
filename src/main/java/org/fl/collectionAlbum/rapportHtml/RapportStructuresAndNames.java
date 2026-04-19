@@ -54,7 +54,7 @@ public class RapportStructuresAndNames {
 	private static final String dateFrancePattern = "EEEE dd MMMM uuuu à HH:mm";
 	
 	private static final String L_LIST2 = "  <span  class=\"dategen\">Généré ";
-	private static final String L_LIST3 = "</span><br/>\n";
+	private static final String L_LIST3 = "</span><br/>";
 	
 	private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(dateFrancePattern, Locale.FRANCE);
 	

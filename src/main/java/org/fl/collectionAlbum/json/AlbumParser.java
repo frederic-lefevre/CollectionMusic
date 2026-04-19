@@ -26,6 +26,7 @@ package org.fl.collectionAlbum.json;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.temporal.TemporalAccessor;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -119,6 +120,20 @@ public class AlbumParser {
 	
 	public static FuzzyPeriod processPeriodComposition(JsonNode albumJson) {
 		return processPeriod(albumJson, JsonMusicProperties.COMPOSITION) ;
+	}
+	
+	public static TemporalAccessor getAcquisitionDate(JsonNode albumJson) {
+		
+		TemporalAccessor acquisitionDate = null ;
+		JsonNode jElem = albumJson.get(JsonMusicProperties.ACQUISITION);
+		if (jElem != null) {
+			try {
+				acquisitionDate = TemporalUtils.parseDate(jElem.asString()) ;
+			} catch (Exception e) {
+				albumLog.log(Level.SEVERE, "Erreur dans la date d'acquisition de l'album " + albumJson, e) ;
+			}
+		}
+		return acquisitionDate;
 	}
 	
 	private static FuzzyPeriod processPeriod(JsonNode albumJson, String periodProp) {

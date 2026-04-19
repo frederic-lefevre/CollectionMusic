@@ -65,9 +65,15 @@ public class DatesAlbumRenderer extends CustomTableCellRenderer {
 			mLog.fine("Null value in Dates Album cell. Should be an Album");
 			setText("Valeur null");
 		} else if (value instanceof Album album) {
-			setText(CollectionUtils.getHtmlForInterval(
-					dateFormatter.compose(beginDateGetter).apply(album), 
-					dateFormatter.compose(endDateGetter).apply(album)));
+			if ((beginDateGetter != null) && (endDateGetter != null)) {
+				setText(CollectionUtils.getHtmlForInterval(
+						dateFormatter.compose(beginDateGetter).apply(album), 
+						dateFormatter.compose(endDateGetter).apply(album)));
+			} else if (beginDateGetter != null) {
+				setText(dateFormatter.compose(beginDateGetter).apply(album));
+			} else {
+				mLog.severe("beginDateGetter must not be null inn DatesAlbumRenderer");
+			}
 		} else {
 			mLog.severe("Invalid value type in Dates Album cell. Should be Album but is " + value.getClass().getName());
 		}		

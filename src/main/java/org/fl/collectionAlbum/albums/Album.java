@@ -42,7 +42,7 @@ import org.fl.collectionAlbum.MusicArtefact;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.ReleaseMatchResult;
-import org.fl.collectionAlbum.format.AbstractMediaFile;
+import org.fl.collectionAlbum.format.AbstractAlbumMediaFiles;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.format.Format;
 import org.fl.collectionAlbum.format.MediaSupports;
@@ -59,17 +59,13 @@ public class Album extends MusicArtefact {
 	protected static final Logger albumLog = Logger.getLogger(Album.class.getName());
 	
     private final String titre;
-    
     private final FuzzyPeriod periodeEnregistrement;
     private final FuzzyPeriod periodeComposition;
-    
     private final Format formatAlbum;
-    private final RangementSupportPhysique rangement;
-    
-    private final boolean specificCompositionDates;
-    
+    private final RangementSupportPhysique rangement;  
+    private final boolean specificCompositionDates;   
     private final Path sleevePath;
-    
+    private final TemporalAccessor acquisitionDate;
     private final Map<ContentNature, Set<MediaFilePath>> potentialMediaFilesPath;
     
 	public Album(ObjectNode albumJson, List<ListeArtiste> knownArtistes, Path jsonFilePath) {
@@ -96,6 +92,7 @@ public class Album extends MusicArtefact {
 		}
 		
 		sleevePath = AlbumParser.getAlbumSleevePath(albumJson);
+		acquisitionDate = AlbumParser.getAcquisitionDate(albumJson);
 	}
     
     public String getTitre() {
@@ -240,7 +237,7 @@ public class Album extends MusicArtefact {
 		return validatePotentialMediaFilePath(potentialMediaFilesPath.get(contentNature), contentNature);
 	}
 	
-	public List<AbstractMediaFile> getAllMediaFiles() {
+	public List<AbstractAlbumMediaFiles> getAllMediaFiles() {
 		return formatAlbum.getAllMediaFiles();
 	}
 	
@@ -250,7 +247,7 @@ public class Album extends MusicArtefact {
 			albumLog.severe("Trying to validate " + contentNature.getNom() + " file path with null value for album " + getTitre());
 			return false;
 		} else if (potentialMediaFilePath.size() == 1) {
-			List<? extends AbstractMediaFile> mediaFiles = getFormatAlbum().getMediaFiles(contentNature);
+			List<? extends AbstractAlbumMediaFiles> mediaFiles = getFormatAlbum().getMediaFiles(contentNature);
 			if ((mediaFiles != null) && !mediaFiles.isEmpty()) {
 				if (mediaFiles.size() == 1) {
 					Set<MediaFilePath> mediaFilePaths = mediaFiles.get(0).getMediaFilePaths();
@@ -299,7 +296,11 @@ public class Album extends MusicArtefact {
 		}
 	}
 	
-    @Override
+    public TemporalAccessor getAcquisitionDate() {
+		return acquisitionDate;
+	}
+
+	@Override
     public boolean hasAdditionnalInfo() {
     	return hasAudioFiles() || hasVideoFiles() || super.hasAdditionnalInfo();
     }

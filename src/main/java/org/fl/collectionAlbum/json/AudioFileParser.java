@@ -30,11 +30,11 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.JsonMusicProperties;
-import org.fl.collectionAlbum.format.AbstractAudioFile;
+import org.fl.collectionAlbum.format.AbstractAlbumsAudioFiles;
 import org.fl.collectionAlbum.format.AudioFileType;
 import org.fl.collectionAlbum.format.ContentNature;
-import org.fl.collectionAlbum.format.LosslessAudioFile;
-import org.fl.collectionAlbum.format.LossyAudioFile;
+import org.fl.collectionAlbum.format.LosslessAlbumAudioFiles;
+import org.fl.collectionAlbum.format.LossyAlbumAudioFiles;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
 import tools.jackson.databind.JsonNode;
@@ -58,7 +58,7 @@ public class AudioFileParser extends AbstractMediaFileParser {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public AbstractAudioFile parseMediaFile(ObjectNode audioFileJson) {
+	public AbstractAlbumsAudioFiles parseMediaFile(ObjectNode audioFileJson) {
 
 		if (audioFileJson != null) {
 			
@@ -97,7 +97,7 @@ public class AudioFileParser extends AbstractMediaFileParser {
 				if (bitDepth == null) {
 					return null;
 				} else {
-					return new LosslessAudioFile(audioFileJson, type, source, bitDepth, samplingRate, note, audioFileLocations);
+					return new LosslessAlbumAudioFiles(audioFileJson, type, source, bitDepth, samplingRate, note, audioFileLocations);
 				}
 				
 			} else {
@@ -112,7 +112,7 @@ public class AudioFileParser extends AbstractMediaFileParser {
 				if (bitRate == null) {
 					return null;
 				} else {
-					return new LossyAudioFile(audioFileJson, type, source, bitRate, samplingRate, note, audioFileLocations);
+					return new LossyAlbumAudioFiles(audioFileJson, type, source, bitRate, samplingRate, note, audioFileLocations);
 				}
 			}
 		} else {

@@ -80,5 +80,6 @@ public class JsonMusicProperties {
 	public final static String JSON_VERSION	  = "jsonVersion" ;
 	public final static String SLEEVE_IMG	  = "sleeveImg" ;
 	public final static String DISCOGS_VALID  = "discogsFormatValidation" ;
+	public final static String ACQUISITION    = "acquisition" ;
 	
 }

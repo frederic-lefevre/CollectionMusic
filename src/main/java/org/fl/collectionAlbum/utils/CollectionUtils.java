@@ -31,6 +31,7 @@ import java.awt.Image;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Path;
+import java.time.temporal.TemporalAccessor;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
@@ -226,6 +227,13 @@ public class CollectionUtils {
 		
 		appendNotes(buf, album);
 
+		TemporalAccessor acquisitionDate = album.getAcquisitionDate();
+		if (acquisitionDate != null) {
+			buf.append("<h3>Date d'acquisition: ")
+				.append(TemporalUtils.formatDate(acquisitionDate))
+				.append("</h3>");
+		}
+		
 		buf.append("</body></html>");
 		return buf.toString();		
 	}
@@ -233,8 +241,9 @@ public class CollectionUtils {
 	private static void appendNotes(StringBuilder buf, MusicArtefact musicArtefact) {
 		
 		if (musicArtefact.hasNotes()) {
-			buf.append("<h3>Notes:</h3>");
-			musicArtefact.getNotes().forEach(note -> buf.append("<p>").append(note).append("</p>"));
+			buf.append("<h3>Notes:</h3>\n<ul>\n");
+			musicArtefact.getNotes().forEach(note -> buf.append("  <li>").append(note).append("</li>\n"));
+			buf.append("</ul>\n");
 		}	
 	}
 	

@@ -31,7 +31,7 @@ import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.format.ContentNature;
-import org.fl.collectionAlbum.format.VideoFile;
+import org.fl.collectionAlbum.format.AlbumVideoFiles;
 import org.fl.collectionAlbum.format.VideoFileType;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
@@ -48,7 +48,7 @@ public class VideoFileParser extends AbstractMediaFileParser {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public VideoFile parseMediaFile(ObjectNode videoFileJson) {
+	public AlbumVideoFiles parseMediaFile(ObjectNode videoFileJson) {
 		
 		if (videoFileJson != null) {
 		
@@ -81,7 +81,7 @@ public class VideoFileParser extends AbstractMediaFileParser {
 			if ((type == null) || (source == null) || (width == null) || (height == null)) {
 				return null;
 			} else {
-				return new VideoFile(videoFileJson, type, source, width, height, note, videoFileLocations);
+				return new AlbumVideoFiles(videoFileJson, type, source, width, height, note, videoFileLocations);
 			}
 		} else {
 			rapportLog.severe("Json VideoFile null parameter");

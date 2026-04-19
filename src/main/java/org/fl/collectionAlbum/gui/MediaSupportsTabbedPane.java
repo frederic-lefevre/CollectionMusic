@@ -49,7 +49,9 @@ public class MediaSupportsTabbedPane extends JTabbedPane {
 		Stream.of(MediaSupports.values()).forEachOrdered(mediaSupport -> {
 			
 			AlbumsScrollJTablePane albumsScrollJTablePane =
-					new AlbumsScrollJTablePane(() -> collectionAlbumContainer.getAlbumsWithMediaSupport(mediaSupport).getAlbums(), generationPane);
+					new AlbumsScrollJTablePane(() -> collectionAlbumContainer.getAlbumsWithMediaSupport(mediaSupport).getAlbums(), 
+							AbstractAlbumsTableModel.REGULAR_COLUMN_LIST,
+							generationPane);
 			albumTableModels.add(albumsScrollJTablePane.getAlbumsTableModel());
 			addTab(mediaSupport.getDescription(), albumsScrollJTablePane);
 		});
