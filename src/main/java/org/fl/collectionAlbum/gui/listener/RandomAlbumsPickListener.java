@@ -62,7 +62,7 @@ public class RandomAlbumsPickListener implements java.awt.event.ActionListener {
 
 		// Table to display the result albums
 		AlbumsScrollJTablePane albumsScrollJTablePane = 
-				new AlbumsScrollJTablePane(randomAlbums, AbstractAlbumsTableModel.REGULAR_COLUMN_LIST, generationPane);
+				new AlbumsScrollJTablePane(randomAlbums, AbstractAlbumsTableModel.ACQUISITION_COLUMN_LIST, generationPane);
 		
 		JOptionPane.showMessageDialog(null, albumsScrollJTablePane, "Albums choisis aléatoirement", JOptionPane.PLAIN_MESSAGE);
 	}
