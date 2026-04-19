@@ -31,6 +31,8 @@ import java.util.logging.Logger;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableRowSorter;
 
@@ -48,7 +50,9 @@ public class AlbumsJTable extends MusicArtefactTable<Album> {
 	
 	private final List<AlbumTableColumn> albumTableColumns;
 	
-	public AlbumsJTable(AbstractAlbumsTableModel albumsTableModel, GenerationPane generationPane) {
+	public record AlbumColumnSort(AlbumTableColumn albumTableColumnToSort, SortOrder sortOrder) {}
+	
+	public AlbumsJTable(AbstractAlbumsTableModel albumsTableModel, GenerationPane generationPane, AlbumColumnSort albumColumnSort) {
 		super(albumsTableModel);
 		
 		this.albumTableColumns = albumsTableModel.getAlbumTableColumns();
@@ -83,6 +87,23 @@ public class AlbumsJTable extends MusicArtefactTable<Album> {
 		addMouseListener(new AlbumMouseAdapter(this, Control.getOsActionsOnAlbum(), generationPane));
 
 		setRowSorter(sorter);
+		
+		if (albumColumnSort != null) {
+			int columnIdx = getColumnNumber(albumColumnSort.albumTableColumnToSort);
+			if (columnIdx >= 0) {
+				sorter.setSortKeys(List.of(new RowSorter.SortKey(columnIdx, albumColumnSort.sortOrder())));
+			}
+		}	
+	}
+	
+	private int getColumnNumber(AlbumTableColumn albumTableColumn) {
+		
+		for (int i=0; i < albumTableColumns.size(); i++) {
+			if (albumTableColumns.get(i) == albumTableColumn) {
+				return i;
+			}
+		}
+		return -1;	
 	}
 	
 	// Get the selected album

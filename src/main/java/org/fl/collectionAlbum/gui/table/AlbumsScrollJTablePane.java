@@ -32,6 +32,7 @@ import javax.swing.JScrollPane;
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.gui.GenerationPane;
+import org.fl.collectionAlbum.gui.table.AlbumsJTable.AlbumColumnSort;
 
 public class AlbumsScrollJTablePane extends JScrollPane {
 
@@ -43,15 +44,23 @@ public class AlbumsScrollJTablePane extends JScrollPane {
 		super();
 		
 		albumsTableModel = new AlbumsTableModel(albums, albumTableColumns);
-		setViewportView(new AlbumsJTable(albumsTableModel, generationPane));		
+		setViewportView(new AlbumsJTable(albumsTableModel, generationPane, null));		
 		setPreferredSize(Control.getMainSubPaneDimension());
 	}
 
+	public AlbumsScrollJTablePane(List<Album> albums, List<AlbumTableColumn> albumTableColumns, GenerationPane generationPane, AlbumColumnSort albumColumnSort) {
+		super();
+		
+		albumsTableModel = new AlbumsTableModel(albums, albumTableColumns);
+		setViewportView(new AlbumsJTable(albumsTableModel, generationPane, albumColumnSort));		
+		setPreferredSize(Control.getMainSubPaneDimension());
+	}
+	
 	public AlbumsScrollJTablePane(Supplier<List<Album>> albumsListSupplier, List<AlbumTableColumn> albumTableColumns, GenerationPane generationPane) {
 		super();
 		
 		albumsTableModel = new DynamicAlbumsTableModel(albumsListSupplier, albumTableColumns);
-		setViewportView(new AlbumsJTable(albumsTableModel, generationPane));		
+		setViewportView(new AlbumsJTable(albumsTableModel, generationPane, null));		
 		setPreferredSize(Control.getMainSubPaneDimension());
 	}
 	

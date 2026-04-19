@@ -177,7 +177,8 @@ public class GenerationPane extends JPanel {
 		});
 		
 		// Collection metrics history
-		CollectionMetricsTabbedPane collectionMetricsTabPanes = new CollectionMetricsTabbedPane(List.of(Control.getCollectionMetricsHsitory(), Control.getConcertMetricsHsitory()));
+		CollectionMetricsTabbedPane collectionMetricsTabPanes = 
+				new CollectionMetricsTabbedPane(List.of(Control.getCollectionMetricsHsitory(), Control.getConcertMetricsHsitory()), collectionAlbumContainer, this);
 
 		startReadCollection.addColorableTabbedPane(List.of(collectionMetricsTabPanes, collectionTabPanes));
 		startGenerationSite.addColorableTabbedPane(List.of(collectionMetricsTabPanes, collectionTabPanes));
