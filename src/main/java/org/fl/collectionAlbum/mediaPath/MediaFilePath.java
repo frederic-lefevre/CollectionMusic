@@ -40,24 +40,12 @@ import org.fl.collectionAlbum.format.ContentNature;
 
 public class MediaFilePath {
 
-	static final Logger mLog = Logger.getLogger(MediaFilePath.class.getName());
-	
-	static final Set<String> coverExtensions = Set.of("jpg", "png");
-	
-	static final Set<String> infoFileExtensions = Set.of("pdf","crt");
-	
-	public static final Set<String> extensionSet = new HashSet<>();
-
-	static final String COVER_START_NAME = "cover.";
+	private static final Logger mLog = Logger.getLogger(MediaFilePath.class.getName());
 	
 	private final Path mediaFilesPath;
-	
 	private final Set<Album> albumsSet;
-	
 	private long mediaFileNumber;
-	
 	private Path coverPath;
-	
 	private final ContentNature contentNature;
 	
 	private String mediaFileExtension;
@@ -128,11 +116,7 @@ public class MediaFilePath {
 		return Optional.ofNullable(filename)
 				.map(f -> f.toString())
 				.filter(f -> f.contains("."))
-				.map(f -> f.substring(f.lastIndexOf(".") + 1))
-				.map(ext -> { extensionSet.add(ext);
-				return ext;
-					});
-				
+				.map(f -> f.substring(f.lastIndexOf(".") + 1));			
 	}
 
 	public boolean hasCover() {
@@ -142,6 +126,5 @@ public class MediaFilePath {
 	public String getMediaFileExtension() {
 		return mediaFileExtension;
 	}
-	
 
 }

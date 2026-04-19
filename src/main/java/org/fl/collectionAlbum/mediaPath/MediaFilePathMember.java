@@ -26,11 +26,19 @@ package org.fl.collectionAlbum.mediaPath;
 
 import java.nio.file.Path;
 import java.util.Optional;
+import java.util.Set;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.format.ContentNature;
 
 class MediaFilePathMember {
+	
+	private static final Logger mLog = Logger.getLogger(MediaFilePathMember.class.getName());
+	
+	private static final String COVER_START_NAME = "cover.";
+	private static final Set<String> coverExtensions = Set.of("jpg", "png");
+	private static final Set<String> infoFileExtensions = Set.of("pdf","crt");
 	
 	private final Path filePath;
 	private final Optional<String> extension;
@@ -45,17 +53,17 @@ class MediaFilePathMember {
 		
 		isMediaFile = extension.filter(e -> mediaContentNature.getFileExtensions().contains(e.toLowerCase())).isPresent();
 		
-		isCoverFile = filePath.getFileName().toString().toLowerCase().startsWith(MediaFilePath.COVER_START_NAME) &&
+		isCoverFile = filePath.getFileName().toString().toLowerCase().startsWith(COVER_START_NAME) &&
 				extension
-				.filter(e -> MediaFilePath.coverExtensions.contains(e.toLowerCase()))
+				.filter(e -> coverExtensions.contains(e.toLowerCase()))
 				.isPresent();
 		
 		isInfoFile = extension
-				.filter(e -> MediaFilePath.infoFileExtensions.contains(e.toLowerCase()))
+				.filter(e -> infoFileExtensions.contains(e.toLowerCase()))
 				.isPresent();
 		
 		if (!isMediaFile && !isCoverFile && !isInfoFile) {
-			MediaFilePath.mLog.log(logLevel, "Unexpected file in media path : " + filePath);
+			mLog.log(logLevel, "Unexpected file in media path : " + filePath);
 		}
 	}
 
