@@ -50,7 +50,7 @@ public abstract class AbstractAlbumsAudioFiles extends AbstractAlbumMediaFiles {
 		if ((mediaFilePaths != null) && !mediaFilePaths.isEmpty()) {
 			mediaFilePaths.stream()
 				.filter(mediaFilePath -> !type.getExtensions().contains(mediaFilePath.getMediaFileExtension()))
-				.forEach(mediaFilePath -> albumLog.warning("Extension mismatch for " + audioJson + "\n Waited extension " + mediaFilePath.getMediaFileExtension()));
+				.forEach(mediaFilePath -> albumLog.warning("Media file extension mismatch for " + audioJson + "\n Waited extension " + mediaFilePath.getMediaFileExtension()));
 		} 
 	}
 	
