@@ -25,6 +25,8 @@ SOFTWARE.
 package org.fl.collectionAlbum.format;
 
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.json.AbstractMediaFileParser;
@@ -32,7 +34,7 @@ import org.fl.collectionAlbum.json.AudioFileParser;
 import org.fl.collectionAlbum.json.VideoFileParser;
 
 public enum ContentNature { 
-	AUDIO("audio", JsonMusicProperties.AUDIO_FILE, Set.of("flac", "mp3", "wma", "aiff", "m4a", "wav"), true), 
+	AUDIO("audio", JsonMusicProperties.AUDIO_FILE, Stream.of(AudioFileType.values()).map(a -> a.getExtension()).collect(Collectors.toSet()), true), 
 	VIDEO("vidéo", JsonMusicProperties.VIDEO_FILE, Set.of("m2ts", "mkv", "mpls", "vob", "m4v", "mp4", "bdmv"), false);
 	
 	private final String nom;

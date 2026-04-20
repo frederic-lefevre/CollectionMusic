@@ -42,72 +42,13 @@ public class MediaFilePath {
 
 	private static final Logger mLog = Logger.getLogger(MediaFilePath.class.getName());
 	
-	private static final Set<String> coverExtensions = Set.of("jpg", "png");
-	
-	private static final Set<String> infoFileExtensions = Set.of("pdf","crt");
-	
-	public static final Set<String> extensionSet = new HashSet<>();
-
-	private static final String COVER_START_NAME = "cover.";
-	
 	private final Path mediaFilesPath;
-	
 	private final Set<Album> albumsSet;
-	
 	private long mediaFileNumber;
-	
 	private Path coverPath;
-	
 	private final ContentNature contentNature;
 	
 	private String mediaFileExtension;
-	
-	private static class MediaFilePathMember {
-		
-		private final Path filePath;
-		private final Optional<String> extension;
-		private final boolean isMediaFile;
-		private final boolean isCoverFile;
-		private final boolean isInfoFile;
-		
-		public MediaFilePathMember(Path fp, Optional<String> ext, ContentNature mediaContentNature, Level logLevel) {
-			super();
-			filePath = fp;
-			extension = ext;
-			
-			isMediaFile = extension.filter(e -> mediaContentNature.getFileExtensions().contains(e.toLowerCase())).isPresent();
-			
-			isCoverFile = filePath.getFileName().toString().toLowerCase().startsWith(COVER_START_NAME) &&
-					extension
-					.filter(e -> coverExtensions.contains(e.toLowerCase()))
-					.isPresent();
-			
-			isInfoFile = extension
-					.filter(e -> infoFileExtensions.contains(e.toLowerCase()))
-					.isPresent();
-			
-			if (!isMediaFile && !isCoverFile && !isInfoFile) {
-				mLog.log(logLevel, "Unexpected file in media path : " + filePath);
-			}
-		}
-
-		public Path getFilePath() {
-			return filePath;
-		}
-
-		public Optional<String> getExtension() {
-			return extension;
-		}
-
-		public boolean isMediaFile() {
-			return isMediaFile;
-		}
-
-		public boolean isCoverFile() {
-			return isCoverFile;
-		}
-
-	}
 	
 	public MediaFilePath(Path mediaFilesPath, ContentNature cn, boolean logWarnings) {
 		
@@ -175,11 +116,7 @@ public class MediaFilePath {
 		return Optional.ofNullable(filename)
 				.map(f -> f.toString())
 				.filter(f -> f.contains("."))
-				.map(f -> f.substring(f.lastIndexOf(".") + 1))
-				.map(ext -> { extensionSet.add(ext);
-				return ext;
-					});
-				
+				.map(f -> f.substring(f.lastIndexOf(".") + 1));			
 	}
 
 	public boolean hasCover() {
@@ -189,6 +126,5 @@ public class MediaFilePath {
 	public String getMediaFileExtension() {
 		return mediaFileExtension;
 	}
-	
 
 }
