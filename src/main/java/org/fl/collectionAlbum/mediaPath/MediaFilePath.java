@@ -61,7 +61,7 @@ public class MediaFilePath {
 			
 			Level level = logWarnings ? Level.WARNING : Level.INFO;
 			List<MediaFilePathMember> files = fileStream
-					.filter(file -> Files.isRegularFile(file))
+					.filter(path -> Files.isRegularFile(path))
 					.map(f -> new MediaFilePathMember(f, getFileNameExtension(f), contentNature, level)).collect(Collectors.toList());
 			
 			mediaFileNumber = files.stream().filter(file -> file.isMediaFile()).count();
