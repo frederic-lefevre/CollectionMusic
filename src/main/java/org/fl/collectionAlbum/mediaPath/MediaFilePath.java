@@ -52,7 +52,7 @@ public class MediaFilePath {
 	private long mediaFileNumber;
 	private Path coverPath;
 	private final ContentNature contentNature;
-	private List<MediaFilePathMember> mediaFiles;
+	private List<MediaFile> mediaFiles;
 	
 	private String mediaFileExtension;
 	
@@ -73,7 +73,7 @@ public class MediaFilePath {
 					.filter(path -> Files.isRegularFile(path))
 					.map(path -> { 
 						Optional<String> extension = getFileNameExtension(path);
-						MediaFilePathMember m = new MediaFilePathMember(path, extension);
+						MediaFile m = new MediaFile(path, extension);
 						
 						if (extension.filter(e -> contentNature.getFileExtensions().contains(e.toLowerCase())).isPresent()) {
 							mediaFileNumber++;
@@ -120,7 +120,7 @@ public class MediaFilePath {
 		return coverPath;
 	}
 	
-	public List<MediaFilePathMember> getMediaFiles() {
+	public List<MediaFile> getMediaFiles() {
 		return mediaFiles;
 	}
 

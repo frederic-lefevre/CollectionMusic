@@ -27,12 +27,12 @@ package org.fl.collectionAlbum.mediaPath;
 import java.nio.file.Path;
 import java.util.Optional;
 
-class MediaFilePathMember {
+class MediaFile {
 	
 	private final Path filePath;
 	private final Optional<String> extension;
 
-	public MediaFilePathMember(Path fp, Optional<String> ext) {
+	public MediaFile(Path fp, Optional<String> ext) {
 		super();
 		filePath = fp;
 		extension = ext;
