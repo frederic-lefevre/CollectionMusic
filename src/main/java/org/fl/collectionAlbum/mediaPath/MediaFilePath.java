@@ -52,6 +52,7 @@ public class MediaFilePath {
 	private long mediaFileNumber;
 	private Path coverPath;
 	private final ContentNature contentNature;
+	private List<MediaFilePathMember> mediaFiles;
 	
 	private String mediaFileExtension;
 	
@@ -68,7 +69,7 @@ public class MediaFilePath {
 		try (Stream<Path> fileStream = Files.list(mediaFilesPath)) {
 			
 			Level level = logWarnings ? Level.WARNING : Level.INFO;
-			List<MediaFilePathMember> files = fileStream
+			mediaFiles = fileStream
 					.filter(path -> Files.isRegularFile(path))
 					.map(path -> { 
 						Optional<String> extension = getFileNameExtension(path);
@@ -96,6 +97,7 @@ public class MediaFilePath {
 					.filter(Objects::nonNull)
 					.collect(Collectors.toList());
 	
+			// Check media files extension (should all be the same)
 			if (mediaExtensions.isEmpty()) {
 				mLog.log(level, "No media file found in " + mediaFilesPath.toString());
 			} else if (mediaExtensions.size() == 1) {
@@ -118,6 +120,10 @@ public class MediaFilePath {
 		return coverPath;
 	}
 	
+	public List<MediaFilePathMember> getMediaFiles() {
+		return mediaFiles;
+	}
+
 	public void addAlbum(Album album) {
 		albumsSet.add(album);
 	}
