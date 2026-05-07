@@ -35,7 +35,7 @@ import org.fl.collectionAlbum.json.VideoFileParser;
 
 public enum ContentNature { 
 	AUDIO("audio", JsonMusicProperties.AUDIO_FILE, Stream.of(AudioFileType.values()).map(a -> a.getExtension()).collect(Collectors.toSet()), true), 
-	VIDEO("vidéo", JsonMusicProperties.VIDEO_FILE, Set.of("m2ts", "mkv", "mpls", "vob", "m4v", "mp4", "bdmv"), false);
+	VIDEO("vidéo", JsonMusicProperties.VIDEO_FILE,  Stream.of(VideoFileType.values()).map(a -> a.getExtension()).collect(Collectors.toSet()), false);
 	
 	private final String nom;
 	private final String jsonProperty;

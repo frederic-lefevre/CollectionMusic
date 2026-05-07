@@ -22,28 +22,14 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.mediaPath;
+package org.fl.collectionAlbum.mediaFile;
 
 import java.nio.file.Path;
-import java.util.Optional;
 
-class MediaFile {
-	
-	private final Path filePath;
-	private final Optional<String> extension;
+public class M4aAudioFile extends MediaFile {
 
-	public MediaFile(Path fp, Optional<String> ext) {
-		super();
-		filePath = fp;
-		extension = ext;
-	}
-
-	public Path getFilePath() {
-		return filePath;
-	}
-
-	public Optional<String> getExtension() {
-		return extension;
+	protected M4aAudioFile(Path filePath, String extension) {
+		super(filePath, extension);
 	}
 
 }

@@ -38,6 +38,8 @@ import java.util.stream.Stream;
 
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.format.ContentNature;
+import org.fl.collectionAlbum.mediaFile.MediaFile;
+import org.fl.collectionAlbum.mediaFile.MediaFileBuilder;
 
 public class MediaFilePath {
 
@@ -51,20 +53,18 @@ public class MediaFilePath {
 	private final Set<Album> albumsSet;
 	private long mediaFileNumber;
 	private Path coverPath;
-	private final ContentNature contentNature;
 	private List<MediaFile> mediaFiles;
 	
 	private String mediaFileExtension;
 	
-	public MediaFilePath(Path mediaFilesPath, ContentNature cn, boolean logWarnings) {
+	public MediaFilePath(Path mediaFilesPath, ContentNature contentNature, boolean logWarnings) {
 		
 		this.mediaFilesPath = mediaFilesPath;
-		contentNature = cn;
 		albumsSet = new HashSet<>();
 		mediaFileExtension = null;
 		coverPath = null;
 		mediaFileNumber = 0;
-		Set<String> mediaExtensions = new HashSet<>();
+		Set<String> mediaFileExtensions = new HashSet<>();
 		
 		try (Stream<Path> fileStream = Files.list(mediaFilesPath)) {
 			
@@ -72,39 +72,41 @@ public class MediaFilePath {
 			mediaFiles = fileStream
 					.filter(path -> Files.isRegularFile(path))
 					.map(path -> { 
-						Optional<String> extension = getFileNameExtension(path);
-						MediaFile m = new MediaFile(path, extension);
+						String extension = getFileNameExtension(path).orElse(null);
 						
-						if (extension.filter(e -> contentNature.getFileExtensions().contains(e.toLowerCase())).isPresent()) {
-							mediaFileNumber++;
-							mediaExtensions.add(extension.get());
-							return m;
-						} else if (path.getFileName().toString().toLowerCase().startsWith(COVER_START_NAME) &&
-								extension
-								.filter(e -> coverExtensions.contains(e.toLowerCase()))
-								.isPresent()) {
-							coverPath = path;
+						if (extension == null) {
+							mLog.log(level, "Unexpected file with no extension in media path : " + path);
 							return null;
-						} else if (extension
-									.filter(e -> infoFileExtensions.contains(e.toLowerCase()))
-									.isPresent()) {
-							 return null;
 						} else {
-							mLog.log(level, "Unexpected file in media path : " + path);
-							return null;
-						}	
+							MediaFile mediaFile = MediaFileBuilder.builder(contentNature, path, extension).build();
+							if (mediaFile != null) {
+
+								mediaFileNumber++;
+								mediaFileExtensions.add(extension);
+								return mediaFile;
+							} else if (path.getFileName().toString().toLowerCase().startsWith(COVER_START_NAME) &&
+									coverExtensions.contains(extension.toLowerCase())) {
+								coverPath = path;
+								return null;
+							} else if (infoFileExtensions.contains(extension.toLowerCase())) {
+								return null;
+							} else {
+								mLog.log(level, "Unexpected file in media path : " + path);
+								return null;
+							}
+						}
 					})
 					.filter(Objects::nonNull)
 					.collect(Collectors.toList());
 	
 			// Check media files extension (should all be the same)
-			if (mediaExtensions.isEmpty()) {
+			if (mediaFileExtensions.isEmpty()) {
 				mLog.log(level, "No media file found in " + mediaFilesPath.toString());
-			} else if (mediaExtensions.size() == 1) {
-				mediaFileExtension = mediaExtensions.iterator().next();
+			} else if (mediaFileExtensions.size() == 1) {
+				mediaFileExtension = mediaFileExtensions.iterator().next().toString();
 			} else {
 				mLog.log(level, "More than 1 media file type found in " + mediaFilesPath.toString());
-				mediaFileExtension = mediaExtensions.toString();
+				mediaFileExtension = mediaFileExtensions.toString();
 			}
 			
 		} catch (Exception e) {
@@ -142,7 +144,7 @@ public class MediaFilePath {
 				.filter(extension -> mediaContentNature.getFileExtensions().contains(extension.toLowerCase()))
 				.isPresent();
 	}
-
+	
 	private static Optional<String> getFileNameExtension(Path filename) {
 		return Optional.ofNullable(filename)
 				.map(f -> f.toString())

@@ -22,25 +22,27 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.format;
+package org.fl.collectionAlbum.mediaFile;
 
-public enum VideoFileType {
+import java.nio.file.Path;
 
-	MKV("mkv"),
-	MP4("mp4"),
-	M4V("m4v"),
-	VOB("vob"),
-	M2TS("m2ts"),
-	MPLS("mpls"),
-	BDMV("bdmv");
+public abstract class MediaFile {
 	
+	private final Path filePath;
 	private final String extension;
-	
-	private VideoFileType(String extension) {
+
+	protected MediaFile(Path filePath, String extension) {
+		super();
+		this.filePath = filePath;
 		this.extension = extension;
 	}
-	
+
+	public Path getFilePath() {
+		return filePath;
+	}
+
 	public String getExtension() {
 		return extension;
 	}
+
 }
