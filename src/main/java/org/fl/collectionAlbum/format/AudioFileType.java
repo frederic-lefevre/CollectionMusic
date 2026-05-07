@@ -24,77 +24,27 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.format;
 
-import java.util.Collections;
-import java.util.Set;
-
 public enum AudioFileType {
 	
-	FLAC {
-		
-		@Override
-        public boolean isLossLess() {
-			return true;
-		}
-		
-		@Override
-		public Set<String> getExtensions() {
-			return Set.of("flac", "FLAC");
-		}
-	},
-	WAV {
-		
-		@Override
-        public boolean isLossLess() {
-			return true;
-		}
-		
-		@Override
-		public Set<String> getExtensions() {
-			return Set.of("wav", "WAV");
-		}
-	},
-	AIFF {
-		
-		@Override
-        public boolean isLossLess() {
-			return true;
-		}
-		
-		@Override
-		public Set<String> getExtensions() {
-			return Set.of("aiff", "AIFF");
-		}
-	},
-	MP3 {
-		
-		@Override
-        public boolean isLossLess() {
-			return false;
-		}
-		
-		@Override
-		public Set<String> getExtensions() {
-			return Set.of("mp3", "MP3");
-		}
-	},
-	M4A {
-		
-		@Override
-        public boolean isLossLess() {
-			return false;
-		}
-		
-		@Override
-		public Set<String> getExtensions() {
-			return Set.of("m4a", "M4A");
-		}
-	};
+	FLAC(true, "flac"),
+	WAV(true, "wav"),
+	AIFF(true, "aiff"),
+	MP3(false, "mp3"),
+	M4A(false, "m4a");
+	
+	private final boolean isLossLess;
+	private final String extension;
+	
+	private AudioFileType(boolean isLossLess, String extension) {
+		this.isLossLess = isLossLess;
+		this.extension = extension;
+	}
 	
 	public boolean isLossLess() {
-		return true;
+		return isLossLess;
 	}
 
-	public Set<String> getExtensions() {
-		return Collections.emptySet();
+	public String getExtension() {
+		return extension;
 	}
 }

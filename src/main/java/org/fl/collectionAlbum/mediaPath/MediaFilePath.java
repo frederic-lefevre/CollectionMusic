@@ -28,6 +28,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Level;
@@ -37,110 +38,79 @@ import java.util.stream.Stream;
 
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.format.ContentNature;
+import org.fl.collectionAlbum.mediaFile.MediaFile;
+import org.fl.collectionAlbum.mediaFile.MediaFileBuilder;
 
 public class MediaFilePath {
 
 	private static final Logger mLog = Logger.getLogger(MediaFilePath.class.getName());
 	
+	private static final String COVER_START_NAME = "cover.";
 	private static final Set<String> coverExtensions = Set.of("jpg", "png");
-	
 	private static final Set<String> infoFileExtensions = Set.of("pdf","crt");
 	
-	public static final Set<String> extensionSet = new HashSet<>();
-
-	private static final String COVER_START_NAME = "cover.";
-	
 	private final Path mediaFilesPath;
-	
 	private final Set<Album> albumsSet;
-	
 	private long mediaFileNumber;
-	
 	private Path coverPath;
-	
-	private final ContentNature contentNature;
+	private List<MediaFile> mediaFiles;
 	
 	private String mediaFileExtension;
 	
-	private static class MediaFilePathMember {
-		
-		private final Path filePath;
-		private final Optional<String> extension;
-		private final boolean isMediaFile;
-		private final boolean isCoverFile;
-		private final boolean isInfoFile;
-		
-		public MediaFilePathMember(Path fp, Optional<String> ext, ContentNature mediaContentNature, Level logLevel) {
-			super();
-			filePath = fp;
-			extension = ext;
-			
-			isMediaFile = extension.filter(e -> mediaContentNature.getFileExtensions().contains(e.toLowerCase())).isPresent();
-			
-			isCoverFile = filePath.getFileName().toString().toLowerCase().startsWith(COVER_START_NAME) &&
-					extension
-					.filter(e -> coverExtensions.contains(e.toLowerCase()))
-					.isPresent();
-			
-			isInfoFile = extension
-					.filter(e -> infoFileExtensions.contains(e.toLowerCase()))
-					.isPresent();
-			
-			if (!isMediaFile && !isCoverFile && !isInfoFile) {
-				mLog.log(logLevel, "Unexpected file in media path : " + filePath);
-			}
-		}
-
-		public Path getFilePath() {
-			return filePath;
-		}
-
-		public Optional<String> getExtension() {
-			return extension;
-		}
-
-		public boolean isMediaFile() {
-			return isMediaFile;
-		}
-
-		public boolean isCoverFile() {
-			return isCoverFile;
-		}
-
-	}
-	
-	public MediaFilePath(Path mediaFilesPath, ContentNature cn, boolean logWarnings) {
+	public MediaFilePath(Path mediaFilesPath, ContentNature contentNature, boolean logWarnings) {
 		
 		this.mediaFilesPath = mediaFilesPath;
-		contentNature = cn;
 		albumsSet = new HashSet<>();
 		mediaFileExtension = null;
+		coverPath = null;
+		mediaFileNumber = 0;
+		Set<String> mediaFileExtensions = new HashSet<>();
 		
 		try (Stream<Path> fileStream = Files.list(mediaFilesPath)) {
 			
 			Level level = logWarnings ? Level.WARNING : Level.INFO;
-			List<MediaFilePathMember> files = fileStream
-					.filter(file -> Files.isRegularFile(file))
-					.map(f -> new MediaFilePathMember(f, getFileNameExtension(f), contentNature, level)).collect(Collectors.toList());
-			
-			mediaFileNumber = files.stream().filter(file -> file.isMediaFile()).count();
-			
-			Set<String> mediaExtensions = files.stream().filter(file -> file.isMediaFile()).map(f -> f.getExtension().get()).collect(Collectors.toSet());		
-			if (mediaExtensions.isEmpty()) {
+			mediaFiles = fileStream
+					.filter(path -> Files.isRegularFile(path))
+					.map(path -> { 
+						String extension = getFileNameExtension(path).orElse(null);
+						
+						if (extension == null) {
+							mLog.log(level, "Unexpected file with no extension in media path : " + path);
+							return null;
+						} else {
+							MediaFile mediaFile = MediaFileBuilder.builder(contentNature, path, extension).build();
+							if (mediaFile != null) {
+
+								mediaFileNumber++;
+								mediaFileExtensions.add(extension);
+								return mediaFile;
+							} else if (path.getFileName().toString().toLowerCase().startsWith(COVER_START_NAME) &&
+									coverExtensions.contains(extension.toLowerCase())) {
+								coverPath = path;
+								return null;
+							} else if (infoFileExtensions.contains(extension.toLowerCase())) {
+								return null;
+							} else {
+								mLog.log(level, "Unexpected file in media path : " + path);
+								return null;
+							}
+						}
+					})
+					.filter(Objects::nonNull)
+					.collect(Collectors.toList());
+	
+			// Check media files extension (should all be the same)
+			if (mediaFileExtensions.isEmpty()) {
 				mLog.log(level, "No media file found in " + mediaFilesPath.toString());
-			} else if (mediaExtensions.size() == 1) {
-				mediaFileExtension = mediaExtensions.iterator().next();
+			} else if (mediaFileExtensions.size() == 1) {
+				mediaFileExtension = mediaFileExtensions.iterator().next().toString();
 			} else {
 				mLog.log(level, "More than 1 media file type found in " + mediaFilesPath.toString());
-				mediaFileExtension = mediaExtensions.toString();
+				mediaFileExtension = mediaFileExtensions.toString();
 			}
 			
-			coverPath = files.stream().filter(f -> f.isCoverFile()).map(f -> f.getFilePath()).findFirst().orElse(null);
-			
 		} catch (Exception e) {
-			mLog.log(Level.SEVERE, "Exception when listing files in " + mediaFilesPath, e);
-			mediaFileNumber = 0;
-			coverPath = null;
+			mLog.log(Level.SEVERE, "Exception when listing files in " + mediaFilesPath, e);			
 		}
 	}
 
@@ -152,6 +122,10 @@ public class MediaFilePath {
 		return coverPath;
 	}
 	
+	public List<MediaFile> getMediaFiles() {
+		return mediaFiles;
+	}
+
 	public void addAlbum(Album album) {
 		albumsSet.add(album);
 	}
@@ -170,16 +144,12 @@ public class MediaFilePath {
 				.filter(extension -> mediaContentNature.getFileExtensions().contains(extension.toLowerCase()))
 				.isPresent();
 	}
-
+	
 	private static Optional<String> getFileNameExtension(Path filename) {
 		return Optional.ofNullable(filename)
 				.map(f -> f.toString())
 				.filter(f -> f.contains("."))
-				.map(f -> f.substring(f.lastIndexOf(".") + 1))
-				.map(ext -> { extensionSet.add(ext);
-				return ext;
-					});
-				
+				.map(f -> f.substring(f.lastIndexOf(".") + 1));			
 	}
 
 	public boolean hasCover() {
@@ -189,6 +159,5 @@ public class MediaFilePath {
 	public String getMediaFileExtension() {
 		return mediaFileExtension;
 	}
-	
 
 }

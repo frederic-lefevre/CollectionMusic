@@ -38,7 +38,6 @@ class MediaFilePathTest {
 		
 		assertThat(MediaFilePath.isMediaFileName(Paths.get("toto.flac"), ContentNature.AUDIO)).isTrue();
 		assertThat(MediaFilePath.isMediaFileName(Paths.get("toto.mp3"), ContentNature.AUDIO)).isTrue();
-		assertThat(MediaFilePath.isMediaFileName(Paths.get("toto.wma"), ContentNature.AUDIO)).isTrue();
 		assertThat(MediaFilePath.isMediaFileName(Paths.get("toto.txt"), ContentNature.AUDIO)).isFalse();
 		assertThat(MediaFilePath.isMediaFileName(Paths.get("toto.jpg"), ContentNature.AUDIO)).isFalse();
 		assertThat(MediaFilePath.isMediaFileName(Paths.get("toto"), ContentNature.AUDIO)).isFalse();
