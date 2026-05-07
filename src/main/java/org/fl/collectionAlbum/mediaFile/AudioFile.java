@@ -26,9 +26,9 @@ package org.fl.collectionAlbum.mediaFile;
 
 import java.nio.file.Path;
 
-public class WavAudioFile extends AudioFile {
+public abstract class AudioFile extends MediaFile {
 
-	protected WavAudioFile(Path filePath, String extension) {
+	protected AudioFile(Path filePath, String extension) {
 		super(filePath, extension);
 	}
 

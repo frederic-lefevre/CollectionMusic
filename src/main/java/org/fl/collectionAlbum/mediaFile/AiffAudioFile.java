@@ -26,7 +26,7 @@ package org.fl.collectionAlbum.mediaFile;
 
 import java.nio.file.Path;
 
-public class AiffAudioFile extends MediaFile {
+public class AiffAudioFile extends AudioFile {
 
 	protected AiffAudioFile(Path filePath, String extension) {
 		super(filePath, extension);

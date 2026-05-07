@@ -26,7 +26,7 @@ package org.fl.collectionAlbum.mediaFile;
 
 import java.nio.file.Path;
 
-public class FlacAudioFile extends MediaFile {
+public class FlacAudioFile extends AudioFile {
 
 	protected FlacAudioFile(Path filePath, String extension) {
 		super(filePath, extension);

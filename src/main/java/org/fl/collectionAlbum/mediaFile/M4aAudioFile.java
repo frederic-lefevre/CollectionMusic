@@ -26,7 +26,7 @@ package org.fl.collectionAlbum.mediaFile;
 
 import java.nio.file.Path;
 
-public class M4aAudioFile extends MediaFile {
+public class M4aAudioFile extends AudioFile {
 
 	protected M4aAudioFile(Path filePath, String extension) {
 		super(filePath, extension);
