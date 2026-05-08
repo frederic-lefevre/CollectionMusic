@@ -61,12 +61,14 @@ public class MediaFileInventory {
 	private final ContentNature contentNature;
 	private final boolean logWarnings;
 	private boolean isConnected;
+	private long mediaFileNumber;
 	
 	protected MediaFileInventory(Path rootPath, ContentNature contentNature, boolean logWarnings) {
 		
 		this.rootPath = rootPath;
 		this.contentNature = contentNature;
 		this.logWarnings = logWarnings;
+		this.mediaFileNumber = 0;
 		mediaFilePathInventory = new LinkedHashMap<>();
 		mediaFilePathList = new ArrayList<>();
 		isConnected = Files.exists(rootPath);
@@ -126,6 +128,7 @@ public class MediaFileInventory {
 			MediaFilePath newMediaFilePath = new MediaFilePath(albumAbsolutePath, contentNature, logWarnings);
 			mediaFilePathInventory.put(albumAbsolutePath, newMediaFilePath);
 			mediaFilePathList.add(newMediaFilePath);
+			mediaFileNumber = mediaFileNumber + newMediaFilePath.getMediaFileNumber();
 		}
 		return mediaFilePathInventory.get(albumAbsolutePath);
 	}
@@ -182,6 +185,10 @@ public class MediaFileInventory {
 		return isConnected;
 	}
 
+	public long getMediaFileNumber() {
+		return mediaFileNumber;
+	}
+	
 	public MediaFilePath validateMediaFilePath(Path path) {
 		
 		if (! isConnected()) {

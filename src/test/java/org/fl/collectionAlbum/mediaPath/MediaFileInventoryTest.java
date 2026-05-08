@@ -205,4 +205,13 @@ class MediaFileInventoryTest {
 		assertThat(audioFileInventory.validateMediaFilePath(Paths.get("E:\\XX\\e\\Bill Evans\\Portrait In Jazz"))).isNull();	
 		
 	}
+	
+	@Test
+	void shouldHaveManyAudioFile() {
+		
+		long audioFileNumber = audioFileInventory.getMediaFileNumber();
+		
+		assertThat(audioFileNumber).isGreaterThan(22000);
+		System.out.println("Nombre de fichiers audio=" + audioFileNumber);
+	}
 }
