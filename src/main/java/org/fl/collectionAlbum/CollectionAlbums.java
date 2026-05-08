@@ -64,7 +64,7 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 	// Status
 	private static final String MEDIA_INVENTORY = "Inventaire media";
 	private static final String INIT_MEDIA_INVENTORY = "Initialisation des inventaires des fichiers media";
-	private static final String MEDIA_INVENTORY_PRORESS = "Inventaire des fichiers media en cours";
+	private static final String MEDIA_INVENTORY_PROGRESS = "Inventaire des fichiers media en cours";
 	private static final String DISCOGS_INVENTORY = "Inventaire discogs";
 	private static final String DISCOGS_INVENTORY_PROGRESS = "Inventaire des releases discogs en cours";
 	private static final String LECTURE_ALBUM = "Lecture des albums";
@@ -104,7 +104,7 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 		publish(new ProgressInformation(CALENDARS, "", ""));
 		buildCalendriers();
 		
-		publish(new ProgressInformation(MEDIA_INVENTORY, MEDIA_INVENTORY_PRORESS, ""));
+		publish(new ProgressInformation(MEDIA_INVENTORY, MEDIA_INVENTORY_PROGRESS, ""));
 		MediaFilesInventories.scanMediaFilePaths();
 		
 		// Sort for display when scanning the collection
@@ -118,6 +118,7 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 		long now = System.currentTimeMillis();
 		Control.getCollectionMetricsHsitory().setPresentMetricsIfNew(now, albumsContainer);
 		Control.getConcertMetricsHsitory().setPresentMetricsIfNew(now, albumsContainer);
+		Control.getMediaFileMetricsHsitory().setPresentMetricsIfNew(now);
 		
 		return albumsContainer;
 	}

@@ -89,6 +89,7 @@ public class MediaFileInventory {
 	}
 	
 	public void clearInventory() {
+		mediaFileNumber = 0;
 		mediaFilePathList.clear();
 		mediaFilePathInventory.clear();
 		isConnected = Files.exists(rootPath);

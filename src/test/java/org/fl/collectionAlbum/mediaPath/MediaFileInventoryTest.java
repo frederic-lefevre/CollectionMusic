@@ -212,6 +212,6 @@ class MediaFileInventoryTest {
 		long audioFileNumber = audioFileInventory.getMediaFileNumber();
 		
 		assertThat(audioFileNumber).isGreaterThan(22000);
-		System.out.println("Nombre de fichiers audio=" + audioFileNumber);
+		// System.out.println("Nombre de fichiers audio=" + audioFileNumber);
 	}
 }
