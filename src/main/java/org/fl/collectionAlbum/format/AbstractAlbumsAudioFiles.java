@@ -36,12 +36,12 @@ public abstract class AbstractAlbumsAudioFiles extends AbstractAlbumMediaFiles {
 	private final static Logger albumLog = Logger.getLogger(AbstractAlbumsAudioFiles.class.getName());
 	
 	private final AudioFileType type;
-	private final long samplingRate;  // in KHz
+	private final double samplingRate;  // in KHz
 	
 	private static final String TYPE_TITLE = "Type";
 	private static final String SAMPLING_RATE_TITLE = "Sampling Rate";
 	
-	protected AbstractAlbumsAudioFiles(ObjectNode audioJson, AudioFileType type, String source, long samplingRate, String note, Set<MediaFilePath> mediaFilePaths) {
+	protected AbstractAlbumsAudioFiles(ObjectNode audioJson, AudioFileType type, String source, double samplingRate, String note, Set<MediaFilePath> mediaFilePaths) {
 		super(audioJson, source, note, mediaFilePaths);
 		this.type = type;
 		this.samplingRate = samplingRate;
@@ -58,7 +58,7 @@ public abstract class AbstractAlbumsAudioFiles extends AbstractAlbumMediaFiles {
 		return type;
 	}
 
-	public long getSamplingRate() {
+	public double getSamplingRate() {
 		return samplingRate;
 	}
 	

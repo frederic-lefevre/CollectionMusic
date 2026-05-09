@@ -33,11 +33,11 @@ import tools.jackson.databind.node.ObjectNode;
 
 public class LossyAlbumAudioFiles extends AbstractAlbumsAudioFiles {
 	
-	private final double bitRate;
+	private final double bitRate;  // in kbits/s
 
 	private static final String BIT_RATE_TITLE = "Bit rate";
 	
-	public LossyAlbumAudioFiles(ObjectNode audioJson, AudioFileType type, String source, double bitRate, long samplingRate, String note, Set<MediaFilePath> mediaFilePaths) {
+	public LossyAlbumAudioFiles(ObjectNode audioJson, AudioFileType type, String source, double bitRate, double samplingRate, String note, Set<MediaFilePath> mediaFilePaths) {
 		
 		super(audioJson, type, source, samplingRate, note, mediaFilePaths);
 		this.bitRate = bitRate;
