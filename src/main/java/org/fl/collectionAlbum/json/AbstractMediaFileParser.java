@@ -55,7 +55,7 @@ public abstract class AbstractMediaFileParser {
 
 	protected Set<MediaFilePath> parseMediaFileLocation(JsonNode mediaFileJson, ContentNature contentNature) {
 
-		Set<String> locations = ParserHelpers.getArrayAttributeAsSet(mediaFileJson,  JsonMusicProperties.LOCATION);
+		Set<String> locations = ParserHelpers.getArrayAttributeAsSet(mediaFileJson,  JsonMusicProperties.LOCATION, true);
 		if (locations == null) {
 			return null;
 		} else {

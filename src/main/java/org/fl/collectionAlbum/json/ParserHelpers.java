@@ -29,6 +29,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import tools.jackson.databind.JsonNode;
@@ -64,7 +65,7 @@ public class ParserHelpers {
 				});
 	}
 	
-	public static List<String> getArrayAttribute(JsonNode json, String jsonMusicProperty) {
+	public static List<String> getArrayAttribute(JsonNode json, String jsonMusicProperty, boolean mandatory) {
 
 		JsonNode jElem = json.get(jsonMusicProperty);
 		if (jElem != null) {
@@ -79,12 +80,12 @@ public class ParserHelpers {
 				albumLog.warning(jsonMusicProperty + " n'est pas un JsonArray pour l'artefact " + json);
 			}
 		} else {
-			albumLog.info(() -> "No property " + jsonMusicProperty + " for " + json);
+			albumLog.log(mandatory?Level.WARNING:Level.FINE, () -> "No property " + jsonMusicProperty + " for " + json);
 		}
 		return new ArrayList<String>();
 	}
 	
-	public static Set<String> getArrayAttributeAsSet(JsonNode json, String jsonMusicProperty) {
+	public static Set<String> getArrayAttributeAsSet(JsonNode json, String jsonMusicProperty, boolean mandatory) {
 
 		JsonNode jElem = json.get(jsonMusicProperty);
 		if (jElem != null) {
@@ -96,7 +97,7 @@ public class ParserHelpers {
 				albumLog.warning(jsonMusicProperty + " n'est pas un JsonArray pour l'artefact " + json);
 			}
 		} else {
-			albumLog.info(() -> "No property " + jsonMusicProperty + " for " + json);
+			albumLog.log(mandatory?Level.WARNING:Level.FINE, () -> "No property " + jsonMusicProperty + " for " + json);
 		}
 		return null;
 	}

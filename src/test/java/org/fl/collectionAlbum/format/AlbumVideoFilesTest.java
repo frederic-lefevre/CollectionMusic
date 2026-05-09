@@ -58,13 +58,9 @@ public class AlbumVideoFilesTest {
 		
 		assertThat(videoFileParserFilterCounter.getLogRecordCount()).isEqualTo(3);
 		assertThat(videoFileParserFilterCounter.getLogRecordCount(Level.SEVERE)).isEqualTo(3);
-		
-		if (parserHelpersFilterCounter.isLoggable(Level.INFO)) {
-			assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(2);
-			assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.INFO)).isEqualTo(1);
-		} else {
-			assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(1);
-		}
+
+		assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(2);
+		assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
 		assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.SEVERE)).isEqualTo(1);
 	}
 
@@ -100,13 +96,9 @@ public class AlbumVideoFilesTest {
 		
 		assertThat(videoFileParserFilterCounter.getLogRecordCount()).isEqualTo(1);
 		assertThat(videoFileParserFilterCounter.getLogRecordCount(Level.SEVERE)).isEqualTo(1);
-		
-		if (parserHelpersFilterCounter.isLoggable(Level.INFO)) {
-			assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(1);
-			assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.INFO)).isEqualTo(1);
-		} else {
-			assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(0);
-		}
+
+		assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
 	}
 	
 	@Test
@@ -131,12 +123,8 @@ public class AlbumVideoFilesTest {
 		assertThat(videoFile.getType()).isEqualTo(VideoFileType.MKV);
 		assertThat(videoFile.getNote()).isNull();
 		
-		if (parserHelpersFilterCounter.isLoggable(Level.INFO)) {
-			assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(1);
-			assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.INFO)).isEqualTo(1);
-		} else {
-			assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(0);
-		}
+		assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
 	}
 	
 	@Test
@@ -164,11 +152,7 @@ public class AlbumVideoFilesTest {
 		
 		assertThat(videoFile.displayMediaFileDetailTitles(";")).isEqualTo("Width;Height;Type;Source;Note");
 		
-		if (parserHelpersFilterCounter.isLoggable(Level.INFO)) {
-			assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(1);
-			assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.INFO)).isEqualTo(1);
-		} else {
-			assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(0);
-		}
+		assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
 	}
 }

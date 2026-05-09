@@ -65,9 +65,10 @@ class AlbumAudioFilesTest {
 		
 		if (parserHelpersFilterCounter.isLoggable(Level.INFO)) {
 			assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(2);
-			assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.INFO)).isEqualTo(1);
+			assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
 		} else {
-			assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(1);
+			assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(2);
+			assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
 		}
 		assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.SEVERE)).isEqualTo(1);
 	}
@@ -105,12 +106,8 @@ class AlbumAudioFilesTest {
 		assertThat(audioFileParserFilterCounter.getLogRecordCount()).isEqualTo(1);
 		assertThat(audioFileParserFilterCounter.getLogRecordCount(Level.SEVERE)).isEqualTo(1);
 		
-		if (parserHelpersFilterCounter.isLoggable(Level.INFO)) {
-			assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(1);
-			assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.INFO)).isEqualTo(1);
-		} else {
-			assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(0);
-		}
+		assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
 	}
 	
 	@Test
