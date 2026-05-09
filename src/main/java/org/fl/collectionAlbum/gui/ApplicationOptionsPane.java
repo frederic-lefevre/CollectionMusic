@@ -24,6 +24,10 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui;
 
+import java.awt.Color;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -37,15 +41,39 @@ public class ApplicationOptionsPane extends JPanel {
 	private static final String YES_TITLE = "Oui";
 	private static final String NO_TITLE = "Non";
 	
+	JToggleButton scanMediaMetadataButton;
+	
 	public ApplicationOptionsPane() {
 		super();
 		
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		JLabel scanMediaMetadataLabel = new JLabel(SCAN_METADATA_LABEL);
-		JToggleButton scanMediaMetadataButton = new JToggleButton(NO_TITLE);
+		scanMediaMetadataButton = new JToggleButton(NO_TITLE);
+		setButtonAppearence(scanMediaMetadataButton);
 		
+		scanMediaMetadataButton.addItemListener(new ReadMetadataOptionListener());
 		add(scanMediaMetadataLabel);
 		add(scanMediaMetadataButton);
 	}
 
+	private void setButtonAppearence(JToggleButton toogleButton) {
+		
+		if (toogleButton.isSelected()) {
+			toogleButton.setText(YES_TITLE);
+		} else {
+			toogleButton.setText(NO_TITLE);
+			toogleButton.setBackground(Color.ORANGE);
+		}
+	}
+	
+	private class ReadMetadataOptionListener implements ItemListener {
+
+		@Override
+		public void itemStateChanged(ItemEvent e) {
+			
+			setButtonAppearence(scanMediaMetadataButton);
+			
+		}
+		
+	}
 }
