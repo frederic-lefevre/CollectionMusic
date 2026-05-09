@@ -33,6 +33,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 
+import org.fl.collectionAlbum.Control;
+
 public class ApplicationOptionsPane extends JPanel {
 
 	private static final long serialVersionUID = 1L;
@@ -49,6 +51,7 @@ public class ApplicationOptionsPane extends JPanel {
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		JLabel scanMediaMetadataLabel = new JLabel(SCAN_METADATA_LABEL);
 		scanMediaMetadataButton = new JToggleButton(NO_TITLE);
+		scanMediaMetadataButton.setSelected(Control.isReadMediaFileMetadata());
 		setButtonAppearence(scanMediaMetadataButton);
 		
 		scanMediaMetadataButton.addItemListener(new ReadMetadataOptionListener());
@@ -71,8 +74,8 @@ public class ApplicationOptionsPane extends JPanel {
 		@Override
 		public void itemStateChanged(ItemEvent e) {
 			
-			setButtonAppearence(scanMediaMetadataButton);
-			
+			Control.setReadMediaFileMetadata(scanMediaMetadataButton.isSelected());
+			setButtonAppearence(scanMediaMetadataButton);	
 		}
 		
 	}

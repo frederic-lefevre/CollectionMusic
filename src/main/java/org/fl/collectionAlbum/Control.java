@@ -95,6 +95,7 @@ public class Control {
 	private String cssForGui;
 	private Dimension mainSubPaneDimension;
 	private Dimension infoWindowDimension;
+	private boolean readMediaFileMetadata;
    	
 	private Control() {
 	}
@@ -198,6 +199,8 @@ public class Control {
 					new StringCommandParameter());
 			
 			cssForGui = collectionProperties.getFileContentFromURI("album.cssForGui", Charset.defaultCharset());
+			
+			readMediaFileMetadata = collectionProperties.getBoolean("mediaFile.readMetadata", false);
 						
 		} catch (Exception e) {
 			albumLog.log(Level.SEVERE, "Exception during inintialisation, property file="  + Objects.toString(musicRunningContext.getPropertiesLocation()), e);
@@ -324,6 +327,14 @@ public class Control {
 	
 	public static String getCssForGui() {
 		return getInstance().cssForGui;
+	}
+	
+	public static boolean isReadMediaFileMetadata() {
+		return getInstance().readMediaFileMetadata;
+	}
+
+	public static void setReadMediaFileMetadata(boolean readMediaFileMetadata) {
+		getInstance().readMediaFileMetadata = readMediaFileMetadata;
 	}
 	
 	private Map<String, OsCommandAndOption> getMapOfOsCommandsAndOptions(String osCmdPropBase) {
