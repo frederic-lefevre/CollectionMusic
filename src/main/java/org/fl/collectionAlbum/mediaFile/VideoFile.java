@@ -32,4 +32,10 @@ public class VideoFile extends MediaFile {
 		super(filePath, extension);
 	}
 
+	@Override
+	public void getMetadata() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

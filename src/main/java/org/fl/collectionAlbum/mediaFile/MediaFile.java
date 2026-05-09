@@ -45,4 +45,5 @@ public abstract class MediaFile {
 		return extension;
 	}
 
+	public abstract void getMetadata();
 }

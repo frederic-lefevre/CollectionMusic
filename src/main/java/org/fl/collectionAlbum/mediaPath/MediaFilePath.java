@@ -36,6 +36,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.mediaFile.MediaFile;
@@ -83,6 +84,10 @@ public class MediaFilePath {
 
 								mediaFileNumber++;
 								mediaFileExtensions.add(extension);
+								
+								if (Control.isReadMediaFileMetadata()) {
+									mediaFile.getMetadata();
+								}
 								return mediaFile;
 							} else if (path.getFileName().toString().toLowerCase().startsWith(COVER_START_NAME) &&
 									coverExtensions.contains(extension.toLowerCase())) {

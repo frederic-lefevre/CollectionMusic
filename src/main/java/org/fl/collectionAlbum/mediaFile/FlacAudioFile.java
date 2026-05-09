@@ -32,4 +32,10 @@ public class FlacAudioFile extends AudioFile {
 		super(filePath, extension);
 	}
 
+	@Override
+	public void getMetadata() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
