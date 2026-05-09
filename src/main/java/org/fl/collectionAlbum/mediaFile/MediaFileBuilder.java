@@ -97,7 +97,6 @@ public class MediaFileBuilder {
 
 	private static AudioFileType getAudioFileType(String extension) {
 
-		
 		AudioFileType audioFileType = audioExtensionsMap.get(extension);
 		if (audioFileType == null) {
 			

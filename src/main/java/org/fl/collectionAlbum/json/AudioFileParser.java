@@ -70,8 +70,8 @@ public class AudioFileParser extends AbstractMediaFileParser {
 						return null;
 					});
 			
-			Double samplingRate = Optional.ofNullable(audioFileJson.get(JsonMusicProperties.SAMPLING_RATE))
-					.map(JsonNode::asDouble)
+			Long samplingRate = Optional.ofNullable(audioFileJson.get(JsonMusicProperties.SAMPLING_RATE))
+					.map(JsonNode::asLong)
 					.orElseGet(() -> {
 						albumLog.severe("Json AudioFile null samplingRate parameter" + audioFileJson);
 						return null;
