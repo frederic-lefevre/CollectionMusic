@@ -40,7 +40,7 @@ public class LosslessAlbumAudioFiles extends AbstractAlbumsAudioFiles {
 	private static final int HIGH_RES_BIT_DEPTH_THRESHOLD = 16;
 	private static final long HIGH_RES_SAMPLING_RATE_THRESHOLD = 48;
 	
-	public LosslessAlbumAudioFiles(ObjectNode audioJson, AudioFileType type, String source, int bitDepth, long samplingRate, String note, Set<MediaFilePath> mediaFilePaths) {
+	public LosslessAlbumAudioFiles(ObjectNode audioJson, AudioFileType type, String source, int bitDepth, double samplingRate, String note, Set<MediaFilePath> mediaFilePaths) {
 		
 		super(audioJson, type, source, samplingRate, note, mediaFilePaths);
 
