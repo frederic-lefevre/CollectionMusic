@@ -26,6 +26,8 @@ package org.fl.collectionAlbum.mediaFile;
 
 import java.nio.file.Path;
 
+import org.fl.collectionAlbum.mediaFile.metadata.MediaFileMetadata;
+
 public abstract class MediaFile {
 	
 	private final Path filePath;
@@ -45,5 +47,5 @@ public abstract class MediaFile {
 		return extension;
 	}
 
-	public abstract void getMetadata();
+	public abstract MediaFileMetadata getMetadata();
 }

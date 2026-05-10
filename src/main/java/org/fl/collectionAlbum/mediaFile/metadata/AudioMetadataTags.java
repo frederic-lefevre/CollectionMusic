@@ -42,4 +42,8 @@ public class AudioMetadataTags {
 	public String getTag(String name) {
 		return audioMetadataTags.get(name);
 	}
+	
+	public Map<String, String> getAllTags() {
+		return audioMetadataTags;
+	}
 }

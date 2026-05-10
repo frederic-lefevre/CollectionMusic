@@ -26,6 +26,8 @@ package org.fl.collectionAlbum.mediaFile;
 
 import java.nio.file.Path;
 
+import org.fl.collectionAlbum.mediaFile.metadata.AudioMetadata;
+
 public class M4aAudioFile extends AudioFile {
 
 	protected M4aAudioFile(Path filePath, String extension) {
@@ -33,9 +35,9 @@ public class M4aAudioFile extends AudioFile {
 	}
 
 	@Override
-	public void getMetadata() {
+	protected AudioMetadata parseMetadata() {
 		// TODO Auto-generated method stub
-		
+		return null;
 	}
 
 }

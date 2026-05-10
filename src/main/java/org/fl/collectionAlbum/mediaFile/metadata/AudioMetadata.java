@@ -22,22 +22,34 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.mediaFile;
+package org.fl.collectionAlbum.mediaFile.metadata;
 
-import java.nio.file.Path;
+import java.util.Map;
 
-import org.fl.collectionAlbum.mediaFile.metadata.AudioMetadata;
+public class AudioMetadata implements MediaFileMetadata {
 
-public class WavAudioFile extends AudioFile {
-
-	protected WavAudioFile(Path filePath, String extension) {
-		super(filePath, extension);
+	private final AudioMetadataTags audioMetadataTags;
+	private final AudioStreamMetadata audioStreamMetadata;
+	
+	public AudioMetadata(AudioMetadataTags audioMetadataTags, AudioStreamMetadata audioStreamMetadata) {
+		super();
+		this.audioMetadataTags = audioMetadataTags;
+		this.audioStreamMetadata = audioStreamMetadata;
 	}
 
 	@Override
-	protected AudioMetadata parseMetadata() {
-		// TODO Auto-generated method stub
-		return null;
+	public String getTag(String name) {
+		return audioMetadataTags.getTag(name);
+	}
+
+	@Override
+	public Map<String, String> getAllTags() {
+		return audioMetadataTags.getAllTags();
+	}
+
+	@Override
+	public Map<String, String> getStreamMetadataDescription() {
+		return audioStreamMetadata.getDescription();
 	}
 
 }

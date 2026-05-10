@@ -26,6 +26,8 @@ package org.fl.collectionAlbum.mediaFile;
 
 import java.nio.file.Path;
 
+import org.fl.collectionAlbum.mediaFile.metadata.AudioMetadata;
+
 public class FlacAudioFile extends AudioFile {
 
 	protected FlacAudioFile(Path filePath, String extension) {
@@ -33,9 +35,10 @@ public class FlacAudioFile extends AudioFile {
 	}
 
 	@Override
-	public void getMetadata() {
+	protected AudioMetadata parseMetadata() {
 		// TODO Auto-generated method stub
-		
+		return null;
 	}
+
 
 }

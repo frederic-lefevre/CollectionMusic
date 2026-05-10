@@ -26,6 +26,8 @@ package org.fl.collectionAlbum.mediaFile;
 
 import java.nio.file.Path;
 
+import org.fl.collectionAlbum.mediaFile.metadata.MediaFileMetadata;
+
 public class VideoFile extends MediaFile {
 
 	protected VideoFile(Path filePath, String extension) {
@@ -33,9 +35,9 @@ public class VideoFile extends MediaFile {
 	}
 
 	@Override
-	public void getMetadata() {
+	public MediaFileMetadata getMetadata() {
 		// TODO Auto-generated method stub
-		
+		return null;
 	}
 
 }

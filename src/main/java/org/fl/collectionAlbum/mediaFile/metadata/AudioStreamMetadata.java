@@ -24,10 +24,30 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.mediaFile.metadata;
 
+import java.util.Map;
+
 public record AudioStreamMetadata(
+		boolean isLossless,
 		long samplingRate, // sample frequency in Hz
 		int bitDepth,  // number of bit per sample
 		long bitRate, // in bits per seconds
 		int numberOfChannels
 		) {
+	
+	private static final String IS_LOSSLESS = "Is lossless";
+	private static final String SAMPLING_RATE = "Sampling rate";
+	private static final String BIT_DEPTH = "Number of bits per sample";
+	private static final String BIT_RATE = "Bit rate";
+	private static final String NUMBER_OF_CHANNELS = "Number of channels";
+	
+	public Map<String, String> getDescription() {
+		
+		return Map.of(
+				IS_LOSSLESS, Boolean.toString(isLossless),
+				SAMPLING_RATE, Long.toString(samplingRate),
+				BIT_DEPTH, Integer.toString(bitDepth),
+				BIT_RATE, Long.toString(bitRate),
+				NUMBER_OF_CHANNELS, Integer.toString(numberOfChannels)
+				);
+	}
 }
