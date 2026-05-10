@@ -22,12 +22,24 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.mediaFile;
+package org.fl.collectionAlbum.mediaFile.metadata;
 
-public record AudioStreamMetadata(
-		long samplingRate, // sample frequency in Hz
-		int bitDepth,  // number of bit per sample
-		long bitRate, // in bits per seconds
-		int numberOfChannels
-		) {
+import java.util.HashMap;
+import java.util.Map;
+
+public class AudioMetadataTags {
+
+	private final Map<String, String> audioMetadataTags;
+	
+	protected AudioMetadataTags() {
+		this.audioMetadataTags = new HashMap<>();
+	}
+	
+	public void setTag(String name, String value) {
+		audioMetadataTags.put(name, value);
+	}
+	
+	public String getTag(String name) {
+		return audioMetadataTags.get(name);
+	}
 }
