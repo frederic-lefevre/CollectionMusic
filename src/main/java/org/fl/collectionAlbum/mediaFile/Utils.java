@@ -24,28 +24,33 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.mediaFile;
 
-import java.nio.file.Path;
+import java.nio.ByteBuffer;
 
-import org.fl.collectionAlbum.mediaFile.metadata.MediaFileMetadata;
+public class Utils {
 
-public abstract class MediaFile {
+	// Test if the remaining bytes in the ByteBuffer are the same as the byte array
+	public static boolean remainingBytesEquals(ByteBuffer bb, byte[] byteArray) {
+		
+		if (bb.remaining() != byteArray.length) return false;
+		
+		int index = 0;
+		while (index < byteArray.length) {
+			if (bb.get() != byteArray[index]) return false;
+			index++;
+		}
+		return true;
+	}
 	
-	protected final Path filePath;
-	private final String extension;
-
-	protected MediaFile(Path filePath, String extension) {
-		super();
-		this.filePath = filePath;
-		this.extension = extension;
+	// Test if the next bytes in the ByteBuffer are the same as the byte array
+	public static boolean nextBytesEquals(ByteBuffer bb, byte[] byteArray) {
+		
+		if (bb.remaining() < byteArray.length) return false;
+		
+		int index = 0;
+		while (index < byteArray.length) {
+			if (bb.get() != byteArray[index]) return false;
+			index++;
+		}
+		return true;
 	}
-
-	public Path getFilePath() {
-		return filePath;
-	}
-
-	public String getExtension() {
-		return extension;
-	}
-
-	public abstract MediaFileMetadata getMetadata();
 }

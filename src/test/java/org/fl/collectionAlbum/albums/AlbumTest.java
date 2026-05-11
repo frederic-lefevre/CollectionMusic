@@ -43,6 +43,7 @@ import java.util.logging.Logger;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.JsonMusicProperties;
+import org.fl.collectionAlbum.TestUtils;
 import org.fl.collectionAlbum.artistes.ArtistRole;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
@@ -80,7 +81,7 @@ class AlbumTest {
 	@BeforeAll
 	static void initInventory() {
 		MediaFilesInventories.clearInventories();
-		MediaFilesInventories.scanMediaFilePaths();
+		TestUtils.scanMediaFilePaths(false);
 		DiscogsInventory.buildDiscogsInventory();
 	}
 	
@@ -201,7 +202,7 @@ class AlbumTest {
 		// Add the audio file path
 		AbstractAlbumsAudioFiles audioFile = (AbstractAlbumsAudioFiles) audioFiles.get(0);
 		audioFile.setMediaFilePath(
-				Set.of(new MediaFilePath(Paths.get("E:/Musique/e/Bill Evans/Waltz for Debby/"), ContentNature.AUDIO, ContentNature.AUDIO.strictCheckings())),
+				Set.of(TestUtils.createMediaFile(Paths.get("E:/Musique/e/Bill Evans/Waltz for Debby/"), ContentNature.AUDIO, ContentNature.AUDIO.strictCheckings(), false)),
 				Control.getMediaFileRootUri(ContentNature.AUDIO));
 		
 		assertThat(album.getFormatAlbum().getMediaFiles(ContentNature.AUDIO)).singleElement().satisfies(audio -> {
@@ -255,7 +256,7 @@ class AlbumTest {
 		// Fix the audio file path
 		AbstractAlbumsAudioFiles audioFile2 = (AbstractAlbumsAudioFiles) album2.getFormatAlbum().getMediaFiles(ContentNature.AUDIO).get(0);
 		audioFile2.setMediaFilePath(
-				Set.of(new MediaFilePath(Paths.get("E:/Musique/e/Bill Evans/Portrait In Jazz/"), ContentNature.AUDIO, ContentNature.AUDIO.strictCheckings())),
+				Set.of(TestUtils.createMediaFile(Paths.get("E:/Musique/e/Bill Evans/Portrait In Jazz/"), ContentNature.AUDIO, ContentNature.AUDIO.strictCheckings(), false)),
 				Control.getMediaFileRootUri(ContentNature.AUDIO));
 		
 		assertThat(album2.getFormatAlbum().getMediaFiles(ContentNature.AUDIO)).singleElement().satisfies(audio -> {

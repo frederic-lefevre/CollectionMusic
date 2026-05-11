@@ -36,7 +36,6 @@ import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.format.Format.RangementSupportPhysique;
-import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 import org.fl.collectionAlbum.metrics.Metrics;
 import org.fl.collectionAlbum.format.MediaSupports;
 import org.fl.collectionAlbum.rapportHtml.RapportStructuresAndNames;
@@ -124,7 +123,7 @@ class CollectionAlbumContainerTest {
 
 		RapportStructuresAndNames.renew();
 		
-		MediaFilesInventories.scanMediaFilePaths();
+		TestUtils.scanMediaFilePaths(false);
 		DiscogsInventory.buildDiscogsInventory();
 		
 		CollectionAlbumContainer albumsContainer = CollectionAlbumContainer.getInstance();

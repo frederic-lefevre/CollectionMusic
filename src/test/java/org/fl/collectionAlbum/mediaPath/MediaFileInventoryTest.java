@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.fl.collectionAlbum.TestUtils;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.format.ContentNature;
@@ -56,7 +57,7 @@ class MediaFileInventoryTest {
 	static void readInventory() {
 		
 		MediaFilesInventories.clearInventories();
-		MediaFilesInventories.scanMediaFilePaths();
+		TestUtils.scanMediaFilePaths(false);
 		audioFileInventory = MediaFilesInventories.getMediaFileInventory(ContentNature.AUDIO);
 		videoFileInventory = MediaFilesInventories.getMediaFileInventory(ContentNature.VIDEO);
 	}

@@ -24,19 +24,48 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.mediaFile;
 
+import java.nio.ByteBuffer;
+import java.nio.channels.SeekableByteChannel;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.mediaFile.metadata.AudioMetadata;
 
 public class FlacAudioFile extends AudioFile {
 
+	private static final Logger logger = Logger.getLogger(FlacAudioFile.class.getName());
+	
+	private static final String FLAC_IDENTIFIER = "fLaC";
+	private static final int FLAC_IDENTIFIER_LENGTH = FLAC_IDENTIFIER.length();
+	private static final byte[] FLAC_IDENTIFIER_BYTES = FLAC_IDENTIFIER.getBytes(StandardCharsets.ISO_8859_1);
+	
+	private static final int BYTES_TO_READ = FLAC_IDENTIFIER_LENGTH;
+	
 	protected FlacAudioFile(Path filePath, String extension) {
 		super(filePath, extension);
 	}
 
 	@Override
 	protected AudioMetadata parseMetadata() {
-		// TODO Auto-generated method stub
+		
+		try (SeekableByteChannel sbc = Files.newByteChannel(filePath, StandardOpenOption.READ)) {
+
+			ByteBuffer byteBuffer = ByteBuffer.allocate(FLAC_IDENTIFIER_LENGTH);
+			sbc.read(byteBuffer);
+			
+			byteBuffer.position(0);
+			
+			if (! Utils.nextBytesEquals(byteBuffer, FLAC_IDENTIFIER_BYTES)) {
+				logger.warning(FLAC_IDENTIFIER + " not found at the start of FLAC file " + filePath);
+			}
+			
+		} catch (Exception e) {
+			logger.log(Level.WARNING, "Exception when reading FLAC file " + filePath, e);
+		}
 		return null;
 	}
 

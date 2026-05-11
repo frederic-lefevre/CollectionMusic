@@ -32,8 +32,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.Control;
+import org.fl.collectionAlbum.TestUtils;
 import org.fl.collectionAlbum.json.AudioFileParser;
-import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.fl.util.FilterCounter;
 import org.fl.util.FilterCounter.LogRecordCounter;
 import org.junit.jupiter.api.Test;
@@ -144,7 +144,7 @@ class AlbumAudioFilesTest {
 		assertThat(losslessAudio.getMediaFilePaths()).isNull();
 		
 		losslessAudio.setMediaFilePath(
-				Set.of(new MediaFilePath(Paths.get("E:/Musique/a/John Abercrombie/M [24-96]/"), ContentNature.AUDIO, true)),
+				Set.of(TestUtils.createMediaFile(Paths.get("E:/Musique/a/John Abercrombie/M [24-96]/"), ContentNature.AUDIO, true, false)),
 				Control.getMediaFileRootUri(ContentNature.AUDIO));
 		
 		assertThat(losslessAudio.hasMissingOrInvalidMediaFilePath()).isFalse();
