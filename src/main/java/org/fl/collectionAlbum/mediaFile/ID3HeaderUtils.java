@@ -47,14 +47,14 @@ public class ID3HeaderUtils {
 
 			// go to size field
 			byteBuffer.position(ID3_HEADER_SIZE_OFFSET);
-			return bufferToInt(byteBuffer) + ID3_HEADER_SIZE_OFFSET + SIZE_LENGTH;
+			return decodeID3HeaderLength(byteBuffer) + ID3_HEADER_SIZE_OFFSET + SIZE_LENGTH;
 		} else {
 			// not a ID3 Header
 			return -1;
 		}
 	}
 
-	private static int bufferToInt(ByteBuffer buffer) {
+	private static int decodeID3HeaderLength(ByteBuffer buffer) {
 		byte[] byteArray = new byte[SIZE_LENGTH];
 		buffer.get(byteArray);
 		return (((byteArray[0] & 0xff) << 21) + 
