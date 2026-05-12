@@ -43,7 +43,7 @@ public class FlacAudioFile extends AudioFile {
 	private static final int FLAC_IDENTIFIER_LENGTH = FLAC_IDENTIFIER.length();
 	private static final byte[] FLAC_IDENTIFIER_BYTES = FLAC_IDENTIFIER.getBytes(StandardCharsets.ISO_8859_1);
 	
-	private static final int BYTES_TO_READ = FLAC_IDENTIFIER_LENGTH;
+	private static final int BYTES_TO_READ = FLAC_IDENTIFIER_LENGTH + 1000;
 	
 	protected FlacAudioFile(Path filePath, String extension) {
 		super(filePath, extension);
@@ -54,13 +54,33 @@ public class FlacAudioFile extends AudioFile {
 		
 		try (SeekableByteChannel sbc = Files.newByteChannel(filePath, StandardOpenOption.READ)) {
 
-			ByteBuffer byteBuffer = ByteBuffer.allocate(FLAC_IDENTIFIER_LENGTH);
+			ByteBuffer byteBuffer = ByteBuffer.allocate(BYTES_TO_READ);
 			sbc.read(byteBuffer);
 			
 			byteBuffer.position(0);
 			
 			if (! Utils.nextBytesEquals(byteBuffer, FLAC_IDENTIFIER_BYTES)) {
-				logger.warning(FLAC_IDENTIFIER + " not found at the start of FLAC file " + filePath);
+				
+				// Check if the file begins with a ID3 Header
+				byteBuffer.position(0);
+				int id3HeaderLength = ID3HeaderUtils.getID3v2HeaderLength(byteBuffer);
+				if (id3HeaderLength > 0) {
+					// there is a ID3 Header
+					// skip the ID3 header
+					sbc.position(id3HeaderLength);
+					byteBuffer.clear();
+					
+					sbc.read(byteBuffer);
+					byteBuffer.position(0);
+					
+					if (Utils.nextBytesEquals(byteBuffer, FLAC_IDENTIFIER_BYTES)) {
+						logger.warning(filePath + " is a FLAC file that starts with a ID3 header");	
+					} else {
+						logger.severe(filePath + " is not a FLAC file (ID3 header at beginning but no FLAC identifier after)");
+					}
+				} else {
+					logger.severe(filePath + " is not a FLAC file (no FLAC identifier or ID3 header at beginning)");
+				}
 			}
 			
 		} catch (Exception e) {
@@ -68,6 +88,5 @@ public class FlacAudioFile extends AudioFile {
 		}
 		return null;
 	}
-
 
 }

@@ -28,6 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.net.URISyntaxException;
 import java.nio.file.Path;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.fl.util.FilterCounter;
@@ -62,6 +63,22 @@ class FlacAudioFileTest {
 		f1.parseMetadata();
 		
 		assertThat(flacFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(flacFilterCounter.getLogRecordCount(Level.SEVERE)).isEqualTo(1);
+		flacFilterCounter.stopLogCountAndFilter();
+	}
+	
+	@Test
+	void shouldLogWarningOnFlacFileWithID3header() throws URISyntaxException {
+		
+		Path flacFilePath = FilesUtils.uriStringToAbsolutePath("file:///ForTests/CollectionMusique/f_withID3_Header.flac");
+
+		LogRecordCounter flacFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(FlacAudioFile.class.getName()));	
+		
+		FlacAudioFile f1 = new FlacAudioFile(flacFilePath, "flac");
+		f1.parseMetadata();
+		
+		assertThat(flacFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(flacFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
 		flacFilterCounter.stopLogCountAndFilter();
 	}
 }
