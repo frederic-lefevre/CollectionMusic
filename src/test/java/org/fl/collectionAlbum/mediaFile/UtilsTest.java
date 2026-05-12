@@ -90,6 +90,18 @@ class UtilsTest {
 	}
 	
 	@Test
+	void shouldNotBeEqual4() {
+		byte b1 = 23;
+		byte b2 = 24;
+		byte b3 = 25;
+		byte b4 = 26;
+		assertThat(Utils.remainingBytesEquals(
+				ByteBuffer.allocate(4).put(b1).put(b2).put(b3).position(0), 
+				new byte[] {b1, b2, b3, b4}))
+		.isFalse();
+	}
+	
+	@Test
 	void shouldThrowNPE_NextBytes() {
 		assertThatNullPointerException().isThrownBy(() -> Utils.nextBytesEquals(null, new byte[0]));
 	}
@@ -156,6 +168,18 @@ class UtilsTest {
 		byte b4 = 26;
 		assertThat(Utils.nextBytesEquals(
 				ByteBuffer.allocate(4).put(b1).put(b2).put(b3).put(b4).position(1), 
+				new byte[] {b1, b2, b3, b4}))
+		.isFalse();
+	}
+	
+	@Test
+	void shouldNotBeEqual4_NextBytes() {
+		byte b1 = 23;
+		byte b2 = 24;
+		byte b3 = 25;
+		byte b4 = 26;
+		assertThat(Utils.nextBytesEquals(
+				ByteBuffer.allocate(4).put(b1).put(b2).put(b3).position(0), 
 				new byte[] {b1, b2, b3, b4}))
 		.isFalse();
 	}
