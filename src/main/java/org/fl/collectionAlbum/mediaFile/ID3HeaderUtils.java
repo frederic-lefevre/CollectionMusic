@@ -47,7 +47,7 @@ public class ID3HeaderUtils {
 
 			// go to size field
 			byteBuffer.position(ID3_HEADER_SIZE_OFFSET);
-			return bufferToInt(byteBuffer);
+			return bufferToInt(byteBuffer) + ID3_HEADER_SIZE_OFFSET + SIZE_LENGTH;
 		} else {
 			// not a ID3 Header
 			return -1;

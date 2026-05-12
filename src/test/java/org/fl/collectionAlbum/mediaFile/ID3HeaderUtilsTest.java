@@ -73,7 +73,7 @@ class ID3HeaderUtilsTest {
 			byteBuffer.position(0);
 			
 			int id3length = ID3HeaderUtils.getID3v2HeaderLength(byteBuffer);
-			assertThat(id3length).isPositive().isEqualTo(4712);
+			assertThat(id3length).isPositive().isEqualTo(4722);
 			
 		} catch (IOException e) {
 			
