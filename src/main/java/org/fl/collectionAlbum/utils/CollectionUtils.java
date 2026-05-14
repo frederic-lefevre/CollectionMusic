@@ -207,7 +207,7 @@ public class CollectionUtils {
 		if (album.hasMediaFiles()) {
 			Stream.of(ContentNature.values()).forEachOrdered(contentNature -> {
 				if (album.getFormatAlbum().hasMediaFiles(contentNature)) {
-					buf.append("  <h3>Fichiers " + contentNature.getNom() + ":</h3>\n");
+					buf.append("  <h3>Chemins des fichiers " + contentNature.getNom() + ":</h3>\n");
 					buf.append("  <table>\n");
 					album.getFormatAlbum().getMediaFiles(contentNature).forEach(mediaFile -> {
 						buf.append("    <tr><td class=\"mediadetail\">\n");

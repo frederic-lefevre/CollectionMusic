@@ -159,7 +159,7 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 		
 		if (album.hasMediaFiles()) {
 			
-			JLabel titreMedia = new JLabel("Folders contenant les medias:");
+			JLabel titreMedia = new JLabel("Chemins contenant les fichiers medias:");
 			titreMedia.setBorder(new EmptyBorder(10, 0, 10, 0));
 			titreMedia.setFont(verdana);
 			albumPane.add(titreMedia);
