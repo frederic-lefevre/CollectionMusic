@@ -24,7 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.mediaFile;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
 
 import java.net.URISyntaxException;
 import java.nio.file.Path;
@@ -52,6 +52,9 @@ class FlacAudioFileTest {
 		flacFilterCounter.stopLogCountAndFilter();
 		
 		assertThat(f1.isValidMediaFile).isTrue();
+		assertThat(f1.getExtension()).isEqualTo("flac");
+
+		assertThat(f1.getFilePath().toUri()).asString().isEqualTo("file:///C:/ForTests/CollectionMusique/f1.flac");
 	}
 	
 	@Test
