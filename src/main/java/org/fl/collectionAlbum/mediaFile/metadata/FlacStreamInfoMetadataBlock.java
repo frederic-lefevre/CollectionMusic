@@ -24,30 +24,40 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.mediaFile.metadata;
 
-import java.util.Map;
+import java.nio.ByteBuffer;
 
-public record AudioStreamMetadata (
-		boolean isLossless,
-		long samplingRate, // sample frequency in Hz
-		int bitDepth,  // number of bit per sample
-		long bitRate, // in bits per seconds
-		int numberOfChannels
-		) {
-	
-	private static final String IS_LOSSLESS = "Is lossless";
-	private static final String SAMPLING_RATE = "Sampling rate";
-	private static final String BIT_DEPTH = "Number of bits per sample";
-	private static final String BIT_RATE = "Bit rate";
-	private static final String NUMBER_OF_CHANNELS = "Number of channels";
-	
-	public Map<String, String> getDescription() {
+import org.fl.collectionAlbum.mediaFile.Utils;
+
+public class FlacStreamInfoMetadataBlock {
+
+	private AudioStreamMetadata audioStreamMetadata;
+
+	private final int minBlockSize;
+	private final int maxBlockSize;
+	private final int minFrameSize;
+	private final int maxFrameSize;
+	private final int samplingRate;
+	private final int samplingRatePerChannel;
+	private final int bitsPerSample;
+	private final int noOfChannels;
+	private final int noOfSamples;
+	private final float trackLength;
+	private final String md5;
+
+	public FlacStreamInfoMetadataBlock(ByteBuffer byteBuffer) {
+
+		minBlockSize = Utils.get2bytesUnsignedInt(byteBuffer);
+		maxBlockSize = Utils.get2bytesUnsignedInt(byteBuffer);
+		minFrameSize = Utils.get3bytesUnsignedInt(byteBuffer);
+		maxFrameSize = Utils.get3bytesUnsignedInt(byteBuffer);
 		
-		return Map.of(
-				IS_LOSSLESS, Boolean.toString(isLossless),
-				SAMPLING_RATE, Long.toString(samplingRate),
-				BIT_DEPTH, Integer.toString(bitDepth),
-				BIT_RATE, Long.toString(bitRate),
-				NUMBER_OF_CHANNELS, Integer.toString(numberOfChannels)
-				);
+	
+		samplingRate = 0;
+		samplingRatePerChannel = 0;
+		bitsPerSample = 0;
+		noOfChannels = 0;
+		noOfSamples = 0;
+		trackLength = 0;
+		md5 = null;
 	}
 }

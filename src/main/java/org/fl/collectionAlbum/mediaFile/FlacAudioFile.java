@@ -25,9 +25,8 @@ SOFTWARE.
 package org.fl.collectionAlbum.mediaFile;
 
 import java.nio.ByteBuffer;
-import java.nio.channels.SeekableByteChannel;
+import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.logging.Level;
@@ -58,11 +57,13 @@ public class FlacAudioFile extends AudioFile {
 		// will change if it is not so
 		isValidMediaFile = true;
 		
-		try (SeekableByteChannel sbc = Files.newByteChannel(filePath, StandardOpenOption.READ)) {
+		try (FileChannel sbc = FileChannel.open(filePath, StandardOpenOption.READ)) {
 
-			ByteBuffer byteBuffer = ByteBuffer.allocate(BYTES_TO_READ);
-			sbc.read(byteBuffer);
 			
+			ByteBuffer byteBuffer = sbc.map(FileChannel.MapMode.READ_ONLY, 0, BYTES_TO_READ);
+		//	sbc.read(byteBuffer);
+			
+			System.out.println("Is direct = " + byteBuffer.isDirect());
 			byteBuffer.position(0);
 			
 			if (! Utils.nextBytesEquals(byteBuffer, FLAC_IDENTIFIER_BYTES)) {
@@ -71,13 +72,10 @@ public class FlacAudioFile extends AudioFile {
 				byteBuffer.position(0);
 				int id3HeaderLength = ID3HeaderUtils.getID3v2HeaderLength(byteBuffer);
 				if (id3HeaderLength > 0) {
+					
 					// there is a ID3 Header
 					// skip the ID3 header
-					sbc.position(id3HeaderLength);
-					byteBuffer.clear();
-					
-					sbc.read(byteBuffer);
-					byteBuffer.position(0);
+					byteBuffer = sbc.map(FileChannel.MapMode.READ_ONLY, id3HeaderLength, BYTES_TO_READ);
 					
 					if (Utils.nextBytesEquals(byteBuffer, FLAC_IDENTIFIER_BYTES)) {
 						logger.warning(filePath + " is a FLAC file that starts with a ID3 header");	
