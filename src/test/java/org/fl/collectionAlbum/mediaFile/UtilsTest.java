@@ -183,4 +183,41 @@ class UtilsTest {
 				new byte[] {b1, b2, b3, b4}))
 		.isFalse();
 	}
+	
+	@Test
+	void shouldGetUnsignedShort() {
+		byte b1 = (byte)0xFF;
+
+		assertThat(b1).isEqualTo((byte)-1);
+		
+		assertThat(Utils.get2bytesUnsignedInt(ByteBuffer.allocate(2).put(b1).put(b1).position(0)))
+		 	.isEqualTo(0xFFFF);
+	}
+	
+	@Test
+	void shouldGet3bytesUnsigned0() {
+		byte b1 = 0;
+		
+		assertThat(Utils.get3bytesUnsignedInt(ByteBuffer.allocate(3).put(b1).put(b1).put(b1).position(0))).isZero();
+	}
+	
+	@Test
+	void shouldGet3bytesUnsigned1() {
+		byte b1 = 0;
+		byte b2 = 0;
+		byte b3 = 1;
+		
+		assertThat(Utils.get3bytesUnsignedInt(ByteBuffer.allocate(3).put(b1).put(b2).put(b3).position(0)))
+			.isEqualTo(1);
+	}
+	
+	@Test
+	void shouldGet3bytesUnsignedFF() {
+		byte b1 = (byte)0xFF;
+
+		assertThat(b1).isEqualTo((byte)-1);
+		
+		assertThat(Utils.get3bytesUnsignedInt(ByteBuffer.allocate(3).put(b1).put(b1).put(b1).position(0)))
+		 	.isEqualTo(0xFFFFFF);
+	}
 }

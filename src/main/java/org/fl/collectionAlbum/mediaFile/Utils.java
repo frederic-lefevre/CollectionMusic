@@ -55,9 +55,13 @@ public class Utils {
 	}
 	
 	public static int get3bytesUnsignedInt(ByteBuffer bb) {
-		return (bb.get() << 16) & 0xFF +
-				(bb.get() << 8) & 0xFF +
-				bb.get() & 0xFF;
+		return ((bb.get() & 0xFF) << 16) +
+				((bb.get() & 0xFF) << 8) +
+				(bb.get() & 0xFF);
+	}
+	  
+	public static int get2bytesUnsignedInt(ByteBuffer bb) {
+		return bb.getShort() & 0xFFFF;
 	}
 
 }
