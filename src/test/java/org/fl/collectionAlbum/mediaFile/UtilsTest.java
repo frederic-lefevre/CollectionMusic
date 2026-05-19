@@ -220,4 +220,14 @@ class UtilsTest {
 		assertThat(Utils.get3bytesUnsignedInt(ByteBuffer.allocate(3).put(b1).put(b1).put(b1).position(0)))
 		 	.isEqualTo(0xFFFFFF);
 	}
+	
+	@Test
+	void shouldGetUnsignedByte() {
+		byte b1 = (byte)0xFF;
+
+		assertThat(b1).isEqualTo((byte)-1);
+		
+		assertThat(Utils.get1byteUnsignedInt(ByteBuffer.allocate(1).put(b1).position(0)))
+		 	.isEqualTo(0xFF);
+	}
 }

@@ -42,6 +42,10 @@ public abstract class AudioFile extends MediaFile {
 	
 	@Override
 	public MediaFileMetadata getMetadata() {
+		return getAudioMetadata();
+	}
+
+	public AudioMetadata getAudioMetadata() {
 		if (audioMetadata == null) {
 			audioMetadata = parseMetadata();
 		}

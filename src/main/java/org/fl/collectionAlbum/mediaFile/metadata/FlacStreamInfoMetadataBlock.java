@@ -30,19 +30,13 @@ import org.fl.collectionAlbum.mediaFile.Utils;
 
 public class FlacStreamInfoMetadataBlock {
 
-	private AudioStreamMetadata audioStreamMetadata;
+	private static final int MD5_CHECKSUM_SIZE = 16;
+	private final AudioStreamMetadata audioStreamMetadata;
 
 	private final int minBlockSize;
 	private final int maxBlockSize;
 	private final int minFrameSize;
 	private final int maxFrameSize;
-	private final int samplingRate;
-	private final int samplingRatePerChannel;
-	private final int bitsPerSample;
-	private final int noOfChannels;
-	private final int noOfSamples;
-	private final float trackLength;
-	private final String md5;
 
 	public FlacStreamInfoMetadataBlock(ByteBuffer byteBuffer) {
 
@@ -50,14 +44,56 @@ public class FlacStreamInfoMetadataBlock {
 		maxBlockSize = Utils.get2bytesUnsignedInt(byteBuffer);
 		minFrameSize = Utils.get3bytesUnsignedInt(byteBuffer);
 		maxFrameSize = Utils.get3bytesUnsignedInt(byteBuffer);
-		
 	
-		samplingRate = 0;
-		samplingRatePerChannel = 0;
-		bitsPerSample = 0;
-		noOfChannels = 0;
-		noOfSamples = 0;
-		trackLength = 0;
-		md5 = null;
+		// Read 8 next bytes as unsigned
+		int b1 = Utils.get1byteUnsignedInt(byteBuffer);
+		int b2 = Utils.get1byteUnsignedInt(byteBuffer);
+		int b3 = Utils.get1byteUnsignedInt(byteBuffer);
+		int b4 = Utils.get1byteUnsignedInt(byteBuffer);
+		int b5 = Utils.get1byteUnsignedInt(byteBuffer);
+		int b6 = Utils.get1byteUnsignedInt(byteBuffer);
+		int b7 = Utils.get1byteUnsignedInt(byteBuffer);
+		int b8 = Utils.get1byteUnsignedInt(byteBuffer);
+		
+		int sampleRate = (b1 << 12) +
+			      (b2 << 4) +
+			      ((b3 & 0xF0) >>> 4);
+		
+		int numberOfChannels = ((b3 & 0x0E) >>> 1) + 1;
+
+		int bitsPerSample = ((b3 & 0x01) << 4) +
+			      ((b4 & 0xF0) >>> 4) + 1;
+		
+		int totalNumberOfSamples = b8 + (b7 << 8) + (b6 << 16) + (b5 << 24) + ((b4 & 0x0F) << 32);
+		
+		long trackLength = ((long)totalNumberOfSamples * 1000) / sampleRate;
+		
+		// do not read md5 for now, skip it
+		byteBuffer.position(byteBuffer.position() + MD5_CHECKSUM_SIZE);
+
+		int bitsRate = bitsPerSample * sampleRate;
+		
+		audioStreamMetadata = new AudioStreamMetadata(true, sampleRate, bitsPerSample, bitsRate, numberOfChannels, trackLength);
 	}
+
+	public AudioStreamMetadata getAudioStreamMetadata() {
+		return audioStreamMetadata;
+	}
+
+	public int getMinBlockSize() {
+		return minBlockSize;
+	}
+
+	public int getMaxBlockSize() {
+		return maxBlockSize;
+	}
+
+	public int getMinFrameSize() {
+		return minFrameSize;
+	}
+
+	public int getMaxFrameSize() {
+		return maxFrameSize;
+	}
+
 }

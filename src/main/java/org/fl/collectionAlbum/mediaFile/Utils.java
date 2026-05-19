@@ -64,4 +64,8 @@ public class Utils {
 		return bb.getShort() & 0xFFFF;
 	}
 
+	public static int get1byteUnsignedInt(ByteBuffer bb) {
+		return bb.get() & 0xFF;
+	}
+	
 }

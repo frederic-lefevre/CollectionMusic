@@ -52,4 +52,8 @@ public class AudioMetadata implements MediaFileMetadata {
 		return audioStreamMetadata.getDescription();
 	}
 
+	public AudioStreamMetadata getAudioStreamMetadata() {
+		return audioStreamMetadata;
+	}
+
 }

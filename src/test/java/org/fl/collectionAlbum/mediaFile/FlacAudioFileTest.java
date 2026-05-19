@@ -31,6 +31,9 @@ import java.nio.file.Path;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.fl.collectionAlbum.mediaFile.metadata.AudioMetadata;
+import org.fl.collectionAlbum.mediaFile.metadata.AudioStreamMetadata;
+import org.fl.collectionAlbum.mediaFile.metadata.MediaFileMetadata;
 import org.fl.util.FilterCounter;
 import org.fl.util.FilterCounter.LogRecordCounter;
 import org.fl.util.file.FilesUtils;
@@ -55,6 +58,22 @@ class FlacAudioFileTest {
 		assertThat(f1.getExtension()).isEqualTo("flac");
 
 		assertThat(f1.getFilePath().toUri()).asString().isEqualTo("file:///C:/ForTests/CollectionMusique/f1.flac");
+		
+		MediaFileMetadata metadata = f1.getMetadata();
+		assertThat(metadata).isNotNull();
+		
+		AudioMetadata audioMetadata = f1.getAudioMetadata();
+		assertThat(audioMetadata).isNotNull();
+		
+		AudioStreamMetadata streamInfo = audioMetadata.getAudioStreamMetadata();
+		assertThat(streamInfo).isNotNull();
+		
+		assertThat(streamInfo.samplingRate()).isEqualTo(44100);
+		assertThat(streamInfo.bitDepth()).isEqualTo(16);
+		assertThat(streamInfo.isLossless()).isTrue();
+		assertThat(streamInfo.numberOfChannels()).isEqualTo(2);
+		assertThat(streamInfo.bitRate()).isEqualTo(16*44100);
+		assertThat(streamInfo.trackDuration()).isEqualTo(24240);
 	}
 	
 	@Test
@@ -82,12 +101,27 @@ class FlacAudioFileTest {
 		LogRecordCounter flacFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(FlacAudioFile.class.getName()));	
 		
 		FlacAudioFile f1 = new FlacAudioFile(flacFilePath, "flac");
-		f1.parseMetadata();
+		MediaFileMetadata metadata = f1.getMetadata();
+		assertThat(metadata).isNotNull();
+
 		
 		assertThat(flacFilterCounter.getLogRecordCount()).isEqualTo(1);
 		assertThat(flacFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
 		flacFilterCounter.stopLogCountAndFilter();
 		
 		assertThat(f1.isValidMediaFile).isTrue();
+			
+		AudioMetadata audioMetadata = f1.getAudioMetadata();
+		assertThat(audioMetadata).isNotNull();
+		
+		AudioStreamMetadata streamInfo = audioMetadata.getAudioStreamMetadata();
+		assertThat(streamInfo).isNotNull();
+		
+		assertThat(streamInfo.samplingRate()).isEqualTo(44100);
+		assertThat(streamInfo.bitDepth()).isEqualTo(16);
+		assertThat(streamInfo.isLossless()).isTrue();
+		assertThat(streamInfo.numberOfChannels()).isEqualTo(2);
+		assertThat(streamInfo.bitRate()).isEqualTo(16*44100);
+		assertThat(streamInfo.trackDuration()).isEqualTo(506440);
 	}
 }

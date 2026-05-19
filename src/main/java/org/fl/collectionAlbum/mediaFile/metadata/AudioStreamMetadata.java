@@ -24,6 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.mediaFile.metadata;
 
+import java.time.Duration;
 import java.util.Map;
 
 public record AudioStreamMetadata (
@@ -31,7 +32,8 @@ public record AudioStreamMetadata (
 		long samplingRate, // sample frequency in Hz
 		int bitDepth,  // number of bit per sample
 		long bitRate, // in bits per seconds
-		int numberOfChannels
+		int numberOfChannels, 
+		long trackDuration  // in milliseconds
 		) {
 	
 	private static final String IS_LOSSLESS = "Is lossless";
@@ -39,6 +41,22 @@ public record AudioStreamMetadata (
 	private static final String BIT_DEPTH = "Number of bits per sample";
 	private static final String BIT_RATE = "Bit rate";
 	private static final String NUMBER_OF_CHANNELS = "Number of channels";
+	private static final String TRACK_DURATION = "Track duration";
+	
+	private String getDuration() {
+		Duration duration = Duration.ofMillis(trackDuration);
+		long hourPart = duration.toHours();
+		if (hourPart == 0) {
+			return  String.format("%02d:%02d", 
+					duration.toMinutesPart(), 
+					duration.toSecondsPart());
+		} else {
+			return  String.format("%d:%02d:%02d", 
+					duration.toHours(), 
+					duration.toMinutesPart(), 
+					duration.toSecondsPart());
+		}
+	}
 	
 	public Map<String, String> getDescription() {
 		
@@ -47,7 +65,8 @@ public record AudioStreamMetadata (
 				SAMPLING_RATE, Long.toString(samplingRate),
 				BIT_DEPTH, Integer.toString(bitDepth),
 				BIT_RATE, Long.toString(bitRate),
-				NUMBER_OF_CHANNELS, Integer.toString(numberOfChannels)
+				NUMBER_OF_CHANNELS, Integer.toString(numberOfChannels),
+				TRACK_DURATION, getDuration()
 				);
 	}
 }

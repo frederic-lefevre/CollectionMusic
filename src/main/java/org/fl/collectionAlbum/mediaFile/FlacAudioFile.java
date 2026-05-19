@@ -35,6 +35,7 @@ import java.util.logging.Logger;
 import org.fl.collectionAlbum.mediaFile.metadata.AudioMetadata;
 import org.fl.collectionAlbum.mediaFile.metadata.FlacMetaDataBlockHeader;
 import org.fl.collectionAlbum.mediaFile.metadata.FlacMetaDataBlockHeader.BlockType;
+import org.fl.collectionAlbum.mediaFile.metadata.FlacStreamInfoMetadataBlock;
 
 public class FlacAudioFile extends AudioFile {
 
@@ -97,6 +98,10 @@ public class FlacAudioFile extends AudioFile {
 				FlacMetaDataBlockHeader firstBlock = new FlacMetaDataBlockHeader(byteBuffer);
 				
 				if (firstBlock.getBlockType() == BlockType.STREAMINFO) {
+					
+					FlacStreamInfoMetadataBlock streamInfo = new FlacStreamInfoMetadataBlock(byteBuffer);
+					
+					return new AudioMetadata(null, streamInfo.getAudioStreamMetadata());
 					
 				} else {
 					isValidMediaFile = false;
