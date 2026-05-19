@@ -58,12 +58,10 @@ public class FlacAudioFile extends AudioFile {
 		isValidMediaFile = true;
 		
 		try (FileChannel sbc = FileChannel.open(filePath, StandardOpenOption.READ)) {
-
+				
+			ByteBuffer byteBuffer = ByteBuffer.allocateDirect(BYTES_TO_READ);		
+			sbc.read(byteBuffer);
 			
-			ByteBuffer byteBuffer = sbc.map(FileChannel.MapMode.READ_ONLY, 0, BYTES_TO_READ);
-		//	sbc.read(byteBuffer);
-			
-			System.out.println("Is direct = " + byteBuffer.isDirect());
 			byteBuffer.position(0);
 			
 			if (! Utils.nextBytesEquals(byteBuffer, FLAC_IDENTIFIER_BYTES)) {
@@ -74,9 +72,13 @@ public class FlacAudioFile extends AudioFile {
 				if (id3HeaderLength > 0) {
 					
 					// there is a ID3 Header
-					// skip the ID3 header
-					byteBuffer = sbc.map(FileChannel.MapMode.READ_ONLY, id3HeaderLength, BYTES_TO_READ);
+					// skip the ID3 header	
+					sbc.position(id3HeaderLength);
+					byteBuffer.clear();
 					
+					sbc.read(byteBuffer);
+					byteBuffer.position(0);
+				
 					if (Utils.nextBytesEquals(byteBuffer, FLAC_IDENTIFIER_BYTES)) {
 						logger.warning(filePath + " is a FLAC file that starts with a ID3 header");	
 					} else {
