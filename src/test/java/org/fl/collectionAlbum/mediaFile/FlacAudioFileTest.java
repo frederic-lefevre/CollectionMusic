@@ -50,6 +50,8 @@ class FlacAudioFileTest {
 		f1.parseMetadata();
 		assertThat(flacFilterCounter.getLogRecordCount()).isZero();
 		flacFilterCounter.stopLogCountAndFilter();
+		
+		assertThat(f1.isValidMediaFile).isTrue();
 	}
 	
 	@Test
@@ -65,6 +67,8 @@ class FlacAudioFileTest {
 		assertThat(flacFilterCounter.getLogRecordCount()).isEqualTo(1);
 		assertThat(flacFilterCounter.getLogRecordCount(Level.SEVERE)).isEqualTo(1);
 		flacFilterCounter.stopLogCountAndFilter();
+		
+		assertThat(f1.isValidMediaFile).isFalse();
 	}
 	
 	@Test
@@ -80,5 +84,7 @@ class FlacAudioFileTest {
 		assertThat(flacFilterCounter.getLogRecordCount()).isEqualTo(1);
 		assertThat(flacFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
 		flacFilterCounter.stopLogCountAndFilter();
+		
+		assertThat(f1.isValidMediaFile).isTrue();
 	}
 }

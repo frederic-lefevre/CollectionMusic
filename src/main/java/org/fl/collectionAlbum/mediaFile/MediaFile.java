@@ -32,6 +32,7 @@ public abstract class MediaFile {
 	
 	protected final Path filePath;
 	private final String extension;
+	protected boolean isValidMediaFile;
 
 	protected MediaFile(Path filePath, String extension) {
 		super();
@@ -47,5 +48,9 @@ public abstract class MediaFile {
 		return extension;
 	}
 
+	public boolean isValidMediaFile() {
+		return isValidMediaFile;
+	}
+	
 	public abstract MediaFileMetadata getMetadata();
 }

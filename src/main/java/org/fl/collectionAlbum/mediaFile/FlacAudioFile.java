@@ -34,6 +34,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.mediaFile.metadata.AudioMetadata;
+import org.fl.collectionAlbum.mediaFile.metadata.FlacMetaDataBlockHeader;
+import org.fl.collectionAlbum.mediaFile.metadata.FlacMetaDataBlockHeader.BlockType;
 
 public class FlacAudioFile extends AudioFile {
 
@@ -43,7 +45,8 @@ public class FlacAudioFile extends AudioFile {
 	private static final int FLAC_IDENTIFIER_LENGTH = FLAC_IDENTIFIER.length();
 	private static final byte[] FLAC_IDENTIFIER_BYTES = FLAC_IDENTIFIER.getBytes(StandardCharsets.ISO_8859_1);
 	
-	private static final int BYTES_TO_READ = FLAC_IDENTIFIER_LENGTH + 1000;
+	private static final int STREAMINFO_BLOCK_SIZE = 150;
+	private static final int BYTES_TO_READ = FLAC_IDENTIFIER_LENGTH + STREAMINFO_BLOCK_SIZE;
 	
 	protected FlacAudioFile(Path filePath, String extension) {
 		super(filePath, extension);
@@ -51,6 +54,9 @@ public class FlacAudioFile extends AudioFile {
 
 	@Override
 	protected AudioMetadata parseMetadata() {
+		
+		// will change if it is not so
+		isValidMediaFile = true;
 		
 		try (SeekableByteChannel sbc = Files.newByteChannel(filePath, StandardOpenOption.READ)) {
 
@@ -76,14 +82,30 @@ public class FlacAudioFile extends AudioFile {
 					if (Utils.nextBytesEquals(byteBuffer, FLAC_IDENTIFIER_BYTES)) {
 						logger.warning(filePath + " is a FLAC file that starts with a ID3 header");	
 					} else {
+						isValidMediaFile = false;
 						logger.severe(filePath + " is not a FLAC file (ID3 header at beginning but no FLAC identifier after)");
 					}
 				} else {
+					isValidMediaFile = false;
 					logger.severe(filePath + " is not a FLAC file (no FLAC identifier or ID3 header at beginning)");
 				}
 			}
 			
+			// Read the first metadata block that should be streamInfo
+			if (isValidMediaFile) {
+				
+				FlacMetaDataBlockHeader firstBlock = new FlacMetaDataBlockHeader(byteBuffer);
+				
+				if (firstBlock.getBlockType() == BlockType.STREAMINFO) {
+					
+				} else {
+					isValidMediaFile = false;
+					logger.severe(filePath + " has no StreamInfo metadatablock as first block");
+				}
+			}
+			
 		} catch (Exception e) {
+			isValidMediaFile = false;
 			logger.log(Level.WARNING, "Exception when reading FLAC file " + filePath, e);
 		}
 		return null;

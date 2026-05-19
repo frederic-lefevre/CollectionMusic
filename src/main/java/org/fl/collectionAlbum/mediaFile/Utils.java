@@ -53,4 +53,11 @@ public class Utils {
 		}
 		return true;
 	}
+	
+	public static int get3bytesUnsignedInt(ByteBuffer bb) {
+		return (bb.get() << 16) & 0xFF +
+				(bb.get() << 8) & 0xFF +
+				bb.get() & 0xFF;
+	}
+
 }
