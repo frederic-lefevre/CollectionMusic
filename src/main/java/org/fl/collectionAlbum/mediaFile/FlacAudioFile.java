@@ -127,7 +127,9 @@ public class FlacAudioFile extends AudioFile {
 						BlockType currentBlockType = currentBlockHeader.getBlockType();
 						
 						System.out.println("Block type=" + currentBlockType);
-						hasPictureBlock = (currentBlockType == BlockType.PICTURE);
+						if  (currentBlockType == BlockType.PICTURE) {
+							hasPictureBlock = true;
+						}
 						
 						sbc.position(sbc.position() + currentBlockHeader.getBlockLength());
 					}
