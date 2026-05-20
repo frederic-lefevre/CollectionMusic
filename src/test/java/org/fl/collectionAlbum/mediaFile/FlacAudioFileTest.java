@@ -50,6 +50,7 @@ class FlacAudioFileTest {
 		
 		FlacAudioFile f1 = new FlacAudioFile(flacFilePath, "flac");
 		assertThat(f1.isValidMediaFile()).isFalse(); // not parsed yet
+		assertThat(f1.hasImbeddedPicture).isEmpty();
 		
 		f1.parseMetadata();
 		assertThat(flacFilterCounter.getLogRecordCount()).isZero();
@@ -57,6 +58,7 @@ class FlacAudioFileTest {
 		
 		assertThat(f1.isValidMediaFile()).isTrue();
 		assertThat(f1.getExtension()).isEqualTo("flac");
+		assertThat(f1.hasImbeddedPicture).isPresent().hasValue(false);
 
 		assertThat(f1.getFilePath().toUri()).asString().isEqualTo("file:///C:/ForTests/CollectionMusique/f1.flac");
 		

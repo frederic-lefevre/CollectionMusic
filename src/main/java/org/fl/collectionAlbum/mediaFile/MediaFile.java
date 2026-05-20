@@ -25,6 +25,7 @@ SOFTWARE.
 package org.fl.collectionAlbum.mediaFile;
 
 import java.nio.file.Path;
+import java.util.Optional;
 
 import org.fl.collectionAlbum.mediaFile.metadata.MediaFileMetadata;
 
@@ -32,11 +33,13 @@ public abstract class MediaFile {
 	
 	protected final Path filePath;
 	private final String extension;
+	protected Optional<Boolean> hasImbeddedPicture;
 
 	protected MediaFile(Path filePath, String extension) {
 		super();
 		this.filePath = filePath;
 		this.extension = extension;
+		this.hasImbeddedPicture = Optional.empty();
 	}
 
 	public Path getFilePath() {
@@ -50,4 +53,8 @@ public abstract class MediaFile {
 	public abstract boolean isValidMediaFile();
 	
 	public abstract MediaFileMetadata getMetadata();
+
+	public Optional<Boolean> hasImbeddedPicture() {
+		return hasImbeddedPicture;
+	}
 }

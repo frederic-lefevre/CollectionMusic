@@ -29,6 +29,7 @@ import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -115,6 +116,8 @@ public class FlacAudioFile extends AudioFile {
 						logger.severe(filePath + " has no other metadatablock except stream info");
 					}	
 					
+					boolean hasPictureBlock = false;
+					
 					// Read all other metadata blocks
 					while (hasMoreMetadataBlock) {
 						
@@ -124,11 +127,15 @@ public class FlacAudioFile extends AudioFile {
 						FlacMetaDataBlockHeader currentBlockHeader = new FlacMetaDataBlockHeader(metadataBlockHeaderByteBuffer);
 						
 						hasMoreMetadataBlock = !currentBlockHeader.isLastBlock();
+						BlockType currentBlockType = currentBlockHeader.getBlockType();
 						
-						System.out.println("Block type=" + currentBlockHeader.getBlockType());
+						System.out.println("Block type=" + currentBlockType);
+						hasPictureBlock = (currentBlockType == BlockType.PICTURE);
 						
 						sbc.position(sbc.position() + currentBlockHeader.getBlockLength());
 					}
+					
+					hasImbeddedPicture = Optional.of(hasPictureBlock);
 					
 					return new AudioMetadata(null, streamInfo.getAudioStreamMetadata());
 					
