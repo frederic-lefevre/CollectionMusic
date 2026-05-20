@@ -29,7 +29,7 @@ import java.nio.ByteBuffer;
 import org.fl.collectionAlbum.mediaFile.Utils;
 
 public class FlacStreamInfoMetadataBlock {
-
+	
 	private static final int MD5_CHECKSUM_SIZE = 16;
 	private final AudioStreamMetadata audioStreamMetadata;
 

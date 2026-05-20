@@ -45,8 +45,10 @@ public class FlacAudioFile extends AudioFile {
 	private static final int FLAC_IDENTIFIER_LENGTH = FLAC_IDENTIFIER.length();
 	private static final byte[] FLAC_IDENTIFIER_BYTES = FLAC_IDENTIFIER.getBytes(StandardCharsets.ISO_8859_1);
 	
-	private static final int STREAMINFO_BLOCK_SIZE = 150;
-	private static final int BYTES_TO_READ = FLAC_IDENTIFIER_LENGTH + STREAMINFO_BLOCK_SIZE;
+	private static final int FLAC_METADATA_BLOCK_HEADER_LENGTH = 4;
+	private static final int FLAC_STREAM_INFO_BLOCK_LENGTH = 34; // Expected length
+	
+	private static final int BYTES_TO_READ = FLAC_IDENTIFIER_LENGTH + FLAC_METADATA_BLOCK_HEADER_LENGTH + FLAC_STREAM_INFO_BLOCK_LENGTH;
 	
 	protected FlacAudioFile(Path filePath, String extension) {
 		super(filePath, extension);
@@ -96,6 +98,9 @@ public class FlacAudioFile extends AudioFile {
 			if (isValidMediaFile) {
 				
 				FlacMetaDataBlockHeader firstBlock = new FlacMetaDataBlockHeader(byteBuffer);
+				if (firstBlock.getBlockLength() != FLAC_STREAM_INFO_BLOCK_LENGTH) {
+					logger.severe(filePath + " has an unexpected StreamInfo metadatablock length= " + firstBlock.getBlockLength() + " instead of " + FLAC_STREAM_INFO_BLOCK_LENGTH);
+				}
 				
 				if (firstBlock.getBlockType() == BlockType.STREAMINFO) {
 					
