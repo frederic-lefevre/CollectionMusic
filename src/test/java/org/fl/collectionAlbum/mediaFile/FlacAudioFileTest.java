@@ -49,12 +49,13 @@ class FlacAudioFileTest {
 		LogRecordCounter flacFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(FlacAudioFile.class.getName()));	
 		
 		FlacAudioFile f1 = new FlacAudioFile(flacFilePath, "flac");
+		assertThat(f1.isValidMediaFile()).isFalse(); // not parsed yet
 		
 		f1.parseMetadata();
 		assertThat(flacFilterCounter.getLogRecordCount()).isZero();
 		flacFilterCounter.stopLogCountAndFilter();
 		
-		assertThat(f1.isValidMediaFile).isTrue();
+		assertThat(f1.isValidMediaFile()).isTrue();
 		assertThat(f1.getExtension()).isEqualTo("flac");
 
 		assertThat(f1.getFilePath().toUri()).asString().isEqualTo("file:///C:/ForTests/CollectionMusique/f1.flac");
@@ -90,7 +91,7 @@ class FlacAudioFileTest {
 		assertThat(flacFilterCounter.getLogRecordCount(Level.SEVERE)).isEqualTo(1);
 		flacFilterCounter.stopLogCountAndFilter();
 		
-		assertThat(f1.isValidMediaFile).isFalse();
+		assertThat(f1.isValidMediaFile()).isFalse();
 	}
 	
 	@Test
@@ -109,7 +110,7 @@ class FlacAudioFileTest {
 		assertThat(flacFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
 		flacFilterCounter.stopLogCountAndFilter();
 		
-		assertThat(f1.isValidMediaFile).isTrue();
+		assertThat(f1.isValidMediaFile()).isTrue();
 			
 		AudioMetadata audioMetadata = f1.getAudioMetadata();
 		assertThat(audioMetadata).isNotNull();

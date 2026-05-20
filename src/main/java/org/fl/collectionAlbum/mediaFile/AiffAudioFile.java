@@ -40,4 +40,10 @@ public class AiffAudioFile extends AudioFile {
 		return null;
 	}
 
+	@Override
+	public boolean isValidMediaFile() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

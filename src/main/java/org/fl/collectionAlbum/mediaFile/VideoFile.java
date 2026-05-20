@@ -36,8 +36,14 @@ public class VideoFile extends MediaFile {
 
 	@Override
 	public MediaFileMetadata getMetadata() {
-		// TODO Auto-generated method stub
+		// no parsing yet
 		return null;
+	}
+
+	@Override
+	public boolean isValidMediaFile() {
+		// no check yet
+		return true;
 	}
 
 }

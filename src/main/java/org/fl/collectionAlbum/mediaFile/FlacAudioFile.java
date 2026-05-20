@@ -50,15 +50,19 @@ public class FlacAudioFile extends AudioFile {
 	
 	private static final int FIRST_BYTES_TO_READ = FLAC_IDENTIFIER_LENGTH + FLAC_METADATA_BLOCK_HEADER_LENGTH + FLAC_STREAM_INFO_BLOCK_LENGTH;
 	
+	private boolean isValidFlacFile;
+	
 	protected FlacAudioFile(Path filePath, String extension) {
 		super(filePath, extension);
+		// will change after parsing if the file is valid
+		isValidFlacFile = false;
 	}
 
 	@Override
 	protected AudioMetadata parseMetadata() {
 		
 		// will change if it is not so
-		isValidMediaFile = true;
+		isValidFlacFile = true;
 		
 		try (FileChannel sbc = FileChannel.open(filePath, StandardOpenOption.READ)) {
 				
@@ -85,16 +89,16 @@ public class FlacAudioFile extends AudioFile {
 					if (Utils.nextBytesEquals(byteBuffer, FLAC_IDENTIFIER_BYTES)) {
 						logger.warning(filePath + " is a FLAC file that starts with a ID3 header");	
 					} else {
-						isValidMediaFile = false;
+						isValidFlacFile = false;
 						logger.severe(filePath + " is not a FLAC file (ID3 header at beginning but no FLAC identifier after)");
 					}
 				} else {
-					isValidMediaFile = false;
+					isValidFlacFile = false;
 					logger.severe(filePath + " is not a FLAC file (no FLAC identifier or ID3 header at beginning)");
 				}
 			}
 			
-			if (isValidMediaFile) {
+			if (isValidFlacFile) {
 				
 				// Read the first metadata block that should be streamInfo
 				FlacMetaDataBlockHeader firstBlock = new FlacMetaDataBlockHeader(byteBuffer);
@@ -129,16 +133,21 @@ public class FlacAudioFile extends AudioFile {
 					return new AudioMetadata(null, streamInfo.getAudioStreamMetadata());
 					
 				} else {
-					isValidMediaFile = false;
+					isValidFlacFile = false;
 					logger.severe(filePath + " has no StreamInfo metadatablock as first block");
 				}
 			}
 			
 		} catch (Exception e) {
-			isValidMediaFile = false;
+			isValidFlacFile = false;
 			logger.log(Level.WARNING, "Exception when reading FLAC file " + filePath, e);
 		}
 		return null;
+	}
+
+	@Override
+	public boolean isValidMediaFile() {
+		return isValidFlacFile;
 	}
 
 }
