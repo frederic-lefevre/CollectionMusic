@@ -48,7 +48,7 @@ public class FlacAudioFile extends AudioFile {
 	private static final int FLAC_METADATA_BLOCK_HEADER_LENGTH = 4;
 	private static final int FLAC_STREAM_INFO_BLOCK_LENGTH = 34; // Expected length
 	
-	private static final int BYTES_TO_READ = FLAC_IDENTIFIER_LENGTH + FLAC_METADATA_BLOCK_HEADER_LENGTH + FLAC_STREAM_INFO_BLOCK_LENGTH;
+	private static final int FIRST_BYTES_TO_READ = FLAC_IDENTIFIER_LENGTH + FLAC_METADATA_BLOCK_HEADER_LENGTH + FLAC_STREAM_INFO_BLOCK_LENGTH;
 	
 	protected FlacAudioFile(Path filePath, String extension) {
 		super(filePath, extension);
@@ -62,7 +62,7 @@ public class FlacAudioFile extends AudioFile {
 		
 		try (FileChannel sbc = FileChannel.open(filePath, StandardOpenOption.READ)) {
 				
-			ByteBuffer byteBuffer = ByteBuffer.allocateDirect(BYTES_TO_READ);		
+			ByteBuffer byteBuffer = ByteBuffer.allocateDirect(FIRST_BYTES_TO_READ);		
 			sbc.read(byteBuffer);
 			
 			byteBuffer.position(0);
@@ -94,9 +94,9 @@ public class FlacAudioFile extends AudioFile {
 				}
 			}
 			
-			// Read the first metadata block that should be streamInfo
 			if (isValidMediaFile) {
 				
+				// Read the first metadata block that should be streamInfo
 				FlacMetaDataBlockHeader firstBlock = new FlacMetaDataBlockHeader(byteBuffer);
 				if (firstBlock.getBlockLength() != FLAC_STREAM_INFO_BLOCK_LENGTH) {
 					logger.severe(filePath + " has an unexpected StreamInfo metadatablock length= " + firstBlock.getBlockLength() + " instead of " + FLAC_STREAM_INFO_BLOCK_LENGTH);
@@ -105,6 +105,26 @@ public class FlacAudioFile extends AudioFile {
 				if (firstBlock.getBlockType() == BlockType.STREAMINFO) {
 					
 					FlacStreamInfoMetadataBlock streamInfo = new FlacStreamInfoMetadataBlock(byteBuffer);
+					
+					boolean hasMoreMetadataBlock = !firstBlock.isLastBlock();
+					if (! hasMoreMetadataBlock) {
+						logger.severe(filePath + " has no other metadatablock except stream info");
+					}	
+					
+					// Read all other metadata blocks
+					while (hasMoreMetadataBlock) {
+						
+						ByteBuffer metadataBlockHeaderByteBuffer = ByteBuffer.allocateDirect(FLAC_METADATA_BLOCK_HEADER_LENGTH);
+						sbc.read(metadataBlockHeaderByteBuffer);
+						metadataBlockHeaderByteBuffer.position(0);
+						FlacMetaDataBlockHeader currentBlockHeader = new FlacMetaDataBlockHeader(metadataBlockHeaderByteBuffer);
+						
+						hasMoreMetadataBlock = !currentBlockHeader.isLastBlock();
+						
+						System.out.println("Block type=" + currentBlockHeader.getBlockType());
+						
+						sbc.position(sbc.position() + currentBlockHeader.getBlockLength());
+					}
 					
 					return new AudioMetadata(null, streamInfo.getAudioStreamMetadata());
 					
