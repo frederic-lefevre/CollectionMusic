@@ -39,11 +39,4 @@ public class VideoFile extends MediaFile {
 		// no parsing yet
 		return null;
 	}
-
-	@Override
-	public boolean isValidMediaFile() {
-		// no check yet
-		return true;
-	}
-
 }

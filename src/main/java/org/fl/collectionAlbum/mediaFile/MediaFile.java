@@ -34,11 +34,13 @@ public abstract class MediaFile {
 	protected final Path filePath;
 	private final String extension;
 	protected Optional<Boolean> hasImbeddedPicture;
+	protected Optional<Boolean> isValidMediaFile;
 
 	protected MediaFile(Path filePath, String extension) {
 		super();
 		this.filePath = filePath;
 		this.extension = extension;
+		this.isValidMediaFile = Optional.empty();
 		this.hasImbeddedPicture = Optional.empty();
 	}
 
@@ -49,11 +51,13 @@ public abstract class MediaFile {
 	public String getExtension() {
 		return extension;
 	}
-
-	public abstract boolean isValidMediaFile();
 	
 	public abstract MediaFileMetadata getMetadata();
 
+	public Optional<Boolean> isValidMediaFile() {
+		return isValidMediaFile;
+	}
+	
 	public Optional<Boolean> hasImbeddedPicture() {
 		return hasImbeddedPicture;
 	}

@@ -51,19 +51,16 @@ public class FlacAudioFile extends AudioFile {
 	
 	private static final int FIRST_BYTES_TO_READ = FLAC_IDENTIFIER_LENGTH + FLAC_METADATA_BLOCK_HEADER_LENGTH + FLAC_STREAM_INFO_BLOCK_LENGTH;
 	
-	private boolean isValidFlacFile;
-	
 	protected FlacAudioFile(Path filePath, String extension) {
 		super(filePath, extension);
-		// will change after parsing if the file is valid
-		isValidFlacFile = false;
 	}
 
 	@Override
 	protected AudioMetadata parseMetadata() {
 		
+		AudioMetadata audioMetadata = null;
 		// will change if it is not so
-		isValidFlacFile = true;
+		boolean isValidFlacFile = true;
 		
 		try (FileChannel sbc = FileChannel.open(filePath, StandardOpenOption.READ)) {
 				
@@ -137,9 +134,10 @@ public class FlacAudioFile extends AudioFile {
 					
 					hasImbeddedPicture = Optional.of(hasPictureBlock);
 					
-					return new AudioMetadata(null, streamInfo.getAudioStreamMetadata());
+					audioMetadata = new AudioMetadata(null, streamInfo.getAudioStreamMetadata());
 					
 				} else {
+					
 					isValidFlacFile = false;
 					logger.severe(filePath + " has no StreamInfo metadatablock as first block");
 				}
@@ -149,12 +147,8 @@ public class FlacAudioFile extends AudioFile {
 			isValidFlacFile = false;
 			logger.log(Level.WARNING, "Exception when reading FLAC file " + filePath, e);
 		}
-		return null;
-	}
-
-	@Override
-	public boolean isValidMediaFile() {
-		return isValidFlacFile;
+		isValidMediaFile = Optional.of(isValidFlacFile);
+		return audioMetadata;
 	}
 
 }

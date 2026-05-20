@@ -39,11 +39,4 @@ public class WavAudioFile extends AudioFile {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	@Override
-	public boolean isValidMediaFile() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 }
