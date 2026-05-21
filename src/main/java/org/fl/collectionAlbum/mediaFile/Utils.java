@@ -24,7 +24,11 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.mediaFile;
 
+import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 public class Utils {
 
@@ -54,6 +58,13 @@ public class Utils {
 		return true;
 	}
 	
+	public static int get4bytesUnsignedIntLittleEndian(ByteBuffer bb) {
+		return (bb.get() & 0xFF) +
+				((bb.get() & 0xFF) << 8) +
+				((bb.get() & 0xFF) << 16) +
+				((bb.get() & 0xFF) << 24);
+	}
+	
 	public static int get3bytesUnsignedInt(ByteBuffer bb) {
 		return ((bb.get() & 0xFF) << 16) +
 				((bb.get() & 0xFF) << 8) +
@@ -68,4 +79,16 @@ public class Utils {
 		return bb.get() & 0xFF;
 	}
 	
+	public static ByteBuffer readToDirectByteBuffer(FileChannel sbc, int numberOfBytesToRead) throws IOException {
+		ByteBuffer byteBuffer = ByteBuffer.allocateDirect(numberOfBytesToRead);		
+		sbc.read(byteBuffer);
+		return byteBuffer.position(0);
+	}
+	
+	public static String decodeByteBuffer(ByteBuffer bb, int bytesNumber, Charset charSet) {
+
+		ByteBuffer bbSlice = bb.slice(bb.position(), bytesNumber);
+		bb.position(bb.position() + bytesNumber);
+		return StandardCharsets.UTF_8.decode(bbSlice).toString();
+	}
 }

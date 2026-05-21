@@ -37,6 +37,7 @@ import org.fl.collectionAlbum.mediaFile.metadata.AudioMetadata;
 import org.fl.collectionAlbum.mediaFile.metadata.FlacMetaDataBlockHeader;
 import org.fl.collectionAlbum.mediaFile.metadata.FlacMetaDataBlockHeader.BlockType;
 import org.fl.collectionAlbum.mediaFile.metadata.FlacStreamInfoMetadataBlock;
+import org.fl.collectionAlbum.mediaFile.metadata.VorbisComment;
 
 public class FlacAudioFile extends AudioFile {
 
@@ -66,10 +67,7 @@ public class FlacAudioFile extends AudioFile {
 				
 			size = Optional.of(sbc.size());
 			
-			ByteBuffer byteBuffer = ByteBuffer.allocateDirect(FIRST_BYTES_TO_READ);		
-			sbc.read(byteBuffer);
-			
-			byteBuffer.position(0);
+			ByteBuffer byteBuffer = Utils.readToDirectByteBuffer(sbc, FIRST_BYTES_TO_READ);
 			
 			if (! Utils.nextBytesEquals(byteBuffer, FLAC_IDENTIFIER_BYTES)) {
 				
@@ -120,9 +118,8 @@ public class FlacAudioFile extends AudioFile {
 					// Read all other metadata blocks
 					while (hasMoreMetadataBlock) {
 						
-						ByteBuffer metadataBlockHeaderByteBuffer = ByteBuffer.allocateDirect(FLAC_METADATA_BLOCK_HEADER_LENGTH);
-						sbc.read(metadataBlockHeaderByteBuffer);
-						metadataBlockHeaderByteBuffer.position(0);
+						ByteBuffer metadataBlockHeaderByteBuffer = Utils.readToDirectByteBuffer(sbc, FLAC_METADATA_BLOCK_HEADER_LENGTH);
+						
 						FlacMetaDataBlockHeader currentBlockHeader = new FlacMetaDataBlockHeader(metadataBlockHeaderByteBuffer);
 						
 						hasMoreMetadataBlock = !currentBlockHeader.isLastBlock();
@@ -133,6 +130,10 @@ public class FlacAudioFile extends AudioFile {
 						case BlockType.PICTURE: 
 							hasPictureBlock = true;
 							sbc.position(sbc.position() + currentBlockHeader.getBlockLength());
+							break;
+						case BlockType.VORBIS_COMMENT:
+							ByteBuffer vorbisCommentBuffer = Utils.readToDirectByteBuffer(sbc, currentBlockHeader.getBlockLength());
+							VorbisComment vorbisComment = new VorbisComment(vorbisCommentBuffer);
 							break;
 						default:
 							sbc.position(sbc.position() + currentBlockHeader.getBlockLength());
