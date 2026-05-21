@@ -26,15 +26,25 @@ package org.fl.collectionAlbum.mediaFile.metadata;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.mediaFile.Utils;
 
 public class VorbisComment {
 
-	private String vendorField;
-	private int numberOfFields;
+	private static final String SEPARATOR_STRING = "=";
+	
+	private static final Logger logger = Logger.getLogger(VorbisComment.class.getName());
+	
+	private final String vendorField;
+	private final int numberOfFields;
+	private final Map<String, String> fieldMap;
 	
 	public VorbisComment(ByteBuffer byteBuffer) {
+		
+		fieldMap = new HashMap<>();
 		
 		int vendorFieldLength = Utils.get4bytesUnsignedIntLittleEndian(byteBuffer);
 		
@@ -50,7 +60,24 @@ public class VorbisComment {
 			int fieldLength = Utils.get4bytesUnsignedIntLittleEndian(byteBuffer);
 			String field =  Utils.decodeByteBuffer(byteBuffer, fieldLength,  StandardCharsets.UTF_8);
 			
-			System.out.println("field " + i + "=" + field);
-		}	
+			int separatorIndex = field.indexOf(SEPARATOR_STRING);
+			if (separatorIndex > 0) {
+				String fieldKey = field.substring(0, separatorIndex);
+				if (field.length() > separatorIndex + 1) {
+					fieldMap.put(fieldKey, field.substring(separatorIndex+1));
+				} else {
+					fieldMap.put(fieldKey, "");
+				}
+			} else if (separatorIndex == 0) {
+				logger.warning("Vorbis field without a key: " + field);
+			} else {
+				logger.warning("Vorbis field without '=' separator: " + field);
+			}
+		}
+		System.out.println(fieldMap.toString());
+	}
+
+	public Map<String, String> getFieldMap() {
+		return fieldMap;
 	}
 }
