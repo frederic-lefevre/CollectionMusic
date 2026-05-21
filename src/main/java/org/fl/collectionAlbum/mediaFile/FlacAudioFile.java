@@ -52,6 +52,8 @@ public class FlacAudioFile extends AudioFile {
 	
 	private static final int FIRST_BYTES_TO_READ = FLAC_IDENTIFIER_LENGTH + FLAC_METADATA_BLOCK_HEADER_LENGTH + FLAC_STREAM_INFO_BLOCK_LENGTH;
 	
+	private VorbisComment vorbisComment;
+	
 	protected FlacAudioFile(Path filePath, String extension) {
 		super(filePath, extension);
 	}
@@ -59,6 +61,7 @@ public class FlacAudioFile extends AudioFile {
 	@Override
 	protected AudioMetadata parseMetadata() {
 		
+		vorbisComment = null;
 		AudioMetadata audioMetadata = null;
 		// will change if it is not so
 		boolean isValidFlacFile = true;
@@ -132,8 +135,11 @@ public class FlacAudioFile extends AudioFile {
 							sbc.position(sbc.position() + currentBlockHeader.getBlockLength());
 							break;
 						case BlockType.VORBIS_COMMENT:
+							if (vorbisComment != null) {
+								logger.warning(filePath + " has more than one Vorbis comment");
+							}
 							ByteBuffer vorbisCommentBuffer = Utils.readToDirectByteBuffer(sbc, currentBlockHeader.getBlockLength());
-							VorbisComment vorbisComment = new VorbisComment(vorbisCommentBuffer);
+							vorbisComment = new VorbisComment(vorbisCommentBuffer);
 							break;
 						default:
 							sbc.position(sbc.position() + currentBlockHeader.getBlockLength());

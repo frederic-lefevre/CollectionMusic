@@ -39,7 +39,6 @@ public class VorbisComment {
 	private static final Logger logger = Logger.getLogger(VorbisComment.class.getName());
 	
 	private final String vendorField;
-	private final int numberOfFields;
 	private final Map<String, String> fieldMap;
 	
 	public VorbisComment(ByteBuffer byteBuffer) {
@@ -50,10 +49,9 @@ public class VorbisComment {
 		
 		vendorField = Utils.decodeByteBuffer(byteBuffer, vendorFieldLength,  StandardCharsets.UTF_8);
 		
-		numberOfFields = Utils.get4bytesUnsignedIntLittleEndian(byteBuffer);
+		final int numberOfFields = Utils.get4bytesUnsignedIntLittleEndian(byteBuffer);
 		
 		System.out.println("vendor=" + vendorField);
-		System.out.println("number of field=" + numberOfFields);
 		
 		for (int i=0; i < numberOfFields; i++) {
 			
@@ -69,9 +67,9 @@ public class VorbisComment {
 					fieldMap.put(fieldKey, "");
 				}
 			} else if (separatorIndex == 0) {
-				logger.warning("Vorbis field without a key: " + field);
+				logger.severe("Vorbis field without a key: " + field);
 			} else {
-				logger.warning("Vorbis field without '=' separator: " + field);
+				logger.severe("Vorbis field without '=' separator: " + field);
 			}
 		}
 		System.out.println(fieldMap.toString());
@@ -79,5 +77,9 @@ public class VorbisComment {
 
 	public Map<String, String> getFieldMap() {
 		return fieldMap;
+	}
+
+	public String getVendorField() {
+		return vendorField;
 	}
 }
