@@ -58,10 +58,12 @@ public class FlacMetaDataBlockHeader {
 	
 	public FlacMetaDataBlockHeader(ByteBuffer byteBuffer) throws IOException {
 		
-		// the last block flag is the first bit of the first byte
-		this.isLastBlock = ((byteBuffer.get(0) & 0x80) >>> 7) == 1;
+		int firstByte = byteBuffer.get();
 		
-		int blockTypeBitsValue = byteBuffer.get() & 0x7F;
+		// the last block flag is the first bit of the first byte
+		this.isLastBlock = ((firstByte & 0x80) >>> 7) == 1;
+		
+		int blockTypeBitsValue = firstByte & 0x7F;
 		
 		this.blockType = Stream.of(BlockType.values())
 				.filter(bt -> bt.getId() == blockTypeBitsValue)
