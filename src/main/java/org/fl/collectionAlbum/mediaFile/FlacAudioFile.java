@@ -64,6 +64,8 @@ public class FlacAudioFile extends AudioFile {
 		
 		try (FileChannel sbc = FileChannel.open(filePath, StandardOpenOption.READ)) {
 				
+			size = Optional.of(sbc.size());
+			
 			ByteBuffer byteBuffer = ByteBuffer.allocateDirect(FIRST_BYTES_TO_READ);		
 			sbc.read(byteBuffer);
 			
@@ -127,11 +129,14 @@ public class FlacAudioFile extends AudioFile {
 						BlockType currentBlockType = currentBlockHeader.getBlockType();
 						
 						System.out.println("Block type=" + currentBlockType);
-						if  (currentBlockType == BlockType.PICTURE) {
+						switch (currentBlockHeader.getBlockType()) {
+						case BlockType.PICTURE: 
 							hasPictureBlock = true;
+							sbc.position(sbc.position() + currentBlockHeader.getBlockLength());
+							break;
+						default:
+							sbc.position(sbc.position() + currentBlockHeader.getBlockLength());
 						}
-						
-						sbc.position(sbc.position() + currentBlockHeader.getBlockLength());
 					}
 					
 					hasImbeddedPicture = Optional.of(hasPictureBlock);

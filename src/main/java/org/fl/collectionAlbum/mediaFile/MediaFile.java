@@ -33,6 +33,7 @@ public abstract class MediaFile {
 	
 	protected final Path filePath;
 	private final String extension;
+	protected Optional<Long> size;
 	protected Optional<Boolean> hasImbeddedPicture;
 	protected Optional<Boolean> isValidMediaFile;
 
@@ -42,6 +43,7 @@ public abstract class MediaFile {
 		this.extension = extension;
 		this.isValidMediaFile = Optional.empty();
 		this.hasImbeddedPicture = Optional.empty();
+		this.size = Optional.empty();
 	}
 
 	public Path getFilePath() {
@@ -60,5 +62,9 @@ public abstract class MediaFile {
 	
 	public Optional<Boolean> hasImbeddedPicture() {
 		return hasImbeddedPicture;
+	}
+
+	public Optional<Long> getSize() {
+		return size;
 	}
 }
