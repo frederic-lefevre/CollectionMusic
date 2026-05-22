@@ -148,7 +148,7 @@ public class FlacAudioFile extends AudioFile {
 					
 					hasImbeddedPicture = Optional.of(hasPictureBlock);
 					
-					audioMetadata = new AudioMetadata(null, streamInfo.getAudioStreamMetadata());
+					audioMetadata = new AudioMetadata(streamInfo.getAudioStreamMetadata(), null, null);
 					
 				} else {
 					

@@ -24,26 +24,35 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.mediaFile.metadata;
 
-import java.util.HashMap;
 import java.util.Map;
 
-public class AudioMetadataTags {
+public record NormalizedAudioMetadataTags(
+	int trackNumber,
+	String trackTitle,
+	String albumTitle,
+	String artist,
+	String composer,
+	String genre,
+	String date) {
 
-	private final Map<String, String> audioMetadataTags;
+	private static final String TRACKNUMBER = "TRACKNUMBER";
+	private static final String TITLE = "TITLE";
+	private static final String ALBUM = "ALBUM";
+	private static final String ARTIST = "ARTIST";
+	private static final String COMPOSER = "COMPOSER";
+	private static final String GENRE= "GENRE";
+	private static final String DATE = "DATE";
 	
-	protected AudioMetadataTags() {
-		this.audioMetadataTags = new HashMap<>();
+	public Map<String, String> getNormalizedTags() {
+		
+		return Map.of(
+				TRACKNUMBER, Integer.toString(trackNumber),
+				TITLE, trackTitle,
+				ALBUM, albumTitle,
+				ARTIST, artist,
+				COMPOSER, composer,
+				GENRE, genre,
+				DATE, date);
 	}
 	
-	public void setTag(String name, String value) {
-		audioMetadataTags.put(name, value);
-	}
-	
-	public String getTag(String name) {
-		return audioMetadataTags.get(name);
-	}
-	
-	public Map<String, String> getAllTags() {
-		return audioMetadataTags;
-	}
 }

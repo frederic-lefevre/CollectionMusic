@@ -24,27 +24,44 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.mediaFile.metadata;
 
+import java.util.HashMap;
 import java.util.Map;
 
 public class AudioMetadata implements MediaFileMetadata {
 
-	private final AudioMetadataTags audioMetadataTags;
 	private final AudioStreamMetadata audioStreamMetadata;
+	private final NormalizedAudioMetadataTags normalizedAudioMetadataTags;
+	private final Map<String, String> additionnalTags;
+	private final Map<String, String> normalizedAudioMetadataTagsMap;
+	private final Map<String, String> allTags;
 	
-	public AudioMetadata(AudioMetadataTags audioMetadataTags, AudioStreamMetadata audioStreamMetadata) {
+	public AudioMetadata(AudioStreamMetadata audioStreamMetadata, NormalizedAudioMetadataTags audioMetadataTags, Map<String, String> additionnalTags) {
 		super();
-		this.audioMetadataTags = audioMetadataTags;
+		this.normalizedAudioMetadataTags = audioMetadataTags;
 		this.audioStreamMetadata = audioStreamMetadata;
+		this.additionnalTags = additionnalTags;
+		
+		this.normalizedAudioMetadataTagsMap = normalizedAudioMetadataTags.getNormalizedTags();
+		
+		allTags = new HashMap<>(normalizedAudioMetadataTagsMap);
+		allTags.putAll(additionnalTags);
 	}
 
 	@Override
 	public String getTag(String name) {
-		return audioMetadataTags.getTag(name);
+		
+		String nameUpperCase = name.toUpperCase();
+		if (normalizedAudioMetadataTagsMap.containsKey(nameUpperCase)) {
+			return normalizedAudioMetadataTagsMap.get(nameUpperCase);
+		} else {
+			return additionnalTags.get(nameUpperCase);
+		}
 	}
 
 	@Override
 	public Map<String, String> getAllTags() {
-		return audioMetadataTags.getAllTags();
+
+		return allTags;
 	}
 
 	@Override
