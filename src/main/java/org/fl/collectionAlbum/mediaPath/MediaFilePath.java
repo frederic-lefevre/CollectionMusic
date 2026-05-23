@@ -106,7 +106,7 @@ public class MediaFilePath {
 	
 			// Check media files extension (should all be the same)
 			if (mediaFileExtensions.isEmpty()) {
-				mLog.log(level, "No media file found in " + mediaFilesPath.toString());
+				mLog.log(level, "No media file found directly under " + mediaFilesPath.toString());
 			} else if (mediaFileExtensions.size() == 1) {
 				mediaFileExtension = mediaFileExtensions.iterator().next().toString();
 			} else {
