@@ -48,7 +48,7 @@ public class MediaFilePath {
 	
 	private static final String COVER_START_NAME = "cover.";
 	private static final Set<String> coverExtensions = Set.of("jpg", "png");
-	private static final Set<String> infoFileExtensions = Set.of("pdf","crt");
+	private static final Set<String> infoFileExtensions = Set.of("pdf","crt", "bup", "ifo", "idx2");
 	
 	private final Path mediaFilesPath;
 	private final Set<Album> albumsSet;
