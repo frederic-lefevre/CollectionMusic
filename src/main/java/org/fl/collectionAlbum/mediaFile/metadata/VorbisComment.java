@@ -26,6 +26,7 @@ package org.fl.collectionAlbum.mediaFile.metadata;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -38,12 +39,22 @@ public class VorbisComment {
 	
 	private static final Logger logger = Logger.getLogger(VorbisComment.class.getName());
 	
-	private final String vendorField;
-	private final Map<String, String> fieldMap;
+	// Normalized fields
+	private static final String TRACKNUMBER = "TRACKNUMBER";
+	private static final String TITLE = "TITLE";
+	private static final String ALBUM = "ALBUM";
+	private static final String ARTIST = "ARTIST";
+	private static final String COMPOSER = "COMPOSER";
+	private static final String GENRE= "GENRE";
+	private static final String DATE = "DATE";
 	
-	public VorbisComment(ByteBuffer byteBuffer) {
+	private final String vendorField;
+	private final NormalizedAudioMetadataTags normalizedAudioMetadataTags;
+	private final Map<String, String> additionalFieldsMap;
+	
+	public VorbisComment(ByteBuffer byteBuffer, Path filePath) {
 		
-		fieldMap = new HashMap<>();
+		additionalFieldsMap = new HashMap<>();
 		
 		int vendorFieldLength = Utils.get4bytesUnsignedIntLittleEndian(byteBuffer);
 		
@@ -51,8 +62,7 @@ public class VorbisComment {
 		
 		final int numberOfFields = Utils.get4bytesUnsignedIntLittleEndian(byteBuffer);
 		
-		System.out.println("vendor=" + vendorField);
-		
+		final NormalizedAudioMetadataTagsBuilder normalizedAudioMetadataTagsBuilder = NormalizedAudioMetadataTagsBuilder.builder();
 		for (int i=0; i < numberOfFields; i++) {
 			
 			int fieldLength = Utils.get4bytesUnsignedIntLittleEndian(byteBuffer);
@@ -60,23 +70,48 @@ public class VorbisComment {
 			
 			int separatorIndex = field.indexOf(SEPARATOR_STRING);
 			if (separatorIndex > 0) {
-				String fieldKey = field.substring(0, separatorIndex);
+				
+				String fieldKey = field.substring(0, separatorIndex).toUpperCase();
+				final String fieldValue;
 				if (field.length() > separatorIndex + 1) {
-					fieldMap.put(fieldKey, field.substring(separatorIndex+1));
+					fieldValue = field.substring(separatorIndex+1);
 				} else {
-					fieldMap.put(fieldKey, "");
+					fieldValue = "";
 				}
+				
+				if (fieldKey.equals(TRACKNUMBER)) {
+					normalizedAudioMetadataTagsBuilder.trackNumber(fieldValue);
+				} else if (fieldKey.equals(TITLE)) {
+					normalizedAudioMetadataTagsBuilder.trackTitle(fieldValue);
+				} else if (fieldKey.equals(ALBUM)) {
+					normalizedAudioMetadataTagsBuilder.albumTitle(fieldValue);
+				} else if (fieldKey.equals(ARTIST)) {
+					normalizedAudioMetadataTagsBuilder.artist(fieldValue);
+				} else if (fieldKey.equals(COMPOSER)) {
+					normalizedAudioMetadataTagsBuilder.composer(fieldValue);
+				} else if (fieldKey.equals(GENRE)) {
+					normalizedAudioMetadataTagsBuilder.genre(fieldValue);
+				} else if (fieldKey.equals(DATE)) {
+					normalizedAudioMetadataTagsBuilder.date(fieldValue);
+				} else {
+					additionalFieldsMap.put(fieldKey, fieldValue);
+				}
+
 			} else if (separatorIndex == 0) {
 				logger.severe("Vorbis field without a key: " + field);
 			} else {
 				logger.severe("Vorbis field without '=' separator: " + field);
 			}
 		}
-		System.out.println(fieldMap.toString());
+		normalizedAudioMetadataTags = normalizedAudioMetadataTagsBuilder.build(filePath);
 	}
 
-	public Map<String, String> getFieldMap() {
-		return fieldMap;
+	public NormalizedAudioMetadataTags getNormalizedAudioMetadataTags() {
+		return normalizedAudioMetadataTags;
+	}
+
+	public Map<String, String> getAdditionalFieldsMap() {
+		return additionalFieldsMap;
 	}
 
 	public String getVendorField() {

@@ -35,13 +35,13 @@ public record NormalizedAudioMetadataTags(
 	String genre,
 	String date) {
 
-	private static final String TRACKNUMBER = "TRACKNUMBER";
-	private static final String TITLE = "TITLE";
-	private static final String ALBUM = "ALBUM";
-	private static final String ARTIST = "ARTIST";
-	private static final String COMPOSER = "COMPOSER";
-	private static final String GENRE= "GENRE";
-	private static final String DATE = "DATE";
+	static final String TRACKNUMBER = "TRACKNUMBER";
+	static final String TITLE = "TITLE";
+	static final String ALBUM = "ALBUM";
+	static final String ARTIST = "ARTIST";
+	static final String COMPOSER = "COMPOSER";
+	static final String GENRE= "GENRE";
+	static final String DATE = "DATE";
 	
 	public Map<String, String> getNormalizedTags() {
 		

@@ -103,13 +103,12 @@ class FlacAudioFileTest {
 		
 		Path flacFilePath = FilesUtils.uriStringToAbsolutePath("file:///ForTests/CollectionMusique/f_withID3_Header.flac");
 
-		LogRecordCounter flacFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(FlacAudioFile.class.getName()));	
+		LogRecordCounter flacFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(FlacAudioFile.class.getName()));
 		
 		FlacAudioFile f1 = new FlacAudioFile(flacFilePath, "flac");
 		MediaFileMetadata metadata = f1.getMetadata();
 		assertThat(metadata).isNotNull();
 
-		
 		assertThat(flacFilterCounter.getLogRecordCount()).isEqualTo(1);
 		assertThat(flacFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
 		flacFilterCounter.stopLogCountAndFilter();

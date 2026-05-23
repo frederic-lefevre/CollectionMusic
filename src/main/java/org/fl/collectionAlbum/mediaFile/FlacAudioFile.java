@@ -126,9 +126,7 @@ public class FlacAudioFile extends AudioFile {
 						FlacMetaDataBlockHeader currentBlockHeader = new FlacMetaDataBlockHeader(metadataBlockHeaderByteBuffer);
 						
 						hasMoreMetadataBlock = !currentBlockHeader.isLastBlock();
-						BlockType currentBlockType = currentBlockHeader.getBlockType();
 						
-						System.out.println("Block type=" + currentBlockType);
 						switch (currentBlockHeader.getBlockType()) {
 						case BlockType.PICTURE: 
 							hasPictureBlock = true;
@@ -139,7 +137,7 @@ public class FlacAudioFile extends AudioFile {
 								logger.warning(filePath + " has more than one Vorbis comment");
 							}
 							ByteBuffer vorbisCommentBuffer = Utils.readToDirectByteBuffer(sbc, currentBlockHeader.getBlockLength());
-							vorbisComment = new VorbisComment(vorbisCommentBuffer);
+							vorbisComment = new VorbisComment(vorbisCommentBuffer, filePath);
 							break;
 						default:
 							sbc.position(sbc.position() + currentBlockHeader.getBlockLength());
@@ -148,7 +146,14 @@ public class FlacAudioFile extends AudioFile {
 					
 					hasImbeddedPicture = Optional.of(hasPictureBlock);
 					
-					audioMetadata = new AudioMetadata(streamInfo.getAudioStreamMetadata(), null, null);
+					if (vorbisComment == null) {
+						logger.warning(filePath + " has no Vorbis comment");
+					}
+					
+					audioMetadata = new AudioMetadata(
+							streamInfo.getAudioStreamMetadata(), 
+							vorbisComment.getNormalizedAudioMetadataTags(), 
+							vorbisComment.getAdditionalFieldsMap());
 					
 				} else {
 					
