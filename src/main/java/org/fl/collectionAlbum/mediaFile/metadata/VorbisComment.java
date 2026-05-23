@@ -44,6 +44,7 @@ public class VorbisComment {
 	private static final String TITLE = "TITLE";
 	private static final String ALBUM = "ALBUM";
 	private static final String ARTIST = "ARTIST";
+	private static final String ALBUMARTIST = "ALBUMARTIST";
 	private static final String COMPOSER = "COMPOSER";
 	private static final String GENRE= "GENRE";
 	private static final String DATE = "DATE";
@@ -87,6 +88,8 @@ public class VorbisComment {
 					normalizedAudioMetadataTagsBuilder.albumTitle(fieldValue);
 				} else if (fieldKey.equals(ARTIST)) {
 					normalizedAudioMetadataTagsBuilder.artist(fieldValue);
+				} else if (fieldKey.equals(ALBUMARTIST)) {
+					normalizedAudioMetadataTagsBuilder.albumArtist(fieldValue);
 				} else if (fieldKey.equals(COMPOSER)) {
 					normalizedAudioMetadataTagsBuilder.composer(fieldValue);
 				} else if (fieldKey.equals(GENRE)) {

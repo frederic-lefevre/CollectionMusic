@@ -39,12 +39,13 @@ public class NormalizedAudioMetadataTagsBuilder {
 	private static final int ABSENT_INT_NUMBER = -1;
 	private static final String ABSENT_FIELD = "";
 	
-	private static final List<String> OPTIONAL_FIELDS = List.of(NormalizedAudioMetadataTags.COMPOSER, NormalizedAudioMetadataTags.DATE);
+	private static final List<String> OPTIONAL_FIELDS = List.of(NormalizedAudioMetadataTags.ALBUMARTIST, NormalizedAudioMetadataTags.COMPOSER, NormalizedAudioMetadataTags.DATE);
 	
 	private int trackNumber;
 	private String trackTitle;
 	private String albumTitle;
 	private String artist;
+	private String albumArtist;
 	private String composer;
 	private String genre;
 	private String date;
@@ -55,6 +56,7 @@ public class NormalizedAudioMetadataTagsBuilder {
 		trackTitle = ABSENT_FIELD;
 		albumTitle = ABSENT_FIELD;
 		artist = ABSENT_FIELD;
+		albumArtist = ABSENT_FIELD;
 		composer = ABSENT_FIELD;
 		genre = ABSENT_FIELD;
 		date = ABSENT_FIELD;
@@ -77,6 +79,11 @@ public class NormalizedAudioMetadataTagsBuilder {
 	
 	public NormalizedAudioMetadataTagsBuilder artist(String artist) {
 		this.artist = artist;
+		return this;
+	}
+	
+	public NormalizedAudioMetadataTagsBuilder albumArtist(String albumArtist) {
+		this.albumArtist = albumArtist;
 		return this;
 	}
 	
@@ -114,10 +121,11 @@ public class NormalizedAudioMetadataTagsBuilder {
 		checkStringField(trackTitle, NormalizedAudioMetadataTags.TITLE, audioFilePath);
 		checkStringField(albumTitle, NormalizedAudioMetadataTags.ALBUM, audioFilePath);
 		checkStringField(artist, NormalizedAudioMetadataTags.ARTIST, audioFilePath);
+		checkStringField(albumArtist, NormalizedAudioMetadataTags.ALBUMARTIST, audioFilePath);
 		checkStringField(composer, NormalizedAudioMetadataTags.COMPOSER, audioFilePath);
 		checkStringField(genre, NormalizedAudioMetadataTags.GENRE, audioFilePath);
 		checkStringField(date, NormalizedAudioMetadataTags.DATE, audioFilePath);
-		return new NormalizedAudioMetadataTags(trackNumber, trackTitle, albumTitle, artist, composer, genre, date);
+		return new NormalizedAudioMetadataTags(trackNumber, trackTitle, albumTitle, artist, albumArtist, composer, genre, date);
 	}
 	
 	private void checkStringField(String field, String fieldName, Path audioFilePath) {

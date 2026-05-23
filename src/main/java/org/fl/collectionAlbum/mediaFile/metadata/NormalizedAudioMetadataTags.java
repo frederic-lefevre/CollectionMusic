@@ -31,6 +31,7 @@ public record NormalizedAudioMetadataTags(
 	String trackTitle,
 	String albumTitle,
 	String artist,
+	String albumArtist,
 	String composer,
 	String genre,
 	String date) {
@@ -39,6 +40,7 @@ public record NormalizedAudioMetadataTags(
 	static final String TITLE = "TITLE";
 	static final String ALBUM = "ALBUM";
 	static final String ARTIST = "ARTIST";
+	static final String ALBUMARTIST = "ALBUMARTIST";
 	static final String COMPOSER = "COMPOSER";
 	static final String GENRE= "GENRE";
 	static final String DATE = "DATE";
@@ -50,6 +52,7 @@ public record NormalizedAudioMetadataTags(
 				TITLE, trackTitle,
 				ALBUM, albumTitle,
 				ARTIST, artist,
+				ALBUMARTIST, albumArtist,
 				COMPOSER, composer,
 				GENRE, genre,
 				DATE, date);
