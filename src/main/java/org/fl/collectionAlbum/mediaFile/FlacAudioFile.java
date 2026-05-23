@@ -153,7 +153,8 @@ public class FlacAudioFile extends AudioFile {
 					audioMetadata = new AudioMetadata(
 							streamInfo.getAudioStreamMetadata(), 
 							vorbisComment.getNormalizedAudioMetadataTags(), 
-							vorbisComment.getAdditionalFieldsMap());
+							vorbisComment.getAdditionalFieldsMap(), 
+							filePath);
 					
 				} else {
 					

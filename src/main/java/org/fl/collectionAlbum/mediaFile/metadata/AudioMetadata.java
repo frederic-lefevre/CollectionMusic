@@ -24,18 +24,26 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.mediaFile.metadata;
 
+import java.nio.file.Path;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class AudioMetadata implements MediaFileMetadata {
 
+	private static final Logger logger = Logger.getLogger(AudioMetadata.class.getName());
+	
+	private static final List<String> ACCEPTABLE_NON_NORMALIZED_TAGS = List.of("LENGTH", "TRACKTOTAL", "TOTALTRACKS");
+	
 	private final AudioStreamMetadata audioStreamMetadata;
 	private final NormalizedAudioMetadataTags normalizedAudioMetadataTags;
 	private final Map<String, String> additionnalTags;
 	private final Map<String, String> normalizedAudioMetadataTagsMap;
 	private final Map<String, String> allTags;
 	
-	public AudioMetadata(AudioStreamMetadata audioStreamMetadata, NormalizedAudioMetadataTags audioMetadataTags, Map<String, String> additionnalTags) {
+	public AudioMetadata(AudioStreamMetadata audioStreamMetadata, NormalizedAudioMetadataTags audioMetadataTags, Map<String, String> additionnalTags, Path filePath) {
 		super();
 		this.normalizedAudioMetadataTags = audioMetadataTags;
 		this.audioStreamMetadata = audioStreamMetadata;
@@ -45,6 +53,17 @@ public class AudioMetadata implements MediaFileMetadata {
 		
 		allTags = new HashMap<>(normalizedAudioMetadataTagsMap);
 		allTags.putAll(additionnalTags);
+		
+		if (logger.isLoggable(Level.INFO) && (additionnalTags.size() > 0)) {
+			if (additionnalTags.keySet().stream()
+				.filter(tag -> !ACCEPTABLE_NON_NORMALIZED_TAGS.contains(tag))
+				.findAny()
+				.isPresent()) {
+				logger.info(filePath + " has undesired non normalized audio metadata");
+			} else if (logger.isLoggable(Level.FINE)) {
+				logger.fine(filePath + " has acceptable non normalized audio metadata");
+			}
+		}
 	}
 
 	@Override
