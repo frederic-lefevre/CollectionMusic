@@ -51,7 +51,7 @@ public class VorbisComment {
 	
 	private final String vendorField;
 	private final NormalizedAudioMetadataTags normalizedAudioMetadataTags;
-	private final Map<String, String> additionalFieldsMap;
+	private final Map<String, MetadataTag<?>> additionalFieldsMap;
 	
 	public VorbisComment(ByteBuffer byteBuffer, Path filePath) {
 		
@@ -97,7 +97,8 @@ public class VorbisComment {
 				} else if (fieldKey.equals(DATE)) {
 					normalizedAudioMetadataTagsBuilder.date(fieldValue);
 				} else {
-					additionalFieldsMap.put(fieldKey, fieldValue);
+					MetadataTag<String> additionalTag = new MetadataTag<String>(fieldKey, fieldValue);
+					additionalFieldsMap.put(fieldKey, additionalTag);
 				}
 
 			} else if (separatorIndex == 0) {
@@ -113,7 +114,7 @@ public class VorbisComment {
 		return normalizedAudioMetadataTags;
 	}
 
-	public Map<String, String> getAdditionalFieldsMap() {
+	public Map<String, MetadataTag<?>> getAdditionalFieldsMap() {
 		return additionalFieldsMap;
 	}
 

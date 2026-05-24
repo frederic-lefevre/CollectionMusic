@@ -24,38 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.mediaFile.metadata;
 
-import java.util.Map;
+public record MetadataTag<T>(String name, T value) {
 
-public record NormalizedAudioMetadataTags(
-	MetadataTag<Integer> trackNumber,
-	MetadataTag<String> trackTitle,
-	MetadataTag<String> albumTitle,
-	MetadataTag<String>  artist,
-	MetadataTag<String>  albumArtist,
-	MetadataTag<String>  composer,
-	MetadataTag<String>  genre,
-	MetadataTag<String>  date) {
 
-	static final String TRACKNUMBER = "TRACKNUMBER";
-	static final String TITLE = "TITLE";
-	static final String ALBUM = "ALBUM";
-	static final String ARTIST = "ARTIST";
-	static final String ALBUMARTIST = "ALBUMARTIST";
-	static final String COMPOSER = "COMPOSER";
-	static final String GENRE= "GENRE";
-	static final String DATE = "DATE";
-	
-	public Map<String, MetadataTag<?>> getNormalizedTags() {
-		
-		return Map.of(
-				TRACKNUMBER, trackNumber,
-				TITLE, trackTitle,
-				ALBUM, albumTitle,
-				ARTIST, artist,
-				ALBUMARTIST, albumArtist,
-				COMPOSER, composer,
-				GENRE, genre,
-				DATE, date);
-	}
-	
 }

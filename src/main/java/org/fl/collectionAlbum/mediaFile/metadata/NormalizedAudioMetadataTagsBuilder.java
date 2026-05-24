@@ -125,7 +125,15 @@ public class NormalizedAudioMetadataTagsBuilder {
 		checkStringField(composer, NormalizedAudioMetadataTags.COMPOSER, audioFilePath);
 		checkStringField(genre, NormalizedAudioMetadataTags.GENRE, audioFilePath);
 		checkStringField(date, NormalizedAudioMetadataTags.DATE, audioFilePath);
-		return new NormalizedAudioMetadataTags(trackNumber, trackTitle, albumTitle, artist, albumArtist, composer, genre, date);
+		return new NormalizedAudioMetadataTags(
+				new MetadataTag<Integer>(NormalizedAudioMetadataTags.TRACKNUMBER, trackNumber), 
+				new MetadataTag<String>(NormalizedAudioMetadataTags.TITLE, trackTitle), 
+				new MetadataTag<String>(NormalizedAudioMetadataTags.ALBUM, albumTitle), 
+				new MetadataTag<String>(NormalizedAudioMetadataTags.ARTIST, artist), 
+				new MetadataTag<String>(NormalizedAudioMetadataTags.ALBUMARTIST, albumArtist), 
+				new MetadataTag<String>(NormalizedAudioMetadataTags.COMPOSER, composer), 
+				new MetadataTag<String>(NormalizedAudioMetadataTags.GENRE, genre), 
+				new MetadataTag<String>( NormalizedAudioMetadataTags.DATE, date));
 	}
 	
 	private void checkStringField(String field, String fieldName, Path audioFilePath) {

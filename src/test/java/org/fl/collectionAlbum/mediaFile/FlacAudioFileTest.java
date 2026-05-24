@@ -84,14 +84,14 @@ class FlacAudioFileTest {
 		// TODO check tags
 		NormalizedAudioMetadataTags normalizedAudioTags = audioMetadata.getNormalizedAudioMetadataTags();
 		assertThat(normalizedAudioTags).isNotNull();
-		assertThat(normalizedAudioTags.artist()).isEqualTo("John Eliot Gardiner");
-		assertThat(normalizedAudioTags.albumTitle()).isEqualTo("St. John Passion - Gardiner");
-		assertThat(normalizedAudioTags.trackNumber()).isEqualTo(31);
-		assertThat(normalizedAudioTags.trackTitle()).isEqualTo("31. Rezitativ: Und neigte das Haupt und verschied");
-		assertThat(normalizedAudioTags.date()).isEqualTo("1986");
-		assertThat(normalizedAudioTags.composer()).isEqualTo("J.S. Bach");
-		assertThat(normalizedAudioTags.genre()).isEqualTo("Classical");	
-		assertThat(normalizedAudioTags.albumArtist()).isEqualTo("");
+		assertThat(normalizedAudioTags.artist().value()).isEqualTo("John Eliot Gardiner");
+		assertThat(normalizedAudioTags.albumTitle().value()).isEqualTo("St. John Passion - Gardiner");
+		assertThat(normalizedAudioTags.trackNumber().value()).isEqualTo(31);
+		assertThat(normalizedAudioTags.trackTitle().value()).isEqualTo("31. Rezitativ: Und neigte das Haupt und verschied");
+		assertThat(normalizedAudioTags.date().value()).isEqualTo("1986");
+		assertThat(normalizedAudioTags.composer().value()).isEqualTo("J.S. Bach");
+		assertThat(normalizedAudioTags.genre().value()).isEqualTo("Classical");	
+		assertThat(normalizedAudioTags.albumArtist().value()).isEqualTo("");
 		
 		assertThat(audioMetadata.getAdditionnalTags()).isEmpty();
 		
@@ -121,6 +121,7 @@ class FlacAudioFileTest {
 		Path flacFilePath = FilesUtils.uriStringToAbsolutePath("file:///ForTests/CollectionMusique/f_withID3_Header.flac");
 
 		LogRecordCounter flacFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(FlacAudioFile.class.getName()));
+		LogRecordCounter audioMetadataFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(AudioMetadata.class.getName()));
 		
 		FlacAudioFile f1 = new FlacAudioFile(flacFilePath, "flac");
 		MediaFileMetadata metadata = f1.getMetadata();
@@ -128,7 +129,10 @@ class FlacAudioFileTest {
 
 		assertThat(flacFilterCounter.getLogRecordCount()).isEqualTo(1);
 		assertThat(flacFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
+		assertThat(audioMetadataFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(audioMetadataFilterCounter.getLogRecordCount(Level.INFO)).isEqualTo(1);
 		flacFilterCounter.stopLogCountAndFilter();
+		audioMetadataFilterCounter.stopLogCountAndFilter();
 		
 		assertThat(f1.isValidMediaFile()).isPresent().hasValue(true);
 			
