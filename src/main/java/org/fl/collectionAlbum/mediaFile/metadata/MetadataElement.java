@@ -24,7 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.mediaFile.metadata;
 
-public record MetadataTag<T>(String name, T value) {
+public record MetadataElement<T>(String name, T value) {
 
 
 }

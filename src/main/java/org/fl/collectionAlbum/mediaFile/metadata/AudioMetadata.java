@@ -39,11 +39,11 @@ public class AudioMetadata implements MediaFileMetadata {
 	
 	private final AudioStreamMetadata audioStreamMetadata;
 	private final NormalizedAudioMetadataTags normalizedAudioMetadataTags;
-	private final Map<String, MetadataTag<?>> additionnalTags;
-	private final Map<String, MetadataTag<?>> normalizedAudioMetadataTagsMap;
-	private final Map<String, MetadataTag<?>> allTags;
+	private final Map<String, MetadataElement<?>> additionnalTags;
+	private final Map<String, MetadataElement<?>> normalizedAudioMetadataTagsMap;
+	private final Map<String, MetadataElement<?>> allTags;
 	
-	public AudioMetadata(AudioStreamMetadata audioStreamMetadata, NormalizedAudioMetadataTags audioMetadataTags, Map<String, MetadataTag<?>> additionnalTags, Path filePath) {
+	public AudioMetadata(AudioStreamMetadata audioStreamMetadata, NormalizedAudioMetadataTags audioMetadataTags, Map<String, MetadataElement<?>> additionnalTags, Path filePath) {
 		super();
 		this.normalizedAudioMetadataTags = audioMetadataTags;
 		this.audioStreamMetadata = audioStreamMetadata;
@@ -67,7 +67,7 @@ public class AudioMetadata implements MediaFileMetadata {
 	}
 
 	@Override
-	public MetadataTag<?> getTag(String name) {
+	public MetadataElement<?> getTag(String name) {
 		
 		String nameUpperCase = name.toUpperCase();
 		if (normalizedAudioMetadataTagsMap.containsKey(nameUpperCase)) {
@@ -78,7 +78,7 @@ public class AudioMetadata implements MediaFileMetadata {
 	}
 
 	@Override
-	public Map<String, MetadataTag<?>> getAllTags() {
+	public Map<String, MetadataElement<?>> getAllTags() {
 		return allTags;
 	}
 
@@ -95,7 +95,7 @@ public class AudioMetadata implements MediaFileMetadata {
 		return normalizedAudioMetadataTags;
 	}
 
-	public Map<String, MetadataTag<?>> getAdditionnalTags() {
+	public Map<String, MetadataElement<?>> getAdditionnalTags() {
 		return additionnalTags;
 	}
 

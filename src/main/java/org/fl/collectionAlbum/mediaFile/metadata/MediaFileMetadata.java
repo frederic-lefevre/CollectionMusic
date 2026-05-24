@@ -28,9 +28,9 @@ import java.util.Map;
 
 public interface MediaFileMetadata {
 
-	public MetadataTag<?> getTag(String name);
+	public MetadataElement<?> getTag(String name);
 	
-	public Map<String, MetadataTag<?>> getAllTags();
+	public Map<String, MetadataElement<?>> getAllTags();
 	
 	public Map<String, String> getStreamMetadataDescription();
 }

@@ -126,14 +126,14 @@ public class NormalizedAudioMetadataTagsBuilder {
 		checkStringField(genre, NormalizedAudioMetadataTags.GENRE, audioFilePath);
 		checkStringField(date, NormalizedAudioMetadataTags.DATE, audioFilePath);
 		return new NormalizedAudioMetadataTags(
-				new MetadataTag<Integer>(NormalizedAudioMetadataTags.TRACKNUMBER, trackNumber), 
-				new MetadataTag<String>(NormalizedAudioMetadataTags.TITLE, trackTitle), 
-				new MetadataTag<String>(NormalizedAudioMetadataTags.ALBUM, albumTitle), 
-				new MetadataTag<String>(NormalizedAudioMetadataTags.ARTIST, artist), 
-				new MetadataTag<String>(NormalizedAudioMetadataTags.ALBUMARTIST, albumArtist), 
-				new MetadataTag<String>(NormalizedAudioMetadataTags.COMPOSER, composer), 
-				new MetadataTag<String>(NormalizedAudioMetadataTags.GENRE, genre), 
-				new MetadataTag<String>( NormalizedAudioMetadataTags.DATE, date));
+				new MetadataElement<Integer>(NormalizedAudioMetadataTags.TRACKNUMBER, trackNumber), 
+				new MetadataElement<String>(NormalizedAudioMetadataTags.TITLE, trackTitle), 
+				new MetadataElement<String>(NormalizedAudioMetadataTags.ALBUM, albumTitle), 
+				new MetadataElement<String>(NormalizedAudioMetadataTags.ARTIST, artist), 
+				new MetadataElement<String>(NormalizedAudioMetadataTags.ALBUMARTIST, albumArtist), 
+				new MetadataElement<String>(NormalizedAudioMetadataTags.COMPOSER, composer), 
+				new MetadataElement<String>(NormalizedAudioMetadataTags.GENRE, genre), 
+				new MetadataElement<String>( NormalizedAudioMetadataTags.DATE, date));
 	}
 	
 	private void checkStringField(String field, String fieldName, Path audioFilePath) {

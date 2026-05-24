@@ -27,14 +27,14 @@ package org.fl.collectionAlbum.mediaFile.metadata;
 import java.util.Map;
 
 public record NormalizedAudioMetadataTags(
-	MetadataTag<Integer> trackNumber,
-	MetadataTag<String> trackTitle,
-	MetadataTag<String> albumTitle,
-	MetadataTag<String>  artist,
-	MetadataTag<String>  albumArtist,
-	MetadataTag<String>  composer,
-	MetadataTag<String>  genre,
-	MetadataTag<String>  date) {
+	MetadataElement<Integer> trackNumber,
+	MetadataElement<String> trackTitle,
+	MetadataElement<String> albumTitle,
+	MetadataElement<String>  artist,
+	MetadataElement<String>  albumArtist,
+	MetadataElement<String>  composer,
+	MetadataElement<String>  genre,
+	MetadataElement<String>  date) {
 
 	static final String TRACKNUMBER = "TRACKNUMBER";
 	static final String TITLE = "TITLE";
@@ -45,7 +45,7 @@ public record NormalizedAudioMetadataTags(
 	static final String GENRE= "GENRE";
 	static final String DATE = "DATE";
 	
-	public Map<String, MetadataTag<?>> getNormalizedTags() {
+	public Map<String, MetadataElement<?>> getNormalizedTags() {
 		
 		return Map.of(
 				TRACKNUMBER, trackNumber,
