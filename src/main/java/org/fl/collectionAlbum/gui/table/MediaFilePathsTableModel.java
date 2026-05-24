@@ -32,7 +32,7 @@ import org.fl.collectionAlbum.gui.UpdatableElement;
 import org.fl.collectionAlbum.mediaPath.MediaFileInventory;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
-public class MediaFilesTableModel extends AbstractTableModel implements UpdatableElement {
+public class MediaFilePathsTableModel extends AbstractTableModel implements UpdatableElement {
 
 	private static final long serialVersionUID = 1L;
 
@@ -46,7 +46,7 @@ public class MediaFilesTableModel extends AbstractTableModel implements Updatabl
 	
 	private final List<MediaFilePath> mediaFilePaths;
 	
-	public MediaFilesTableModel(MediaFileInventory mediaFileInventory) {
+	public MediaFilePathsTableModel(MediaFileInventory mediaFileInventory) {
 		super();
 		this.mediaFilePaths = mediaFileInventory.getMediaFilePathList();
 	}
@@ -97,7 +97,7 @@ public class MediaFilesTableModel extends AbstractTableModel implements Updatabl
 		};
 	}
 
-	public MediaFilePath getMediaFileAt(int rowIndex) {
+	public MediaFilePath getMediaFilePathAt(int rowIndex) {
 		return mediaFilePaths.get(rowIndex);
 	}
 

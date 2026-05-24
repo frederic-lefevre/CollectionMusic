@@ -115,7 +115,7 @@ public class GenerationPane extends JPanel {
 		
 		// Media files tab
 		MediaFilesTabbedPane mediaFilesTabbedPane = new MediaFilesTabbedPane(this);
-		collectionTabPanes.add(mediaFilesTabbedPane, "Fichiers media");
+		collectionTabPanes.add(mediaFilesTabbedPane, "Chemins et fichiers media");
 		mediaFilesTabbedPane.getUpdatableElements().forEach(tableModel -> {
 			startReadCollection.addUpdatableElement(tableModel);
 		});
