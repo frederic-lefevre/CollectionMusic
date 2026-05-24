@@ -79,7 +79,6 @@ public class AudioMetadata implements MediaFileMetadata {
 
 	@Override
 	public Map<String, String> getAllTags() {
-
 		return allTags;
 	}
 
@@ -90,6 +89,14 @@ public class AudioMetadata implements MediaFileMetadata {
 
 	public AudioStreamMetadata getAudioStreamMetadata() {
 		return audioStreamMetadata;
+	}
+
+	public NormalizedAudioMetadataTags getNormalizedAudioMetadataTags() {
+		return normalizedAudioMetadataTags;
+	}
+
+	public Map<String, String> getAdditionnalTags() {
+		return additionnalTags;
 	}
 
 }

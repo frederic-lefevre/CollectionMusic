@@ -34,6 +34,7 @@ import java.util.logging.Logger;
 import org.fl.collectionAlbum.mediaFile.metadata.AudioMetadata;
 import org.fl.collectionAlbum.mediaFile.metadata.AudioStreamMetadata;
 import org.fl.collectionAlbum.mediaFile.metadata.MediaFileMetadata;
+import org.fl.collectionAlbum.mediaFile.metadata.NormalizedAudioMetadataTags;
 import org.fl.util.FilterCounter;
 import org.fl.util.FilterCounter.LogRecordCounter;
 import org.fl.util.file.FilesUtils;
@@ -79,6 +80,22 @@ class FlacAudioFileTest {
 		assertThat(streamInfo.numberOfChannels()).isEqualTo(2);
 		assertThat(streamInfo.bitRate()).isEqualTo(16*44100);
 		assertThat(streamInfo.trackDuration()).isEqualTo(24240);
+		
+		// TODO check tags
+		NormalizedAudioMetadataTags normalizedAudioTags = audioMetadata.getNormalizedAudioMetadataTags();
+		assertThat(normalizedAudioTags).isNotNull();
+		assertThat(normalizedAudioTags.artist()).isEqualTo("John Eliot Gardiner");
+		assertThat(normalizedAudioTags.albumTitle()).isEqualTo("St. John Passion - Gardiner");
+		assertThat(normalizedAudioTags.trackNumber()).isEqualTo(31);
+		assertThat(normalizedAudioTags.trackTitle()).isEqualTo("31. Rezitativ: Und neigte das Haupt und verschied");
+		assertThat(normalizedAudioTags.date()).isEqualTo("1986");
+		assertThat(normalizedAudioTags.composer()).isEqualTo("J.S. Bach");
+		assertThat(normalizedAudioTags.genre()).isEqualTo("Classical");	
+		assertThat(normalizedAudioTags.albumArtist()).isEqualTo("");
+		
+		assertThat(audioMetadata.getAdditionnalTags()).isEmpty();
+		
+		assertThat(audioMetadata.getAllTags()).isNotNull().hasSize(normalizedAudioTags.getNormalizedTags().size());
 	}
 	
 	@Test
