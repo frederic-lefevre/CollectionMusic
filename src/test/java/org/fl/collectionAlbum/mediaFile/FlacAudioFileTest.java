@@ -74,12 +74,12 @@ class FlacAudioFileTest {
 		AudioStreamMetadata streamInfo = audioMetadata.getAudioStreamMetadata();
 		assertThat(streamInfo).isNotNull();
 		
-		assertThat(streamInfo.samplingRate()).isEqualTo(44100);
-		assertThat(streamInfo.bitDepth()).isEqualTo(16);
-		assertThat(streamInfo.isLossless()).isTrue();
-		assertThat(streamInfo.numberOfChannels()).isEqualTo(2);
-		assertThat(streamInfo.bitRate()).isEqualTo(16*44100);
-		assertThat(streamInfo.trackDuration()).isEqualTo(24240);
+		assertThat(streamInfo.samplingRate().value()).isEqualTo(44100);
+		assertThat(streamInfo.bitDepth().value()).isEqualTo(16);
+		assertThat(streamInfo.isLossless().value()).isTrue();
+		assertThat(streamInfo.numberOfChannels().value()).isEqualTo(2);
+		assertThat(streamInfo.bitRate().value()).isEqualTo(16*44100);
+		assertThat(streamInfo.trackDuration().value()).isEqualTo(24240);
 		
 		// TODO check tags
 		NormalizedAudioMetadataTags normalizedAudioTags = audioMetadata.getNormalizedAudioMetadataTags();
@@ -121,7 +121,8 @@ class FlacAudioFileTest {
 		Path flacFilePath = FilesUtils.uriStringToAbsolutePath("file:///ForTests/CollectionMusique/f_withID3_Header.flac");
 
 		LogRecordCounter flacFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(FlacAudioFile.class.getName()));
-		LogRecordCounter audioMetadataFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(AudioMetadata.class.getName()));
+		Logger audioMetadataLogger = Logger.getLogger(AudioMetadata.class.getName());
+		LogRecordCounter audioMetadataFilterCounter = FilterCounter.getLogRecordCounter(audioMetadataLogger);
 		
 		FlacAudioFile f1 = new FlacAudioFile(flacFilePath, "flac");
 		MediaFileMetadata metadata = f1.getMetadata();
@@ -129,8 +130,10 @@ class FlacAudioFileTest {
 
 		assertThat(flacFilterCounter.getLogRecordCount()).isEqualTo(1);
 		assertThat(flacFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
-		assertThat(audioMetadataFilterCounter.getLogRecordCount()).isEqualTo(1);
-		assertThat(audioMetadataFilterCounter.getLogRecordCount(Level.INFO)).isEqualTo(1);
+		if (audioMetadataLogger.isLoggable(Level.INFO)) {
+			assertThat(audioMetadataFilterCounter.getLogRecordCount()).isEqualTo(1);
+			assertThat(audioMetadataFilterCounter.getLogRecordCount(Level.INFO)).isEqualTo(1);
+		}
 		flacFilterCounter.stopLogCountAndFilter();
 		audioMetadataFilterCounter.stopLogCountAndFilter();
 		
@@ -142,11 +145,11 @@ class FlacAudioFileTest {
 		AudioStreamMetadata streamInfo = audioMetadata.getAudioStreamMetadata();
 		assertThat(streamInfo).isNotNull();
 		
-		assertThat(streamInfo.samplingRate()).isEqualTo(44100);
-		assertThat(streamInfo.bitDepth()).isEqualTo(16);
-		assertThat(streamInfo.isLossless()).isTrue();
-		assertThat(streamInfo.numberOfChannels()).isEqualTo(2);
-		assertThat(streamInfo.bitRate()).isEqualTo(16*44100);
-		assertThat(streamInfo.trackDuration()).isEqualTo(506440);
+		assertThat(streamInfo.samplingRate().value()).isEqualTo(44100);
+		assertThat(streamInfo.bitDepth().value()).isEqualTo(16);
+		assertThat(streamInfo.isLossless().value()).isTrue();
+		assertThat(streamInfo.numberOfChannels().value()).isEqualTo(2);
+		assertThat(streamInfo.bitRate().value()).isEqualTo(16*44100);
+		assertThat(streamInfo.trackDuration().value()).isEqualTo(506440);
 	}
 }

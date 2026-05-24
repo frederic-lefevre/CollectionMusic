@@ -73,7 +73,7 @@ public class FlacStreamInfoMetadataBlock {
 
 		int bitsRate = bitsPerSample * sampleRate;
 		
-		audioStreamMetadata = new AudioStreamMetadata(true, sampleRate, bitsPerSample, bitsRate, numberOfChannels, trackLength);
+		audioStreamMetadata = AudioStreamMetadataBuilder.build(true, sampleRate, bitsPerSample, bitsRate, numberOfChannels, trackLength);
 	}
 
 	public AudioStreamMetadata getAudioStreamMetadata() {

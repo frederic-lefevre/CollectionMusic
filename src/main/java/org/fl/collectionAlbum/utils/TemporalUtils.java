@@ -25,6 +25,7 @@ SOFTWARE.
 package org.fl.collectionAlbum.utils;
 
 import java.time.DateTimeException;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Year;
@@ -117,6 +118,21 @@ public class TemporalUtils {
 			comp = compareTemporal(t1End, t2End);
 		}
 		return comp;
+	}
+	
+	public static String durationToString(long milliDuration) {
+		Duration duration = Duration.ofMillis(milliDuration);
+		long hourPart = duration.toHours();
+		if (hourPart == 0) {
+			return  String.format("%02d:%02d", 
+					duration.toMinutesPart(), 
+					duration.toSecondsPart());
+		} else {
+			return  String.format("%d:%02d:%02d", 
+					duration.toHours(), 
+					duration.toMinutesPart(), 
+					duration.toSecondsPart());
+		}
 	}
 	
 	public static LocalDate getRoundedLocalDate(TemporalAccessor temporalAccessor) {

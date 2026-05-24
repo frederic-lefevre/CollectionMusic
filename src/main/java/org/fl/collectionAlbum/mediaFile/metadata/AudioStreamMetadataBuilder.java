@@ -24,13 +24,23 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.mediaFile.metadata;
 
-import java.util.Map;
+public class AudioStreamMetadataBuilder {
 
-public interface MediaFileMetadata {
-
-	public MetadataElement<?> getTag(String name);
-	
-	public Map<String, MetadataElement<?>> getAllTags();
-	
-	public Map<String, MetadataElement<?>> getStreamMetadata();
+	static AudioStreamMetadata build(boolean isLossless,
+			long samplingRate, // sample frequency in Hz
+			int bitDepth,  // number of bit per sample
+			long bitRate, // in bits per seconds
+			int numberOfChannels, 
+			long trackDuration  
+			) {
+		
+		return new AudioStreamMetadata(
+				new MetadataElement<Boolean>(AudioStreamMetadata.IS_LOSSLESS, isLossless),
+				new MetadataElement<Long>(AudioStreamMetadata.SAMPLING_RATE, samplingRate),
+				new MetadataElement<Integer>(AudioStreamMetadata.BIT_DEPTH, bitDepth),
+				new MetadataElement<Long>(AudioStreamMetadata.BIT_RATE, bitRate),
+				new MetadataElement<Integer>(AudioStreamMetadata.NUMBER_OF_CHANNELS, numberOfChannels),
+				new MetadataElement<Long>(AudioStreamMetadata.TRACK_DURATION, trackDuration)
+				);
+	}
 }
