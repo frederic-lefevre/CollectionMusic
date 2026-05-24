@@ -231,4 +231,34 @@ class TemporalUtilsTest {
 		
 		assertThat(TemporalUtils.compareTemporalInterval(ta1Begin, null, null, null)).isNegative();
 	}
+	
+	@Test
+	void test22() {
+		assertThat(TemporalUtils.durationToString(0)).isEqualTo("00:00");
+	}
+	
+	@Test
+	void test23() {
+		assertThat(TemporalUtils.durationToString(100)).isEqualTo("00:00");
+	}
+	
+	@Test
+	void test24() {
+		assertThat(TemporalUtils.durationToString(1000)).isEqualTo("00:01");
+	}
+	
+	@Test
+	void test25() {
+		assertThat(TemporalUtils.durationToString(61000)).isEqualTo("01:01");
+	}
+	
+	@Test
+	void test26() {
+		assertThat(TemporalUtils.durationToString(3661000)).isEqualTo("1:01:01");
+	}
+	
+	@Test
+	void test27() {
+		assertThat(TemporalUtils.durationToString(36061000)).isEqualTo("10:01:01");
+	}
 }
