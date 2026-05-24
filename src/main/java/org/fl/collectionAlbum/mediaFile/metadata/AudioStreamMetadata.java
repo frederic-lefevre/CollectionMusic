@@ -43,7 +43,7 @@ public record AudioStreamMetadata (
 	private static final String NUMBER_OF_CHANNELS = "Number of channels";
 	private static final String TRACK_DURATION = "Track duration";
 	
-	private String getDuration() {
+	private String durationToString() {
 		Duration duration = Duration.ofMillis(trackDuration);
 		long hourPart = duration.toHours();
 		if (hourPart == 0) {
@@ -66,7 +66,7 @@ public record AudioStreamMetadata (
 				BIT_DEPTH, Integer.toString(bitDepth),
 				BIT_RATE, Long.toString(bitRate),
 				NUMBER_OF_CHANNELS, Integer.toString(numberOfChannels),
-				TRACK_DURATION, getDuration()
+				TRACK_DURATION, durationToString()
 				);
 	}
 }
