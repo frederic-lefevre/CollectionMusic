@@ -117,9 +117,10 @@ public class MediaFileInventory {
     			// It should be a media file, part of an album
     			
     			addMediaFilePathToInventory(file.getParent());
-    		 	
-    		} 
-    		return FileVisitResult.CONTINUE;
+    			return FileVisitResult.SKIP_SIBLINGS;
+    		} else {
+    			return FileVisitResult.CONTINUE;
+    		}
     	}
 	}
 	
