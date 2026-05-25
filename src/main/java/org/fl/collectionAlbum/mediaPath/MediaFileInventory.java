@@ -44,6 +44,7 @@ import java.util.stream.Collectors;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.format.ContentNature;
+import org.fl.collectionAlbum.mediaFile.MediaFile;
 
 public class MediaFileInventory {
 
@@ -55,22 +56,22 @@ public class MediaFileInventory {
 	
 	private final LinkedHashMap<Path,MediaFilePath> mediaFilePathInventory;
 	
-	// MediaFilePath values maintained as List to be displayed in a JTable
+	// MediaFilePath and MediaFile values maintained as List to be displayed in a JTable
 	private final List<MediaFilePath> mediaFilePathList;
+	private final List<MediaFile> mediaFileList;
 	
 	private final ContentNature contentNature;
 	private final boolean logWarnings;
 	private boolean isConnected;
-	private long mediaFileNumber;
 	
 	protected MediaFileInventory(Path rootPath, ContentNature contentNature, boolean logWarnings) {
 		
 		this.rootPath = rootPath;
 		this.contentNature = contentNature;
 		this.logWarnings = logWarnings;
-		this.mediaFileNumber = 0;
 		mediaFilePathInventory = new LinkedHashMap<>();
 		mediaFilePathList = new ArrayList<>();
+		mediaFileList = new ArrayList<>();
 		isConnected = Files.exists(rootPath);
 	}
 
@@ -89,8 +90,8 @@ public class MediaFileInventory {
 	}
 	
 	public void clearInventory() {
-		mediaFileNumber = 0;
 		mediaFilePathList.clear();
+		mediaFileList.clear();
 		mediaFilePathInventory.clear();
 		isConnected = Files.exists(rootPath);
 	}
@@ -130,7 +131,7 @@ public class MediaFileInventory {
 			MediaFilePath newMediaFilePath = new MediaFilePath(albumAbsolutePath, contentNature, logWarnings);
 			mediaFilePathInventory.put(albumAbsolutePath, newMediaFilePath);
 			mediaFilePathList.add(newMediaFilePath);
-			mediaFileNumber = mediaFileNumber + newMediaFilePath.getMediaFileNumber();
+			mediaFileList.addAll(newMediaFilePath.getMediaFiles());
 		}
 		return mediaFilePathInventory.get(albumAbsolutePath);
 	}
@@ -183,12 +184,16 @@ public class MediaFileInventory {
 		return mediaFilePathList;
 	}
 	
+	public List<MediaFile> getMediaFileList() {
+		return mediaFileList;
+	}
+
 	public boolean isConnected() {
 		return isConnected;
 	}
 
-	public long getMediaFileNumber() {
-		return mediaFileNumber;
+	public int getMediaFileNumber() {
+		return mediaFileList.size();
 	}
 	
 	public MediaFilePath validateMediaFilePath(Path path) {

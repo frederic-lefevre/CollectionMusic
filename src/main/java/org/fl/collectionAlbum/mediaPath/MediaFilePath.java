@@ -51,7 +51,6 @@ public class MediaFilePath {
 	
 	private final Path mediaFilesPath;
 	private final Set<Album> albumsSet;
-	private long mediaFileNumber;
 	private Path coverPath;
 	private List<MediaFile> mediaFiles;
 	
@@ -63,7 +62,6 @@ public class MediaFilePath {
 		albumsSet = new HashSet<>();
 		mediaFileExtension = null;
 		coverPath = null;
-		mediaFileNumber = 0;
 		Set<String> mediaFileExtensions = new HashSet<>();
 		
 		try (Stream<Path> fileStream = Files.list(mediaFilesPath)) {
@@ -81,7 +79,6 @@ public class MediaFilePath {
 							MediaFile mediaFile = MediaFileBuilder.builder(contentNature, path, extension).build();
 							if (mediaFile != null) {
 
-								mediaFileNumber++;
 								mediaFileExtensions.add(extension);
 								
 								if (Control.isReadMediaFileMetadata()) {
@@ -138,8 +135,8 @@ public class MediaFilePath {
 		return albumsSet;
 	}
 	
-	public long getMediaFileNumber() {
-		return mediaFileNumber;
+	public int getMediaFileNumber() {
+		return mediaFiles.size();
 	}
 
 	public static boolean isMediaFileName(Path file, ContentNature mediaContentNature) {
