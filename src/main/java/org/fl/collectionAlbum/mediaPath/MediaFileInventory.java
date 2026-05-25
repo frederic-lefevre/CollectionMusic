@@ -112,10 +112,10 @@ public class MediaFileInventory {
     	@Override
 		public FileVisitResult visitFile(Path file, BasicFileAttributes attr) {
     		
-    		if ((Files.isRegularFile(file)) &&
+    		if ((attr.isRegularFile()) &&
     				MediaFilePath.isMediaFileName(file, contentNature)) {
     			// It should be a media file, part of an album
-    			
+
     			addMediaFilePathToInventory(file.getParent());
     			return FileVisitResult.SKIP_SIBLINGS;
     		} else {
