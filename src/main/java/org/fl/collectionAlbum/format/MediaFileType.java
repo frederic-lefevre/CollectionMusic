@@ -22,21 +22,16 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.mediaFile;
+package org.fl.collectionAlbum.format;
 
 import java.nio.file.Path;
+import java.util.function.Function;
 
-import org.fl.collectionAlbum.mediaFile.metadata.MediaFileMetadata;
+import org.fl.collectionAlbum.mediaFile.MediaFile;
 
-public class VideoFile extends MediaFile {
+public interface MediaFileType {
 
-	public VideoFile(Path filePath, String extension) {
-		super(filePath, extension);
-	}
-
-	@Override
-	public MediaFileMetadata getMetadata() {
-		// no parsing yet
-		return null;
-	}
+	public String getExtension();
+	public boolean isLossLess();
+	public Function<Path, MediaFile> mediaFileConstructor();
 }

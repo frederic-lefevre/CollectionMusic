@@ -26,12 +26,13 @@ package org.fl.collectionAlbum.mediaFile;
 
 import java.nio.file.Path;
 
+import org.fl.collectionAlbum.format.AudioFileType;
 import org.fl.collectionAlbum.mediaFile.metadata.AudioMetadata;
 
 public class M4aAudioFile extends AudioFile {
 
-	protected M4aAudioFile(Path filePath, String extension) {
-		super(filePath, extension);
+	public M4aAudioFile(Path filePath) {
+		super(filePath, AudioFileType.M4A);
 	}
 
 	@Override

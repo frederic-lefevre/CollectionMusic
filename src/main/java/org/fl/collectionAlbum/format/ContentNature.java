@@ -25,6 +25,7 @@ SOFTWARE.
 package org.fl.collectionAlbum.format;
 
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -36,18 +37,21 @@ import org.fl.collectionAlbum.json.VideoFilePathJsonParser;
 public enum ContentNature {
 	
 	AUDIO("audio", 
-			JsonMusicProperties.AUDIO_FILE, 
+			JsonMusicProperties.AUDIO_FILE,
 			Stream.of(AudioFileType.values()).map(a -> a.getExtension()).collect(Collectors.toSet()), 
+	//		Stream.of(AudioFileType.values()).collect(Collectors.toMap(AudioFileType::getExtension, Function.identity())), 
 			true,
 			new AudioFilePathJsonParser()), 
 	VIDEO("vidéo", 
-			JsonMusicProperties.VIDEO_FILE,  
+			JsonMusicProperties.VIDEO_FILE,
 			Stream.of(VideoFileType.values()).map(a -> a.getExtension()).collect(Collectors.toSet()), 
+	//		Stream.of(AudioFileType.values()).collect(Collectors.toMap(AudioFileType::getExtension, Function.identity())), 
 			false,
 			new VideoFilePathJsonParser());
 	
 	private final String nom;
 	private final String jsonProperty;
+
 	private final Set<String> fileExtensions;
 	private final boolean strictCheckings;
 	private final AbstractMediaFileParser mediaFileParser;
@@ -58,6 +62,7 @@ public enum ContentNature {
 		fileExtensions = exts;
 		strictCheckings = sc;
 		mediaFileParser = mfp;
+		
 	}
 	
 	public String getNom() {

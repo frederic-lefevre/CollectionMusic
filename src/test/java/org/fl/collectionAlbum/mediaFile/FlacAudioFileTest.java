@@ -49,7 +49,7 @@ class FlacAudioFileTest {
 		
 		LogRecordCounter flacFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(FlacAudioFile.class.getName()));	
 		
-		FlacAudioFile f1 = new FlacAudioFile(flacFilePath, "flac");
+		FlacAudioFile f1 = new FlacAudioFile(flacFilePath);
 		assertThat(f1.isValidMediaFile()).isEmpty(); // not parsed yet
 		assertThat(f1.hasImbeddedPicture()).isEmpty();
 		assertThat(f1.getSize()).isEmpty();
@@ -105,7 +105,7 @@ class FlacAudioFileTest {
 
 		LogRecordCounter flacFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(FlacAudioFile.class.getName()));	
 		
-		FlacAudioFile f1 = new FlacAudioFile(flacFilePath, "flac");
+		FlacAudioFile f1 = new FlacAudioFile(flacFilePath);
 		f1.parseMetadata();
 		
 		assertThat(flacFilterCounter.getLogRecordCount()).isEqualTo(1);
@@ -124,7 +124,7 @@ class FlacAudioFileTest {
 		Logger audioMetadataLogger = Logger.getLogger(AudioMetadata.class.getName());
 		LogRecordCounter audioMetadataFilterCounter = FilterCounter.getLogRecordCounter(audioMetadataLogger);
 		
-		FlacAudioFile f1 = new FlacAudioFile(flacFilePath, "flac");
+		FlacAudioFile f1 = new FlacAudioFile(flacFilePath);
 		MediaFileMetadata metadata = f1.getMetadata();
 		assertThat(metadata).isNotNull();
 

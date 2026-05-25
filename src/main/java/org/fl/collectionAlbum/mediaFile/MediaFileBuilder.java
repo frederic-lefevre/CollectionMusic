@@ -70,15 +70,15 @@ public class MediaFileBuilder {
 			AudioFileType audioFileType = getAudioFileType(extension);
 
 			if (audioFileType == AudioFileType.FLAC) {
-				yield new FlacAudioFile(filePath, extension);
+				yield new FlacAudioFile(filePath);
 			} else if (audioFileType == AudioFileType.WAV) {
-				yield new WavAudioFile(filePath, extension);
+				yield new WavAudioFile(filePath);
 			} else if (audioFileType == AudioFileType.AIFF) {
-				yield new AiffAudioFile(filePath, extension);
+				yield new AiffAudioFile(filePath);
 			} else if (audioFileType == AudioFileType.MP3) {
-				yield new Mp3AudioFile(filePath, extension);
+				yield new Mp3AudioFile(filePath);
 			} else if (audioFileType == AudioFileType.M4A) {
-				yield new M4aAudioFile(filePath, extension);
+				yield new M4aAudioFile(filePath);
 			} else {
 				yield null;
 			}

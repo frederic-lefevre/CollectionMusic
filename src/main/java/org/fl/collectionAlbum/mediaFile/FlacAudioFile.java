@@ -33,6 +33,7 @@ import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.fl.collectionAlbum.format.AudioFileType;
 import org.fl.collectionAlbum.mediaFile.metadata.AudioMetadata;
 import org.fl.collectionAlbum.mediaFile.metadata.FlacMetaDataBlockHeader;
 import org.fl.collectionAlbum.mediaFile.metadata.FlacMetaDataBlockHeader.BlockType;
@@ -54,8 +55,8 @@ public class FlacAudioFile extends AudioFile {
 	
 	private VorbisComment vorbisComment;
 	
-	protected FlacAudioFile(Path filePath, String extension) {
-		super(filePath, extension);
+	public FlacAudioFile(Path filePath) {
+		super(filePath, AudioFileType.FLAC);
 	}
 
 	@Override

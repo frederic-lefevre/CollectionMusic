@@ -24,7 +24,13 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.format;
 
-public enum VideoFileType {
+import java.nio.file.Path;
+import java.util.function.Function;
+
+import org.fl.collectionAlbum.mediaFile.MediaFile;
+import org.fl.collectionAlbum.mediaFile.VideoFile;
+
+public enum VideoFileType implements MediaFileType {
 
 	MKV("mkv"),
 	MP4("mp4"),
@@ -40,7 +46,18 @@ public enum VideoFileType {
 		this.extension = extension;
 	}
 	
+	@Override
 	public String getExtension() {
 		return extension;
+	}
+
+	@Override
+	public boolean isLossLess() {
+		return false;  // not implemented
+	}
+
+	@Override
+	public Function<Path, MediaFile> mediaFileConstructor() {
+		return (path) -> new VideoFile(path, extension);
 	}
 }

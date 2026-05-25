@@ -26,12 +26,13 @@ package org.fl.collectionAlbum.mediaFile;
 
 import java.nio.file.Path;
 
+import org.fl.collectionAlbum.format.AudioFileType;
 import org.fl.collectionAlbum.mediaFile.metadata.AudioMetadata;
 
 public class AiffAudioFile extends AudioFile {
 
-	protected AiffAudioFile(Path filePath, String extension) {
-		super(filePath, extension);
+	public AiffAudioFile(Path filePath) {
+		super(filePath, AudioFileType.AIFF);
 	}
 
 	@Override

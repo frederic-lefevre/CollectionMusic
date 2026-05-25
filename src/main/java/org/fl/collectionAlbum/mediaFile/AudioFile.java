@@ -26,6 +26,7 @@ package org.fl.collectionAlbum.mediaFile;
 
 import java.nio.file.Path;
 
+import org.fl.collectionAlbum.format.AudioFileType;
 import org.fl.collectionAlbum.mediaFile.metadata.AudioMetadata;
 import org.fl.collectionAlbum.mediaFile.metadata.MediaFileMetadata;
 
@@ -33,8 +34,8 @@ public abstract class AudioFile extends MediaFile {
 
 	private AudioMetadata audioMetadata;
 	
-	protected AudioFile(Path filePath, String extension) {
-		super(filePath, extension);
+	protected AudioFile(Path filePath, AudioFileType audioFileType) {
+		super(filePath, audioFileType.getExtension());
 		audioMetadata = null;
 	}
 	
