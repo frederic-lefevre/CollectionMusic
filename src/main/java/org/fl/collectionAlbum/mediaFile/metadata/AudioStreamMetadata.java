@@ -35,12 +35,12 @@ public record AudioStreamMetadata (
 		MetadataElement<Long> trackDuration  // in milliseconds
 		) {
 	
-	static final String IS_LOSSLESS = "Is lossless";
-	static final String SAMPLING_RATE = "Sampling rate";
-	static final String BIT_DEPTH = "Number of bits per sample";
-	static final String BIT_RATE = "Bit rate";
-	static final String NUMBER_OF_CHANNELS = "Number of channels";
-	static final String TRACK_DURATION = "Track duration";
+	public static final String IS_LOSSLESS = "Is lossless";
+	public static final String SAMPLING_RATE = "Sampling rate";
+	public static final String BIT_DEPTH = "Number of bits per sample";
+	public static final String BIT_RATE = "Bit rate";
+	public static final String NUMBER_OF_CHANNELS = "Number of channels";
+	public static final String TRACK_DURATION = "Track duration";
 	
 	public Map<String, MetadataElement<?>> getMetadataMap() {
 		

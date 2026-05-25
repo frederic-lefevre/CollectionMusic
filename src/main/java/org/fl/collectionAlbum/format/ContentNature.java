@@ -24,6 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.format;
 
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -39,30 +40,30 @@ public enum ContentNature {
 	AUDIO("audio", 
 			JsonMusicProperties.AUDIO_FILE,
 			Stream.of(AudioFileType.values()).map(a -> a.getExtension()).collect(Collectors.toSet()), 
-	//		Stream.of(AudioFileType.values()).collect(Collectors.toMap(AudioFileType::getExtension, Function.identity())), 
+			Stream.of(AudioFileType.values()).collect(Collectors.toMap(AudioFileType::getExtension, Function.identity())), 
 			true,
 			new AudioFilePathJsonParser()), 
 	VIDEO("vidéo", 
 			JsonMusicProperties.VIDEO_FILE,
 			Stream.of(VideoFileType.values()).map(a -> a.getExtension()).collect(Collectors.toSet()), 
-	//		Stream.of(AudioFileType.values()).collect(Collectors.toMap(AudioFileType::getExtension, Function.identity())), 
+			Stream.of(VideoFileType.values()).collect(Collectors.toMap(VideoFileType::getExtension, Function.identity())), 
 			false,
 			new VideoFilePathJsonParser());
 	
 	private final String nom;
 	private final String jsonProperty;
-
 	private final Set<String> fileExtensions;
+	private final Map<String, MediaFileType> mediaFileTypeMap;
 	private final boolean strictCheckings;
 	private final AbstractMediaFileParser mediaFileParser;
 	
-	private ContentNature(String n, String jp, Set<String> exts, boolean sc, AbstractMediaFileParser mfp) {
+	private ContentNature(String n, String jp, Set<String> exts, Map<String, MediaFileType> mft, boolean sc, AbstractMediaFileParser mfp) {
 		nom = n;
 		jsonProperty = jp;
 		fileExtensions = exts;
+		mediaFileTypeMap = mft;
 		strictCheckings = sc;
 		mediaFileParser = mfp;
-		
 	}
 	
 	public String getNom() {
@@ -77,6 +78,10 @@ public enum ContentNature {
 		return fileExtensions;
 	}
 	
+	public Map<String, MediaFileType> getMediaFileTypeMap() {
+		return mediaFileTypeMap;
+	}
+
 	public AbstractMediaFileParser getMediaFileParser() {
 		return mediaFileParser;
 	}

@@ -25,18 +25,11 @@ SOFTWARE.
 package org.fl.collectionAlbum.mediaFile;
 
 import java.nio.file.Path;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Stream;
 
-import org.fl.collectionAlbum.format.AudioFileType;
 import org.fl.collectionAlbum.format.ContentNature;
-import org.fl.collectionAlbum.format.VideoFileType;
+import org.fl.collectionAlbum.format.MediaFileType;
 
 public class MediaFileBuilder {
-	
-	private static final Map<String, AudioFileType> audioExtensionsMap = new HashMap<>();
-	private static final Map<String, VideoFileType> videoExtensionsMap = new HashMap<>();
 	
 	private final ContentNature contentNature;
 	private final Path filePath;
@@ -65,59 +58,11 @@ public class MediaFileBuilder {
 			return null;
 		}
 
-		return switch (contentNature) {
-		case AUDIO -> {
-			AudioFileType audioFileType = getAudioFileType(extension);
-			
-			if (audioFileType != null) {
-				yield audioFileType.mediaFileConstructor().apply(filePath);
-			} else {
-				yield null;
-			}
+		MediaFileType mediaFiletype = contentNature.getMediaFileTypeMap().get(extension.toLowerCase());
+		if (mediaFiletype != null) {
+			return mediaFiletype.mediaFileConstructor().apply(filePath);
+		} else {
+			return null;
 		}
-		case VIDEO -> {
-			VideoFileType videoFileType = getVideoFileType(extension);
-			
-			if (videoFileType != null) {
-				yield videoFileType.mediaFileConstructor().apply(filePath);
-			} else {
-				yield null;
-			}
-		}
-		};
-	}
-
-	private static AudioFileType getAudioFileType(String extension) {
-
-		AudioFileType audioFileType = audioExtensionsMap.get(extension);
-		if (audioFileType == null) {
-			
-			String lowerExtension = extension.toLowerCase();
-			audioFileType = Stream.of(AudioFileType.values())
-				.filter(a -> lowerExtension.equals(a.getExtension()))
-				.findFirst()
-				.orElse(null);
-			
-			if (audioFileType != null) {
-				audioExtensionsMap.put(extension, audioFileType);
-			}
-		} 
-		return audioFileType;
-	}
-	
-	private static VideoFileType getVideoFileType(String extension) {
-		
-		VideoFileType videoFileType = videoExtensionsMap.get(extension);
-		if (videoFileType == null) {
-			String lowerExtension = extension.toLowerCase();
-			videoFileType = Stream.of(VideoFileType.values())
-					.filter(a -> lowerExtension.equals(a.getExtension()))
-					.findFirst()
-					.orElse(null);
-			if (videoFileType != null) {
-				videoExtensionsMap.put(extension, videoFileType);
-			}
-		}
-		return videoFileType;
 	}
 }
