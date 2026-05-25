@@ -29,7 +29,6 @@ import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -73,7 +72,7 @@ public class MediaFilePath {
 			mediaFiles = fileStream
 					.filter(path -> Files.isRegularFile(path))
 					.map(path -> { 
-						String extension = getFileNameExtension(path).orElse(null);
+						String extension = getFileNameExtension(path);
 						
 						if (extension == null) {
 							mLog.log(level, "Unexpected file with no extension in media path : " + path);
@@ -108,7 +107,7 @@ public class MediaFilePath {
 			if (mediaFileExtensions.isEmpty()) {
 				mLog.log(level, "No media file found directly under " + mediaFilesPath.toString());
 			} else if (mediaFileExtensions.size() == 1) {
-				mediaFileExtension = mediaFileExtensions.iterator().next().toString();
+				mediaFileExtension = mediaFileExtensions.iterator().next();
 			} else {
 				mLog.log(level, "More than 1 media file type found in " + mediaFilesPath.toString());
 				mediaFileExtension = mediaFileExtensions.toString();
@@ -145,16 +144,23 @@ public class MediaFilePath {
 
 	public static boolean isMediaFileName(Path file, ContentNature mediaContentNature) {
 
-		return getFileNameExtension(file)
-				.filter(extension -> mediaContentNature.getFileExtensions().contains(extension.toLowerCase()))
-				.isPresent();
+		String extension = getFileNameExtension(file);
+		if (extension != null) {
+			return mediaContentNature.getFileExtensions().contains(extension.toLowerCase());
+		} else {
+			return false;
+		}
 	}
 	
-	private static Optional<String> getFileNameExtension(Path filename) {
-		return Optional.ofNullable(filename)
-				.map(f -> f.toString())
-				.filter(f -> f.contains("."))
-				.map(f -> f.substring(f.lastIndexOf(".") + 1));			
+	private static String getFileNameExtension(Path path) {
+		
+		String fileName = path.toString();
+	    int dotIndex = fileName.lastIndexOf(".");
+	    if (dotIndex >= 0) {
+	        return fileName.substring(dotIndex + 1);
+	    } else {
+	    	return null;
+	    }		
 	}
 
 	public boolean hasCover() {
