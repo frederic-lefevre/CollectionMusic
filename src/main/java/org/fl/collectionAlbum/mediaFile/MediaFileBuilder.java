@@ -68,28 +68,20 @@ public class MediaFileBuilder {
 		return switch (contentNature) {
 		case AUDIO -> {
 			AudioFileType audioFileType = getAudioFileType(extension);
-
-			if (audioFileType == AudioFileType.FLAC) {
-				yield new FlacAudioFile(filePath);
-			} else if (audioFileType == AudioFileType.WAV) {
-				yield new WavAudioFile(filePath);
-			} else if (audioFileType == AudioFileType.AIFF) {
-				yield new AiffAudioFile(filePath);
-			} else if (audioFileType == AudioFileType.MP3) {
-				yield new Mp3AudioFile(filePath);
-			} else if (audioFileType == AudioFileType.M4A) {
-				yield new M4aAudioFile(filePath);
+			
+			if (audioFileType != null) {
+				yield audioFileType.mediaFileConstructor().apply(filePath);
 			} else {
 				yield null;
 			}
 		}
 		case VIDEO -> {
 			VideoFileType videoFileType = getVideoFileType(extension);
-
-			if (videoFileType == null) {
-				yield null;
+			
+			if (videoFileType != null) {
+				yield videoFileType.mediaFileConstructor().apply(filePath);
 			} else {
-				yield new VideoFile(filePath, extension);
+				yield null;
 			}
 		}
 		};
