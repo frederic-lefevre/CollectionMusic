@@ -40,11 +40,11 @@ import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.node.ObjectNode;
 
-public class AudioFileParser extends AbstractMediaFileParser {
+public class AudioFilePathJsonParser extends AbstractMediaFileParser {
 
-	private static final Logger albumLog = Logger.getLogger(AudioFileParser.class.getName());
+	private static final Logger albumLog = Logger.getLogger(AudioFilePathJsonParser.class.getName());
 	
-	public AudioFileParser() {
+	public AudioFilePathJsonParser() {
 		super();
 	}
 
@@ -58,28 +58,28 @@ public class AudioFileParser extends AbstractMediaFileParser {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public AbstractAlbumsAudioFiles parseMediaFile(ObjectNode audioFileJson) {
+	public AbstractAlbumsAudioFiles parseMediaFile(ObjectNode audioFilePathJson) {
 
-		if (audioFileJson != null) {
+		if (audioFilePathJson != null) {
 			
-			AudioFileType type = Optional.ofNullable(audioFileJson.get(JsonMusicProperties.TYPE))
+			AudioFileType type = Optional.ofNullable(audioFilePathJson.get(JsonMusicProperties.TYPE))
 					.map(JsonNode::asString)
 					.map(s -> findType(s))
 					.orElseGet(() -> {
-						albumLog.severe("Json AudioFile null type parameter: " + audioFileJson);
+						albumLog.severe("Json AudioFile null type parameter: " + audioFilePathJson);
 						return null;
 					});
 			
-			Double samplingRate = Optional.ofNullable(audioFileJson.get(JsonMusicProperties.SAMPLING_RATE))
+			Double samplingRate = Optional.ofNullable(audioFilePathJson.get(JsonMusicProperties.SAMPLING_RATE))
 					.map(JsonNode::asDouble)
 					.orElseGet(() -> {
-						albumLog.severe("Json AudioFile null samplingRate parameter" + audioFileJson);
+						albumLog.severe("Json AudioFile null samplingRate parameter" + audioFilePathJson);
 						return null;
 					});
 			
-			String source = parseSource(audioFileJson);
-			String note = parseNote(audioFileJson);
-			Set<MediaFilePath> audioFileLocations = parseMediaFileLocation(audioFileJson, ContentNature.AUDIO);
+			String source = parseSource(audioFilePathJson);
+			String note = parseNote(audioFilePathJson);
+			Set<MediaFilePath> audioFileLocations = parseMediaFileLocation(audioFilePathJson, ContentNature.AUDIO);
 			
 			if ((type == null) || (source == null) || (samplingRate == null)) {
 				
@@ -87,32 +87,32 @@ public class AudioFileParser extends AbstractMediaFileParser {
 				
 			} else if (type.isLossLess()) {
 				
-				Integer bitDepth = Optional.ofNullable(audioFileJson.get(JsonMusicProperties.BIT_DEPTH))
+				Integer bitDepth = Optional.ofNullable(audioFilePathJson.get(JsonMusicProperties.BIT_DEPTH))
 						.map(JsonNode::asInt)
 						.orElseGet(() -> {
-							albumLog.severe("Json AudioFile null bitDepth parameter" + audioFileJson);
+							albumLog.severe("Json AudioFile null bitDepth parameter" + audioFilePathJson);
 							return null;
 						});
 				
 				if (bitDepth == null) {
 					return null;
 				} else {
-					return new LosslessAlbumAudioFiles(audioFileJson, type, source, bitDepth, samplingRate, note, audioFileLocations);
+					return new LosslessAlbumAudioFiles(audioFilePathJson, type, source, bitDepth, samplingRate, note, audioFileLocations);
 				}
 				
 			} else {
 				
-				Double bitRate = Optional.ofNullable(audioFileJson.get(JsonMusicProperties.BIT_RATE))
+				Double bitRate = Optional.ofNullable(audioFilePathJson.get(JsonMusicProperties.BIT_RATE))
 						.map(JsonNode::asDouble)
 						.orElseGet(() -> {
-							albumLog.severe("Json AudioFile null bitRate parameter" + audioFileJson);
+							albumLog.severe("Json AudioFile null bitRate parameter" + audioFilePathJson);
 							return null;
 						});
 				
 				if (bitRate == null) {
 					return null;
 				} else {
-					return new LossyAlbumAudioFiles(audioFileJson, type, source, bitRate, samplingRate, note, audioFileLocations);
+					return new LossyAlbumAudioFiles(audioFilePathJson, type, source, bitRate, samplingRate, note, audioFileLocations);
 				}
 			}
 		} else {

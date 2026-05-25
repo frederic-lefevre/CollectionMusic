@@ -33,7 +33,7 @@ import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.TestUtils;
-import org.fl.collectionAlbum.json.AudioFileParser;
+import org.fl.collectionAlbum.json.AudioFilePathJsonParser;
 import org.fl.util.FilterCounter;
 import org.fl.util.FilterCounter.LogRecordCounter;
 import org.junit.jupiter.api.Test;
@@ -56,7 +56,7 @@ class AlbumAudioFilesTest {
 		String audioFileStr1 = "{}" ;
 		ObjectNode jf1 = (ObjectNode)mapper.readTree(audioFileStr1);
 		
-		AudioFileParser audioFileParser = new AudioFileParser();
+		AudioFilePathJsonParser audioFileParser = new AudioFilePathJsonParser();
 		AbstractAlbumsAudioFiles audio = audioFileParser.parseMediaFile(jf1);
 		assertThat(audio).isNull();
 		
@@ -78,7 +78,7 @@ class AlbumAudioFilesTest {
 		
 		LogRecordCounter filterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.AudioFileParser"));
 		
-		AudioFileParser audioFileParser = new AudioFileParser();
+		AudioFilePathJsonParser audioFileParser = new AudioFilePathJsonParser();
 		AbstractAlbumsAudioFiles audio = audioFileParser.parseMediaFile(null);
 		assertThat(audio).isNull();
 		
@@ -99,7 +99,7 @@ class AlbumAudioFilesTest {
 				""" ;
 		ObjectNode jf1 = (ObjectNode)mapper.readTree(audioFileStr1);
 		
-		AudioFileParser audioFileParser = new AudioFileParser();
+		AudioFilePathJsonParser audioFileParser = new AudioFilePathJsonParser();
 		AbstractAlbumsAudioFiles audio = audioFileParser.parseMediaFile(jf1);
 		assertThat(audio).isNull();
 
@@ -124,7 +124,7 @@ class AlbumAudioFilesTest {
 				""" ;
 		ObjectNode jf1 = (ObjectNode)mapper.readTree(audioFileStr1);
 		
-		AudioFileParser audioFileParser = new AudioFileParser();
+		AudioFilePathJsonParser audioFileParser = new AudioFilePathJsonParser();
 		AbstractAlbumsAudioFiles audio = audioFileParser.parseMediaFile(jf1);
 		assertThat(audio).isInstanceOf(LosslessAlbumAudioFiles.class);
 
@@ -178,7 +178,7 @@ class AlbumAudioFilesTest {
 				""" ;
 		ObjectNode jf1 = (ObjectNode)mapper.readTree(audioFileStr1);
 		
-		AudioFileParser audioFileParser = new AudioFileParser();
+		AudioFilePathJsonParser audioFileParser = new AudioFilePathJsonParser();
 		AbstractAlbumsAudioFiles audio = audioFileParser.parseMediaFile(jf1);
 		assertThat(audio).isInstanceOf(LosslessAlbumAudioFiles.class);
 
@@ -217,7 +217,7 @@ class AlbumAudioFilesTest {
 				""" ;
 		ObjectNode jf1 = (ObjectNode)mapper.readTree(audioFileStr1);
 		
-		AudioFileParser audioFileParser = new AudioFileParser();
+		AudioFilePathJsonParser audioFileParser = new AudioFilePathJsonParser();
 		AbstractAlbumsAudioFiles audio = audioFileParser.parseMediaFile(jf1);
 		assertThat(audio).isInstanceOf(LosslessAlbumAudioFiles.class);
 

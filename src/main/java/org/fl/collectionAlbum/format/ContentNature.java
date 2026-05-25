@@ -30,24 +30,34 @@ import java.util.stream.Stream;
 
 import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.json.AbstractMediaFileParser;
-import org.fl.collectionAlbum.json.AudioFileParser;
-import org.fl.collectionAlbum.json.VideoFileParser;
+import org.fl.collectionAlbum.json.AudioFilePathJsonParser;
+import org.fl.collectionAlbum.json.VideoFilePathJsonParser;
 
-public enum ContentNature { 
-	AUDIO("audio", JsonMusicProperties.AUDIO_FILE, Stream.of(AudioFileType.values()).map(a -> a.getExtension()).collect(Collectors.toSet()), true), 
-	VIDEO("vidéo", JsonMusicProperties.VIDEO_FILE,  Stream.of(VideoFileType.values()).map(a -> a.getExtension()).collect(Collectors.toSet()), false);
+public enum ContentNature {
+	
+	AUDIO("audio", 
+			JsonMusicProperties.AUDIO_FILE, 
+			Stream.of(AudioFileType.values()).map(a -> a.getExtension()).collect(Collectors.toSet()), 
+			true,
+			new AudioFilePathJsonParser()), 
+	VIDEO("vidéo", 
+			JsonMusicProperties.VIDEO_FILE,  
+			Stream.of(VideoFileType.values()).map(a -> a.getExtension()).collect(Collectors.toSet()), 
+			false,
+			new VideoFilePathJsonParser());
 	
 	private final String nom;
 	private final String jsonProperty;
 	private final Set<String> fileExtensions;
 	private final boolean strictCheckings;
-	private AbstractMediaFileParser mediaFileParser;
+	private final AbstractMediaFileParser mediaFileParser;
 	
-	private ContentNature(String n, String jp, Set<String> exts, boolean sc) {
+	private ContentNature(String n, String jp, Set<String> exts, boolean sc, AbstractMediaFileParser mfp) {
 		nom = n;
 		jsonProperty = jp;
 		fileExtensions = exts;
 		strictCheckings = sc;
+		mediaFileParser = mfp;
 	}
 	
 	public String getNom() {
@@ -63,13 +73,6 @@ public enum ContentNature {
 	}
 	
 	public AbstractMediaFileParser getMediaFileParser() {
-		if (mediaFileParser == null) {
-			if (this == AUDIO) {
-				mediaFileParser = new AudioFileParser();
-			} else if (this == VIDEO) {
-				mediaFileParser = new VideoFileParser();
-			}
-		}
 		return mediaFileParser;
 	}
 	

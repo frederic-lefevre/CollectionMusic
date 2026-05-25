@@ -29,7 +29,7 @@ import static org.assertj.core.api.Assertions.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.fl.collectionAlbum.json.VideoFileParser;
+import org.fl.collectionAlbum.json.VideoFilePathJsonParser;
 import org.fl.util.FilterCounter;
 import org.fl.util.FilterCounter.LogRecordCounter;
 import org.junit.jupiter.api.Test;
@@ -52,7 +52,7 @@ public class AlbumVideoFilesTest {
 		String videoFileStr1 = "{}" ;
 		ObjectNode jf1 = (ObjectNode)mapper.readTree(videoFileStr1);
 		
-		VideoFileParser videoFileParser = new VideoFileParser();
+		VideoFilePathJsonParser videoFileParser = new VideoFilePathJsonParser();
 		AlbumVideoFiles videoFile = videoFileParser.parseMediaFile(jf1);
 		assertThat(videoFile).isNull();
 		
@@ -69,7 +69,7 @@ public class AlbumVideoFilesTest {
 		
 		LogRecordCounter videoFileParserFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.VideoFileParser"));
 		
-		VideoFileParser videoFileParser = new VideoFileParser();
+		VideoFilePathJsonParser videoFileParser = new VideoFilePathJsonParser();
 		AlbumVideoFiles videoFile = videoFileParser.parseMediaFile(null);
 		assertThat(videoFile).isNull();
 		
@@ -90,7 +90,7 @@ public class AlbumVideoFilesTest {
 				""" ;
 		ObjectNode jf1 = (ObjectNode)mapper.readTree(videoFileStr1);
 		
-		VideoFileParser videoFileParser = new VideoFileParser();
+		VideoFilePathJsonParser videoFileParser = new VideoFilePathJsonParser();
 		AlbumVideoFiles videoFile = videoFileParser.parseMediaFile(jf1);
 		assertThat(videoFile).isNull();
 		
@@ -114,7 +114,7 @@ public class AlbumVideoFilesTest {
 				""" ;
 		ObjectNode jf1 = (ObjectNode)mapper.readTree(videoFileStr1);
 		
-		VideoFileParser videoFileParser = new VideoFileParser();
+		VideoFilePathJsonParser videoFileParser = new VideoFilePathJsonParser();
 		AlbumVideoFiles videoFile = videoFileParser.parseMediaFile(jf1);
 		assertThat(videoFile).isNotNull();
 		assertThat(videoFile.getHeight()).isEqualTo(480);
@@ -141,7 +141,7 @@ public class AlbumVideoFilesTest {
 				""" ;
 		ObjectNode jf1 = (ObjectNode)mapper.readTree(videoFileStr1);
 		
-		VideoFileParser videoFileParser = new VideoFileParser();
+		VideoFilePathJsonParser videoFileParser = new VideoFilePathJsonParser();
 		AlbumVideoFiles videoFile = videoFileParser.parseMediaFile(jf1);
 		assertThat(videoFile).isNotNull();
 		assertThat(videoFile.getHeight()).isEqualTo(480);

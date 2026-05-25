@@ -30,11 +30,11 @@ public record NormalizedAudioMetadataTags(
 	MetadataElement<Integer> trackNumber,
 	MetadataElement<String> trackTitle,
 	MetadataElement<String> albumTitle,
-	MetadataElement<String>  artist,
-	MetadataElement<String>  albumArtist,
-	MetadataElement<String>  composer,
-	MetadataElement<String>  genre,
-	MetadataElement<String>  date) {
+	MetadataElement<String> artist,
+	MetadataElement<String> albumArtist,
+	MetadataElement<String> composer,
+	MetadataElement<String> genre,
+	MetadataElement<String> date) {
 
 	static final String TRACKNUMBER = "TRACKNUMBER";
 	static final String TITLE = "TITLE";
