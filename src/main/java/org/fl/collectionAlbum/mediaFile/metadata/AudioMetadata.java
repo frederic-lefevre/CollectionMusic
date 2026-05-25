@@ -67,15 +67,15 @@ public class AudioMetadata implements MediaFileMetadata {
 	}
 
 	@Override
-	public MetadataElement<?> getTag(String name) {
-		return allTags.get(name.toUpperCase());
+	public Map<String, MetadataElement<?>> getNormalizedTags() {
+		return normalizedAudioMetadataTagsMap;
 	}
 
 	@Override
-	public Map<String, MetadataElement<?>> getAllTags() {
-		return allTags;
+	public Map<String, MetadataElement<?>> getAdditionalTags() {
+		return additionnalTags;
 	}
-
+	
 	@Override
 	public Map<String, MetadataElement<?>> getStreamMetadata() {
 		return audioStreamMetadata.getMetadataMap();
@@ -88,9 +88,4 @@ public class AudioMetadata implements MediaFileMetadata {
 	public NormalizedAudioMetadataTags getNormalizedAudioMetadataTags() {
 		return normalizedAudioMetadataTags;
 	}
-
-	public Map<String, MetadataElement<?>> getAdditionnalTags() {
-		return additionnalTags;
-	}
-
 }

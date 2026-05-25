@@ -28,12 +28,14 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.net.URISyntaxException;
 import java.nio.file.Path;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.mediaFile.metadata.AudioMetadata;
 import org.fl.collectionAlbum.mediaFile.metadata.AudioStreamMetadata;
 import org.fl.collectionAlbum.mediaFile.metadata.MediaFileMetadata;
+import org.fl.collectionAlbum.mediaFile.metadata.MetadataElement;
 import org.fl.collectionAlbum.mediaFile.metadata.NormalizedAudioMetadataTags;
 import org.fl.util.FilterCounter;
 import org.fl.util.FilterCounter.LogRecordCounter;
@@ -81,7 +83,6 @@ class FlacAudioFileTest {
 		assertThat(streamInfo.bitRate().value()).isEqualTo(16*44100);
 		assertThat(streamInfo.trackDuration().value()).isEqualTo(24240);
 		
-		// TODO check tags
 		NormalizedAudioMetadataTags normalizedAudioTags = audioMetadata.getNormalizedAudioMetadataTags();
 		assertThat(normalizedAudioTags).isNotNull();
 		assertThat(normalizedAudioTags.artist().value()).isEqualTo("John Eliot Gardiner");
@@ -93,9 +94,16 @@ class FlacAudioFileTest {
 		assertThat(normalizedAudioTags.genre().value()).isEqualTo("Classical");	
 		assertThat(normalizedAudioTags.albumArtist().value()).isEqualTo("");
 		
-		assertThat(audioMetadata.getAdditionnalTags()).isEmpty();
+		Map<String, MetadataElement<?>> normalizedTags =  metadata.getNormalizedTags();
+		assertThat(normalizedTags).isNotNull();
+		MetadataElement<?> artistElement = normalizedTags.get(NormalizedAudioMetadataTags.ARTIST);
+		assertThat(artistElement.name()).isEqualTo(NormalizedAudioMetadataTags.ARTIST);
+		assertThat(artistElement.value())
+			.isInstanceOf(String.class)
+			.isEqualTo(normalizedAudioTags.artist().value())
+			.isEqualTo("John Eliot Gardiner");
 		
-		assertThat(audioMetadata.getAllTags()).isNotNull().hasSize(normalizedAudioTags.getNormalizedTags().size());
+		assertThat(audioMetadata.getAdditionalTags()).isEmpty();
 	}
 	
 	@Test

@@ -36,6 +36,7 @@ import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.mediaFile.metadata.AudioStreamMetadata;
 import org.fl.collectionAlbum.mediaFile.metadata.MediaFileMetadata;
 import org.fl.collectionAlbum.mediaFile.metadata.MetadataElement;
+import org.fl.collectionAlbum.mediaFile.metadata.NormalizedAudioMetadataTags;
 import org.fl.util.FilterCounter;
 import org.fl.util.FilterCounter.LogRecordCounter;
 import org.fl.util.file.FilesUtils;
@@ -66,6 +67,16 @@ class MediaFileBuilderTest {
 		assertThat(bitDepthMetadataElement.value())
 			.isInstanceOf(Integer.class)
 			.isEqualTo(16);
+		
+		Map<String, MetadataElement<?>> normalizedTags =  metadata.getNormalizedTags();
+		assertThat(normalizedTags).isNotNull();
+		MetadataElement<?> artistElement = normalizedTags.get(NormalizedAudioMetadataTags.ARTIST);
+		assertThat(artistElement.name()).isEqualTo(NormalizedAudioMetadataTags.ARTIST);
+		assertThat(artistElement.value())
+			.isInstanceOf(String.class)
+			.isEqualTo("John Eliot Gardiner");
+		
+		assertThat(metadata.getAdditionalTags()).isNotNull().isEmpty();
 	}
 	
 	@Test
