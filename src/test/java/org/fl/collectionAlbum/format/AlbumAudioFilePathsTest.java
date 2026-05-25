@@ -33,7 +33,10 @@ import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.TestUtils;
+import org.fl.collectionAlbum.json.AbstractMediaFileParser;
 import org.fl.collectionAlbum.json.AudioFilePathJsonParser;
+import org.fl.collectionAlbum.json.ParserHelpers;
+import org.fl.collectionAlbum.mediaPath.MediaFileInventory;
 import org.fl.util.FilterCounter;
 import org.fl.util.FilterCounter.LogRecordCounter;
 import org.junit.jupiter.api.Test;
@@ -43,15 +46,15 @@ import tools.jackson.databind.DatabindException;
 import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.node.ObjectNode;
 
-class AlbumAudioFilesTest {
+class AlbumAudioFilePathsTest {
 	
 	private static final ObjectMapper mapper = new ObjectMapper();
 	
 	@Test
 	void shouldHaveAllValues() throws DatabindException, JacksonException {
 		
-		LogRecordCounter audioFileParserFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.AudioFileParser"));
-		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
+		LogRecordCounter audioFileParserFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(AudioFilePathJsonParser.class.getName()));
+		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(ParserHelpers.class.getName()));
 		
 		String audioFileStr1 = "{}" ;
 		ObjectNode jf1 = (ObjectNode)mapper.readTree(audioFileStr1);
@@ -76,7 +79,7 @@ class AlbumAudioFilesTest {
 	@Test
 	void shouldAcceptNullWithError() {
 		
-		LogRecordCounter filterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.AudioFileParser"));
+		LogRecordCounter filterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(AudioFilePathJsonParser.class.getName()));
 		
 		AudioFilePathJsonParser audioFileParser = new AudioFilePathJsonParser();
 		AbstractAlbumsAudioFiles audio = audioFileParser.parseMediaFile(null);
@@ -89,8 +92,8 @@ class AlbumAudioFilesTest {
 	@Test
 	void shouldNotDeserializeToAudioFile() throws DatabindException, JacksonException {
 		
-		LogRecordCounter audioFileParserFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.AudioFileParser"));
-		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
+		LogRecordCounter audioFileParserFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(AudioFilePathJsonParser.class.getName()));
+		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(ParserHelpers.class.getName()));
 		
 		String audioFileStr1 = """
 			{"bitDepth": 24 , 
@@ -113,7 +116,7 @@ class AlbumAudioFilesTest {
 	@Test
 	void shouldDeserializeToAudioFile2() throws DatabindException, JacksonException {
 		
-		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
+		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(ParserHelpers.class.getName()));
 		
 		String audioFileStr1 = """
 				{"bitDepth": 32 , 
@@ -166,7 +169,7 @@ class AlbumAudioFilesTest {
 	@Test
 	void shouldDeserializeToAudioFileWithInvalidPath() throws DatabindException, JacksonException {
 		
-		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
+		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(ParserHelpers.class.getName()));
 		
 		String audioFileStr1 = """
 				{"bitDepth": 32 , 
@@ -204,8 +207,8 @@ class AlbumAudioFilesTest {
 	@Test
 	void shouldDeserializeToAudioFileWithPathNotFound() throws DatabindException, JacksonException {
 		
-		LogRecordCounter filterCounter1 = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.AbstractMediaFileParser"));
-		LogRecordCounter filterCounter2 = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.mediaPath.MediaFileInventory"));
+		LogRecordCounter filterCounter1 = FilterCounter.getLogRecordCounter(Logger.getLogger(AbstractMediaFileParser.class.getName()));
+		LogRecordCounter filterCounter2 = FilterCounter.getLogRecordCounter(Logger.getLogger(MediaFileInventory.class.getName()));
 		
 		String audioFileStr1 = """
 				{"bitDepth": 32 , 

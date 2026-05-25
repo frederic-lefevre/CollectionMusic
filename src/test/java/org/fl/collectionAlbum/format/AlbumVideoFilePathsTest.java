@@ -29,6 +29,7 @@ import static org.assertj.core.api.Assertions.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.fl.collectionAlbum.json.ParserHelpers;
 import org.fl.collectionAlbum.json.VideoFilePathJsonParser;
 import org.fl.util.FilterCounter;
 import org.fl.util.FilterCounter.LogRecordCounter;
@@ -39,15 +40,15 @@ import tools.jackson.databind.DatabindException;
 import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.node.ObjectNode;
 
-public class AlbumVideoFilesTest {
+public class AlbumVideoFilePathsTest {
 	
 	private static final ObjectMapper mapper = new ObjectMapper();
 	
 	@Test
 	void shouldHaveAllValues() throws DatabindException, JacksonException {
 		
-		LogRecordCounter videoFileParserFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.VideoFileParser"));
-		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
+		LogRecordCounter videoFileParserFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(VideoFilePathJsonParser.class.getName()));
+		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(ParserHelpers.class.getName()));
 		
 		String videoFileStr1 = "{}" ;
 		ObjectNode jf1 = (ObjectNode)mapper.readTree(videoFileStr1);
@@ -67,7 +68,7 @@ public class AlbumVideoFilesTest {
 	@Test
 	void shouldAcceptNullWithError() {
 		
-		LogRecordCounter videoFileParserFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.VideoFileParser"));
+		LogRecordCounter videoFileParserFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(VideoFilePathJsonParser.class.getName()));
 		
 		VideoFilePathJsonParser videoFileParser = new VideoFilePathJsonParser();
 		AlbumVideoFiles videoFile = videoFileParser.parseMediaFile(null);
@@ -80,8 +81,8 @@ public class AlbumVideoFilesTest {
 	@Test
 	void shouldNotDeserializeToVideoFile() throws DatabindException, JacksonException {
 		
-		LogRecordCounter videoFileParserFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.VideoFileParser"));
-		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
+		LogRecordCounter videoFileParserFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(VideoFilePathJsonParser.class.getName()));
+		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(ParserHelpers.class.getName()));
 		
 		String videoFileStr1 = """
 			{"width": 720, 
@@ -104,7 +105,7 @@ public class AlbumVideoFilesTest {
 	@Test
 	void shouldDeserializeToVideoFileWithoutNote() throws DatabindException, JacksonException {
 		
-		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
+		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(ParserHelpers.class.getName()));
 		
 		String videoFileStr1 = """
 			{"width": 720, 
@@ -130,7 +131,7 @@ public class AlbumVideoFilesTest {
 	@Test
 	void shouldDeserializeToVideoFile() throws DatabindException, JacksonException {
 		
-		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
+		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(ParserHelpers.class.getName()));
 		
 		String videoFileStr1 = """
 			{"width": 720, 
