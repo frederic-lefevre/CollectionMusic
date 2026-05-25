@@ -33,8 +33,11 @@ import javax.swing.JTabbedPane;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.format.ContentNature;
+import org.fl.collectionAlbum.gui.table.MediaFileJTable;
 import org.fl.collectionAlbum.gui.table.MediaFilePathsJTable;
 import org.fl.collectionAlbum.gui.table.MediaFilePathsTableModel;
+import org.fl.collectionAlbum.gui.table.MediaFileTableModel;
+import org.fl.collectionAlbum.mediaPath.MediaFileInventory;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 
 public class MediaFilesTabbedPane extends JTabbedPane {
@@ -52,7 +55,9 @@ public class MediaFilesTabbedPane extends JTabbedPane {
 		// Media files tabs
 		Stream.of(ContentNature.values()).forEachOrdered(contentNature -> {
 			
-			MediaFilePathsTableModel tm = new MediaFilePathsTableModel(MediaFilesInventories.getMediaFileInventory(contentNature));
+			MediaFileInventory mediaFileInventory = MediaFilesInventories.getMediaFileInventory(contentNature);
+			
+			MediaFilePathsTableModel tm = new MediaFilePathsTableModel(mediaFileInventory);
 			updatableElements.add(tm);
 			
 			MediaFilePathsJTable mediaFilePathsJTable = new MediaFilePathsJTable(tm, generationPane);
@@ -62,6 +67,17 @@ public class MediaFilesTabbedPane extends JTabbedPane {
 			mediaFilePathsScrollTable.setPreferredSize(Control.getMainSubPaneDimension());
 			
 			add(mediaFilePathsScrollTable, "Chemins des fichiers " + contentNature.getNom());
+			
+			MediaFileTableModel mediaFileTableModel = new MediaFileTableModel(mediaFileInventory.getMediaFileList());
+			updatableElements.add(mediaFileTableModel);
+			
+			MediaFileJTable mediaFileJTable = new MediaFileJTable(mediaFileTableModel);
+			
+			// Scroll pane to contain the media path table
+			JScrollPane mediaFileScrollTable = new JScrollPane(mediaFileJTable);
+			mediaFileScrollTable.setPreferredSize(Control.getMainSubPaneDimension());
+			
+			add(mediaFileScrollTable, "Fichiers " + contentNature.getNom());
 		});
 	}
 

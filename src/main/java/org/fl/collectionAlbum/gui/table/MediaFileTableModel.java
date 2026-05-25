@@ -22,53 +22,60 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.mediaFile;
+package org.fl.collectionAlbum.gui.table;
 
-import java.nio.file.Path;
-import java.util.Optional;
+import java.util.List;
 
-import org.fl.collectionAlbum.mediaFile.metadata.MediaFileMetadata;
+import javax.swing.table.AbstractTableModel;
 
-public abstract class MediaFile {
+import org.fl.collectionAlbum.gui.UpdatableElement;
+import org.fl.collectionAlbum.mediaFile.MediaFile;
+
+public class MediaFileTableModel extends AbstractTableModel implements UpdatableElement {
+
+	private static final long serialVersionUID = 1L;
+
+	public static final int FILE_COL_IDX = 0;
 	
-	protected final Path filePath;
-	private final String extension;
-	protected Optional<Long> size;
-	protected Optional<Boolean> hasImbeddedPicture;
-	protected Optional<Boolean> isValidMediaFile;
-
-	protected MediaFile(Path filePath, String extension) {
+	private static final String[] entetes = {"Fichiers"};
+	
+	private final List<MediaFile> mediaFiles;
+	
+	public MediaFileTableModel(List<MediaFile> mediaFiles) {
 		super();
-		this.filePath = filePath;
-		this.extension = extension;
-		this.isValidMediaFile = Optional.empty();
-		this.hasImbeddedPicture = Optional.empty();
-		this.size = Optional.empty();
-	}
-
-	public Path getFilePath() {
-		return filePath;
-	}
-
-	public String getExtension() {
-		return extension;
+		this.mediaFiles = mediaFiles;
 	}
 	
-	public Path getFileName() {
-		return filePath.getFileName();
-	}
-	
-	public abstract MediaFileMetadata getMetadata();
-
-	public Optional<Boolean> isValidMediaFile() {
-		return isValidMediaFile;
-	}
-	
-	public Optional<Boolean> hasImbeddedPicture() {
-		return hasImbeddedPicture;
+	@Override
+	public int getRowCount() {
+		if (mediaFiles == null) {
+			return 0;
+		} else {
+			return mediaFiles.size();
+		}
 	}
 
-	public Optional<Long> getSize() {
-		return size;
+	@Override
+	public int getColumnCount() {
+		return entetes.length;
+	}
+
+	@Override
+	public String getColumnName(int col) {
+	    return entetes[col];
+	}
+	
+	@Override
+	public Object getValueAt(int rowIndex, int columnIndex) {
+		
+		return switch(columnIndex) {
+		case FILE_COL_IDX -> mediaFiles.get(rowIndex).getFileName();
+		default -> null;
+		};
+	}
+
+	@Override
+	public void updateElement() {
+		fireTableDataChanged();
 	}
 }
