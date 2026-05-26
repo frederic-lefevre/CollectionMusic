@@ -27,40 +27,28 @@ package org.fl.collectionAlbum.mediaFile.metadata;
 import java.util.List;
 import java.util.Map;
 
-public record AudioStreamMetadata (
-		MetadataElement<Boolean> isLossless,
-		MetadataElement<Long> samplingRate, // sample frequency in Hz
-		MetadataElement<Integer> bitDepth,  // number of bit per sample
-		MetadataElement<Long> bitRate, // in bits per seconds
-		MetadataElement<Integer> numberOfChannels, 
-		MetadataElement<Long> trackDuration  // in milliseconds
-		) {
+public class VideoMetadata implements MediaFileMetadata {
+
+	@Override
+	public Map<String, MetadataElement<?>> getStreamMetadata() {
+		return Map.of();
+	}
+
+	@Override
+	public Map<String, MetadataElement<?>> getNormalizedTags() {
+		return Map.of();
+	}
+
+	@Override
+	public Map<String, MetadataElement<?>> getAdditionalTags() {
+		return Map.of();
+	}
+
+	public static List<String> getStreamMetadataNames() {
+		return List.of();
+	}
 	
-	public static final String IS_LOSSLESS = "Sans perte";
-	public static final String SAMPLING_RATE = "Echantillonnage (Hz)";
-	public static final String BIT_DEPTH = "Bits par echantillon";
-	public static final String BIT_RATE = "Débit (bits/s)";
-	public static final String NUMBER_OF_CHANNELS = "Cannaux";
-	public static final String TRACK_DURATION = "Durée";
-	
-	public static final  List<String> metadataNames = List.of(
-			IS_LOSSLESS,
-			SAMPLING_RATE,
-			BIT_DEPTH,
-			BIT_RATE,
-			NUMBER_OF_CHANNELS,
-			TRACK_DURATION
-			);
-	
-	public Map<String, MetadataElement<?>> getMetadataMap() {
-		
-		return Map.of(
-				IS_LOSSLESS,isLossless,
-				SAMPLING_RATE, samplingRate,
-				BIT_DEPTH, bitDepth,
-				BIT_RATE, bitRate,
-				NUMBER_OF_CHANNELS, numberOfChannels,
-				TRACK_DURATION, trackDuration
-				);
+	public static List<String> getNormalizedMetadataNames() {
+		return List.of();
 	}
 }

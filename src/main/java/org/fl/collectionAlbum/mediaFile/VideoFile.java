@@ -27,16 +27,20 @@ package org.fl.collectionAlbum.mediaFile;
 import java.nio.file.Path;
 
 import org.fl.collectionAlbum.mediaFile.metadata.MediaFileMetadata;
+import org.fl.collectionAlbum.mediaFile.metadata.VideoMetadata;
 
 public class VideoFile extends MediaFile {
 
+	private VideoMetadata videoMetadata;
+	
 	public VideoFile(Path filePath, String extension) {
 		super(filePath, extension);
+		videoMetadata = null;
 	}
 
 	@Override
 	public MediaFileMetadata getMetadata() {
 		// no parsing yet
-		return null;
+		return videoMetadata;
 	}
 }

@@ -24,12 +24,16 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui.table;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Stream;
 
 import javax.swing.table.AbstractTableModel;
 
+import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.gui.UpdatableElement;
 import org.fl.collectionAlbum.mediaFile.MediaFile;
+import org.fl.collectionAlbum.mediaFile.metadata.MediaFileMetadata;
 
 public class MediaFileTableModel extends AbstractTableModel implements UpdatableElement {
 
@@ -37,13 +41,20 @@ public class MediaFileTableModel extends AbstractTableModel implements Updatable
 
 	public static final int FILE_COL_IDX = 0;
 	
-	private static final String[] entetes = {"Fichiers"};
+	private static final List<String> baseEntetes = List.of("Fichiers");
+	
+	private final List<String> streamInfoEntetes;
+	private final List<String> normalizedTagsEntetes;
+	private final List<String> entetes;
 	
 	private final List<MediaFile> mediaFiles;
 	
-	public MediaFileTableModel(List<MediaFile> mediaFiles) {
+	public MediaFileTableModel(List<MediaFile> mediaFiles, ContentNature contentNature) {
 		super();
 		this.mediaFiles = mediaFiles;
+		this.streamInfoEntetes = contentNature.getStreamMetadataNames();
+		this.normalizedTagsEntetes = contentNature.getNormalizedMetadataNames();		
+		this.entetes = Stream.of(baseEntetes, streamInfoEntetes, normalizedTagsEntetes).flatMap(Collection::stream).toList();
 	}
 	
 	@Override
@@ -57,21 +68,40 @@ public class MediaFileTableModel extends AbstractTableModel implements Updatable
 
 	@Override
 	public int getColumnCount() {
-		return entetes.length;
+		return entetes.size();
 	}
 
 	@Override
 	public String getColumnName(int col) {
-	    return entetes[col];
+	    return entetes.get(col);
 	}
 	
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		
-		return switch(columnIndex) {
-		case FILE_COL_IDX -> mediaFiles.get(rowIndex).getFileName();
-		default -> null;
-		};
+		if (rowIndex < mediaFiles.size()) {
+			MediaFile mediaFile = mediaFiles.get(rowIndex);
+			if (columnIndex == FILE_COL_IDX) {
+				return mediaFile.getFileName();
+			} else {
+
+				MediaFileMetadata mediaFileMetadata = mediaFile.getMetadata();
+				if (mediaFileMetadata == null) {
+					return null;
+				} else if ((columnIndex > FILE_COL_IDX) && (columnIndex < streamInfoEntetes.size() + 1)) {
+
+					return mediaFileMetadata.getStreamMetadata().get(streamInfoEntetes.get(columnIndex - 1)).value();
+
+				} else if ((columnIndex > streamInfoEntetes.size()) && (columnIndex < entetes.size() + 1)) {
+
+					return mediaFileMetadata.getNormalizedTags().get(normalizedTagsEntetes.get(columnIndex - (streamInfoEntetes.size() + 1))).value();
+				} else {
+					return null;
+				}
+			}
+		} else {
+			return null;
+		}
 	}
 
 	@Override

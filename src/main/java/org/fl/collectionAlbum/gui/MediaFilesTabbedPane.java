@@ -68,7 +68,7 @@ public class MediaFilesTabbedPane extends JTabbedPane {
 			
 			add(mediaFilePathsScrollTable, "Chemins des fichiers " + contentNature.getNom());
 			
-			MediaFileTableModel mediaFileTableModel = new MediaFileTableModel(mediaFileInventory.getMediaFileList());
+			MediaFileTableModel mediaFileTableModel = new MediaFileTableModel(mediaFileInventory.getMediaFileList(), contentNature);
 			updatableElements.add(mediaFileTableModel);
 			
 			MediaFileJTable mediaFileJTable = new MediaFileJTable(mediaFileTableModel);

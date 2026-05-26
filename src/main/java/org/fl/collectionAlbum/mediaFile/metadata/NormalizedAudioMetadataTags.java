@@ -24,6 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.mediaFile.metadata;
 
+import java.util.List;
 import java.util.Map;
 
 public record NormalizedAudioMetadataTags(
@@ -36,14 +37,24 @@ public record NormalizedAudioMetadataTags(
 	MetadataElement<String> genre,
 	MetadataElement<String> date) {
 
-	public static final String TRACKNUMBER = "Track number";
-	public static final String TITLE = "Title";
+	public static final String TRACKNUMBER = "Numéro du morceau";
+	public static final String TITLE = "Titre";
 	public static final String ALBUM = "Album";
-	public static final String ARTIST = "Artist";
-	public static final String ALBUMARTIST = "Album artist";
-	public static final String COMPOSER = "Composer";
+	public static final String ARTIST = "Artiste";
+	public static final String ALBUMARTIST = "Artiste de l'album";
+	public static final String COMPOSER = "Compositeur";
 	public static final String GENRE= "Genre";
 	public static final String DATE = "Date";
+	
+	public static final List<String> metadataNames = List.of(
+			TRACKNUMBER,
+			TITLE,
+			ALBUM,
+			ARTIST,
+			ALBUMARTIST,
+			COMPOSER,
+			GENRE,
+			DATE);
 	
 	public Map<String, MetadataElement<?>> getNormalizedTags() {
 		
@@ -57,5 +68,4 @@ public record NormalizedAudioMetadataTags(
 				GENRE, genre,
 				DATE, date);
 	}
-	
 }

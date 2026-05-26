@@ -88,4 +88,12 @@ public class AudioMetadata implements MediaFileMetadata {
 	public NormalizedAudioMetadataTags getNormalizedAudioMetadataTags() {
 		return normalizedAudioMetadataTags;
 	}
+	
+	public static List<String> getStreamMetadataNames() {
+		return AudioStreamMetadata.metadataNames;
+	}
+	
+	public static List<String> getNormalizedMetadataNames() {
+		return NormalizedAudioMetadataTags.metadataNames;
+	}
 }
