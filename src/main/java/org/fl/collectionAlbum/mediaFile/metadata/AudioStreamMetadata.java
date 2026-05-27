@@ -35,10 +35,10 @@ public record AudioStreamMetadata (
 		MetadataElement<Long> trackDuration  // in milliseconds
 		) {
 	
-	public static final String IS_LOSSLESS = "Sans perte";
-	public static final String SAMPLING_RATE = "Echantillonnage (Hz)";
-	public static final String BIT_DEPTH = "<html>Bits par echantillon";
-	public static final String BIT_RATE = "Débit (bits/s)";
+	public static final String IS_LOSSLESS = "<html>Sans<br>perte</html>";
+	public static final String SAMPLING_RATE = "<html>Echantillonnage<br>(Hz)</html>";
+	public static final String BIT_DEPTH = "<html>Bits par<br>échantillon</html>";
+	public static final String BIT_RATE = "<html>Débit<br>(bits/s)</html>";
 	public static final String NUMBER_OF_CHANNELS = "Canaux";
 	public static final String TRACK_DURATION = "Durée";
 	

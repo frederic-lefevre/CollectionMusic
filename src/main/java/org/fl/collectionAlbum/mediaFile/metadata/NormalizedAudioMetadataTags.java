@@ -36,11 +36,11 @@ public record NormalizedAudioMetadataTags(
 	MetadataElement<String> genre,
 	MetadataElement<String> date) {
 
-	public static final String TRACKNUMBER = "Numéro du morceau";
+	public static final String TRACKNUMBER = "<html>Numéro du<br>morceau</html>";
 	public static final String TITLE = "Titre";
 	public static final String ALBUM = "Album";
 	public static final String ARTIST = "Artiste";
-	public static final String ALBUMARTIST = "Artiste de l'album";
+	public static final String ALBUMARTIST = "<html>Artiste de<br>l'album</html>";
 	public static final String COMPOSER = "Compositeur";
 	public static final String GENRE= "Genre";
 	public static final String DATE = "Date";

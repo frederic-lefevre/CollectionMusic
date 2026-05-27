@@ -42,6 +42,10 @@ public class CollectionNumberRenderer extends CustomTableCellRenderer {
 		super(font, SwingConstants.RIGHT);
 	}
 
+	public CollectionNumberRenderer(int horizontalAlignment) {
+		super(font, horizontalAlignment);
+	}
+	
 	@Override
 	public void valueProcessor(Object value) {
 		
