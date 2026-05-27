@@ -33,6 +33,7 @@ import java.util.stream.Stream;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.gui.renderer.CollectionBooleanRenderer;
 import org.fl.collectionAlbum.gui.renderer.CollectionNumberRenderer;
+import org.fl.collectionAlbum.gui.renderer.DurationRenderer;
 import org.fl.collectionAlbum.mediaFile.MediaFile;
 import org.fl.collectionAlbum.utils.CollectionUtils;
 
@@ -66,7 +67,7 @@ public class MediaFileTableColumns {
 					new CollectionUtils.LongComparator(), Long.class, streamInfoGetter(BIT_RATE)),
 			new TableColumnParameter<MediaFile>(NUMBER_OF_CHANNELS, 60, new CollectionNumberRenderer(), 
 					new CollectionUtils.IntegerComparator(), Integer.class, streamInfoGetter(NUMBER_OF_CHANNELS)),
-			new TableColumnParameter<MediaFile>(TRACK_DURATION, 80, new CollectionNumberRenderer(), 
+			new TableColumnParameter<MediaFile>(TRACK_DURATION, 80, new DurationRenderer(), 
 					new CollectionUtils.LongComparator(), Long.class, streamInfoGetter(TRACK_DURATION))
 			);
 	
