@@ -56,28 +56,28 @@ public class MediaFileTableColumns {
 	}
 	
 	private static final List<TableColumnParameter<MediaFile>> audioStreamInfoColumnsParameters = List.of(
-			new TableColumnParameter<MediaFile>(IS_LOSSLESS, 80, new CollectionBooleanRenderer(), 
+			new TableColumnParameter<MediaFile>(IS_LOSSLESS, 70, new CollectionBooleanRenderer(), 
 					null, Boolean.class, streamInfoGetter(IS_LOSSLESS)),
 			new TableColumnParameter<MediaFile>(SAMPLING_RATE, 120, new CollectionNumberRenderer(), 
 					new CollectionUtils.LongComparator(), Long.class, streamInfoGetter(SAMPLING_RATE)),
-			new TableColumnParameter<MediaFile>(BIT_DEPTH, 120, new CollectionNumberRenderer(), 
+			new TableColumnParameter<MediaFile>(BIT_DEPTH, 100, new CollectionNumberRenderer(), 
 					new CollectionUtils.IntegerComparator(), Integer.class, streamInfoGetter(BIT_DEPTH)),
-			new TableColumnParameter<MediaFile>(BIT_RATE, 120, new CollectionNumberRenderer(), 
+			new TableColumnParameter<MediaFile>(BIT_RATE, 100, new CollectionNumberRenderer(), 
 					new CollectionUtils.LongComparator(), Long.class, streamInfoGetter(BIT_RATE)),
-			new TableColumnParameter<MediaFile>(NUMBER_OF_CHANNELS, 120, new CollectionNumberRenderer(), 
+			new TableColumnParameter<MediaFile>(NUMBER_OF_CHANNELS, 60, new CollectionNumberRenderer(), 
 					new CollectionUtils.IntegerComparator(), Integer.class, streamInfoGetter(NUMBER_OF_CHANNELS)),
-			new TableColumnParameter<MediaFile>(TRACK_DURATION, 120, new CollectionNumberRenderer(), 
+			new TableColumnParameter<MediaFile>(TRACK_DURATION, 80, new CollectionNumberRenderer(), 
 					new CollectionUtils.LongComparator(), Long.class, streamInfoGetter(TRACK_DURATION))
 			);
 	
 	private static final List<TableColumnParameter<MediaFile>> normalizedAudioTagsColumnParameters = List.of(
 			new TableColumnParameter<MediaFile>(TRACKNUMBER, 100, new CollectionNumberRenderer(), 
 					new CollectionUtils.IntegerComparator(), Integer.class, normalizedTagGetter(TRACKNUMBER)),
-			new TableColumnParameter<MediaFile>(TITLE, 100, null, 
+			new TableColumnParameter<MediaFile>(TITLE, 200, null, 
 					null, String.class, normalizedTagGetter(TITLE)),
-			new TableColumnParameter<MediaFile>(ALBUM, 100, null, 
+			new TableColumnParameter<MediaFile>(ALBUM, 200, null, 
 					null, String.class, normalizedTagGetter(ALBUM)),
-			new TableColumnParameter<MediaFile>(ARTIST, 100, null, 
+			new TableColumnParameter<MediaFile>(ARTIST, 150, null, 
 					null, String.class, normalizedTagGetter(ARTIST)),
 			new TableColumnParameter<MediaFile>(ALBUMARTIST, 100, null, 
 					null, String.class, normalizedTagGetter(ALBUMARTIST)),
@@ -85,7 +85,7 @@ public class MediaFileTableColumns {
 					null, String.class, normalizedTagGetter(COMPOSER)),
 			new TableColumnParameter<MediaFile>(GENRE, 100, null, 
 					null, String.class, normalizedTagGetter(GENRE)),
-			new TableColumnParameter<MediaFile>(DATE, 100, null, 
+			new TableColumnParameter<MediaFile>(DATE, 80, null, 
 					null, String.class, normalizedTagGetter(DATE))
 			);
 	

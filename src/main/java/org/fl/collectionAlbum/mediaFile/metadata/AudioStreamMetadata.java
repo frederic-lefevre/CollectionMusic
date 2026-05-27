@@ -40,7 +40,7 @@ public record AudioStreamMetadata (
 	public static final String SAMPLING_RATE = "Echantillonnage (Hz)";
 	public static final String BIT_DEPTH = "Bits par echantillon";
 	public static final String BIT_RATE = "Débit (bits/s)";
-	public static final String NUMBER_OF_CHANNELS = "Cannaux";
+	public static final String NUMBER_OF_CHANNELS = "Canaux";
 	public static final String TRACK_DURATION = "Durée";
 	
 	public static final  List<String> metadataNames = List.of(
