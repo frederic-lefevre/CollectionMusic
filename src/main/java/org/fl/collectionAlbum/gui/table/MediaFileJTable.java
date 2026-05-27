@@ -39,7 +39,6 @@ public class MediaFileJTable extends JTable {
 
 	private static final long serialVersionUID = 1L;
 	
-	
 	public MediaFileJTable(MediaFileTableModel mediaFileTableModel) {
 		super(mediaFileTableModel);
 		
