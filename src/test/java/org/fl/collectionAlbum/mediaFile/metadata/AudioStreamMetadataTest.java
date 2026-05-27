@@ -39,8 +39,7 @@ class AudioStreamMetadataTest {
 		
 		AudioStreamMetadata audioStreamMetadata = new AudioStreamMetadata(m2, m3, m1, m3, m1, m3);
 		
-		assertThat(AudioStreamMetadata.metadataNames.size())
-			.isEqualTo(audioStreamMetadata.getMetadataMap().size())
+		assertThat(audioStreamMetadata.getMetadataMap().size())
 			.isEqualTo(AudioStreamMetadata.class.getRecordComponents().length);
 	}
 }

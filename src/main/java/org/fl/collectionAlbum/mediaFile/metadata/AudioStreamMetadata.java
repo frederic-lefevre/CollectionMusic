@@ -24,7 +24,6 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.mediaFile.metadata;
 
-import java.util.List;
 import java.util.Map;
 
 public record AudioStreamMetadata (
@@ -38,19 +37,10 @@ public record AudioStreamMetadata (
 	
 	public static final String IS_LOSSLESS = "Sans perte";
 	public static final String SAMPLING_RATE = "Echantillonnage (Hz)";
-	public static final String BIT_DEPTH = "Bits par echantillon";
+	public static final String BIT_DEPTH = "<html>Bits par echantillon";
 	public static final String BIT_RATE = "Débit (bits/s)";
 	public static final String NUMBER_OF_CHANNELS = "Canaux";
 	public static final String TRACK_DURATION = "Durée";
-	
-	public static final  List<String> metadataNames = List.of(
-			IS_LOSSLESS,
-			SAMPLING_RATE,
-			BIT_DEPTH,
-			BIT_RATE,
-			NUMBER_OF_CHANNELS,
-			TRACK_DURATION
-			);
 	
 	public Map<String, MetadataElement<?>> getMetadataMap() {
 		

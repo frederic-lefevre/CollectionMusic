@@ -24,7 +24,6 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.format;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
@@ -35,8 +34,6 @@ import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.json.AbstractMediaFileParser;
 import org.fl.collectionAlbum.json.AudioFilePathJsonParser;
 import org.fl.collectionAlbum.json.VideoFilePathJsonParser;
-import org.fl.collectionAlbum.mediaFile.metadata.AudioMetadata;
-import org.fl.collectionAlbum.mediaFile.metadata.VideoMetadata;
 
 public enum ContentNature {
 	
@@ -44,16 +41,12 @@ public enum ContentNature {
 			JsonMusicProperties.AUDIO_FILE,
 			Stream.of(AudioFileType.values()).map(a -> a.getExtension()).collect(Collectors.toSet()), 
 			Stream.of(AudioFileType.values()).collect(Collectors.toMap(AudioFileType::getExtension, Function.identity())),
-			AudioMetadata.getStreamMetadataNames(),
-			AudioMetadata.getNormalizedMetadataNames(),
 			true,
 			new AudioFilePathJsonParser()), 
 	VIDEO("vidéo", 
 			JsonMusicProperties.VIDEO_FILE,
 			Stream.of(VideoFileType.values()).map(a -> a.getExtension()).collect(Collectors.toSet()), 
 			Stream.of(VideoFileType.values()).collect(Collectors.toMap(VideoFileType::getExtension, Function.identity())), 
-			VideoMetadata.getStreamMetadataNames(),
-			VideoMetadata.getNormalizedMetadataNames(),
 			false,
 			new VideoFilePathJsonParser());
 	
@@ -61,18 +54,14 @@ public enum ContentNature {
 	private final String jsonProperty;
 	private final Set<String> fileExtensions;
 	private final Map<String, MediaFileType> mediaFileTypeMap;
-	private final List<String> streamMetadataNames;
-	private final List<String> normalizedMetadataNames;
 	private final boolean strictCheckings;
 	private final AbstractMediaFileParser mediaFileParser;
 	
-	private ContentNature(String n, String jp, Set<String> exts, Map<String, MediaFileType> mft, List<String> smn, List<String> nmn,boolean sc, AbstractMediaFileParser mfp) {
+	private ContentNature(String n, String jp, Set<String> exts, Map<String, MediaFileType> mft, boolean sc, AbstractMediaFileParser mfp) {
 		nom = n;
 		jsonProperty = jp;
 		fileExtensions = exts;
 		mediaFileTypeMap = mft;
-		streamMetadataNames = smn;
-		normalizedMetadataNames = nmn;
 		strictCheckings = sc;
 		mediaFileParser = mfp;
 	}
@@ -91,14 +80,6 @@ public enum ContentNature {
 	
 	public Map<String, MediaFileType> getMediaFileTypeMap() {
 		return mediaFileTypeMap;
-	}
-
-	public List<String> getStreamMetadataNames() {
-		return streamMetadataNames;
-	}
-	
-	public List<String> getNormalizedMetadataNames() {
-		return normalizedMetadataNames;
 	}
 
 	public boolean strictCheckings() {

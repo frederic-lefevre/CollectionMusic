@@ -38,8 +38,7 @@ class NormalizedAudioMetadataTagsTest {
 		
 		NormalizedAudioMetadataTags normalizedAudioMetadataTags = new NormalizedAudioMetadataTags(m1, m2, m2, m2, m2, m2, m2, m2);
 		
-		assertThat(NormalizedAudioMetadataTags.metadataNames.size())
-			.isEqualTo(normalizedAudioMetadataTags.getNormalizedTags().size())
+		assertThat(normalizedAudioMetadataTags.getNormalizedTags().size())
 			.isEqualTo(NormalizedAudioMetadataTags.class.getRecordComponents().length);
 	}
 }
