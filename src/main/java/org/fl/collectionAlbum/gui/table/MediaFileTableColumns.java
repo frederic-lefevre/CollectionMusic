@@ -44,7 +44,7 @@ public class MediaFileTableColumns {
 	private static final String FICHIERS = "Fichiers";
 	
 	private static final List<TableColumnParameter<MediaFile>> mediaFileCommonColumnsParameters = List.of(
-			new TableColumnParameter<MediaFile>(FICHIERS, 200, null, null, String.class, (f) -> f.getFileName())
+			new TableColumnParameter<MediaFile>(FICHIERS, 200, null, null, String.class, (f) -> f.getFileName().toString())
 			);
 	
 	private static Function<MediaFile, Object> streamInfoGetter(String metadataName) {
