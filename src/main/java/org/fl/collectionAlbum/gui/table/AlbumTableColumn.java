@@ -49,67 +49,59 @@ import org.fl.collectionAlbum.utils.TemporalUtils;
 
 public enum AlbumTableColumn {
 
-	TITRE("Titres", 250, new StringToHtmlRenderer(), null, String.class, Album::getTitre),
-	AUTEURS("Auteurs", 550, new AuteurListRenderer(), new RangementComparator(), Album.class, (a) -> a),
-	FORMAT("Formats", 100, null, null, String.class,
+	TITRE(new TableColumnParameter("Titres", 250, new StringToHtmlRenderer(), null, String.class), Album::getTitre),
+	AUTEURS(new TableColumnParameter("Auteurs", 550, new AuteurListRenderer(), new RangementComparator(), Album.class), (a) -> a),
+	FORMAT(new TableColumnParameter("Formats", 100, null, null, String.class),
 			(a) -> a.getFormatAlbum()
 				.getSupportsPhysiques().stream()
 				.map(f -> f.getNom())
 				.collect(Collectors.joining(","))),
-	MEDIA_FILES("Fichiers media", 140, new MediaFilesRenderer(), new AlbumMediaFilesStatusComparator(),  Album.class, (a) -> a),
-	PROBLEM("Problème", 70, new CollectionBooleanRenderer(), null, Boolean.class, Album::hasProblem),
-	DISCOGS("Discogs release", 110, null, null, String.class, (a) -> Optional.ofNullable(a.getDiscogsLink()).orElse("")),
-	POIDS("Poids", 50, new CollectionNumberRenderer(), new CollectionUtils.DoubleComparator(), Double.class, (a) -> a.getFormatAlbum().getPoids()),
-	ENREGISTREMENT("Enregistrement", 260, 
+	MEDIA_FILES(new TableColumnParameter("Fichiers media", 140, new MediaFilesRenderer(), new AlbumMediaFilesStatusComparator(),  Album.class), (a) -> a),
+	PROBLEM(new TableColumnParameter("Problème", 70, new CollectionBooleanRenderer(), null, Boolean.class), Album::hasProblem),
+	DISCOGS(new TableColumnParameter("Discogs release", 110, null, null, String.class), (a) -> Optional.ofNullable(a.getDiscogsLink()).orElse("")),
+	POIDS(new TableColumnParameter("Poids", 50, new CollectionNumberRenderer(), new CollectionUtils.DoubleComparator(), Double.class), (a) -> a.getFormatAlbum().getPoids()),
+	ENREGISTREMENT(new TableColumnParameter("Enregistrement", 260, 
 			new DatesAlbumRenderer(Album::getDebutEnregistrement, Album::getFinEnregistrement, t -> TemporalUtils.formatDate((TemporalAccessor)t)),
 			new AlbumEnregistrementComparator(),
-			Album.class,
+			Album.class),
 			(a) -> a),
-	COMPOSITION("Composition", 260,
+	COMPOSITION(new TableColumnParameter("Composition", 260,
 			new DatesAlbumRenderer(Album::getDebutComposition, Album::getFinComposition, t -> TemporalUtils.formatDate((TemporalAccessor)t)),
 			new AlbumCompositionComparator(),
-			Album.class,
+			Album.class),
 			(a) -> a),
-	ACQUISITION("Date d'acquisition", 140, 
+	ACQUISITION(new TableColumnParameter("Date d'acquisition", 140, 
 			new DatesAlbumRenderer(Album::getAcquisitionDate, null, t -> TemporalUtils.formatDate((TemporalAccessor)t)), 
 			new AlbumAcquisitionDateComparator(), 
-			Album.class, 
+			Album.class), 
 			(a) -> a);
 		
-	private final String name;
-	private final int width;
-	private final TableCellRenderer cellRenderer;
-	private final Comparator<?> comparator;
-	private final Class<?> valueClass;
+	private final TableColumnParameter parameters;
 	private final Function<Album, Object> valueGetter;
 	
-	private AlbumTableColumn(String name, int width, TableCellRenderer cellRenderer, Comparator<?> comparator, Class<?> valueClass, Function<Album, Object> valueGetter) {
-		this.name = name;
-		this.width = width;
-		this.cellRenderer = cellRenderer;
-		this.comparator = comparator;
-		this.valueClass = valueClass;
+	private AlbumTableColumn(TableColumnParameter parameters, Function<Album, Object> valueGetter) {
+		this.parameters = parameters;
 		this.valueGetter = valueGetter;
 	}
 
 	public String getName() {
-		return name;
+		return parameters.name();
 	}
 
 	public int getWidth() {
-		return width;
+		return parameters.width();
 	}
 
 	public TableCellRenderer getCellRenderer() {
-		return cellRenderer;
+		return parameters.cellRenderer();
 	}
 
 	public Comparator<?> getComparator() {
-		return comparator;
+		return parameters.comparator();
 	}
 
 	public Class<?> getValueClass() {
-		return valueClass;
+		return parameters.valueClass();
 	}
 
 	public Function<Album, Object> getValueGetter() {
