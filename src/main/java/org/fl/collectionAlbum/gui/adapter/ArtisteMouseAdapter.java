@@ -41,14 +41,13 @@ import org.fl.collectionAlbum.gui.table.ArtistesJTable;
 public class ArtisteMouseAdapter extends MouseAdapter {
 
 	private final JPopupMenu localJPopupMenu;
-	private final JMenuItem showArtisteInfo;
 	private final ArtistesJTable artistesJTable; 
 	private final GenerationPane generationPane;
 	
 	public ArtisteMouseAdapter(ArtistesJTable artistesJTable, GenerationPane generationPane) {
 		
 		localJPopupMenu = new JPopupMenu();
-		showArtisteInfo = new JMenuItem("Informations sur l'artiste");
+		JMenuItem showArtisteInfo = new JMenuItem("Informations sur l'artiste");
 		showArtisteInfo.addActionListener(new ArtisteActionListener(artistesJTable, generationPane));
 		localJPopupMenu.add(showArtisteInfo);
 		this.artistesJTable = artistesJTable;
