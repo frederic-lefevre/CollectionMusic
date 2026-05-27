@@ -45,7 +45,7 @@ public class MediaFileTableColumns {
 	private static final String FICHIERS = "Fichiers";
 	
 	private static final List<TableColumnParameter<MediaFile>> mediaFileCommonColumnsParameters = List.of(
-			new TableColumnParameter<MediaFile>(FICHIERS, 200, null, null, String.class, (f) -> f.getFileName().toString())
+			new TableColumnParameter<MediaFile>(FICHIERS, 220, null, null, String.class, (f) -> f.getFileName().toString())
 			);
 	
 	private static Function<MediaFile, Object> streamInfoGetter(String metadataName) {
@@ -63,7 +63,7 @@ public class MediaFileTableColumns {
 					new CollectionUtils.LongComparator(), Long.class, streamInfoGetter(SAMPLING_RATE)),
 			new TableColumnParameter<MediaFile>(BIT_DEPTH, 100, new CollectionNumberRenderer(), 
 					new CollectionUtils.IntegerComparator(), Integer.class, streamInfoGetter(BIT_DEPTH)),
-			new TableColumnParameter<MediaFile>(BIT_RATE, 100, new CollectionNumberRenderer(), 
+			new TableColumnParameter<MediaFile>(BIT_RATE, 85, new CollectionNumberRenderer(), 
 					new CollectionUtils.LongComparator(), Long.class, streamInfoGetter(BIT_RATE)),
 			new TableColumnParameter<MediaFile>(NUMBER_OF_CHANNELS, 60, new CollectionNumberRenderer(), 
 					new CollectionUtils.IntegerComparator(), Integer.class, streamInfoGetter(NUMBER_OF_CHANNELS)),
@@ -74,7 +74,7 @@ public class MediaFileTableColumns {
 	private static final List<TableColumnParameter<MediaFile>> normalizedAudioTagsColumnParameters = List.of(
 			new TableColumnParameter<MediaFile>(TRACKNUMBER, 100, new CollectionNumberRenderer(), 
 					new CollectionUtils.IntegerComparator(), Integer.class, normalizedTagGetter(TRACKNUMBER)),
-			new TableColumnParameter<MediaFile>(TITLE, 200, null, 
+			new TableColumnParameter<MediaFile>(TITLE, 220, null, 
 					null, String.class, normalizedTagGetter(TITLE)),
 			new TableColumnParameter<MediaFile>(ALBUM, 200, null, 
 					null, String.class, normalizedTagGetter(ALBUM)),
@@ -86,7 +86,7 @@ public class MediaFileTableColumns {
 					null, String.class, normalizedTagGetter(COMPOSER)),
 			new TableColumnParameter<MediaFile>(GENRE, 100, null, 
 					null, String.class, normalizedTagGetter(GENRE)),
-			new TableColumnParameter<MediaFile>(DATE, 80, null, 
+			new TableColumnParameter<MediaFile>(DATE, 75, null, 
 					null, String.class, normalizedTagGetter(DATE))
 			);
 	
