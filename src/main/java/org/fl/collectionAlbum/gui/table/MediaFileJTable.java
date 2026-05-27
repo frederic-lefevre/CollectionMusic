@@ -24,20 +24,44 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui.table;
 
+import java.util.Comparator;
+import java.util.List;
+
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
+import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableRowSorter;
+
+import org.fl.collectionAlbum.mediaFile.MediaFile;
 
 public class MediaFileJTable extends JTable {
 
 	private static final long serialVersionUID = 1L;
+	
 	
 	public MediaFileJTable(MediaFileTableModel mediaFileTableModel) {
 		super(mediaFileTableModel);
 		
 		setFillsViewportHeight(true);
 		
-		getColumnModel().getColumn(MediaFileTableModel.FILE_COL_IDX).setPreferredWidth(100);
+		TableRowSorter<MediaFileTableModel> sorter = new TableRowSorter<>(mediaFileTableModel);
+		
+		List<TableColumnParameter<MediaFile>> columnsParameters = mediaFileTableModel.getMediaColumnsParameters();
+		
+		for (int colIdx = 0; colIdx < columnsParameters.size();  colIdx++) {
+			
+			TableCellRenderer renderer = columnsParameters.get(colIdx).cellRenderer();
+			if (renderer != null) {
+				 getColumnModel().getColumn(colIdx).setCellRenderer(renderer);
+			}
+			getColumnModel().getColumn(colIdx).setPreferredWidth(columnsParameters.get(colIdx).width());
+			
+			Comparator<?> comparator = columnsParameters.get(colIdx).comparator();
+			if (comparator != null) {
+				sorter.setComparator(colIdx, comparator);
+			}
+		}
 		
 		// Allow single row selection only
 		ListSelectionModel listSelectionModel = new DefaultListSelectionModel();
@@ -45,6 +69,8 @@ public class MediaFileJTable extends JTable {
 		setSelectionModel(listSelectionModel);
 		
 		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		
+		setRowSorter(sorter);
 	}
 
 }

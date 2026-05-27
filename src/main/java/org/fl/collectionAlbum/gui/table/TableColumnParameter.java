@@ -25,14 +25,16 @@ SOFTWARE.
 package org.fl.collectionAlbum.gui.table;
 
 import java.util.Comparator;
+import java.util.function.Function;
 
 import javax.swing.table.TableCellRenderer;
 
-public record TableColumnParameter(
+public record TableColumnParameter<T>(
 		String name, 
 		int width, 
 		TableCellRenderer cellRenderer, 
 		Comparator<?> comparator, 
-		Class<?> valueClass) {
+		Class<?> valueClass,
+		Function<T, Object> valueGetter) {
 
 }

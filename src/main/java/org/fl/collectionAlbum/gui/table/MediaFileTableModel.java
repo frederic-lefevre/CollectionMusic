@@ -24,37 +24,28 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui.table;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.stream.Stream;
 
 import javax.swing.table.AbstractTableModel;
 
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.gui.UpdatableElement;
 import org.fl.collectionAlbum.mediaFile.MediaFile;
-import org.fl.collectionAlbum.mediaFile.metadata.MediaFileMetadata;
 
 public class MediaFileTableModel extends AbstractTableModel implements UpdatableElement {
 
 	private static final long serialVersionUID = 1L;
 
-	public static final int FILE_COL_IDX = 0;
-	
-	private static final List<String> baseEntetes = List.of("Fichiers");
-	
-	private final List<String> streamInfoEntetes;
-	private final List<String> normalizedTagsEntetes;
-	private final List<String> entetes;
+	private final List<TableColumnParameter<MediaFile>> mediaColumnsParameters;
+	private final int nbColumns;
 	
 	private final List<MediaFile> mediaFiles;
 	
 	public MediaFileTableModel(List<MediaFile> mediaFiles, ContentNature contentNature) {
 		super();
 		this.mediaFiles = mediaFiles;
-		this.streamInfoEntetes = contentNature.getStreamMetadataNames();
-		this.normalizedTagsEntetes = contentNature.getNormalizedMetadataNames();		
-		this.entetes = Stream.of(baseEntetes, streamInfoEntetes, normalizedTagsEntetes).flatMap(Collection::stream).toList();
+		this.mediaColumnsParameters = MediaFileTableColumns.mediaColumnsParameters(contentNature);
+		this.nbColumns = mediaColumnsParameters.size();		
 	}
 	
 	@Override
@@ -68,40 +59,34 @@ public class MediaFileTableModel extends AbstractTableModel implements Updatable
 
 	@Override
 	public int getColumnCount() {
-		return entetes.size();
+		return nbColumns;
 	}
 
 	@Override
 	public String getColumnName(int col) {
-	    return entetes.get(col);
+	    return mediaColumnsParameters.get(col).name();
 	}
 	
+    @Override
+    public Class<?> getColumnClass(int columnIndex) {
+    	return mediaColumnsParameters.get(columnIndex).valueClass();
+    }
+    
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		
 		if (rowIndex < mediaFiles.size()) {
 			MediaFile mediaFile = mediaFiles.get(rowIndex);
-			if (columnIndex == FILE_COL_IDX) {
-				return mediaFile.getFileName();
-			} else {
+			
+			return mediaColumnsParameters.get(columnIndex).valueGetter().apply(mediaFile);
 
-				MediaFileMetadata mediaFileMetadata = mediaFile.getMetadata();
-				if (mediaFileMetadata == null) {
-					return null;
-				} else if ((columnIndex > FILE_COL_IDX) && (columnIndex < streamInfoEntetes.size() + 1)) {
-
-					return mediaFileMetadata.getStreamMetadata().get(streamInfoEntetes.get(columnIndex - 1)).value();
-
-				} else if ((columnIndex > streamInfoEntetes.size()) && (columnIndex < entetes.size() + 1)) {
-
-					return mediaFileMetadata.getNormalizedTags().get(normalizedTagsEntetes.get(columnIndex - (streamInfoEntetes.size() + 1))).value();
-				} else {
-					return null;
-				}
-			}
 		} else {
 			return null;
 		}
+	}
+
+	public List<TableColumnParameter<MediaFile>> getMediaColumnsParameters() {
+		return mediaColumnsParameters;
 	}
 
 	@Override
