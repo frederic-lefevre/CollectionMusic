@@ -47,7 +47,7 @@ public class MediaFilePathsJTable extends JTable {
 	private static final Logger tLog = Logger.getLogger(MediaFilePathsJTable.class.getName());
 	
 	private static final MediaFilePathAlbumComparator MEDIA_FILE_PATH_ALBUM_COMPARATOR = new MediaFilePathAlbumComparator();
-	private static final CollectionUtils.LongComparator LONG_COMPARATOR = new CollectionUtils.LongComparator();
+	private static final CollectionUtils.IntegerComparator INTEGER_COMPARATOR = new CollectionUtils.IntegerComparator();
 	
 	public MediaFilePathsJTable(MediaFilePathsTableModel mediaFilePathsTableModel, GenerationPane generationPane) {
 		super(mediaFilePathsTableModel);
@@ -56,11 +56,13 @@ public class MediaFilePathsJTable extends JTable {
 		
 		getColumnModel().getColumn(MediaFilePathsTableModel.ALBUMS_COL_IDX).setCellRenderer(new AlbumsRenderer());
 		getColumnModel().getColumn(MediaFilePathsTableModel.PATH_COL_IDX).setPreferredWidth(700);
-		getColumnModel().getColumn(MediaFilePathsTableModel.ALBUMS_COL_IDX).setPreferredWidth(700);
-		getColumnModel().getColumn(MediaFilePathsTableModel.NB_FILES_COL_IDX).setPreferredWidth(125);
-		getColumnModel().getColumn(MediaFilePathsTableModel.COVER_IMAGE_COL_IDX).setPreferredWidth(140);
+		getColumnModel().getColumn(MediaFilePathsTableModel.ALBUMS_COL_IDX).setPreferredWidth(680);
+		getColumnModel().getColumn(MediaFilePathsTableModel.NB_FILES_COL_IDX).setPreferredWidth(100);
+		getColumnModel().getColumn(MediaFilePathsTableModel.COVER_IMAGE_COL_IDX).setPreferredWidth(100);
 		getColumnModel().getColumn(MediaFilePathsTableModel.EXTENSION_COL_IDX).setPreferredWidth(100);
+		getColumnModel().getColumn(MediaFilePathsTableModel.METADATA_CHECK_COL_IDX).setPreferredWidth(100);
 		getColumnModel().getColumn(MediaFilePathsTableModel.COVER_IMAGE_COL_IDX).setCellRenderer(new CollectionBooleanRenderer());
+		getColumnModel().getColumn(MediaFilePathsTableModel.METADATA_CHECK_COL_IDX).setCellRenderer(new CollectionBooleanRenderer());
 				
 		// Allow single row selection only
 		ListSelectionModel listSelectionModel = new DefaultListSelectionModel();
@@ -74,7 +76,7 @@ public class MediaFilePathsJTable extends JTable {
 		// Row sorter
 		TableRowSorter<MediaFilePathsTableModel> sorter = new TableRowSorter<>(mediaFilePathsTableModel);
 		sorter.setComparator(MediaFilePathsTableModel.ALBUMS_COL_IDX, MEDIA_FILE_PATH_ALBUM_COMPARATOR);
-		sorter.setComparator(MediaFilePathsTableModel.NB_FILES_COL_IDX, LONG_COMPARATOR);
+		sorter.setComparator(MediaFilePathsTableModel.NB_FILES_COL_IDX, INTEGER_COMPARATOR);
 		setRowSorter(sorter);
 				
 	}

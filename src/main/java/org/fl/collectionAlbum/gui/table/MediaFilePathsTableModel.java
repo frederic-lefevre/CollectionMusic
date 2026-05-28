@@ -41,8 +41,10 @@ public class MediaFilePathsTableModel extends AbstractTableModel implements Upda
 	public static final int NB_FILES_COL_IDX = 2;
 	public static final int COVER_IMAGE_COL_IDX = 3;
 	public static final int EXTENSION_COL_IDX = 4;
+	public static final int METADATA_CHECK_COL_IDX = 5;
 	
-	private static final String[] entetes = {"Chemins", "Albums", "Nombre de medias", "Image de la pochette", "Type de media"};
+	private static final String[] entetes = {"<html>Chemins des fichiers<br>media</html>", 
+			"Albums", "<html>Nombre de<br>medias</html>", "<html>Image de la<br>pochette</html>", "Type de media", "<html>Metadata<br>equivalentes</html>"};
 	
 	private final List<MediaFilePath> mediaFilePaths;
 	
@@ -80,6 +82,7 @@ public class MediaFilePathsTableModel extends AbstractTableModel implements Upda
 			case NB_FILES_COL_IDX -> Long.class;
 			case COVER_IMAGE_COL_IDX -> Boolean.class;
 			case EXTENSION_COL_IDX -> String.class;
+			case METADATA_CHECK_COL_IDX -> Boolean.class;
 			default -> Object.class;
 		};
 	}
@@ -93,6 +96,7 @@ public class MediaFilePathsTableModel extends AbstractTableModel implements Upda
 			case NB_FILES_COL_IDX -> mediaFilePaths.get(rowIndex).getMediaFileNumber();
 			case COVER_IMAGE_COL_IDX -> mediaFilePaths.get(rowIndex).hasCover();
 			case EXTENSION_COL_IDX -> mediaFilePaths.get(rowIndex).getMediaFileExtension();
+			case METADATA_CHECK_COL_IDX -> mediaFilePaths.get(rowIndex).hasEquivalentStreamMetadata();
 			default -> null;
 		};
 	}

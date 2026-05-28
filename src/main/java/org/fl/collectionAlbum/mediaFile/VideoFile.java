@@ -43,4 +43,9 @@ public class VideoFile extends MediaFile {
 		// no parsing yet
 		return videoMetadata;
 	}
+	
+	@Override
+	public boolean hasEquivalentStreamMetadata(MediaFile otherMediaFile) {	
+		return (otherMediaFile instanceof VideoFile);
+	}
 }

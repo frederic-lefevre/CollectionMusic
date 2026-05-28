@@ -71,4 +71,6 @@ public abstract class MediaFile {
 	public Optional<Long> getSize() {
 		return size;
 	}
+	
+	public abstract boolean hasEquivalentStreamMetadata(MediaFile otherMediaFile);
 }

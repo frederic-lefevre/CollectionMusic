@@ -28,6 +28,7 @@ import java.nio.file.Path;
 
 import org.fl.collectionAlbum.format.AudioFileType;
 import org.fl.collectionAlbum.mediaFile.metadata.AudioMetadata;
+import org.fl.collectionAlbum.mediaFile.metadata.AudioStreamMetadata;
 import org.fl.collectionAlbum.mediaFile.metadata.MediaFileMetadata;
 
 public abstract class AudioFile extends MediaFile {
@@ -51,5 +52,30 @@ public abstract class AudioFile extends MediaFile {
 			audioMetadata = parseMetadata();
 		}
 		return audioMetadata;
+	}
+	
+	public boolean hasEquivalentStreamMetadata(MediaFile otherMediaFile) {
+		
+		if (otherMediaFile instanceof AudioFile otherAudioFile) {
+			
+			if (audioMetadata == null) {
+				return otherAudioFile.getAudioMetadata() == null;
+			} else if (otherAudioFile.getAudioMetadata() == null) {
+				return false;
+			} else {
+				AudioStreamMetadata streamInfo =  audioMetadata.getAudioStreamMetadata();
+				AudioStreamMetadata otherStreamInfo =   otherAudioFile.getAudioMetadata().getAudioStreamMetadata();
+				if (streamInfo == null) {
+					return otherStreamInfo == null;
+				} else if (otherStreamInfo == null) {
+					return false;
+				} else {
+					return streamInfo.isEquivalentTo(otherStreamInfo);
+				}
+				
+			}
+		} else {
+			return false;
+		}		
 	}
 }

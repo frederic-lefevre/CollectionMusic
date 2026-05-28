@@ -42,6 +42,15 @@ public record AudioStreamMetadata (
 	public static final String NUMBER_OF_CHANNELS = "Canaux";
 	public static final String TRACK_DURATION = "Durée";
 	
+	public boolean isEquivalentTo(AudioStreamMetadata otherStreamInfo) {
+		// All field equals except track duration
+		return isLossless().value().equals(otherStreamInfo.isLossless().value()) &&
+				samplingRate().value().equals(otherStreamInfo.samplingRate().value()) &&
+				bitDepth().value().equals(otherStreamInfo.bitDepth().value()) &&
+				bitRate().value().equals(otherStreamInfo.bitRate().value()) &&
+				numberOfChannels().value().equals(otherStreamInfo.numberOfChannels().value());
+	}
+	
 	public Map<String, MetadataElement<?>> getMetadataMap() {
 		
 		return Map.of(

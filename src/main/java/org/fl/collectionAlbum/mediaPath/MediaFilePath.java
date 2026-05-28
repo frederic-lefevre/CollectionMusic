@@ -54,6 +54,7 @@ public class MediaFilePath {
 	private final Set<Album> albumsSet;
 	private Path coverPath;
 	private List<MediaFile> mediaFiles;
+	private boolean hasEquivalentMetadata;
 	
 	private String mediaFileExtension;
 	
@@ -64,6 +65,7 @@ public class MediaFilePath {
 		albumsSet = new HashSet<>();
 		mediaFileExtension = null;
 		coverPath = null;
+		hasEquivalentMetadata = false;
 		Set<String> mediaFileExtensions = new HashSet<>();
 		
 		try (Stream<Path> fileStream = Files.list(mediaFilesPath)) {
@@ -111,6 +113,10 @@ public class MediaFilePath {
 				mLog.log(level, "More than 1 media file type found in " + mediaFilesPath.toString());
 				mediaFileExtension = mediaFileExtensions.toString();
 			}
+			
+			hasEquivalentMetadata = (mediaFiles == null) ||
+					mediaFiles.isEmpty() ||
+					mediaFiles.stream().allMatch(m -> mediaFiles.get(0).hasEquivalentStreamMetadata(m));
 			
 		} catch (Exception e) {
 			mLog.log(Level.SEVERE, "Exception when listing files in " + mediaFilesPath, e);			
@@ -172,6 +178,17 @@ public class MediaFilePath {
 
 	public String getMediaFileExtension() {
 		return mediaFileExtension;
+	}
+	
+	public boolean hasEquivalentStreamMetadata() {
+		return hasEquivalentMetadata;
+	}
+	
+	// TODO completer ci dessous
+	public boolean checkVersusAlbumDeclaration(int bitDepth, double samplingRate) {
+		
+		mediaFiles.stream().map(m -> m.getMetadata().getStreamMetadata());
+		return true;
 	}
 
 }
