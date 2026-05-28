@@ -29,8 +29,10 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.Set;
 
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
 import org.fl.collectionAlbum.Control;
@@ -39,11 +41,13 @@ import org.fl.collectionAlbum.gui.CollectionMenuItems;
 import org.fl.collectionAlbum.gui.DetailedAlbumAndDiscogsInfoPane;
 import org.fl.collectionAlbum.gui.GenerationPane;
 import org.fl.collectionAlbum.gui.listener.MediaFilePathCommandListener;
-import org.fl.collectionAlbum.gui.listener.OsActionListener;
 import org.fl.collectionAlbum.gui.listener.AlbumCustomActionListener.CustomAlbumAction;
 import org.fl.collectionAlbum.gui.table.AlbumTableColumn;
 import org.fl.collectionAlbum.gui.table.AlbumsScrollJTablePane;
+import org.fl.collectionAlbum.gui.table.MediaFileJTable;
 import org.fl.collectionAlbum.gui.table.MediaFilePathsJTable;
+import org.fl.collectionAlbum.gui.table.MediaFileTableModel;
+import org.fl.collectionAlbum.mediaFile.MediaFile;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.fl.collectionAlbum.osAction.OsAction;
 
@@ -62,6 +66,8 @@ public class MediaFilePathMouseAdapter extends MouseAdapter {
 		this.mediaFilePathMenuItems = new CollectionMenuItems<>();
 		this.generationPane = generationPane;
 		
+		JMenuItem showMediaFiles = new JMenuItem("Fichiers media");
+		
 		osActions.forEach(osAction -> 
 			mediaFilePathMenuItems.addMenuItem(
 				osAction.actionTitle(),
@@ -70,6 +76,7 @@ public class MediaFilePathMouseAdapter extends MouseAdapter {
 				localJPopupMenu
 			)
 		);
+		
 	}
 
 	@Override
@@ -120,7 +127,17 @@ public class MediaFilePathMouseAdapter extends MouseAdapter {
 					JOptionPane.showMessageDialog(null, albumsScrollJTablePane, "Albums correspondants", JOptionPane.PLAIN_MESSAGE);
 				}
 			} else {
-				(new OsActionListener<>(mediaFilePath.getPath().toString(), Control.getDisplayFolderAction())).actionPerformed(null);
+				List<MediaFile> mediaFileList = mediaFilePath.getMediaFiles();
+				if ((mediaFileList != null) && !mediaFileList.isEmpty()) {
+					MediaFileTableModel mediaFileTableModel = new MediaFileTableModel(mediaFileList, mediaFilePath.getContentNature());
+					MediaFileJTable mediaFileJTable = new MediaFileJTable(mediaFileTableModel);
+					
+					// Scroll pane to contain the media path table
+					JScrollPane mediaFileScrollTable = new JScrollPane(mediaFileJTable);
+					mediaFileScrollTable.setPreferredSize(Control.getMainSubPaneDimension());
+					
+					JOptionPane.showMessageDialog(null, mediaFileScrollTable, "Fichiers media correspondants", JOptionPane.PLAIN_MESSAGE);
+				}
 			}
 		}
 	}

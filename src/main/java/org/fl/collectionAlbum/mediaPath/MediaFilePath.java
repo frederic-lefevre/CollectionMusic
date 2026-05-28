@@ -50,6 +50,7 @@ public class MediaFilePath {
 	private static final Set<String> infoFileExtensions = Set.of("pdf","crt", "bup", "ifo", "idx2");
 	
 	private final Path mediaFilesPath;
+	private final ContentNature contentNature;
 	private final Set<Album> albumsSet;
 	private Path coverPath;
 	private List<MediaFile> mediaFiles;
@@ -59,6 +60,7 @@ public class MediaFilePath {
 	public MediaFilePath(Path mediaFilesPath, ContentNature contentNature, boolean logWarnings) {
 		
 		this.mediaFilesPath = mediaFilesPath;
+		this.contentNature = contentNature;
 		albumsSet = new HashSet<>();
 		mediaFileExtension = null;
 		coverPath = null;
@@ -119,6 +121,10 @@ public class MediaFilePath {
 		return mediaFilesPath;
 	}
 	
+	public ContentNature getContentNature() {
+		return contentNature;
+	}
+
 	public Path getCoverPath() {
 		return coverPath;
 	}
