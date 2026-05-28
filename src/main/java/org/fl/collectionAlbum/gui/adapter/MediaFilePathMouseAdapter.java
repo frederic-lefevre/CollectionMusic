@@ -24,6 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui.adapter;
 
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -66,7 +67,9 @@ public class MediaFilePathMouseAdapter extends MouseAdapter {
 		this.mediaFilePathMenuItems = new CollectionMenuItems<>();
 		this.generationPane = generationPane;
 		
-		JMenuItem showMediaFiles = new JMenuItem("Fichiers media");
+		JMenuItem showMediaFiles = new JMenuItem("Afficher la liste des fichiers media");
+		showMediaFiles.addActionListener(new MediaFilePathActionListener(mediaFilePathsTable));
+		localJPopupMenu.add(showMediaFiles);
 		
 		osActions.forEach(osAction -> 
 			mediaFilePathMenuItems.addMenuItem(
@@ -127,22 +130,52 @@ public class MediaFilePathMouseAdapter extends MouseAdapter {
 					JOptionPane.showMessageDialog(null, albumsScrollJTablePane, "Albums correspondants", JOptionPane.PLAIN_MESSAGE);
 				}
 			} else {
-				List<MediaFile> mediaFileList = mediaFilePath.getMediaFiles();
-				if ((mediaFileList != null) && !mediaFileList.isEmpty()) {
-					MediaFileTableModel mediaFileTableModel = new MediaFileTableModel(mediaFileList, mediaFilePath.getContentNature());
-					MediaFileJTable mediaFileJTable = new MediaFileJTable(mediaFileTableModel);
-					
-					// Scroll pane to contain the media path table
-					JScrollPane mediaFileScrollTable = new JScrollPane(mediaFileJTable);
-					mediaFileScrollTable.setPreferredSize(Control.getMainSubPaneDimension());
-					
-					JOptionPane.showMessageDialog(null, mediaFileScrollTable, "Fichiers media correspondants", JOptionPane.PLAIN_MESSAGE);
-				}
+				displayMediaFileList(mediaFilePath);
 			}
+		}
+	}
+	
+	private static void displayMediaFileList(MediaFilePathsJTable mediaFilePathsTable) {
+		
+		MediaFilePath mediaFilePath = mediaFilePathsTable.getSelectedMediaFilePath();
+		if (mediaFilePath != null) {
+			displayMediaFileList(mediaFilePath);
+		}
+	}
+	
+	private static void displayMediaFileList(MediaFilePath mediaFilePath) {
+		
+		List<MediaFile> mediaFileList = mediaFilePath.getMediaFiles();
+		if ((mediaFileList != null) && !mediaFileList.isEmpty()) {
+			MediaFileTableModel mediaFileTableModel = new MediaFileTableModel(mediaFileList, mediaFilePath.getContentNature());
+			MediaFileJTable mediaFileJTable = new MediaFileJTable(mediaFileTableModel);
+			
+			// Scroll pane to contain the media path table
+			JScrollPane mediaFileScrollTable = new JScrollPane(mediaFileJTable);
+			mediaFileScrollTable.setPreferredSize(Control.getMainSubPaneDimension());
+			
+			JOptionPane.showMessageDialog(null, mediaFileScrollTable, "Fichiers media correspondants", JOptionPane.PLAIN_MESSAGE);
 		}
 	}
 	
 	private void enableMenuItems() {
 		mediaFilePathMenuItems.enableMenuItems(mediaFilePathsTable.getSelectedMediaFilePath());
+	}
+	
+	private static class MediaFilePathActionListener implements java.awt.event.ActionListener {
+
+		private final MediaFilePathsJTable mediaFilePathsTable;
+		
+		public MediaFilePathActionListener(MediaFilePathsJTable mediaFilePathsTable) {
+			super();
+			this.mediaFilePathsTable = mediaFilePathsTable;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+			displayMediaFileList(mediaFilePathsTable);
+		}
+		
 	}
 }
