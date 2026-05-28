@@ -33,7 +33,7 @@ import java.util.logging.Level;
 import java.util.stream.Stream;
 
 import org.fl.collectionAlbum.albums.Album;
-import org.fl.collectionAlbum.format.AbstractAlbumMediaFiles;
+import org.fl.collectionAlbum.format.AbstractAlbumMediaFilePaths;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.format.Format;
 import org.fl.collectionAlbum.format.Format.RangementSupportPhysique;
@@ -102,10 +102,10 @@ public class RapportAlbum extends RapportMusicArtefact {
 		if (format.hasMediaFiles()) {
 			
 			Stream.of(ContentNature.values()).forEachOrdered(contentNature -> {
-				if (format.hasMediaFiles(contentNature)) {
+				if (format.hasMediaFilePaths(contentNature)) {
 					write("  <h4>Fichiers " + contentNature.getNom() + "</h4>\n");
 					write("  <table>\n");
-					format.getMediaFiles(contentNature).forEach(detailInCell);
+					format.getMediaFilePaths(contentNature).forEach(detailInCell);
 					write("  </table>\n");
 				}
 			});
@@ -123,7 +123,7 @@ public class RapportAlbum extends RapportMusicArtefact {
 		}
 	}
 	
-	private Consumer<AbstractAlbumMediaFiles> detailInCell = mediaFile -> {
+	private Consumer<AbstractAlbumMediaFilePaths> detailInCell = mediaFile -> {
 		write("    <tr><td class=\"mediadetail\">\n");
 		write(mediaFile.displayMediaFileDetailWithFileLink("<br/>\n", true));
 		write("\n    </td></tr>\n");

@@ -30,7 +30,7 @@ import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
 import tools.jackson.databind.node.ObjectNode;
 
-public class AlbumVideoFiles extends AbstractAlbumMediaFiles {
+public class AlbumVideoFiles extends AbstractAlbumMediaFilePaths {
 
 	private final int width;
 	private final int height;

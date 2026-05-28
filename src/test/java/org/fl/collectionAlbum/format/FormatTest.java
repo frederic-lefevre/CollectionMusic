@@ -96,8 +96,8 @@ class FormatTest {
 
 		assertThat(format1.getContentNatures()).isEmpty();
 
-		assertThat(format1.hasMediaFiles(ContentNature.AUDIO)).isFalse();
-		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isFalse();
+		assertThat(format1.hasMediaFilePaths(ContentNature.AUDIO)).isFalse();
+		assertThat(format1.hasMediaFilePaths(ContentNature.VIDEO)).isFalse();
 		
 		assertThat(format1.hasError()).isTrue();
 	}
@@ -110,8 +110,8 @@ class FormatTest {
 		Format format1 = new Format(jf1) ;
 
 		assertThat(format1.getPoids()).isEqualTo(3);
-		assertThat(format1.hasMediaFiles(ContentNature.AUDIO)).isFalse();
-		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isFalse();
+		assertThat(format1.hasMediaFilePaths(ContentNature.AUDIO)).isFalse();
+		assertThat(format1.hasMediaFilePaths(ContentNature.VIDEO)).isFalse();
 		
 		assertMediaSupports(format1, Set.of(MediaSupports.CD));
 		
@@ -132,11 +132,11 @@ class FormatTest {
 		Format format1 = new Format(jf1) ;
 		
 		assertThat(format1.getPoids()).isEqualTo(2.5);
-		assertThat(format1.getMediaFiles(ContentNature.AUDIO)).isEmpty();
-		assertThat(format1.getMediaFiles(ContentNature.VIDEO)).isEmpty();
-		assertThat(format1.getAllMediaFiles()).isEmpty();
-		assertThat(format1.hasMediaFiles(ContentNature.AUDIO)).isFalse();
-		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isFalse();
+		assertThat(format1.getMediaFilePaths(ContentNature.AUDIO)).isEmpty();
+		assertThat(format1.getMediaFilePaths(ContentNature.VIDEO)).isEmpty();
+		assertThat(format1.getAllMediaFilePaths()).isEmpty();
+		assertThat(format1.hasMediaFilePaths(ContentNature.AUDIO)).isFalse();
+		assertThat(format1.hasMediaFilePaths(ContentNature.VIDEO)).isFalse();
 		assertThat(format1.hasContentNature(ContentNature.AUDIO)).isTrue();
 		assertThat(format1.hasContentNature(ContentNature.VIDEO)).isFalse();
 		assertThat(format1.hasMissingOrInvalidMediaFilePath(ContentNature.AUDIO)).isFalse();
@@ -158,11 +158,11 @@ class FormatTest {
 		Format format1 = new Format(jf1) ;
 		
 		assertThat(format1.getPoids()).isEqualTo(3);
-		assertThat(format1.getMediaFiles(ContentNature.AUDIO)).isEmpty();
-		assertThat(format1.getMediaFiles(ContentNature.VIDEO)).isEmpty();
-		assertThat(format1.getAllMediaFiles()).isEmpty();
-		assertThat(format1.hasMediaFiles(ContentNature.AUDIO)).isFalse();
-		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isFalse();
+		assertThat(format1.getMediaFilePaths(ContentNature.AUDIO)).isEmpty();
+		assertThat(format1.getMediaFilePaths(ContentNature.VIDEO)).isEmpty();
+		assertThat(format1.getAllMediaFilePaths()).isEmpty();
+		assertThat(format1.hasMediaFilePaths(ContentNature.AUDIO)).isFalse();
+		assertThat(format1.hasMediaFilePaths(ContentNature.VIDEO)).isFalse();
 		assertThat(format1.hasContentNature(ContentNature.AUDIO)).isTrue();
 		assertThat(format1.hasContentNature(ContentNature.VIDEO)).isTrue();
 		
@@ -194,11 +194,11 @@ class FormatTest {
 		assertThat(format3.getPoids()).isEqualTo(format1.getPoids() + format2.getPoids());
 		
 		assertThat(format3.hasError()).isFalse();
-		assertThat(format3.hasMediaFiles(ContentNature.AUDIO)).isFalse();
-		assertThat(format3.getMediaFiles(ContentNature.AUDIO)).isNull();
-		assertThat(format3.hasMediaFiles(ContentNature.VIDEO)).isFalse();
-		assertThat(format3.getMediaFiles(ContentNature.VIDEO)).isNull();
-		assertThat(format3.getAllMediaFiles()).isEmpty();
+		assertThat(format3.hasMediaFilePaths(ContentNature.AUDIO)).isFalse();
+		assertThat(format3.getMediaFilePaths(ContentNature.AUDIO)).isNull();
+		assertThat(format3.hasMediaFilePaths(ContentNature.VIDEO)).isFalse();
+		assertThat(format3.getMediaFilePaths(ContentNature.VIDEO)).isNull();
+		assertThat(format3.getAllMediaFilePaths()).isEmpty();
 		assertThat(format3.hasContentNature(ContentNature.AUDIO)).isTrue();
 		assertThat(format3.hasContentNature(ContentNature.VIDEO)).isFalse();
 		
@@ -230,11 +230,11 @@ class FormatTest {
 		Format format1 = new Format(jf1) ;
 		
 		assertThat(format1.getPoids()).isEqualTo(2.5);
-		assertThat(format1.hasMediaFiles(ContentNature.AUDIO)).isTrue();
-		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isFalse();
-		assertThat(format1.getMediaFiles(ContentNature.VIDEO)).isEmpty();
+		assertThat(format1.hasMediaFilePaths(ContentNature.AUDIO)).isTrue();
+		assertThat(format1.hasMediaFilePaths(ContentNature.VIDEO)).isFalse();
+		assertThat(format1.getMediaFilePaths(ContentNature.VIDEO)).isEmpty();
 		
-		assertThat(format1.getMediaFiles(ContentNature.AUDIO)).singleElement()
+		assertThat(format1.getMediaFilePaths(ContentNature.AUDIO)).singleElement()
 			.satisfies(audio -> {
 				assertThat(audio).isNotNull().isInstanceOf(LosslessAlbumAudioFiles.class);
 				
@@ -245,7 +245,7 @@ class FormatTest {
 				assertThat(lossLessAudio.getSource()).isEqualTo("MOFI Fidelity Sound Lab");
 			});
 		
-		assertThat(format1.getAllMediaFiles()).hasSameElementsAs(format1.getMediaFiles(ContentNature.AUDIO));
+		assertThat(format1.getAllMediaFilePaths()).hasSameElementsAs(format1.getMediaFilePaths(ContentNature.AUDIO));
 		
 		assertMediaSupports(format1, Set.of(MediaSupports.CD, MediaSupports.Vinyl45T));
 		
@@ -277,11 +277,11 @@ class FormatTest {
 		Format format1 = new Format(jf1) ;
 		
 		assertThat(format1.getPoids()).isEqualTo(2.5);
-		assertThat(format1.hasMediaFiles(ContentNature.AUDIO)).isTrue();
-		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isFalse();
-		assertThat(format1.getMediaFiles(ContentNature.VIDEO)).isEmpty();
+		assertThat(format1.hasMediaFilePaths(ContentNature.AUDIO)).isTrue();
+		assertThat(format1.hasMediaFilePaths(ContentNature.VIDEO)).isFalse();
+		assertThat(format1.getMediaFilePaths(ContentNature.VIDEO)).isEmpty();
 
-		assertThat(format1.getMediaFiles(ContentNature.AUDIO)).singleElement()
+		assertThat(format1.getMediaFilePaths(ContentNature.AUDIO)).singleElement()
 			.satisfies(audio -> {
 				assertThat(audio).isNotNull().isInstanceOf(LosslessAlbumAudioFiles.class);
 				
@@ -292,7 +292,7 @@ class FormatTest {
 				assertThat(lossLessAudio.getSource()).isEqualTo("MOFI Fidelity Sound Lab");
 			});
 		
-		assertThat(format1.getAllMediaFiles()).hasSameElementsAs(format1.getMediaFiles(ContentNature.AUDIO));
+		assertThat(format1.getAllMediaFilePaths()).hasSameElementsAs(format1.getMediaFilePaths(ContentNature.AUDIO));
 		
 		assertMediaSupports(format1, Set.of(MediaSupports.CD, MediaSupports.Vinyl45T));
 		
@@ -326,11 +326,11 @@ class FormatTest {
 		Format format1 = new Format(jf1) ;
 		
 		assertThat(format1.getPoids()).isEqualTo(2.5);
-		assertThat(format1.hasMediaFiles(ContentNature.AUDIO)).isTrue();
-		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isFalse();
-		assertThat(format1.getMediaFiles(ContentNature.VIDEO)).isEmpty();
+		assertThat(format1.hasMediaFilePaths(ContentNature.AUDIO)).isTrue();
+		assertThat(format1.hasMediaFilePaths(ContentNature.VIDEO)).isFalse();
+		assertThat(format1.getMediaFilePaths(ContentNature.VIDEO)).isEmpty();
 
-		assertThat(format1.getMediaFiles(ContentNature.AUDIO)).hasSize(2)
+		assertThat(format1.getMediaFilePaths(ContentNature.AUDIO)).hasSize(2)
 			.anySatisfy(audio -> {
 				assertThat(audio).isNotNull().isInstanceOf(LossyAlbumAudioFiles.class);
 				
@@ -359,7 +359,7 @@ class FormatTest {
 					csvAudio -> assertThat(csvAudio).isEqualTo("320.0 kbit/s;44.1 KHz;MP3;MOFI Fidelity Sound Lab;Mix Bob Smith"),
 					csvAudio -> assertThat(csvAudio).isEqualTo("24 bits;88.0 KHz;FLAC;CD"));
 
-		assertThat(format1.getAllMediaFiles()).hasSameElementsAs(format1.getMediaFiles(ContentNature.AUDIO));
+		assertThat(format1.getAllMediaFilePaths()).hasSameElementsAs(format1.getMediaFilePaths(ContentNature.AUDIO));
 		
 		assertMediaSupports(format1, Set.of(MediaSupports.CD, MediaSupports.Vinyl45T));
 		
@@ -398,10 +398,10 @@ class FormatTest {
 		Format format1 = new Format(jf1) ;
 		
 		assertThat(format1.getPoids()).isEqualTo(2.5);
-		assertThat(format1.hasMediaFiles(ContentNature.AUDIO)).isTrue();
-		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isTrue();
+		assertThat(format1.hasMediaFilePaths(ContentNature.AUDIO)).isTrue();
+		assertThat(format1.hasMediaFilePaths(ContentNature.VIDEO)).isTrue();
 
-		assertThat(format1.getMediaFiles(ContentNature.AUDIO)).singleElement()
+		assertThat(format1.getMediaFilePaths(ContentNature.AUDIO)).singleElement()
 			.satisfies(audio -> {
 				assertThat(audio).isNotNull().isInstanceOf(LosslessAlbumAudioFiles.class);
 				
@@ -412,7 +412,7 @@ class FormatTest {
 				assertThat(lossLessAudio.getSource()).isEqualTo("MOFI Fidelity Sound Lab");
 			});
 		
-		assertThat(format1.getMediaFiles(ContentNature.VIDEO)).singleElement()
+		assertThat(format1.getMediaFilePaths(ContentNature.VIDEO)).singleElement()
 			.asInstanceOf(InstanceOfAssertFactories.type(AlbumVideoFiles.class))
 			.satisfies(videoFile -> {
 				assertThat(videoFile.getHeight()).isEqualTo(480);
@@ -422,9 +422,9 @@ class FormatTest {
 				assertThat(videoFile.getNote()).isEqualTo("version noir et blanc");
 			});
 		
-		assertThat(format1.getAllMediaFiles())
-			.containsAll(format1.getMediaFiles(ContentNature.VIDEO))
-			.containsAll(format1.getMediaFiles(ContentNature.AUDIO));
+		assertThat(format1.getAllMediaFilePaths())
+			.containsAll(format1.getMediaFilePaths(ContentNature.VIDEO))
+			.containsAll(format1.getMediaFilePaths(ContentNature.AUDIO));
 		
 		assertMediaSupports(format1, Set.of(MediaSupports.CD, MediaSupports.Vinyl45T));
 		
@@ -465,10 +465,10 @@ class FormatTest {
 		ObjectNode jf1 = (ObjectNode)mapper.readTree(formatStr1);
 		Format format1 = new Format(jf1) ;
 
-		assertThat(format1.hasMediaFiles(ContentNature.AUDIO)).isFalse();
-		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isTrue();
+		assertThat(format1.hasMediaFilePaths(ContentNature.AUDIO)).isFalse();
+		assertThat(format1.hasMediaFilePaths(ContentNature.VIDEO)).isTrue();
 		
-		assertThat(format1.getMediaFiles(ContentNature.VIDEO)).hasSize(2)
+		assertThat(format1.getMediaFilePaths(ContentNature.VIDEO)).hasSize(2)
 			.asInstanceOf(InstanceOfAssertFactories.list(AlbumVideoFiles.class))
 			.anySatisfy(videoFile -> {
 				assertThat(videoFile.getHeight()).isEqualTo(1024);
@@ -485,7 +485,7 @@ class FormatTest {
 				assertThat(videoFile.getNote()).isEqualTo("version noir et blanc");
 			});
 		
-		assertThat(format1.getAllMediaFiles()).hasSameElementsAs(format1.getMediaFiles(ContentNature.VIDEO));
+		assertThat(format1.getAllMediaFilePaths()).hasSameElementsAs(format1.getMediaFilePaths(ContentNature.VIDEO));
 		
 		assertThat(format1.hasContentNature(ContentNature.VIDEO)).isTrue();
 		assertThat(format1.hasContentNature(ContentNature.AUDIO)).isFalse();
@@ -508,8 +508,8 @@ class FormatTest {
 		Format format1 = new Format(jf1) ;
 
 		assertThat(format1.getPoids()).isZero();
-		assertThat(format1.hasMediaFiles(ContentNature.AUDIO)).isFalse();
-		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isFalse();
+		assertThat(format1.hasMediaFilePaths(ContentNature.AUDIO)).isFalse();
+		assertThat(format1.hasMediaFilePaths(ContentNature.VIDEO)).isFalse();
 		
 		assertMediaSupports(format1, Collections.emptySet());
 		
@@ -526,8 +526,8 @@ class FormatTest {
 		Format format1 = new Format(jf1) ;
 
 		assertThat(format1.getPoids()).isEqualTo(3);
-		assertThat(format1.hasMediaFiles(ContentNature.AUDIO)).isFalse();
-		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isFalse();
+		assertThat(format1.hasMediaFilePaths(ContentNature.AUDIO)).isFalse();
+		assertThat(format1.hasMediaFilePaths(ContentNature.VIDEO)).isFalse();
 		assertThat(format1.hasContentNature(ContentNature.AUDIO)).isFalse();
 		assertThat(format1.hasContentNature(ContentNature.VIDEO)).isTrue();
 		
@@ -550,8 +550,8 @@ class FormatTest {
 		Format format1 = new Format(jf1) ;
 
 		assertThat(format1.getPoids()).isEqualTo(3);
-		assertThat(format1.hasMediaFiles(ContentNature.AUDIO)).isFalse();
-		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isFalse();
+		assertThat(format1.hasMediaFilePaths(ContentNature.AUDIO)).isFalse();
+		assertThat(format1.hasMediaFilePaths(ContentNature.VIDEO)).isFalse();
 		assertThat(format1.hasContentNature(ContentNature.AUDIO)).isTrue();
 		assertThat(format1.hasContentNature(ContentNature.VIDEO)).isFalse();
 		
@@ -576,8 +576,8 @@ class FormatTest {
 		Format format1 = new Format(jf1) ;
 
 		assertThat(format1.getPoids()).isEqualTo(3);
-		assertThat(format1.hasMediaFiles(ContentNature.AUDIO)).isFalse();
-		assertThat(format1.hasMediaFiles(ContentNature.VIDEO)).isFalse();
+		assertThat(format1.hasMediaFilePaths(ContentNature.AUDIO)).isFalse();
+		assertThat(format1.hasMediaFilePaths(ContentNature.VIDEO)).isFalse();
 		assertThat(format1.hasContentNature(ContentNature.AUDIO)).isTrue();
 		assertThat(format1.hasContentNature(ContentNature.VIDEO)).isTrue();
 		

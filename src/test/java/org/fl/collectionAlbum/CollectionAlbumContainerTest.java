@@ -151,7 +151,7 @@ class CollectionAlbumContainerTest {
 		URI pAlbum = RapportStructuresAndNames.getArtisteAlbumRapportRelativeUri(artiste);
 		assertThat(pAlbum).hasToString("artistes/albums/i0.html");
 		
-		assertThat(album.getAllMediaFiles()).singleElement()
+		assertThat(album.getAllMediaFilePaths()).singleElement()
 			.satisfies(mediaFile -> assertThat(mediaFile.getMediaFilePaths()).singleElement()
 					.satisfies(mediaFilePath -> assertThat(mediaFilePath.getAlbumSet()).singleElement()
 							.satisfies(album1 -> assertThat(album1).isEqualTo(album))));

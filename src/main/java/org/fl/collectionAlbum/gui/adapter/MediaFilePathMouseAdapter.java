@@ -24,7 +24,6 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui.adapter;
 
-import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
@@ -43,6 +42,7 @@ import org.fl.collectionAlbum.gui.DetailedAlbumAndDiscogsInfoPane;
 import org.fl.collectionAlbum.gui.GenerationPane;
 import org.fl.collectionAlbum.gui.listener.MediaFilePathCommandListener;
 import org.fl.collectionAlbum.gui.listener.AlbumCustomActionListener.CustomAlbumAction;
+import org.fl.collectionAlbum.gui.listener.MediaFilePathActionListener;
 import org.fl.collectionAlbum.gui.table.AlbumTableColumn;
 import org.fl.collectionAlbum.gui.table.AlbumsScrollJTablePane;
 import org.fl.collectionAlbum.gui.table.MediaFileJTable;
@@ -135,15 +135,7 @@ public class MediaFilePathMouseAdapter extends MouseAdapter {
 		}
 	}
 	
-	private static void displayMediaFileList(MediaFilePathsJTable mediaFilePathsTable) {
-		
-		MediaFilePath mediaFilePath = mediaFilePathsTable.getSelectedMediaFilePath();
-		if (mediaFilePath != null) {
-			displayMediaFileList(mediaFilePath);
-		}
-	}
-	
-	private static void displayMediaFileList(MediaFilePath mediaFilePath) {
+	public static void displayMediaFileList(MediaFilePath mediaFilePath) {
 		
 		List<MediaFile> mediaFileList = mediaFilePath.getMediaFiles();
 		if ((mediaFileList != null) && !mediaFileList.isEmpty()) {
@@ -160,22 +152,5 @@ public class MediaFilePathMouseAdapter extends MouseAdapter {
 	
 	private void enableMenuItems() {
 		mediaFilePathMenuItems.enableMenuItems(mediaFilePathsTable.getSelectedMediaFilePath());
-	}
-	
-	private static class MediaFilePathActionListener implements java.awt.event.ActionListener {
-
-		private final MediaFilePathsJTable mediaFilePathsTable;
-		
-		public MediaFilePathActionListener(MediaFilePathsJTable mediaFilePathsTable) {
-			super();
-			this.mediaFilePathsTable = mediaFilePathsTable;
-		}
-		
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			
-			displayMediaFileList(mediaFilePathsTable);
-		}
-		
 	}
 }

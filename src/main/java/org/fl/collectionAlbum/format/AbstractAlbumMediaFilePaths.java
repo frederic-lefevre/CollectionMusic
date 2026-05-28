@@ -39,9 +39,9 @@ import tools.jackson.databind.node.ArrayNode;
 import tools.jackson.databind.node.JsonNodeFactory;
 import tools.jackson.databind.node.ObjectNode;
 
-public abstract class AbstractAlbumMediaFiles {
+public abstract class AbstractAlbumMediaFilePaths {
 
-	private static final Logger logger = Logger.getLogger(AbstractAlbumMediaFiles.class.getName());
+	private static final Logger logger = Logger.getLogger(AbstractAlbumMediaFilePaths.class.getName());
 	
 	private final String source;
 	private final String note;
@@ -57,7 +57,7 @@ public abstract class AbstractAlbumMediaFiles {
 	private static final String FILE_LINK2 = "\">";
 	private static final String FILE_LINK3 = "</a>";
 	
-	protected AbstractAlbumMediaFiles(ObjectNode mediaJson, String source, String note, Set<MediaFilePath> mediaFilePaths) {
+	protected AbstractAlbumMediaFilePaths(ObjectNode mediaJson, String source, String note, Set<MediaFilePath> mediaFilePaths) {
 		super();
 		this.mediaJson = mediaJson;
 		this.source = source;

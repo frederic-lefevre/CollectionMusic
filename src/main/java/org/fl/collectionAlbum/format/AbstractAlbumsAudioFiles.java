@@ -31,7 +31,7 @@ import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
 import tools.jackson.databind.node.ObjectNode;
 
-public abstract class AbstractAlbumsAudioFiles extends AbstractAlbumMediaFiles {
+public abstract class AbstractAlbumsAudioFiles extends AbstractAlbumMediaFilePaths {
 
 	private final static Logger albumLog = Logger.getLogger(AbstractAlbumsAudioFiles.class.getName());
 	

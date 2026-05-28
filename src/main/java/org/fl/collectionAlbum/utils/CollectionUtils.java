@@ -206,10 +206,10 @@ public class CollectionUtils {
 		buf.append(album.getFormatAlbum().mediaSupportsHtmlList());
 		if (album.hasMediaFiles()) {
 			Stream.of(ContentNature.values()).forEachOrdered(contentNature -> {
-				if (album.getFormatAlbum().hasMediaFiles(contentNature)) {
+				if (album.getFormatAlbum().hasMediaFilePaths(contentNature)) {
 					buf.append("  <h3>Chemins des fichiers " + contentNature.getNom() + ":</h3>\n");
 					buf.append("  <table>\n");
-					album.getFormatAlbum().getMediaFiles(contentNature).forEach(mediaFile -> {
+					album.getFormatAlbum().getMediaFilePaths(contentNature).forEach(mediaFile -> {
 						buf.append("    <tr><td class=\"mediadetail\">\n");
 						buf.append(mediaFile.displayMediaFileDetailWithFileLink("<br/>\n", true));
 						buf.append("    </td></tr>\n");							
