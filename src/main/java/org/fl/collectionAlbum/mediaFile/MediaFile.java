@@ -26,8 +26,10 @@ package org.fl.collectionAlbum.mediaFile;
 
 import java.nio.file.Path;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import org.fl.collectionAlbum.mediaFile.metadata.MediaFileMetadata;
+import org.fl.collectionAlbum.mediaFile.metadata.MetadataElement;
 
 public abstract class MediaFile {
 	
@@ -59,6 +61,7 @@ public abstract class MediaFile {
 	}
 	
 	public abstract MediaFileMetadata getMetadata();
+	public abstract boolean hasEquivalentStreamMetadata(MediaFile otherMediaFile);
 
 	public Optional<Boolean> isValidMediaFile() {
 		return isValidMediaFile;
@@ -72,5 +75,13 @@ public abstract class MediaFile {
 		return size;
 	}
 	
-	public abstract boolean hasEquivalentStreamMetadata(MediaFile otherMediaFile);
+	public boolean haveMetadata(MetadataElement<?>... metadataElements) {
+		
+		return Optional.ofNullable(getMetadata())
+				.map(metadata -> Stream.of(metadataElements)
+						.allMatch(metadataElement -> Optional.ofNullable(metadata.getStreamMetadata())
+								.map(streamMetadata -> streamMetadata.get(metadataElement.name()).value().equals(metadataElement.value()))
+								.orElse(false)))
+				.orElse(false);
+	}
 }

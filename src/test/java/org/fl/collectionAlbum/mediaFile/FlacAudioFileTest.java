@@ -104,6 +104,15 @@ class FlacAudioFileTest {
 			.isEqualTo("John Eliot Gardiner");
 		
 		assertThat(audioMetadata.getAdditionalTags()).isEmpty();
+		
+		assertThat(f1.haveMetadata(new MetadataElement<>(AudioStreamMetadata.BIT_DEPTH, 16))).isTrue();
+		assertThat(f1.haveMetadata(new MetadataElement<>(AudioStreamMetadata.SAMPLING_RATE, 44100L))).isTrue();
+		assertThat(f1.haveMetadata(new MetadataElement<>(AudioStreamMetadata.SAMPLING_RATE, 44100))).isFalse();
+		assertThat(f1.haveMetadata(
+				new MetadataElement<>(AudioStreamMetadata.IS_LOSSLESS, true), 
+				new MetadataElement<>(AudioStreamMetadata.BIT_DEPTH, 16), 
+				new MetadataElement<>(AudioStreamMetadata.SAMPLING_RATE, 44100L)))
+			.isTrue();
 	}
 	
 	@Test
