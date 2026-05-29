@@ -54,6 +54,7 @@ public abstract class AudioFile extends MediaFile {
 		return audioMetadata;
 	}
 	
+	@Override
 	public boolean hasEquivalentStreamMetadata(MediaFile otherMediaFile) {
 		
 		if (otherMediaFile instanceof AudioFile otherAudioFile) {
