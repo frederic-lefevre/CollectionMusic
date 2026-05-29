@@ -47,7 +47,7 @@ import org.fl.collectionAlbum.utils.TemporalUtils;
 public class AlbumTableColumn {
 
 	private static final TableColumnParameter<Album> TITRE = 
-			new TableColumnParameter<>("Titres", 250, new StringToHtmlRenderer(), null, String.class, Album::getTitre);
+			new TableColumnParameter<>("<html>Titres des<br>albums</html>", 250, new StringToHtmlRenderer(), null, String.class, Album::getTitre);
 	public static final TableColumnParameter<Album> AUTEURS = 
 			new TableColumnParameter<>("Auteurs", 550, new AuteurListRenderer(), new RangementComparator(), Album.class, (a) -> a);
 	private static final TableColumnParameter<Album> FORMAT = 
@@ -61,7 +61,7 @@ public class AlbumTableColumn {
 	private static final TableColumnParameter<Album> PROBLEM = 
 			new TableColumnParameter<>("Problème", 70, new CollectionBooleanRenderer(), null, Boolean.class, Album::hasProblem);
 	public static final TableColumnParameter<Album> DISCOGS = 
-			new TableColumnParameter<>("Discogs release", 110, null, null, String.class, (a) -> Optional.ofNullable(a.getDiscogsLink()).orElse(""));
+			new TableColumnParameter<>("<html>Discogs<br>release</html>", 60, null, null, String.class, (a) -> Optional.ofNullable(a.getDiscogsLink()).orElse(""));
 	private static final TableColumnParameter<Album> POIDS = 
 			new TableColumnParameter<>("Poids", 50, new CollectionNumberRenderer(), new CollectionUtils.DoubleComparator(), Double.class, (a) -> a.getFormatAlbum().getPoids());
 	private static final TableColumnParameter<Album> ENREGISTREMENT = 
@@ -83,7 +83,7 @@ public class AlbumTableColumn {
 					Album.class, 
 					(a) -> a);
 	private static final TableColumnParameter<Album> METADATA_MATCH = 
-			new TableColumnParameter<>("Metadata exactes", 70, new CollectionBooleanRenderer(), null, Boolean.class, Album::matchesMediaFileMetadata);
+			new TableColumnParameter<>("<html>Metadata<br>exactes</html>", 80, new CollectionBooleanRenderer(), null, Boolean.class, Album::matchesMediaFileMetadata);
 	
 	public static final List<TableColumnParameter<Album>> REGULAR_COLUMN_LIST = List.of(
 			AlbumTableColumn.TITRE, 
