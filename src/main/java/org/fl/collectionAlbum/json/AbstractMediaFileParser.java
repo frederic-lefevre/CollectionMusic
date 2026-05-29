@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.JsonMusicProperties;
-import org.fl.collectionAlbum.format.AbstractAlbumMediaFiles;
+import org.fl.collectionAlbum.format.AbstractAlbumMediaFilePaths;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
@@ -55,7 +55,7 @@ public abstract class AbstractMediaFileParser {
 
 	protected Set<MediaFilePath> parseMediaFileLocation(JsonNode mediaFileJson, ContentNature contentNature) {
 
-		Set<String> locations = ParserHelpers.getArrayAttributeAsSet(mediaFileJson,  JsonMusicProperties.LOCATION);
+		Set<String> locations = ParserHelpers.getArrayAttributeAsSet(mediaFileJson,  JsonMusicProperties.LOCATION, true);
 		if (locations == null) {
 			return null;
 		} else {
@@ -83,5 +83,5 @@ public abstract class AbstractMediaFileParser {
 		return ParserHelpers.parseStringProperty(mediaFileJson, JsonMusicProperties.SOURCE, true);
 	}
 
-	public abstract <T extends AbstractAlbumMediaFiles> T parseMediaFile(ObjectNode mediaFileJson);
+	public abstract <T extends AbstractAlbumMediaFilePaths> T parseMediaFile(ObjectNode mediaFileJson);
 }

@@ -46,6 +46,7 @@ import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory;
+import org.fl.collectionAlbum.gui.listener.MediaFilePathActionListener;
 import org.fl.collectionAlbum.gui.listener.OsActionListener;
 import org.fl.collectionAlbum.utils.CollectionUtils;
 
@@ -159,13 +160,30 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 		
 		if (album.hasMediaFiles()) {
 			
-			JLabel titreMedia = new JLabel("Folders contenant les medias:");
-			titreMedia.setBorder(new EmptyBorder(10, 0, 10, 0));
-			titreMedia.setFont(verdana);
-			albumPane.add(titreMedia);
+			JLabel titreMediaFiles = new JLabel("Listes fichiers medias:");
+			titreMediaFiles.setBorder(new EmptyBorder(10, 0, 10, 0));
+			titreMediaFiles.setFont(verdana);
+			albumPane.add(titreMediaFiles);
 			
-			album.getAllMediaFiles().stream()
-					.map(mediaFile -> mediaFile.getMediaFilePaths())
+			album.getAllMediaFilePaths().stream()
+				.map(mediaFilePaths -> mediaFilePaths.getMediaFilePaths())
+				.flatMap(Collection::stream)
+				.forEachOrdered(mediaFilePath -> {
+					JButton showMediaFilesutton = new JButton("Liste des fichiers media de " + mediaFilePath.getPath().getFileName());
+					
+					MediaFilePathActionListener showMediaFileListener = new MediaFilePathActionListener(mediaFilePath);
+					showMediaFilesutton.addActionListener(showMediaFileListener);
+					
+					albumPane.add(showMediaFilesutton);
+				});
+			
+			JLabel titreMediaPath = new JLabel("Chemins contenant les fichiers medias:");
+			titreMediaPath.setBorder(new EmptyBorder(10, 0, 10, 0));
+			titreMediaPath.setFont(verdana);
+			albumPane.add(titreMediaPath);
+			
+			album.getAllMediaFilePaths().stream()
+					.map(mediaFilePaths -> mediaFilePaths.getMediaFilePaths())
 					.flatMap(Collection::stream)
 					.map(mediaFilePath -> mediaFilePath.getPath().toString())
 					.distinct()

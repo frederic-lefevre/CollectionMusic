@@ -75,6 +75,8 @@ public class CollectionAlbumGui extends JFrame {
 		try {
 			// init panel de lecture et génération de site
 			collectionTabs.add(new GenerationPane(CollectionAlbumContainer.getInstance()), "Analyse et génération des rapports de la collection", 0);
+			
+			collectionTabs.add(new ApplicationOptionsPane(), "Options de l'application", 1);
 
 			collectionTabs.setSelectedIndex(0);
 		} catch (Exception e) {

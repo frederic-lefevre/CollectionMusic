@@ -48,9 +48,9 @@ public class AlbumsJTable extends MusicArtefactTable<Album> {
 
 	private static final Logger tLog = Logger.getLogger(AlbumsJTable.class.getName());
 	
-	private final List<AlbumTableColumn> albumTableColumns;
+	private final List<TableColumnParameter<Album>> albumTableColumns;
 	
-	public record AlbumColumnSort(AlbumTableColumn albumTableColumnToSort, SortOrder sortOrder) {}
+	public record AlbumColumnSort(TableColumnParameter<Album> albumTableColumnToSort, SortOrder sortOrder) {}
 	
 	public AlbumsJTable(AbstractAlbumsTableModel albumsTableModel, GenerationPane generationPane, AlbumColumnSort albumColumnSort) {
 		super(albumsTableModel);
@@ -65,13 +65,13 @@ public class AlbumsJTable extends MusicArtefactTable<Album> {
 		TableRowSorter<AbstractAlbumsTableModel> sorter = new TableRowSorter<>(albumsTableModel);
 		
 		for (int colIdx = 0; colIdx < albumTableColumns.size(); colIdx++) {
-			TableCellRenderer renderer =  albumTableColumns.get(colIdx).getCellRenderer();
+			TableCellRenderer renderer =  albumTableColumns.get(colIdx).cellRenderer();
 			if (renderer != null) {
 				 getColumnModel().getColumn(colIdx).setCellRenderer(renderer);
 			}
-			getColumnModel().getColumn(colIdx).setPreferredWidth(albumTableColumns.get(colIdx).getWidth());
+			getColumnModel().getColumn(colIdx).setPreferredWidth(albumTableColumns.get(colIdx).width());
 			
-			Comparator<?> comparator =  albumTableColumns.get(colIdx).getComparator();
+			Comparator<?> comparator =  albumTableColumns.get(colIdx).comparator();
 			if (comparator != null) {
 				sorter.setComparator(colIdx, comparator);
 			}
@@ -96,7 +96,7 @@ public class AlbumsJTable extends MusicArtefactTable<Album> {
 		}	
 	}
 	
-	private int getColumnNumber(AlbumTableColumn albumTableColumn) {
+	private int getColumnNumber(TableColumnParameter<Album> albumTableColumn) {
 		
 		for (int i=0; i < albumTableColumns.size(); i++) {
 			if (albumTableColumns.get(i) == albumTableColumn) {

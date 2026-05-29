@@ -30,7 +30,7 @@ import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
 import tools.jackson.databind.node.ObjectNode;
 
-public class AlbumVideoFiles extends AbstractAlbumMediaFiles {
+public class AlbumVideoFiles extends AbstractAlbumMediaFilePaths {
 
 	private final int width;
 	private final int height;
@@ -90,5 +90,10 @@ public class AlbumVideoFiles extends AbstractAlbumMediaFiles {
 		videoFilesDetailTitles.append(TYPE_TITLE).append(separator);
 		appendCommonMediaFileDetailTitles(videoFilesDetailTitles, separator);
 		return videoFilesDetailTitles.toString();
+	}
+
+	@Override
+	public boolean matchesMediaFilesMetadata() {
+		return true; // not yet implemented
 	}
 }

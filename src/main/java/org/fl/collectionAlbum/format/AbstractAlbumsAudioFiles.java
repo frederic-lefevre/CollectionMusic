@@ -31,12 +31,12 @@ import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
 import tools.jackson.databind.node.ObjectNode;
 
-public abstract class AbstractAlbumsAudioFiles extends AbstractAlbumMediaFiles {
+public abstract class AbstractAlbumsAudioFiles extends AbstractAlbumMediaFilePaths {
 
 	private final static Logger albumLog = Logger.getLogger(AbstractAlbumsAudioFiles.class.getName());
 	
 	private final AudioFileType type;
-	private final double samplingRate;
+	private final double samplingRate;  // in KHz
 	
 	private static final String TYPE_TITLE = "Type";
 	private static final String SAMPLING_RATE_TITLE = "Sampling Rate";
@@ -49,8 +49,8 @@ public abstract class AbstractAlbumsAudioFiles extends AbstractAlbumMediaFiles {
 		// Check type versus media file paths extensions
 		if ((mediaFilePaths != null) && !mediaFilePaths.isEmpty()) {
 			mediaFilePaths.stream()
-				.filter(mediaFilePath -> !type.getExtensions().contains(mediaFilePath.getMediaFileExtension()))
-				.forEach(mediaFilePath -> albumLog.warning("Extension mismatch for " + audioJson + "\n Waited extension " + mediaFilePath.getMediaFileExtension()));
+				.filter(mediaFilePath -> !type.getExtension().equals(mediaFilePath.getMediaFileExtension().toLowerCase()))
+				.forEach(mediaFilePath -> albumLog.warning("Media file extension mismatch for " + audioJson + "\n Waited extension " + mediaFilePath.getMediaFileExtension()));
 		} 
 	}
 	

@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.fl.collectionAlbum.TestUtils;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
@@ -219,7 +220,7 @@ class DiscogsAlbumReleaseMatcherTest {
 	@BeforeAll
 	static void initInventory() {
 		MediaFilesInventories.clearInventories();
-		MediaFilesInventories.scanMediaFilePaths();
+		TestUtils.scanMediaFilePaths(false);
 		DiscogsInventory.buildDiscogsInventory();
 	}
 	

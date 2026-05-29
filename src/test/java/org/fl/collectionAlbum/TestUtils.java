@@ -26,6 +26,12 @@ package org.fl.collectionAlbum;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.nio.file.Path;
+
+import org.fl.collectionAlbum.format.ContentNature;
+import org.fl.collectionAlbum.mediaPath.MediaFilePath;
+import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
+
 public class TestUtils {
 
 	public static void assertEmptyCollection(CollectionAlbumContainer albumsContainer) {
@@ -47,5 +53,22 @@ public class TestUtils {
 		assertThat(albumsContainer.getConcertsArtistes().getNombreArtistes()).isZero();
 		
 		assertThatIllegalArgumentException().isThrownBy(() -> albumsContainer.pickRandomAlbums(1));
+	}
+	
+	public static synchronized MediaFilePath createMediaFile(Path mediaFilesPath, ContentNature contentNature, boolean logWarnings, boolean readMediaFileMetadata) {
+		
+		boolean actualReadMediaFileMetadata = Control.isReadMediaFileMetadata();
+		Control.setReadMediaFileMetadata(readMediaFileMetadata);
+		MediaFilePath mediaFilePath = new MediaFilePath(mediaFilesPath, contentNature, logWarnings);
+		Control.setReadMediaFileMetadata(actualReadMediaFileMetadata);
+		return mediaFilePath;
+	}
+	
+	public static synchronized void scanMediaFilePaths(boolean readMediaFileMetadata) {
+		
+		boolean actualReadMediaFileMetadata = Control.isReadMediaFileMetadata();
+		Control.setReadMediaFileMetadata(readMediaFileMetadata);
+		MediaFilesInventories.scanMediaFilePaths();
+		Control.setReadMediaFileMetadata(actualReadMediaFileMetadata);
 	}
 }

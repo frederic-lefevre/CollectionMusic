@@ -26,6 +26,7 @@ package org.fl.collectionAlbum.discogs;
 
 import static org.assertj.core.api.Assertions.*;
 
+import org.fl.collectionAlbum.TestUtils;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
@@ -37,7 +38,7 @@ class DiscogsAlbumReleaseTest {
 	@BeforeAll
 	static void initInventory() {
 		MediaFilesInventories.clearInventories();
-		MediaFilesInventories.scanMediaFilePaths();
+		TestUtils.scanMediaFilePaths(false);
 		DiscogsInventory.buildDiscogsInventory();
 	}
 	

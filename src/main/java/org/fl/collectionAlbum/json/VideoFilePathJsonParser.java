@@ -38,50 +38,50 @@ import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.node.ObjectNode;
 
-public class VideoFileParser extends AbstractMediaFileParser {
+public class VideoFilePathJsonParser extends AbstractMediaFileParser {
 
-	private static final Logger rapportLog = Logger.getLogger(VideoFileParser.class.getName());
+	private static final Logger rapportLog = Logger.getLogger(VideoFilePathJsonParser.class.getName());
 	
-	public VideoFileParser() {
+	public VideoFilePathJsonParser() {
 		super();
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public AlbumVideoFiles parseMediaFile(ObjectNode videoFileJson) {
+	public AlbumVideoFiles parseMediaFile(ObjectNode videoFilePathJson) {
 		
-		if (videoFileJson != null) {
+		if (videoFilePathJson != null) {
 		
-			VideoFileType type = Optional.ofNullable(videoFileJson.get(JsonMusicProperties.TYPE))
+			VideoFileType type = Optional.ofNullable(videoFilePathJson.get(JsonMusicProperties.TYPE))
 					.map(JsonNode::asString)
 					.map(s -> findType(s))
 					.orElseGet(() -> {
-						rapportLog.severe("Json VideoFile null type parameter: " + videoFileJson);
+						rapportLog.severe("Json VideoFile null type parameter: " + videoFilePathJson);
 						return null;
 					});
 			
-			String source = parseSource(videoFileJson);
-			String note = parseNote(videoFileJson);
-			Set<MediaFilePath> videoFileLocations = parseMediaFileLocation(videoFileJson, ContentNature.VIDEO);
+			String source = parseSource(videoFilePathJson);
+			String note = parseNote(videoFilePathJson);
+			Set<MediaFilePath> videoFileLocations = parseMediaFileLocation(videoFilePathJson, ContentNature.VIDEO);
 			
-			Integer width = Optional.ofNullable(videoFileJson.get(JsonMusicProperties.VIDEO_WIDTH))
+			Integer width = Optional.ofNullable(videoFilePathJson.get(JsonMusicProperties.VIDEO_WIDTH))
 					.map(JsonNode::asInt)
 					.orElseGet(() -> {
-						rapportLog.severe("Json VideoFile null width parameter" + videoFileJson);
+						rapportLog.severe("Json VideoFile null width parameter" + videoFilePathJson);
 						return null;
 					});
 			
-			Integer height = Optional.ofNullable(videoFileJson.get(JsonMusicProperties.VIDEO_HEIGHT))
+			Integer height = Optional.ofNullable(videoFilePathJson.get(JsonMusicProperties.VIDEO_HEIGHT))
 					.map(JsonNode::asInt)
 					.orElseGet(() -> {
-						rapportLog.severe("Json VideoFile null height parameter" + videoFileJson);
+						rapportLog.severe("Json VideoFile null height parameter" + videoFilePathJson);
 						return null;
 					});
 			
 			if ((type == null) || (source == null) || (width == null) || (height == null)) {
 				return null;
 			} else {
-				return new AlbumVideoFiles(videoFileJson, type, source, width, height, note, videoFileLocations);
+				return new AlbumVideoFiles(videoFilePathJson, type, source, width, height, note, videoFileLocations);
 			}
 		} else {
 			rapportLog.severe("Json VideoFile null parameter");

@@ -154,7 +154,7 @@ public class MediaFilesSearchPane extends JScrollPane {
 								
 								if ((potentialMediaFilesPaths.size() == 1) &&
 										album.hasMediaFiles(contentNature) &&
-										(album.getFormatAlbum().getMediaFiles(contentNature).size() == 1)) {
+										(album.getFormatAlbum().getMediaFilePaths(contentNature).size() == 1)) {
 									// Media file paths can be validated if and only if there is a single potential link
 									// and a single media file defined in the album
 									mediaFilesValidations.get(contentNature).setVisible(true);

@@ -22,32 +22,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.gui.listener;
+package org.fl.collectionAlbum.mediaFile.metadata;
 
-import java.awt.event.ActionEvent;
+public record MetadataElement<T>(String name, T value) {
 
-import org.fl.collectionAlbum.gui.table.MediaFilesJTable;
-import org.fl.collectionAlbum.mediaPath.MediaFilePath;
-import org.fl.collectionAlbum.osAction.OsAction;
-
-public class MediaFileCommandListener implements java.awt.event.ActionListener {
-
-	private final MediaFilesJTable mediaFileJTable;
-	private final OsAction<MediaFilePath> osAction;
-	
-	public MediaFileCommandListener(MediaFilesJTable mediaFileJTable, OsAction<MediaFilePath> osAction) {
-		this.mediaFileJTable = mediaFileJTable;
-		this.osAction = osAction;
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		
-		MediaFilePath mediaFilePath = mediaFileJTable.getSelectedMediaFile();
-		
-		if (mediaFilePath != null) {
-			osAction.runOsAction(mediaFilePath);
-		}
-	}
 
 }

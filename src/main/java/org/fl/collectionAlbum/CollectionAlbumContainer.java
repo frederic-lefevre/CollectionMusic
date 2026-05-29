@@ -110,7 +110,7 @@ public class CollectionAlbumContainer {
 		album.addMusicArtfactArtistesToList(collectionArtistes);
 		
 		// Add the album to each media files that it references
-		album.getAllMediaFiles().stream()
+		album.getAllMediaFilePaths().stream()
 			.map(mediaFile -> mediaFile.getMediaFilePaths())
 			.filter(Objects::nonNull)
 			.flatMap(mediaFileList -> mediaFileList.stream())

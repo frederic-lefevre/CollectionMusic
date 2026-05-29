@@ -35,14 +35,14 @@ public abstract class AbstractAlbumsTableModel extends AbstractTableModel implem
 
 	private static final long serialVersionUID = 1L;
 
-	private final List<AlbumTableColumn> albumTableColumns;
+	private final List<TableColumnParameter<Album>> albumTableColumns;
 	
-	AbstractAlbumsTableModel(List<AlbumTableColumn> albumTableColumns) {
+	AbstractAlbumsTableModel(List<TableColumnParameter<Album>> albumTableColumns) {
 		super();
 		this.albumTableColumns = albumTableColumns;
 	}
 	
-	public List<AlbumTableColumn> getAlbumTableColumns() {
+	public List<TableColumnParameter<Album>> getAlbumTableColumns() {
 		return albumTableColumns;
 	}
 
@@ -53,7 +53,7 @@ public abstract class AbstractAlbumsTableModel extends AbstractTableModel implem
 	
 	@Override
 	public String getColumnName(int col) {
-	    return albumTableColumns.get(col).getName();
+	    return albumTableColumns.get(col).name();
 	}
 	
 	@Override
@@ -63,7 +63,7 @@ public abstract class AbstractAlbumsTableModel extends AbstractTableModel implem
 	
     @Override
     public Class<?> getColumnClass(int columnIndex) {
-    	return albumTableColumns.get(columnIndex).getValueClass();
+    	return albumTableColumns.get(columnIndex).valueClass();
     }
     
 	@Override
@@ -73,7 +73,7 @@ public abstract class AbstractAlbumsTableModel extends AbstractTableModel implem
 			// This may happen when triggering a rescan of the collection
 			return null;
 		} else {
-			return albumTableColumns.get(columnIndex).getValueGetter().apply(getAlbumsList().get(rowIndex));
+			return albumTableColumns.get(columnIndex).valueGetter().apply(getAlbumsList().get(rowIndex));
 		}
 	}
 
@@ -88,33 +88,4 @@ public abstract class AbstractAlbumsTableModel extends AbstractTableModel implem
 	
 	protected abstract List<Album> getAlbumsList();
 	
-	public static final List<AlbumTableColumn> REGULAR_COLUMN_LIST = List.of(
-			AlbumTableColumn.TITRE, 
-			AlbumTableColumn.AUTEURS, 
-			AlbumTableColumn.FORMAT, 
-			AlbumTableColumn.DISCOGS,
-			AlbumTableColumn.POIDS,
-			AlbumTableColumn.ENREGISTREMENT,
-			AlbumTableColumn.COMPOSITION);
-	
-	public static final List<AlbumTableColumn> AUGMENTED_COLUMN_LIST = List.of(
-			AlbumTableColumn.TITRE, 
-			AlbumTableColumn.AUTEURS, 
-			AlbumTableColumn.FORMAT,
-			AlbumTableColumn.MEDIA_FILES, 
-			AlbumTableColumn.PROBLEM,
-			AlbumTableColumn.DISCOGS,
-			AlbumTableColumn.POIDS,
-			AlbumTableColumn.ENREGISTREMENT,
-			AlbumTableColumn.COMPOSITION);
-	
-	public static final List<AlbumTableColumn> ACQUISITION_COLUMN_LIST = List.of(
-			AlbumTableColumn.TITRE, 
-			AlbumTableColumn.AUTEURS, 
-			AlbumTableColumn.FORMAT, 
-			AlbumTableColumn.DISCOGS,
-			AlbumTableColumn.POIDS,
-			AlbumTableColumn.ENREGISTREMENT,
-			AlbumTableColumn.COMPOSITION,
-			AlbumTableColumn.ACQUISITION);
 }

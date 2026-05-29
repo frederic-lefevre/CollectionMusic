@@ -36,7 +36,6 @@ import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.format.Format.RangementSupportPhysique;
-import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 import org.fl.collectionAlbum.metrics.Metrics;
 import org.fl.collectionAlbum.format.MediaSupports;
 import org.fl.collectionAlbum.rapportHtml.RapportStructuresAndNames;
@@ -124,7 +123,7 @@ class CollectionAlbumContainerTest {
 
 		RapportStructuresAndNames.renew();
 		
-		MediaFilesInventories.scanMediaFilePaths();
+		TestUtils.scanMediaFilePaths(false);
 		DiscogsInventory.buildDiscogsInventory();
 		
 		CollectionAlbumContainer albumsContainer = CollectionAlbumContainer.getInstance();
@@ -152,7 +151,7 @@ class CollectionAlbumContainerTest {
 		URI pAlbum = RapportStructuresAndNames.getArtisteAlbumRapportRelativeUri(artiste);
 		assertThat(pAlbum).hasToString("artistes/albums/i0.html");
 		
-		assertThat(album.getAllMediaFiles()).singleElement()
+		assertThat(album.getAllMediaFilePaths()).singleElement()
 			.satisfies(mediaFile -> assertThat(mediaFile.getMediaFilePaths()).singleElement()
 					.satisfies(mediaFilePath -> assertThat(mediaFilePath.getAlbumSet()).singleElement()
 							.satisfies(album1 -> assertThat(album1).isEqualTo(album))));

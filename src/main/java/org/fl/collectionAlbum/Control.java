@@ -48,6 +48,7 @@ import org.fl.collectionAlbum.gui.CollectionAlbumGui;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.fl.collectionAlbum.metrics.CollectionMetricsHistory;
 import org.fl.collectionAlbum.metrics.ConcertMetricsHistory;
+import org.fl.collectionAlbum.metrics.MediaFileMetricsHistory;
 import org.fl.collectionAlbum.osAction.MusicArtefactCommandParameter;
 import org.fl.collectionAlbum.osAction.DiscogsReleaseCommandParameter;
 import org.fl.collectionAlbum.osAction.ListOfStringCommandParameter;
@@ -74,6 +75,7 @@ public class Control {
 	private Path concertDirectoryName;
 	private CollectionMetricsHistory collectionMetricsHsitory;
 	private ConcertMetricsHistory concertMetricsHsitory;
+	private MediaFileMetricsHistory mediaFileMetricsHistory;
 	private Path rapportPath;
 	private Path oldRapportPath;
 	private String albumSleevesImgUri;
@@ -93,6 +95,7 @@ public class Control {
 	private String cssForGui;
 	private Dimension mainSubPaneDimension;
 	private Dimension infoWindowDimension;
+	private boolean readMediaFileMetadata;
    	
 	private Control() {
 	}
@@ -124,7 +127,7 @@ public class Control {
 			rapportPath = FilesUtils.uriStringToAbsolutePath(collectionProperties.getProperty("album.rapportDirectory.name"));
 			oldRapportPath = FilesUtils.uriStringToAbsolutePath(collectionProperties.getProperty("album.oldRapportDirectory.name"));
 			
-			// Get collection album and concert history folder path
+			// Get collection album, concert, media file history folder path
 			try {
 				collectionMetricsHsitory = CollectionMetricsHistory.buildCollectionMetricsHistory(
 						FilesUtils.uriStringToAbsolutePath(collectionProperties.getProperty("album.historyFolder.name")));
@@ -136,6 +139,12 @@ public class Control {
 						FilesUtils.uriStringToAbsolutePath(collectionProperties.getProperty("concert.historyFolder.name")));
 			} catch (IOException e) {
 				albumLog.log(Level.SEVERE, "IOException accessinng concert metrics history folder", e);
+			}
+			try {
+				mediaFileMetricsHistory = MediaFileMetricsHistory.buildMediaFileMetricsHistory(
+						FilesUtils.uriStringToAbsolutePath(collectionProperties.getProperty("mediaFile.historyFolder.name")));
+			} catch (IOException e) {
+				albumLog.log(Level.SEVERE, "IOException accessinng media file metrics history folder", e);
 			}
 			
 			// get the album sleeves images path (this is storing the sleeves images when the sleeve image of the media files is
@@ -190,6 +199,8 @@ public class Control {
 					new StringCommandParameter());
 			
 			cssForGui = collectionProperties.getFileContentFromURI("album.cssForGui", Charset.defaultCharset());
+			
+			readMediaFileMetadata = collectionProperties.getBoolean("mediaFile.readMetadata", false);
 						
 		} catch (Exception e) {
 			albumLog.log(Level.SEVERE, "Exception during inintialisation, property file="  + Objects.toString(musicRunningContext.getPropertiesLocation()), e);
@@ -258,6 +269,10 @@ public class Control {
 		return getInstance().concertMetricsHsitory;
 	}
 	
+	public static MediaFileMetricsHistory getMediaFileMetricsHsitory() {
+		return getInstance().mediaFileMetricsHistory;
+	}
+	
 	public static String getAlbumSleevesImgUri() {
 		return getInstance().albumSleevesImgUri;
 	}
@@ -312,6 +327,14 @@ public class Control {
 	
 	public static String getCssForGui() {
 		return getInstance().cssForGui;
+	}
+	
+	public static boolean isReadMediaFileMetadata() {
+		return getInstance().readMediaFileMetadata;
+	}
+
+	public static void setReadMediaFileMetadata(boolean readMediaFileMetadata) {
+		getInstance().readMediaFileMetadata = readMediaFileMetadata;
 	}
 	
 	private Map<String, OsCommandAndOption> getMapOfOsCommandsAndOptions(String osCmdPropBase) {

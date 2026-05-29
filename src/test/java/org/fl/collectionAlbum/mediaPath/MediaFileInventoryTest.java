@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import org.fl.collectionAlbum.TestUtils;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.format.ContentNature;
@@ -56,7 +57,7 @@ class MediaFileInventoryTest {
 	static void readInventory() {
 		
 		MediaFilesInventories.clearInventories();
-		MediaFilesInventories.scanMediaFilePaths();
+		TestUtils.scanMediaFilePaths(false);
 		audioFileInventory = MediaFilesInventories.getMediaFileInventory(ContentNature.AUDIO);
 		videoFileInventory = MediaFilesInventories.getMediaFileInventory(ContentNature.VIDEO);
 	}
@@ -101,6 +102,7 @@ class MediaFileInventoryTest {
 			.singleElement()
 			.satisfies(audioPath -> {
 				assertThat(audioPath.getPath()).hasToString("E:\\Musique\\e\\Bill Evans\\Portrait In Jazz");
+				assertThat(audioPath.getContentNature()).isEqualTo(ContentNature.AUDIO);
 				assertThat(audioPath.hasCover()).isTrue();
 				assertThat(audioPath.getCoverPath()).isNotNull().isEqualTo(Paths.get("E:\\Musique\\e\\Bill Evans\\Portrait In Jazz\\cover.jpg"));
 				assertThat(audioPath.getMediaFileExtension()).isEqualTo("flac");
@@ -156,6 +158,7 @@ class MediaFileInventoryTest {
 			.singleElement()
 			.satisfies(audioPath -> {
 				assertThat(audioPath.getPath().toString()).contains("A Bigger Bang, Live On Copacabana Beach");
+				assertThat(audioPath.getContentNature()).isEqualTo(ContentNature.AUDIO);
 				assertThat(audioPath.hasCover()).isTrue();
 			});
 		
@@ -164,7 +167,10 @@ class MediaFileInventoryTest {
 		assertThat(potentialVideoPaths)
 			.isNotNull()
 			.singleElement()
-			.matches(audioPath -> audioPath.getPath().toString().contains("A Bigger Bang"));
+			.satisfies(videoPath -> {
+				assertThat(videoPath.getPath().toString().contains("A Bigger Bang"));
+				assertThat(videoPath.getContentNature()).isEqualTo(ContentNature.VIDEO);
+			});
 	}
 
 	@Test
@@ -204,5 +210,14 @@ class MediaFileInventoryTest {
 		
 		assertThat(audioFileInventory.validateMediaFilePath(Paths.get("E:\\XX\\e\\Bill Evans\\Portrait In Jazz"))).isNull();	
 		
+	}
+	
+	@Test
+	void shouldHaveManyAudioFile() {
+		
+		long audioFileNumber = audioFileInventory.getMediaFileNumber();
+		
+		assertThat(audioFileNumber).isGreaterThan(22000);
+		// System.out.println("Nombre de fichiers audio=" + audioFileNumber);
 	}
 }

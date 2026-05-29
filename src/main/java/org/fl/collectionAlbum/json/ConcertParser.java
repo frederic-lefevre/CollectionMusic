@@ -62,7 +62,7 @@ public class ConcertParser {
 	}
 	
 	public static List<String> getConcertMorceaux(JsonNode arteFactJson) {	
-		return ParserHelpers.getArrayAttribute(arteFactJson, JsonMusicProperties.MORCEAUX);
+		return ParserHelpers.getArrayAttribute(arteFactJson, JsonMusicProperties.MORCEAUX, false);
 	}
 	
 	public static List<URI> getConcertTickets(JsonNode arteFactJson) {

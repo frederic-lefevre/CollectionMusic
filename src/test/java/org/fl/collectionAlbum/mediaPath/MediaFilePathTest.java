@@ -38,12 +38,11 @@ class MediaFilePathTest {
 		
 		assertThat(MediaFilePath.isMediaFileName(Paths.get("toto.flac"), ContentNature.AUDIO)).isTrue();
 		assertThat(MediaFilePath.isMediaFileName(Paths.get("toto.mp3"), ContentNature.AUDIO)).isTrue();
-		assertThat(MediaFilePath.isMediaFileName(Paths.get("toto.wma"), ContentNature.AUDIO)).isTrue();
 		assertThat(MediaFilePath.isMediaFileName(Paths.get("toto.txt"), ContentNature.AUDIO)).isFalse();
 		assertThat(MediaFilePath.isMediaFileName(Paths.get("toto.jpg"), ContentNature.AUDIO)).isFalse();
 		assertThat(MediaFilePath.isMediaFileName(Paths.get("toto"), ContentNature.AUDIO)).isFalse();
 		assertThat(MediaFilePath.isMediaFileName(Paths.get(""), ContentNature.AUDIO)).isFalse();
-		assertThat(MediaFilePath.isMediaFileName(null, ContentNature.AUDIO)).isFalse();
+		
 		assertThat(MediaFilePath.isMediaFileName(Paths.get("toto.mkv"), ContentNature.AUDIO)).isFalse();
 		
 		assertThat(MediaFilePath.isMediaFileName(Paths.get("toto.flac"), ContentNature.VIDEO)).isFalse();
@@ -53,4 +52,8 @@ class MediaFilePathTest {
 		//MediaFilePath.extensionSet.forEach(extension -> System.out.println(extension));
 	}
 
+	@Test
+	void shouldThrowNPE() {
+		assertThatNullPointerException().isThrownBy(() -> MediaFilePath.isMediaFileName(null, ContentNature.AUDIO));
+	}
 }

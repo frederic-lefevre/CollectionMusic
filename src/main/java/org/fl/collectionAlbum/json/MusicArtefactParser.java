@@ -150,7 +150,7 @@ public class MusicArtefactParser {
 	}
 	
 	public List<String> getNotes() {
-		return ParserHelpers.getArrayAttribute(arteFactJson, JsonMusicProperties.NOTES);
+		return ParserHelpers.getArrayAttribute(arteFactJson, JsonMusicProperties.NOTES, false);
 	}
 
 	public enum CheckPathOption { EXISTS, IS_FILE, IS_IMAGE_FILE };
@@ -160,7 +160,7 @@ public class MusicArtefactParser {
 	}
 
 	protected static List<URI> getUrisList(JsonNode arteFactJson, String jsonProperty, String rootUri, CheckPathOption... checkPathOptions) {
-		return ParserHelpers.getArrayAttribute(arteFactJson, jsonProperty).stream()
+		return ParserHelpers.getArrayAttribute(arteFactJson, jsonProperty, false).stream()
 				.map(relativeUriString -> getAbsoluteUri(rootUri, relativeUriString, arteFactJson, checkPathOptions))
 				.filter(Objects::nonNull)
 				.toList();

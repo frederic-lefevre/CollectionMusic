@@ -24,28 +24,46 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.format;
 
+import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.fl.collectionAlbum.JsonMusicProperties;
 import org.fl.collectionAlbum.json.AbstractMediaFileParser;
-import org.fl.collectionAlbum.json.AudioFileParser;
-import org.fl.collectionAlbum.json.VideoFileParser;
+import org.fl.collectionAlbum.json.AudioFilePathJsonParser;
+import org.fl.collectionAlbum.json.VideoFilePathJsonParser;
 
-public enum ContentNature { 
-	AUDIO("audio", JsonMusicProperties.AUDIO_FILE, Set.of("flac", "mp3", "wma", "aiff", "m4a", "wav"), true), 
-	VIDEO("vidéo", JsonMusicProperties.VIDEO_FILE, Set.of("m2ts", "mkv", "mpls", "vob", "m4v", "mp4", "bdmv"), false);
+public enum ContentNature {
+	
+	AUDIO("audio", 
+			JsonMusicProperties.AUDIO_FILE,
+			Stream.of(AudioFileType.values()).map(a -> a.getExtension()).collect(Collectors.toSet()), 
+			Stream.of(AudioFileType.values()).collect(Collectors.toMap(AudioFileType::getExtension, Function.identity())),
+			true,
+			new AudioFilePathJsonParser()), 
+	VIDEO("vidéo", 
+			JsonMusicProperties.VIDEO_FILE,
+			Stream.of(VideoFileType.values()).map(a -> a.getExtension()).collect(Collectors.toSet()), 
+			Stream.of(VideoFileType.values()).collect(Collectors.toMap(VideoFileType::getExtension, Function.identity())), 
+			false,
+			new VideoFilePathJsonParser());
 	
 	private final String nom;
 	private final String jsonProperty;
 	private final Set<String> fileExtensions;
+	private final Map<String, MediaFileType> mediaFileTypeMap;
 	private final boolean strictCheckings;
-	private AbstractMediaFileParser mediaFileParser;
+	private final AbstractMediaFileParser mediaFileParser;
 	
-	private ContentNature(String n, String jp, Set<String> exts, boolean sc) {
+	private ContentNature(String n, String jp, Set<String> exts, Map<String, MediaFileType> mft, boolean sc, AbstractMediaFileParser mfp) {
 		nom = n;
 		jsonProperty = jp;
 		fileExtensions = exts;
+		mediaFileTypeMap = mft;
 		strictCheckings = sc;
+		mediaFileParser = mfp;
 	}
 	
 	public String getNom() {
@@ -60,18 +78,16 @@ public enum ContentNature {
 		return fileExtensions;
 	}
 	
-	public AbstractMediaFileParser getMediaFileParser() {
-		if (mediaFileParser == null) {
-			if (this == AUDIO) {
-				mediaFileParser = new AudioFileParser();
-			} else if (this == VIDEO) {
-				mediaFileParser = new VideoFileParser();
-			}
-		}
-		return mediaFileParser;
+	public Map<String, MediaFileType> getMediaFileTypeMap() {
+		return mediaFileTypeMap;
 	}
-	
+
 	public boolean strictCheckings() {
 		return strictCheckings;
 	}
+	
+	public AbstractMediaFileParser getMediaFileParser() {
+		return mediaFileParser;
+	}
+	
 }

@@ -24,77 +24,46 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.format;
 
-import java.util.Collections;
-import java.util.Set;
+import java.nio.file.Path;
+import java.util.function.Function;
 
-public enum AudioFileType {
+import org.fl.collectionAlbum.mediaFile.AiffAudioFile;
+import org.fl.collectionAlbum.mediaFile.FlacAudioFile;
+import org.fl.collectionAlbum.mediaFile.M4aAudioFile;
+import org.fl.collectionAlbum.mediaFile.MediaFile;
+import org.fl.collectionAlbum.mediaFile.Mp3AudioFile;
+import org.fl.collectionAlbum.mediaFile.WavAudioFile;
+
+public enum AudioFileType implements MediaFileType {
 	
-	FLAC {
-		
-		@Override
-        public boolean isLossLess() {
-			return true;
-		}
-		
-		@Override
-		public Set<String> getExtensions() {
-			return Set.of("flac", "FLAC");
-		}
-	},
-	WAV {
-		
-		@Override
-        public boolean isLossLess() {
-			return true;
-		}
-		
-		@Override
-		public Set<String> getExtensions() {
-			return Set.of("wav", "WAV");
-		}
-	},
-	AIFF {
-		
-		@Override
-        public boolean isLossLess() {
-			return true;
-		}
-		
-		@Override
-		public Set<String> getExtensions() {
-			return Set.of("aiff", "AIFF");
-		}
-	},
-	MP3 {
-		
-		@Override
-        public boolean isLossLess() {
-			return false;
-		}
-		
-		@Override
-		public Set<String> getExtensions() {
-			return Set.of("mp3", "MP3");
-		}
-	},
-	M4A {
-		
-		@Override
-        public boolean isLossLess() {
-			return false;
-		}
-		
-		@Override
-		public Set<String> getExtensions() {
-			return Set.of("m4a", "M4A");
-		}
-	};
+	FLAC(true, "flac", (path) -> new FlacAudioFile(path)),
+	WAV(true, "wav", (path) -> new WavAudioFile(path)),
+	AIFF(true, "aiff", (path) -> new AiffAudioFile(path)),
+	MP3(false, "mp3", (path) -> new Mp3AudioFile(path)),
+	M4A(false, "m4a", (path) -> new M4aAudioFile(path));
 	
+	private final boolean isLossLess;
+	private final String extension;
+	private final Function<Path, MediaFile> mediaFileConstructor;
+	
+	private AudioFileType(boolean isLossLess, String extension, Function<Path, MediaFile> mediaFileConstructor) {
+		this.isLossLess = isLossLess;
+		this.extension = extension;
+		this.mediaFileConstructor = mediaFileConstructor;
+	}
+	
+	@Override
 	public boolean isLossLess() {
-		return true;
+		return isLossLess;
 	}
 
-	public Set<String> getExtensions() {
-		return Collections.emptySet();
+	@Override
+	public String getExtension() {
+		return extension;
+	}
+
+	@Override
+	public Function<Path, MediaFile> mediaFileConstructor() {
+		return mediaFileConstructor;
 	}
 }

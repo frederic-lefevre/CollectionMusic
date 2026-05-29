@@ -33,6 +33,7 @@ import javax.swing.JTabbedPane;
 import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.format.MediaSupports;
 import org.fl.collectionAlbum.gui.table.AbstractAlbumsTableModel;
+import org.fl.collectionAlbum.gui.table.AlbumTableColumn;
 import org.fl.collectionAlbum.gui.table.AlbumsScrollJTablePane;
 
 public class MediaSupportsTabbedPane extends JTabbedPane {
@@ -50,7 +51,7 @@ public class MediaSupportsTabbedPane extends JTabbedPane {
 			
 			AlbumsScrollJTablePane albumsScrollJTablePane =
 					new AlbumsScrollJTablePane(() -> collectionAlbumContainer.getAlbumsWithMediaSupport(mediaSupport).getAlbums(), 
-							AbstractAlbumsTableModel.REGULAR_COLUMN_LIST,
+							AlbumTableColumn.REGULAR_COLUMN_LIST,
 							generationPane);
 			albumTableModels.add(albumsScrollJTablePane.getAlbumsTableModel());
 			addTab(mediaSupport.getDescription(), albumsScrollJTablePane);

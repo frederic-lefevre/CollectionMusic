@@ -24,11 +24,40 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.format;
 
-public enum VideoFileType {
+import java.nio.file.Path;
+import java.util.function.Function;
 
-	MKV,
-	MP4,
-	M4V,
-	VOB,
-	M2TS;
+import org.fl.collectionAlbum.mediaFile.MediaFile;
+import org.fl.collectionAlbum.mediaFile.VideoFile;
+
+public enum VideoFileType implements MediaFileType {
+
+	MKV("mkv"),
+	MP4("mp4"),
+	M4V("m4v"),
+	VOB("vob"),
+	M2TS("m2ts"),
+	MPLS("mpls"),
+	BDMV("bdmv");
+	
+	private final String extension;
+	
+	private VideoFileType(String extension) {
+		this.extension = extension;
+	}
+	
+	@Override
+	public String getExtension() {
+		return extension;
+	}
+
+	@Override
+	public boolean isLossLess() {
+		return false;  // not implemented
+	}
+
+	@Override
+	public Function<Path, MediaFile> mediaFileConstructor() {
+		return (path) -> new VideoFile(path, extension);
+	}
 }

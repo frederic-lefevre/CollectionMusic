@@ -122,7 +122,7 @@ public class AlbumVersionMigrator4 implements VersionMigrator {
 		if (jsonMediaFiles != null) {
 			jsonMediaFiles.forEach(jsonMediaFile -> {
 					
-				Set<String> locations = ParserHelpers.getArrayAttributeAsSet(jsonMediaFile,  JsonMusicProperties.LOCATION);
+				Set<String> locations = ParserHelpers.getArrayAttributeAsSet(jsonMediaFile,  JsonMusicProperties.LOCATION, true);
 				if (locations == null) {
 					try {
 						albumLog.severe("Media files location missing for " + JsonUtils.jsonPrettyPrint(albumJson));

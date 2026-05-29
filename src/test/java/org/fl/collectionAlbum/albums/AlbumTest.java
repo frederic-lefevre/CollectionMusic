@@ -43,6 +43,7 @@ import java.util.logging.Logger;
 import org.assertj.core.api.InstanceOfAssertFactories;
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.JsonMusicProperties;
+import org.fl.collectionAlbum.TestUtils;
 import org.fl.collectionAlbum.artistes.ArtistRole;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
@@ -50,7 +51,7 @@ import org.fl.collectionAlbum.disocgs.DiscogsInventory;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.MatchResultType;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.ReleaseMatchResult;
 import org.fl.collectionAlbum.format.AbstractAlbumsAudioFiles;
-import org.fl.collectionAlbum.format.AbstractAlbumMediaFiles;
+import org.fl.collectionAlbum.format.AbstractAlbumMediaFilePaths;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.format.LosslessAlbumAudioFiles;
 import org.fl.collectionAlbum.format.MediaSupports;
@@ -80,7 +81,7 @@ class AlbumTest {
 	@BeforeAll
 	static void initInventory() {
 		MediaFilesInventories.clearInventories();
-		MediaFilesInventories.scanMediaFilePaths();
+		TestUtils.scanMediaFilePaths(false);
 		DiscogsInventory.buildDiscogsInventory();
 	}
 	
@@ -114,7 +115,7 @@ class AlbumTest {
 		
 		assertThat(album.getAllArtists()).isEmpty();
 		
-		assertThat(album.getAllMediaFiles()).isEmpty();
+		assertThat(album.getAllMediaFilePaths()).isEmpty();
 		
 		assertMediaSupports(album, Collections.emptySet());
 		
@@ -176,7 +177,7 @@ class AlbumTest {
 		assertThat(album.hasMediaFilePathNotFound(ContentNature.AUDIO)).isTrue();
 		assertThat(album.hasProblem()).isTrue();
 		
-		List<? extends AbstractAlbumMediaFiles> audioFiles = album.getFormatAlbum().getMediaFiles(ContentNature.AUDIO);
+		List<? extends AbstractAlbumMediaFilePaths> audioFiles = album.getFormatAlbum().getMediaFilePaths(ContentNature.AUDIO);
 		assertThat(audioFiles).isNotNull()
 			.singleElement()
 			.asInstanceOf(InstanceOfAssertFactories.type(AbstractAlbumsAudioFiles.class))
@@ -194,17 +195,17 @@ class AlbumTest {
 				assertThat(audio.getMediaFilePaths()).isNull();
 			});
 
-		assertThat(album.getAllMediaFiles()).hasSameElementsAs(audioFiles);
+		assertThat(album.getAllMediaFilePaths()).hasSameElementsAs(audioFiles);
 		
 		assertThat(album.getCoverImage()).isNull();
 		
 		// Add the audio file path
 		AbstractAlbumsAudioFiles audioFile = (AbstractAlbumsAudioFiles) audioFiles.get(0);
 		audioFile.setMediaFilePath(
-				Set.of(new MediaFilePath(Paths.get("E:/Musique/e/Bill Evans/Waltz for Debby/"), ContentNature.AUDIO, ContentNature.AUDIO.strictCheckings())),
+				Set.of(TestUtils.createMediaFile(Paths.get("E:/Musique/e/Bill Evans/Waltz for Debby/"), ContentNature.AUDIO, ContentNature.AUDIO.strictCheckings(), false)),
 				Control.getMediaFileRootUri(ContentNature.AUDIO));
 		
-		assertThat(album.getFormatAlbum().getMediaFiles(ContentNature.AUDIO)).singleElement().satisfies(audio -> {
+		assertThat(album.getFormatAlbum().getMediaFilePaths(ContentNature.AUDIO)).singleElement().satisfies(audio -> {
 			assertThat(audio.hasMissingOrInvalidMediaFilePath()).isFalse();
 			assertThat(audio.getMediaFilePaths())
 				.isNotNull()
@@ -232,7 +233,7 @@ class AlbumTest {
 		assertThat(album2.hasMediaFilePathNotFound(ContentNature.AUDIO)).isFalse();
 		assertThat(album2.hasProblem()).isFalse();
 		
-		assertThat(album2.getFormatAlbum().getMediaFiles(ContentNature.AUDIO)).isNotNull()
+		assertThat(album2.getFormatAlbum().getMediaFilePaths(ContentNature.AUDIO)).isNotNull()
 			.singleElement()
 			.asInstanceOf(InstanceOfAssertFactories.type(AbstractAlbumsAudioFiles.class))
 			.satisfies(audio -> {
@@ -253,12 +254,12 @@ class AlbumTest {
 			});
 		
 		// Fix the audio file path
-		AbstractAlbumsAudioFiles audioFile2 = (AbstractAlbumsAudioFiles) album2.getFormatAlbum().getMediaFiles(ContentNature.AUDIO).get(0);
+		AbstractAlbumsAudioFiles audioFile2 = (AbstractAlbumsAudioFiles) album2.getFormatAlbum().getMediaFilePaths(ContentNature.AUDIO).get(0);
 		audioFile2.setMediaFilePath(
-				Set.of(new MediaFilePath(Paths.get("E:/Musique/e/Bill Evans/Portrait In Jazz/"), ContentNature.AUDIO, ContentNature.AUDIO.strictCheckings())),
+				Set.of(TestUtils.createMediaFile(Paths.get("E:/Musique/e/Bill Evans/Portrait In Jazz/"), ContentNature.AUDIO, ContentNature.AUDIO.strictCheckings(), false)),
 				Control.getMediaFileRootUri(ContentNature.AUDIO));
 		
-		assertThat(album2.getFormatAlbum().getMediaFiles(ContentNature.AUDIO)).singleElement().satisfies(audio -> {
+		assertThat(album2.getFormatAlbum().getMediaFilePaths(ContentNature.AUDIO)).singleElement().satisfies(audio -> {
 			assertThat(audio.hasMissingOrInvalidMediaFilePath()).isFalse();
 			assertThat(audio.getMediaFilePaths())
 				.isNotNull()
@@ -284,7 +285,7 @@ class AlbumTest {
 		assertThat(album3.hasMediaFilePathNotFound(ContentNature.AUDIO)).isFalse();
 		assertThat(album3.hasProblem()).isFalse();
 		
-		assertThat(album3.getFormatAlbum().getMediaFiles(ContentNature.AUDIO)).isNotNull()
+		assertThat(album3.getFormatAlbum().getMediaFilePaths(ContentNature.AUDIO)).isNotNull()
 			.singleElement()
 			.asInstanceOf(InstanceOfAssertFactories.type(AbstractAlbumsAudioFiles.class))
 			.satisfies(audio -> {
@@ -327,7 +328,7 @@ class AlbumTest {
 		assertThat(album4.hasMediaFilePathNotFound(ContentNature.AUDIO)).isFalse();
 		assertThat(album4.hasProblem()).isFalse();
 		
-		assertThat(album4.getFormatAlbum().getMediaFiles(ContentNature.AUDIO)).isNotNull()
+		assertThat(album4.getFormatAlbum().getMediaFilePaths(ContentNature.AUDIO)).isNotNull()
 			.singleElement()
 			.asInstanceOf(InstanceOfAssertFactories.type(AbstractAlbumsAudioFiles.class))
 			.satisfies(audio -> {
@@ -440,6 +441,20 @@ class AlbumTest {
 		assertMediaSupports(album, Set.of(MediaSupports.CD));
 		
 		assertThat(album.getContentNatures()).containsExactly(ContentNature.AUDIO);
+	}
+	
+	@Test
+	void testMediaFileMetadataMatch() throws DatabindException, JacksonException {
+		
+		ObjectNode jAlbum = (ObjectNode)mapper.readTree(albumStr3);
+
+		ListeArtiste la = new ListeArtiste();
+		List<ListeArtiste> lla = new ArrayList<ListeArtiste>();
+		lla.add(la);
+
+		Album album = new Album(jAlbum, lla, Path.of("dummyPath"));
+		
+		assertThat(album.matchesMediaFileMetadata()).isTrue();	
 	}
 	
 	private static final String albumStr2 = """

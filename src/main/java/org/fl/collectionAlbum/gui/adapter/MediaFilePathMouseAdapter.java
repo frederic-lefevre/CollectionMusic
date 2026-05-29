@@ -29,8 +29,10 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.Set;
 
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
 import org.fl.collectionAlbum.Control;
@@ -38,38 +40,46 @@ import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.gui.CollectionMenuItems;
 import org.fl.collectionAlbum.gui.DetailedAlbumAndDiscogsInfoPane;
 import org.fl.collectionAlbum.gui.GenerationPane;
-import org.fl.collectionAlbum.gui.listener.MediaFileCommandListener;
-import org.fl.collectionAlbum.gui.listener.OsActionListener;
+import org.fl.collectionAlbum.gui.listener.MediaFilePathCommandListener;
 import org.fl.collectionAlbum.gui.listener.AlbumCustomActionListener.CustomAlbumAction;
-import org.fl.collectionAlbum.gui.table.AbstractAlbumsTableModel;
+import org.fl.collectionAlbum.gui.listener.MediaFilePathActionListener;
+import org.fl.collectionAlbum.gui.table.AlbumTableColumn;
 import org.fl.collectionAlbum.gui.table.AlbumsScrollJTablePane;
-import org.fl.collectionAlbum.gui.table.MediaFilesJTable;
+import org.fl.collectionAlbum.gui.table.MediaFileJTable;
+import org.fl.collectionAlbum.gui.table.MediaFilePathsJTable;
+import org.fl.collectionAlbum.gui.table.MediaFileTableModel;
+import org.fl.collectionAlbum.mediaFile.MediaFile;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.fl.collectionAlbum.osAction.OsAction;
 
-public class MediaFileMouseAdapter extends MouseAdapter {
+public class MediaFilePathMouseAdapter extends MouseAdapter {
 
-	private final MediaFilesJTable mediaFileTable;
+	private final MediaFilePathsJTable mediaFilePathsTable;
 	private final JPopupMenu localJPopupMenu;
-	private final CollectionMenuItems<MediaFilePath> mediaFileMenuItems;
+	private final CollectionMenuItems<MediaFilePath> mediaFilePathMenuItems;
 	private final GenerationPane generationPane;
 	
-	public MediaFileMouseAdapter(MediaFilesJTable mediaFileTable, List<OsAction<MediaFilePath>> osActions, GenerationPane generationPane) {
+	public MediaFilePathMouseAdapter(MediaFilePathsJTable mediaFilePathsTable, List<OsAction<MediaFilePath>> osActions, GenerationPane generationPane) {
 		super();
 		
-		this.mediaFileTable = mediaFileTable;
-		localJPopupMenu = new JPopupMenu();
-		mediaFileMenuItems = new CollectionMenuItems<>();
+		this.mediaFilePathsTable = mediaFilePathsTable;
+		this.localJPopupMenu = new JPopupMenu();
+		this.mediaFilePathMenuItems = new CollectionMenuItems<>();
 		this.generationPane = generationPane;
 		
+		JMenuItem showMediaFiles = new JMenuItem("Afficher la liste des fichiers media");
+		showMediaFiles.addActionListener(new MediaFilePathActionListener(mediaFilePathsTable));
+		localJPopupMenu.add(showMediaFiles);
+		
 		osActions.forEach(osAction -> 
-			mediaFileMenuItems.addMenuItem(
+			mediaFilePathMenuItems.addMenuItem(
 				osAction.actionTitle(),
-				new MediaFileCommandListener(mediaFileTable, osAction),
+				new MediaFilePathCommandListener(mediaFilePathsTable, osAction),
 				osAction.commandParameter().getActionValidityPredicate(),
 				localJPopupMenu
 			)
 		);
+		
 	}
 
 	@Override
@@ -102,11 +112,11 @@ public class MediaFileMouseAdapter extends MouseAdapter {
 	
 	private void doubleClickAction() {
 		
-		MediaFilePath mediaFilePath = mediaFileTable.getSelectedMediaFile();
+		MediaFilePath mediaFilePath = mediaFilePathsTable.getSelectedMediaFilePath();
 		if (mediaFilePath != null) {
 			
 			Set<Album> albums = mediaFilePath.getAlbumSet();
-			if ((mediaFileTable.isAlbumsColumnSelected()) && !albums.isEmpty()) {
+			if ((mediaFilePathsTable.isAlbumsColumnSelected()) && !albums.isEmpty()) {
 				if (albums.size() == 1) {
 					Album album = albums.iterator().next();
 					JOptionPane.showMessageDialog(null, 
@@ -116,16 +126,31 @@ public class MediaFileMouseAdapter extends MouseAdapter {
 				} else {
 					
 					AlbumsScrollJTablePane albumsScrollJTablePane = 
-							new AlbumsScrollJTablePane(albums.stream().toList(), AbstractAlbumsTableModel.REGULAR_COLUMN_LIST, generationPane);
+							new AlbumsScrollJTablePane(albums.stream().toList(), AlbumTableColumn.REGULAR_COLUMN_LIST, generationPane);
 					JOptionPane.showMessageDialog(null, albumsScrollJTablePane, "Albums correspondants", JOptionPane.PLAIN_MESSAGE);
 				}
 			} else {
-				(new OsActionListener<>(mediaFilePath.getPath().toString(), Control.getDisplayFolderAction())).actionPerformed(null);
+				displayMediaFileList(mediaFilePath);
 			}
 		}
 	}
 	
+	public static void displayMediaFileList(MediaFilePath mediaFilePath) {
+		
+		List<MediaFile> mediaFileList = mediaFilePath.getMediaFiles();
+		if ((mediaFileList != null) && !mediaFileList.isEmpty()) {
+			MediaFileTableModel mediaFileTableModel = new MediaFileTableModel(mediaFileList, mediaFilePath.getContentNature());
+			MediaFileJTable mediaFileJTable = new MediaFileJTable(mediaFileTableModel);
+			
+			// Scroll pane to contain the media path table
+			JScrollPane mediaFileScrollTable = new JScrollPane(mediaFileJTable);
+			mediaFileScrollTable.setPreferredSize(Control.getMainSubPaneDimension());
+			
+			JOptionPane.showMessageDialog(null, mediaFileScrollTable, "Fichiers media correspondants", JOptionPane.PLAIN_MESSAGE);
+		}
+	}
+	
 	private void enableMenuItems() {
-		mediaFileMenuItems.enableMenuItems(mediaFileTable.getSelectedMediaFile());
+		mediaFilePathMenuItems.enableMenuItems(mediaFilePathsTable.getSelectedMediaFilePath());
 	}
 }

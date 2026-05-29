@@ -42,7 +42,7 @@ import org.fl.collectionAlbum.MusicArtefact;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.ReleaseMatchResult;
-import org.fl.collectionAlbum.format.AbstractAlbumMediaFiles;
+import org.fl.collectionAlbum.format.AbstractAlbumMediaFilePaths;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.format.Format;
 import org.fl.collectionAlbum.format.MediaSupports;
@@ -140,15 +140,15 @@ public class Album extends MusicArtefact {
     }
     
     public boolean hasMediaFiles(ContentNature contentNature) {
-    	return formatAlbum.hasMediaFiles(contentNature);
+    	return formatAlbum.hasMediaFilePaths(contentNature);
     }
     
     public boolean hasAudioFiles() {
-    	return formatAlbum.hasMediaFiles(ContentNature.AUDIO);
+    	return formatAlbum.hasMediaFilePaths(ContentNature.AUDIO);
     }
     
     public boolean hasVideoFiles() {
-    	return formatAlbum.hasMediaFiles(ContentNature.VIDEO);
+    	return formatAlbum.hasMediaFilePaths(ContentNature.VIDEO);
     }
     
     public boolean hasMediaSupport(MediaSupports mediaSupport) {
@@ -237,8 +237,8 @@ public class Album extends MusicArtefact {
 		return validatePotentialMediaFilePath(potentialMediaFilesPath.get(contentNature), contentNature);
 	}
 	
-	public List<AbstractAlbumMediaFiles> getAllMediaFiles() {
-		return formatAlbum.getAllMediaFiles();
+	public List<AbstractAlbumMediaFilePaths> getAllMediaFilePaths() {
+		return formatAlbum.getAllMediaFilePaths();
 	}
 	
 	private boolean validatePotentialMediaFilePath(Set<MediaFilePath> potentialMediaFilePath, ContentNature contentNature) {
@@ -247,7 +247,7 @@ public class Album extends MusicArtefact {
 			albumLog.severe("Trying to validate " + contentNature.getNom() + " file path with null value for album " + getTitre());
 			return false;
 		} else if (potentialMediaFilePath.size() == 1) {
-			List<? extends AbstractAlbumMediaFiles> mediaFiles = getFormatAlbum().getMediaFiles(contentNature);
+			List<? extends AbstractAlbumMediaFilePaths> mediaFiles = getFormatAlbum().getMediaFilePaths(contentNature);
 			if ((mediaFiles != null) && !mediaFiles.isEmpty()) {
 				if (mediaFiles.size() == 1) {
 					Set<MediaFilePath> mediaFilePaths = mediaFiles.get(0).getMediaFilePaths();
@@ -283,7 +283,7 @@ public class Album extends MusicArtefact {
 		if (sleevePath != null) {
 			return sleevePath;
 		} else if (hasMediaFiles()) {
-			return getAllMediaFiles().stream()
+			return getAllMediaFilePaths().stream()
 					.map(mediaFile -> mediaFile.getMediaFilePaths())
 					.filter(Objects::nonNull)
 					.flatMap(Collection::stream)
@@ -300,6 +300,10 @@ public class Album extends MusicArtefact {
 		return acquisitionDate;
 	}
 
+    public boolean matchesMediaFileMetadata() {
+    	return formatAlbum.matchesMediaFilesMetadata();
+    }
+    
 	@Override
     public boolean hasAdditionnalInfo() {
     	return hasAudioFiles() || hasVideoFiles() || super.hasAdditionnalInfo();

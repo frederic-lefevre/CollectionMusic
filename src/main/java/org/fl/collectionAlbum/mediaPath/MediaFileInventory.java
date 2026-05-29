@@ -44,6 +44,7 @@ import java.util.stream.Collectors;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.format.ContentNature;
+import org.fl.collectionAlbum.mediaFile.MediaFile;
 
 public class MediaFileInventory {
 
@@ -55,8 +56,9 @@ public class MediaFileInventory {
 	
 	private final LinkedHashMap<Path,MediaFilePath> mediaFilePathInventory;
 	
-	// MediaFilePath values maintained as List to be displayed in a JTable
+	// MediaFilePath and MediaFile values maintained as List to be displayed in a JTable
 	private final List<MediaFilePath> mediaFilePathList;
+	private final List<MediaFile> mediaFileList;
 	
 	private final ContentNature contentNature;
 	private final boolean logWarnings;
@@ -69,6 +71,7 @@ public class MediaFileInventory {
 		this.logWarnings = logWarnings;
 		mediaFilePathInventory = new LinkedHashMap<>();
 		mediaFilePathList = new ArrayList<>();
+		mediaFileList = new ArrayList<>();
 		isConnected = Files.exists(rootPath);
 	}
 
@@ -88,6 +91,7 @@ public class MediaFileInventory {
 	
 	public void clearInventory() {
 		mediaFilePathList.clear();
+		mediaFileList.clear();
 		mediaFilePathInventory.clear();
 		isConnected = Files.exists(rootPath);
 	}
@@ -109,14 +113,15 @@ public class MediaFileInventory {
     	@Override
 		public FileVisitResult visitFile(Path file, BasicFileAttributes attr) {
     		
-    		if ((Files.isRegularFile(file)) &&
+    		if ((attr.isRegularFile()) &&
     				MediaFilePath.isMediaFileName(file, contentNature)) {
     			// It should be a media file, part of an album
-    			
+
     			addMediaFilePathToInventory(file.getParent());
-    		 	
-    		} 
-    		return FileVisitResult.CONTINUE;
+    			return FileVisitResult.SKIP_SIBLINGS;
+    		} else {
+    			return FileVisitResult.CONTINUE;
+    		}
     	}
 	}
 	
@@ -126,6 +131,7 @@ public class MediaFileInventory {
 			MediaFilePath newMediaFilePath = new MediaFilePath(albumAbsolutePath, contentNature, logWarnings);
 			mediaFilePathInventory.put(albumAbsolutePath, newMediaFilePath);
 			mediaFilePathList.add(newMediaFilePath);
+			mediaFileList.addAll(newMediaFilePath.getMediaFiles());
 		}
 		return mediaFilePathInventory.get(albumAbsolutePath);
 	}
@@ -178,10 +184,18 @@ public class MediaFileInventory {
 		return mediaFilePathList;
 	}
 	
+	public List<MediaFile> getMediaFileList() {
+		return mediaFileList;
+	}
+
 	public boolean isConnected() {
 		return isConnected;
 	}
 
+	public int getMediaFileNumber() {
+		return mediaFileList.size();
+	}
+	
 	public MediaFilePath validateMediaFilePath(Path path) {
 		
 		if (! isConnected()) {
@@ -235,7 +249,7 @@ public class MediaFileInventory {
     	@Override
 		public FileVisitResult visitFile(Path file, BasicFileAttributes attr) {
     		
-    		if ((Files.isRegularFile(file)) &&
+    		if (attr.isRegularFile() &&
     				MediaFilePath.isMediaFileName(file, contentNature)) {
     			// It should be a media file, part of an album
     			

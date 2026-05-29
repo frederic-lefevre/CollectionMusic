@@ -29,7 +29,8 @@ import static org.assertj.core.api.Assertions.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.fl.collectionAlbum.json.VideoFileParser;
+import org.fl.collectionAlbum.json.ParserHelpers;
+import org.fl.collectionAlbum.json.VideoFilePathJsonParser;
 import org.fl.util.FilterCounter;
 import org.fl.util.FilterCounter.LogRecordCounter;
 import org.junit.jupiter.api.Test;
@@ -39,41 +40,37 @@ import tools.jackson.databind.DatabindException;
 import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.node.ObjectNode;
 
-public class AlbumVideoFilesTest {
+public class AlbumVideoFilePathsTest {
 	
 	private static final ObjectMapper mapper = new ObjectMapper();
 	
 	@Test
 	void shouldHaveAllValues() throws DatabindException, JacksonException {
 		
-		LogRecordCounter videoFileParserFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.VideoFileParser"));
-		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
+		LogRecordCounter videoFileParserFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(VideoFilePathJsonParser.class.getName()));
+		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(ParserHelpers.class.getName()));
 		
 		String videoFileStr1 = "{}" ;
 		ObjectNode jf1 = (ObjectNode)mapper.readTree(videoFileStr1);
 		
-		VideoFileParser videoFileParser = new VideoFileParser();
+		VideoFilePathJsonParser videoFileParser = new VideoFilePathJsonParser();
 		AlbumVideoFiles videoFile = videoFileParser.parseMediaFile(jf1);
 		assertThat(videoFile).isNull();
 		
 		assertThat(videoFileParserFilterCounter.getLogRecordCount()).isEqualTo(3);
 		assertThat(videoFileParserFilterCounter.getLogRecordCount(Level.SEVERE)).isEqualTo(3);
-		
-		if (parserHelpersFilterCounter.isLoggable(Level.INFO)) {
-			assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(2);
-			assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.INFO)).isEqualTo(1);
-		} else {
-			assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(1);
-		}
+
+		assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(2);
+		assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
 		assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.SEVERE)).isEqualTo(1);
 	}
 
 	@Test
 	void shouldAcceptNullWithError() {
 		
-		LogRecordCounter videoFileParserFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.VideoFileParser"));
+		LogRecordCounter videoFileParserFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(VideoFilePathJsonParser.class.getName()));
 		
-		VideoFileParser videoFileParser = new VideoFileParser();
+		VideoFilePathJsonParser videoFileParser = new VideoFilePathJsonParser();
 		AlbumVideoFiles videoFile = videoFileParser.parseMediaFile(null);
 		assertThat(videoFile).isNull();
 		
@@ -84,8 +81,8 @@ public class AlbumVideoFilesTest {
 	@Test
 	void shouldNotDeserializeToVideoFile() throws DatabindException, JacksonException {
 		
-		LogRecordCounter videoFileParserFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.VideoFileParser"));
-		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
+		LogRecordCounter videoFileParserFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(VideoFilePathJsonParser.class.getName()));
+		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(ParserHelpers.class.getName()));
 		
 		String videoFileStr1 = """
 			{"width": 720, 
@@ -94,25 +91,21 @@ public class AlbumVideoFilesTest {
 				""" ;
 		ObjectNode jf1 = (ObjectNode)mapper.readTree(videoFileStr1);
 		
-		VideoFileParser videoFileParser = new VideoFileParser();
+		VideoFilePathJsonParser videoFileParser = new VideoFilePathJsonParser();
 		AlbumVideoFiles videoFile = videoFileParser.parseMediaFile(jf1);
 		assertThat(videoFile).isNull();
 		
 		assertThat(videoFileParserFilterCounter.getLogRecordCount()).isEqualTo(1);
 		assertThat(videoFileParserFilterCounter.getLogRecordCount(Level.SEVERE)).isEqualTo(1);
-		
-		if (parserHelpersFilterCounter.isLoggable(Level.INFO)) {
-			assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(1);
-			assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.INFO)).isEqualTo(1);
-		} else {
-			assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(0);
-		}
+
+		assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
 	}
 	
 	@Test
 	void shouldDeserializeToVideoFileWithoutNote() throws DatabindException, JacksonException {
 		
-		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
+		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(ParserHelpers.class.getName()));
 		
 		String videoFileStr1 = """
 			{"width": 720, 
@@ -122,7 +115,7 @@ public class AlbumVideoFilesTest {
 				""" ;
 		ObjectNode jf1 = (ObjectNode)mapper.readTree(videoFileStr1);
 		
-		VideoFileParser videoFileParser = new VideoFileParser();
+		VideoFilePathJsonParser videoFileParser = new VideoFilePathJsonParser();
 		AlbumVideoFiles videoFile = videoFileParser.parseMediaFile(jf1);
 		assertThat(videoFile).isNotNull();
 		assertThat(videoFile.getHeight()).isEqualTo(480);
@@ -131,18 +124,14 @@ public class AlbumVideoFilesTest {
 		assertThat(videoFile.getType()).isEqualTo(VideoFileType.MKV);
 		assertThat(videoFile.getNote()).isNull();
 		
-		if (parserHelpersFilterCounter.isLoggable(Level.INFO)) {
-			assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(1);
-			assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.INFO)).isEqualTo(1);
-		} else {
-			assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(0);
-		}
+		assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
 	}
 	
 	@Test
 	void shouldDeserializeToVideoFile() throws DatabindException, JacksonException {
 		
-		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
+		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(ParserHelpers.class.getName()));
 		
 		String videoFileStr1 = """
 			{"width": 720, 
@@ -153,7 +142,7 @@ public class AlbumVideoFilesTest {
 				""" ;
 		ObjectNode jf1 = (ObjectNode)mapper.readTree(videoFileStr1);
 		
-		VideoFileParser videoFileParser = new VideoFileParser();
+		VideoFilePathJsonParser videoFileParser = new VideoFilePathJsonParser();
 		AlbumVideoFiles videoFile = videoFileParser.parseMediaFile(jf1);
 		assertThat(videoFile).isNotNull();
 		assertThat(videoFile.getHeight()).isEqualTo(480);
@@ -164,11 +153,7 @@ public class AlbumVideoFilesTest {
 		
 		assertThat(videoFile.displayMediaFileDetailTitles(";")).isEqualTo("Width;Height;Type;Source;Note");
 		
-		if (parserHelpersFilterCounter.isLoggable(Level.INFO)) {
-			assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(1);
-			assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.INFO)).isEqualTo(1);
-		} else {
-			assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(0);
-		}
+		assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
 	}
 }

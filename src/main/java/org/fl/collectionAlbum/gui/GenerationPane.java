@@ -27,7 +27,6 @@ package org.fl.collectionAlbum.gui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.List;
-import java.util.stream.Stream;
 
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
@@ -36,8 +35,7 @@ import javax.swing.JScrollPane;
 import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory;
-import org.fl.collectionAlbum.format.ContentNature;
-import org.fl.collectionAlbum.gui.table.AbstractAlbumsTableModel;
+import org.fl.collectionAlbum.gui.table.AlbumTableColumn;
 import org.fl.collectionAlbum.gui.table.AlbumsScrollJTablePane;
 import org.fl.collectionAlbum.gui.table.ArtistesScrollJTablePane;
 import org.fl.collectionAlbum.gui.table.ConcertsScrollJTablePane;
@@ -45,9 +43,6 @@ import org.fl.collectionAlbum.gui.table.DiscogsReleaseJTable;
 import org.fl.collectionAlbum.gui.table.DisocgsReleaseTableModel;
 import org.fl.collectionAlbum.gui.table.LieuConcertJTable;
 import org.fl.collectionAlbum.gui.table.LieuConcertTableModel;
-import org.fl.collectionAlbum.gui.table.MediaFilesJTable;
-import org.fl.collectionAlbum.gui.table.MediaFilesTableModel;
-import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 
 public class GenerationPane extends JPanel {
 
@@ -72,7 +67,7 @@ public class GenerationPane extends JPanel {
 
 		// collection tab: Scroll pane to contain the collection table
 		AlbumsScrollJTablePane albumsScrollJTablePane = 
-				new AlbumsScrollJTablePane(collectionAlbumContainer.getCollectionAlbumsMusiques().getAlbums(), AbstractAlbumsTableModel.AUGMENTED_COLUMN_LIST, this);	
+				new AlbumsScrollJTablePane(collectionAlbumContainer.getCollectionAlbumsMusiques().getAlbums(), AlbumTableColumn.AUGMENTED_COLUMN_LIST, this);	
 		
 		ArtistesScrollJTablePane artistesScrollJTablePane = new ArtistesScrollJTablePane(collectionAlbumContainer.getCollectionArtistes().getArtistes(), this, true);
 		ArtistesScrollJTablePane artistesConcertsScrollJTablePane = new ArtistesScrollJTablePane(collectionAlbumContainer.getConcertsArtistes().getArtistes(), this, true);
@@ -118,19 +113,11 @@ public class GenerationPane extends JPanel {
 		collectionTabPanes.add(albumsScrollJTablePane, "Collection d'albums");	
 		collectionTabPanes.add(artistesScrollJTablePane, "Artistes des albums");
 		
-		// Media files tabs
-		Stream.of(ContentNature.values()).forEachOrdered(contentNature -> {
-			
-			MediaFilesTableModel tm = new MediaFilesTableModel(MediaFilesInventories.getMediaFileInventory(contentNature));
-			startReadCollection.addUpdatableElement(tm);
-			
-			MediaFilesJTable mediaFilesJTable = new MediaFilesJTable(tm, this);
-			
-			// Scroll pane to contain the media path table
-			JScrollPane mediaFilesScrollTable = new JScrollPane(mediaFilesJTable);
-			mediaFilesScrollTable.setPreferredSize(Control.getMainSubPaneDimension());
-			
-			collectionTabPanes.add(mediaFilesScrollTable, "Chemins des fichiers " + contentNature.getNom());
+		// Media files tab
+		MediaFilesTabbedPane mediaFilesTabbedPane = new MediaFilesTabbedPane(this);
+		collectionTabPanes.add(mediaFilesTabbedPane, "Chemins et fichiers media");
+		mediaFilesTabbedPane.getUpdatableElements().forEach(tableModel -> {
+			startReadCollection.addUpdatableElement(tableModel);
 		});
 		
 		// Discogs releases pane
@@ -178,7 +165,10 @@ public class GenerationPane extends JPanel {
 		
 		// Collection metrics history
 		CollectionMetricsTabbedPane collectionMetricsTabPanes = 
-				new CollectionMetricsTabbedPane(List.of(Control.getCollectionMetricsHsitory(), Control.getConcertMetricsHsitory()), collectionAlbumContainer, this);
+				new CollectionMetricsTabbedPane(
+						List.of(Control.getCollectionMetricsHsitory(), Control.getConcertMetricsHsitory(), Control.getMediaFileMetricsHsitory()), 
+						collectionAlbumContainer, 
+						this);
 
 		startReadCollection.addColorableTabbedPane(List.of(collectionMetricsTabPanes, collectionTabPanes));
 		startGenerationSite.addColorableTabbedPane(List.of(collectionMetricsTabPanes, collectionTabPanes));
