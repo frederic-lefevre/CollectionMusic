@@ -443,6 +443,20 @@ class AlbumTest {
 		assertThat(album.getContentNatures()).containsExactly(ContentNature.AUDIO);
 	}
 	
+	@Test
+	void testMediaFileMetadataMatch() throws DatabindException, JacksonException {
+		
+		ObjectNode jAlbum = (ObjectNode)mapper.readTree(albumStr3);
+
+		ListeArtiste la = new ListeArtiste();
+		List<ListeArtiste> lla = new ArrayList<ListeArtiste>();
+		lla.add(la);
+
+		Album album = new Album(jAlbum, lla, Path.of("dummyPath"));
+		
+		assertThat(album.matchesMediaFileMetadata()).isTrue();	
+	}
+	
 	private static final String albumStr2 = """
 { 
   "titre": "Van Halen",

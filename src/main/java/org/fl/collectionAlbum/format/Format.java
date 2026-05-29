@@ -490,4 +490,8 @@ public class Format {
 			return Collections.emptyList();
 		}
 	}
+	
+	public boolean matchesMediaFilesMetadata() {
+		return getAllMediaFilePaths().stream().allMatch(AbstractAlbumMediaFilePaths::matchesMediaFilesMetadata);
+	}
 }

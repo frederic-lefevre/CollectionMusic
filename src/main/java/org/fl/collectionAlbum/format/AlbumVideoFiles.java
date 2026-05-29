@@ -91,4 +91,9 @@ public class AlbumVideoFiles extends AbstractAlbumMediaFilePaths {
 		appendCommonMediaFileDetailTitles(videoFilesDetailTitles, separator);
 		return videoFilesDetailTitles.toString();
 	}
+
+	@Override
+	public boolean matchesMediaFilesMetadata() {
+		return true; // not yet implemented
+	}
 }

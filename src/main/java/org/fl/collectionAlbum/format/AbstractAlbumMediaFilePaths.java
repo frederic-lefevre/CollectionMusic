@@ -70,6 +70,7 @@ public abstract class AbstractAlbumMediaFilePaths {
 	public abstract String displayMediaFileDetail(String separator, boolean withPrefix);
 	public abstract String displayMediaFileDetailWithFileLink(String separator, boolean withPrefix);
 	public abstract String displayMediaFileDetailTitles(String separator);
+	public abstract boolean matchesMediaFilesMetadata();
 	
 	public abstract String displayMediaFileSummary();
 	

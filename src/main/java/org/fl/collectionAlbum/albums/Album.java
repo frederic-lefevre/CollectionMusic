@@ -300,6 +300,10 @@ public class Album extends MusicArtefact {
 		return acquisitionDate;
 	}
 
+    public boolean matchesMediaFileMetadata() {
+    	return formatAlbum.matchesMediaFilesMetadata();
+    }
+    
 	@Override
     public boolean hasAdditionnalInfo() {
     	return hasAudioFiles() || hasVideoFiles() || super.hasAdditionnalInfo();

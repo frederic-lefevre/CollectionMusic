@@ -24,23 +24,41 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.format;
 
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiConsumer;
 
+import org.fl.collectionAlbum.mediaFile.metadata.AudioStreamMetadata;
+import org.fl.collectionAlbum.mediaFile.metadata.MetadataElement;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
 import tools.jackson.databind.node.ObjectNode;
 
 public class LossyAlbumAudioFiles extends AbstractAlbumsAudioFiles {
-	
-	private final double bitRate;  // in kbits/s
 
 	private static final String BIT_RATE_TITLE = "Bit rate";
+	
+	private final double bitRate;  // in kbits/s
+	private final boolean matchesMediaFilesMetadata;
 	
 	public LossyAlbumAudioFiles(ObjectNode audioJson, AudioFileType type, String source, double bitRate, double samplingRate, String note, Set<MediaFilePath> mediaFilePaths) {
 		
 		super(audioJson, type, source, samplingRate, note, mediaFilePaths);
 		this.bitRate = bitRate;
+		
+		if ((mediaFilePaths == null) || mediaFilePaths.isEmpty()) {
+			matchesMediaFilesMetadata = true;
+		} else {
+			matchesMediaFilesMetadata = mediaFilePaths.stream()
+					.map(m -> m.getMediaFiles())
+					.filter(Objects::nonNull)
+					.filter(m -> !m.isEmpty())
+					.map(m -> m.get(0))
+					.allMatch(mediaFile -> mediaFile.haveMetadata(
+							new MetadataElement<>(AudioStreamMetadata.IS_LOSSLESS, false),
+							new MetadataElement<>(AudioStreamMetadata.SAMPLING_RATE, (long)(samplingRate*1000)),
+							new MetadataElement<>(AudioStreamMetadata.BIT_RATE,  (long)(bitRate*1000))));
+		}
 	}
 
 	public double getBitRate() {
@@ -84,4 +102,10 @@ public class LossyAlbumAudioFiles extends AbstractAlbumsAudioFiles {
 		appendCommonAudioFileDetailTitles(audioFilesDetailTitles, separator);
 		return audioFilesDetailTitles.toString();
 	}
+	
+	@Override
+	public boolean matchesMediaFilesMetadata() {
+		return matchesMediaFilesMetadata;
+	}
+
 }

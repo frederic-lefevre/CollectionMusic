@@ -183,12 +183,5 @@ public class MediaFilePath {
 	public boolean hasEquivalentStreamMetadata() {
 		return hasEquivalentMetadata;
 	}
-	
-	// TODO completer ci dessous
-	public boolean checkVersusAlbumDeclaration(int bitDepth, double samplingRate) {
-		
-		mediaFiles.stream().map(m -> m.getMetadata().getStreamMetadata());
-		return true;
-	}
 
 }

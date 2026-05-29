@@ -24,27 +24,45 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.format;
 
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiConsumer;
 
+import org.fl.collectionAlbum.mediaFile.metadata.AudioStreamMetadata;
+import org.fl.collectionAlbum.mediaFile.metadata.MetadataElement;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
 import tools.jackson.databind.node.ObjectNode;
 
 public class LosslessAlbumAudioFiles extends AbstractAlbumsAudioFiles {
 
-	private final int bitDepth;
-	
 	private static final String BIT_DEPTH_TITLE = "Bit depth";
 	
 	private static final int HIGH_RES_BIT_DEPTH_THRESHOLD = 16;
 	private static final long HIGH_RES_SAMPLING_RATE_THRESHOLD = 48;
+	
+	private final int bitDepth;
+	private final boolean matchesMediaFilesMetadata;
 	
 	public LosslessAlbumAudioFiles(ObjectNode audioJson, AudioFileType type, String source, int bitDepth, double samplingRate, String note, Set<MediaFilePath> mediaFilePaths) {
 		
 		super(audioJson, type, source, samplingRate, note, mediaFilePaths);
 
 		this.bitDepth = bitDepth;
+		
+		if ((mediaFilePaths == null) || mediaFilePaths.isEmpty()) {
+			matchesMediaFilesMetadata = true;
+		} else {
+			matchesMediaFilesMetadata = mediaFilePaths.stream()
+				.map(m -> m.getMediaFiles())
+				.filter(Objects::nonNull)
+				.filter(m -> !m.isEmpty())
+				.map(m -> m.get(0))
+				.allMatch(mediaFile -> mediaFile.haveMetadata(
+						new MetadataElement<>(AudioStreamMetadata.IS_LOSSLESS, true),
+						new MetadataElement<>(AudioStreamMetadata.SAMPLING_RATE, (long)(samplingRate*1000)),
+						new MetadataElement<>(AudioStreamMetadata.BIT_DEPTH, bitDepth)));
+		}
 	}
 
 	public int getBitDepth() {
@@ -87,6 +105,11 @@ public class LosslessAlbumAudioFiles extends AbstractAlbumsAudioFiles {
 		audioFilesDetailTitles.append(BIT_DEPTH_TITLE).append(separator);
 		appendCommonAudioFileDetailTitles(audioFilesDetailTitles, separator);
 		return audioFilesDetailTitles.toString();
+	}
+
+	@Override
+	public boolean matchesMediaFilesMetadata() {
+		return matchesMediaFilesMetadata;
 	}
 
 }
