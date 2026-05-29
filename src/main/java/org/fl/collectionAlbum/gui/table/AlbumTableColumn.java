@@ -82,6 +82,8 @@ public class AlbumTableColumn {
 					new AlbumAcquisitionDateComparator(), 
 					Album.class, 
 					(a) -> a);
+	private static final TableColumnParameter<Album> METADATA_MATCH = 
+			new TableColumnParameter<>("Metadata exactes", 70, new CollectionBooleanRenderer(), null, Boolean.class, Album::matchesMediaFileMetadata);
 	
 	public static final List<TableColumnParameter<Album>> REGULAR_COLUMN_LIST = List.of(
 			AlbumTableColumn.TITRE, 
@@ -101,7 +103,8 @@ public class AlbumTableColumn {
 			AlbumTableColumn.DISCOGS,
 			AlbumTableColumn.POIDS,
 			AlbumTableColumn.ENREGISTREMENT,
-			AlbumTableColumn.COMPOSITION);
+			AlbumTableColumn.COMPOSITION,
+			AlbumTableColumn.METADATA_MATCH);
 	
 	public static final List<TableColumnParameter<Album>> ACQUISITION_COLUMN_LIST = List.of(
 			AlbumTableColumn.TITRE, 
