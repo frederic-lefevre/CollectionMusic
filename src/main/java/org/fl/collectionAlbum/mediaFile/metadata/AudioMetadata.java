@@ -54,12 +54,12 @@ public class AudioMetadata implements MediaFileMetadata {
 		allTags = new HashMap<>(normalizedAudioMetadataTagsMap);
 		allTags.putAll(additionnalTags);
 		
-		if (logger.isLoggable(Level.INFO) && (additionnalTags.size() > 0)) {
+		if (additionnalTags.size() > 0) {
 			if (additionnalTags.keySet().stream()
 				.filter(tag -> !ACCEPTABLE_NON_NORMALIZED_TAGS.contains(tag))
 				.findAny()
 				.isPresent()) {
-				logger.info(filePath + " has undesired non normalized audio metadata");
+				logger.warning(filePath + " has undesired non normalized audio metadata");
 			} else if (logger.isLoggable(Level.FINE)) {
 				logger.fine(filePath + " has acceptable non normalized audio metadata");
 			}
