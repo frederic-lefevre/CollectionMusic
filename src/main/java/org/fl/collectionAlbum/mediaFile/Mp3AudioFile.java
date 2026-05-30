@@ -24,20 +24,46 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.mediaFile;
 
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
+import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.format.AudioFileType;
 import org.fl.collectionAlbum.mediaFile.metadata.AudioMetadata;
 
 public class Mp3AudioFile extends AudioFile {
 
+	private static final Logger logger = Logger.getLogger(Mp3AudioFile.class.getName());
+	
+	private static final int FIRST_BYTES_TO_READ = 200;
+	
 	public Mp3AudioFile(Path filePath) {
 		super(filePath, AudioFileType.MP3);
 	}
 
 	@Override
 	protected AudioMetadata parseMetadata() {
-		// TODO Auto-generated method stub
+		
+		AudioMetadata audioMetadata = null;
+		
+		// will change if it is not so
+		boolean isValidMp3File = true;
+		
+		try (FileChannel sbc = FileChannel.open(filePath, StandardOpenOption.READ)) {
+			
+			size = Optional.of(sbc.size());
+			
+			ByteBuffer byteBuffer = Utils.readToDirectByteBuffer(sbc, FIRST_BYTES_TO_READ);
+			
+		} catch (Exception e) {
+			isValidMp3File = false;
+			logger.log(Level.WARNING, "Exception when reading MP3 file " + filePath, e);
+		}
+		
 		return null;
 	}
 }
