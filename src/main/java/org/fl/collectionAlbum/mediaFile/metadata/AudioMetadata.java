@@ -25,7 +25,6 @@ SOFTWARE.
 package org.fl.collectionAlbum.mediaFile.metadata;
 
 import java.nio.file.Path;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -41,7 +40,6 @@ public class AudioMetadata implements MediaFileMetadata {
 	private final NormalizedAudioMetadataTags normalizedAudioMetadataTags;
 	private final Map<String, MetadataElement<?>> additionnalTags;
 	private final Map<String, MetadataElement<?>> normalizedAudioMetadataTagsMap;
-	private final Map<String, MetadataElement<?>> allTags;
 	
 	public AudioMetadata(AudioStreamMetadata audioStreamMetadata, NormalizedAudioMetadataTags audioMetadataTags, Map<String, MetadataElement<?>> additionnalTags, Path filePath) {
 		super();
@@ -50,9 +48,6 @@ public class AudioMetadata implements MediaFileMetadata {
 		this.additionnalTags = additionnalTags;
 		
 		this.normalizedAudioMetadataTagsMap = normalizedAudioMetadataTags.getNormalizedTags();
-		
-		allTags = new HashMap<>(normalizedAudioMetadataTagsMap);
-		allTags.putAll(additionnalTags);
 		
 		if (additionnalTags.size() > 0) {
 			if (additionnalTags.keySet().stream()
