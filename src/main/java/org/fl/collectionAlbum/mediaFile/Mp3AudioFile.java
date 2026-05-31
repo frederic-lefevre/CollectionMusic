@@ -29,7 +29,6 @@ import java.nio.channels.FileChannel;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -55,9 +54,6 @@ public class Mp3AudioFile extends AudioFile {
 		
 		AudioMetadata audioMetadata = null;
 		
-		// will change if it is not so
-		boolean isValidMp3File = true;
-		
 		try (FileChannel sbc = FileChannel.open(filePath, StandardOpenOption.READ)) {
 			
 			size = Optional.of(sbc.size());
@@ -79,12 +75,13 @@ public class Mp3AudioFile extends AudioFile {
 				logger.log(Level.WARNING, "No ID3 Header found at the begining of MP3 file " + filePath);
 
 				id3AndHeaderBuffer =  Utils.readToDirectByteBuffer(sbc, Mp3Header.MP3_HEADER_SIZE);
-
 			}
 			
 			// Parse stream info in MP3 Header
-			Mp3Header mp3Header = new Mp3Header(id3AndHeaderBuffer, filePath);
+			Mp3Header mp3Header = new Mp3Header(id3AndHeaderBuffer, filePath, sbc);
 			
+			isValidMediaFile = Optional.of(mp3Header.isSupportedMp3());
+					
 			audioMetadata = new AudioMetadata(
 					mp3Header.getAudioStreamMetadata(), 
 					NormalizedAudioMetadataTagsBuilder.builder().albumTitle("Album title").artist("artist").trackNumber("01").genre("genre").trackTitle("titre").build(filePath), 
@@ -92,7 +89,6 @@ public class Mp3AudioFile extends AudioFile {
 					filePath);
 			
 		} catch (Exception e) {
-			isValidMp3File = false;
 			logger.log(Level.WARNING, "Exception when reading MP3 file " + filePath, e);
 		}
 		

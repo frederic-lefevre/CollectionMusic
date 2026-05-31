@@ -25,15 +25,15 @@ SOFTWARE.
 package org.fl.collectionAlbum.mediaFile.metadata;
 
 import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.nio.file.Path;
 import java.util.logging.Logger;
 
-import org.fl.collectionAlbum.mediaFile.Mp3AudioFile;
 import org.fl.collectionAlbum.mediaFile.Utils;
 
 public class Mp3Header {
 
-	private static final Logger logger = Logger.getLogger(Mp3AudioFile.class.getName());
+	private static final Logger logger = Logger.getLogger(Mp3Header.class.getName());
 	
 	public static final int MP3_HEADER_SIZE = 4;
 
@@ -73,7 +73,9 @@ public class Mp3Header {
 	private final String version;
 	private final String layer;
 	
-	public Mp3Header(ByteBuffer byteBuffer, Path filePath) {
+	private final boolean isSupportedMp3;
+	
+	public Mp3Header(ByteBuffer byteBuffer, Path filePath, FileChannel sbc) {
 		
 		long bitRate = INVALID_RATE;
 		long samplingRate = INVALID_RATE;
@@ -84,12 +86,15 @@ public class Mp3Header {
 		int b2 = Utils.get1byteUnsignedInt(byteBuffer);
 		int b3 = Utils.get1byteUnsignedInt(byteBuffer);
 		int b4 = Utils.get1byteUnsignedInt(byteBuffer);
-		
+
 		if (((b1 & SYNC_BYTE_1) != SYNC_BYTE_1) || ((b2 & SYNC_BYTE_2_MASK) != SYNC_BYTE_2_MASK)) {
 			
 			logger.warning("Invalid MP3 Header (no 0xFF 0b111xxxxx sync bytes) in " + filePath);
 			version = null;
 			layer = null;
+				
+			audioStreamMetadata = null;
+			isSupportedMp3 = false;
 		} else {
 			
 			int versionIndex = (b2 & VERSION_MASK) >> 3;
@@ -106,18 +111,10 @@ public class Mp3Header {
 			
 			int numberOfChannelIndex = (b4 & CHANNEL_MODE_MASK) >> 6;
 			numberOfChannels = NUMBER_OF_CHANNELS_VALUES[numberOfChannelIndex];
+			
+			audioStreamMetadata = AudioStreamMetadataBuilder.build(false, samplingRate, 0, bitRate, numberOfChannels, 0);
+			isSupportedMp3 = true;
 		}
-		
-		audioStreamMetadata = AudioStreamMetadataBuilder.build(false, samplingRate, 0, bitRate, numberOfChannels, 0);
-
-		/*
-		System.out.println("Version=" + version);
-		System.out.println("Layer=" + layer);
-		System.out.println("BitRate=" + bitRate);
-		System.out.println("SamplingRate=" + samplingRate);
-		System.out.println("NumberOfChannels=" + numberOfChannels);
-		*/
-
 	}
 	
 	public AudioStreamMetadata getAudioStreamMetadata() {
@@ -130,6 +127,10 @@ public class Mp3Header {
 
 	public String getLayer() {
 		return layer;
+	}
+	
+	public boolean isSupportedMp3() {
+		return isSupportedMp3;
 	}
 	
 	private long getBitRateValue(int bitRateIndex, int versionIndex, int layerIndex) {

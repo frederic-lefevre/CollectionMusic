@@ -28,10 +28,15 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.net.URISyntaxException;
 import java.nio.file.Path;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.mediaFile.metadata.AudioMetadata;
 import org.fl.collectionAlbum.mediaFile.metadata.AudioStreamMetadata;
 import org.fl.collectionAlbum.mediaFile.metadata.MediaFileMetadata;
+import org.fl.collectionAlbum.mediaFile.metadata.Mp3Header;
+import org.fl.util.FilterCounter;
+import org.fl.util.FilterCounter.LogRecordCounter;
 import org.fl.util.file.FilesUtils;
 import org.junit.jupiter.api.Test;
 
@@ -51,6 +56,7 @@ class Mp3AudioFileTest {
 		assertThat(f1.getExtension()).isEqualTo("mp3");
 		
 		assertThat(f1.getSize()).isPresent().hasValue(5213186L);
+		assertThat(f1.isValidMediaFile()).isPresent().hasValue(true);
 
 		assertThat(f1.getFilePath().toUri()).asString().isEqualTo("file:///C:/ForTests/CollectionMusique/Rock%20Around%20The%20Clock.mp3");
 		
@@ -69,5 +75,37 @@ class Mp3AudioFileTest {
 		assertThat(streamInfo.numberOfChannels().value()).isEqualTo(2);
 		assertThat(streamInfo.bitRate().value()).isEqualTo(320000);
 		assertThat(streamInfo.trackDuration().value()).isEqualTo(0);  // not calculated
+	}
+	
+	@Test
+	void shouldNotParseMp3FileWithPaddingAfterID3() throws URISyntaxException {
+
+		Path mp3FilePath = FilesUtils.uriStringToAbsolutePath("file:///ForTests/CollectionMusique/f1.mp3");
+		
+		LogRecordCounter mp3FilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(Mp3Header.class.getName()));
+				
+		Mp3AudioFile f1 = new Mp3AudioFile(mp3FilePath);
+		assertThat(f1.isValidMediaFile()).isEmpty(); // not parsed yet
+		assertThat(f1.hasImbeddedPicture()).isEmpty();
+		assertThat(f1.getSize()).isEmpty();
+		
+		assertThat(f1.getExtension()).isEqualTo("mp3");
+		assertThat(f1.getFilePath().toUri()).asString().isEqualTo("file:///C:/ForTests/CollectionMusique/f1.mp3");
+		
+		MediaFileMetadata metadata = f1.getMetadata();
+		assertThat(metadata).isNotNull();
+		assertThat(f1.getSize()).isPresent().hasValue(3613113L);
+		assertThat(f1.isValidMediaFile()).isPresent().hasValue(false);
+		
+		AudioMetadata audioMetadata = f1.getAudioMetadata();
+		assertThat(audioMetadata).isNotNull();
+		
+		AudioStreamMetadata streamInfo = audioMetadata.getAudioStreamMetadata();
+		assertThat(streamInfo).isNull();
+		
+		assertThat(mp3FilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(mp3FilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
+		mp3FilterCounter.stopLogCountAndFilter();
+		
 	}
 }
