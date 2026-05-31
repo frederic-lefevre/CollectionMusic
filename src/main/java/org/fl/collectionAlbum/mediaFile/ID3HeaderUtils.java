@@ -38,6 +38,8 @@ public class ID3HeaderUtils {
 	private static final int FLAG_LENGTH = 1;
 	private static final int ID3_HEADER_SIZE_OFFSET = ID3_IDENTIFIER.length() + MAJOR_VERSION_LENGTH + MINOR_VERSION_LENGTH + FLAG_LENGTH;
 	private static final int SIZE_LENGTH = 4;
+	
+	public static final int BEGIN_HEADER_SIZE = ID3_HEADER_SIZE_OFFSET + SIZE_LENGTH;
 
 	public static int getID3v2HeaderLength(ByteBuffer byteBuffer) {
 

@@ -28,18 +28,23 @@ import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.format.AudioFileType;
 import org.fl.collectionAlbum.mediaFile.metadata.AudioMetadata;
+import org.fl.collectionAlbum.mediaFile.metadata.MetadataElement;
+import org.fl.collectionAlbum.mediaFile.metadata.Mp3Header;
+import org.fl.collectionAlbum.mediaFile.metadata.NormalizedAudioMetadataTagsBuilder;
 
 public class Mp3AudioFile extends AudioFile {
 
 	private static final Logger logger = Logger.getLogger(Mp3AudioFile.class.getName());
 	
-	private static final int FIRST_BYTES_TO_READ = 200;
+	// This is a partial implementation to cover most of the cases
 	
 	public Mp3AudioFile(Path filePath) {
 		super(filePath, AudioFileType.MP3);
@@ -57,13 +62,40 @@ public class Mp3AudioFile extends AudioFile {
 			
 			size = Optional.of(sbc.size());
 			
-			ByteBuffer byteBuffer = Utils.readToDirectByteBuffer(sbc, FIRST_BYTES_TO_READ);
+			ByteBuffer byteBuffer = Utils.readToDirectByteBuffer(sbc, ID3HeaderUtils.BEGIN_HEADER_SIZE);
+			
+			ByteBuffer id3AndHeaderBuffer;
+			
+			int id3HeaderLength = ID3HeaderUtils.getID3v2HeaderLength(byteBuffer);
+			if (id3HeaderLength > 0) {
+				
+				// Read the remaining of the ID3 Header and the MP3 Header
+				id3AndHeaderBuffer =  Utils.readToDirectByteBuffer(sbc, id3HeaderLength - ID3HeaderUtils.BEGIN_HEADER_SIZE + Mp3Header.MP3_HEADER_SIZE);
+				
+				// Parse the tags
+				id3AndHeaderBuffer.position(id3HeaderLength - ID3HeaderUtils.BEGIN_HEADER_SIZE); // TODO Replace by parsing
+				
+			} else {
+				logger.log(Level.WARNING, "No ID3 Header found at the begining of MP3 file " + filePath);
+
+				id3AndHeaderBuffer =  Utils.readToDirectByteBuffer(sbc, Mp3Header.MP3_HEADER_SIZE);
+
+			}
+			
+			// Parse stream info in MP3 Header
+			Mp3Header mp3Header = new Mp3Header(id3AndHeaderBuffer, filePath);
+			
+			audioMetadata = new AudioMetadata(
+					mp3Header.getAudioStreamMetadata(), 
+					NormalizedAudioMetadataTagsBuilder.builder().albumTitle("Album title").artist("artist").trackNumber("01").genre("genre").trackTitle("titre").build(filePath), 
+					new HashMap<String, MetadataElement<?>>(), 
+					filePath);
 			
 		} catch (Exception e) {
 			isValidMp3File = false;
 			logger.log(Level.WARNING, "Exception when reading MP3 file " + filePath, e);
 		}
 		
-		return null;
+		return audioMetadata;
 	}
 }
