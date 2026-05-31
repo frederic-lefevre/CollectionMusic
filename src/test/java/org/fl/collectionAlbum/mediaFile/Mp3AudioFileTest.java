@@ -53,17 +53,13 @@ class Mp3AudioFileTest {
 		assertThat(f1.isValidMediaFile()).isEmpty(); // not parsed yet
 		assertThat(f1.hasImbeddedPicture()).isEmpty();
 		assertThat(f1.getSize()).isEmpty();
-		
-		f1.parseMetadata();
-		assertThat(f1.getExtension()).isEqualTo("mp3");
-		
-		assertThat(f1.getSize()).isPresent().hasValue(5213186L);
-		assertThat(f1.isValidMediaFile()).isPresent().hasValue(true);
-
 		assertThat(f1.getFilePath().toUri()).asString().isEqualTo("file:///C:/ForTests/CollectionMusique/Rock%20Around%20The%20Clock.mp3");
+		assertThat(f1.getExtension()).isEqualTo("mp3");
 		
 		MediaFileMetadata metadata = f1.getMetadata();
 		assertThat(metadata).isNotNull();
+		assertThat(f1.getSize()).isPresent().hasValue(5213186L);
+		assertThat(f1.isValidMediaFile()).isPresent().hasValue(true);
 		
 		AudioMetadata audioMetadata = f1.getAudioMetadata();
 		assertThat(audioMetadata).isNotNull();
@@ -77,7 +73,6 @@ class Mp3AudioFileTest {
 		assertThat(streamInfo.numberOfChannels().value()).isEqualTo(2);
 		assertThat(streamInfo.bitRate().value()).isEqualTo(320000);
 		assertThat(streamInfo.trackDuration().value()).isEqualTo(0);  // not calculated
-		
 		
 		assertThat(metadata.getFormatSpecificMetadata()).isNotNull().containsExactlyInAnyOrderEntriesOf(
 				Map.of("Version", new MetadataElement<>("Version", "MPEG version 1"), "Layer", new MetadataElement<>("Layer", "Layer III"))
@@ -100,15 +95,12 @@ class Mp3AudioFileTest {
 		assertThat(f1.getFilePath().toUri()).asString().isEqualTo("file:///C:/ForTests/CollectionMusique/f1.mp3");
 		
 		MediaFileMetadata metadata = f1.getMetadata();
-		assertThat(metadata).isNotNull();
+		assertThat(metadata).isNull();
 		assertThat(f1.getSize()).isPresent().hasValue(3613113L);
 		assertThat(f1.isValidMediaFile()).isPresent().hasValue(false);
 		
 		AudioMetadata audioMetadata = f1.getAudioMetadata();
-		assertThat(audioMetadata).isNotNull();
-		
-		AudioStreamMetadata streamInfo = audioMetadata.getAudioStreamMetadata();
-		assertThat(streamInfo).isNull();
+		assertThat(audioMetadata).isNull();
 		
 		assertThat(mp3FilterCounter.getLogRecordCount()).isEqualTo(1);
 		assertThat(mp3FilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);

@@ -81,13 +81,15 @@ public class Mp3AudioFile extends AudioFile {
 			Mp3Header mp3Header = new Mp3Header(id3AndHeaderBuffer, filePath, sbc);
 			
 			isValidMediaFile = Optional.of(mp3Header.isSupportedMp3());
-					
-			audioMetadata = new AudioMetadata(
-					mp3Header.getAudioStreamMetadata(), 
-					NormalizedAudioMetadataTagsBuilder.builder().albumTitle("Album title").artist("artist").trackNumber("01").genre("genre").trackTitle("titre").build(filePath), 
-					new HashMap<String, MetadataElement<?>>(), 
-					mp3Header.getFormatSpecificMetadata(),
-					filePath);
+				
+			if (isValidMediaFile.get()) {
+				audioMetadata = new AudioMetadata(
+						mp3Header.getAudioStreamMetadata(), 
+						NormalizedAudioMetadataTagsBuilder.builder().albumTitle("Album title").artist("artist").trackNumber("01").genre("genre").trackTitle("titre").build(filePath), 
+						new HashMap<String, MetadataElement<?>>(), 
+						mp3Header.getFormatSpecificMetadata(),
+						filePath);
+			}
 			
 		} catch (Exception e) {
 			logger.log(Level.WARNING, "Exception when reading MP3 file " + filePath, e);

@@ -87,7 +87,7 @@ public class MediaFilePathsJTable extends JTable {
 		if (rowIdxs.length == 0) {
 			return null;
 		} else if (rowIdxs.length > 1) {
-			tLog.severe("Found several selected rows for MediaFilesJTable. Number of selected rows: " + rowIdxs.length);
+			tLog.severe("Found several selected rows for MediaFilePathsJTable. Number of selected rows: " + rowIdxs.length);
 		}
 		return ((MediaFilePathsTableModel)getModel()).getMediaFilePathAt(convertRowIndexToModel(rowIdxs[0]));
 	}
