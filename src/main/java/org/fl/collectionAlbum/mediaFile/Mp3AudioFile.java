@@ -86,6 +86,7 @@ public class Mp3AudioFile extends AudioFile {
 					mp3Header.getAudioStreamMetadata(), 
 					NormalizedAudioMetadataTagsBuilder.builder().albumTitle("Album title").artist("artist").trackNumber("01").genre("genre").trackTitle("titre").build(filePath), 
 					new HashMap<String, MetadataElement<?>>(), 
+					mp3Header.getFormatSpecificMetadata(),
 					filePath);
 			
 		} catch (Exception e) {

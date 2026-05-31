@@ -155,6 +155,7 @@ public class FlacAudioFile extends AudioFile {
 							streamInfo.getAudioStreamMetadata(), 
 							vorbisComment.getNormalizedAudioMetadataTags(), 
 							vorbisComment.getAdditionalFieldsMap(), 
+							streamInfo.getFormatSpecificMetadata(),
 							filePath);
 					
 				} else {

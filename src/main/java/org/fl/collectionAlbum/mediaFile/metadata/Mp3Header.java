@@ -27,6 +27,7 @@ package org.fl.collectionAlbum.mediaFile.metadata;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.file.Path;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.mediaFile.Utils;
@@ -69,9 +70,13 @@ public class Mp3Header {
 	
 	private static final int[] NUMBER_OF_CHANNELS_VALUES = {2, 2, 2, 1};
 	
+	private static final String VERSION = "Version";
+	private static final String LAYER = "Layer";
+	
 	private final AudioStreamMetadata audioStreamMetadata;
 	private final String version;
 	private final String layer;
+	private final Map<String, MetadataElement<?>> formatSpecificMetadata;
 	
 	private final boolean isSupportedMp3;
 	
@@ -95,6 +100,7 @@ public class Mp3Header {
 				
 			audioStreamMetadata = null;
 			isSupportedMp3 = false;
+			formatSpecificMetadata = Map.of();
 		} else {
 			
 			int versionIndex = (b2 & VERSION_MASK) >> 3;
@@ -114,6 +120,11 @@ public class Mp3Header {
 			
 			audioStreamMetadata = AudioStreamMetadataBuilder.build(false, samplingRate, 0, bitRate, numberOfChannels, 0);
 			isSupportedMp3 = true;
+			
+			formatSpecificMetadata = Map.of(
+					VERSION, new MetadataElement<>(VERSION, version),
+					LAYER, new MetadataElement<>(LAYER, layer)
+					);
 		}
 	}
 	
@@ -129,6 +140,10 @@ public class Mp3Header {
 		return layer;
 	}
 	
+	public Map<String, MetadataElement<?>> getFormatSpecificMetadata() {
+		return formatSpecificMetadata;
+	}
+
 	public boolean isSupportedMp3() {
 		return isSupportedMp3;
 	}

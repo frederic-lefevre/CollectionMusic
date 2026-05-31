@@ -39,13 +39,21 @@ public class AudioMetadata implements MediaFileMetadata {
 	private final AudioStreamMetadata audioStreamMetadata;
 	private final NormalizedAudioMetadataTags normalizedAudioMetadataTags;
 	private final Map<String, MetadataElement<?>> additionnalTags;
+	private final Map<String, MetadataElement<?>> formatSpecificMetadata;
 	private final Map<String, MetadataElement<?>> normalizedAudioMetadataTagsMap;
 	
-	public AudioMetadata(AudioStreamMetadata audioStreamMetadata, NormalizedAudioMetadataTags audioMetadataTags, Map<String, MetadataElement<?>> additionnalTags, Path filePath) {
+	public AudioMetadata(
+			AudioStreamMetadata audioStreamMetadata, 
+			NormalizedAudioMetadataTags audioMetadataTags, 
+			Map<String, MetadataElement<?>> additionnalTags,
+			Map<String, MetadataElement<?>> formatSpecificMetadata,
+			Path filePath) {
+		
 		super();
 		this.normalizedAudioMetadataTags = audioMetadataTags;
 		this.audioStreamMetadata = audioStreamMetadata;
 		this.additionnalTags = additionnalTags;
+		this.formatSpecificMetadata = formatSpecificMetadata;
 		
 		this.normalizedAudioMetadataTagsMap = normalizedAudioMetadataTags.getNormalizedTags();
 		
@@ -76,6 +84,11 @@ public class AudioMetadata implements MediaFileMetadata {
 		return audioStreamMetadata.getMetadataMap();
 	}
 
+	@Override
+	public Map<String, MetadataElement<?>> getFormatSpecificMetadata() {
+		return formatSpecificMetadata;
+	}
+	
 	public AudioStreamMetadata getAudioStreamMetadata() {
 		return audioStreamMetadata;
 	}
@@ -83,4 +96,5 @@ public class AudioMetadata implements MediaFileMetadata {
 	public NormalizedAudioMetadataTags getNormalizedAudioMetadataTags() {
 		return normalizedAudioMetadataTags;
 	}
+
 }

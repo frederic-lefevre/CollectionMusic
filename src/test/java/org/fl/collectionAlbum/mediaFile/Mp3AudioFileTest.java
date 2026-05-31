@@ -28,12 +28,14 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.net.URISyntaxException;
 import java.nio.file.Path;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.mediaFile.metadata.AudioMetadata;
 import org.fl.collectionAlbum.mediaFile.metadata.AudioStreamMetadata;
 import org.fl.collectionAlbum.mediaFile.metadata.MediaFileMetadata;
+import org.fl.collectionAlbum.mediaFile.metadata.MetadataElement;
 import org.fl.collectionAlbum.mediaFile.metadata.Mp3Header;
 import org.fl.util.FilterCounter;
 import org.fl.util.FilterCounter.LogRecordCounter;
@@ -75,6 +77,11 @@ class Mp3AudioFileTest {
 		assertThat(streamInfo.numberOfChannels().value()).isEqualTo(2);
 		assertThat(streamInfo.bitRate().value()).isEqualTo(320000);
 		assertThat(streamInfo.trackDuration().value()).isEqualTo(0);  // not calculated
+		
+		
+		assertThat(metadata.getFormatSpecificMetadata()).isNotNull().containsExactlyInAnyOrderEntriesOf(
+				Map.of("Version", new MetadataElement<>("Version", "MPEG version 1"), "Layer", new MetadataElement<>("Layer", "Layer III"))
+				);
 	}
 	
 	@Test

@@ -113,6 +113,14 @@ class FlacAudioFileTest {
 				new MetadataElement<>(AudioStreamMetadata.BIT_DEPTH, 16), 
 				new MetadataElement<>(AudioStreamMetadata.SAMPLING_RATE, 44100L)))
 			.isTrue();
+		
+		assertThat(metadata.getFormatSpecificMetadata()).isNotNull().containsExactlyInAnyOrderEntriesOf(
+				Map.of(
+						"Minimum block size", new MetadataElement<>("Minimum block size", 1152), 
+						"Maximum block size", new MetadataElement<>("Maximum block size", 1152),
+						"Minimum frame size", new MetadataElement<>("Minimum frame size", 631),
+						"Maximum frame size", new MetadataElement<>("Maximum frame size", 1837)
+				));
 	}
 	
 	@Test
