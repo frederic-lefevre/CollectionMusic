@@ -29,6 +29,8 @@ import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,6 +40,9 @@ import org.fl.collectionAlbum.mediaFile.metadata.AudioMetadata;
 import org.fl.collectionAlbum.mediaFile.metadata.FlacMetaDataBlockHeader;
 import org.fl.collectionAlbum.mediaFile.metadata.FlacMetaDataBlockHeader.BlockType;
 import org.fl.collectionAlbum.mediaFile.metadata.FlacStreamInfoMetadataBlock;
+import org.fl.collectionAlbum.mediaFile.metadata.MetadataElement;
+import org.fl.collectionAlbum.mediaFile.metadata.NormalizedAudioMetadataTags;
+import org.fl.collectionAlbum.mediaFile.metadata.NormalizedAudioMetadataTagsBuilder;
 import org.fl.collectionAlbum.mediaFile.metadata.VorbisComment;
 
 public class FlacAudioFile extends AudioFile {
@@ -147,14 +152,23 @@ public class FlacAudioFile extends AudioFile {
 					
 					hasImbeddedPicture = Optional.of(hasPictureBlock);
 					
+					NormalizedAudioMetadataTags normalizedAudioMetadataTags;
+					Map<String, MetadataElement<?>> additionalFieldsMap;
 					if (vorbisComment == null) {
+						
+						normalizedAudioMetadataTags = NormalizedAudioMetadataTagsBuilder.builder().build(filePath);
+						additionalFieldsMap = new HashMap<>();
 						logger.warning(filePath + " has no Vorbis comment");
+						
+					} else {
+						normalizedAudioMetadataTags = vorbisComment.getNormalizedAudioMetadataTags();
+						additionalFieldsMap = vorbisComment.getAdditionalFieldsMap();					
 					}
 					
 					audioMetadata = new AudioMetadata(
 							streamInfo.getAudioStreamMetadata(), 
-							vorbisComment.getNormalizedAudioMetadataTags(), 
-							vorbisComment.getAdditionalFieldsMap(), 
+							normalizedAudioMetadataTags, 
+							additionalFieldsMap, 
 							streamInfo.getFormatSpecificMetadata(),
 							filePath);
 					
