@@ -25,6 +25,8 @@ SOFTWARE.
 package org.fl.collectionAlbum.gui;
 
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.GridLayout;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
@@ -42,6 +44,8 @@ public class MediaFileDetailPane extends JScrollPane {
 
 	private static final long serialVersionUID = 1L;
 
+	private static final Font verdana = new Font("Verdana", Font.BOLD, 14);
+	
 	public MediaFileDetailPane(MediaFile mediaFile) {
 		
 		super();
@@ -51,6 +55,8 @@ public class MediaFileDetailPane extends JScrollPane {
 
 		infosPane.add(descriptionValuePanel("Chemin du fichier", mediaFile.getFilePath().toString()));
 		infosPane.add(descriptionValuePanel("Taille du fichier", mediaFile.getSize().map(v -> Long.toString(v)).orElse("Inconnue")));
+		infosPane.add(descriptionValuePanel("Fichier media valide", mediaFile.isValidMediaFile().map(v -> Boolean.toString(v)).orElse("Inconnu")));
+		infosPane.add(descriptionValuePanel("Image incluse dans le fichier", mediaFile.hasImbeddedPicture().map(v -> Boolean.toString(v)).orElse("Inconnu")));
 		
 		MediaFileMetadata metadata = mediaFile.getMetadata();
 		if (metadata != null) {
@@ -86,10 +92,14 @@ public class MediaFileDetailPane extends JScrollPane {
 	private static JPanel descriptionValuePanel(String description, String value) {
 		
 		JPanel dvPane = new JPanel();
-		dvPane.setLayout(new BoxLayout(dvPane, BoxLayout.X_AXIS));
-		
-		dvPane.add(new JLabel(description + ": "));
-		dvPane.add(new JLabel(value));
+		dvPane.setLayout(new GridLayout(1, 2));
+		dvPane.setFont(verdana);	
+		JLabel titreLbl = new JLabel(description + ": ");
+		titreLbl.setFont(verdana);
+		dvPane.add(titreLbl);
+		JLabel valueLbl = new JLabel(value);
+		valueLbl.setFont(verdana);
+		dvPane.add(valueLbl);
 		
 		return dvPane;
 	}
