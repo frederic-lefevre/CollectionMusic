@@ -29,14 +29,17 @@ import java.nio.channels.FileChannel;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.format.AudioFileType;
 import org.fl.collectionAlbum.mediaFile.metadata.AudioMetadata;
+import org.fl.collectionAlbum.mediaFile.metadata.Id3v2Tag;
 import org.fl.collectionAlbum.mediaFile.metadata.MetadataElement;
 import org.fl.collectionAlbum.mediaFile.metadata.Mp3Header;
+import org.fl.collectionAlbum.mediaFile.metadata.NormalizedAudioMetadataTags;
 import org.fl.collectionAlbum.mediaFile.metadata.NormalizedAudioMetadataTagsBuilder;
 
 public class Mp3AudioFile extends AudioFile {
@@ -58,6 +61,9 @@ public class Mp3AudioFile extends AudioFile {
 			
 			size = Optional.of(sbc.size());
 			
+			NormalizedAudioMetadataTags normalizedAudioMetadataTags;
+			Map<String, MetadataElement<?>> additionalFieldsMap;
+			
 			ByteBuffer byteBuffer = Utils.readToDirectByteBuffer(sbc, ID3HeaderUtils.BEGIN_HEADER_SIZE);
 			
 			ByteBuffer id3AndHeaderBuffer;
@@ -69,11 +75,18 @@ public class Mp3AudioFile extends AudioFile {
 				id3AndHeaderBuffer =  Utils.readToDirectByteBuffer(sbc, id3HeaderLength - ID3HeaderUtils.BEGIN_HEADER_SIZE + Mp3Header.MP3_HEADER_SIZE);
 				
 				// Parse the tags
+				Id3v2Tag id3v2Tag = new Id3v2Tag(id3AndHeaderBuffer, id3HeaderLength, filePath);
+				
+				normalizedAudioMetadataTags = id3v2Tag.getNormalizedAudioMetadataTags();
+				additionalFieldsMap = id3v2Tag.getAdditionalFieldsMap();
+				
 				id3AndHeaderBuffer.position(id3HeaderLength - ID3HeaderUtils.BEGIN_HEADER_SIZE); // TODO Replace by parsing
 				
 			} else {
 				logger.log(Level.WARNING, "No ID3 Header found at the begining of MP3 file " + filePath);
 
+				normalizedAudioMetadataTags = NormalizedAudioMetadataTagsBuilder.builder().build(filePath);
+				additionalFieldsMap = new HashMap<String, MetadataElement<?>>();
 				id3AndHeaderBuffer =  Utils.readToDirectByteBuffer(sbc, Mp3Header.MP3_HEADER_SIZE);
 			}
 			
@@ -85,8 +98,8 @@ public class Mp3AudioFile extends AudioFile {
 			if (isValidMediaFile.get()) {
 				audioMetadata = new AudioMetadata(
 						mp3Header.getAudioStreamMetadata(), 
-						NormalizedAudioMetadataTagsBuilder.builder().albumTitle("Album title").artist("artist").trackNumber("01").genre("genre").trackTitle("titre").build(filePath), 
-						new HashMap<String, MetadataElement<?>>(), 
+						normalizedAudioMetadataTags, 
+						additionalFieldsMap, 
 						mp3Header.getFormatSpecificMetadata(),
 						filePath);
 			}
