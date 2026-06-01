@@ -30,6 +30,8 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.text.NumberFormat;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.swing.BorderFactory;
@@ -39,13 +41,17 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import org.fl.collectionAlbum.mediaFile.MediaFile;
+import org.fl.collectionAlbum.mediaFile.metadata.AudioStreamMetadata;
 import org.fl.collectionAlbum.mediaFile.metadata.MediaFileMetadata;
 import org.fl.collectionAlbum.mediaFile.metadata.MetadataElement;
+import org.fl.collectionAlbum.utils.TemporalUtils;
 
 public class MediaFileDetailPane extends JScrollPane {
 
 	private static final long serialVersionUID = 1L;
 
+	private static final NumberFormat numberFormat = NumberFormat.getInstance(Locale.FRANCE);
+	
 	private static final Font verdana = new Font("Verdana", Font.BOLD, 14);
 	private static final Font verdanaTitre = new Font("Verdana", Font.BOLD, 16);
 	private static final Dimension metadataWindowDimension = new Dimension(1200, 900);
@@ -70,13 +76,13 @@ public class MediaFileDetailPane extends JScrollPane {
 		addDescriptionValueLabels(generalInfoPane, gridConstraints, "Chemin du fichier", mediaFile.getFilePath().toString());
 		gridConstraints.gridx = 0;
 		gridConstraints.gridy++;
-		addDescriptionValueLabels(generalInfoPane, gridConstraints, "Taille du fichier", mediaFile.getSize().map(v -> Long.toString(v)).orElse("Inconnue"));
+		addDescriptionValueLabels(generalInfoPane, gridConstraints, "Taille du fichier", mediaFile.getSize().map(v -> numberFormat.format(v)).orElse("Inconnue"));
 		gridConstraints.gridx = 0;
 		gridConstraints.gridy++;
-		addDescriptionValueLabels(generalInfoPane, gridConstraints, "Fichier media valide", mediaFile.isValidMediaFile().map(v -> Boolean.toString(v)).orElse("Inconnu"));
+		addDescriptionValueLabels(generalInfoPane, gridConstraints, "Fichier media valide", mediaFile.isValidMediaFile().map(v -> booleanPrinter(v)).orElse("Inconnu"));
 		gridConstraints.gridx = 0;
 		gridConstraints.gridy++;
-		addDescriptionValueLabels(generalInfoPane, gridConstraints, "Image incluse dans le fichier", mediaFile.hasImbeddedPicture().map(v -> Boolean.toString(v)).orElse("Inconnu"));
+		addDescriptionValueLabels(generalInfoPane, gridConstraints, "Image incluse dans le fichier", mediaFile.hasImbeddedPicture().map(v -> booleanPrinter(v)).orElse("Inconnu"));
 		
 		infosPane.add(generalInfoPane);
 		
@@ -123,10 +129,10 @@ public class MediaFileDetailPane extends JScrollPane {
 			metadataPane.add(titreMetadata, gridConstraints);
 			metadataMap.values().stream()
 				.filter(m -> (m.value() != null) && !m.value().toString().isBlank())
-				.forEachOrdered(m -> {
+				.forEach(m -> {
 						gridConstraints.gridx = 0;
 						gridConstraints.gridy++;
-						addDescriptionValueLabels(metadataPane, gridConstraints, m.name(), m.value().toString());
+						addDescriptionValueLabels(metadataPane, gridConstraints, m.name(), metadataValuePrinter(m));
 				});
 		}
 		return metadataPane;
@@ -147,5 +153,29 @@ public class MediaFileDetailPane extends JScrollPane {
 		gridConstraints.gridwidth = 2;
 		gridConstraints.weightx =1;
 		pane.add(valueLbl, gridConstraints);
+	}
+	
+	private static String booleanPrinter(Boolean b) {
+		if (b) {
+			return "Oui";
+		} else {
+			return "Non";
+		}
+	}
+	
+	private static <T> String metadataValuePrinter(MetadataElement<T> metadata) {
+		
+		T value =  metadata.value();
+		if (value instanceof Long longValue) {
+			if (metadata.name().equals(AudioStreamMetadata.TRACK_DURATION)) {
+				return TemporalUtils.durationToString(longValue);
+			} else {
+				return numberFormat.format(longValue);
+			}
+		} else if (value instanceof Boolean booleanValue) {
+			return booleanPrinter(booleanValue);
+		} else {
+			return value.toString();
+		}
 	}
 }
