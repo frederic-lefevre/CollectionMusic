@@ -117,11 +117,12 @@ public class MediaFileDetailPane extends JScrollPane {
 		} else {
 			metadataPane.add(titreMetadata, gridConstraints);
 			metadataMap.values().stream()
-					.forEachOrdered(m -> {
+				.filter(m -> (m.value() != null) && !m.value().toString().isBlank())
+				.forEachOrdered(m -> {
 						gridConstraints.gridx = 0;
 						gridConstraints.gridy++;
 						descriptionValuePanel(metadataPane, gridConstraints, m.name(), m.value().toString());
-					});
+				});
 		}
 		return metadataPane;
 	}
