@@ -47,6 +47,7 @@ public class MediaFileDetailPane extends JScrollPane {
 	private static final long serialVersionUID = 1L;
 
 	private static final Font verdana = new Font("Verdana", Font.BOLD, 14);
+	private static final Font verdanaTitre = new Font("Verdana", Font.BOLD, 16);
 	private static final Dimension metadataWindowDimension = new Dimension(1200, 900);
 	
 	public MediaFileDetailPane(MediaFile mediaFile) {
@@ -66,16 +67,16 @@ public class MediaFileDetailPane extends JScrollPane {
 		gridConstraints.gridy = 0;
 		gridConstraints.anchor = GridBagConstraints.LINE_START;
 		
-		descriptionValuePanel(generalInfoPane, gridConstraints, "Chemin du fichier", mediaFile.getFilePath().toString());
+		addDescriptionValueLabels(generalInfoPane, gridConstraints, "Chemin du fichier", mediaFile.getFilePath().toString());
 		gridConstraints.gridx = 0;
 		gridConstraints.gridy++;
-		descriptionValuePanel(generalInfoPane, gridConstraints, "Taille du fichier", mediaFile.getSize().map(v -> Long.toString(v)).orElse("Inconnue"));
+		addDescriptionValueLabels(generalInfoPane, gridConstraints, "Taille du fichier", mediaFile.getSize().map(v -> Long.toString(v)).orElse("Inconnue"));
 		gridConstraints.gridx = 0;
 		gridConstraints.gridy++;
-		descriptionValuePanel(generalInfoPane, gridConstraints, "Fichier media valide", mediaFile.isValidMediaFile().map(v -> Boolean.toString(v)).orElse("Inconnu"));
+		addDescriptionValueLabels(generalInfoPane, gridConstraints, "Fichier media valide", mediaFile.isValidMediaFile().map(v -> Boolean.toString(v)).orElse("Inconnu"));
 		gridConstraints.gridx = 0;
 		gridConstraints.gridy++;
-		descriptionValuePanel(generalInfoPane, gridConstraints, "Image incluse dans le fichier", mediaFile.hasImbeddedPicture().map(v -> Boolean.toString(v)).orElse("Inconnu"));
+		addDescriptionValueLabels(generalInfoPane, gridConstraints, "Image incluse dans le fichier", mediaFile.hasImbeddedPicture().map(v -> Boolean.toString(v)).orElse("Inconnu"));
 		
 		infosPane.add(generalInfoPane);
 		
@@ -97,6 +98,7 @@ public class MediaFileDetailPane extends JScrollPane {
 		JPanel metadataPane = new JPanel();
 		metadataPane.setLayout(new GridBagLayout());
 		metadataPane.setAlignmentX(RIGHT_ALIGNMENT);
+		metadataPane.setBackground(Color.WHITE);
 		
 		metadataPane.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1, Color.BLACK));
 
@@ -109,7 +111,10 @@ public class MediaFileDetailPane extends JScrollPane {
 		gridConstraints.anchor = GridBagConstraints.LINE_START;
 		
 		JLabel titreMetadata = new JLabel(titre);
-		titreMetadata.setFont(verdana);
+		titreMetadata.setFont(verdanaTitre);
+		titreMetadata.setOpaque(true);
+		titreMetadata.setBackground(Color.LIGHT_GRAY);
+		titreMetadata.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, Color.BLACK));
 		
 		if ((metadataMap == null) ||  metadataMap.isEmpty()) {
 			titreMetadata.setText("Pas de " + titre);
@@ -121,16 +126,16 @@ public class MediaFileDetailPane extends JScrollPane {
 				.forEachOrdered(m -> {
 						gridConstraints.gridx = 0;
 						gridConstraints.gridy++;
-						descriptionValuePanel(metadataPane, gridConstraints, m.name(), m.value().toString());
+						addDescriptionValueLabels(metadataPane, gridConstraints, m.name(), m.value().toString());
 				});
 		}
 		return metadataPane;
 	}
 	
-	private static void descriptionValuePanel(JPanel pane, GridBagConstraints gridConstraints, String description, String value) {
+	private static void addDescriptionValueLabels(JPanel pane, GridBagConstraints gridConstraints, String description, String value) {
 	
 		gridConstraints.gridheight = 1;
-		JLabel titreLbl = new JLabel(description + ": ");
+		JLabel titreLbl = new JLabel(description);
 		titreLbl.setFont(verdana);
 		
 		gridConstraints.gridwidth = 1;
