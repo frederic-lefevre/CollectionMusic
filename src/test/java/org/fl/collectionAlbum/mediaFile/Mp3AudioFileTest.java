@@ -72,7 +72,7 @@ class Mp3AudioFileTest {
 		assertThat(streamInfo.isLossless().value()).isFalse();
 		assertThat(streamInfo.numberOfChannels().value()).isEqualTo(2);
 		assertThat(streamInfo.bitRate().value()).isEqualTo(320000);
-		assertThat(streamInfo.trackDuration().value()).isEqualTo(0);  // not calculated
+		assertThat(streamInfo.trackDuration().value()).isNull();  // not calculated
 		
 		assertThat(metadata.getFormatSpecificMetadata()).isNotNull().containsExactlyInAnyOrderEntriesOf(
 				Map.of("Version", new MetadataElement<>("Version", "MPEG version 1"), "Layer", new MetadataElement<>("Layer", "Layer III"))

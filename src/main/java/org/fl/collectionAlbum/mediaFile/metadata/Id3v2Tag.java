@@ -25,15 +25,47 @@ SOFTWARE.
 package org.fl.collectionAlbum.mediaFile.metadata;
 
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 
 public class Id3v2Tag {
 
+	private static final String BAND = "TPE2";
+	private static final byte[] BAND_BYTES = BAND.getBytes(StandardCharsets.ISO_8859_1);
+	
+	private static final String ALBUM = "TALB";
+	private static final byte[] ALBUM_BYTES = ALBUM.getBytes(StandardCharsets.ISO_8859_1);
+	
+	private static final String ARTIST = "TPE1";
+	private static final byte[] ARTIST_BYTES = ARTIST.getBytes(StandardCharsets.ISO_8859_1);
+	
+	private static final String COMPOSER = "TCOM";
+	private static final byte[] COMPOSER_BYTES = COMPOSER.getBytes(StandardCharsets.ISO_8859_1);
+	
+	private static final String CONDUCTOR = "TPE3";
+	private static final byte[] CONDUCTOR_BYTES = CONDUCTOR.getBytes(StandardCharsets.ISO_8859_1);
+	
+	private static final String GENRE = "TCON";
+	private static final byte[] GENRE_BYTES = GENRE.getBytes(StandardCharsets.ISO_8859_1);
+	
+	private static final String LENGTH = "TLEN";
+	private static final byte[] LENGTH_BYTES = LENGTH.getBytes(StandardCharsets.ISO_8859_1);
+	
+	private static final String DATE = "TDAT";
+	private static final byte[] DATE_BYTES = DATE.getBytes(StandardCharsets.ISO_8859_1);
+	
+	private static final String TITLE = "TIT2";
+	private static final byte[] TITLE_BYTES = TITLE.getBytes(StandardCharsets.ISO_8859_1);
+	
+	private static final String YEAR = "TYER";
+	private static final byte[] YEAR_BYTES = YEAR.getBytes(StandardCharsets.ISO_8859_1);
+	  
 	private final NormalizedAudioMetadataTags normalizedAudioMetadataTags;
 	private final Map<String, MetadataElement<?>> additionalFieldsMap;
-	
+
+	  
 	public Id3v2Tag(ByteBuffer byteBuffer, long id3HeaderLength, Path filePath) {
 		
 		additionalFieldsMap = new HashMap<>();

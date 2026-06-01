@@ -40,6 +40,7 @@ import org.fl.collectionAlbum.mediaFile.metadata.AudioMetadata;
 import org.fl.collectionAlbum.mediaFile.metadata.FlacMetaDataBlockHeader;
 import org.fl.collectionAlbum.mediaFile.metadata.FlacMetaDataBlockHeader.BlockType;
 import org.fl.collectionAlbum.mediaFile.metadata.FlacStreamInfoMetadataBlock;
+import org.fl.collectionAlbum.mediaFile.metadata.ID3Header;
 import org.fl.collectionAlbum.mediaFile.metadata.MetadataElement;
 import org.fl.collectionAlbum.mediaFile.metadata.NormalizedAudioMetadataTags;
 import org.fl.collectionAlbum.mediaFile.metadata.NormalizedAudioMetadataTagsBuilder;
@@ -82,7 +83,7 @@ public class FlacAudioFile extends AudioFile {
 				
 				// Check if the file begins with a ID3 Header
 				byteBuffer.position(0);
-				int id3HeaderLength = ID3HeaderUtils.getID3v2HeaderLength(byteBuffer);
+				int id3HeaderLength = ID3Header.getID3v2HeaderLength(byteBuffer);
 				if (id3HeaderLength > 0) {
 					
 					// there is a ID3 Header

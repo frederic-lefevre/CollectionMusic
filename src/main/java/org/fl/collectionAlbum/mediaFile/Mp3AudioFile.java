@@ -36,6 +36,7 @@ import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.format.AudioFileType;
 import org.fl.collectionAlbum.mediaFile.metadata.AudioMetadata;
+import org.fl.collectionAlbum.mediaFile.metadata.ID3Header;
 import org.fl.collectionAlbum.mediaFile.metadata.Id3v2Tag;
 import org.fl.collectionAlbum.mediaFile.metadata.MetadataElement;
 import org.fl.collectionAlbum.mediaFile.metadata.Mp3Header;
@@ -64,15 +65,17 @@ public class Mp3AudioFile extends AudioFile {
 			NormalizedAudioMetadataTags normalizedAudioMetadataTags;
 			Map<String, MetadataElement<?>> additionalFieldsMap;
 			
-			ByteBuffer byteBuffer = Utils.readToDirectByteBuffer(sbc, ID3HeaderUtils.BEGIN_HEADER_SIZE);
+			ByteBuffer byteBuffer = Utils.readToDirectByteBuffer(sbc, ID3Header.BEGIN_HEADER_SIZE);
 			
 			ByteBuffer id3AndHeaderBuffer;
 			
-			int id3HeaderLength = ID3HeaderUtils.getID3v2HeaderLength(byteBuffer);
-			if (id3HeaderLength > 0) {
+			ID3Header id3Header = new ID3Header(byteBuffer, filePath);
+			if (id3Header.isID3v2Header() && !id3Header.isHasExtendedHeader()) {
 				
-				// Read the remaining of the ID3 Header and the MP3 Header
-				id3AndHeaderBuffer =  Utils.readToDirectByteBuffer(sbc, id3HeaderLength - ID3HeaderUtils.BEGIN_HEADER_SIZE + Mp3Header.MP3_HEADER_SIZE);
+				int id3HeaderLength = id3Header.getHeaderLength();
+				
+				// Read the ID3 Header and the MP3 Header
+				id3AndHeaderBuffer =  Utils.readToDirectByteBuffer(sbc, id3HeaderLength + Mp3Header.MP3_HEADER_SIZE);
 				
 				// Parse the tags
 				Id3v2Tag id3v2Tag = new Id3v2Tag(id3AndHeaderBuffer, id3HeaderLength, filePath);
@@ -80,10 +83,14 @@ public class Mp3AudioFile extends AudioFile {
 				normalizedAudioMetadataTags = id3v2Tag.getNormalizedAudioMetadataTags();
 				additionalFieldsMap = id3v2Tag.getAdditionalFieldsMap();
 				
-				id3AndHeaderBuffer.position(id3HeaderLength - ID3HeaderUtils.BEGIN_HEADER_SIZE); // TODO Replace by parsing
+				id3AndHeaderBuffer.position(id3HeaderLength); // TODO Replace by parsing
 				
 			} else {
-				logger.log(Level.WARNING, "No ID3 Header found at the begining of MP3 file " + filePath);
+				if (! id3Header.isID3v2Header()) {
+					logger.log(Level.WARNING, "No ID3 Header found at the begining of MP3 file " + filePath);
+				} else {
+					logger.log(Level.WARNING, "Unsupported ID3 header in " + filePath);
+				}
 
 				normalizedAudioMetadataTags = NormalizedAudioMetadataTagsBuilder.builder().build(filePath);
 				additionalFieldsMap = new HashMap<String, MetadataElement<?>>();

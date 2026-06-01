@@ -153,9 +153,9 @@ class FlacAudioFileTest {
 
 		assertThat(flacFilterCounter.getLogRecordCount()).isEqualTo(1);
 		assertThat(flacFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
-		if (audioMetadataLogger.isLoggable(Level.INFO)) {
+		if (audioMetadataLogger.isLoggable(Level.FINE)) {
 			assertThat(audioMetadataFilterCounter.getLogRecordCount()).isEqualTo(1);
-			assertThat(audioMetadataFilterCounter.getLogRecordCount(Level.INFO)).isEqualTo(1);
+			assertThat(audioMetadataFilterCounter.getLogRecordCount(Level.FINE)).isEqualTo(1);
 		}
 		flacFilterCounter.stopLogCountAndFilter();
 		audioMetadataFilterCounter.stopLogCountAndFilter();
