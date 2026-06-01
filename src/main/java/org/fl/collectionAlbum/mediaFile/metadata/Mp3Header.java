@@ -118,7 +118,7 @@ public class Mp3Header {
 			int numberOfChannelIndex = (b4 & CHANNEL_MODE_MASK) >> 6;
 			numberOfChannels = NUMBER_OF_CHANNELS_VALUES[numberOfChannelIndex];
 			
-			audioStreamMetadata = AudioStreamMetadataBuilder.build(false, samplingRate, 0, bitRate, numberOfChannels, 0);
+			audioStreamMetadata = AudioStreamMetadataBuilder.build(false, samplingRate, 0, bitRate, numberOfChannels, null);
 			isSupportedMp3 = true;
 			
 			formatSpecificMetadata = Map.of(

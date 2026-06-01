@@ -31,7 +31,7 @@ public class AudioStreamMetadataBuilder {
 			int bitDepth,  // number of bit per sample
 			long bitRate, // in bits per seconds
 			int numberOfChannels, 
-			long trackDuration  
+			Long trackDuration  
 			) {
 		
 		return new AudioStreamMetadata(
