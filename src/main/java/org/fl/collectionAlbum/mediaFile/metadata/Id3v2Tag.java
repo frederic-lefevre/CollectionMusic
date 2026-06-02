@@ -132,57 +132,53 @@ public class Id3v2Tag {
 					fieldContentLength = fieldContentLength -  endOfFrameLength;
 
 					if (ALBUM.equals(tagKey)) {
-						String fieldContent = Utils.decodeByteBuffer(byteBuffer, fieldContentLength, fieldCharset);
+						String fieldContent = getFieldContent(byteBuffer, fieldContentLength, endOfFrameLength, fieldCharset);
 						normalizedAudioMetadataTagsBuilder.albumTitle(fieldContent);
 
 					} else if (ARTIST.equals(tagKey)) {
-						String fieldContent = Utils.decodeByteBuffer(byteBuffer, fieldContentLength, fieldCharset);
+						String fieldContent = getFieldContent(byteBuffer, fieldContentLength, endOfFrameLength, fieldCharset);
 						normalizedAudioMetadataTagsBuilder.artist(fieldContent);
 
 					} else if (GENRE.equals(tagKey)) {
-						String fieldContent = Utils.decodeByteBuffer(byteBuffer, fieldContentLength, fieldCharset);
+						String fieldContent = getFieldContent(byteBuffer, fieldContentLength, endOfFrameLength, fieldCharset);
 						normalizedAudioMetadataTagsBuilder.genre(fieldContent);
 
 					} else if (TITLE.equals(tagKey)) {
-						String fieldContent = Utils.decodeByteBuffer(byteBuffer, fieldContentLength, fieldCharset);
+						String fieldContent = getFieldContent(byteBuffer, fieldContentLength, endOfFrameLength, fieldCharset);
 						normalizedAudioMetadataTagsBuilder.trackTitle(fieldContent);
 
 					} else if (TRACK_NUMBER.equals(tagKey)) {
-						String fieldContent = Utils.decodeByteBuffer(byteBuffer, fieldContentLength, fieldCharset);
+						String fieldContent = getFieldContent(byteBuffer, fieldContentLength, endOfFrameLength, fieldCharset);
 						normalizedAudioMetadataTagsBuilder.trackNumber(fieldContent);
 
 					} else if (YEAR.equals(tagKey)) {
-						String fieldContent = Utils.decodeByteBuffer(byteBuffer, fieldContentLength, fieldCharset);
+						String fieldContent = getFieldContent(byteBuffer, fieldContentLength, endOfFrameLength, fieldCharset);
 						normalizedAudioMetadataTagsBuilder.date(fieldContent);
 
 					} else if (COMPOSER.equals(tagKey)) {
-						String fieldContent = Utils.decodeByteBuffer(byteBuffer, fieldContentLength, fieldCharset);
+						String fieldContent = getFieldContent(byteBuffer, fieldContentLength, endOfFrameLength, fieldCharset);
 						normalizedAudioMetadataTagsBuilder.composer(fieldContent);
 
 					} else if (ALBUM_ARTIST.equals(tagKey)) {
-						String fieldContent = Utils.decodeByteBuffer(byteBuffer, fieldContentLength, fieldCharset);
+						String fieldContent = getFieldContent(byteBuffer, fieldContentLength, endOfFrameLength, fieldCharset);
 						normalizedAudioMetadataTagsBuilder.albumArtist(fieldContent);
 
 					} else if (ATTACHED_PICTURE.equals(tagKey)) {
 						// Ignore and skip embedded picture
-						byteBuffer.position(byteBuffer.position() + fieldContentLength);
+						byteBuffer.position(byteBuffer.position() + fieldContentLength + endOfFrameLength);
 						hasImbeddedPicture = true;
 
 					} else if (CONDUCTOR.equals(tagKey)) {
-						String fieldContent = Utils.decodeByteBuffer(byteBuffer, fieldContentLength, fieldCharset);
+						String fieldContent = getFieldContent(byteBuffer, fieldContentLength, endOfFrameLength, fieldCharset);
 
 						MetadataElement<String> additionalTag = new MetadataElement<String>(CONDUCTOR_STRING, fieldContent);
 						additionalFieldsMap.put(CONDUCTOR_STRING, additionalTag);
 
 					} else {
-						String fieldContent = Utils.decodeByteBuffer(byteBuffer, fieldContentLength, fieldCharset);
+						String fieldContent = getFieldContent(byteBuffer, fieldContentLength, endOfFrameLength, fieldCharset);
 						MetadataElement<String> additionalTag = new MetadataElement<String>(tagKey, fieldContent);
 						additionalFieldsMap.put(tagKey, additionalTag);
-					}
-
-					// Skip end of content byte(s)
-					byteBuffer.position(byteBuffer.position() + endOfFrameLength);
-
+					}					
 				}
 			} while (tagRemain);
 
@@ -194,10 +190,15 @@ public class Id3v2Tag {
 	private String getFieldContent(ByteBuffer byteBuffer, int fieldContentLength, int endOfFrameLength, Charset fieldCharset) {
 		
 		String fieldContent = Utils.decodeByteBuffer(byteBuffer, fieldContentLength, fieldCharset);
-		String endOfFrame = Utils.decodeByteBuffer(byteBuffer, endOfFrameLength, fieldCharset);
-		if (endOfFrame.charAt(0) != 0) {
+		
+		byte[] endOfFrameBytes = new byte[endOfFrameLength];
+		
+		byteBuffer.get(endOfFrameBytes);
+		if (endOfFrameBytes[0] != 0) {
 			// assume there is no end of string bytes and the end is part of the content
-			return fieldContent + endOfFrame;
+			// Rewind to the start of content and take all the bytes (no end of frame bytes)
+			byteBuffer.position(byteBuffer.position() - (fieldContentLength + endOfFrameLength));
+			return Utils.decodeByteBuffer(byteBuffer, fieldContentLength + endOfFrameLength, fieldCharset);
 		} else {
 			return fieldContent;
 		}
