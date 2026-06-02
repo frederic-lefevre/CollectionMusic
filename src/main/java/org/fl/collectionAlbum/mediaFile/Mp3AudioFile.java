@@ -78,12 +78,13 @@ public class Mp3AudioFile extends AudioFile {
 				id3AndHeaderBuffer =  Utils.readToDirectByteBuffer(sbc, id3HeaderLength + Mp3Header.MP3_HEADER_SIZE);
 				
 				// Parse the tags
-				Id3v2Tag id3v2Tag = new Id3v2Tag(id3AndHeaderBuffer, id3HeaderLength, filePath);
+				Id3v2Tag id3v2Tag = new Id3v2Tag(id3AndHeaderBuffer, filePath);
 				
 				normalizedAudioMetadataTags = id3v2Tag.getNormalizedAudioMetadataTags();
 				additionalFieldsMap = id3v2Tag.getAdditionalFieldsMap();
+				hasImbeddedPicture = Optional.of(id3v2Tag.hasImbeddedPicture());
 				
-				id3AndHeaderBuffer.position(id3HeaderLength); // TODO Replace by parsing
+				id3AndHeaderBuffer.position(id3HeaderLength);
 				
 			} else {
 				if (! id3Header.isID3v2Header()) {

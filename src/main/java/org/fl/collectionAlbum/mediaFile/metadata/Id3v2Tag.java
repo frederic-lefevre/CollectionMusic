@@ -25,53 +25,182 @@ SOFTWARE.
 package org.fl.collectionAlbum.mediaFile.metadata;
 
 import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.fl.collectionAlbum.mediaFile.Utils;
 
 public class Id3v2Tag {
 
-	private static final String BAND = "TPE2";
-	private static final byte[] BAND_BYTES = BAND.getBytes(StandardCharsets.ISO_8859_1);
+	private static final Logger logger = Logger.getLogger(Id3v2Tag.class.getName());
 	
+	private static final int KEY_FIELD_LENGTH = 4;
+	private static final int FLAG_LENGTH = 2;
+	
+	private static final String ALBUM_ARTIST = "TPE2";	
 	private static final String ALBUM = "TALB";
-	private static final byte[] ALBUM_BYTES = ALBUM.getBytes(StandardCharsets.ISO_8859_1);
-	
-	private static final String ARTIST = "TPE1";
-	private static final byte[] ARTIST_BYTES = ARTIST.getBytes(StandardCharsets.ISO_8859_1);
-	
-	private static final String COMPOSER = "TCOM";
-	private static final byte[] COMPOSER_BYTES = COMPOSER.getBytes(StandardCharsets.ISO_8859_1);
-	
-	private static final String CONDUCTOR = "TPE3";
-	private static final byte[] CONDUCTOR_BYTES = CONDUCTOR.getBytes(StandardCharsets.ISO_8859_1);
-	
-	private static final String GENRE = "TCON";
-	private static final byte[] GENRE_BYTES = GENRE.getBytes(StandardCharsets.ISO_8859_1);
-	
-	private static final String LENGTH = "TLEN";
-	private static final byte[] LENGTH_BYTES = LENGTH.getBytes(StandardCharsets.ISO_8859_1);
-	
-	private static final String DATE = "TDAT";
-	private static final byte[] DATE_BYTES = DATE.getBytes(StandardCharsets.ISO_8859_1);
-	
-	private static final String TITLE = "TIT2";
-	private static final byte[] TITLE_BYTES = TITLE.getBytes(StandardCharsets.ISO_8859_1);
-	
+	private static final String ARTIST = "TPE1";	
+	private static final String COMPOSER = "TCOM";	
+	private static final String CONDUCTOR = "TPE3";	
+	private static final String GENRE = "TCON";	
+	private static final String TITLE = "TIT2";	
 	private static final String YEAR = "TYER";
-	private static final byte[] YEAR_BYTES = YEAR.getBytes(StandardCharsets.ISO_8859_1);
+	private static final String TRACK_NUMBER = "TRCK";
+	private static final String ATTACHED_PICTURE = "APIC";
+	private static final String POPM = "POPM";
+	private static final String PRIV = "PRIV";
+	private static final String MCDI = "MCDI";
 	  
+	private static final String CONDUCTOR_STRING = "Chef d'orchestre";	
+	
+	private static final byte[] END_OF_TAG_BYTES = {0, 0, 0, 0};
+	private static final String END_OF_TAG = new String(END_OF_TAG_BYTES, StandardCharsets.ISO_8859_1);
+	
+	private static final Charset[] encoding = {
+			StandardCharsets.ISO_8859_1, 
+			StandardCharsets.UTF_16, 
+			StandardCharsets.UTF_16BE, 
+			StandardCharsets.UTF_8};
+	
+	private static final int[] END_OF_FRAME_LENGTH = { 1, 2, 2, 1};
+	
 	private final NormalizedAudioMetadataTags normalizedAudioMetadataTags;
 	private final Map<String, MetadataElement<?>> additionalFieldsMap;
-
+	private boolean hasImbeddedPicture;
 	  
-	public Id3v2Tag(ByteBuffer byteBuffer, long id3HeaderLength, Path filePath) {
-		
-		additionalFieldsMap = new HashMap<>();
-		
-		normalizedAudioMetadataTags = NormalizedAudioMetadataTagsBuilder.builder().albumTitle("Album title").artist("artist").trackNumber("01").genre("genre").trackTitle("titre").build(filePath);
+	public Id3v2Tag(ByteBuffer byteBuffer, Path filePath) {
 
+		hasImbeddedPicture = false;
+		additionalFieldsMap = new HashMap<>();
+		final NormalizedAudioMetadataTagsBuilder normalizedAudioMetadataTagsBuilder = NormalizedAudioMetadataTagsBuilder.builder();
+
+		Id3v2TagParsing(byteBuffer, filePath, normalizedAudioMetadataTagsBuilder, additionalFieldsMap);
+		
+		normalizedAudioMetadataTags = normalizedAudioMetadataTagsBuilder.build(filePath);
+	}
+	
+	
+	private void Id3v2TagParsing(
+			ByteBuffer byteBuffer, 
+			Path filePath, 
+			NormalizedAudioMetadataTagsBuilder normalizedAudioMetadataTagsBuilder, 
+			Map<String, MetadataElement<?>> additionalFieldsMap) {
+		
+		try {
+			boolean tagRemain = true;
+			do {
+				String tagKey = Utils.decodeByteBuffer(byteBuffer, KEY_FIELD_LENGTH, StandardCharsets.ISO_8859_1);
+
+				if (END_OF_TAG.equals(tagKey)) {
+					tagRemain = false;
+				} else {
+
+					int fieldLength = Utils.get4bytesUnsignedInt(byteBuffer);  
+					// Length of the following bytes : charset(1) + BOM id (FF FE, if it is UTF-16*, 00 00 if ISO_8859_1)
+					// + field(n) + 1 (ISO_8859_1, UTF-8) or 2 bytes (UTF-16*) at 00 depending on encoding (!)
+
+					if (fieldLength > byteBuffer.remaining() + 8) {
+						throw new Id3ParsingException("Found too long tag field length: " + fieldLength + 
+								"\n in file " + filePath + 
+								"\n for tag key=" + tagKey + 
+								" at buffer offset 0x" + Integer.toHexString(byteBuffer.position()));
+					}
+
+					// Skip flags
+					byteBuffer.position(byteBuffer.position() + FLAG_LENGTH);
+					
+					int charSetIndex;
+					int fieldContentLength = fieldLength;
+					if ((tagKey.charAt(0) == 'W') || POPM.equals(tagKey) || PRIV.equals(tagKey) || MCDI.equals(tagKey)) {
+						// Special case for URL fields which has no encoding info
+						charSetIndex = 0;
+					} else {
+						charSetIndex = Utils.get1byteUnsignedInt(byteBuffer);
+						if (charSetIndex > END_OF_FRAME_LENGTH.length - 1) {
+							throw new Id3ParsingException("Found out of bound charset index: " + charSetIndex + "\n in file " + filePath + "\n for tag key=" + tagKey);
+						}
+						fieldContentLength = fieldContentLength -1;
+					}
+
+					Charset fieldCharset = encoding[charSetIndex];
+					int endOfFrameLength = END_OF_FRAME_LENGTH[charSetIndex];	
+					fieldContentLength = fieldContentLength -  endOfFrameLength;
+
+					if (ALBUM.equals(tagKey)) {
+						String fieldContent = Utils.decodeByteBuffer(byteBuffer, fieldContentLength, fieldCharset);
+						normalizedAudioMetadataTagsBuilder.albumTitle(fieldContent);
+
+					} else if (ARTIST.equals(tagKey)) {
+						String fieldContent = Utils.decodeByteBuffer(byteBuffer, fieldContentLength, fieldCharset);
+						normalizedAudioMetadataTagsBuilder.artist(fieldContent);
+
+					} else if (GENRE.equals(tagKey)) {
+						String fieldContent = Utils.decodeByteBuffer(byteBuffer, fieldContentLength, fieldCharset);
+						normalizedAudioMetadataTagsBuilder.genre(fieldContent);
+
+					} else if (TITLE.equals(tagKey)) {
+						String fieldContent = Utils.decodeByteBuffer(byteBuffer, fieldContentLength, fieldCharset);
+						normalizedAudioMetadataTagsBuilder.trackTitle(fieldContent);
+
+					} else if (TRACK_NUMBER.equals(tagKey)) {
+						String fieldContent = Utils.decodeByteBuffer(byteBuffer, fieldContentLength, fieldCharset);
+						normalizedAudioMetadataTagsBuilder.trackNumber(fieldContent);
+
+					} else if (YEAR.equals(tagKey)) {
+						String fieldContent = Utils.decodeByteBuffer(byteBuffer, fieldContentLength, fieldCharset);
+						normalizedAudioMetadataTagsBuilder.date(fieldContent);
+
+					} else if (COMPOSER.equals(tagKey)) {
+						String fieldContent = Utils.decodeByteBuffer(byteBuffer, fieldContentLength, fieldCharset);
+						normalizedAudioMetadataTagsBuilder.composer(fieldContent);
+
+					} else if (ALBUM_ARTIST.equals(tagKey)) {
+						String fieldContent = Utils.decodeByteBuffer(byteBuffer, fieldContentLength, fieldCharset);
+						normalizedAudioMetadataTagsBuilder.albumArtist(fieldContent);
+
+					} else if (ATTACHED_PICTURE.equals(tagKey)) {
+						// Ignore and skip embedded picture
+						byteBuffer.position(byteBuffer.position() + fieldContentLength);
+						hasImbeddedPicture = true;
+
+					} else if (CONDUCTOR.equals(tagKey)) {
+						String fieldContent = Utils.decodeByteBuffer(byteBuffer, fieldContentLength, fieldCharset);
+
+						MetadataElement<String> additionalTag = new MetadataElement<String>(CONDUCTOR_STRING, fieldContent);
+						additionalFieldsMap.put(CONDUCTOR_STRING, additionalTag);
+
+					} else {
+						String fieldContent = Utils.decodeByteBuffer(byteBuffer, fieldContentLength, fieldCharset);
+						MetadataElement<String> additionalTag = new MetadataElement<String>(tagKey, fieldContent);
+						additionalFieldsMap.put(tagKey, additionalTag);
+					}
+
+					// Skip end of content byte(s)
+					byteBuffer.position(byteBuffer.position() + endOfFrameLength);
+
+				}
+			} while (tagRemain);
+
+		} catch (Exception e) {
+			logger.log(Level.WARNING, "Unsupported ID3 Tag for file " + filePath, e);
+		}
+	}
+	
+	private String getFieldContent(ByteBuffer byteBuffer, int fieldContentLength, int endOfFrameLength, Charset fieldCharset) {
+		
+		String fieldContent = Utils.decodeByteBuffer(byteBuffer, fieldContentLength, fieldCharset);
+		String endOfFrame = Utils.decodeByteBuffer(byteBuffer, endOfFrameLength, fieldCharset);
+		if (endOfFrame.charAt(0) != 0) {
+			// assume there is no end of string bytes and the end is part of the content
+			return fieldContent + endOfFrame;
+		} else {
+			return fieldContent;
+		}
 	}
 	
 	public NormalizedAudioMetadataTags getNormalizedAudioMetadataTags() {
@@ -80,5 +209,9 @@ public class Id3v2Tag {
 
 	public Map<String, MetadataElement<?>> getAdditionalFieldsMap() {
 		return additionalFieldsMap;
+	}
+
+	public boolean hasImbeddedPicture() {
+		return hasImbeddedPicture;
 	}
 }
