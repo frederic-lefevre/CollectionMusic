@@ -28,7 +28,6 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
-import java.nio.charset.StandardCharsets;
 
 public class Utils {
 
@@ -65,6 +64,13 @@ public class Utils {
 				((bb.get() & 0xFF) << 24);
 	}
 	
+	public static int get4bytesUnsignedInt(ByteBuffer bb) {
+		return ((bb.get() & 0xFF) << 24) +
+				((bb.get() & 0xFF) << 16) +
+				((bb.get() & 0xFF) << 8) +
+				(bb.get() & 0xFF);
+	}
+	
 	public static int get3bytesUnsignedInt(ByteBuffer bb) {
 		return ((bb.get() & 0xFF) << 16) +
 				((bb.get() & 0xFF) << 8) +
@@ -89,6 +95,6 @@ public class Utils {
 
 		ByteBuffer bbSlice = bb.slice(bb.position(), bytesNumber);
 		bb.position(bb.position() + bytesNumber);
-		return StandardCharsets.UTF_8.decode(bbSlice).toString();
+		return charSet.decode(bbSlice).toString();
 	}
 }

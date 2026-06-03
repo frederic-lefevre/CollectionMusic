@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.mediaFile;
+package org.fl.collectionAlbum.mediaFile.metadata;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -37,7 +37,7 @@ import java.nio.file.StandardOpenOption;
 import org.fl.util.file.FilesUtils;
 import org.junit.jupiter.api.Test;
 
-class ID3HeaderUtilsTest {
+class ID3HeaderTest {
 
 	@Test
 	void hasNoID3Header() throws URISyntaxException {
@@ -51,7 +51,7 @@ class ID3HeaderUtilsTest {
 			
 			byteBuffer.position(0);
 			
-			int id3length = ID3HeaderUtils.getID3v2HeaderLength(byteBuffer);
+			int id3length = ID3Header.getID3v2HeaderLength(byteBuffer);
 			assertThat(id3length).isEqualTo(-1);
 			
 		} catch (IOException e) {
@@ -72,7 +72,7 @@ class ID3HeaderUtilsTest {
 			
 			byteBuffer.position(0);
 			
-			int id3length = ID3HeaderUtils.getID3v2HeaderLength(byteBuffer);
+			int id3length = ID3Header.getID3v2HeaderLength(byteBuffer);
 			assertThat(id3length).isPositive().isEqualTo(4722);
 			
 		} catch (IOException e) {

@@ -22,38 +22,39 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.mediaFile.metadata;
+package org.fl.collectionAlbum.gui.adapter;
 
-import java.util.List;
-import java.util.Map;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
-public class VideoMetadata implements MediaFileMetadata {
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
-	@Override
-	public Map<String, MetadataElement<?>> getStreamMetadata() {
-		return Map.of();
-	}
+import org.fl.collectionAlbum.gui.MediaFileDetailPane;
+import org.fl.collectionAlbum.gui.table.MediaFileJTable;
+import org.fl.collectionAlbum.mediaFile.MediaFile;
 
-	@Override
-	public Map<String, MetadataElement<?>> getNormalizedTags() {
-		return Map.of();
-	}
+public class MediaFileMouseAdapter extends MouseAdapter {
 
-	@Override
-	public Map<String, MetadataElement<?>> getAdditionalTags() {
-		return Map.of();
-	}
-
-	@Override
-	public Map<String, MetadataElement<?>> getFormatSpecificMetadata() {
-		return Map.of();
+	private final MediaFileJTable mediaFileJTable;
+	
+	public MediaFileMouseAdapter(MediaFileJTable mediaFileJTable) {
+		super();
+		this.mediaFileJTable = mediaFileJTable;
 	}
 	
-	public static List<String> getStreamMetadataNames() {
-		return List.of();
+	@Override
+	public void mouseClicked(MouseEvent evt) {
+		if (SwingUtilities.isLeftMouseButton(evt) && (evt.getClickCount() > 1)) {
+			doubleClickAction();
+		}
 	}
 	
-	public static List<String> getNormalizedMetadataNames() {
-		return List.of();
+	private void doubleClickAction() {
+		
+		MediaFile selectedMediaFile = mediaFileJTable.getSelectedMediaFile();
+		if (selectedMediaFile != null) {
+			JOptionPane.showMessageDialog(null, new MediaFileDetailPane(selectedMediaFile), "Metadata du fichiers media " + selectedMediaFile.getFileName(), JOptionPane.PLAIN_MESSAGE);
+		}
 	}
 }

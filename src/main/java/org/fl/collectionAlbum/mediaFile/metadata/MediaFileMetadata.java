@@ -31,4 +31,5 @@ public interface MediaFileMetadata {
 	public Map<String, MetadataElement<?>> getStreamMetadata();
 	public Map<String, MetadataElement<?>> getNormalizedTags();
 	public Map<String, MetadataElement<?>> getAdditionalTags();
+	public Map<String, MetadataElement<?>> getFormatSpecificMetadata();
 }

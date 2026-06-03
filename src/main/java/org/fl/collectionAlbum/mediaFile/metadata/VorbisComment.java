@@ -59,7 +59,7 @@ public class VorbisComment {
 		
 		int vendorFieldLength = Utils.get4bytesUnsignedIntLittleEndian(byteBuffer);
 		
-		vendorField = Utils.decodeByteBuffer(byteBuffer, vendorFieldLength,  StandardCharsets.UTF_8);
+		vendorField = Utils.decodeByteBuffer(byteBuffer, vendorFieldLength, StandardCharsets.UTF_8);
 		
 		final int numberOfFields = Utils.get4bytesUnsignedIntLittleEndian(byteBuffer);
 		
@@ -67,7 +67,7 @@ public class VorbisComment {
 		for (int i=0; i < numberOfFields; i++) {
 			
 			int fieldLength = Utils.get4bytesUnsignedIntLittleEndian(byteBuffer);
-			String field =  Utils.decodeByteBuffer(byteBuffer, fieldLength,  StandardCharsets.UTF_8);
+			String field =  Utils.decodeByteBuffer(byteBuffer, fieldLength, StandardCharsets.UTF_8);
 			
 			int separatorIndex = field.indexOf(SEPARATOR_STRING);
 			if (separatorIndex > 0) {

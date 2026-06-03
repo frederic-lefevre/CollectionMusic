@@ -24,36 +24,12 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.mediaFile.metadata;
 
-import java.util.List;
-import java.util.Map;
+public class Id3ParsingException extends RuntimeException{
 
-public class VideoMetadata implements MediaFileMetadata {
-
-	@Override
-	public Map<String, MetadataElement<?>> getStreamMetadata() {
-		return Map.of();
-	}
-
-	@Override
-	public Map<String, MetadataElement<?>> getNormalizedTags() {
-		return Map.of();
-	}
-
-	@Override
-	public Map<String, MetadataElement<?>> getAdditionalTags() {
-		return Map.of();
-	}
-
-	@Override
-	public Map<String, MetadataElement<?>> getFormatSpecificMetadata() {
-		return Map.of();
-	}
+	private static final long serialVersionUID = 1L;
 	
-	public static List<String> getStreamMetadataNames() {
-		return List.of();
+	public Id3ParsingException(String reason) {
+		super(reason);
 	}
-	
-	public static List<String> getNormalizedMetadataNames() {
-		return List.of();
-	}
+
 }

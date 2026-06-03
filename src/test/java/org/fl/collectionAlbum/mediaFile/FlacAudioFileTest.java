@@ -52,23 +52,18 @@ class FlacAudioFileTest {
 		LogRecordCounter flacFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(FlacAudioFile.class.getName()));	
 		
 		FlacAudioFile f1 = new FlacAudioFile(flacFilePath);
+		assertThat(f1.getFilePath().toUri()).asString().isEqualTo("file:///C:/ForTests/CollectionMusique/f1.flac");
 		assertThat(f1.isValidMediaFile()).isEmpty(); // not parsed yet
 		assertThat(f1.hasImbeddedPicture()).isEmpty();
 		assertThat(f1.getSize()).isEmpty();
-		
-		f1.parseMetadata();
-		assertThat(flacFilterCounter.getLogRecordCount()).isZero();
-		flacFilterCounter.stopLogCountAndFilter();
-		
-		assertThat(f1.isValidMediaFile()).isPresent().hasValue(true);
 		assertThat(f1.getExtension()).isEqualTo("flac");
-		assertThat(f1.hasImbeddedPicture()).isPresent().hasValue(false);
-		assertThat(f1.getSize()).isPresent().hasValue(873559L);
-
-		assertThat(f1.getFilePath().toUri()).asString().isEqualTo("file:///C:/ForTests/CollectionMusique/f1.flac");
 		
 		MediaFileMetadata metadata = f1.getMetadata();
 		assertThat(metadata).isNotNull();
+		
+		assertThat(f1.isValidMediaFile()).isPresent().hasValue(true);
+		assertThat(f1.hasImbeddedPicture()).isPresent().hasValue(false);
+		assertThat(f1.getSize()).isPresent().hasValue(873559L);
 		
 		AudioMetadata audioMetadata = f1.getAudioMetadata();
 		assertThat(audioMetadata).isNotNull();
@@ -113,6 +108,17 @@ class FlacAudioFileTest {
 				new MetadataElement<>(AudioStreamMetadata.BIT_DEPTH, 16), 
 				new MetadataElement<>(AudioStreamMetadata.SAMPLING_RATE, 44100L)))
 			.isTrue();
+		
+		assertThat(metadata.getFormatSpecificMetadata()).isNotNull().containsExactlyInAnyOrderEntriesOf(
+				Map.of(
+						"Minimum block size", new MetadataElement<>("Minimum block size", 1152), 
+						"Maximum block size", new MetadataElement<>("Maximum block size", 1152),
+						"Minimum frame size", new MetadataElement<>("Minimum frame size", 631),
+						"Maximum frame size", new MetadataElement<>("Maximum frame size", 1837)
+				));
+		
+		assertThat(flacFilterCounter.getLogRecordCount()).isZero();
+		flacFilterCounter.stopLogCountAndFilter();
 	}
 	
 	@Test
@@ -147,9 +153,9 @@ class FlacAudioFileTest {
 
 		assertThat(flacFilterCounter.getLogRecordCount()).isEqualTo(1);
 		assertThat(flacFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
-		if (audioMetadataLogger.isLoggable(Level.INFO)) {
+		if (audioMetadataLogger.isLoggable(Level.FINE)) {
 			assertThat(audioMetadataFilterCounter.getLogRecordCount()).isEqualTo(1);
-			assertThat(audioMetadataFilterCounter.getLogRecordCount(Level.INFO)).isEqualTo(1);
+			assertThat(audioMetadataFilterCounter.getLogRecordCount(Level.FINE)).isEqualTo(1);
 		}
 		flacFilterCounter.stopLogCountAndFilter();
 		audioMetadataFilterCounter.stopLogCountAndFilter();

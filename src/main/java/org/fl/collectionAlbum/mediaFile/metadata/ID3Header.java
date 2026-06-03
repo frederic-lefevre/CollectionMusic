@@ -22,13 +22,19 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.mediaFile;
+package org.fl.collectionAlbum.mediaFile.metadata;
 
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
+import java.util.logging.Logger;
 
-public class ID3HeaderUtils {
+import org.fl.collectionAlbum.mediaFile.Utils;
 
+public class ID3Header {
+
+	private static final Logger logger = Logger.getLogger(ID3Header.class.getName());
+	
 	private static final String ID3_IDENTIFIER = "ID3";
 
 	private static final byte[] ID3_IDENTIFIER_BYTES = ID3_IDENTIFIER.getBytes(StandardCharsets.ISO_8859_1);
@@ -38,6 +44,55 @@ public class ID3HeaderUtils {
 	private static final int FLAG_LENGTH = 1;
 	private static final int ID3_HEADER_SIZE_OFFSET = ID3_IDENTIFIER.length() + MAJOR_VERSION_LENGTH + MINOR_VERSION_LENGTH + FLAG_LENGTH;
 	private static final int SIZE_LENGTH = 4;
+	
+	public static final int BEGIN_HEADER_SIZE = ID3_HEADER_SIZE_OFFSET + SIZE_LENGTH;
+
+	private static final int EXTENDED_HEADER_MASK = 0x40;
+	
+	private final boolean isID3v2Header;
+	private final int majorVersion;
+	private final int minorVersion;
+	private final boolean hasExtendedHeader;
+	private final int headerLength;
+	
+	public ID3Header(ByteBuffer byteBuffer, Path filePath) {
+		
+		isID3v2Header = Utils.nextBytesEquals(byteBuffer, ID3_IDENTIFIER_BYTES);
+		if (isID3v2Header) {
+			majorVersion = Utils.get1byteUnsignedInt(byteBuffer);
+			minorVersion = Utils.get1byteUnsignedInt(byteBuffer);
+			hasExtendedHeader = (Utils.get1byteUnsignedInt(byteBuffer) & EXTENDED_HEADER_MASK) != 0;
+			if (hasExtendedHeader) {
+				logger.warning(filePath + " has extended ID3 header. This is not supported");
+			}
+			headerLength = decodeID3HeaderLength(byteBuffer);
+		} else {
+			majorVersion = -1;
+			minorVersion = -1;
+			hasExtendedHeader = false;
+			headerLength = -1;
+		}
+	}
+	
+	public boolean isID3v2Header() {
+		return isID3v2Header;
+	}
+	
+	public int getMajorVersion() {
+		return majorVersion;
+	}
+
+	public int getMinorVersion() {
+		return minorVersion;
+	}
+
+	public boolean isHasExtendedHeader() {
+		return hasExtendedHeader;
+	}
+
+	public int getHeaderLength() {
+		return headerLength;
+	}
 
 	public static int getID3v2HeaderLength(ByteBuffer byteBuffer) {
 

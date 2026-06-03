@@ -25,7 +25,6 @@ SOFTWARE.
 package org.fl.collectionAlbum.mediaFile.metadata;
 
 import java.nio.file.Path;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
@@ -40,26 +39,30 @@ public class AudioMetadata implements MediaFileMetadata {
 	private final AudioStreamMetadata audioStreamMetadata;
 	private final NormalizedAudioMetadataTags normalizedAudioMetadataTags;
 	private final Map<String, MetadataElement<?>> additionnalTags;
+	private final Map<String, MetadataElement<?>> formatSpecificMetadata;
 	private final Map<String, MetadataElement<?>> normalizedAudioMetadataTagsMap;
-	private final Map<String, MetadataElement<?>> allTags;
 	
-	public AudioMetadata(AudioStreamMetadata audioStreamMetadata, NormalizedAudioMetadataTags audioMetadataTags, Map<String, MetadataElement<?>> additionnalTags, Path filePath) {
+	public AudioMetadata(
+			AudioStreamMetadata audioStreamMetadata, 
+			NormalizedAudioMetadataTags audioMetadataTags, 
+			Map<String, MetadataElement<?>> additionnalTags,
+			Map<String, MetadataElement<?>> formatSpecificMetadata,
+			Path filePath) {
+		
 		super();
 		this.normalizedAudioMetadataTags = audioMetadataTags;
 		this.audioStreamMetadata = audioStreamMetadata;
 		this.additionnalTags = additionnalTags;
+		this.formatSpecificMetadata = formatSpecificMetadata;
 		
 		this.normalizedAudioMetadataTagsMap = normalizedAudioMetadataTags.getNormalizedTags();
 		
-		allTags = new HashMap<>(normalizedAudioMetadataTagsMap);
-		allTags.putAll(additionnalTags);
-		
-		if (logger.isLoggable(Level.INFO) && (additionnalTags.size() > 0)) {
+		if (additionnalTags.size() > 0) {
 			if (additionnalTags.keySet().stream()
 				.filter(tag -> !ACCEPTABLE_NON_NORMALIZED_TAGS.contains(tag))
 				.findAny()
 				.isPresent()) {
-				logger.info(filePath + " has undesired non normalized audio metadata");
+				logger.warning(filePath + " has undesired non normalized audio metadata");
 			} else if (logger.isLoggable(Level.FINE)) {
 				logger.fine(filePath + " has acceptable non normalized audio metadata");
 			}
@@ -81,6 +84,11 @@ public class AudioMetadata implements MediaFileMetadata {
 		return audioStreamMetadata.getMetadataMap();
 	}
 
+	@Override
+	public Map<String, MetadataElement<?>> getFormatSpecificMetadata() {
+		return formatSpecificMetadata;
+	}
+	
 	public AudioStreamMetadata getAudioStreamMetadata() {
 		return audioStreamMetadata;
 	}
@@ -88,4 +96,5 @@ public class AudioMetadata implements MediaFileMetadata {
 	public NormalizedAudioMetadataTags getNormalizedAudioMetadataTags() {
 		return normalizedAudioMetadataTags;
 	}
+
 }

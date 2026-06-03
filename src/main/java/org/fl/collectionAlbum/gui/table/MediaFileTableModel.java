@@ -89,6 +89,10 @@ public class MediaFileTableModel extends AbstractTableModel implements Updatable
 		return mediaColumnsParameters;
 	}
 
+	public MediaFile getMediaFileAt(int rowIndex) {
+		return  mediaFiles.get(rowIndex);
+	}
+	
 	@Override
 	public void updateElement() {
 		fireTableDataChanged();

@@ -25,6 +25,7 @@ SOFTWARE.
 package org.fl.collectionAlbum.mediaFile.metadata;
 
 import java.nio.ByteBuffer;
+import java.util.Map;
 
 import org.fl.collectionAlbum.mediaFile.Utils;
 
@@ -33,11 +34,18 @@ public class FlacStreamInfoMetadataBlock {
 	private static final int MD5_CHECKSUM_SIZE = 16;
 	private final AudioStreamMetadata audioStreamMetadata;
 
+	private static final String MIN_BLOCK_SIZE = "Minimum block size";
+	private static final String MAX_BLOCK_SIZE = "Maximum block size";
+	private static final String MIN_FRAME_SIZE = "Minimum frame size";
+	private static final String MAX_FRAME_SIZE = "Maximum frame size";
+	
 	private final int minBlockSize;
 	private final int maxBlockSize;
 	private final int minFrameSize;
 	private final int maxFrameSize;
 
+	private final Map<String, MetadataElement<?>> formatSpecificMetadata;
+	
 	public FlacStreamInfoMetadataBlock(ByteBuffer byteBuffer) {
 
 		minBlockSize = Utils.get2bytesUnsignedInt(byteBuffer);
@@ -74,6 +82,13 @@ public class FlacStreamInfoMetadataBlock {
 		int bitsRate = bitsPerSample * sampleRate;
 		
 		audioStreamMetadata = AudioStreamMetadataBuilder.build(true, sampleRate, bitsPerSample, bitsRate, numberOfChannels, trackLength);
+		
+		formatSpecificMetadata = Map.of(
+				MIN_BLOCK_SIZE, new MetadataElement<>(MIN_BLOCK_SIZE, minBlockSize),
+				MAX_BLOCK_SIZE, new MetadataElement<>(MAX_BLOCK_SIZE, maxBlockSize),
+				MIN_FRAME_SIZE, new MetadataElement<>(MIN_FRAME_SIZE, minFrameSize),
+				MAX_FRAME_SIZE, new MetadataElement<>(MAX_FRAME_SIZE, maxFrameSize)
+				);
 	}
 
 	public AudioStreamMetadata getAudioStreamMetadata() {
@@ -94,6 +109,10 @@ public class FlacStreamInfoMetadataBlock {
 
 	public int getMaxFrameSize() {
 		return maxFrameSize;
+	}
+
+	public Map<String, MetadataElement<?>> getFormatSpecificMetadata() {
+		return formatSpecificMetadata;
 	}
 
 }

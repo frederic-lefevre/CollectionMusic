@@ -26,6 +26,7 @@ package org.fl.collectionAlbum.gui.table;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.JTable;
@@ -33,11 +34,14 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableRowSorter;
 
+import org.fl.collectionAlbum.gui.adapter.MediaFileMouseAdapter;
 import org.fl.collectionAlbum.mediaFile.MediaFile;
 
 public class MediaFileJTable extends JTable {
 
 	private static final long serialVersionUID = 1L;
+	
+	private static final Logger logger = Logger.getLogger(MediaFileJTable.class.getName());
 	
 	public MediaFileJTable(MediaFileTableModel mediaFileTableModel) {
 		super(mediaFileTableModel);
@@ -69,7 +73,18 @@ public class MediaFileJTable extends JTable {
 		
 		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		
+		addMouseListener(new MediaFileMouseAdapter(this));
+		
 		setRowSorter(sorter);
 	}
 
+	public MediaFile getSelectedMediaFile() {
+		int[] rowIdxs = getSelectedRows();
+		if (rowIdxs.length == 0) {
+			return null;
+		} else if (rowIdxs.length > 1) {
+			logger.severe("Found several selected rows for MediaFilesJTable. Number of selected rows: " + rowIdxs.length);
+		}
+		return ((MediaFileTableModel)getModel()).getMediaFileAt(convertRowIndexToModel(rowIdxs[0]));
+	}
 }

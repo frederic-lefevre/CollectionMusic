@@ -48,7 +48,8 @@ public abstract class AudioFile extends MediaFile {
 	}
 
 	public AudioMetadata getAudioMetadata() {
-		if (audioMetadata == null) {
+		if ((audioMetadata == null) && isValidMediaFile.isEmpty()) {
+			// Lazy get
 			audioMetadata = parseMetadata();
 		}
 		return audioMetadata;
