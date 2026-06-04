@@ -24,20 +24,45 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.mediaFile;
 
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
+import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.format.AudioFileType;
 import org.fl.collectionAlbum.mediaFile.metadata.AudioMetadata;
 
 public class AiffAudioFile extends AudioFile {
 
+	private static final Logger logger = Logger.getLogger(AiffAudioFile.class.getName());
+	
+	private static final int FIRST_BYTES_TO_READ = 1000;
+			
 	public AiffAudioFile(Path filePath) {
 		super(filePath, AudioFileType.AIFF);
 	}
 
 	@Override
 	protected AudioMetadata parseMetadata() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		AudioMetadata audioMetadata = null;
+		// will change if it is not so
+		boolean isValidFlacFile = true;
+		
+		try (FileChannel sbc = FileChannel.open(filePath, StandardOpenOption.READ)) {
+			
+			size = Optional.of(sbc.size());
+			
+			ByteBuffer byteBuffer = Utils.readToDirectByteBuffer(sbc, FIRST_BYTES_TO_READ);
+			
+		} catch (Exception e) {
+			isValidFlacFile = false;
+			logger.log(Level.WARNING, "Exception when reading AIFF file " + filePath, e);
+		}
+		isValidMediaFile = Optional.of(isValidFlacFile);
+		return audioMetadata;
 	}
 }
