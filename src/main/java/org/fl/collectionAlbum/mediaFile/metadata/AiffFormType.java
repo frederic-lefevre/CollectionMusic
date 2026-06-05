@@ -24,38 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.mediaFile.metadata;
 
-import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
-
-import org.fl.collectionAlbum.mediaFile.Utils;
-
-public class AiffChunk {
-
-	public static final int CHUNK_ID_LENGTH = 4;
-	public static final int CHUNK_HEADER_LENGTH = 8;
-	public static final String FORM_CHUNK_ID = "FORM";
-	public static final String COMM_CHUNK_ID = "COMM";
-	public static final String ID3_CHUNK_ID = "ID3 ";
-	public static final String SOUND_DATA_CHUNK_ID = "SSND";
-	
-	public static final byte[] FORM_CHUNK_ID_BYTES = FORM_CHUNK_ID.getBytes(StandardCharsets.UTF_8);
-	
-	private final String chunkId;
-	private final int chunkContentLength;
-	
-	public AiffChunk(ByteBuffer byteBuffer, Path filePath) {
-		
-		chunkId =  Utils.decodeByteBuffer(byteBuffer, AiffChunk.CHUNK_ID_LENGTH, StandardCharsets.UTF_8);
-		chunkContentLength = Utils.get4bytesUnsignedInt(byteBuffer);
-	}
-
-	public String getChunkId() {
-		return chunkId;
-	}
-
-	public int getChunkContentLength() {
-		return chunkContentLength;
-	}
-	
+public enum AiffFormType {	
+	AIFF,
+	AIFC;
 }

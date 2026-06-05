@@ -28,8 +28,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.net.URISyntaxException;
 import java.nio.file.Path;
+import java.util.Map;
 
+import org.fl.collectionAlbum.mediaFile.metadata.AudioMetadata;
+import org.fl.collectionAlbum.mediaFile.metadata.AudioStreamMetadata;
 import org.fl.collectionAlbum.mediaFile.metadata.MediaFileMetadata;
+import org.fl.collectionAlbum.mediaFile.metadata.MetadataElement;
+import org.fl.collectionAlbum.mediaFile.metadata.NormalizedAudioMetadataTags;
 import org.fl.util.file.FilesUtils;
 import org.junit.jupiter.api.Test;
 
@@ -48,12 +53,43 @@ class AiffAudioFileTest {
 		assertThat(f1.getExtension()).isEqualTo("aiff");
 		
 		MediaFileMetadata metadata = f1.getMetadata();
-		assertThat(metadata).isNull();
+		assertThat(metadata).isNotNull();
 		
 		assertThat(f1.isValidMediaFile()).isPresent().hasValue(true);
-		assertThat(f1.getFormType()).isEqualTo("AIFF");
-//		assertThat(f1.hasImbeddedPicture()).isPresent().hasValue(false);
 		assertThat(f1.getSize()).isPresent().hasValue(83042068L);
 		
+		AudioMetadata audioMetadata = f1.getAudioMetadata();
+		assertThat(audioMetadata).isNotNull();
+		
+		AudioStreamMetadata streamInfo = audioMetadata.getAudioStreamMetadata();
+		assertThat(streamInfo).isNotNull();
+	
+		
+		assertThat(streamInfo.samplingRate().value()).isEqualTo(96000);
+		assertThat(streamInfo.bitDepth().value()).isEqualTo(24);
+		assertThat(streamInfo.isLossless().value()).isTrue();
+		assertThat(streamInfo.numberOfChannels().value()).isEqualTo(2);
+		assertThat(streamInfo.bitRate().value()).isEqualTo(24*96000);
+		assertThat(streamInfo.trackDuration().value()).isEqualTo(141572);
+		assertThat(f1.hasImbeddedPicture()).isPresent().hasValue(true);
+		
+		NormalizedAudioMetadataTags normalizedAudioTags = audioMetadata.getNormalizedAudioMetadataTags();
+		assertThat(normalizedAudioTags).isNotNull();
+		
+		assertThat(normalizedAudioTags.artist().value()).isEqualTo("Lou Reed");
+		assertThat(normalizedAudioTags.albumTitle().value()).isEqualTo("Lou Reed Remastered (2016)");
+		assertThat(normalizedAudioTags.trackNumber().value()).isEqualTo(6);
+		assertThat(normalizedAudioTags.trackTitle().value()).isEqualTo("I Love You");
+		assertThat(normalizedAudioTags.date().value()).isEqualTo("1972");
+		assertThat(normalizedAudioTags.composer().value()).isEqualTo("");
+		assertThat(normalizedAudioTags.genre().value()).isEqualTo("Rock");	
+		assertThat(normalizedAudioTags.albumArtist().value()).isEqualTo("Lou Reed");
+		
+		
+		assertThat(metadata.getFormatSpecificMetadata()).isNotNull().containsExactlyInAnyOrderEntriesOf(
+				Map.of(
+						"AIFF form type", new MetadataElement<>("AIFF form type", "AIFF")
+				));
 	}
+	
 }

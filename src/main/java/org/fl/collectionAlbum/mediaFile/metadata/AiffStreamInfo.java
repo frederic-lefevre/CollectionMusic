@@ -25,37 +25,42 @@ SOFTWARE.
 package org.fl.collectionAlbum.mediaFile.metadata;
 
 import java.nio.ByteBuffer;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Path;
+import java.util.Map;
 
 import org.fl.collectionAlbum.mediaFile.Utils;
 
-public class AiffChunk {
-
-	public static final int CHUNK_ID_LENGTH = 4;
-	public static final int CHUNK_HEADER_LENGTH = 8;
-	public static final String FORM_CHUNK_ID = "FORM";
-	public static final String COMM_CHUNK_ID = "COMM";
-	public static final String ID3_CHUNK_ID = "ID3 ";
-	public static final String SOUND_DATA_CHUNK_ID = "SSND";
+public class AiffStreamInfo {
 	
-	public static final byte[] FORM_CHUNK_ID_BYTES = FORM_CHUNK_ID.getBytes(StandardCharsets.UTF_8);
+	private static final String AIFF_FORM_TYPE = "AIFF form type";
 	
-	private final String chunkId;
-	private final int chunkContentLength;
+	private AudioStreamMetadata audioStreamMetadata;
+	private final Map<String, MetadataElement<?>> formatSpecificMetadata;
 	
-	public AiffChunk(ByteBuffer byteBuffer, Path filePath) {
+	public AiffStreamInfo(AiffFormType formType) {
 		
-		chunkId =  Utils.decodeByteBuffer(byteBuffer, AiffChunk.CHUNK_ID_LENGTH, StandardCharsets.UTF_8);
-		chunkContentLength = Utils.get4bytesUnsignedInt(byteBuffer);
-	}
-
-	public String getChunkId() {
-		return chunkId;
-	}
-
-	public int getChunkContentLength() {
-		return chunkContentLength;
+		audioStreamMetadata = null;
+		formatSpecificMetadata = Map.of(AIFF_FORM_TYPE, new MetadataElement<>(AIFF_FORM_TYPE, formType.name()));	
 	}
 	
+	public AudioStreamMetadata parseStreamInfo(ByteBuffer byteBuffer) {
+		
+		int numberOfChannels = Utils.get2bytesUnsignedInt(byteBuffer);
+		long numSampleFrames =  Utils.get4bytesUnsignedInt(byteBuffer) ;
+		int sampleSize = Utils.get2bytesUnsignedInt(byteBuffer);
+		long samplingRate = Utils.get10bytesUnsignedLong(byteBuffer);
+		
+		long trackLength = ((long)numSampleFrames * 1000) / samplingRate;
+		int bitsRate = sampleSize * (int)samplingRate;
+		
+		audioStreamMetadata = AudioStreamMetadataBuilder.build(true, samplingRate, sampleSize, bitsRate, numberOfChannels, trackLength);
+		return audioStreamMetadata;
+	}
+	
+	public AudioStreamMetadata getAudioStreamMetadata() {
+		return audioStreamMetadata;
+	}
+	
+	public Map<String, MetadataElement<?>> getFormatSpecificMetadata() {
+		return formatSpecificMetadata;
+	}
 }

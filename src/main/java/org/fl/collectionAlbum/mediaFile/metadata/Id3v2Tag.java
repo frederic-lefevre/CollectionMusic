@@ -50,6 +50,7 @@ public class Id3v2Tag {
 	private static final String GENRE = "TCON";	
 	private static final String TITLE = "TIT2";	
 	private static final String YEAR = "TYER";
+	private static final String RECORDING_YEAR = "TDRC";
 	private static final String TRACK_NUMBER = "TRCK";
 	private static final String ATTACHED_PICTURE = "APIC";
 	private static final String POPM = "POPM";
@@ -71,19 +72,30 @@ public class Id3v2Tag {
 	
 	private final NormalizedAudioMetadataTags normalizedAudioMetadataTags;
 	private final Map<String, MetadataElement<?>> additionalFieldsMap;
+	private final NormalizedAudioMetadataTagsBuilder normalizedAudioMetadataTagsBuilder;
 	private boolean hasImbeddedPicture;
 	  
 	public Id3v2Tag(ByteBuffer byteBuffer, Path filePath) {
 
 		hasImbeddedPicture = false;
 		additionalFieldsMap = new HashMap<>();
-		final NormalizedAudioMetadataTagsBuilder normalizedAudioMetadataTagsBuilder = NormalizedAudioMetadataTagsBuilder.builder();
+		normalizedAudioMetadataTagsBuilder = NormalizedAudioMetadataTagsBuilder.builder();
 
 		Id3v2TagParsing(byteBuffer, filePath, normalizedAudioMetadataTagsBuilder, additionalFieldsMap);
 		
 		normalizedAudioMetadataTags = normalizedAudioMetadataTagsBuilder.build(filePath);
 	}
 	
+	public Id3v2Tag(ByteBuffer byteBuffer, Path filePath,  Map<String, MetadataElement<?>> additionalFieldsMap, NormalizedAudioMetadataTagsBuilder normalizedAudioMetadataTagsBuilder) {
+
+		hasImbeddedPicture = false;
+		this.additionalFieldsMap = additionalFieldsMap;
+		this.normalizedAudioMetadataTagsBuilder = normalizedAudioMetadataTagsBuilder;
+
+		Id3v2TagParsing(byteBuffer, filePath, normalizedAudioMetadataTagsBuilder, additionalFieldsMap);
+		
+		normalizedAudioMetadataTags = normalizedAudioMetadataTagsBuilder.build(filePath);
+	}
 	
 	private void Id3v2TagParsing(
 			ByteBuffer byteBuffer, 
@@ -103,12 +115,12 @@ public class Id3v2Tag {
 					int fieldLength = Utils.get4bytesUnsignedInt(byteBuffer);  
 					// Length of the following bytes : charset(1) + BOM id (FF FE, if it is UTF-16*, 00 00 if ISO_8859_1)
 					// + field(n) + 1 (ISO_8859_1, UTF-8) or 2 bytes (UTF-16*) at 00 depending on encoding (!)
-
 					if (fieldLength > byteBuffer.remaining() + 8) {
 						throw new Id3ParsingException("Found too long tag field length: " + fieldLength + 
 								"\n in file " + filePath + 
 								"\n for tag key=" + tagKey + 
-								" at buffer offset 0x" + Integer.toHexString(byteBuffer.position()));
+								" at buffer offset 0x" + Integer.toHexString(byteBuffer.position()) +
+								"\n Remaining in buffer=" + byteBuffer.remaining());
 					}
 
 					// Skip flags
@@ -141,7 +153,8 @@ public class Id3v2Tag {
 
 					} else if (GENRE.equals(tagKey)) {
 						String fieldContent = getFieldContent(byteBuffer, fieldContentLength, endOfFrameLength, fieldCharset);
-						normalizedAudioMetadataTagsBuilder.genre(fieldContent);
+						String genre = Id3Genre.getGenre(fieldContent);
+						normalizedAudioMetadataTagsBuilder.genre(genre);
 
 					} else if (TITLE.equals(tagKey)) {
 						String fieldContent = getFieldContent(byteBuffer, fieldContentLength, endOfFrameLength, fieldCharset);
@@ -151,7 +164,7 @@ public class Id3v2Tag {
 						String fieldContent = getFieldContent(byteBuffer, fieldContentLength, endOfFrameLength, fieldCharset);
 						normalizedAudioMetadataTagsBuilder.trackNumber(fieldContent);
 
-					} else if (YEAR.equals(tagKey)) {
+					} else if (YEAR.equals(tagKey) || RECORDING_YEAR.equals(tagKey)) {
 						String fieldContent = getFieldContent(byteBuffer, fieldContentLength, endOfFrameLength, fieldCharset);
 						normalizedAudioMetadataTagsBuilder.date(fieldContent);
 
@@ -206,6 +219,10 @@ public class Id3v2Tag {
 	
 	public NormalizedAudioMetadataTags getNormalizedAudioMetadataTags() {
 		return normalizedAudioMetadataTags;
+	}
+
+	public NormalizedAudioMetadataTagsBuilder getNormalizedAudioMetadataTagsBuilder() {
+		return normalizedAudioMetadataTagsBuilder;
 	}
 
 	public Map<String, MetadataElement<?>> getAdditionalFieldsMap() {

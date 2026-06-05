@@ -29,24 +29,27 @@ import java.nio.channels.FileChannel;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.format.AudioFileType;
 import org.fl.collectionAlbum.mediaFile.metadata.AiffChunk;
+import org.fl.collectionAlbum.mediaFile.metadata.AiffFormType;
+import org.fl.collectionAlbum.mediaFile.metadata.AiffStreamInfo;
 import org.fl.collectionAlbum.mediaFile.metadata.AudioMetadata;
+import org.fl.collectionAlbum.mediaFile.metadata.ID3Header;
+import org.fl.collectionAlbum.mediaFile.metadata.Id3v2Tag;
+import org.fl.collectionAlbum.mediaFile.metadata.MetadataElement;
+import org.fl.collectionAlbum.mediaFile.metadata.NormalizedAudioMetadataTagsBuilder;
 
 public class AiffAudioFile extends AudioFile {
 
 	private static final Logger logger = Logger.getLogger(AiffAudioFile.class.getName());
 	
 	private static final int FIRST_BYTES_TO_READ = 2*AiffChunk.CHUNK_ID_LENGTH + 4;
-	
-	private static final String AIFF_FORM_TYPE = "AIFF";
-	private static final String AIFC_FORM_TYPE = "AIFC";
-	
-	private String formType;
 	
 	public AiffAudioFile(Path filePath) {
 		super(filePath, AudioFileType.AIFF);
@@ -59,7 +62,7 @@ public class AiffAudioFile extends AudioFile {
 		// will change if it is not so
 		boolean isValidFlacFile = true;
 		
-		formType = null;
+		AiffFormType formType = null;
 		
 		try (FileChannel sbc = FileChannel.open(filePath, StandardOpenOption.READ)) {
 			
@@ -74,10 +77,16 @@ public class AiffAudioFile extends AudioFile {
 					logger.severe("Announced file length " + fileLength + " is different from real file length " + size.get() + " for " + filePath);
 				}
 				
-				formType = Utils.decodeByteBuffer(byteBuffer, AiffChunk.CHUNK_ID_LENGTH, StandardCharsets.ISO_8859_1);
-				if (!AIFF_FORM_TYPE.equals(formType) && !AIFC_FORM_TYPE.equals(formType)) {
-					logger.severe("Invalid FORM Type " + formType + " for file " + filePath);
+				String formTypeString = Utils.decodeByteBuffer(byteBuffer, AiffChunk.CHUNK_ID_LENGTH, StandardCharsets.ISO_8859_1);
+				try {
+					formType = AiffFormType.valueOf(formTypeString);
+				} catch (IllegalArgumentException e) {
+					logger.severe("Invalid FORM Type " + formTypeString + " for file " + filePath);
 				}
+				
+				AiffStreamInfo aiffStreamInfo = new AiffStreamInfo(formType);
+				final NormalizedAudioMetadataTagsBuilder normalizedAudioMetadataTagsBuilder = NormalizedAudioMetadataTagsBuilder.builder();
+				Map<String, MetadataElement<?>> additionalFieldsMap = new HashMap<String, MetadataElement<?>>();;
 				
 				boolean commChunkProcessed = false;
 				boolean id3ChunkProcessed = false;
@@ -85,15 +94,32 @@ public class AiffAudioFile extends AudioFile {
 					
 					ByteBuffer chunkHeaderBuffer = Utils.readToDirectByteBuffer(sbc, AiffChunk.CHUNK_HEADER_LENGTH);
 					AiffChunk chunk = new AiffChunk(chunkHeaderBuffer, filePath);
-					System.out.println("Found chunk " + chunk.getChunkId());
 					if (chunk.getChunkId().equals(AiffChunk.COMM_CHUNK_ID)) {
 
-						commChunkProcessed = true;
-						sbc.position(sbc.position() + chunk.getChunkContentLength()); // TODO replace by parsing
+						ByteBuffer commContentBuffer = Utils.readToDirectByteBuffer(sbc, chunk.getChunkContentLength());
 						
+						aiffStreamInfo.parseStreamInfo(commContentBuffer);
+						commChunkProcessed = true;
+
 					} else if  (chunk.getChunkId().equals(AiffChunk.ID3_CHUNK_ID)) {
 						
+						// Parse the tags
+						ByteBuffer id3ContentBuffer = Utils.readToDirectByteBuffer(sbc, chunk.getChunkContentLength());
+						ID3Header id3Header = new ID3Header(id3ContentBuffer, filePath);
+						if (id3Header.isID3v2Header() && !id3Header.isHasExtendedHeader()) {
+							
+							Id3v2Tag id3v2Tag = new Id3v2Tag(id3ContentBuffer, filePath, additionalFieldsMap, normalizedAudioMetadataTagsBuilder);
+							hasImbeddedPicture = Optional.of(id3v2Tag.hasImbeddedPicture());
+
+						} else {
+							if (! id3Header.isID3v2Header()) {
+								logger.log(Level.WARNING, "No ID3 Header found at the begining of MP3 file " + filePath);
+							} else {
+								logger.log(Level.WARNING, "Unsupported ID3 header in " + filePath);
+							}
+						}
 						id3ChunkProcessed = true;
+						
 						sbc.position(sbc.position() + chunk.getChunkContentLength()); // TODO replace by parsing
 						
 					} else if (chunk.getChunkId().equals(AiffChunk.SOUND_DATA_CHUNK_ID)) {
@@ -107,6 +133,13 @@ public class AiffAudioFile extends AudioFile {
 					}
 				} while ((sbc.position() < sbc.size() - AiffChunk.CHUNK_HEADER_LENGTH)  && (!commChunkProcessed || !id3ChunkProcessed));
 				
+				audioMetadata = new AudioMetadata(
+						aiffStreamInfo.getAudioStreamMetadata(), 
+						normalizedAudioMetadataTagsBuilder.build(filePath), 
+						additionalFieldsMap, 
+						aiffStreamInfo.getFormatSpecificMetadata(), 
+						filePath);
+				
 			} else {
 				logger.severe("No mandatory " + AiffChunk.FORM_CHUNK_ID + "chunk id found at the begining of AIFF file " + filePath);
 			}
@@ -117,9 +150,5 @@ public class AiffAudioFile extends AudioFile {
 		}
 		isValidMediaFile = Optional.of(isValidFlacFile);
 		return audioMetadata;
-	}
-
-	public String getFormType() {
-		return formType;
 	}
 }
