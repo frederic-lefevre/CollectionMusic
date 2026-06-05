@@ -51,6 +51,7 @@ class AiffAudioFileTest {
 		assertThat(metadata).isNull();
 		
 		assertThat(f1.isValidMediaFile()).isPresent().hasValue(true);
+		assertThat(f1.getFormType()).isEqualTo("AIFF");
 //		assertThat(f1.hasImbeddedPicture()).isPresent().hasValue(false);
 		assertThat(f1.getSize()).isPresent().hasValue(83042068L);
 		
