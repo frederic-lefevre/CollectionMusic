@@ -43,7 +43,7 @@ public class MediaFilesInventories {
 		Stream.of(ContentNature.values()).forEachOrdered(contentNature -> {
 			mediaFilesInventories.put(
 					contentNature, 
-					new MediaFileInventory(Control.getMediaFileRootPath(contentNature), contentNature, contentNature.strictCheckings()));
+					new MediaFileInventory(Control.getMediaFileRootPath(contentNature), contentNature, contentNature.isSingleLevelMediaPath()));
 		});
 	}
 

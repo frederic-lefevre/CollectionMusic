@@ -54,7 +54,7 @@ public enum ContentNature {
 	private final String jsonProperty;
 	private final Set<String> fileExtensions;
 	private final Map<String, MediaFileType> mediaFileTypeMap;
-	private final boolean strictCheckings;
+	private final boolean isSingleLevelMediaPath;
 	private final AbstractMediaFileParser mediaFileParser;
 	
 	private ContentNature(String n, String jp, Set<String> exts, Map<String, MediaFileType> mft, boolean sc, AbstractMediaFileParser mfp) {
@@ -62,7 +62,7 @@ public enum ContentNature {
 		jsonProperty = jp;
 		fileExtensions = exts;
 		mediaFileTypeMap = mft;
-		strictCheckings = sc;
+		isSingleLevelMediaPath = sc;
 		mediaFileParser = mfp;
 	}
 	
@@ -82,8 +82,8 @@ public enum ContentNature {
 		return mediaFileTypeMap;
 	}
 
-	public boolean strictCheckings() {
-		return strictCheckings;
+	public boolean isSingleLevelMediaPath() {
+		return isSingleLevelMediaPath;
 	}
 	
 	public AbstractMediaFileParser getMediaFileParser() {

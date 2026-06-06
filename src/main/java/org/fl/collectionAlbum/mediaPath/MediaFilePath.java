@@ -58,7 +58,7 @@ public class MediaFilePath {
 	
 	private String mediaFileExtension;
 	
-	public MediaFilePath(Path mediaFilesPath, ContentNature contentNature, boolean logWarnings) {
+	public MediaFilePath(Path mediaFilesPath, ContentNature contentNature, boolean isSingleLevelMediaPath) {
 		
 		this.mediaFilesPath = mediaFilesPath;
 		this.contentNature = contentNature;
@@ -70,7 +70,7 @@ public class MediaFilePath {
 		
 		try (Stream<Path> fileStream = Files.list(mediaFilesPath)) {
 			
-			Level level = logWarnings ? Level.WARNING : Level.INFO;
+			Level level = isSingleLevelMediaPath ? Level.WARNING : Level.INFO;
 			mediaFiles = fileStream
 					.filter(path -> Files.isRegularFile(path))
 					.map(path -> { 
