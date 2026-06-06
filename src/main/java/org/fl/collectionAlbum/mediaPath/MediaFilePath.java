@@ -70,7 +70,6 @@ public class MediaFilePath {
 		
 		try (Stream<Path> fileStream = Files.list(mediaFilesPath)) {
 			
-			Level level = isSingleLevelMediaPath ? Level.WARNING : Level.INFO;
 			mediaFiles = fileStream
 					.filter(path -> Files.isRegularFile(path))
 					.map(path -> { 
@@ -105,6 +104,7 @@ public class MediaFilePath {
 					.collect(Collectors.toList());
 	
 			// Check media files extension (should all be the same)
+			Level level = isSingleLevelMediaPath ? Level.WARNING : Level.INFO;
 			if (mediaFileExtensions.isEmpty()) {
 				mLog.log(level, "No media file found directly under " + mediaFilesPath.toString());
 			} else if (mediaFileExtensions.size() == 1) {

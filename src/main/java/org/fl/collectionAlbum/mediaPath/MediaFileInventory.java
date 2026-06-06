@@ -54,7 +54,7 @@ public class MediaFileInventory {
 	
 	private final Path rootPath;
 	
-	private final LinkedHashMap<Path,MediaFilePath> mediaFilePathInventory;
+	private final LinkedHashMap<Path,MediaFilePath> mediaFilePathMap;
 	
 	// MediaFilePath and MediaFile values maintained as List to be displayed in a JTable
 	private final List<MediaFilePath> mediaFilePathList;
@@ -69,7 +69,7 @@ public class MediaFileInventory {
 		this.rootPath = rootPath;
 		this.contentNature = contentNature;
 		this.isSingleLevelMediaPath = isSingleLevelMediaPath;
-		mediaFilePathInventory = new LinkedHashMap<>();
+		mediaFilePathMap = new LinkedHashMap<>();
 		mediaFilePathList = new ArrayList<>();
 		mediaFileList = new ArrayList<>();
 		isConnected = Files.exists(rootPath);
@@ -92,7 +92,7 @@ public class MediaFileInventory {
 	public void clearInventory() {
 		mediaFilePathList.clear();
 		mediaFileList.clear();
-		mediaFilePathInventory.clear();
+		mediaFilePathMap.clear();
 		isConnected = Files.exists(rootPath);
 	}
 	
@@ -100,7 +100,7 @@ public class MediaFileInventory {
 		
 		@Override
 		public FileVisitResult preVisitDirectory(Path file, BasicFileAttributes attr) {
-			if (mediaFilePathInventory.containsKey(file)) {
+			if (mediaFilePathMap.containsKey(file)) {
     			// already in inventory
     			
     			return FileVisitResult.SKIP_SUBTREE;
@@ -127,13 +127,13 @@ public class MediaFileInventory {
 	
 	private MediaFilePath addMediaFilePathToInventory(Path mediaFolderAbsolutePath) {
 		
-		if (! mediaFilePathInventory.containsKey(mediaFolderAbsolutePath)) {
+		if (! mediaFilePathMap.containsKey(mediaFolderAbsolutePath)) {
 			MediaFilePath newMediaFilePath = new MediaFilePath(mediaFolderAbsolutePath, contentNature, isSingleLevelMediaPath);
-			mediaFilePathInventory.put(mediaFolderAbsolutePath, newMediaFilePath);
+			mediaFilePathMap.put(mediaFolderAbsolutePath, newMediaFilePath);
 			mediaFilePathList.add(newMediaFilePath);
 			mediaFileList.addAll(newMediaFilePath.getMediaFiles());
 		}
-		return mediaFilePathInventory.get(mediaFolderAbsolutePath);
+		return mediaFilePathMap.get(mediaFolderAbsolutePath);
 	}
 	
 	private boolean checkInventoryKey(Path inventoryKey, String artist, String albumTitle) {
@@ -149,7 +149,7 @@ public class MediaFileInventory {
 		String title = album.getTitre();
 		List<Artiste> auteurs = album.getAuteurs();
 		
-		Map<Path,MediaFilePath> potentialMediaPath = mediaFilePathInventory.entrySet().stream()
+		Map<Path,MediaFilePath> potentialMediaPath = mediaFilePathMap.entrySet().stream()
 			.filter(inventoryEntry -> checkInventoryKey(inventoryEntry.getKey(), title))
 			.filter(inventoryEntry -> 
 				(auteurs.isEmpty() ||
@@ -177,7 +177,7 @@ public class MediaFileInventory {
 	}
 	
 	public int getNbMediaPath() {
-		return mediaFilePathInventory.size();
+		return mediaFilePathMap.size();
 	}
 	
 	public List<MediaFilePath> getMediaFilePathList() {
