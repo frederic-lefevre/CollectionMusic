@@ -207,7 +207,7 @@ public class MediaFileInventory {
 			
 			if (path.startsWith(rootPath)) {
 
-				MediaPathValidatorVisitor mediaPathValidatorVisitor = new MediaPathValidatorVisitor(multiFolderLoggingLevel);
+				MediaPathValidatorVisitor mediaPathValidatorVisitor = new MediaPathValidatorVisitor(contentNature, multiFolderLoggingLevel);
 
 				try {
 					Files.walkFileTree(path, mediaPathValidatorVisitor);
@@ -253,16 +253,18 @@ public class MediaFileInventory {
 	private static final Set<String> coverExtensions = Set.of("jpg", "png");
 	private static final Set<String> infoFileExtensions = Set.of("pdf","crt", "bup", "ifo", "idx2", "clpi", "xml", "png", "bdjo", "jpg", "grn", "txt", "jar", "srt", "map");
 	
-	private class MediaPathValidatorVisitor extends SimpleFileVisitor<Path> {
+	private static class MediaPathValidatorVisitor extends SimpleFileVisitor<Path> {
 		
+		private final ContentNature contentNature;
 		private final List<MediaFile> mediaFiles;
 		private final Set<String> mediaFileExtensions;
 		private Path coverPath;
 		private final Level multiFolderLoggingLevel;
 		private boolean topLevelVisited;
 		
-		MediaPathValidatorVisitor(Level multiFolderLoggingLevel) {
+		MediaPathValidatorVisitor(ContentNature contentNature, Level multiFolderLoggingLevel) {
 			super();
+			this.contentNature = contentNature;
 			this.mediaFiles = new ArrayList<MediaFile>();
 			this.mediaFileExtensions = new HashSet<>();
 			this.multiFolderLoggingLevel = multiFolderLoggingLevel;
