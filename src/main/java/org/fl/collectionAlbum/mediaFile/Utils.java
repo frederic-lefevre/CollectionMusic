@@ -85,6 +85,23 @@ public class Utils {
 		return bb.get() & 0xFF;
 	}
 	
+	public static long get10bytesUnsignedLong(ByteBuffer bb) {
+		
+		byte[] byteArray = new byte[10];
+	    bb.get(byteArray);
+	    int exponent = ((byteArray[0] << 8) + byteArray[1]) -  16445;
+	  
+	    int shift = 55;
+	    long mantissa = 0;
+	    for (int i = 2; i < 9; i++) {
+	      mantissa = mantissa + (((long) byteArray[i] & 0XFFL) << shift);
+	      shift -= 8;
+	    }
+	    mantissa = mantissa + (byteArray[9] >>> 1);
+
+	    return (long)(mantissa * Math.pow(2, exponent));
+	}
+	
 	public static ByteBuffer readToDirectByteBuffer(FileChannel sbc, int numberOfBytesToRead) throws IOException {
 		ByteBuffer byteBuffer = ByteBuffer.allocateDirect(numberOfBytesToRead);		
 		sbc.read(byteBuffer);
