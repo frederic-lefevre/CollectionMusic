@@ -202,7 +202,13 @@ class AlbumTest {
 		// Add the audio file path
 		AbstractAlbumsAudioFiles audioFile = (AbstractAlbumsAudioFiles) audioFiles.get(0);
 		audioFile.setMediaFilePath(
-				Set.of(TestUtils.createMediaFile(Paths.get("E:/Musique/e/Bill Evans/Waltz for Debby/"), ContentNature.AUDIO, ContentNature.AUDIO.isSingleLevelMediaPath(), false)),
+				Set.of(TestUtils.createMediaFile(
+						Paths.get("E:/Musique/e/Bill Evans/Waltz for Debby/"), 
+						ContentNature.AUDIO, 
+						List.of(), 
+						Paths.get("E:/Musique/e/Bill Evans/Waltz for Debby/cover.jpg"), 
+						"flac", 
+						false)),
 				Control.getMediaFileRootUri(ContentNature.AUDIO));
 		
 		assertThat(album.getFormatAlbum().getMediaFilePaths(ContentNature.AUDIO)).singleElement().satisfies(audio -> {
@@ -256,7 +262,13 @@ class AlbumTest {
 		// Fix the audio file path
 		AbstractAlbumsAudioFiles audioFile2 = (AbstractAlbumsAudioFiles) album2.getFormatAlbum().getMediaFilePaths(ContentNature.AUDIO).get(0);
 		audioFile2.setMediaFilePath(
-				Set.of(TestUtils.createMediaFile(Paths.get("E:/Musique/e/Bill Evans/Portrait In Jazz/"), ContentNature.AUDIO, ContentNature.AUDIO.isSingleLevelMediaPath(), false)),
+				Set.of(TestUtils.createMediaFile(
+						Paths.get("E:/Musique/e/Bill Evans/Portrait In Jazz/"), 
+						ContentNature.AUDIO, 
+						List.of(), 
+						Paths.get("E:/Musique/a/John Abercrombie/M [24-96]/"), 
+						"flac", 
+						false)),
 				Control.getMediaFileRootUri(ContentNature.AUDIO));
 		
 		assertThat(album2.getFormatAlbum().getMediaFilePaths(ContentNature.AUDIO)).singleElement().satisfies(audio -> {
