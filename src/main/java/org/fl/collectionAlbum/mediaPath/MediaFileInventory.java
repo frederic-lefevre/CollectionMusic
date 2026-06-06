@@ -125,15 +125,15 @@ public class MediaFileInventory {
     	}
 	}
 	
-	private MediaFilePath addMediaFilePathToInventory(Path albumAbsolutePath) {
+	private MediaFilePath addMediaFilePathToInventory(Path mediaFolderAbsolutePath) {
 		
-		if (! mediaFilePathInventory.containsKey(albumAbsolutePath)) {
-			MediaFilePath newMediaFilePath = new MediaFilePath(albumAbsolutePath, contentNature, isSingleLevelMediaPath);
-			mediaFilePathInventory.put(albumAbsolutePath, newMediaFilePath);
+		if (! mediaFilePathInventory.containsKey(mediaFolderAbsolutePath)) {
+			MediaFilePath newMediaFilePath = new MediaFilePath(mediaFolderAbsolutePath, contentNature, isSingleLevelMediaPath);
+			mediaFilePathInventory.put(mediaFolderAbsolutePath, newMediaFilePath);
 			mediaFilePathList.add(newMediaFilePath);
 			mediaFileList.addAll(newMediaFilePath.getMediaFiles());
 		}
-		return mediaFilePathInventory.get(albumAbsolutePath);
+		return mediaFilePathInventory.get(mediaFolderAbsolutePath);
 	}
 	
 	private boolean checkInventoryKey(Path inventoryKey, String artist, String albumTitle) {
