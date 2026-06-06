@@ -77,7 +77,7 @@ public class MediaFilePath {
 						String extension = getFileNameExtension(path);
 						
 						if (extension == null) {
-							mLog.log(level, "Unexpected file with no extension in media path : " + path);
+							mLog.warning("Unexpected file with no extension in media path : " + path);
 							return null;
 						} else {
 							MediaFile mediaFile = MediaFileBuilder.builder(contentNature, path, extension).build();
@@ -96,7 +96,7 @@ public class MediaFilePath {
 							} else if (infoFileExtensions.contains(extension.toLowerCase())) {
 								return null;
 							} else {
-								mLog.log(level, "Unexpected file in media path : " + path);
+								mLog.warning("Unexpected file in media path : " + path);
 								return null;
 							}
 						}
