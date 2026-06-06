@@ -25,6 +25,7 @@ SOFTWARE.
 package org.fl.collectionAlbum.gui.table;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.swing.table.AbstractTableModel;
 
@@ -82,7 +83,7 @@ public class MediaFilePathsTableModel extends AbstractTableModel implements Upda
 			case NB_FILES_COL_IDX -> Long.class;
 			case COVER_IMAGE_COL_IDX -> Boolean.class;
 			case EXTENSION_COL_IDX -> String.class;
-			case METADATA_CHECK_COL_IDX -> Boolean.class;
+			case METADATA_CHECK_COL_IDX -> Optional.class;
 			default -> Object.class;
 		};
 	}

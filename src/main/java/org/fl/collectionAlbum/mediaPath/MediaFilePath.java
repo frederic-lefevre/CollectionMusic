@@ -27,6 +27,7 @@ package org.fl.collectionAlbum.mediaPath;
 import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.fl.collectionAlbum.Control;
@@ -41,7 +42,7 @@ public class MediaFilePath {
 	private final Set<Album> albumsSet;
 	private final Path coverPath;
 	private final List<MediaFile> mediaFiles;
-	private final boolean hasEquivalentMetadata;
+	private final Optional<Boolean> hasEquivalentMetadata;
 	private final String mediaFileExtension;
 	
 	public MediaFilePath(Path mediaFilesPath, ContentNature contentNature, List<MediaFile> mediaFiles, Path coverPath, String mediaFileExtension) {
@@ -54,11 +55,12 @@ public class MediaFilePath {
 		this.coverPath = coverPath;
 			
 		if (Control.isReadMediaFileMetadata()) {
-			hasEquivalentMetadata = (mediaFiles == null) ||
+			hasEquivalentMetadata = Optional.of(
+					(mediaFiles == null) ||
 					mediaFiles.isEmpty() ||
-					mediaFiles.stream().allMatch(m -> mediaFiles.get(0).hasEquivalentStreamMetadata(m));
+					mediaFiles.stream().allMatch(m -> mediaFiles.get(0).hasEquivalentStreamMetadata(m)));
 		} else {
-			hasEquivalentMetadata = false;
+			hasEquivalentMetadata = Optional.empty();
 		}
 	}
 
@@ -98,7 +100,7 @@ public class MediaFilePath {
 		return mediaFileExtension;
 	}
 	
-	public boolean hasEquivalentStreamMetadata() {
+	public Optional<Boolean> hasEquivalentStreamMetadata() {
 		return hasEquivalentMetadata;
 	}
 }
