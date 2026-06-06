@@ -26,6 +26,7 @@ package org.fl.collectionAlbum.mediaFile;
 
 import java.nio.file.Path;
 
+import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.format.AudioFileType;
 import org.fl.collectionAlbum.mediaFile.metadata.AudioMetadata;
 import org.fl.collectionAlbum.mediaFile.metadata.AudioStreamMetadata;
@@ -48,7 +49,8 @@ public abstract class AudioFile extends MediaFile {
 	}
 
 	public AudioMetadata getAudioMetadata() {
-		if ((audioMetadata == null) && isValidMediaFile.isEmpty()) {
+
+		if ((audioMetadata == null) && Control.isReadMediaFileMetadata() && isValidMediaFile.isEmpty()) {
 			// Lazy get
 			audioMetadata = parseMetadata();
 		}

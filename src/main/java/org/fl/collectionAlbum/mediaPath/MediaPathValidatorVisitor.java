@@ -35,7 +35,6 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.mediaFile.MediaFile;
 import org.fl.collectionAlbum.mediaFile.MediaFileBuilder;
@@ -85,10 +84,9 @@ class MediaPathValidatorVisitor extends SimpleFileVisitor<Path> {
 					
 					mediaFileExtensions.add(extension);
 					
-					if (Control.isReadMediaFileMetadata()) {
-						// Media file metadata parsing
-						mediaFile.getMetadata();
-					}
+					// Media file metadata parsing (will occur if the option is true)
+					mediaFile.getMetadata();
+
 					mediaFiles.add(mediaFile);
 				} else if (path.getFileName().toString().toLowerCase().startsWith(COVER_START_NAME) &&
 						coverExtensions.contains(extension.toLowerCase())) {
