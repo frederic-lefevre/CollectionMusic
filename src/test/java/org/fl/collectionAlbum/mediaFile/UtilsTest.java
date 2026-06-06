@@ -230,4 +230,58 @@ class UtilsTest {
 		assertThat(Utils.get1byteUnsignedInt(ByteBuffer.allocate(1).put(b1).position(0)))
 		 	.isEqualTo(0xFF);
 	}
+	
+	@Test
+	void shouldGet10bytesUnsigned1() {
+		byte b1 = 0;
+		byte b2 = 0;
+		byte b3 = 0;
+		byte b4 = 0;
+		byte b5 = 0;
+		byte b6 = 0;
+		byte b7 = 0;
+		byte b8 = 0;
+		byte b9 = 0;
+		byte b10 = 0;
+		
+		assertThat(Utils.get10bytesUnsignedLong(
+				ByteBuffer.allocate(10).put(b1).put(b2).put(b3).put(b4).put(b5).put(b6).put(b7).put(b8).put(b9).put(b10).position(0)))
+		.isEqualTo(0);
+	}
+	
+	@Test
+	void shouldGet10bytesUnsigned2() {
+		byte b1 = 0x40;
+		byte b2 = 0;
+		byte b3 = (byte) 0x9E;
+		byte b4 = 0x06;
+		byte b5 = 0x52;
+		byte b6 = 0x14;
+		byte b7 = 0x1E;
+		byte b8 = (byte) 0xF0;
+		byte b9 = (byte) 0xDB;
+		byte b10 = (byte) 0xF6;
+		
+		assertThat(Utils.get10bytesUnsignedLong(
+				ByteBuffer.allocate(10).put(b1).put(b2).put(b3).put(b4).put(b5).put(b6).put(b7).put(b8).put(b9).put(b10).position(0)))
+		.isEqualTo(2);
+	}
+	
+	@Test
+	void shouldGet10bytesUnsigned3() {
+		byte b1 = 0x40;
+		byte b2 = 0x0F;
+		byte b3 = (byte) 0xBB;
+		byte b4 = (byte) 0x80;
+		byte b5 = 0;
+		byte b6 = 0;
+		byte b7 = 0;
+		byte b8 = 0;
+		byte b9 = 0;
+		byte b10 = 0;
+		
+		assertThat(Utils.get10bytesUnsignedLong(
+				ByteBuffer.allocate(10).put(b1).put(b2).put(b3).put(b4).put(b5).put(b6).put(b7).put(b8).put(b9).put(b10).position(0)))
+		.isEqualTo(96000);
+	}
 }
