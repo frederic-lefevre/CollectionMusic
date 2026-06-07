@@ -68,7 +68,7 @@ public class MediaFileInventory {
 		
 		this.rootPath = rootPath;
 		this.contentNature = contentNature;
-		multiFolderLoggingLevel = isSingleLevelMediaPath ? Level.WARNING : Level.INFO;
+		multiFolderLoggingLevel = isSingleLevelMediaPath ? Level.WARNING : Level.FINE;
 		mediaFilePathMap = new LinkedHashMap<>();
 		mediaFilePathList = new ArrayList<>();
 		mediaFileList = new ArrayList<>();
