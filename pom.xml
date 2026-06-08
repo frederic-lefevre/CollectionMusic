@@ -22,7 +22,7 @@
 		<dependency>
 			<groupId>org.fl</groupId>
 			<artifactId>FlUtils</artifactId>
-			<version>12.0.0</version>
+			<version>12.1.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.fl</groupId>
@@ -107,7 +107,7 @@
                     <configuration>
                     	<dateFormat>yyyy-MM-dd HH:mm:ss Z</dateFormat>
                         <skipPoms>false</skipPoms>
-                        <commitIdGenerationMode>flat</commitIdGenerationMode>
+                        <commitIdGenerationMode>full</commitIdGenerationMode>
                         <injectAllReactorProjects>true</injectAllReactorProjects>
                     </configuration>
             </plugin>
