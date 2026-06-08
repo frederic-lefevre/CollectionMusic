@@ -29,12 +29,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.mediaFile.metadata.AudioMetadata;
 import org.fl.collectionAlbum.mediaFile.metadata.AudioStreamMetadata;
 import org.fl.collectionAlbum.mediaFile.metadata.MediaFileMetadata;
 import org.fl.collectionAlbum.mediaFile.metadata.MetadataElement;
 import org.fl.collectionAlbum.mediaFile.metadata.NormalizedAudioMetadataTags;
+import org.fl.util.FilterCounter;
+import org.fl.util.FilterCounter.LogRecordCounter;
 import org.fl.util.file.FilesUtils;
 import org.junit.jupiter.api.Test;
 
@@ -44,6 +48,8 @@ class AiffAudioFileTest {
 	void shouldParseAiffFile() throws URISyntaxException {
 		
 		Path aiffFilePath = FilesUtils.uriStringToAbsolutePath("file:///ForTests/CollectionMusique/I_LoveYou.aiff");
+		
+		LogRecordCounter filterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(AudioMetadata.class.getName()));
 		
 		AiffAudioFile f1 = new AiffAudioFile(aiffFilePath);
 		assertThat(f1.getFilePath().toUri()).asString().isEqualTo("file:///C:/ForTests/CollectionMusique/I_LoveYou.aiff");
@@ -90,6 +96,12 @@ class AiffAudioFileTest {
 				Map.of(
 						"AIFF form type", new MetadataElement<>("AIFF form type", "AIFF")
 				));
+		
+		assertThat(audioMetadata.getAdditionalTags()).isNotEmpty().hasSize(2);
+		
+		assertThat(filterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(filterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
+		filterCounter.stopLogCountAndFilter();
 	}
 	
 }
