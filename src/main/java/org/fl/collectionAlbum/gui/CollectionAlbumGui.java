@@ -68,7 +68,8 @@ public class CollectionAlbumGui extends JFrame {
    		// init main window
    		setBounds(20, 20, WINDOW_WIDTH, WINDOW_HEIGHT);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setTitle("Collection d'albums et concerts") ;
+
+		setTitle("Collection d'albums et concerts   [" + getRunningContext().getVersion() + "]") ;
 		
 		ApplicationTabbedPane collectionTabs = new ApplicationTabbedPane(getRunningContext());
 		
