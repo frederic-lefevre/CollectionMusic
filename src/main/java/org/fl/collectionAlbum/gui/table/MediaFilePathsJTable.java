@@ -36,6 +36,7 @@ import org.fl.collectionAlbum.gui.GenerationPane;
 import org.fl.collectionAlbum.gui.adapter.MediaFilePathMouseAdapter;
 import org.fl.collectionAlbum.gui.renderer.AlbumsRenderer;
 import org.fl.collectionAlbum.gui.renderer.CollectionBooleanRenderer;
+import org.fl.collectionAlbum.gui.renderer.CollectionOptionalBooleanRenderer;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.fl.collectionAlbum.mediaPath.MediaFilePathAlbumComparator;
 import org.fl.collectionAlbum.utils.CollectionUtils;
@@ -62,7 +63,7 @@ public class MediaFilePathsJTable extends JTable {
 		getColumnModel().getColumn(MediaFilePathsTableModel.EXTENSION_COL_IDX).setPreferredWidth(100);
 		getColumnModel().getColumn(MediaFilePathsTableModel.METADATA_CHECK_COL_IDX).setPreferredWidth(100);
 		getColumnModel().getColumn(MediaFilePathsTableModel.COVER_IMAGE_COL_IDX).setCellRenderer(new CollectionBooleanRenderer());
-		getColumnModel().getColumn(MediaFilePathsTableModel.METADATA_CHECK_COL_IDX).setCellRenderer(new CollectionBooleanRenderer());
+		getColumnModel().getColumn(MediaFilePathsTableModel.METADATA_CHECK_COL_IDX).setCellRenderer(new CollectionOptionalBooleanRenderer());
 				
 		// Allow single row selection only
 		ListSelectionModel listSelectionModel = new DefaultListSelectionModel();

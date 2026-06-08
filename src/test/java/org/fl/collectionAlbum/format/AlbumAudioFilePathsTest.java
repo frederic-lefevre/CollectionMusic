@@ -27,6 +27,7 @@ package org.fl.collectionAlbum.format;
 import static org.assertj.core.api.Assertions.*;
 
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -147,7 +148,13 @@ class AlbumAudioFilePathsTest {
 		assertThat(losslessAudio.getMediaFilePaths()).isNull();
 		
 		losslessAudio.setMediaFilePath(
-				Set.of(TestUtils.createMediaFile(Paths.get("E:/Musique/a/John Abercrombie/M [24-96]/"), ContentNature.AUDIO, true, false)),
+				Set.of(TestUtils.createMediaFile(
+						Paths.get("E:/Musique/a/John Abercrombie/M [24-96]/"), 
+						ContentNature.AUDIO, 
+						List.of(), 
+						Paths.get("E:/Musique/a/John Abercrombie/M [24-96]/"), 
+						"flac",
+						false)),
 				Control.getMediaFileRootUri(ContentNature.AUDIO));
 		
 		assertThat(losslessAudio.hasMissingOrInvalidMediaFilePath()).isFalse();

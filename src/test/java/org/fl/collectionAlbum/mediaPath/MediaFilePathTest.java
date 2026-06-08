@@ -36,17 +36,17 @@ class MediaFilePathTest {
 	@Test
 	void shouldSelectMediaFileExtension() {
 		
-		assertThat(MediaFilePath.isMediaFileName(Paths.get("toto.flac"), ContentNature.AUDIO)).isTrue();
-		assertThat(MediaFilePath.isMediaFileName(Paths.get("toto.mp3"), ContentNature.AUDIO)).isTrue();
-		assertThat(MediaFilePath.isMediaFileName(Paths.get("toto.txt"), ContentNature.AUDIO)).isFalse();
-		assertThat(MediaFilePath.isMediaFileName(Paths.get("toto.jpg"), ContentNature.AUDIO)).isFalse();
-		assertThat(MediaFilePath.isMediaFileName(Paths.get("toto"), ContentNature.AUDIO)).isFalse();
-		assertThat(MediaFilePath.isMediaFileName(Paths.get(""), ContentNature.AUDIO)).isFalse();
+		assertThat(MediaFileInventory.isMediaFileName(Paths.get("toto.flac"), ContentNature.AUDIO)).isTrue();
+		assertThat(MediaFileInventory.isMediaFileName(Paths.get("toto.mp3"), ContentNature.AUDIO)).isTrue();
+		assertThat(MediaFileInventory.isMediaFileName(Paths.get("toto.txt"), ContentNature.AUDIO)).isFalse();
+		assertThat(MediaFileInventory.isMediaFileName(Paths.get("toto.jpg"), ContentNature.AUDIO)).isFalse();
+		assertThat(MediaFileInventory.isMediaFileName(Paths.get("toto"), ContentNature.AUDIO)).isFalse();
+		assertThat(MediaFileInventory.isMediaFileName(Paths.get(""), ContentNature.AUDIO)).isFalse();
 		
-		assertThat(MediaFilePath.isMediaFileName(Paths.get("toto.mkv"), ContentNature.AUDIO)).isFalse();
+		assertThat(MediaFileInventory.isMediaFileName(Paths.get("toto.mkv"), ContentNature.AUDIO)).isFalse();
 		
-		assertThat(MediaFilePath.isMediaFileName(Paths.get("toto.flac"), ContentNature.VIDEO)).isFalse();
-		assertThat(MediaFilePath.isMediaFileName(Paths.get("toto.mkv"), ContentNature.VIDEO)).isTrue();
+		assertThat(MediaFileInventory.isMediaFileName(Paths.get("toto.flac"), ContentNature.VIDEO)).isFalse();
+		assertThat(MediaFileInventory.isMediaFileName(Paths.get("toto.mkv"), ContentNature.VIDEO)).isTrue();
 		
 		//To print all encountered extension
 		//MediaFilePath.extensionSet.forEach(extension -> System.out.println(extension));
@@ -54,6 +54,6 @@ class MediaFilePathTest {
 
 	@Test
 	void shouldThrowNPE() {
-		assertThatNullPointerException().isThrownBy(() -> MediaFilePath.isMediaFileName(null, ContentNature.AUDIO));
+		assertThatNullPointerException().isThrownBy(() -> MediaFileInventory.isMediaFileName(null, ContentNature.AUDIO));
 	}
 }

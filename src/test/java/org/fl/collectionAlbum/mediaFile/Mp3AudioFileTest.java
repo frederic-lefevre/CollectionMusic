@@ -150,6 +150,8 @@ class Mp3AudioFileTest {
 		
 		Path mp3FilePath = FilesUtils.uriStringToAbsolutePath("file:///ForTests/CollectionMusique/CarnivalInRio.mp3");
 		
+		LogRecordCounter filterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(AudioMetadata.class.getName()));
+		
 		Mp3AudioFile f1 = new Mp3AudioFile(mp3FilePath);
 		assertThat(f1.isValidMediaFile()).isEmpty(); // not parsed yet
 		assertThat(f1.hasImbeddedPicture()).isEmpty();
@@ -192,12 +194,18 @@ class Mp3AudioFileTest {
 		assertThat(f1.hasImbeddedPicture()).hasValue(true);
 		
 		assertThat(audioMetadata.getAdditionalTags()).isNotEmpty().hasSize(3);
+		
+		assertThat(filterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(filterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
+		filterCounter.stopLogCountAndFilter();
 	}
 	
 	@Test
 	void shouldParseMp3FileWithPopmFields() throws URISyntaxException {
 		
 		Path mp3FilePath = FilesUtils.uriStringToAbsolutePath("file:///ForTests/CollectionMusique/GotPapersOnYouBaby.mp3");
+		
+		LogRecordCounter filterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(AudioMetadata.class.getName()));
 		
 		Mp3AudioFile f1 = new Mp3AudioFile(mp3FilePath);
 		assertThat(f1.isValidMediaFile()).isEmpty(); // not parsed yet
@@ -241,6 +249,10 @@ class Mp3AudioFileTest {
 		assertThat(f1.hasImbeddedPicture()).hasValue(true);
 		
 		assertThat(audioMetadata.getAdditionalTags()).isNotEmpty().hasSize(1);
+		
+		assertThat(filterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(filterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
+		filterCounter.stopLogCountAndFilter();
 	}
 	
 	@Test

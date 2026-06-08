@@ -27,8 +27,10 @@ package org.fl.collectionAlbum;
 import static org.assertj.core.api.Assertions.*;
 
 import java.nio.file.Path;
+import java.util.List;
 
 import org.fl.collectionAlbum.format.ContentNature;
+import org.fl.collectionAlbum.mediaFile.MediaFile;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 
@@ -55,11 +57,17 @@ public class TestUtils {
 		assertThatIllegalArgumentException().isThrownBy(() -> albumsContainer.pickRandomAlbums(1));
 	}
 	
-	public static synchronized MediaFilePath createMediaFile(Path mediaFilesPath, ContentNature contentNature, boolean logWarnings, boolean readMediaFileMetadata) {
+	public static synchronized MediaFilePath createMediaFile(
+			Path mediaFilesPath, 
+			ContentNature contentNature, 
+			List<MediaFile> mediaFiles, 
+			Path coverPath, 
+			String mediaFileExtension,
+			boolean readMediaFileMetadata) {
 		
 		boolean actualReadMediaFileMetadata = Control.isReadMediaFileMetadata();
 		Control.setReadMediaFileMetadata(readMediaFileMetadata);
-		MediaFilePath mediaFilePath = new MediaFilePath(mediaFilesPath, contentNature, logWarnings);
+		MediaFilePath mediaFilePath = new MediaFilePath(mediaFilesPath, contentNature, mediaFiles, coverPath, mediaFileExtension);
 		Control.setReadMediaFileMetadata(actualReadMediaFileMetadata);
 		return mediaFilePath;
 	}

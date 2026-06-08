@@ -24,102 +24,43 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.mediaPath;
 
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.mediaFile.MediaFile;
-import org.fl.collectionAlbum.mediaFile.MediaFileBuilder;
 
 public class MediaFilePath {
-
-	private static final Logger mLog = Logger.getLogger(MediaFilePath.class.getName());
-	
-	private static final String COVER_START_NAME = "cover.";
-	private static final Set<String> coverExtensions = Set.of("jpg", "png");
-	private static final Set<String> infoFileExtensions = Set.of("pdf","crt", "bup", "ifo", "idx2");
 	
 	private final Path mediaFilesPath;
 	private final ContentNature contentNature;
 	private final Set<Album> albumsSet;
-	private Path coverPath;
-	private List<MediaFile> mediaFiles;
-	private boolean hasEquivalentMetadata;
+	private final Path coverPath;
+	private final List<MediaFile> mediaFiles;
+	private final Optional<Boolean> hasEquivalentMetadata;
+	private final String mediaFileExtension;
 	
-	private String mediaFileExtension;
-	
-	public MediaFilePath(Path mediaFilesPath, ContentNature contentNature, boolean logWarnings) {
+	public MediaFilePath(Path mediaFilesPath, ContentNature contentNature, List<MediaFile> mediaFiles, Path coverPath, String mediaFileExtension) {
 		
 		this.mediaFilesPath = mediaFilesPath;
 		this.contentNature = contentNature;
+		this.mediaFiles = mediaFiles;
 		albumsSet = new HashSet<>();
-		mediaFileExtension = null;
-		coverPath = null;
-		hasEquivalentMetadata = false;
-		Set<String> mediaFileExtensions = new HashSet<>();
-		
-		try (Stream<Path> fileStream = Files.list(mediaFilesPath)) {
+		this.mediaFileExtension = mediaFileExtension;
+		this.coverPath = coverPath;
 			
-			Level level = logWarnings ? Level.WARNING : Level.INFO;
-			mediaFiles = fileStream
-					.filter(path -> Files.isRegularFile(path))
-					.map(path -> { 
-						String extension = getFileNameExtension(path);
-						
-						if (extension == null) {
-							mLog.log(level, "Unexpected file with no extension in media path : " + path);
-							return null;
-						} else {
-							MediaFile mediaFile = MediaFileBuilder.builder(contentNature, path, extension).build();
-							if (mediaFile != null) {
-
-								mediaFileExtensions.add(extension);
-								
-								if (Control.isReadMediaFileMetadata()) {
-									mediaFile.getMetadata();
-								}
-								return mediaFile;
-							} else if (path.getFileName().toString().toLowerCase().startsWith(COVER_START_NAME) &&
-									coverExtensions.contains(extension.toLowerCase())) {
-								coverPath = path;
-								return null;
-							} else if (infoFileExtensions.contains(extension.toLowerCase())) {
-								return null;
-							} else {
-								mLog.log(level, "Unexpected file in media path : " + path);
-								return null;
-							}
-						}
-					})
-					.filter(Objects::nonNull)
-					.collect(Collectors.toList());
-	
-			// Check media files extension (should all be the same)
-			if (mediaFileExtensions.isEmpty()) {
-				mLog.log(level, "No media file found directly under " + mediaFilesPath.toString());
-			} else if (mediaFileExtensions.size() == 1) {
-				mediaFileExtension = mediaFileExtensions.iterator().next();
-			} else {
-				mLog.log(level, "More than 1 media file type found in " + mediaFilesPath.toString());
-				mediaFileExtension = mediaFileExtensions.toString();
-			}
-			
-			hasEquivalentMetadata = (mediaFiles == null) ||
+		if (Control.isReadMediaFileMetadata()) {
+			hasEquivalentMetadata = Optional.of(
+					(mediaFiles == null) ||
 					mediaFiles.isEmpty() ||
-					mediaFiles.stream().allMatch(m -> mediaFiles.get(0).hasEquivalentStreamMetadata(m));
-			
-		} catch (Exception e) {
-			mLog.log(Level.SEVERE, "Exception when listing files in " + mediaFilesPath, e);			
+					mediaFiles.stream().allMatch(m -> mediaFiles.get(0).hasEquivalentStreamMetadata(m)));
+		} else {
+			hasEquivalentMetadata = Optional.empty();
 		}
 	}
 
@@ -151,27 +92,6 @@ public class MediaFilePath {
 		return mediaFiles.size();
 	}
 
-	public static boolean isMediaFileName(Path file, ContentNature mediaContentNature) {
-
-		String extension = getFileNameExtension(file);
-		if (extension != null) {
-			return mediaContentNature.getFileExtensions().contains(extension.toLowerCase());
-		} else {
-			return false;
-		}
-	}
-	
-	private static String getFileNameExtension(Path path) {
-		
-		String fileName = path.toString();
-	    int dotIndex = fileName.lastIndexOf(".");
-	    if (dotIndex >= 0) {
-	        return fileName.substring(dotIndex + 1);
-	    } else {
-	    	return null;
-	    }		
-	}
-
 	public boolean hasCover() {
 		return coverPath != null;
 	}
@@ -180,8 +100,7 @@ public class MediaFilePath {
 		return mediaFileExtension;
 	}
 	
-	public boolean hasEquivalentStreamMetadata() {
+	public Optional<Boolean> hasEquivalentStreamMetadata() {
 		return hasEquivalentMetadata;
 	}
-
 }
