@@ -37,7 +37,7 @@ import javax.swing.JTable;
 import javax.swing.SortOrder;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
-import org.fl.collectionAlbum.gui.table.AlbumTableColumn;
+import org.fl.collectionAlbum.gui.table.AlbumTableColumns;
 import org.fl.collectionAlbum.gui.table.AlbumsJTable.AlbumColumnSort;
 import org.fl.collectionAlbum.gui.table.AlbumsScrollJTablePane;
 import org.fl.collectionAlbum.gui.table.MetricsHistoryTableModel;
@@ -84,9 +84,9 @@ public class CollectionMetricsTabbedPane extends AbstractColorableTabbedPane {
 		AlbumsScrollJTablePane albumsScrollJTablePane = 
 				new AlbumsScrollJTablePane(
 						collectionAlbumContainer.getCollectionAlbumsMusiques().getAlbums(),
-						AlbumTableColumn.ACQUISITION_COLUMN_LIST,
+						AlbumTableColumns.ACQUISITION_COLUMNS,
 						generationPane,
-						new AlbumColumnSort(AlbumTableColumn.ACQUISITION, SortOrder.DESCENDING));
+						new AlbumColumnSort(AlbumTableColumns.ACQUISITION, SortOrder.DESCENDING));
 		albumsScrollJTablePane.setPreferredSize(SCROLL_TABLE_DIMENSION);
 		tableModelList.add(albumsScrollJTablePane.getAlbumsTableModel());
 		add("Albums par date d'acquisition", albumsScrollJTablePane);

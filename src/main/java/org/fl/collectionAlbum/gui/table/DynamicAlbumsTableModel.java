@@ -35,7 +35,7 @@ public class DynamicAlbumsTableModel extends AbstractAlbumsTableModel {
 	private final Supplier<List<Album>> albumsListSupplier;
 	private List<Album> albumsList;
 	
-	public DynamicAlbumsTableModel(Supplier<List<Album>> albumsListSupplier, List<TableColumnParameter<Album>> albumTableColumns) {
+	public DynamicAlbumsTableModel(Supplier<List<Album>> albumsListSupplier, AlbumTableColumns albumTableColumns) {
 		super(albumTableColumns);
 		this.albumsListSupplier = albumsListSupplier;
 		this.albumsList = albumsListSupplier.get();

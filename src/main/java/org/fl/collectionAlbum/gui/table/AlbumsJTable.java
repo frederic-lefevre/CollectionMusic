@@ -38,7 +38,6 @@ import javax.swing.table.TableRowSorter;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
-import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.gui.GenerationPane;
 import org.fl.collectionAlbum.gui.adapter.AlbumMouseAdapter;
 
@@ -48,7 +47,7 @@ public class AlbumsJTable extends MusicArtefactTable<Album> {
 
 	private static final Logger tLog = Logger.getLogger(AlbumsJTable.class.getName());
 	
-	private final List<TableColumnParameter<Album>> albumTableColumns;
+	private final AlbumTableColumns albumTableColumns;
 	
 	public record AlbumColumnSort(TableColumnParameter<Album> albumTableColumnToSort, SortOrder sortOrder) {}
 	
@@ -59,19 +58,19 @@ public class AlbumsJTable extends MusicArtefactTable<Album> {
 		
 		setFillsViewportHeight(true);
 		
-		setRowHeight(ContentNature.values().length*25);
+		setRowHeight(albumTableColumns.rowHeight());
 		
 		// Row sorter
 		TableRowSorter<AbstractAlbumsTableModel> sorter = new TableRowSorter<>(albumsTableModel);
 		
-		for (int colIdx = 0; colIdx < albumTableColumns.size(); colIdx++) {
-			TableCellRenderer renderer =  albumTableColumns.get(colIdx).cellRenderer();
+		for (int colIdx = 0; colIdx < albumTableColumns.tableColumnParameters().size(); colIdx++) {
+			TableCellRenderer renderer =  albumTableColumns.tableColumnParameters().get(colIdx).cellRenderer();
 			if (renderer != null) {
 				 getColumnModel().getColumn(colIdx).setCellRenderer(renderer);
 			}
-			getColumnModel().getColumn(colIdx).setPreferredWidth(albumTableColumns.get(colIdx).width());
+			getColumnModel().getColumn(colIdx).setPreferredWidth(albumTableColumns.tableColumnParameters().get(colIdx).width());
 			
-			Comparator<?> comparator =  albumTableColumns.get(colIdx).comparator();
+			Comparator<?> comparator =  albumTableColumns.tableColumnParameters().get(colIdx).comparator();
 			if (comparator != null) {
 				sorter.setComparator(colIdx, comparator);
 			}
@@ -98,8 +97,8 @@ public class AlbumsJTable extends MusicArtefactTable<Album> {
 	
 	private int getColumnNumber(TableColumnParameter<Album> albumTableColumn) {
 		
-		for (int i=0; i < albumTableColumns.size(); i++) {
-			if (albumTableColumns.get(i) == albumTableColumn) {
+		for (int i=0; i < albumTableColumns.tableColumnParameters().size(); i++) {
+			if (albumTableColumns.tableColumnParameters().get(i) == albumTableColumn) {
 				return i;
 			}
 		}
@@ -121,12 +120,12 @@ public class AlbumsJTable extends MusicArtefactTable<Album> {
 	
 	@Override
 	public boolean isArtistsColumnSelected() {
-		return albumTableColumns.get(getSelectedColumn()) == AlbumTableColumn.AUTEURS;
+		return albumTableColumns.tableColumnParameters().get(getSelectedColumn()) == AlbumTableColumns.AUTEURS;
 	}
 
 	@Override
 	public boolean isDiscogsReleaseColumnSelected() {
-		return albumTableColumns.get(getSelectedColumn()) == AlbumTableColumn.DISCOGS;
+		return albumTableColumns.tableColumnParameters().get(getSelectedColumn()) == AlbumTableColumns.DISCOGS;
 	}
 
 	@Override

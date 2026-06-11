@@ -43,7 +43,7 @@ import org.fl.collectionAlbum.gui.GenerationPane;
 import org.fl.collectionAlbum.gui.listener.MediaFilePathCommandListener;
 import org.fl.collectionAlbum.gui.listener.AlbumCustomActionListener.CustomAlbumAction;
 import org.fl.collectionAlbum.gui.listener.MediaFilePathActionListener;
-import org.fl.collectionAlbum.gui.table.AlbumTableColumn;
+import org.fl.collectionAlbum.gui.table.AlbumTableColumns;
 import org.fl.collectionAlbum.gui.table.AlbumsScrollJTablePane;
 import org.fl.collectionAlbum.gui.table.MediaFileJTable;
 import org.fl.collectionAlbum.gui.table.MediaFilePathsJTable;
@@ -126,7 +126,7 @@ public class MediaFilePathMouseAdapter extends MouseAdapter {
 				} else {
 					
 					AlbumsScrollJTablePane albumsScrollJTablePane = 
-							new AlbumsScrollJTablePane(albums.stream().toList(), AlbumTableColumn.REGULAR_COLUMN_LIST, generationPane);
+							new AlbumsScrollJTablePane(albums.stream().toList(), AlbumTableColumns.REGULAR_COLUMNS, generationPane);
 					JOptionPane.showMessageDialog(null, albumsScrollJTablePane, "Albums correspondants", JOptionPane.PLAIN_MESSAGE);
 				}
 			} else {

@@ -38,7 +38,7 @@ import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.albums.ListeAlbum;
 import org.fl.collectionAlbum.gui.GenerationPane;
-import org.fl.collectionAlbum.gui.table.AlbumTableColumn;
+import org.fl.collectionAlbum.gui.table.AlbumTableColumns;
 import org.fl.collectionAlbum.gui.table.AlbumsScrollJTablePane;
 
 public class AlbumStatistiquesMouseAdapter extends StatistiquesMouseAdapter {
@@ -99,7 +99,7 @@ public class AlbumStatistiquesMouseAdapter extends StatistiquesMouseAdapter {
 			if (! albumList.isEmpty()) {
 				// Table to display the result albums
 				AlbumsScrollJTablePane albumsScrollJTablePane = new AlbumsScrollJTablePane(albumList, 
-						AlbumTableColumn.ACQUISITION_COLUMN_LIST,
+						AlbumTableColumns.ACQUISITION_COLUMNS,
 						generationPane);
 			
 				JOptionPane.showMessageDialog(null, albumsScrollJTablePane, getWindowsTitle("Albums "), JOptionPane.PLAIN_MESSAGE);

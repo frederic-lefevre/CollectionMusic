@@ -35,6 +35,7 @@ import org.fl.collectionAlbum.albums.AlbumAcquisitionDateComparator;
 import org.fl.collectionAlbum.albums.AlbumCompositionComparator;
 import org.fl.collectionAlbum.albums.AlbumEnregistrementComparator;
 import org.fl.collectionAlbum.albums.AlbumMediaFilesStatusComparator;
+import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.gui.renderer.AuteurListRenderer;
 import org.fl.collectionAlbum.gui.renderer.CollectionBooleanRenderer;
 import org.fl.collectionAlbum.gui.renderer.CollectionNumberRenderer;
@@ -44,7 +45,7 @@ import org.fl.collectionAlbum.gui.renderer.StringToHtmlRenderer;
 import org.fl.collectionAlbum.utils.CollectionUtils;
 import org.fl.collectionAlbum.utils.TemporalUtils;
 
-public class AlbumTableColumn {
+public record AlbumTableColumns(List<TableColumnParameter<Album>> tableColumnParameters, int rowHeight) {
 
 	private static final TableColumnParameter<Album> TITRE = 
 			new TableColumnParameter<>("<html>Titres des<br>albums</html>", 250, new StringToHtmlRenderer(), null, String.class, Album::getTitre);
@@ -84,36 +85,44 @@ public class AlbumTableColumn {
 					(a) -> a);
 	private static final TableColumnParameter<Album> METADATA_MATCH = 
 			new TableColumnParameter<>("<html>Metadata<br>exactes</html>", 80, new CollectionBooleanRenderer(), null, Boolean.class, Album::matchesMediaFileMetadata);
+
+	private static final List<TableColumnParameter<Album>> REGULAR_COLUMN_LIST = List.of(
+			AlbumTableColumns.TITRE, 
+			AlbumTableColumns.AUTEURS, 
+			AlbumTableColumns.FORMAT, 
+			AlbumTableColumns.DISCOGS,
+			AlbumTableColumns.POIDS,
+			AlbumTableColumns.ENREGISTREMENT,
+			AlbumTableColumns.COMPOSITION);
 	
-	public static final List<TableColumnParameter<Album>> REGULAR_COLUMN_LIST = List.of(
-			AlbumTableColumn.TITRE, 
-			AlbumTableColumn.AUTEURS, 
-			AlbumTableColumn.FORMAT, 
-			AlbumTableColumn.DISCOGS,
-			AlbumTableColumn.POIDS,
-			AlbumTableColumn.ENREGISTREMENT,
-			AlbumTableColumn.COMPOSITION);
+	private static final List<TableColumnParameter<Album>> AUGMENTED_COLUMN_LIST = List.of(
+			AlbumTableColumns.TITRE, 
+			AlbumTableColumns.AUTEURS, 
+			AlbumTableColumns.FORMAT,
+			AlbumTableColumns.MEDIA_FILES, 
+			AlbumTableColumns.PROBLEM,
+			AlbumTableColumns.DISCOGS,
+			AlbumTableColumns.POIDS,
+			AlbumTableColumns.ENREGISTREMENT,
+			AlbumTableColumns.COMPOSITION,
+			AlbumTableColumns.METADATA_MATCH);
 	
-	public static final List<TableColumnParameter<Album>> AUGMENTED_COLUMN_LIST = List.of(
-			AlbumTableColumn.TITRE, 
-			AlbumTableColumn.AUTEURS, 
-			AlbumTableColumn.FORMAT,
-			AlbumTableColumn.MEDIA_FILES, 
-			AlbumTableColumn.PROBLEM,
-			AlbumTableColumn.DISCOGS,
-			AlbumTableColumn.POIDS,
-			AlbumTableColumn.ENREGISTREMENT,
-			AlbumTableColumn.COMPOSITION,
-			AlbumTableColumn.METADATA_MATCH);
+	private static final List<TableColumnParameter<Album>> ACQUISITION_COLUMN_LIST = List.of(
+			AlbumTableColumns.TITRE, 
+			AlbumTableColumns.AUTEURS, 
+			AlbumTableColumns.FORMAT, 
+			AlbumTableColumns.DISCOGS,
+			AlbumTableColumns.POIDS,
+			AlbumTableColumns.ENREGISTREMENT,
+			AlbumTableColumns.COMPOSITION,
+			AlbumTableColumns.ACQUISITION);
 	
-	public static final List<TableColumnParameter<Album>> ACQUISITION_COLUMN_LIST = List.of(
-			AlbumTableColumn.TITRE, 
-			AlbumTableColumn.AUTEURS, 
-			AlbumTableColumn.FORMAT, 
-			AlbumTableColumn.DISCOGS,
-			AlbumTableColumn.POIDS,
-			AlbumTableColumn.ENREGISTREMENT,
-			AlbumTableColumn.COMPOSITION,
-			AlbumTableColumn.ACQUISITION);
-		
+	public static final AlbumTableColumns REGULAR_COLUMNS =
+			new AlbumTableColumns(REGULAR_COLUMN_LIST, 50);
+	
+	public static final AlbumTableColumns AUGMENTED_COLUMNS =
+			new AlbumTableColumns(AUGMENTED_COLUMN_LIST, ContentNature.values().length*25);
+	
+	public static final AlbumTableColumns ACQUISITION_COLUMNS =
+			new AlbumTableColumns(ACQUISITION_COLUMN_LIST, 50);
 }
