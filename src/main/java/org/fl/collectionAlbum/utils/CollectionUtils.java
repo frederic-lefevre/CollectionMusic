@@ -66,7 +66,7 @@ public class CollectionUtils {
 	private static final Logger logger = Logger.getLogger(CollectionUtils.class.getName());
 	
 	private static final String VIRGULE = ", ";
-	private static final String TIRET = " - ";
+	private static final String SEPARATEUR = "<br/>";
 	
 	public static String getHtmlForString(String s) {
 		
@@ -81,7 +81,7 @@ public class CollectionUtils {
 		
 		return getStringBuilderWithHtmlBegin()
 				.append("<p>[")
-				.append(v1).append(TIRET).append(v2)
+				.append(v1).append(SEPARATEUR).append(v2)
 				.append("]</p></body></html>")
 				.toString();
 	}
