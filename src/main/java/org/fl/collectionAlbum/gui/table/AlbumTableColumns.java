@@ -113,6 +113,7 @@ public record AlbumTableColumns(List<TableColumnParameter<Album>> tableColumnPar
 			AlbumTableColumns.POIDS,
 			AlbumTableColumns.ENREGISTREMENT,
 			AlbumTableColumns.COMPOSITION,
+			AlbumTableColumns.ACQUISITION,
 			AlbumTableColumns.METADATA_MATCH);
 	
 	private static final List<TableColumnParameter<Album>> ACQUISITION_COLUMN_LIST = List.of(
