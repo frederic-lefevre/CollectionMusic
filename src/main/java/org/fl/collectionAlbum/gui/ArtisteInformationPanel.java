@@ -122,7 +122,7 @@ public class ArtisteInformationPanel extends JPanel {
 			return null;
 		} else {
 			JScrollPane albumsScrollJTablePane = new AlbumsScrollJTablePane(albums, 
-					AlbumTableColumns.ACQUISITION_COLUMNS,
+					AlbumTableColumns.POCHETTE_COLUMNS,
 					generationPane);
 			albumsScrollJTablePane.setPreferredSize(SCROLL_TABLE_DIMENSION);
 			return albumsScrollJTablePane;

@@ -24,6 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui.table;
 
+import java.nio.file.Path;
 import java.time.temporal.TemporalAccessor;
 import java.util.List;
 import java.util.Optional;
@@ -38,6 +39,7 @@ import org.fl.collectionAlbum.albums.AlbumMediaFilesStatusComparator;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.gui.renderer.AuteurListRenderer;
 import org.fl.collectionAlbum.gui.renderer.CollectionBooleanRenderer;
+import org.fl.collectionAlbum.gui.renderer.CollectionImageRenderer;
 import org.fl.collectionAlbum.gui.renderer.CollectionNumberRenderer;
 import org.fl.collectionAlbum.gui.renderer.DatesAlbumRenderer;
 import org.fl.collectionAlbum.gui.renderer.MediaFilesRenderer;
@@ -47,6 +49,12 @@ import org.fl.collectionAlbum.utils.TemporalUtils;
 
 public record AlbumTableColumns(List<TableColumnParameter<Album>> tableColumnParameters, int rowHeight) {
 
+	private static final int POCHETTE_WIDTH = 85;
+	private static final int POCHETTE_HEIGHT = 85;
+	
+	private static final TableColumnParameter<Album> POCHETTE = 
+			new TableColumnParameter<>("<html>Pochettes<br>des albums</html>", POCHETTE_WIDTH, new CollectionImageRenderer(POCHETTE_WIDTH, POCHETTE_HEIGHT), null, Path.class, Album::getCoverImage);
+	
 	private static final TableColumnParameter<Album> TITRE = 
 			new TableColumnParameter<>("<html>Titres des<br>albums</html>", 250, new StringToHtmlRenderer(), null, String.class, Album::getTitre);
 	public static final TableColumnParameter<Album> AUTEURS = 
@@ -117,6 +125,17 @@ public record AlbumTableColumns(List<TableColumnParameter<Album>> tableColumnPar
 			AlbumTableColumns.COMPOSITION,
 			AlbumTableColumns.ACQUISITION);
 	
+	private static final List<TableColumnParameter<Album>> POCHETTE_COLUMN_LIST = List.of(
+			AlbumTableColumns.POCHETTE, 
+			AlbumTableColumns.TITRE, 
+			AlbumTableColumns.AUTEURS, 
+			AlbumTableColumns.FORMAT, 
+			AlbumTableColumns.DISCOGS,
+			AlbumTableColumns.POIDS,
+			AlbumTableColumns.ENREGISTREMENT,
+			AlbumTableColumns.COMPOSITION,
+			AlbumTableColumns.ACQUISITION);
+	
 	public static final AlbumTableColumns REGULAR_COLUMNS =
 			new AlbumTableColumns(REGULAR_COLUMN_LIST, 50);
 	
@@ -125,4 +144,7 @@ public record AlbumTableColumns(List<TableColumnParameter<Album>> tableColumnPar
 	
 	public static final AlbumTableColumns ACQUISITION_COLUMNS =
 			new AlbumTableColumns(ACQUISITION_COLUMN_LIST, 50);
+	
+	public static final AlbumTableColumns POCHETTE_COLUMNS =
+			new AlbumTableColumns(POCHETTE_COLUMN_LIST, POCHETTE_HEIGHT);
 }
