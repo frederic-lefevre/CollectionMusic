@@ -91,6 +91,8 @@ public class AlbumsJTable extends MusicArtefactTable<Album> {
 			int columnIdx = getColumnNumber(albumColumnSort.albumTableColumnToSort);
 			if (columnIdx >= 0) {
 				sorter.setSortKeys(List.of(new RowSorter.SortKey(columnIdx, albumColumnSort.sortOrder())));
+			} else {
+				throw new IllegalArgumentException("The album colum to sort is not a column of this table: " + albumColumnSort.albumTableColumnToSort.name());
 			}
 		}	
 	}
