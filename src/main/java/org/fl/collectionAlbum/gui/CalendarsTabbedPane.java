@@ -82,14 +82,18 @@ public class CalendarsTabbedPane extends JTabbedPane {
 		StatisticsScrollPane concertStatisticsPane = 
 				new StatisticsScrollPane(collectionAlbumContainer.getStatChronoConcert(), Granularite.PAR_AN, stConcertBuilder);
 		
+		AlbumCharacteristicsScrollPane albumCharacteristicsScrollPane = new AlbumCharacteristicsScrollPane();
+		
 		updatableElements.add(compositionStatisticsPane);
 		updatableElements.add(enregistrementStatisticsPane);
 		updatableElements.add(acquisitionStatisticsPane);
+		updatableElements.add(albumCharacteristicsScrollPane);
 		updatableElements.add(concertStatisticsPane);
 		
 		addTab("Composition des albums", compositionStatisticsPane);
 		addTab("Enregistrement des albums", enregistrementStatisticsPane);
 		addTab("Acquisition des albums", acquisitionStatisticsPane);
+		addTab("Caractéristiques des albums", albumCharacteristicsScrollPane);
 		addTab("Concerts", concertStatisticsPane);
 		
 		CalendarPane calendarPane = new CalendarPane(collectionAlbumContainer, generationPane);
