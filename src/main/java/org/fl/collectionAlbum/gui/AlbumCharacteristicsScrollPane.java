@@ -24,27 +24,70 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui;
 
+
+import java.awt.Font;
+import java.awt.GridLayout;
+
 import javax.swing.BoxLayout;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+
+import org.fl.collectionAlbum.CollectionAlbumContainer;
+import org.fl.collectionAlbum.albums.ListeAlbum;
 
 public class AlbumCharacteristicsScrollPane extends JScrollPane implements UpdatableElement  {
 
 	private static final long serialVersionUID = 1L;
 
-	public AlbumCharacteristicsScrollPane() {
+	private static final Font TITLE_FONT = new Font("Verdana", Font.BOLD, 18);
+	private static final Font FONT = new Font("Verdana", Font.BOLD, 14);
+	
+	private static final String AUDIO_CHARACTERISTICS_TITLE = "Caractéristiques des numérisations des albums";
+	
+	private final CollectionAlbumContainer collectionAlbumContainer;
+	private final JPanel albumsCaracteristicsPanel;
+	
+	public AlbumCharacteristicsScrollPane(CollectionAlbumContainer collectionAlbumContainer, GenerationPane generationPane) {
 		super();
 		
-		final JPanel albumsCaracteristicsPanel = new JPanel();
+		this.collectionAlbumContainer = collectionAlbumContainer;
+		
+		albumsCaracteristicsPanel = new JPanel();
 		albumsCaracteristicsPanel.setLayout(new BoxLayout(albumsCaracteristicsPanel, BoxLayout.Y_AXIS));
 		
+		fillPanel();
 		
 		setViewportView(albumsCaracteristicsPanel);
 	}
 	
+	private void fillPanel() {
+		
+		albumsCaracteristicsPanel.removeAll();
+		JLabel albumsAudioCharacteristicsLabel = new JLabel(AUDIO_CHARACTERISTICS_TITLE);
+		albumsAudioCharacteristicsLabel.setFont(TITLE_FONT);
+		
+		JPanel albumsAudioCharacteristicsPanel = new JPanel();
+		albumsAudioCharacteristicsPanel.setLayout(new GridLayout(0, 2));
+		
+		ListeAlbum highResAudioAlbums = collectionAlbumContainer.getAlbumsWithHighResAudio().sortRangementAlbum();
+		addCharacteristic("Albums avec fichier audio haute résolution", highResAudioAlbums, albumsAudioCharacteristicsPanel);
+		
+		albumsCaracteristicsPanel.add(albumsAudioCharacteristicsLabel);
+		albumsCaracteristicsPanel.add(albumsAudioCharacteristicsPanel);
+	}
+	
+	private void addCharacteristic(String characteristicTitle, ListeAlbum albums, JPanel panel) {
+		JLabel titleLabel = new JLabel(characteristicTitle);
+		titleLabel.setFont(FONT);
+		panel.add(titleLabel);
+		JLabel valueLabel = new JLabel(Integer.toString(albums.getNombreAlbums()));
+		panel.add(valueLabel);
+	}
+	
 	@Override
 	public void updateElement() {
-		// TODO Auto-generated method stub
+		fillPanel();
 		
 	}
 
