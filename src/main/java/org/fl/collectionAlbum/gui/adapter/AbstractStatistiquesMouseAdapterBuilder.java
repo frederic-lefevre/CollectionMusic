@@ -31,10 +31,12 @@ import org.fl.collectionAlbum.gui.GenerationPane;
 
 public abstract class AbstractStatistiquesMouseAdapterBuilder {
 
-	protected CollectionAlbumContainer collectionAlbumContainer;
-	protected GenerationPane generationPane;
+	protected final String title;
+	protected final CollectionAlbumContainer collectionAlbumContainer;
+	protected final GenerationPane generationPane;
 
-	protected AbstractStatistiquesMouseAdapterBuilder(CollectionAlbumContainer collectionAlbumContainer, GenerationPane generationPane) {
+	protected AbstractStatistiquesMouseAdapterBuilder(String title, CollectionAlbumContainer collectionAlbumContainer, GenerationPane generationPane) {
+		this.title = title;
 		this.collectionAlbumContainer = collectionAlbumContainer;
 		this.generationPane = generationPane;
 	}

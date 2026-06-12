@@ -31,13 +31,20 @@ import org.fl.collectionAlbum.gui.GenerationPane;
 
 public class StatistiquesMouseAdapter extends MouseAdapter {
 
-	protected int anneeDebut;
-	protected int anneeFin;
-	protected CollectionAlbumContainer collectionAlbumContainer;
-	protected GenerationPane generationPane;
+	private static final String SEPARATOR = " et ";
+	private static final String EN = " en ";
+	private static final String ENTRE = " entre ";
 	
-	protected StatistiquesMouseAdapter(int anneeDebut, int anneeFin,
+	protected final String title;
+	protected final int anneeDebut;
+	protected final int anneeFin;
+	protected final CollectionAlbumContainer collectionAlbumContainer;
+	protected final GenerationPane generationPane;
+	
+	protected StatistiquesMouseAdapter(String title,
+			int anneeDebut, int anneeFin,
 			CollectionAlbumContainer collectionAlbumContainer, GenerationPane generationPane) {
+		this.title = title;
 		this.anneeDebut = anneeDebut;
 		this.anneeFin = anneeFin;
 		this.collectionAlbumContainer = collectionAlbumContainer;
@@ -49,11 +56,11 @@ public class StatistiquesMouseAdapter extends MouseAdapter {
 		return (val >= minInclusive && val < maxExclusive);
 	}
 	
-	protected String getWindowsTitle(String name) {
-		String windowTitle = name + anneeDebut;
+	protected String getWindowsTitle() {
 		if (anneeDebut + 1 < anneeFin) {
-			windowTitle = windowTitle + "-" + (anneeFin-1);
+			return title + ENTRE + anneeDebut + SEPARATOR +  (anneeFin-1);
+		} else {
+			return title + EN + anneeDebut;
 		}
-		return windowTitle;
 	}
 }

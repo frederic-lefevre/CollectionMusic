@@ -47,23 +47,27 @@ public class CalendarsTabbedPane extends JTabbedPane {
 		updatableElements = new ArrayList<>();
 		
 		AlbumStatistiquesMouseAdapter.Builder stCompositionBuilder = 
-				AlbumStatistiquesMouseAdapter.Builder.builder(collectionAlbumContainer, 
+				AlbumStatistiquesMouseAdapter.Builder.builder("Albums composés",
+						collectionAlbumContainer, 
 						album -> album.getDebutComposition(),
 						listeAlbum -> listeAlbum.sortChronoComposition(),
 						generationPane);
 		AlbumStatistiquesMouseAdapter.Builder stEnregistrementBuilder = 
-				AlbumStatistiquesMouseAdapter.Builder.builder(collectionAlbumContainer, 
+				AlbumStatistiquesMouseAdapter.Builder.builder("Albums enregistrés",
+						collectionAlbumContainer, 
 						album -> album.getDebutEnregistrement(), 
 						listeAlbum -> listeAlbum.sortChronoEnregistrement(), 
 						generationPane);
 		AlbumStatistiquesMouseAdapter.Builder stAcquisitionBuilder = 
-				AlbumStatistiquesMouseAdapter.Builder.builder(collectionAlbumContainer, 
+				AlbumStatistiquesMouseAdapter.Builder.builder("Albums acquis",
+						collectionAlbumContainer, 
 						album -> album.getAcquisitionDate(), 
 						listeAlbum -> listeAlbum.sortChronoAcquisition(), 
 						generationPane);
 		
 		ConcertStatistiquesMouseAdapter.Builder stConcertBuilder =
-				ConcertStatistiquesMouseAdapter.Builder.builder(collectionAlbumContainer, 
+				ConcertStatistiquesMouseAdapter.Builder.builder("Concerts",
+						collectionAlbumContainer, 
 						concert -> concert.getDateConcert(), 
 						listeConcert -> listeConcert.sortChrono(), 
 						generationPane);
