@@ -95,7 +95,7 @@ public record AlbumTableColumns(List<TableColumnParameter<Album>> tableColumnPar
 			new TableColumnParameter<>("<html>Metadata<br/>exactes</html>", 80, new CollectionBooleanRenderer(), null, Boolean.class, Album::matchesMediaFileMetadata);
 	
 	private static final TableColumnParameter<Album> MEDIA_FILES_TYPES = 
-			new TableColumnParameter<>("<html>Fichiers<br/>media</html>", 80, new StringToHtmlRenderer(), null, String.class, (a) -> a.getFormatAlbum().displayMediaFilesSummary());
+			new TableColumnParameter<>("<html>Fichiers<br/>media</html>", 80, new StringToHtmlRenderer(), null, String.class, (a) -> a.getFormatAlbum().displayMediaFilesSummaryCompact());
 
 	private static final List<TableColumnParameter<Album>> REGULAR_COLUMN_LIST = List.of(
 			AlbumTableColumns.TITRE, 
