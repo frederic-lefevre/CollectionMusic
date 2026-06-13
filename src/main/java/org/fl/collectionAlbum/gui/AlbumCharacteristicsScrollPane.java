@@ -74,10 +74,18 @@ public class AlbumCharacteristicsScrollPane extends JScrollPane implements Updat
 		JPanel albumsAudioCharacteristicsPanel = new JPanel();
 		albumsAudioCharacteristicsPanel.setLayout(new GridLayout(0, 2));
 		
+		ListeAlbum albumsWithAudio = collectionAlbumContainer.getAlbumsWithAudioFile().sortRangementAlbum();
+		addCharacteristic("Albums avec fichier audio", albumsWithAudio, albumsAudioCharacteristicsPanel);
 		ListeAlbum highResAudioAlbums = collectionAlbumContainer.getAlbumsWithHighResAudio().sortRangementAlbum();
 		addCharacteristic("Albums avec fichier audio haute résolution", highResAudioAlbums, albumsAudioCharacteristicsPanel);
 		ListeAlbum lowResAudioAlbums = collectionAlbumContainer.getAlbumsWithLowResAudio().sortRangementAlbum();
 		addCharacteristic("Albums avec fichier audio avec perte (basse qualité)", lowResAudioAlbums, albumsAudioCharacteristicsPanel);
+		ListeAlbum missingAudioAlbums = collectionAlbumContainer.getAlbumsMissingAudioFile().sortRangementAlbum();
+		addCharacteristic("Albums manquant de fichier audio", missingAudioAlbums, albumsAudioCharacteristicsPanel);
+		ListeAlbum albumsWithVideoFile = collectionAlbumContainer.getAlbumsWithVideoFile().sortRangementAlbum();
+		addCharacteristic("Albums avec fichier vidéo", albumsWithVideoFile, albumsAudioCharacteristicsPanel);
+		ListeAlbum albumsMissingVideoFile = collectionAlbumContainer.getAlbumsMissingVideoFile().sortRangementAlbum();
+		addCharacteristic("Albums manquant de fichier vidéo", albumsMissingVideoFile, albumsAudioCharacteristicsPanel);
 		
 		albumsCaracteristicsPanel.add(albumsAudioCharacteristicsLabel);
 		albumsCaracteristicsPanel.add(albumsAudioCharacteristicsPanel);
