@@ -93,6 +93,9 @@ public record AlbumTableColumns(List<TableColumnParameter<Album>> tableColumnPar
 					(a) -> a);
 	private static final TableColumnParameter<Album> METADATA_MATCH = 
 			new TableColumnParameter<>("<html>Metadata<br/>exactes</html>", 80, new CollectionBooleanRenderer(), null, Boolean.class, Album::matchesMediaFileMetadata);
+	
+	private static final TableColumnParameter<Album> MEDIA_FILES_TYPES = 
+			new TableColumnParameter<>("<html>Fichiers<br/>media</html>", 80, new StringToHtmlRenderer(), null, String.class, (a) -> a.getFormatAlbum().displayMediaFilesSummary());
 
 	private static final List<TableColumnParameter<Album>> REGULAR_COLUMN_LIST = List.of(
 			AlbumTableColumns.TITRE, 
@@ -137,6 +140,17 @@ public record AlbumTableColumns(List<TableColumnParameter<Album>> tableColumnPar
 			AlbumTableColumns.COMPOSITION,
 			AlbumTableColumns.ACQUISITION);
 	
+	private static final List<TableColumnParameter<Album>> MEDIA_FILES_COLUMN_LIST = List.of(
+			AlbumTableColumns.TITRE, 
+			AlbumTableColumns.AUTEURS, 
+			AlbumTableColumns.FORMAT, 
+			AlbumTableColumns.DISCOGS,
+			AlbumTableColumns.POIDS,
+			AlbumTableColumns.ENREGISTREMENT,
+			AlbumTableColumns.COMPOSITION,
+			AlbumTableColumns.ACQUISITION,
+			AlbumTableColumns.MEDIA_FILES_TYPES);
+	
 	public static final AlbumTableColumns REGULAR_COLUMNS =
 			new AlbumTableColumns(REGULAR_COLUMN_LIST, 50);
 	
@@ -148,4 +162,7 @@ public record AlbumTableColumns(List<TableColumnParameter<Album>> tableColumnPar
 	
 	public static final AlbumTableColumns POCHETTE_COLUMNS =
 			new AlbumTableColumns(POCHETTE_COLUMN_LIST, POCHETTE_HEIGHT);
+	
+	public static final AlbumTableColumns MEDIA_FILES_COLUMNS =
+			new AlbumTableColumns(MEDIA_FILES_COLUMN_LIST, 50);
 }

@@ -51,7 +51,7 @@ public class ListAlbumListener implements java.awt.event.ActionListener {
 		
 		// Table to display the albums
 		AlbumsScrollJTablePane albumsScrollJTablePane = 
-				new AlbumsScrollJTablePane(albums, AlbumTableColumns.ACQUISITION_COLUMNS, generationPane);
+				new AlbumsScrollJTablePane(albums, AlbumTableColumns.MEDIA_FILES_COLUMNS, generationPane);
 		
 		JOptionPane.showMessageDialog(null, albumsScrollJTablePane, listTitle, JOptionPane.PLAIN_MESSAGE);
 	}

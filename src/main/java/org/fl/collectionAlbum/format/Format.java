@@ -447,11 +447,11 @@ public class Format {
 		}
 	}
 	
-	private String displayAudioFilesDetail() {
+	public String displayAudioFilesDetail() {
 		return displayMediaFileInformation(getAllMediaFilePaths(), (af) -> af.displayMediaFileDetail("<br/>", true), "<br/>---<br/>");
 	}
 	
-	private String displayMediaFilesSummary() {
+	public String displayMediaFilesSummary() {
 		return displayMediaFileInformation(getAllMediaFilePaths(), (af) -> af.displayMediaFileSummary(), "<br/>");
 		
 	}
