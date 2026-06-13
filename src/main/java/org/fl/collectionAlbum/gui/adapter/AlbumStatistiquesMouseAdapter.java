@@ -38,49 +38,55 @@ import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.albums.ListeAlbum;
 import org.fl.collectionAlbum.gui.GenerationPane;
-import org.fl.collectionAlbum.gui.table.AlbumTableColumn;
+import org.fl.collectionAlbum.gui.table.AlbumTableColumns;
 import org.fl.collectionAlbum.gui.table.AlbumsScrollJTablePane;
 
 public class AlbumStatistiquesMouseAdapter extends StatistiquesMouseAdapter {
 	
-	private Function<Album,TemporalAccessor> albumDateFunction;
-	private Function<ListeAlbum, ListeAlbum> albumListSorter;
+	private final Function<Album,TemporalAccessor> albumDateFunction;
+	private final Function<ListeAlbum, ListeAlbum> albumListSorter;
 	
 	private AlbumStatistiquesMouseAdapter() {
-		super(0, 0, null, null);
+		super("", 0, 0, null, null);
+		albumDateFunction = null;
+		albumListSorter = null;
 	}
 	
-	private AlbumStatistiquesMouseAdapter(int anneeDebut, int anneeFin, Function<Album, TemporalAccessor> albumDateFunction, Function<ListeAlbum, ListeAlbum> albumListSorter,
+	private AlbumStatistiquesMouseAdapter(String title,
+			int anneeDebut, int anneeFin, 
+			Function<Album, TemporalAccessor> albumDateFunction, Function<ListeAlbum, ListeAlbum> albumListSorter,
 			CollectionAlbumContainer collectionAlbumContainer, GenerationPane generationPane) {
-		super(anneeDebut, anneeFin, collectionAlbumContainer, generationPane);
+		super(title, anneeDebut, anneeFin, collectionAlbumContainer, generationPane);
 		this.albumDateFunction = albumDateFunction;
 		this.albumListSorter = albumListSorter;
 	}
 	
 	public static class Builder extends AbstractStatistiquesMouseAdapterBuilder {
 		
-		private Function<Album,TemporalAccessor> albumDateFunction;
-		private Function<ListeAlbum, ListeAlbum> albumListSorter;
+		private final Function<Album,TemporalAccessor> albumDateFunction;
+		private final Function<ListeAlbum, ListeAlbum> albumListSorter;
 
-		private Builder(CollectionAlbumContainer collectionAlbumContainer, 
+		private Builder(String title,
+				CollectionAlbumContainer collectionAlbumContainer, 
 				Function<Album,TemporalAccessor> albumDateFunction, 
 				Function<ListeAlbum, ListeAlbum> albumListSorter, 
 				GenerationPane generationPane) {
-			super(collectionAlbumContainer, generationPane);
+			super(title, collectionAlbumContainer, generationPane);
 			this.albumDateFunction = albumDateFunction;
 			this.albumListSorter = albumListSorter;		
 		}
 		
-		public static Builder builder(CollectionAlbumContainer collectionAlbumContainer, 
+		public static Builder builder(String title,
+				CollectionAlbumContainer collectionAlbumContainer, 
 				Function<Album,TemporalAccessor> albumDateFunction, 
 				Function<ListeAlbum, ListeAlbum> albumListSorter,
 				GenerationPane generationPane) {
-			return new Builder(collectionAlbumContainer, albumDateFunction, albumListSorter, generationPane);
+			return new Builder(title, collectionAlbumContainer, albumDateFunction, albumListSorter, generationPane);
 		}
 		
 		@Override
 		public AlbumStatistiquesMouseAdapter build(int anneeDebut, int anneeFin) {
-			return new AlbumStatistiquesMouseAdapter(anneeDebut, anneeFin, albumDateFunction, albumListSorter, collectionAlbumContainer, generationPane);
+			return new AlbumStatistiquesMouseAdapter(title, anneeDebut, anneeFin, albumDateFunction, albumListSorter, collectionAlbumContainer, generationPane);
 		}
 	}
 	
@@ -99,10 +105,10 @@ public class AlbumStatistiquesMouseAdapter extends StatistiquesMouseAdapter {
 			if (! albumList.isEmpty()) {
 				// Table to display the result albums
 				AlbumsScrollJTablePane albumsScrollJTablePane = new AlbumsScrollJTablePane(albumList, 
-						AlbumTableColumn.ACQUISITION_COLUMN_LIST,
+						AlbumTableColumns.ACQUISITION_COLUMNS,
 						generationPane);
 			
-				JOptionPane.showMessageDialog(null, albumsScrollJTablePane, getWindowsTitle("Albums "), JOptionPane.PLAIN_MESSAGE);
+				JOptionPane.showMessageDialog(null, albumsScrollJTablePane, getWindowsTitle(), JOptionPane.PLAIN_MESSAGE);
 			}
 		}
 	}	

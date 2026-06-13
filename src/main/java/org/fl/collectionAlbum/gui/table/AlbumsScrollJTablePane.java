@@ -40,7 +40,7 @@ public class AlbumsScrollJTablePane extends JScrollPane {
 	
 	private final AbstractAlbumsTableModel albumsTableModel;
 	 
-	public AlbumsScrollJTablePane(List<Album> albums, List<TableColumnParameter<Album>> albumTableColumns, GenerationPane generationPane) {
+	public AlbumsScrollJTablePane(List<Album> albums, AlbumTableColumns albumTableColumns, GenerationPane generationPane) {
 		super();
 		
 		albumsTableModel = new AlbumsTableModel(albums, albumTableColumns);
@@ -48,7 +48,7 @@ public class AlbumsScrollJTablePane extends JScrollPane {
 		setPreferredSize(Control.getMainSubPaneDimension());
 	}
 
-	public AlbumsScrollJTablePane(List<Album> albums, List<TableColumnParameter<Album>> albumTableColumns, GenerationPane generationPane, AlbumColumnSort albumColumnSort) {
+	public AlbumsScrollJTablePane(List<Album> albums, AlbumTableColumns albumTableColumns, GenerationPane generationPane, AlbumColumnSort albumColumnSort) {
 		super();
 		
 		albumsTableModel = new AlbumsTableModel(albums, albumTableColumns);
@@ -56,7 +56,7 @@ public class AlbumsScrollJTablePane extends JScrollPane {
 		setPreferredSize(Control.getMainSubPaneDimension());
 	}
 	
-	public AlbumsScrollJTablePane(Supplier<List<Album>> albumsListSupplier, List<TableColumnParameter<Album>> albumTableColumns, GenerationPane generationPane) {
+	public AlbumsScrollJTablePane(Supplier<List<Album>> albumsListSupplier, AlbumTableColumns albumTableColumns, GenerationPane generationPane) {
 		super();
 		
 		albumsTableModel = new DynamicAlbumsTableModel(albumsListSupplier, albumTableColumns);

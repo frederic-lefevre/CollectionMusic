@@ -45,7 +45,7 @@ import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.albums.ListeAlbum;
 import org.fl.collectionAlbum.gui.table.AbstractAlbumsTableModel;
-import org.fl.collectionAlbum.gui.table.AlbumTableColumn;
+import org.fl.collectionAlbum.gui.table.AlbumTableColumns;
 import org.fl.collectionAlbum.gui.table.AlbumsScrollJTablePane;
 import org.fl.collectionAlbum.utils.TemporalUtils;
 
@@ -145,7 +145,7 @@ public class AlbumsSearchPanel extends JPanel {
 		
 		// Table to display the result albums
 		AlbumsScrollJTablePane albumsScrollJTablePane = new AlbumsScrollJTablePane(searchResultAlbums,
-				AlbumTableColumn.ACQUISITION_COLUMN_LIST,
+				AlbumTableColumns.ACQUISITION_COLUMNS,
 				generationPane);
 		albumsTableModel = albumsScrollJTablePane.getAlbumsTableModel();
 		

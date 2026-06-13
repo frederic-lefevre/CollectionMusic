@@ -29,41 +29,31 @@ import java.util.List;
 
 import javax.swing.JOptionPane;
 
-import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.gui.GenerationPane;
-import org.fl.collectionAlbum.gui.UtilsPane;
 import org.fl.collectionAlbum.gui.table.AlbumTableColumns;
 import org.fl.collectionAlbum.gui.table.AlbumsScrollJTablePane;
 
-public class RandomAlbumsPickListener implements java.awt.event.ActionListener {
+public class ListAlbumListener implements java.awt.event.ActionListener {
 
+	private final String listTitle;
+	private final List<Album> albums;
 	private final GenerationPane generationPane;
-	private final UtilsPane utilsPane;
-	private final CollectionAlbumContainer collectionAlbumContainer;
 	
-	public RandomAlbumsPickListener(UtilsPane utilsPane, GenerationPane generationPane, CollectionAlbumContainer collectionAlbumContainer) {
+	public ListAlbumListener(String listTitle, List<Album> albums, GenerationPane generationPane) {
+		this.listTitle = listTitle;
+		this.albums = albums;
 		this.generationPane = generationPane;
-		this.utilsPane = utilsPane;
-		this.collectionAlbumContainer = collectionAlbumContainer;
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		
-		String methodForRandomAlbum = utilsPane.getMethodForRandomAlbum();
-		
-		List<Album> randomAlbums;
-		if ((methodForRandomAlbum != null) && (methodForRandomAlbum.equals(UtilsPane.EQUI_REPARTI_PAR_ALBUM))) {
-			randomAlbums = collectionAlbumContainer.pickRandomAlbums(utilsPane.getNumberOfAlbums());
-		} else {
-			randomAlbums = collectionAlbumContainer.pickRandomAlbumsViaArtiste(utilsPane.getNumberOfAlbums());
-		}
-
-		// Table to display the result albums
+		// Table to display the albums
 		AlbumsScrollJTablePane albumsScrollJTablePane = 
-				new AlbumsScrollJTablePane(randomAlbums, AlbumTableColumns.ACQUISITION_COLUMNS, generationPane);
+				new AlbumsScrollJTablePane(albums, AlbumTableColumns.MEDIA_FILES_COLUMNS, generationPane);
 		
-		JOptionPane.showMessageDialog(null, albumsScrollJTablePane, "Albums choisis aléatoirement", JOptionPane.PLAIN_MESSAGE);
+		JOptionPane.showMessageDialog(null, albumsScrollJTablePane, listTitle, JOptionPane.PLAIN_MESSAGE);
 	}
+
 }

@@ -42,43 +42,50 @@ import org.fl.collectionAlbum.gui.table.ConcertsScrollJTablePane;
 
 public class ConcertStatistiquesMouseAdapter extends StatistiquesMouseAdapter {
 
-	private Function<Concert, TemporalAccessor> concertDateFunction;
-	private Function<ListeConcert, ListeConcert> concertSorter;
+	private final Function<Concert, TemporalAccessor> concertDateFunction;
+	private final  Function<ListeConcert, ListeConcert> concertSorter;
 	
 	private ConcertStatistiquesMouseAdapter() {
-		super(0,0, null, null);
+		super("", 0,0, null, null);
+		concertDateFunction = null;
+		concertSorter = null;
 	}
 	
-	protected ConcertStatistiquesMouseAdapter(int anneeDebut, int anneeFin, 
+	protected ConcertStatistiquesMouseAdapter(String title,
+			int anneeDebut, int anneeFin, 
 			Function<Concert, TemporalAccessor> concertDateFunction,  Function<ListeConcert, ListeConcert> concertSorter,
 			CollectionAlbumContainer collectionAlbumContainer, GenerationPane generationPane) {
-		super(anneeDebut, anneeFin, collectionAlbumContainer, generationPane);
+		super(title, anneeDebut, anneeFin, collectionAlbumContainer, generationPane);
 		this.concertDateFunction = concertDateFunction;
 		this.concertSorter = concertSorter;
 	}
 
 	public static class Builder extends AbstractStatistiquesMouseAdapterBuilder {
 		
-		private Function<Concert,TemporalAccessor> concertDateFunction;
-		private Function<ListeConcert, ListeConcert> concertSorter;
+		private final Function<Concert,TemporalAccessor> concertDateFunction;
+		private final Function<ListeConcert, ListeConcert> concertSorter;
 		
-		protected Builder(CollectionAlbumContainer collectionAlbumContainer, 
-				Function<Concert, TemporalAccessor> concertDateFunction,  Function<ListeConcert, ListeConcert> concertSorter, 
+		protected Builder(String title,
+				CollectionAlbumContainer collectionAlbumContainer, 
+				Function<Concert, TemporalAccessor> concertDateFunction,  
+				Function<ListeConcert, ListeConcert> concertSorter, 
 				GenerationPane generationPane) {
-			super(collectionAlbumContainer, generationPane);
+			super(title, collectionAlbumContainer, generationPane);
 			this.concertDateFunction = concertDateFunction;
 			this.concertSorter = concertSorter;
 		}
 
-		public static Builder builder(CollectionAlbumContainer collectionAlbumContainer, 
-				Function<Concert, TemporalAccessor> concertDateFunction,  Function<ListeConcert, ListeConcert> concertSorter, 
+		public static Builder builder(String title,
+				CollectionAlbumContainer collectionAlbumContainer, 
+				Function<Concert, TemporalAccessor> concertDateFunction,  
+				Function<ListeConcert, ListeConcert> concertSorter, 
 				GenerationPane generationPane) {
-			return new Builder(collectionAlbumContainer, concertDateFunction, concertSorter, generationPane);
+			return new Builder(title, collectionAlbumContainer, concertDateFunction, concertSorter, generationPane);
 		}
 				
 		@Override
 		public MouseAdapter build(int anneeDebut, int anneeFin) {
-			return new ConcertStatistiquesMouseAdapter(anneeDebut, anneeFin, concertDateFunction, concertSorter, collectionAlbumContainer, generationPane);
+			return new ConcertStatistiquesMouseAdapter(title, anneeDebut, anneeFin, concertDateFunction, concertSorter, collectionAlbumContainer, generationPane);
 		}
 		
 	}
@@ -96,7 +103,7 @@ public class ConcertStatistiquesMouseAdapter extends StatistiquesMouseAdapter {
 				
 				ConcertsScrollJTablePane concertsScrollJTablePane = new ConcertsScrollJTablePane(concertList, generationPane);
 				
-				JOptionPane.showMessageDialog(null, concertsScrollJTablePane, getWindowsTitle("Concerts "), JOptionPane.PLAIN_MESSAGE);
+				JOptionPane.showMessageDialog(null, concertsScrollJTablePane, getWindowsTitle(), JOptionPane.PLAIN_MESSAGE);
 			}
 		}
 	}

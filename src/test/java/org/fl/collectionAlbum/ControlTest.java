@@ -38,9 +38,12 @@ import org.fl.util.RunningContext;
 import org.fl.util.file.FilesUtils;
 import org.junit.jupiter.api.Test;
 
+import tools.jackson.core.JacksonException;
 import tools.jackson.databind.JsonNode;
 
 class ControlTest {
+	
+	private static final String APPLICATION_NAME = "org.fl.collectionAlbum";
 	
 	@Test
 	void controlBasicTest() {
@@ -98,7 +101,7 @@ class ControlTest {
 		RunningContext runningContext = Control.getMusicRunningContext();
 		
 		assertThat(runningContext).isNotNull();
-		assertThat(runningContext.getName()).isNotNull().isEqualTo("org.fl.collectionAlbum");
+		assertThat(runningContext.getName()).isNotNull().isEqualTo(APPLICATION_NAME);
 		
 		JsonNode applicationInfo = runningContext.getApplicationInfo(false);
 		assertThat(applicationInfo).isNotNull();
@@ -108,7 +111,7 @@ class ControlTest {
 		.satisfiesExactlyInAnyOrder(
 				buildInfo -> { 
 					assertThat(buildInfo.get("moduleName")).isNotNull();
-					assertThat(buildInfo.get("moduleName").asString()).isEqualTo("org.fl.collectionAlbum");
+					assertThat(buildInfo.get("moduleName").asString()).isEqualTo(APPLICATION_NAME);
 					assertThat(buildInfo.get("version")).isNotNull();
 					assertThat(buildInfo.get("version").asString()).isNotEmpty();
 				},
@@ -140,5 +143,42 @@ class ControlTest {
 		Path propertyFilePath = Paths.get(propertyFileUri);
 		
 		assertThat(propertyFilePath).exists().isRegularFile();
+	}
+	
+	@Test
+	void buildInformationTest() throws JacksonException, URISyntaxException {
+		
+		RunningContext runningContext = Control.getMusicRunningContext();
+		
+		assertThat(runningContext).isNotNull();
+		
+		JsonNode buildInformation = runningContext.getBuildInformationAsJson();
+		assertThat(buildInformation).isNotNull();
+
+		assertThat(buildInformation).isNotEmpty().hasSize(3)
+			.satisfiesExactlyInAnyOrder(
+				buildInfo -> assertModuleBuildInfo(buildInfo, APPLICATION_NAME),
+				buildInfo -> assertModuleBuildInfo(buildInfo, "org.fl.discogsInterface"),
+				buildInfo -> assertModuleBuildInfo(buildInfo, "org.fl.util")
+			);
+	}
+	
+	private void assertModuleBuildInfo(JsonNode buildInfo, String moduleName) {
+		assertThat(buildInfo).hasSize(14);
+		assertThat(buildInfo.has("builderName")).isTrue();
+		assertThat(buildInfo.has("builderEmail")).isTrue();
+		assertThat(buildInfo.has("gitCommitIdDescribe")).isTrue();
+		assertThat(buildInfo.get("moduleName")).isNotNull();
+		assertThat(buildInfo.get("moduleName").asString()).isEqualTo(moduleName);
+		assertThat(buildInfo.has("version")).isTrue();
+		assertThat(buildInfo.has("buildtime")).isTrue();
+		assertThat(buildInfo.has("builder")).isTrue();
+		assertThat(buildInfo.has("buildhost")).isTrue();
+		assertThat(buildInfo.has("buildOs")).isTrue();
+		assertThat(buildInfo.has("gitBranch")).isTrue();
+		assertThat(buildInfo.has("gitCommitId")).isTrue();
+		assertThat(buildInfo.has("gitCommitUrl")).isTrue();
+		assertThat(buildInfo.has("gitCommitTime")).isTrue();
+		assertThat(buildInfo.has("gitDirty")).isTrue();
 	}
 }

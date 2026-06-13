@@ -35,6 +35,8 @@ import java.time.temporal.TemporalAccessor;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -61,8 +63,10 @@ import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 
 public class CollectionUtils {
 	
+	private static final Logger logger = Logger.getLogger(CollectionUtils.class.getName());
+	
 	private static final String VIRGULE = ", ";
-	private static final String TIRET = " - ";
+	private static final String SEPARATEUR = "<br/>";
 	
 	public static String getHtmlForString(String s) {
 		
@@ -77,7 +81,7 @@ public class CollectionUtils {
 		
 		return getStringBuilderWithHtmlBegin()
 				.append("<p>[")
-				.append(v1).append(TIRET).append(v2)
+				.append(v1).append(SEPARATEUR).append(v2)
 				.append("]</p></body></html>")
 				.toString();
 	}
@@ -302,24 +306,36 @@ public class CollectionUtils {
 	
 	public static JLabel getAdjustedImageLabel(Path imagePath, int maxWidth, int maxHeight) {
 		try {
-			ImageIcon image = new ImageIcon(ImageIO.read(imagePath.toFile()));
-			final int imageWidth = image.getIconWidth();
-			final int imageHeight = image.getIconHeight();
-			int adjustedImageWidth;
-			int adjustedImageHeight;
-			if (imageWidth > imageHeight) {
-				adjustedImageWidth = maxWidth;
-				adjustedImageHeight = (imageHeight * maxWidth)/imageWidth;
-			} else {
-				adjustedImageHeight = maxHeight;
-				adjustedImageWidth = (imageWidth* maxHeight)/imageHeight;
-			}
-			ImageIcon adjustedImage = new ImageIcon(image.getImage().getScaledInstance(adjustedImageWidth, adjustedImageHeight, Image.SCALE_SMOOTH));
-
-			return new JLabel(adjustedImage);
+			return new JLabel(buildAdjustedImageIcon(imagePath, maxWidth, maxHeight));
 		} catch (IOException e) {
 			return new JLabel("Fichier image non trouvé: " + Objects.toString(imagePath));
 		}
+	}
+	
+	public static ImageIcon getAdjustedImageIcon(Path imagePath, int maxWidth, int maxHeight) {
+		try {	
+			return buildAdjustedImageIcon(imagePath, maxWidth, maxHeight);
+		} catch (Exception e) {
+			logger.log(Level.WARNING, "Exception when build ImageIcon for path " +  Objects.toString(imagePath), e);
+			return null;
+		}
+	}
+	
+	public static ImageIcon buildAdjustedImageIcon(Path imagePath, int maxWidth, int maxHeight) throws IOException {
+
+		ImageIcon image = new ImageIcon(ImageIO.read(imagePath.toFile()));
+		final int imageWidth = image.getIconWidth();
+		final int imageHeight = image.getIconHeight();
+		int adjustedImageWidth;
+		int adjustedImageHeight;
+		if (imageWidth > imageHeight) {
+			adjustedImageWidth = maxWidth;
+			adjustedImageHeight = (imageHeight * maxWidth)/imageWidth;
+		} else {
+			adjustedImageHeight = maxHeight;
+			adjustedImageWidth = (imageWidth* maxHeight)/imageHeight;
+		}
+		return new ImageIcon(image.getImage().getScaledInstance(adjustedImageWidth, adjustedImageHeight, Image.SCALE_SMOOTH));
 	}
 	
 	private static final Font verdana = new Font("Verdana", Font.BOLD, 14);

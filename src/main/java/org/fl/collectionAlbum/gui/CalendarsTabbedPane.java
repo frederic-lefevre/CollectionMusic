@@ -47,23 +47,27 @@ public class CalendarsTabbedPane extends JTabbedPane {
 		updatableElements = new ArrayList<>();
 		
 		AlbumStatistiquesMouseAdapter.Builder stCompositionBuilder = 
-				AlbumStatistiquesMouseAdapter.Builder.builder(collectionAlbumContainer, 
+				AlbumStatistiquesMouseAdapter.Builder.builder("Albums composés",
+						collectionAlbumContainer, 
 						album -> album.getDebutComposition(),
 						listeAlbum -> listeAlbum.sortChronoComposition(),
 						generationPane);
 		AlbumStatistiquesMouseAdapter.Builder stEnregistrementBuilder = 
-				AlbumStatistiquesMouseAdapter.Builder.builder(collectionAlbumContainer, 
+				AlbumStatistiquesMouseAdapter.Builder.builder("Albums enregistrés",
+						collectionAlbumContainer, 
 						album -> album.getDebutEnregistrement(), 
 						listeAlbum -> listeAlbum.sortChronoEnregistrement(), 
 						generationPane);
 		AlbumStatistiquesMouseAdapter.Builder stAcquisitionBuilder = 
-				AlbumStatistiquesMouseAdapter.Builder.builder(collectionAlbumContainer, 
+				AlbumStatistiquesMouseAdapter.Builder.builder("Albums acquis",
+						collectionAlbumContainer, 
 						album -> album.getAcquisitionDate(), 
 						listeAlbum -> listeAlbum.sortChronoAcquisition(), 
 						generationPane);
 		
 		ConcertStatistiquesMouseAdapter.Builder stConcertBuilder =
-				ConcertStatistiquesMouseAdapter.Builder.builder(collectionAlbumContainer, 
+				ConcertStatistiquesMouseAdapter.Builder.builder("Concerts",
+						collectionAlbumContainer, 
 						concert -> concert.getDateConcert(), 
 						listeConcert -> listeConcert.sortChrono(), 
 						generationPane);
@@ -78,14 +82,18 @@ public class CalendarsTabbedPane extends JTabbedPane {
 		StatisticsScrollPane concertStatisticsPane = 
 				new StatisticsScrollPane(collectionAlbumContainer.getStatChronoConcert(), Granularite.PAR_AN, stConcertBuilder);
 		
+		AlbumCharacteristicsScrollPane albumCharacteristicsScrollPane = new AlbumCharacteristicsScrollPane(collectionAlbumContainer, generationPane);
+		
 		updatableElements.add(compositionStatisticsPane);
 		updatableElements.add(enregistrementStatisticsPane);
 		updatableElements.add(acquisitionStatisticsPane);
+		updatableElements.add(albumCharacteristicsScrollPane);
 		updatableElements.add(concertStatisticsPane);
 		
 		addTab("Composition des albums", compositionStatisticsPane);
 		addTab("Enregistrement des albums", enregistrementStatisticsPane);
 		addTab("Acquisition des albums", acquisitionStatisticsPane);
+		addTab("Caractéristiques des albums", albumCharacteristicsScrollPane);
 		addTab("Concerts", concertStatisticsPane);
 		
 		CalendarPane calendarPane = new CalendarPane(collectionAlbumContainer, generationPane);

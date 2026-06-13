@@ -58,13 +58,11 @@ public class StatisticsScrollPane extends JScrollPane implements UpdatableElemen
 	private static final Font PERIOD_FONT = new Font("Verdana", Font.BOLD, 64);
 	private static final Font STAT_FONT = new Font("Verdana", Font.BOLD, 64);
 	
-	private static final Function<Double, String> statToStringFunction = (d) ->  Optional.ofNullable(d).map(poids -> Format.poidsToString(poids)).orElse("");
+	private static final Function<Double, String> statToStringFunction = (d) -> Optional.ofNullable(d).map(poids -> Format.poidsToString(poids)).orElse("");
 	
 	private final StatChrono statChrono;
 	private final Granularite granularite;
 	private final AbstractStatistiquesMouseAdapterBuilder mouseAdapterBuilder;
-	private final JPanel statistiquesPanel;
-	private final JPanel currentStatistiquePanel;
 	private final JLabel currentPeriodLabel;
 	private final JLabel currentStatLabel;
 	private final JPanel statistiquesTablePanel;
@@ -75,14 +73,14 @@ public class StatisticsScrollPane extends JScrollPane implements UpdatableElemen
 		this.statChrono = statChrono;
 		this.granularite = granularite;
 		this.mouseAdapterBuilder = mouseAdapterBuilder;
-		this.statistiquesPanel =  new JPanel();
+		final JPanel statistiquesPanel =  new JPanel();
 		statistiquesPanel.setLayout(new BoxLayout(statistiquesPanel, BoxLayout.X_AXIS));
 		
 		this.statistiquesTablePanel = new JPanel();
 		
 		statistiquesPanel.add(statistiquesTablePanel);
 		
-		currentStatistiquePanel = new JPanel();
+		final JPanel currentStatistiquePanel = new JPanel();
 		currentStatistiquePanel.setLayout(new BoxLayout(currentStatistiquePanel, BoxLayout.Y_AXIS));
 		
 		currentPeriodLabel = new JLabel();

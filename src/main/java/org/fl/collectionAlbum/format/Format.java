@@ -435,24 +435,37 @@ public class Format {
 	private <T extends AbstractAlbumMediaFilePaths> String displayMediaFileInformation(
 			List<T> mediaFiles,
 			Function<T, String> getMediaInfos,
-			String infoSeparator) {
+			String infoSeparator,
+			boolean compact) {
 		
 		if (hasMediaFile(mediaFiles)) {
 
-			return mediaFiles.stream()
-					.map(mediaFile -> getMediaInfos.apply(mediaFile))
-					.collect(Collectors.joining(infoSeparator));
+			if (compact) {
+				return mediaFiles.stream()
+						.map(mediaFile -> getMediaInfos.apply(mediaFile))
+						.distinct()
+						.collect(Collectors.joining(infoSeparator));
+			} else {
+				return mediaFiles.stream()
+						.map(mediaFile -> getMediaInfos.apply(mediaFile))
+						.collect(Collectors.joining(infoSeparator));
+			}
 		} else {
 			return "";
 		}
 	}
 	
-	private String displayAudioFilesDetail() {
-		return displayMediaFileInformation(getAllMediaFilePaths(), (af) -> af.displayMediaFileDetail("<br/>", true), "<br/>---<br/>");
+	public String displayAudioFilesDetail() {
+		return displayMediaFileInformation(getAllMediaFilePaths(), (af) -> af.displayMediaFileDetail("<br/>", true), "<br/>---<br/>", false);
 	}
 	
-	private String displayMediaFilesSummary() {
-		return displayMediaFileInformation(getAllMediaFilePaths(), (af) -> af.displayMediaFileSummary(), "<br/>");
+	public String displayMediaFilesSummary() {
+		return displayMediaFileInformation(getAllMediaFilePaths(), (af) -> af.displayMediaFileSummary(), "<br/>", false);
+		
+	}
+	
+	public String displayMediaFilesSummaryCompact() {
+		return displayMediaFileInformation(getAllMediaFilePaths(), (af) -> af.displayMediaFileSummary(), "<br/>", true);
 		
 	}
 	

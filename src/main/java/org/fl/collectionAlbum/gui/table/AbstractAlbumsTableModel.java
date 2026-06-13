@@ -35,25 +35,25 @@ public abstract class AbstractAlbumsTableModel extends AbstractTableModel implem
 
 	private static final long serialVersionUID = 1L;
 
-	private final List<TableColumnParameter<Album>> albumTableColumns;
+	private final AlbumTableColumns albumTableColumns;
 	
-	AbstractAlbumsTableModel(List<TableColumnParameter<Album>> albumTableColumns) {
+	AbstractAlbumsTableModel(AlbumTableColumns albumTableColumns) {
 		super();
 		this.albumTableColumns = albumTableColumns;
 	}
 	
-	public List<TableColumnParameter<Album>> getAlbumTableColumns() {
+	public AlbumTableColumns getAlbumTableColumns() {
 		return albumTableColumns;
 	}
 
 	@Override
 	public int getColumnCount() {
-		return albumTableColumns.size();
+		return albumTableColumns.tableColumnParameters().size();
 	}
 	
 	@Override
 	public String getColumnName(int col) {
-	    return albumTableColumns.get(col).name();
+	    return albumTableColumns.tableColumnParameters().get(col).name();
 	}
 	
 	@Override
@@ -63,7 +63,7 @@ public abstract class AbstractAlbumsTableModel extends AbstractTableModel implem
 	
     @Override
     public Class<?> getColumnClass(int columnIndex) {
-    	return albumTableColumns.get(columnIndex).valueClass();
+    	return albumTableColumns.tableColumnParameters().get(columnIndex).valueClass();
     }
     
 	@Override
@@ -73,7 +73,7 @@ public abstract class AbstractAlbumsTableModel extends AbstractTableModel implem
 			// This may happen when triggering a rescan of the collection
 			return null;
 		} else {
-			return albumTableColumns.get(columnIndex).valueGetter().apply(getAlbumsList().get(rowIndex));
+			return albumTableColumns.tableColumnParameters().get(columnIndex).valueGetter().apply(getAlbumsList().get(rowIndex));
 		}
 	}
 
