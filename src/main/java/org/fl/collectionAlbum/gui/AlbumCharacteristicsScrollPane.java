@@ -43,7 +43,7 @@ public class AlbumCharacteristicsScrollPane extends JScrollPane implements Updat
 	private static final long serialVersionUID = 1L;
 
 	private static final Font TITLE_FONT = new Font("Verdana", Font.BOLD, 18);
-	private static final Font FONT = new Font("Verdana", Font.BOLD, 14);
+	private static final Font FONT = new Font("Verdana", Font.BOLD, 16);
 	
 	private static final String AUDIO_CHARACTERISTICS_TITLE = "Caractéristiques des numérisations des albums";
 	
@@ -72,7 +72,7 @@ public class AlbumCharacteristicsScrollPane extends JScrollPane implements Updat
 		albumsAudioCharacteristicsLabel.setFont(TITLE_FONT);
 		
 		JPanel albumsAudioCharacteristicsPanel = new JPanel();
-		albumsAudioCharacteristicsPanel.setLayout(new GridLayout(0, 2));
+		albumsAudioCharacteristicsPanel.setLayout(new GridLayout(0, 2, 50, 50));
 		
 		ListeAlbum albumsWithAudio = collectionAlbumContainer.getAlbumsWithAudioFile().sortRangementAlbum();
 		addCharacteristic("Albums avec fichier audio", albumsWithAudio, albumsAudioCharacteristicsPanel);
