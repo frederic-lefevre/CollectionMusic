@@ -29,12 +29,14 @@ import java.awt.Font;
 import java.awt.GridLayout;
 
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.albums.ListeAlbum;
+import org.fl.collectionAlbum.gui.listener.ListAlbumListener;
 
 public class AlbumCharacteristicsScrollPane extends JScrollPane implements UpdatableElement  {
 
@@ -46,12 +48,14 @@ public class AlbumCharacteristicsScrollPane extends JScrollPane implements Updat
 	private static final String AUDIO_CHARACTERISTICS_TITLE = "Caractéristiques des numérisations des albums";
 	
 	private final CollectionAlbumContainer collectionAlbumContainer;
+	private final GenerationPane generationPane;
 	private final JPanel albumsCaracteristicsPanel;
 	
 	public AlbumCharacteristicsScrollPane(CollectionAlbumContainer collectionAlbumContainer, GenerationPane generationPane) {
 		super();
 		
 		this.collectionAlbumContainer = collectionAlbumContainer;
+		this.generationPane = generationPane;
 		
 		albumsCaracteristicsPanel = new JPanel();
 		albumsCaracteristicsPanel.setLayout(new BoxLayout(albumsCaracteristicsPanel, BoxLayout.Y_AXIS));
@@ -78,10 +82,12 @@ public class AlbumCharacteristicsScrollPane extends JScrollPane implements Updat
 	}
 	
 	private void addCharacteristic(String characteristicTitle, ListeAlbum albums, JPanel panel) {
-		JLabel titleLabel = new JLabel(characteristicTitle);
-		titleLabel.setFont(FONT);
-		panel.add(titleLabel);
+		JButton buttonTitle = new JButton(characteristicTitle);
+		buttonTitle.setFont(FONT);
+		buttonTitle.addActionListener(new ListAlbumListener(characteristicTitle, albums.getAlbums(), generationPane));
+		panel.add(buttonTitle);
 		JLabel valueLabel = new JLabel(Integer.toString(albums.getNombreAlbums()));
+		valueLabel.setFont(FONT);
 		panel.add(valueLabel);
 	}
 	
