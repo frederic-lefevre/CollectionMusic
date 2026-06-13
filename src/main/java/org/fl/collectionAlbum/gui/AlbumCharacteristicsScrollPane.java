@@ -76,6 +76,8 @@ public class AlbumCharacteristicsScrollPane extends JScrollPane implements Updat
 		
 		ListeAlbum highResAudioAlbums = collectionAlbumContainer.getAlbumsWithHighResAudio().sortRangementAlbum();
 		addCharacteristic("Albums avec fichier audio haute résolution", highResAudioAlbums, albumsAudioCharacteristicsPanel);
+		ListeAlbum lowResAudioAlbums = collectionAlbumContainer.getAlbumsWithLowResAudio().sortRangementAlbum();
+		addCharacteristic("Albums avec fichier audio avec perte (basse qualité)", lowResAudioAlbums, albumsAudioCharacteristicsPanel);
 		
 		albumsCaracteristicsPanel.add(albumsAudioCharacteristicsLabel);
 		albumsCaracteristicsPanel.add(albumsAudioCharacteristicsPanel);
