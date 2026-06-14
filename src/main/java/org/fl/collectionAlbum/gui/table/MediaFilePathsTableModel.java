@@ -25,81 +25,26 @@ SOFTWARE.
 package org.fl.collectionAlbum.gui.table;
 
 import java.util.List;
-import java.util.Optional;
-
-import javax.swing.table.AbstractTableModel;
 
 import org.fl.collectionAlbum.gui.UpdatableElement;
 import org.fl.collectionAlbum.mediaPath.MediaFileInventory;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
-public class MediaFilePathsTableModel extends AbstractTableModel implements UpdatableElement {
+public class MediaFilePathsTableModel extends AbstractCollectionTableModel<MediaFilePath> implements UpdatableElement {
 
 	private static final long serialVersionUID = 1L;
-
-	public static final int PATH_COL_IDX = 0;
-	public static final int ALBUMS_COL_IDX = 1;
-	public static final int NB_FILES_COL_IDX = 2;
-	public static final int COVER_IMAGE_COL_IDX = 3;
-	public static final int EXTENSION_COL_IDX = 4;
-	public static final int METADATA_CHECK_COL_IDX = 5;
-	
-	private static final String[] entetes = {"<html>Chemins des fichiers<br>media</html>", 
-			"Albums", "<html>Nombre de<br>medias</html>", "<html>Image de la<br>pochette</html>", "Type de media", "<html>Metadata<br>equivalentes</html>"};
 	
 	private final List<MediaFilePath> mediaFilePaths;
+	private final GenericTableColumns<MediaFilePath> mediaFilePathTableColumns;
 	
-	public MediaFilePathsTableModel(MediaFileInventory mediaFileInventory) {
-		super();
+	public MediaFilePathsTableModel(MediaFileInventory mediaFileInventory, GenericTableColumns<MediaFilePath> mediaFilePathTableColumns) {
+		super(mediaFilePathTableColumns);
 		this.mediaFilePaths = mediaFileInventory.getMediaFilePathList();
+		this.mediaFilePathTableColumns = mediaFilePathTableColumns;
 	}
 
-	@Override
-	public int getRowCount() {
-		if (mediaFilePaths == null) {
-			return 0;
-		} else {
-			return mediaFilePaths.size();
-		}
-	}
-
-	@Override
-	public int getColumnCount() {
-		return entetes.length;
-	}
-
-	@Override
-	public String getColumnName(int col) {
-	    return entetes[col];
-	}
-    
-	// AbstractTableModel.getColumnClass is overridden because it interprets numbers as string
-	// So they are left aligned instead of right aligned
-	@Override
-	public Class<?> getColumnClass(int columnIndex) {
-		return switch(columnIndex){
-			case PATH_COL_IDX -> String.class;
-			case ALBUMS_COL_IDX -> MediaFilePath.class;
-			case NB_FILES_COL_IDX -> Long.class;
-			case COVER_IMAGE_COL_IDX -> Boolean.class;
-			case EXTENSION_COL_IDX -> String.class;
-			case METADATA_CHECK_COL_IDX -> Optional.class;
-			default -> Object.class;
-		};
-	}
-	
-	@Override
-	public Object getValueAt(int rowIndex, int columnIndex) {
-
-		return switch(columnIndex){
-			case PATH_COL_IDX -> mediaFilePaths.get(rowIndex).getPath().toString();
-			case ALBUMS_COL_IDX -> mediaFilePaths.get(rowIndex);
-			case NB_FILES_COL_IDX -> mediaFilePaths.get(rowIndex).getMediaFileNumber();
-			case COVER_IMAGE_COL_IDX -> mediaFilePaths.get(rowIndex).hasCover();
-			case EXTENSION_COL_IDX -> mediaFilePaths.get(rowIndex).getMediaFileExtension();
-			case METADATA_CHECK_COL_IDX -> mediaFilePaths.get(rowIndex).hasEquivalentStreamMetadata();
-			default -> null;
-		};
+	public GenericTableColumns<MediaFilePath> mediaFilePathTableColumns() {
+		return mediaFilePathTableColumns;
 	}
 
 	public MediaFilePath getMediaFilePathAt(int rowIndex) {
@@ -109,5 +54,10 @@ public class MediaFilePathsTableModel extends AbstractTableModel implements Upda
 	@Override
 	public void updateElement() {
 		fireTableDataChanged();
+	}
+
+	@Override
+	protected List<MediaFilePath> getItemList() {
+		return mediaFilePaths;
 	}
 }

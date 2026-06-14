@@ -35,7 +35,7 @@ public class DynamicAlbumsTableModel extends AbstractAlbumsTableModel {
 	private final Supplier<List<Album>> albumsListSupplier;
 	private List<Album> albumsList;
 	
-	public DynamicAlbumsTableModel(Supplier<List<Album>> albumsListSupplier, AlbumTableColumns albumTableColumns) {
+	public DynamicAlbumsTableModel(Supplier<List<Album>> albumsListSupplier, GenericTableColumns<Album> albumTableColumns) {
 		super(albumTableColumns);
 		this.albumsListSupplier = albumsListSupplier;
 		this.albumsList = albumsListSupplier.get();
@@ -46,9 +46,9 @@ public class DynamicAlbumsTableModel extends AbstractAlbumsTableModel {
 		this.albumsList = albumsListSupplier.get();
 		super.fireTableDataChanged();
 	}
-	
+
 	@Override
-	protected List<Album> getAlbumsList() {
+	protected List<Album> getItemList() {
 		return albumsList;
 	}
 }

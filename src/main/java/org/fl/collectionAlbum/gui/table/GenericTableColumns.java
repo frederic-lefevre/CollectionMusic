@@ -24,38 +24,8 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui.table;
 
-import java.util.Collections;
 import java.util.List;
 
-import org.fl.collectionAlbum.concerts.Concert;
-import org.fl.collectionAlbum.gui.UpdatableElement;
+public record GenericTableColumns<T>(List<TableColumnParameter<T>> tableColumnParameters, int rowHeight ) {
 
-public class ConcertTableModel extends AbstractCollectionTableModel<Concert> implements UpdatableElement {
-
-	private static final long serialVersionUID = 1L;
-	
-	private final List<Concert> listeConcert;
-	
-	public ConcertTableModel(List<Concert> listeConcert, GenericTableColumns<Concert> concertTableColumns) {
-		super(concertTableColumns);
-		this.listeConcert = listeConcert;
-	}
-
-	@Override
-	public void updateElement() {
-		fireTableDataChanged();
-	}
-	
-	public Concert getConcertAt(int rowIndex) {
-		return listeConcert.get(rowIndex);
-	}
-	
-	public List<Concert> getListeConcert() {
-		return Collections.unmodifiableList(listeConcert);
-	}
-
-	@Override
-	protected List<Concert> getItemList() {
-		return listeConcert;
-	}
 }

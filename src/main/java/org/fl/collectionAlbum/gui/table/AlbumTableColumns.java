@@ -47,7 +47,7 @@ import org.fl.collectionAlbum.gui.renderer.StringToHtmlRenderer;
 import org.fl.collectionAlbum.utils.CollectionUtils;
 import org.fl.collectionAlbum.utils.TemporalUtils;
 
-public record AlbumTableColumns(List<TableColumnParameter<Album>> tableColumnParameters, int rowHeight) {
+public class AlbumTableColumns {
 
 	private static final int POCHETTE_WIDTH = 85;
 	private static final int POCHETTE_HEIGHT = 85;
@@ -155,18 +155,18 @@ public record AlbumTableColumns(List<TableColumnParameter<Album>> tableColumnPar
 			AlbumTableColumns.ACQUISITION,
 			AlbumTableColumns.MEDIA_FILES_TYPES);
 	
-	public static final AlbumTableColumns REGULAR_COLUMNS =
-			new AlbumTableColumns(REGULAR_COLUMN_LIST, 50);
+	public static final GenericTableColumns<Album> REGULAR_COLUMNS =
+			new GenericTableColumns<>(REGULAR_COLUMN_LIST, 50);
 	
-	public static final AlbumTableColumns AUGMENTED_COLUMNS =
-			new AlbumTableColumns(AUGMENTED_COLUMN_LIST, ContentNature.values().length*25);
+	public static final GenericTableColumns<Album> AUGMENTED_COLUMNS =
+			new GenericTableColumns<>(AUGMENTED_COLUMN_LIST, ContentNature.values().length*25);
 	
-	public static final AlbumTableColumns ACQUISITION_COLUMNS =
-			new AlbumTableColumns(ACQUISITION_COLUMN_LIST, 50);
+	public static final GenericTableColumns<Album> ACQUISITION_COLUMNS =
+			new GenericTableColumns<>(ACQUISITION_COLUMN_LIST, 50);
 	
-	public static final AlbumTableColumns POCHETTE_COLUMNS =
-			new AlbumTableColumns(POCHETTE_COLUMN_LIST, POCHETTE_HEIGHT);
+	public static final GenericTableColumns<Album> POCHETTE_COLUMNS =
+			new GenericTableColumns<>(POCHETTE_COLUMN_LIST, POCHETTE_HEIGHT);
 	
-	public static final AlbumTableColumns MEDIA_FILES_COLUMNS =
-			new AlbumTableColumns(MEDIA_FILES_COLUMN_LIST, 50);
+	public static final GenericTableColumns<Album> MEDIA_FILES_COLUMNS =
+			new GenericTableColumns<>(MEDIA_FILES_COLUMN_LIST, 50);
 }

@@ -34,13 +34,14 @@ public class AlbumsTableModel extends AbstractAlbumsTableModel {
 	
 	private final List<Album> albumsList;
 	
-	public AlbumsTableModel(List<Album> albumsList, AlbumTableColumns albumTableColumns) {
+	public AlbumsTableModel(List<Album> albumsList, GenericTableColumns<Album> albumTableColumns) {
 		super(albumTableColumns);
 		this.albumsList = albumsList;
 	}
 
 	@Override
-	protected List<Album> getAlbumsList() {
+	protected List<Album> getItemList() {
 		return albumsList;
 	}
+
 }

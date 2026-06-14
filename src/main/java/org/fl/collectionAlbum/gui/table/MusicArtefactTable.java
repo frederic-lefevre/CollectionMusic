@@ -24,28 +24,18 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui.table;
 
-import javax.swing.JTable;
-import javax.swing.table.JTableHeader;
-import javax.swing.table.TableModel;
-
 import org.fl.collectionAlbum.MusicArtefact;
 
-public abstract class MusicArtefactTable<T extends MusicArtefact> extends JTable {
+public abstract class MusicArtefactTable<T extends MusicArtefact> extends AbstractCollectionTable<T> {
 
 	private static final long serialVersionUID = 1L;
 
-	public MusicArtefactTable(TableModel dm) {
-		super(dm);
+	public MusicArtefactTable(AbstractCollectionTableModel<T> collectionTableModel) {
+		super(collectionTableModel);
 	}
 	
 	public abstract T getSelectedMusicArtefact();
 	public abstract boolean isArtistsColumnSelected();
 	public abstract boolean isDiscogsReleaseColumnSelected();
 	public abstract boolean isLieuColumnSelected();
-	abstract String getColumnToolTip(int columnIndex);
-	
-	@Override
-	protected JTableHeader createDefaultTableHeader() {
-		return new JTableHeaderWithSpecificToolTips(columnModel, columnIndex -> getColumnToolTip(columnIndex));
-    }
 }

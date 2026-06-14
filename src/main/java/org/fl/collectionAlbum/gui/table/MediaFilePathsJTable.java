@@ -24,76 +24,26 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui.table;
 
-import java.util.logging.Logger;
-
-import javax.swing.DefaultListSelectionModel;
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
-import javax.swing.table.TableRowSorter;
-
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.gui.GenerationPane;
 import org.fl.collectionAlbum.gui.adapter.MediaFilePathMouseAdapter;
-import org.fl.collectionAlbum.gui.renderer.AlbumsRenderer;
-import org.fl.collectionAlbum.gui.renderer.CollectionBooleanRenderer;
-import org.fl.collectionAlbum.gui.renderer.CollectionOptionalBooleanRenderer;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
-import org.fl.collectionAlbum.mediaPath.MediaFilePathAlbumComparator;
-import org.fl.collectionAlbum.utils.CollectionUtils;
 
-public class MediaFilePathsJTable extends JTable {
+public class MediaFilePathsJTable extends AbstractCollectionTable<MediaFilePath> {
 
 	private static final long serialVersionUID = 1L;
-
-	private static final Logger tLog = Logger.getLogger(MediaFilePathsJTable.class.getName());
-	
-	private static final MediaFilePathAlbumComparator MEDIA_FILE_PATH_ALBUM_COMPARATOR = new MediaFilePathAlbumComparator();
-	private static final CollectionUtils.IntegerComparator INTEGER_COMPARATOR = new CollectionUtils.IntegerComparator();
 	
 	public MediaFilePathsJTable(MediaFilePathsTableModel mediaFilePathsTableModel, GenerationPane generationPane) {
 		super(mediaFilePathsTableModel);
 		
-		setFillsViewportHeight(true);
-		
-		getColumnModel().getColumn(MediaFilePathsTableModel.ALBUMS_COL_IDX).setCellRenderer(new AlbumsRenderer());
-		getColumnModel().getColumn(MediaFilePathsTableModel.PATH_COL_IDX).setPreferredWidth(700);
-		getColumnModel().getColumn(MediaFilePathsTableModel.ALBUMS_COL_IDX).setPreferredWidth(680);
-		getColumnModel().getColumn(MediaFilePathsTableModel.NB_FILES_COL_IDX).setPreferredWidth(100);
-		getColumnModel().getColumn(MediaFilePathsTableModel.COVER_IMAGE_COL_IDX).setPreferredWidth(100);
-		getColumnModel().getColumn(MediaFilePathsTableModel.EXTENSION_COL_IDX).setPreferredWidth(100);
-		getColumnModel().getColumn(MediaFilePathsTableModel.METADATA_CHECK_COL_IDX).setPreferredWidth(100);
-		getColumnModel().getColumn(MediaFilePathsTableModel.COVER_IMAGE_COL_IDX).setCellRenderer(new CollectionBooleanRenderer());
-		getColumnModel().getColumn(MediaFilePathsTableModel.METADATA_CHECK_COL_IDX).setCellRenderer(new CollectionOptionalBooleanRenderer());
-				
-		// Allow single row selection only
-		ListSelectionModel listSelectionModel = new DefaultListSelectionModel();
-		listSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		setSelectionModel(listSelectionModel);
-		
-		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		
-		addMouseListener(new MediaFilePathMouseAdapter(this, Control.getOsActionOnMediaFilePath(), generationPane));
-		
-		// Row sorter
-		TableRowSorter<MediaFilePathsTableModel> sorter = new TableRowSorter<>(mediaFilePathsTableModel);
-		sorter.setComparator(MediaFilePathsTableModel.ALBUMS_COL_IDX, MEDIA_FILE_PATH_ALBUM_COMPARATOR);
-		sorter.setComparator(MediaFilePathsTableModel.NB_FILES_COL_IDX, INTEGER_COMPARATOR);
-		setRowSorter(sorter);
-				
+		addMouseListener(new MediaFilePathMouseAdapter(this, Control.getOsActionOnMediaFilePath(), generationPane));	
 	}
 
 	public MediaFilePath getSelectedMediaFilePath() {
-		
-		int[] rowIdxs = getSelectedRows();
-		if (rowIdxs.length == 0) {
-			return null;
-		} else if (rowIdxs.length > 1) {
-			tLog.severe("Found several selected rows for MediaFilePathsJTable. Number of selected rows: " + rowIdxs.length);
-		}
-		return ((MediaFilePathsTableModel)getModel()).getMediaFilePathAt(convertRowIndexToModel(rowIdxs[0]));
+		return getSelectedItem();
 	}
 	
 	public boolean isAlbumsColumnSelected() {
-		return  isColumnSelected(MediaFilePathsTableModel.ALBUMS_COL_IDX);
+		return  isColumnSelected(MediaFilePathTableColumns.ALBUMS);
 	}
 }

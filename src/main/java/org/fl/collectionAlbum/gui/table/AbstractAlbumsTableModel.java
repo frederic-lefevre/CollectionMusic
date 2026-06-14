@@ -24,68 +24,23 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui.table;
 
-import java.util.List;
-
-import javax.swing.table.AbstractTableModel;
-
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.gui.UpdatableElement;
 
-public abstract class AbstractAlbumsTableModel extends AbstractTableModel implements UpdatableElement {
+public abstract class AbstractAlbumsTableModel extends AbstractCollectionTableModel<Album> implements UpdatableElement {
 
 	private static final long serialVersionUID = 1L;
-
-	private final AlbumTableColumns albumTableColumns;
 	
-	AbstractAlbumsTableModel(AlbumTableColumns albumTableColumns) {
-		super();
-		this.albumTableColumns = albumTableColumns;
-	}
-	
-	public AlbumTableColumns getAlbumTableColumns() {
-		return albumTableColumns;
-	}
-
-	@Override
-	public int getColumnCount() {
-		return albumTableColumns.tableColumnParameters().size();
-	}
-	
-	@Override
-	public String getColumnName(int col) {
-	    return albumTableColumns.tableColumnParameters().get(col).name();
-	}
-	
-	@Override
-	public int getRowCount() {
-		return getAlbumsList().size();
-	}
-	
-    @Override
-    public Class<?> getColumnClass(int columnIndex) {
-    	return albumTableColumns.tableColumnParameters().get(columnIndex).valueClass();
-    }
-    
-	@Override
-	public Object getValueAt(int rowIndex, int columnIndex) {
-		
-		if (getAlbumsList().size() < rowIndex + 1) {
-			// This may happen when triggering a rescan of the collection
-			return null;
-		} else {
-			return albumTableColumns.tableColumnParameters().get(columnIndex).valueGetter().apply(getAlbumsList().get(rowIndex));
-		}
+	AbstractAlbumsTableModel(GenericTableColumns<Album> albumTableColumns) {
+		super(albumTableColumns);
 	}
 
 	public Album getAlbumAt(int rowIndex) {
-		return getAlbumsList().get(rowIndex);
+		return getItemList().get(rowIndex);
 	}
 	
 	@Override
 	public void updateElement() {
 		fireTableDataChanged();
-	}
-	
-	protected abstract List<Album> getAlbumsList();
-	
+	}	
 }
