@@ -34,11 +34,8 @@ public class ConcertTableModel extends AbstractCollectionTableModel<Concert> imp
 
 	private static final long serialVersionUID = 1L;
 	
-	private final List<Concert> listeConcert;
-	
 	public ConcertTableModel(List<Concert> listeConcert, GenericTableColumns<Concert> concertTableColumns) {
-		super(concertTableColumns);
-		this.listeConcert = listeConcert;
+		super(concertTableColumns, listeConcert);
 	}
 
 	@Override
@@ -47,15 +44,10 @@ public class ConcertTableModel extends AbstractCollectionTableModel<Concert> imp
 	}
 	
 	public Concert getConcertAt(int rowIndex) {
-		return listeConcert.get(rowIndex);
+		return getItemList().get(rowIndex);
 	}
 	
 	public List<Concert> getListeConcert() {
-		return Collections.unmodifiableList(listeConcert);
-	}
-
-	@Override
-	protected List<Concert> getItemList() {
-		return listeConcert;
+		return Collections.unmodifiableList(getItemList());
 	}
 }

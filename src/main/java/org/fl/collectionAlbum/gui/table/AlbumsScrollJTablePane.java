@@ -38,7 +38,7 @@ public class AlbumsScrollJTablePane extends JScrollPane {
 
 	private static final long serialVersionUID = 1L;
 	
-	private final AbstractAlbumsTableModel albumsTableModel;
+	private final AlbumsTableModel albumsTableModel;
 	 
 	public AlbumsScrollJTablePane(List<Album> albums, GenericTableColumns<Album> albumTableColumns, GenerationPane generationPane) {
 		super();
@@ -64,7 +64,7 @@ public class AlbumsScrollJTablePane extends JScrollPane {
 		setPreferredSize(Control.getMainSubPaneDimension());
 	}
 	
-	public AbstractAlbumsTableModel getAlbumsTableModel() {
+	public AlbumsTableModel getAlbumsTableModel() {
 		return albumsTableModel;
 	}
 }

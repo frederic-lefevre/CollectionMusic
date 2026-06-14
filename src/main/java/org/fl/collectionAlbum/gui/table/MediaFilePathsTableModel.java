@@ -24,8 +24,6 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui.table;
 
-import java.util.List;
-
 import org.fl.collectionAlbum.gui.UpdatableElement;
 import org.fl.collectionAlbum.mediaPath.MediaFileInventory;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
@@ -33,13 +31,11 @@ import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 public class MediaFilePathsTableModel extends AbstractCollectionTableModel<MediaFilePath> implements UpdatableElement {
 
 	private static final long serialVersionUID = 1L;
-	
-	private final List<MediaFilePath> mediaFilePaths;
+
 	private final GenericTableColumns<MediaFilePath> mediaFilePathTableColumns;
 	
 	public MediaFilePathsTableModel(MediaFileInventory mediaFileInventory, GenericTableColumns<MediaFilePath> mediaFilePathTableColumns) {
-		super(mediaFilePathTableColumns);
-		this.mediaFilePaths = mediaFileInventory.getMediaFilePathList();
+		super(mediaFilePathTableColumns, mediaFileInventory.getMediaFilePathList());
 		this.mediaFilePathTableColumns = mediaFilePathTableColumns;
 	}
 
@@ -48,16 +44,11 @@ public class MediaFilePathsTableModel extends AbstractCollectionTableModel<Media
 	}
 
 	public MediaFilePath getMediaFilePathAt(int rowIndex) {
-		return mediaFilePaths.get(rowIndex);
+		return getItemList().get(rowIndex);
 	}
 
 	@Override
 	public void updateElement() {
 		fireTableDataChanged();
-	}
-
-	@Override
-	protected List<MediaFilePath> getItemList() {
-		return mediaFilePaths;
 	}
 }

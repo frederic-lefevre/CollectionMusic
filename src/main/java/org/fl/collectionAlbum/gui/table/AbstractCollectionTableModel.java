@@ -33,10 +33,12 @@ public abstract class AbstractCollectionTableModel<T> extends AbstractTableModel
 	private static final long serialVersionUID = 1L;
 	
 	private final GenericTableColumns<T>  genericTableColumns;
+	private List<T> itemList;
 	
-	AbstractCollectionTableModel(GenericTableColumns<T>  genericTableColumns) {
+	AbstractCollectionTableModel(GenericTableColumns<T>  genericTableColumns, List<T> itemList) {
 		super();
 		this.genericTableColumns = genericTableColumns;
+		this.itemList = itemList;
 	}
 	
 	protected GenericTableColumns<T> getGenericTableColumns() {
@@ -62,19 +64,25 @@ public abstract class AbstractCollectionTableModel<T> extends AbstractTableModel
 	
 	@Override
 	public int getRowCount() {
-		return getItemList().size();
+		return itemList.size();
 	}
 	
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 
-		if (getItemList().size() < rowIndex + 1) {
+		if (itemList.size() < rowIndex + 1) {
 			// This may happen when triggering a rescan of the collection
 			return null;
 		} else {
-			return genericTableColumns.tableColumnParameters().get(columnIndex).valueGetter().apply(getItemList().get(rowIndex));
+			return genericTableColumns.tableColumnParameters().get(columnIndex).valueGetter().apply(itemList.get(rowIndex));
 		}
 	}
 	
-	protected abstract List<T> getItemList();
+	protected List<T> getItemList() {
+		return itemList;
+	};
+	
+	protected void setItemList(List<T> listOfItems) {
+		this.itemList = listOfItems;
+	}
 }

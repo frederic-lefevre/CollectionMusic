@@ -40,7 +40,7 @@ public class AlbumsJTable extends MusicArtefactTable<Album> {
 	
 	public record AlbumColumnSort(TableColumnParameter<Album> albumTableColumnToSort, SortOrder sortOrder) {}
 	
-	public AlbumsJTable(AbstractAlbumsTableModel albumsTableModel, GenerationPane generationPane, AlbumColumnSort albumColumnSort) {
+	public AlbumsJTable(AlbumsTableModel albumsTableModel, GenerationPane generationPane, AlbumColumnSort albumColumnSort) {
 		super(albumsTableModel);
 		
 		addMouseListener(new AlbumMouseAdapter(this, Control.getOsActionsOnAlbum(), generationPane));

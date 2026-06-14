@@ -27,21 +27,24 @@ package org.fl.collectionAlbum.gui.table;
 import java.util.List;
 
 import org.fl.collectionAlbum.albums.Album;
+import org.fl.collectionAlbum.gui.UpdatableElement;
 
-public class AlbumsTableModel extends AbstractAlbumsTableModel {
+public class AlbumsTableModel extends AbstractCollectionTableModel<Album> implements UpdatableElement {
 	
 	private static final long serialVersionUID = 1L;
-	
-	private final List<Album> albumsList;
-	
+
 	public AlbumsTableModel(List<Album> albumsList, GenericTableColumns<Album> albumTableColumns) {
-		super(albumTableColumns);
-		this.albumsList = albumsList;
+		super(albumTableColumns, albumsList);
 	}
 
-	@Override
-	protected List<Album> getItemList() {
-		return albumsList;
+	public Album getAlbumAt(int rowIndex) {
+		return getItemList().get(rowIndex);
 	}
+	
+	@Override
+	public void updateElement() {
+		fireTableDataChanged();		
+	}
+
 
 }

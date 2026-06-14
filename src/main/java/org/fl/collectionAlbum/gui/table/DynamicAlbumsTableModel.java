@@ -28,27 +28,20 @@ import java.util.function.Supplier;
 
 import org.fl.collectionAlbum.albums.Album;
 
-public class DynamicAlbumsTableModel extends AbstractAlbumsTableModel {
+public class DynamicAlbumsTableModel extends AlbumsTableModel {
 
 	private static final long serialVersionUID = 1L;
 
 	private final Supplier<List<Album>> albumsListSupplier;
-	private List<Album> albumsList;
 	
 	public DynamicAlbumsTableModel(Supplier<List<Album>> albumsListSupplier, GenericTableColumns<Album> albumTableColumns) {
-		super(albumTableColumns);
+		super(albumsListSupplier.get(), albumTableColumns);
 		this.albumsListSupplier = albumsListSupplier;
-		this.albumsList = albumsListSupplier.get();
 	}
 	
 	@Override
 	public void fireTableDataChanged() {
-		this.albumsList = albumsListSupplier.get();
+		setItemList(albumsListSupplier.get());
 		super.fireTableDataChanged();
-	}
-
-	@Override
-	protected List<Album> getItemList() {
-		return albumsList;
 	}
 }
