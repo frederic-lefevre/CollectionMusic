@@ -24,28 +24,42 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui.table;
 
-import javax.swing.JTable;
+import java.awt.event.MouseEvent;
+import java.util.function.Function;
+
 import javax.swing.table.JTableHeader;
-import javax.swing.table.TableModel;
+import javax.swing.table.TableColumnModel;
 
-import org.fl.collectionAlbum.MusicArtefact;
-
-public abstract class MusicArtefactTable<T extends MusicArtefact> extends JTable {
+public class JTableHeaderWithSpecificToolTips extends JTableHeader {
 
 	private static final long serialVersionUID = 1L;
-
-	public MusicArtefactTable(TableModel dm) {
-		super(dm);
+	
+	private final Function<Integer, String> toolTipsGetter;
+	
+	public JTableHeaderWithSpecificToolTips() {
+		super();
+		this.toolTipsGetter = null;
 	}
 	
-	public abstract T getSelectedMusicArtefact();
-	public abstract boolean isArtistsColumnSelected();
-	public abstract boolean isDiscogsReleaseColumnSelected();
-	public abstract boolean isLieuColumnSelected();
-	abstract String getColumnToolTip(int columnIndex);
+	public JTableHeaderWithSpecificToolTips(TableColumnModel cm) {
+		super(cm);
+		this.toolTipsGetter = null;
+	}
+	
+	public JTableHeaderWithSpecificToolTips(TableColumnModel cm, Function<Integer, String> toolTipsGetter) {
+		super(cm);
+		this.toolTipsGetter = toolTipsGetter;
+	}
 	
 	@Override
-	protected JTableHeader createDefaultTableHeader() {
-		return new JTableHeaderWithSpecificToolTips(columnModel, columnIndex -> getColumnToolTip(columnIndex));
+    public String getToolTipText(MouseEvent e) {
+		if (toolTipsGetter != null) {
+	        java.awt.Point p = e.getPoint();
+	        int index = columnModel.getColumnIndexAtX(p.x);
+	        int realIndex = columnModel.getColumn(index).getModelIndex();
+	        return toolTipsGetter.apply(realIndex);
+		} else {
+			return null;
+		}
     }
 }
