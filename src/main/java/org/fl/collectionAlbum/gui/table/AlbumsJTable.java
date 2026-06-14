@@ -134,4 +134,14 @@ public class AlbumsJTable extends MusicArtefactTable<Album> {
 	public boolean isLieuColumnSelected() {
 		return false;
 	}
+
+	@Override
+	String getColumnToolTip(int columnIndex) {
+		String toolTipText =  albumTableColumns.tableColumnParameters().get(columnIndex).toolTipText();
+		if ((toolTipText != null) && !toolTipText.isBlank()) {
+			return toolTipText;
+		} else {
+			return null;
+		}
+	}
 }

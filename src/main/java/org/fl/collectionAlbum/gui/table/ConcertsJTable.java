@@ -111,4 +111,9 @@ public class ConcertsJTable extends MusicArtefactTable<Concert> {
 	public boolean isDiscogsReleaseColumnSelected() {
 		return false;
 	}
+
+	@Override
+	String getColumnToolTip(int columnIndex) {
+		return null;
+	}
 }

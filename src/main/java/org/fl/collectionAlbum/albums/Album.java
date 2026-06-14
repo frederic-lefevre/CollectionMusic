@@ -300,6 +300,7 @@ public class Album extends MusicArtefact {
 		return acquisitionDate;
 	}
 
+    // "Les metadata dans la déclaration de l'album correspondent aux metadata des fichiers audio"
     public boolean matchesMediaFileMetadata() {
     	return formatAlbum.matchesMediaFilesMetadata();
     }

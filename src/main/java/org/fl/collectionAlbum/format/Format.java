@@ -504,6 +504,7 @@ public class Format {
 		}
 	}
 	
+	 // "Les metadata dans la déclaration de l'album correspondent aux metadata des fichiers audio"
 	public boolean matchesMediaFilesMetadata() {
 		return getAllMediaFilePaths().stream().allMatch(AbstractAlbumMediaFilePaths::matchesMediaFilesMetadata);
 	}

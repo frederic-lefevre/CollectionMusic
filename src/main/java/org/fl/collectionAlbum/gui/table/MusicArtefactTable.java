@@ -24,7 +24,10 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui.table;
 
+import java.awt.event.MouseEvent;
+
 import javax.swing.JTable;
+import javax.swing.table.JTableHeader;
 import javax.swing.table.TableModel;
 
 import org.fl.collectionAlbum.MusicArtefact;
@@ -41,4 +44,19 @@ public abstract class MusicArtefactTable<T extends MusicArtefact> extends JTable
 	public abstract boolean isArtistsColumnSelected();
 	public abstract boolean isDiscogsReleaseColumnSelected();
 	public abstract boolean isLieuColumnSelected();
+	abstract String getColumnToolTip(int columnIndex);
+	
+	@Override
+	protected JTableHeader createDefaultTableHeader() {
+        return new JTableHeader(columnModel) {
+        	
+        	@Override
+            public String getToolTipText(MouseEvent e) {
+                java.awt.Point p = e.getPoint();
+                int index = columnModel.getColumnIndexAtX(p.x);
+                int realIndex = columnModel.getColumn(index).getModelIndex();
+                return getColumnToolTip(realIndex);
+            }
+        };
+    }
 }
