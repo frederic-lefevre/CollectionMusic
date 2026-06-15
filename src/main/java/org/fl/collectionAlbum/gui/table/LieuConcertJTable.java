@@ -24,62 +24,21 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui.table;
 
-import java.util.logging.Logger;
-
-import javax.swing.DefaultListSelectionModel;
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
-import javax.swing.table.TableRowSorter;
-
 import org.fl.collectionAlbum.concerts.LieuConcert;
 import org.fl.collectionAlbum.gui.GenerationPane;
 import org.fl.collectionAlbum.gui.adapter.LieuConcertMouseAdapter;
-import org.fl.collectionAlbum.gui.renderer.CollectionNumberRenderer;
-import org.fl.collectionAlbum.utils.CollectionUtils;
 
-public class LieuConcertJTable extends JTable {
+public class LieuConcertJTable extends AbstractCollectionTable<LieuConcert> {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final Logger logger = Logger.getLogger(LieuConcertJTable.class.getName());
-	
-	private static final CollectionUtils.IntegerComparator INTEGER_COMPARATOR = new CollectionUtils.IntegerComparator();
-	
 	public LieuConcertJTable(LieuConcertTableModel lieuConcertTableModel, GenerationPane generationPane) {
 		super(lieuConcertTableModel);
 		
-		setFillsViewportHeight(true);
-		
-		setRowHeight(30);
-		
-		getColumnModel().getColumn(LieuConcertTableModel.NUMBER_COL_IDX).setCellRenderer(new CollectionNumberRenderer());
-		
-		getColumnModel().getColumn(LieuConcertTableModel.LIEU_COL_IDX).setPreferredWidth(600);
-		getColumnModel().getColumn(LieuConcertTableModel.NUMBER_COL_IDX).setPreferredWidth(200);
-		
-		// Allow single row selection only
-		ListSelectionModel listSelectionModel = new DefaultListSelectionModel();
-		listSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		setSelectionModel(listSelectionModel);
-		
-		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		
 		addMouseListener( new LieuConcertMouseAdapter(this, generationPane));
-		
-		// Row sorter
-		TableRowSorter<LieuConcertTableModel> sorter = new TableRowSorter<>(lieuConcertTableModel);
-		sorter.setComparator(LieuConcertTableModel.NUMBER_COL_IDX, INTEGER_COMPARATOR);
-		setRowSorter(sorter);
 	}
 	
 	public LieuConcert getSelectedLieuConcert() {
-		
-		int[] rowIdxs = getSelectedRows();
-		if (rowIdxs.length == 0) {
-			return null;
-		} else if (rowIdxs.length > 1) {
-			logger.severe("Found several selected rows for LieuConcertJTable. Number of selected rows: " + rowIdxs.length);
-		}
-		return ((LieuConcertTableModel)getModel()).getLieuConcertAt(convertRowIndexToModel(rowIdxs[0]));
+		return getSelectedItem();
 	}
 }

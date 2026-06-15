@@ -144,7 +144,8 @@ public class GenerationPane extends JPanel {
 		collectionTabPanes.add(artistesConcertsScrollJTablePane, "Artistes des concerts");
 		
 		// Lieux des concerts
-		LieuConcertTableModel lieuConcertTableModel = new LieuConcertTableModel(collectionAlbumContainer.getLieuxDesConcerts().getLieuxConcerts());
+		LieuConcertTableModel lieuConcertTableModel = 
+				new LieuConcertTableModel(collectionAlbumContainer.getLieuxDesConcerts().getLieuxConcerts(), LieuConcertTableModel.REGULAR_COLUMNS);
 		startReadCollection.addUpdatableElement(lieuConcertTableModel);
 		
 		LieuConcertJTable lieuConcertJTable = new LieuConcertJTable(lieuConcertTableModel, this);
