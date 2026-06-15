@@ -30,7 +30,8 @@ import java.util.function.Function;
 import javax.swing.table.TableCellRenderer;
 
 public record TableColumnParameter<T>(
-		String name, 
+		String name,
+		String toolTipText,
 		int width, 
 		TableCellRenderer cellRenderer, 
 		Comparator<?> comparator, 

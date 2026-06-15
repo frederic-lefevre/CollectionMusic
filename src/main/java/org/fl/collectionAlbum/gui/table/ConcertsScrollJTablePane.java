@@ -41,7 +41,7 @@ public class ConcertsScrollJTablePane extends JScrollPane {
 	public ConcertsScrollJTablePane(List<Concert> concerts, GenerationPane generationPane) {
 		super();
 		
-		this.concertTableModel = new ConcertTableModel(concerts);
+		this.concertTableModel = new ConcertTableModel(concerts, ConcertTableColumns.REGULAR_COLUMNS);
 		setViewportView(new ConcertsJTable(concertTableModel, generationPane));
 		setPreferredSize(Control.getMainSubPaneDimension());
 	}

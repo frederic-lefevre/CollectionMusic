@@ -34,6 +34,7 @@ import javax.swing.JTabbedPane;
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.gui.table.MediaFileJTable;
+import org.fl.collectionAlbum.gui.table.MediaFilePathTableColumns;
 import org.fl.collectionAlbum.gui.table.MediaFilePathsJTable;
 import org.fl.collectionAlbum.gui.table.MediaFilePathsTableModel;
 import org.fl.collectionAlbum.gui.table.MediaFileTableModel;
@@ -57,7 +58,7 @@ public class MediaFilesTabbedPane extends JTabbedPane {
 			
 			MediaFileInventory mediaFileInventory = MediaFilesInventories.getMediaFileInventory(contentNature);
 			
-			MediaFilePathsTableModel tm = new MediaFilePathsTableModel(mediaFileInventory);
+			MediaFilePathsTableModel tm = new MediaFilePathsTableModel(mediaFileInventory, MediaFilePathTableColumns.REGULAR_COLUMNS);
 			updatableElements.add(tm);
 			
 			MediaFilePathsJTable mediaFilePathsJTable = new MediaFilePathsJTable(tm, generationPane);

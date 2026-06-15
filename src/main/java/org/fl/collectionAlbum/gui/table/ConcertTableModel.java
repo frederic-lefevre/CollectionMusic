@@ -27,58 +27,15 @@ package org.fl.collectionAlbum.gui.table;
 import java.util.Collections;
 import java.util.List;
 
-import javax.swing.table.AbstractTableModel;
-
 import org.fl.collectionAlbum.concerts.Concert;
 import org.fl.collectionAlbum.gui.UpdatableElement;
 
-public class ConcertTableModel extends AbstractTableModel implements UpdatableElement {
+public class ConcertTableModel extends AbstractCollectionTableModel<Concert> implements UpdatableElement {
 
 	private static final long serialVersionUID = 1L;
 	
-	public static final int DATE_COL_IDX = 0;
-	public static final int ARTISTE_COL_IDX = 1;
-	public static final int LIEU_COL_IDX = 2;
-	
-	private static final String[] entetes = {"Dates", "Artistes", "Lieu"};
-	
-	private final List<Concert> listeConcert;
-	
-	public ConcertTableModel(List<Concert> listeConcert) {
-		super();
-		this.listeConcert = listeConcert;
-	}
-	
-	@Override
-	public int getRowCount() {
-		return listeConcert.size();
-	}
-
-	@Override
-	public int getColumnCount() {
-		return entetes.length;
-	}
-
-	@Override
-	public String getColumnName(int col) {
-	    return entetes[col];
-	}
-	
-	@Override
-	public Object getValueAt(int rowIndex, int columnIndex) {
-		
-		if (listeConcert.size() < rowIndex + 1) {
-			// This may happen when triggering a rescan of the collection
-			return null;
-		} else {
-			
-			return switch(columnIndex) {
-				case DATE_COL_IDX -> listeConcert.get(rowIndex).getDateConcert();
-				case ARTISTE_COL_IDX -> listeConcert.get(rowIndex);
-				case LIEU_COL_IDX -> listeConcert.get(rowIndex).getLieuConcert().getLieu();
-				default -> null;
-			};
-		}
+	public ConcertTableModel(List<Concert> listeConcert, GenericTableColumns<Concert> concertTableColumns) {
+		super(concertTableColumns, listeConcert);
 	}
 
 	@Override
@@ -87,10 +44,10 @@ public class ConcertTableModel extends AbstractTableModel implements UpdatableEl
 	}
 	
 	public Concert getConcertAt(int rowIndex) {
-		return listeConcert.get(rowIndex);
+		return getItemList().get(rowIndex);
 	}
 	
 	public List<Concert> getListeConcert() {
-		return Collections.unmodifiableList(listeConcert);
+		return Collections.unmodifiableList(getItemList());
 	}
 }

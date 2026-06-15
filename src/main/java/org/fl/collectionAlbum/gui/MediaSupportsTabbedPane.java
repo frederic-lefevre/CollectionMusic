@@ -32,14 +32,14 @@ import javax.swing.JTabbedPane;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.format.MediaSupports;
-import org.fl.collectionAlbum.gui.table.AbstractAlbumsTableModel;
 import org.fl.collectionAlbum.gui.table.AlbumTableColumns;
 import org.fl.collectionAlbum.gui.table.AlbumsScrollJTablePane;
+import org.fl.collectionAlbum.gui.table.AlbumsTableModel;
 
 public class MediaSupportsTabbedPane extends JTabbedPane {
 
 	private static final long serialVersionUID = 1L;
-	private final List<AbstractAlbumsTableModel> albumTableModels;
+	private final List<AlbumsTableModel> albumTableModels;
 
 	public MediaSupportsTabbedPane(CollectionAlbumContainer collectionAlbumContainer, GenerationPane generationPane) {
 		
@@ -58,7 +58,7 @@ public class MediaSupportsTabbedPane extends JTabbedPane {
 		});
 	}
 	
-	public List<AbstractAlbumsTableModel> getAlbumsTableModels() {
+	public List<AlbumsTableModel> getAlbumsTableModels() {
 		return albumTableModels;
 	}
 }

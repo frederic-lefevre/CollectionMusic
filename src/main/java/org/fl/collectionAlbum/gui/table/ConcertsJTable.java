@@ -24,87 +24,36 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui.table;
 
-import java.time.temporal.TemporalAccessor;
-import java.util.function.Function;
-import java.util.logging.Logger;
-
-import javax.swing.DefaultListSelectionModel;
-import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
-import javax.swing.table.TableRowSorter;
-
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.concerts.Concert;
-import org.fl.collectionAlbum.concerts.ConcertAuteurComparator;
 import org.fl.collectionAlbum.gui.GenerationPane;
 import org.fl.collectionAlbum.gui.adapter.ConcertMouseAdapter;
-import org.fl.collectionAlbum.gui.renderer.AuteurListRenderer;
-import org.fl.collectionAlbum.gui.renderer.DateRenderer;
-import org.fl.collectionAlbum.utils.TemporalUtils;
 
 public class ConcertsJTable extends MusicArtefactTable<Concert> {
 
 	private static final long serialVersionUID = 1L;
-
-	private static final Logger logger = Logger.getLogger(ConcertsJTable.class.getName());
-	
-	private static final ConcertAuteurComparator CONCERT_AUTEUR_COMPARATOR = new ConcertAuteurComparator();
-	private static final TemporalUtils.TemporalAccessorComparator TEMPORAL_ACCESSOR_COMPARATOR = new TemporalUtils.TemporalAccessorComparator();
-	
-	private static final Function<TemporalAccessor, String> concertDateFormatter = t -> TemporalUtils.formatDate((TemporalAccessor)t);
 	
 	public ConcertsJTable(ConcertTableModel concertTableModel, GenerationPane generationPane) {
 		
 		super(concertTableModel);
 		
-		setFillsViewportHeight(true);
-		
-		setRowHeight(50);
-		
-		getColumnModel().getColumn(ConcertTableModel.DATE_COL_IDX).setCellRenderer(new DateRenderer(concertDateFormatter));
-		getColumnModel().getColumn(ConcertTableModel.ARTISTE_COL_IDX).setCellRenderer(new AuteurListRenderer());
-		
-		getColumnModel().getColumn(ConcertTableModel.DATE_COL_IDX).setPreferredWidth(200);
-		getColumnModel().getColumn(ConcertTableModel.ARTISTE_COL_IDX).setPreferredWidth(700);
-		getColumnModel().getColumn(ConcertTableModel.LIEU_COL_IDX).setPreferredWidth(500);
-		
-		// Allow single row selection only
-		ListSelectionModel listSelectionModel = new DefaultListSelectionModel();
-		listSelectionModel.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		setSelectionModel(listSelectionModel);
-		
-		setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		
 		addMouseListener(new ConcertMouseAdapter(this, Control.getOsActionsOnConcert(), generationPane));
-		
-		// Row sorter
-		TableRowSorter<ConcertTableModel> sorter = new TableRowSorter<>(concertTableModel);
-		sorter.setComparator(ConcertTableModel.DATE_COL_IDX, TEMPORAL_ACCESSOR_COMPARATOR);
-		sorter.setComparator(ConcertTableModel.ARTISTE_COL_IDX, CONCERT_AUTEUR_COMPARATOR);
-		setRowSorter(sorter);
 	}
 	
 	// Get the selected concert
 	@Override
 	public Concert getSelectedMusicArtefact() {
-		
-		int[] rowIdxs = getSelectedRows();
-		if (rowIdxs.length == 0) {
-			return null;
-		} else if (rowIdxs.length > 1) {
-			logger.severe("Found several selected rows for ConcertsJTable. Number of selected rows: " + rowIdxs.length);
-		}
-		return ((ConcertTableModel)getModel()).getConcertAt(convertRowIndexToModel(rowIdxs[0]));
+		return getSelectedItem();
 	}
 
 	@Override
 	public boolean isLieuColumnSelected() {
-		return isColumnSelected(ConcertTableModel.LIEU_COL_IDX);
+		return isColumnSelected(ConcertTableColumns.LIEU);
 	}
 	
 	@Override
 	public boolean isArtistsColumnSelected() {
-		return isColumnSelected(ConcertTableModel.ARTISTE_COL_IDX);
+		return isColumnSelected(ConcertTableColumns.ARTISTE);
 	}
 
 	@Override

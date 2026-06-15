@@ -24,25 +24,42 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui.table;
 
-import java.util.List;
+import java.awt.event.MouseEvent;
+import java.util.function.Function;
 
-import org.fl.collectionAlbum.albums.Album;
-import org.fl.collectionAlbum.gui.UpdatableElement;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumnModel;
 
-public class AlbumsTableModel extends AbstractCollectionTableModel<Album> implements UpdatableElement {
-	
+public class JTableHeaderWithSpecificToolTips extends JTableHeader {
+
 	private static final long serialVersionUID = 1L;
-
-	public AlbumsTableModel(List<Album> albumsList, GenericTableColumns<Album> albumTableColumns) {
-		super(albumTableColumns, albumsList);
+	
+	private final Function<Integer, String> toolTipsGetter;
+	
+	public JTableHeaderWithSpecificToolTips() {
+		super();
+		this.toolTipsGetter = null;
 	}
-
-	public Album getAlbumAt(int rowIndex) {
-		return getItemList().get(rowIndex);
+	
+	public JTableHeaderWithSpecificToolTips(TableColumnModel cm) {
+		super(cm);
+		this.toolTipsGetter = null;
+	}
+	
+	public JTableHeaderWithSpecificToolTips(TableColumnModel cm, Function<Integer, String> toolTipsGetter) {
+		super(cm);
+		this.toolTipsGetter = toolTipsGetter;
 	}
 	
 	@Override
-	public void updateElement() {
-		fireTableDataChanged();		
-	}
+    public String getToolTipText(MouseEvent e) {
+		if (toolTipsGetter != null) {
+	        java.awt.Point p = e.getPoint();
+	        int index = columnModel.getColumnIndexAtX(p.x);
+	        int realIndex = columnModel.getColumn(index).getModelIndex();
+	        return toolTipsGetter.apply(realIndex);
+		} else {
+			return null;
+		}
+    }
 }

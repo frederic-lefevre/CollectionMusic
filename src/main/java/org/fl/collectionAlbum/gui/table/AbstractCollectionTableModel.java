@@ -28,64 +28,61 @@ import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
 
-import org.fl.collectionAlbum.albums.Album;
-import org.fl.collectionAlbum.gui.UpdatableElement;
-
-public abstract class AbstractAlbumsTableModel extends AbstractTableModel implements UpdatableElement {
+public abstract class AbstractCollectionTableModel<T> extends AbstractTableModel {
 
 	private static final long serialVersionUID = 1L;
-
-	private final AlbumTableColumns albumTableColumns;
 	
-	AbstractAlbumsTableModel(AlbumTableColumns albumTableColumns) {
+	private final GenericTableColumns<T>  genericTableColumns;
+	private List<T> itemList;
+	
+	AbstractCollectionTableModel(GenericTableColumns<T>  genericTableColumns, List<T> itemList) {
 		super();
-		this.albumTableColumns = albumTableColumns;
+		this.genericTableColumns = genericTableColumns;
+		this.itemList = itemList;
 	}
 	
-	public AlbumTableColumns getAlbumTableColumns() {
-		return albumTableColumns;
+	protected GenericTableColumns<T> getGenericTableColumns() {
+		return genericTableColumns;
 	}
-
+	
 	@Override
 	public int getColumnCount() {
-		return albumTableColumns.tableColumnParameters().size();
+		return genericTableColumns.tableColumnParameters().size();
 	}
 	
 	@Override
 	public String getColumnName(int col) {
-	    return albumTableColumns.tableColumnParameters().get(col).name();
+	    return genericTableColumns.tableColumnParameters().get(col).name();
 	}
+	
+	// AbstractTableModel.getColumnClass is overridden because it interprets numbers as string
+	// So they are left aligned instead of right aligned
+    @Override
+    public Class<?> getColumnClass(int columnIndex) {
+    	return genericTableColumns.tableColumnParameters().get(columnIndex).valueClass();
+    } 
 	
 	@Override
 	public int getRowCount() {
-		return getAlbumsList().size();
+		return itemList.size();
 	}
 	
-    @Override
-    public Class<?> getColumnClass(int columnIndex) {
-    	return albumTableColumns.tableColumnParameters().get(columnIndex).valueClass();
-    }
-    
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
-		
-		if (getAlbumsList().size() < rowIndex + 1) {
+
+		if (itemList.size() < rowIndex + 1) {
 			// This may happen when triggering a rescan of the collection
 			return null;
 		} else {
-			return albumTableColumns.tableColumnParameters().get(columnIndex).valueGetter().apply(getAlbumsList().get(rowIndex));
+			return genericTableColumns.tableColumnParameters().get(columnIndex).valueGetter().apply(itemList.get(rowIndex));
 		}
 	}
-
-	public Album getAlbumAt(int rowIndex) {
-		return getAlbumsList().get(rowIndex);
+	
+	protected List<T> getItemList() {
+		return itemList;
+	};
+	
+	protected void setItemList(List<T> listOfItems) {
+		this.itemList = listOfItems;
 	}
-	
-	@Override
-	public void updateElement() {
-		fireTableDataChanged();
-	}
-	
-	protected abstract List<Album> getAlbumsList();
-	
 }

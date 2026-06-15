@@ -47,7 +47,7 @@ public class MediaFileTableColumns {
 	private static final String FICHIERS = "<html>Fichiers<br>media</html>";  // must be on 2 lines to have the header on 2 lines
 	
 	private static final List<TableColumnParameter<MediaFile>> mediaFileCommonColumnsParameters = List.of(
-			new TableColumnParameter<MediaFile>(FICHIERS, 260, null, null, String.class, (f) -> f.getFileName().toString())
+			new TableColumnParameter<MediaFile>(FICHIERS, null,260, null, null, String.class, (f) -> f.getFileName().toString())
 			);
 	
 	private static Function<MediaFile, Object> streamInfoGetter(String metadataName) {
@@ -59,36 +59,36 @@ public class MediaFileTableColumns {
 	}
 	
 	private static final List<TableColumnParameter<MediaFile>> audioStreamInfoColumnsParameters = List.of(
-			new TableColumnParameter<MediaFile>(IS_LOSSLESS, 70, new CollectionBooleanRenderer(), 
+			new TableColumnParameter<MediaFile>(IS_LOSSLESS, null, 70, new CollectionBooleanRenderer(), 
 					null, Boolean.class, streamInfoGetter(IS_LOSSLESS)),
-			new TableColumnParameter<MediaFile>(SAMPLING_RATE, 120, new CollectionNumberRenderer(), 
+			new TableColumnParameter<MediaFile>(SAMPLING_RATE, null, 120, new CollectionNumberRenderer(), 
 					new CollectionUtils.LongComparator(), Long.class, streamInfoGetter(SAMPLING_RATE)),
-			new TableColumnParameter<MediaFile>(BIT_DEPTH, 80, new CollectionNumberRenderer(), 
+			new TableColumnParameter<MediaFile>(BIT_DEPTH, null, 80, new CollectionNumberRenderer(), 
 					new CollectionUtils.IntegerComparator(), Integer.class, streamInfoGetter(BIT_DEPTH)),
-			new TableColumnParameter<MediaFile>(BIT_RATE, 85, new CollectionNumberRenderer(), 
+			new TableColumnParameter<MediaFile>(BIT_RATE, null, 85, new CollectionNumberRenderer(), 
 					new CollectionUtils.LongComparator(), Long.class, streamInfoGetter(BIT_RATE)),
-			new TableColumnParameter<MediaFile>(NUMBER_OF_CHANNELS, 60, new CollectionNumberRenderer(SwingConstants.CENTER), 
+			new TableColumnParameter<MediaFile>(NUMBER_OF_CHANNELS, null, 60, new CollectionNumberRenderer(SwingConstants.CENTER), 
 					new CollectionUtils.IntegerComparator(), Integer.class, streamInfoGetter(NUMBER_OF_CHANNELS)),
-			new TableColumnParameter<MediaFile>(TRACK_DURATION, 70, new DurationRenderer(), 
+			new TableColumnParameter<MediaFile>(TRACK_DURATION, null, 70, new DurationRenderer(), 
 					new CollectionUtils.LongComparator(), Long.class, streamInfoGetter(TRACK_DURATION))
 			);
 	
 	private static final List<TableColumnParameter<MediaFile>> normalizedAudioTagsColumnParameters = List.of(
-			new TableColumnParameter<MediaFile>(TRACKNUMBER, 80, new CollectionNumberRenderer(SwingConstants.CENTER), 
+			new TableColumnParameter<MediaFile>(TRACKNUMBER, null, 80, new CollectionNumberRenderer(SwingConstants.CENTER), 
 					new CollectionUtils.IntegerComparator(), Integer.class, normalizedTagGetter(TRACKNUMBER)),
-			new TableColumnParameter<MediaFile>(TITLE, 220, null, 
+			new TableColumnParameter<MediaFile>(TITLE, null, 220, null, 
 					null, String.class, normalizedTagGetter(TITLE)),
-			new TableColumnParameter<MediaFile>(ALBUM, 200, null, 
+			new TableColumnParameter<MediaFile>(ALBUM, null, 200, null, 
 					null, String.class, normalizedTagGetter(ALBUM)),
-			new TableColumnParameter<MediaFile>(ARTIST, 150, null, 
+			new TableColumnParameter<MediaFile>(ARTIST, null, 150, null, 
 					null, String.class, normalizedTagGetter(ARTIST)),
-			new TableColumnParameter<MediaFile>(ALBUMARTIST, 100, null, 
+			new TableColumnParameter<MediaFile>(ALBUMARTIST, null, 100, null, 
 					null, String.class, normalizedTagGetter(ALBUMARTIST)),
-			new TableColumnParameter<MediaFile>(COMPOSER, 100, null, 
+			new TableColumnParameter<MediaFile>(COMPOSER, null, 100, null, 
 					null, String.class, normalizedTagGetter(COMPOSER)),
-			new TableColumnParameter<MediaFile>(GENRE, 100, null, 
+			new TableColumnParameter<MediaFile>(GENRE, null, 100, null, 
 					null, String.class, normalizedTagGetter(GENRE)),
-			new TableColumnParameter<MediaFile>(DATE, 60, null, 
+			new TableColumnParameter<MediaFile>(DATE, null, 60, null, 
 					null, String.class, normalizedTagGetter(DATE))
 			);
 	
