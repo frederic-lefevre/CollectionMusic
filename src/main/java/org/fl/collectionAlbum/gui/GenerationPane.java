@@ -38,6 +38,7 @@ import org.fl.collectionAlbum.disocgs.DiscogsInventory;
 import org.fl.collectionAlbum.gui.table.AlbumTableColumns;
 import org.fl.collectionAlbum.gui.table.AlbumsScrollJTablePane;
 import org.fl.collectionAlbum.gui.table.ArtistesScrollJTablePane;
+import org.fl.collectionAlbum.gui.table.ArtistesTableColumns;
 import org.fl.collectionAlbum.gui.table.ConcertsScrollJTablePane;
 import org.fl.collectionAlbum.gui.table.DiscogsReleaseJTable;
 import org.fl.collectionAlbum.gui.table.DisocgsReleaseTableModel;
@@ -69,8 +70,10 @@ public class GenerationPane extends JPanel {
 		AlbumsScrollJTablePane albumsScrollJTablePane = 
 				new AlbumsScrollJTablePane(collectionAlbumContainer.getCollectionAlbumsMusiques().getAlbums(), AlbumTableColumns.AUGMENTED_COLUMNS, this);	
 		
-		ArtistesScrollJTablePane artistesScrollJTablePane = new ArtistesScrollJTablePane(collectionAlbumContainer.getCollectionArtistes().getArtistes(), this, true);
-		ArtistesScrollJTablePane artistesConcertsScrollJTablePane = new ArtistesScrollJTablePane(collectionAlbumContainer.getConcertsArtistes().getArtistes(), this, true);
+		ArtistesScrollJTablePane artistesScrollJTablePane = 
+				new ArtistesScrollJTablePane(collectionAlbumContainer.getCollectionArtistes().getArtistes(), ArtistesTableColumns.REGULAR_COLUMNS, this);
+		ArtistesScrollJTablePane artistesConcertsScrollJTablePane = 
+				new ArtistesScrollJTablePane(collectionAlbumContainer.getConcertsArtistes().getArtistes(), ArtistesTableColumns.REGULAR_COLUMNS, this);
 		
 		// Control buttons panel
 		JPanel controlPanel = new JPanel();

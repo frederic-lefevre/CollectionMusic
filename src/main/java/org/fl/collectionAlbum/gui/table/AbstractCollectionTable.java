@@ -51,7 +51,10 @@ public abstract class AbstractCollectionTable<T> extends JTable {
 		
 		setFillsViewportHeight(true);
 		
-		setRowHeight(tableColumns.rowHeight());
+		int rowHeight = tableColumns.rowHeight();
+		if (rowHeight > 0) {
+			setRowHeight(tableColumns.rowHeight());
+		}
 		
 		// Row sorter
 		TableRowSorter<AbstractCollectionTableModel<T>> sorter = new TableRowSorter<>(collectionTableModel);

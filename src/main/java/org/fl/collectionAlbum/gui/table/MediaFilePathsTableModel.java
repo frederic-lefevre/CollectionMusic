@@ -31,16 +31,9 @@ import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 public class MediaFilePathsTableModel extends AbstractCollectionTableModel<MediaFilePath> implements UpdatableElement {
 
 	private static final long serialVersionUID = 1L;
-
-	private final GenericTableColumns<MediaFilePath> mediaFilePathTableColumns;
 	
 	public MediaFilePathsTableModel(MediaFileInventory mediaFileInventory, GenericTableColumns<MediaFilePath> mediaFilePathTableColumns) {
 		super(mediaFilePathTableColumns, mediaFileInventory.getMediaFilePathList());
-		this.mediaFilePathTableColumns = mediaFilePathTableColumns;
-	}
-
-	public GenericTableColumns<MediaFilePath> mediaFilePathTableColumns() {
-		return mediaFilePathTableColumns;
 	}
 
 	public MediaFilePath getMediaFilePathAt(int rowIndex) {
