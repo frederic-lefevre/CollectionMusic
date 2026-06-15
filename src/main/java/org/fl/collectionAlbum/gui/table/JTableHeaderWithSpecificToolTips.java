@@ -24,31 +24,42 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui.table;
 
-import java.util.List;
+import java.awt.event.MouseEvent;
+import java.util.function.Function;
 
-import javax.swing.JScrollPane;
+import javax.swing.table.JTableHeader;
+import javax.swing.table.TableColumnModel;
 
-import org.fl.collectionAlbum.Control;
-import org.fl.collectionAlbum.artistes.Artiste;
-import org.fl.collectionAlbum.gui.GenerationPane;
-
-public class ArtistesScrollJTablePane extends JScrollPane {
+public class JTableHeaderWithSpecificToolTips extends JTableHeader {
 
 	private static final long serialVersionUID = 1L;
-
-	private final ArtistesTableModel artistesTableModel;
 	
-	public ArtistesScrollJTablePane(List<Artiste> artistes, GenericTableColumns<Artiste> artisteTableColumns, GenerationPane generationPane) {
+	private final Function<Integer, String> toolTipsGetter;
+	
+	public JTableHeaderWithSpecificToolTips() {
 		super();
-		
-		artistesTableModel = new ArtistesTableModel(artistes, artisteTableColumns);
-		setViewportView(new ArtistesJTable(artistesTableModel, generationPane));
-		if (artisteTableColumns == ArtistesTableColumns.REGULAR_COLUMNS) {
-			setPreferredSize(Control.getMainSubPaneDimension());
-		}
+		this.toolTipsGetter = null;
 	}
 	
-	public ArtistesTableModel getArtistesTableModel() {
-		return artistesTableModel;
+	public JTableHeaderWithSpecificToolTips(TableColumnModel cm) {
+		super(cm);
+		this.toolTipsGetter = null;
 	}
+	
+	public JTableHeaderWithSpecificToolTips(TableColumnModel cm, Function<Integer, String> toolTipsGetter) {
+		super(cm);
+		this.toolTipsGetter = toolTipsGetter;
+	}
+	
+	@Override
+    public String getToolTipText(MouseEvent e) {
+		if (toolTipsGetter != null) {
+	        java.awt.Point p = e.getPoint();
+	        int index = columnModel.getColumnIndexAtX(p.x);
+	        int realIndex = columnModel.getColumn(index).getModelIndex();
+	        return toolTipsGetter.apply(realIndex);
+		} else {
+			return null;
+		}
+    }
 }

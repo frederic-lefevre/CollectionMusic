@@ -48,6 +48,7 @@ import org.fl.collectionAlbum.ChronoArtistes;
 import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.gui.table.ArtistesScrollJTablePane;
+import org.fl.collectionAlbum.gui.table.ArtistesTableColumns;
 import org.fl.collectionAlbum.utils.CollectionUtils;
 import org.fl.collectionAlbum.utils.JLabelBuilder;
 
@@ -107,7 +108,7 @@ public class MonthPane extends JPanel implements UpdatableElement {
 		dayMonthLabel.setFont(MONTH_FONT);
 		artistesOfTheDayPane.add(dayMonthLabel);
 		
-		artistesPane = new ArtistesScrollJTablePane(currentArtisteList, generationPane, false);
+		artistesPane = new ArtistesScrollJTablePane(currentArtisteList, ArtistesTableColumns.MINIMAL_COLUMNS, generationPane);
 		artistesPane.setAlignmentY(TOP_ALIGNMENT);
 		
 		fillMonthGridPane();

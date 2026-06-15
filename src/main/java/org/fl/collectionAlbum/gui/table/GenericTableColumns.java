@@ -26,29 +26,6 @@ package org.fl.collectionAlbum.gui.table;
 
 import java.util.List;
 
-import javax.swing.JScrollPane;
+public record GenericTableColumns<T>(List<TableColumnParameter<T>> tableColumnParameters, int rowHeight ) {
 
-import org.fl.collectionAlbum.Control;
-import org.fl.collectionAlbum.artistes.Artiste;
-import org.fl.collectionAlbum.gui.GenerationPane;
-
-public class ArtistesScrollJTablePane extends JScrollPane {
-
-	private static final long serialVersionUID = 1L;
-
-	private final ArtistesTableModel artistesTableModel;
-	
-	public ArtistesScrollJTablePane(List<Artiste> artistes, GenericTableColumns<Artiste> artisteTableColumns, GenerationPane generationPane) {
-		super();
-		
-		artistesTableModel = new ArtistesTableModel(artistes, artisteTableColumns);
-		setViewportView(new ArtistesJTable(artistesTableModel, generationPane));
-		if (artisteTableColumns == ArtistesTableColumns.REGULAR_COLUMNS) {
-			setPreferredSize(Control.getMainSubPaneDimension());
-		}
-	}
-	
-	public ArtistesTableModel getArtistesTableModel() {
-		return artistesTableModel;
-	}
 }

@@ -26,65 +26,28 @@ package org.fl.collectionAlbum.gui.table;
 
 import java.util.List;
 
-import javax.swing.table.AbstractTableModel;
-
 import org.fl.collectionAlbum.concerts.LieuConcert;
 import org.fl.collectionAlbum.gui.UpdatableElement;
+import org.fl.collectionAlbum.gui.renderer.CollectionNumberRenderer;
+import org.fl.collectionAlbum.utils.CollectionUtils;
 
-public class LieuConcertTableModel extends AbstractTableModel implements UpdatableElement {
+public class LieuConcertTableModel extends AbstractCollectionTableModel<LieuConcert> implements UpdatableElement {
 
 	private static final long serialVersionUID = 1L;
 
-	public static final int LIEU_COL_IDX = 0;
-	public static final int NUMBER_COL_IDX = 1;
+	private static final TableColumnParameter<LieuConcert> LIEU =
+			new TableColumnParameter<>("Lieu", null, 600, null, null, String.class, (l) -> l.getLieu());
+	private static final TableColumnParameter<LieuConcert> NOMBRE =
+			new TableColumnParameter<>("Nombre", null, 200, new CollectionNumberRenderer(), new CollectionUtils.IntegerComparator(), Integer.class, (l) -> l.getNombreConcert());
 	
-	private static final String[] entetes = {"Lieu", "Nombre"};
+	public static final GenericTableColumns<LieuConcert> REGULAR_COLUMNS = new GenericTableColumns<>(List.of(LIEU, NOMBRE), 30);
 	
-	private final List<LieuConcert> lieuxConcerts;
-	
-	public LieuConcertTableModel(List<LieuConcert> lieuxConcerts) {
-		super();
-		this.lieuxConcerts = lieuxConcerts;
-	}
-	
-	@Override
-	public int getRowCount() {
-		return lieuxConcerts.size();
-	}
-
-	@Override
-	public int getColumnCount() {
-		return entetes.length;
-	}
-
-	@Override
-	public String getColumnName(int col) {
-	    return entetes[col];
-	}
-	
-	@Override
-	public Object getValueAt(int rowIndex, int columnIndex) {
-		
-		if (lieuxConcerts.size() < rowIndex + 1) {
-			// This may happen when triggering a rescan of the collection
-			return null;
-		} else {
-			
-			return switch(columnIndex) {
-				case LIEU_COL_IDX -> lieuxConcerts.get(rowIndex).getLieu();
-				case NUMBER_COL_IDX -> lieuxConcerts.get(rowIndex).getNombreConcert();
-				default -> null;
-			};
-		}
+	public LieuConcertTableModel(List<LieuConcert> lieuxConcerts, GenericTableColumns<LieuConcert>  columns) {
+		super(columns, lieuxConcerts);
 	}
 
 	@Override
 	public void updateElement() {
 		fireTableDataChanged();
 	}
-	
-	public LieuConcert getLieuConcertAt(int rowIndex) {
-		return lieuxConcerts.get(rowIndex);
-	}
-
 }

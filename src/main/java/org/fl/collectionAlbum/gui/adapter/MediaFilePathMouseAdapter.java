@@ -47,6 +47,7 @@ import org.fl.collectionAlbum.gui.table.AlbumTableColumns;
 import org.fl.collectionAlbum.gui.table.AlbumsScrollJTablePane;
 import org.fl.collectionAlbum.gui.table.MediaFileJTable;
 import org.fl.collectionAlbum.gui.table.MediaFilePathsJTable;
+import org.fl.collectionAlbum.gui.table.MediaFileTableColumns;
 import org.fl.collectionAlbum.gui.table.MediaFileTableModel;
 import org.fl.collectionAlbum.mediaFile.MediaFile;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
@@ -139,7 +140,8 @@ public class MediaFilePathMouseAdapter extends MouseAdapter {
 		
 		List<MediaFile> mediaFileList = mediaFilePath.getMediaFiles();
 		if ((mediaFileList != null) && !mediaFileList.isEmpty()) {
-			MediaFileTableModel mediaFileTableModel = new MediaFileTableModel(mediaFileList, mediaFilePath.getContentNature());
+			MediaFileTableModel mediaFileTableModel = 
+					new MediaFileTableModel(mediaFileList, MediaFileTableColumns.mediaColumnsParameters(mediaFilePath.getContentNature()));
 			MediaFileJTable mediaFileJTable = new MediaFileJTable(mediaFileTableModel);
 			
 			// Scroll pane to contain the media path table

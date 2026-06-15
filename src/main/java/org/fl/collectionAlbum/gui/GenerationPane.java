@@ -38,6 +38,7 @@ import org.fl.collectionAlbum.disocgs.DiscogsInventory;
 import org.fl.collectionAlbum.gui.table.AlbumTableColumns;
 import org.fl.collectionAlbum.gui.table.AlbumsScrollJTablePane;
 import org.fl.collectionAlbum.gui.table.ArtistesScrollJTablePane;
+import org.fl.collectionAlbum.gui.table.ArtistesTableColumns;
 import org.fl.collectionAlbum.gui.table.ConcertsScrollJTablePane;
 import org.fl.collectionAlbum.gui.table.DiscogsReleaseJTable;
 import org.fl.collectionAlbum.gui.table.DisocgsReleaseTableModel;
@@ -69,8 +70,10 @@ public class GenerationPane extends JPanel {
 		AlbumsScrollJTablePane albumsScrollJTablePane = 
 				new AlbumsScrollJTablePane(collectionAlbumContainer.getCollectionAlbumsMusiques().getAlbums(), AlbumTableColumns.AUGMENTED_COLUMNS, this);	
 		
-		ArtistesScrollJTablePane artistesScrollJTablePane = new ArtistesScrollJTablePane(collectionAlbumContainer.getCollectionArtistes().getArtistes(), this, true);
-		ArtistesScrollJTablePane artistesConcertsScrollJTablePane = new ArtistesScrollJTablePane(collectionAlbumContainer.getConcertsArtistes().getArtistes(), this, true);
+		ArtistesScrollJTablePane artistesScrollJTablePane = 
+				new ArtistesScrollJTablePane(collectionAlbumContainer.getCollectionArtistes().getArtistes(), ArtistesTableColumns.REGULAR_COLUMNS, this);
+		ArtistesScrollJTablePane artistesConcertsScrollJTablePane = 
+				new ArtistesScrollJTablePane(collectionAlbumContainer.getConcertsArtistes().getArtistes(), ArtistesTableColumns.REGULAR_COLUMNS, this);
 		
 		// Control buttons panel
 		JPanel controlPanel = new JPanel();
@@ -121,7 +124,7 @@ public class GenerationPane extends JPanel {
 		});
 		
 		// Discogs releases pane
-		DisocgsReleaseTableModel dtm = new DisocgsReleaseTableModel(DiscogsInventory.getDiscogsInventory());
+		DisocgsReleaseTableModel dtm = new DisocgsReleaseTableModel(DiscogsInventory.getDiscogsInventory(), DisocgsReleaseTableModel.REGULAR_COLUMNS);
 		startReadCollection.addUpdatableElement(dtm);
 		
 		DiscogsReleaseJTable discogsReleaseJTable = new DiscogsReleaseJTable(dtm, collectionAlbumContainer, this);
@@ -141,7 +144,8 @@ public class GenerationPane extends JPanel {
 		collectionTabPanes.add(artistesConcertsScrollJTablePane, "Artistes des concerts");
 		
 		// Lieux des concerts
-		LieuConcertTableModel lieuConcertTableModel = new LieuConcertTableModel(collectionAlbumContainer.getLieuxDesConcerts().getLieuxConcerts());
+		LieuConcertTableModel lieuConcertTableModel = 
+				new LieuConcertTableModel(collectionAlbumContainer.getLieuxDesConcerts().getLieuxConcerts(), LieuConcertTableModel.REGULAR_COLUMNS);
 		startReadCollection.addUpdatableElement(lieuConcertTableModel);
 		
 		LieuConcertJTable lieuConcertJTable = new LieuConcertJTable(lieuConcertTableModel, this);

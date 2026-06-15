@@ -100,6 +100,8 @@ public class MediaFilePath {
 		return mediaFileExtension;
 	}
 	
+	// All tracks in the media file path have equivalent metadata:
+	// same file type, same number of channels, sampling rate, bit depth, bit rate, lossless or not
 	public Optional<Boolean> hasEquivalentStreamMetadata() {
 		return hasEquivalentMetadata;
 	}

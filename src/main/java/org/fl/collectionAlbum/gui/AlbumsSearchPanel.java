@@ -44,9 +44,9 @@ import javax.swing.border.EtchedBorder;
 import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.albums.ListeAlbum;
-import org.fl.collectionAlbum.gui.table.AbstractAlbumsTableModel;
 import org.fl.collectionAlbum.gui.table.AlbumTableColumns;
 import org.fl.collectionAlbum.gui.table.AlbumsScrollJTablePane;
+import org.fl.collectionAlbum.gui.table.AlbumsTableModel;
 import org.fl.collectionAlbum.utils.TemporalUtils;
 
 public class AlbumsSearchPanel extends JPanel {
@@ -63,7 +63,7 @@ public class AlbumsSearchPanel extends JPanel {
 	private final DateRangeChooser dateComposition;
 	private final DateRangeChooser dateAcquisition;
 	private final List<Album> searchResultAlbums;
-	private final AbstractAlbumsTableModel albumsTableModel;
+	private final AlbumsTableModel albumsTableModel;
 	
 	private final JTextField titreAlbumSearchedText;
 	private final JTextField auteursAlbumSearchedText;
