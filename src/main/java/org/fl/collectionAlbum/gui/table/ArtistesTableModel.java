@@ -41,8 +41,4 @@ public class ArtistesTableModel extends AbstractCollectionTableModel<Artiste> im
 	public void updateElement() {
 		fireTableDataChanged();
 	}
-	
-	public Artiste getArtisteAt(int rowIndex) {
-		return getItemList().get(rowIndex);
-	}
 }

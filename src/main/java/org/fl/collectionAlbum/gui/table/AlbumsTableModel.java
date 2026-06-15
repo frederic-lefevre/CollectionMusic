@@ -36,10 +36,6 @@ public class AlbumsTableModel extends AbstractCollectionTableModel<Album> implem
 	public AlbumsTableModel(List<Album> albumsList, GenericTableColumns<Album> albumTableColumns) {
 		super(albumTableColumns, albumsList);
 	}
-
-	public Album getAlbumAt(int rowIndex) {
-		return getItemList().get(rowIndex);
-	}
 	
 	@Override
 	public void updateElement() {

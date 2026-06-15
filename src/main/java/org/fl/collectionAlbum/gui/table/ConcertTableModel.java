@@ -43,10 +43,6 @@ public class ConcertTableModel extends AbstractCollectionTableModel<Concert> imp
 		fireTableDataChanged();
 	}
 	
-	public Concert getConcertAt(int rowIndex) {
-		return getItemList().get(rowIndex);
-	}
-	
 	public List<Concert> getListeConcert() {
 		return Collections.unmodifiableList(getItemList());
 	}

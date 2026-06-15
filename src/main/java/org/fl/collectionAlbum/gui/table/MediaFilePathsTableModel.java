@@ -36,10 +36,6 @@ public class MediaFilePathsTableModel extends AbstractCollectionTableModel<Media
 		super(mediaFilePathTableColumns, mediaFileInventory.getMediaFilePathList());
 	}
 
-	public MediaFilePath getMediaFilePathAt(int rowIndex) {
-		return getItemList().get(rowIndex);
-	}
-
 	@Override
 	public void updateElement() {
 		fireTableDataChanged();
