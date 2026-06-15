@@ -24,68 +24,46 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui.table;
 
+import java.time.temporal.TemporalAccessor;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import javax.swing.table.AbstractTableModel;
-
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
+import org.fl.collectionAlbum.disocgs.FormatCompatibilityResult;
 import org.fl.collectionAlbum.gui.UpdatableElement;
+import org.fl.collectionAlbum.gui.renderer.CollectionBooleanRenderer;
+import org.fl.collectionAlbum.gui.renderer.DateRenderer;
+import org.fl.collectionAlbum.gui.renderer.FormatCompatibilityRenderer;
+import org.fl.collectionAlbum.utils.TemporalUtils;
 
-public class DisocgsReleaseTableModel extends AbstractTableModel implements UpdatableElement {
+public class DisocgsReleaseTableModel extends AbstractCollectionTableModel<DiscogsAlbumRelease> implements UpdatableElement {
 
 	private static final long serialVersionUID = 1L;
 
-	public static final int ID_COL_IDX = 0;
-	public static final int ARTISTS_COL_IDX = 1;
-	public static final int TITLE_COL_IDX = 2;
-	public static final int FORMAT_COL_IDX = 3;
-	public static final int DATE_ADDED_COL_IDX = 4;
-	public static final int ALBUM_LINK_COL_IDX = 5;
-	public static final int FORMAT_MATCH_COL_IDX = 6;
-			
-	private static final String[] entetes = {"Id", "Auteurs", "Titre de l'album", "Formats", "Date ajout", "Lié à un album", "Format Ok"};
+	private static final Function<TemporalAccessor, String> discogsDateFormatter = t -> TemporalUtils.formatDateNumeric((TemporalAccessor)t);
+	private static final FormatCompatibilityResult.FormatCompatibilityComparator FORMAT_COMPATIBILITY_COMPARATOR = new FormatCompatibilityResult.FormatCompatibilityComparator();
 	
-	private final List<DiscogsAlbumRelease> discogsAlbumReleases;
+	private static final TableColumnParameter<DiscogsAlbumRelease> ID = 
+			new TableColumnParameter<>("Id", null, 70, null, null, String.class, (d) -> d.getInventoryCsvAlbum().getReleaseId());
+	private static final TableColumnParameter<DiscogsAlbumRelease> ARTISTES = 
+			new TableColumnParameter<>("Auteurs", null, 700, null, null, String.class, (d) -> d.getInventoryCsvAlbum().getArtists().stream().collect(Collectors.joining(",")));
+	private static final TableColumnParameter<DiscogsAlbumRelease> TITLE = 
+			new TableColumnParameter<>("Titre de l'album", null, 580, null, null, String.class, (d) -> d.getInventoryCsvAlbum().getTitle());
+	private static final TableColumnParameter<DiscogsAlbumRelease> FORMAT = 
+			new TableColumnParameter<>("Formats", null, 200, null, null, String.class, (d) -> d.getInventoryCsvAlbum().getFormats().stream().collect(Collectors.joining(",")));
+	private static final TableColumnParameter<DiscogsAlbumRelease> DATE_AJOUT = 
+			new TableColumnParameter<>("Date ajout", null, 90, new DateRenderer(discogsDateFormatter), null, String.class, (d) -> d.getInventoryCsvAlbum().getDateAdded());
+	private static final TableColumnParameter<DiscogsAlbumRelease> ALBUM_LINKED = 
+			new TableColumnParameter<>("Lié à un album", null, 100, new CollectionBooleanRenderer(), null, Boolean.class, (d) -> d.isLinkedToAlbum());
+	private static final TableColumnParameter<DiscogsAlbumRelease> FORMAT_MATCH = 
+			new TableColumnParameter<>("Format Ok", null, 80, new FormatCompatibilityRenderer(), FORMAT_COMPATIBILITY_COMPARATOR, FormatCompatibilityResult.class, (d) -> d.formatCompatibility());
 	
-	public DisocgsReleaseTableModel(List<DiscogsAlbumRelease> discogsAlbumReleases) {
-		super();
-		this.discogsAlbumReleases = discogsAlbumReleases;
-	}
-
-	@Override
-	public int getRowCount() {
-		return discogsAlbumReleases.size();
-	}
-
-	@Override
-	public int getColumnCount() {
-		return entetes.length;
-	}
-
-	@Override
-	public String getColumnName(int col) {
-	    return entetes[col];
-	}
-    
-	@Override
-	public Object getValueAt(int rowIndex, int columnIndex) {
-
-		return switch(columnIndex) {
-			case ID_COL_IDX -> discogsAlbumReleases.get(rowIndex).getInventoryCsvAlbum().getReleaseId();
-			case ARTISTS_COL_IDX -> discogsAlbumReleases.get(rowIndex).getInventoryCsvAlbum().getArtists().stream().collect(Collectors.joining(","));
-			case TITLE_COL_IDX -> discogsAlbumReleases.get(rowIndex).getInventoryCsvAlbum().getTitle();
-			case FORMAT_COL_IDX -> discogsAlbumReleases.get(rowIndex).getInventoryCsvAlbum().getFormats().stream().collect(Collectors.joining(","));
-			case DATE_ADDED_COL_IDX -> discogsAlbumReleases.get(rowIndex).getInventoryCsvAlbum().getDateAdded();
-			case ALBUM_LINK_COL_IDX -> discogsAlbumReleases.get(rowIndex).isLinkedToAlbum();
-			case FORMAT_MATCH_COL_IDX -> discogsAlbumReleases.get(rowIndex).formatCompatibility();
-			default -> null;
-		};
-
-	}
-
-	public DiscogsAlbumRelease getDiscogsReleaseAt(int rowIndex) {
-		return discogsAlbumReleases.get(rowIndex);
+	public static final GenericTableColumns<DiscogsAlbumRelease> REGULAR_COLUMNS = 
+			new GenericTableColumns<>(List.of(ID, ARTISTES, TITLE, FORMAT, DATE_AJOUT, ALBUM_LINKED, FORMAT_MATCH), 0);
+	
+	public DisocgsReleaseTableModel(List<DiscogsAlbumRelease> discogsAlbumReleases,  GenericTableColumns<DiscogsAlbumRelease> columns) {
+		super(columns, discogsAlbumReleases);
 	}
 
 	@Override

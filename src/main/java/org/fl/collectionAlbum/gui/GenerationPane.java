@@ -124,7 +124,7 @@ public class GenerationPane extends JPanel {
 		});
 		
 		// Discogs releases pane
-		DisocgsReleaseTableModel dtm = new DisocgsReleaseTableModel(DiscogsInventory.getDiscogsInventory());
+		DisocgsReleaseTableModel dtm = new DisocgsReleaseTableModel(DiscogsInventory.getDiscogsInventory(), DisocgsReleaseTableModel.REGULAR_COLUMNS);
 		startReadCollection.addUpdatableElement(dtm);
 		
 		DiscogsReleaseJTable discogsReleaseJTable = new DiscogsReleaseJTable(dtm, collectionAlbumContainer, this);
