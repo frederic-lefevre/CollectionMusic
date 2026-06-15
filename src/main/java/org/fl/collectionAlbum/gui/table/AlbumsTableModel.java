@@ -45,6 +45,4 @@ public class AlbumsTableModel extends AbstractCollectionTableModel<Album> implem
 	public void updateElement() {
 		fireTableDataChanged();		
 	}
-
-
 }
