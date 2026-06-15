@@ -70,5 +70,5 @@ public class MediaFilePathTableColumns {
 			PATH, ALBUMS, FILE_NUMBER, PRESENCE_POCHETTE, MEDIA_TYPE, METADATA_CHECK
 			);
 	
-	public static final GenericTableColumns<MediaFilePath> REGULAR_COLUMNS = new GenericTableColumns<>(REGULAR_COLUMNS_LIST, 25);
+	public static final GenericTableColumns<MediaFilePath> REGULAR_COLUMNS = new GenericTableColumns<>(REGULAR_COLUMNS_LIST, 0);
 }
