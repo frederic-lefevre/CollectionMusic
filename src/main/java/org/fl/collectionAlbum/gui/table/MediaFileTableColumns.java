@@ -98,12 +98,11 @@ public class MediaFileTableColumns {
 	
 	private static final List<TableColumnParameter<MediaFile>> videoColumnsParameters = mediaFileCommonColumnsParameters;
 	
-	public static List<TableColumnParameter<MediaFile>> mediaColumnsParameters(ContentNature contentNature) {
+	public static  GenericTableColumns<MediaFile> mediaColumnsParameters(ContentNature contentNature) {
 		
 		return switch(contentNature) {
-		case AUDIO -> audioColumnsParameters;
-		case VIDEO -> videoColumnsParameters;
+		case AUDIO -> new GenericTableColumns<>(audioColumnsParameters, 0);
+		case VIDEO -> new GenericTableColumns<>(videoColumnsParameters, 0);
 		};
 	}
-	
 }

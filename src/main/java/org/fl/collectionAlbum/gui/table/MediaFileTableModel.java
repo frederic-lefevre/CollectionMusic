@@ -26,67 +26,18 @@ package org.fl.collectionAlbum.gui.table;
 
 import java.util.List;
 
-import javax.swing.table.AbstractTableModel;
-
-import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.gui.UpdatableElement;
 import org.fl.collectionAlbum.mediaFile.MediaFile;
 
-public class MediaFileTableModel extends AbstractTableModel implements UpdatableElement {
+public class MediaFileTableModel extends AbstractCollectionTableModel<MediaFile> implements UpdatableElement {
 
 	private static final long serialVersionUID = 1L;
-
-	private final List<TableColumnParameter<MediaFile>> mediaColumnsParameters;
-	private final int nbColumns;
 	
 	private final List<MediaFile> mediaFiles;
 	
-	public MediaFileTableModel(List<MediaFile> mediaFiles, ContentNature contentNature) {
-		super();
-		this.mediaFiles = mediaFiles;
-		this.mediaColumnsParameters = MediaFileTableColumns.mediaColumnsParameters(contentNature);
-		this.nbColumns = mediaColumnsParameters.size();		
-	}
-	
-	@Override
-	public int getRowCount() {
-		if (mediaFiles == null) {
-			return 0;
-		} else {
-			return mediaFiles.size();
-		}
-	}
-
-	@Override
-	public int getColumnCount() {
-		return nbColumns;
-	}
-
-	@Override
-	public String getColumnName(int col) {
-	    return mediaColumnsParameters.get(col).name();
-	}
-	
-    @Override
-    public Class<?> getColumnClass(int columnIndex) {
-    	return mediaColumnsParameters.get(columnIndex).valueClass();
-    }
-    
-	@Override
-	public Object getValueAt(int rowIndex, int columnIndex) {
-		
-		if (rowIndex < mediaFiles.size()) {
-			MediaFile mediaFile = mediaFiles.get(rowIndex);
-			
-			return mediaColumnsParameters.get(columnIndex).valueGetter().apply(mediaFile);
-
-		} else {
-			return null;
-		}
-	}
-
-	public List<TableColumnParameter<MediaFile>> getMediaColumnsParameters() {
-		return mediaColumnsParameters;
+	public MediaFileTableModel(List<MediaFile> mediaFiles, GenericTableColumns<MediaFile> columns) {
+		super(columns, mediaFiles);
+		this.mediaFiles = mediaFiles;	
 	}
 
 	public MediaFile getMediaFileAt(int rowIndex) {
