@@ -22,25 +22,17 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.gui;
+package org.fl.collectionAlbum.gui.table;
 
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+import org.fl.collectionAlbum.mediaFile.MediaFileGenres.GenreParameters;
 
-import org.fl.collectionAlbum.CollectionAlbumContainer;
-
-public class MediaFileGenreScrollPane extends JScrollPane {
+public class GenreJTable extends AbstractCollectionTable<GenreParameters> {
 
 	private static final long serialVersionUID = 1L;
 
-	private final CollectionAlbumContainer collectionAlbumContainer;
-	
-	public MediaFileGenreScrollPane(CollectionAlbumContainer collectionAlbumContainer) {
-		super();
-		this.collectionAlbumContainer = collectionAlbumContainer;
-		
-		JPanel genresPanel = new JPanel();
-		
-		setViewportView(genresPanel);
+	public GenreJTable(GenreTableModel genreTableModel) {
+		super(genreTableModel);
 	}
+
+	
 }

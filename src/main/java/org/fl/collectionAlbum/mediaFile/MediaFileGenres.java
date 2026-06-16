@@ -76,6 +76,7 @@ public class MediaFileGenres {
 	
 	public void clearMediaFileGenres() {
 		genresMap.clear();
+		genresParameterList.clear();
 	}
 	
 	public Set<String> getGenres() {
@@ -118,6 +119,7 @@ public class MediaFileGenres {
 		if (genreParameters == null) {
 			genreParameters = new GenreParameters(genre);
 			genresMap.put(genre, genreParameters);
+			genresParameterList.add(genreParameters);
 		}
 		genreParameters.mediaFiles().add(mediaFile);
 		genreParameters.duration = genreParameters.duration + duration;
