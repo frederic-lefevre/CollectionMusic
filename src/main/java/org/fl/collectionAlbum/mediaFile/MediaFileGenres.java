@@ -41,7 +41,7 @@ public class MediaFileGenres {
 	
 	private static final String PAS_DE_GENRE = "Genre absent";
 	
-	public class GenreParameters {
+	public static class GenreParameters {
 
 		private final String genre;
 		private final List<MediaFile> mediaFiles;
@@ -111,7 +111,6 @@ public class MediaFileGenres {
 			}
 		}
 	}
-
 	
 	private void addMediaFileToGenre(String genre, MediaFile mediaFile, long duration) {
 		

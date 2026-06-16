@@ -38,7 +38,7 @@ public class GenreTableModel extends AbstractCollectionTableModel<GenreParameter
 
 	private static final TableColumnParameter<GenreParameters> GENRE = 
 			new TableColumnParameter<>("Genre", null, 600, null, null, String.class, (g) -> g.genre());
-	private static final TableColumnParameter<GenreParameters> MEDIA_FILE_NUMBER = 
+	public static final TableColumnParameter<GenreParameters> MEDIA_FILE_NUMBER = 
 			new TableColumnParameter<>("Nombre de morceaux", null, 100, new CollectionNumberRenderer(), 
 					new CollectionUtils.IntegerComparator(), Integer.class, (g) -> g.mediaFiles().size());
 	private static final TableColumnParameter<GenreParameters> TOTAL_DURATION = 

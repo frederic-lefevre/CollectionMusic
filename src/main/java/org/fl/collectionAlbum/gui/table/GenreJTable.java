@@ -24,6 +24,11 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui.table;
 
+import java.util.List;
+
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
+
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.gui.adapter.GenreParametersMouseAdapter;
 import org.fl.collectionAlbum.mediaFile.MediaFileGenres.GenreParameters;
@@ -31,11 +36,18 @@ import org.fl.collectionAlbum.mediaFile.MediaFileGenres.GenreParameters;
 public class GenreJTable extends AbstractCollectionTable<GenreParameters> {
 
 	private static final long serialVersionUID = 1L;
-
+	
 	public GenreJTable(GenreTableModel genreTableModel, ContentNature contentNature) {
 		super(genreTableModel);
 		
 		addMouseListener(new GenreParametersMouseAdapter(this, contentNature));
+		
+		int columnIdx = getColumnNumber(GenreTableModel.MEDIA_FILE_NUMBER);
+		if (columnIdx >= 0) {
+			getRowSorter().setSortKeys(List.of(new RowSorter.SortKey(columnIdx, SortOrder.DESCENDING)));
+		} else {
+			throw new IllegalArgumentException("The colum to sort is not a column of this table: " + GenreTableModel.MEDIA_FILE_NUMBER.name());
+		}
 	}
 
 	public GenreParameters getSelectedGenreParameters() {
