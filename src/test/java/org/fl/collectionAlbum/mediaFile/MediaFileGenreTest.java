@@ -29,6 +29,7 @@ import static org.assertj.core.api.Assertions.*;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 
+import org.fl.collectionAlbum.mediaFile.metadata.NormalizedAudioMetadataTags;
 import org.fl.util.file.FilesUtils;
 import org.junit.jupiter.api.Test;
 
@@ -56,6 +57,9 @@ class MediaFileGenreTest {
 		
 		Path flacFilePath = FilesUtils.uriStringToAbsolutePath("file:///ForTests/CollectionMusique/f1.flac");
 		FlacAudioFile f1 = new FlacAudioFile(flacFilePath);
+		String tagForGenre = f1.getMetadata().getTagForGenre();
+		assertThat(tagForGenre).isEqualTo(NormalizedAudioMetadataTags.GENRE);
+		assertThat(f1.getMetadata().getNormalizedTags().get(tagForGenre).value()).isEqualTo(expectedGenre);
 		assertThat(f1.getAudioMetadata().getNormalizedAudioMetadataTags().genre().value()).isEqualTo(expectedGenre);	
 
 		mediaFileGenres.registerTrack(f1);

@@ -26,6 +26,7 @@ package org.fl.collectionAlbum.mediaFile;
 
 import java.nio.file.Path;
 
+import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.mediaFile.metadata.MediaFileMetadata;
 import org.fl.collectionAlbum.mediaFile.metadata.VideoMetadata;
 
@@ -47,5 +48,10 @@ public class VideoFile extends MediaFile {
 	@Override
 	public boolean hasEquivalentStreamMetadata(MediaFile otherMediaFile) {	
 		return (otherMediaFile instanceof VideoFile);
+	}
+
+	@Override
+	public ContentNature getContentNature() {
+		return ContentNature.VIDEO;
 	}
 }

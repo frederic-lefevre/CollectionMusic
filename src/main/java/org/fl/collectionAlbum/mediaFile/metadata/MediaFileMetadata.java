@@ -32,4 +32,6 @@ public interface MediaFileMetadata {
 	public Map<String, MetadataElement<?>> getNormalizedTags();
 	public Map<String, MetadataElement<?>> getAdditionalTags();
 	public Map<String, MetadataElement<?>> getFormatSpecificMetadata();
+	
+	public String getTagForGenre(); 
 }

@@ -29,9 +29,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.fl.collectionAlbum.mediaFile.metadata.NormalizedAudioMetadataTags;
+import org.fl.collectionAlbum.mediaFile.metadata.MediaFileMetadata;
 
 public class MediaFileGenres {
 
@@ -40,7 +41,7 @@ public class MediaFileGenres {
 	private static final String PAS_DE_GENRE = "Genre absent";
 	
 	private final Map<String, List<MediaFile>> genresMap;
-	
+
 	public MediaFileGenres() {
 		genresMap = new HashMap<>();
 	}
@@ -59,15 +60,29 @@ public class MediaFileGenres {
 	
 	public void registerTrack(MediaFile mediaFile) {
 		
-		Object genreObject = mediaFile.getMetadata().getNormalizedTags().get(NormalizedAudioMetadataTags.GENRE).value();
-		if (genreObject != null) {
-			if (genreObject instanceof String genre) {
-				addMediaFileToGenre(mediaFile, genre);
-			}  else {
-				logger.severe("The value of a genre metadata should be a String but is " + genreObject.getClass().getName());
+		try {
+			MediaFileMetadata mediaFileMetadata = mediaFile.getMetadata();
+			if (mediaFileMetadata != null) {
+				String genreTag = mediaFileMetadata.getTagForGenre();
+				Object genreObject = mediaFile.getMetadata().getNormalizedTags().get(genreTag).value();
+				if (genreObject != null) {
+					if (genreObject instanceof String genre) {
+						addMediaFileToGenre(mediaFile, genre);
+					}  else {
+						logger.severe("The value of a genre metadata should be a String but is " + genreObject.getClass().getName());
+					}
+				} else {
+					addMediaFileToGenre(mediaFile, PAS_DE_GENRE);
+				}
+			} else {
+				addMediaFileToGenre(mediaFile, PAS_DE_GENRE);
 			}
-		} else {
-			addMediaFileToGenre(mediaFile, PAS_DE_GENRE);
+		} catch (Exception e) {
+			if (mediaFile == null) {
+				logger.log(Level.SEVERE, "Trying to register musical genre of null mediaFile", e);
+			} else {
+				logger.log(Level.SEVERE, "Exception when registering musical genre of track " + mediaFile.getFilePath(), e);
+			}
 		}
 	}
 	

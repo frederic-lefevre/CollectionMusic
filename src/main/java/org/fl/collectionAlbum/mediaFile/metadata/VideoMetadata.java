@@ -49,6 +49,11 @@ public class VideoMetadata implements MediaFileMetadata {
 		return Map.of();
 	}
 	
+	@Override
+	public String getTagForGenre() {
+		return null;
+	}
+	
 	public static List<String> getStreamMetadataNames() {
 		return List.of();
 	}
