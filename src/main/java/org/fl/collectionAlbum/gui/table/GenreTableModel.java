@@ -54,7 +54,6 @@ public class GenreTableModel extends AbstractCollectionTableModel<GenreParameter
 
 	@Override
 	public void updateElement() {
-		System.out.println("Uptade table model genre ");
 		fireTableDataChanged();	
 	}
 }
