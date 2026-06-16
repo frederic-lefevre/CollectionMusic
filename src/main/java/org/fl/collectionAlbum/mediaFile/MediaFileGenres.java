@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -40,10 +41,37 @@ public class MediaFileGenres {
 	
 	private static final String PAS_DE_GENRE = "Genre absent";
 	
-	private final Map<String, List<MediaFile>> genresMap;
+	public class GenreParameters {
+
+		private final String genre;
+		private final List<MediaFile> mediaFiles;
+		private long duration;
+
+		private GenreParameters(String genre) {
+			this.genre = genre;
+			mediaFiles = new ArrayList<>();
+			duration = 0;
+		}
+
+		public String genre() {
+			return genre;
+		}
+
+		public List<MediaFile> mediaFiles() {
+			return mediaFiles;
+		}
+
+		public long duration() {
+			return duration;
+		}
+	};
+	
+	private final Map<String, GenreParameters> genresMap;
+	private final List<GenreParameters> genresParameterList;
 
 	public MediaFileGenres() {
 		genresMap = new HashMap<>();
+		genresParameterList = new ArrayList<>();
 	}
 	
 	public void clearMediaFileGenres() {
@@ -54,7 +82,11 @@ public class MediaFileGenres {
 		return genresMap.keySet();
 	}
 	
-	public List<MediaFile> getMediaFileOfGenre(String genre) {
+	public List<GenreParameters> getGenresParameterList() {
+		return genresParameterList;
+	}
+	
+	public GenreParameters getGenreParameters(String genre) {
 		return genresMap.get(genre);
 	}
 	
@@ -63,19 +95,12 @@ public class MediaFileGenres {
 		try {
 			MediaFileMetadata mediaFileMetadata = mediaFile.getMetadata();
 			if (mediaFileMetadata != null) {
-				String genreTag = mediaFileMetadata.getTagForGenre();
-				Object genreObject = mediaFile.getMetadata().getNormalizedTags().get(genreTag).value();
-				if (genreObject != null) {
-					if (genreObject instanceof String genre) {
-						addMediaFileToGenre(mediaFile, genre);
-					}  else {
-						logger.severe("The value of a genre metadata should be a String but is " + genreObject.getClass().getName());
-					}
-				} else {
-					addMediaFileToGenre(mediaFile, PAS_DE_GENRE);
-				}
+				
+				addMediaFileToGenre(Optional.ofNullable(mediaFileMetadata.getGenre()).orElse(PAS_DE_GENRE), 
+						mediaFile, 
+						Optional.ofNullable(mediaFileMetadata.getDuration()).orElse(0L));
 			} else {
-				addMediaFileToGenre(mediaFile, PAS_DE_GENRE);
+				addMediaFileToGenre(PAS_DE_GENRE, mediaFile, 0);
 			}
 		} catch (Exception e) {
 			if (mediaFile == null) {
@@ -85,13 +110,16 @@ public class MediaFileGenres {
 			}
 		}
 	}
+
 	
-	private void addMediaFileToGenre(MediaFile mediaFile, String genre) {
-		List<MediaFile> mediaFiles = genresMap.get(genre);
-		if (mediaFiles == null) {
-			mediaFiles = new ArrayList<>();
-			genresMap.put(genre, mediaFiles);
+	private void addMediaFileToGenre(String genre, MediaFile mediaFile, long duration) {
+		
+		GenreParameters genreParameters = genresMap.get(genre);
+		if (genreParameters == null) {
+			genreParameters = new GenreParameters(genre);
+			genresMap.put(genre, genreParameters);
 		}
-		mediaFiles.add(mediaFile);
+		genreParameters.mediaFiles().add(mediaFile);
+		genreParameters.duration = genreParameters.duration + duration;
 	}
 }

@@ -90,8 +90,13 @@ public class AudioMetadata implements MediaFileMetadata {
 	}
 	
 	@Override
-	public String getTagForGenre() {
-		return NormalizedAudioMetadataTags.GENRE;
+	public String getGenre() {
+		return normalizedAudioMetadataTags.genre().value();
+	}
+	
+	@Override
+	public Long getDuration() {
+		return audioStreamMetadata.trackDuration().value();
 	}
 	
 	public AudioStreamMetadata getAudioStreamMetadata() {

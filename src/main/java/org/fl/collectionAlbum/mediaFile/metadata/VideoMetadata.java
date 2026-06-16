@@ -50,8 +50,13 @@ public class VideoMetadata implements MediaFileMetadata {
 	}
 	
 	@Override
-	public String getTagForGenre() {
+	public String getGenre() {
 		return null;
+	}
+	
+	@Override
+	public Long getDuration() {
+		return 0L;
 	}
 	
 	public static List<String> getStreamMetadataNames() {
