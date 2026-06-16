@@ -56,8 +56,12 @@ public class JTableHeaderWithSpecificToolTips extends JTableHeader {
 		if (toolTipsGetter != null) {
 	        java.awt.Point p = e.getPoint();
 	        int index = columnModel.getColumnIndexAtX(p.x);
-	        int realIndex = columnModel.getColumn(index).getModelIndex();
-	        return toolTipsGetter.apply(realIndex);
+	        if (index < 0) {
+	        	return null;
+	        } else {
+	        	int realIndex = columnModel.getColumn(index).getModelIndex();
+	        	return toolTipsGetter.apply(realIndex);
+	        }
 		} else {
 			return null;
 		}
