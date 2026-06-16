@@ -49,7 +49,6 @@ public class GenreTableModel extends AbstractCollectionTableModel<GenreParameter
 	
 	public GenreTableModel(List<GenreParameters> genreParametersList, GenericTableColumns<GenreParameters> genericTableColumns) {
 		super(genericTableColumns, genreParametersList);
-	
 	}
 
 	@Override
