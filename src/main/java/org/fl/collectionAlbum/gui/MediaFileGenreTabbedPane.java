@@ -61,7 +61,7 @@ public class MediaFileGenreTabbedPane extends JTabbedPane {
 					GenreTableModel.REGULAR_COLUMN);
 			updatableElements.add(genreTableModel);
 
-			GenreJTable genreTable = new GenreJTable(genreTableModel);
+			GenreJTable genreTable = new GenreJTable(genreTableModel, contentNature);
 			JScrollPane genreScrollTable = new JScrollPane(genreTable);
 			genreScrollTable.setPreferredSize(Control.getMainSubPaneDimension());
 			

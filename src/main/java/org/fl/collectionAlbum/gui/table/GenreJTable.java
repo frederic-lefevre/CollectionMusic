@@ -24,15 +24,21 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui.table;
 
+import org.fl.collectionAlbum.format.ContentNature;
+import org.fl.collectionAlbum.gui.adapter.GenreParametersMouseAdapter;
 import org.fl.collectionAlbum.mediaFile.MediaFileGenres.GenreParameters;
 
 public class GenreJTable extends AbstractCollectionTable<GenreParameters> {
 
 	private static final long serialVersionUID = 1L;
 
-	public GenreJTable(GenreTableModel genreTableModel) {
+	public GenreJTable(GenreTableModel genreTableModel, ContentNature contentNature) {
 		super(genreTableModel);
+		
+		addMouseListener(new GenreParametersMouseAdapter(this, contentNature));
 	}
 
-	
+	public GenreParameters getSelectedGenreParameters() {
+		return getSelectedItem();
+	}
 }
