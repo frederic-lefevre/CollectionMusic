@@ -45,6 +45,7 @@ import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.mediaFile.MediaFile;
+import org.fl.collectionAlbum.mediaFile.MediaFileGenres;
 
 public class MediaFileInventory {
 
@@ -59,6 +60,7 @@ public class MediaFileInventory {
 	// MediaFilePath and MediaFile values maintained as List to be displayed in a JTable
 	private final List<MediaFilePath> mediaFilePathList;
 	private final List<MediaFile> mediaFileList;
+	private final MediaFileGenres mediaFileGenres;
 	
 	private final ContentNature contentNature;
 	private final Level multiFolderLoggingLevel;
@@ -72,6 +74,7 @@ public class MediaFileInventory {
 		mediaFilePathMap = new LinkedHashMap<>();
 		mediaFilePathList = new ArrayList<>();
 		mediaFileList = new ArrayList<>();
+		mediaFileGenres = new MediaFileGenres();
 		isConnected = Files.exists(rootPath);
 	}
 
@@ -93,6 +96,7 @@ public class MediaFileInventory {
 		mediaFilePathList.clear();
 		mediaFileList.clear();
 		mediaFilePathMap.clear();
+		mediaFileGenres.clearMediaFileGenres();
 		isConnected = Files.exists(rootPath);
 	}
 	
@@ -130,9 +134,20 @@ public class MediaFileInventory {
 			MediaFilePath newMediaFilePath = new MediaFilePath(mediaFolderAbsolutePath, contentNature, mediaFiles, coverPath, mediaFileExtension);
 			mediaFilePathMap.put(mediaFolderAbsolutePath, newMediaFilePath);
 			mediaFilePathList.add(newMediaFilePath);
-			mediaFileList.addAll(newMediaFilePath.getMediaFiles());
+			addMediaFilesToInventory(newMediaFilePath.getMediaFiles());
 		}
 		return mediaFilePathMap.get(mediaFolderAbsolutePath);
+	}
+	
+	private void addMediaFilesToInventory(List<MediaFile> mediaFiles) {
+		mediaFiles.forEach(mediaFile -> {
+			if (mediaFile.getContentNature() == contentNature) {
+				mediaFileList.add(mediaFile);
+				mediaFileGenres.registerTrack(mediaFile);
+			} else {
+				albumLog.severe("Trying to put media file " + mediaFile.getFilePath() + " in " + contentNature.getNom() + " inventory (wrong content nature)");
+			}
+		});
 	}
 	
 	private boolean checkInventoryKey(Path inventoryKey, String artist, String albumTitle) {
@@ -185,6 +200,10 @@ public class MediaFileInventory {
 	
 	public List<MediaFile> getMediaFileList() {
 		return mediaFileList;
+	}
+
+	public MediaFileGenres getMediaFileGenres() {
+		return mediaFileGenres;
 	}
 
 	public boolean isConnected() {

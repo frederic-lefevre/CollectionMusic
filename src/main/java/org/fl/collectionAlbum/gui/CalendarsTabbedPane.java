@@ -84,17 +84,21 @@ public class CalendarsTabbedPane extends JTabbedPane {
 		
 		AlbumCharacteristicsScrollPane albumCharacteristicsScrollPane = new AlbumCharacteristicsScrollPane(collectionAlbumContainer, generationPane);
 		
+		MediaFileGenreTabbedPane mediaFileGenreTabbedPane = new MediaFileGenreTabbedPane(collectionAlbumContainer);
+		
 		updatableElements.add(compositionStatisticsPane);
 		updatableElements.add(enregistrementStatisticsPane);
 		updatableElements.add(acquisitionStatisticsPane);
 		updatableElements.add(albumCharacteristicsScrollPane);
 		updatableElements.add(concertStatisticsPane);
+		updatableElements.addAll(mediaFileGenreTabbedPane.getUpdatableElements());
 		
 		addTab("Composition des albums", compositionStatisticsPane);
 		addTab("Enregistrement des albums", enregistrementStatisticsPane);
 		addTab("Acquisition des albums", acquisitionStatisticsPane);
 		addTab("Caractéristiques des albums", albumCharacteristicsScrollPane);
 		addTab("Concerts", concertStatisticsPane);
+		addTab("Genres musicaux des fichiers media", mediaFileGenreTabbedPane);
 		
 		CalendarPane calendarPane = new CalendarPane(collectionAlbumContainer, generationPane);
 		updatableElements.addAll(calendarPane.getUpdatableElements());

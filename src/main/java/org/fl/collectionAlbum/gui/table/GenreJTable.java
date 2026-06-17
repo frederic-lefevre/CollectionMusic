@@ -22,17 +22,35 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.mediaFile.metadata;
+package org.fl.collectionAlbum.gui.table;
 
-import java.util.Map;
+import java.util.List;
 
-public interface MediaFileMetadata {
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
 
-	public Map<String, MetadataElement<?>> getStreamMetadata();
-	public Map<String, MetadataElement<?>> getNormalizedTags();
-	public Map<String, MetadataElement<?>> getAdditionalTags();
-	public Map<String, MetadataElement<?>> getFormatSpecificMetadata();
+import org.fl.collectionAlbum.format.ContentNature;
+import org.fl.collectionAlbum.gui.adapter.GenreParametersMouseAdapter;
+import org.fl.collectionAlbum.mediaFile.MediaFileGenres.GenreParameters;
+
+public class GenreJTable extends AbstractCollectionTable<GenreParameters> {
+
+	private static final long serialVersionUID = 1L;
 	
-	public String getGenre(); 
-	public Long getDuration(); 
+	public GenreJTable(GenreTableModel genreTableModel, ContentNature contentNature) {
+		super(genreTableModel);
+		
+		addMouseListener(new GenreParametersMouseAdapter(this, contentNature));
+		
+		int columnIdx = getColumnNumber(GenreTableModel.MEDIA_FILE_NUMBER);
+		if (columnIdx >= 0) {
+			getRowSorter().setSortKeys(List.of(new RowSorter.SortKey(columnIdx, SortOrder.DESCENDING)));
+		} else {
+			throw new IllegalArgumentException("The colum to sort is not a column of this table: " + GenreTableModel.MEDIA_FILE_NUMBER.name());
+		}
+	}
+
+	public GenreParameters getSelectedGenreParameters() {
+		return getSelectedItem();
+	}
 }

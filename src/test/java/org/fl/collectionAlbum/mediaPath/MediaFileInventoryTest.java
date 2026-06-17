@@ -38,6 +38,7 @@ import org.fl.collectionAlbum.TestUtils;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.format.ContentNature;
+import org.fl.collectionAlbum.mediaFile.MediaFileGenres;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -57,7 +58,7 @@ class MediaFileInventoryTest {
 	static void readInventory() {
 		
 		MediaFilesInventories.clearInventories();
-		TestUtils.scanMediaFilePaths(false);
+		TestUtils.scanMediaFilePaths(true);
 		audioFileInventory = MediaFilesInventories.getMediaFileInventory(ContentNature.AUDIO);
 		videoFileInventory = MediaFilesInventories.getMediaFileInventory(ContentNature.VIDEO);
 	}
@@ -209,7 +210,6 @@ class MediaFileInventoryTest {
 	void shouldNotValidatePath() throws URISyntaxException {
 		
 		assertThat(audioFileInventory.validateMediaFilePath(Paths.get("E:\\XX\\e\\Bill Evans\\Portrait In Jazz"))).isNull();	
-		
 	}
 	
 	@Test
@@ -219,5 +219,28 @@ class MediaFileInventoryTest {
 		
 		assertThat(audioFileNumber).isGreaterThan(22000);
 		// System.out.println("Nombre de fichiers audio=" + audioFileNumber);
+	}
+	
+	
+	@Test
+	void shouldHaveAudioMusicalGenres() {
+		
+		MediaFileGenres mediaFileGenres = audioFileInventory.getMediaFileGenres();
+		assertThat(mediaFileGenres).isNotNull();
+		
+		assertThat(mediaFileGenres.getGenres())
+			.isNotEmpty()
+			.contains("Rock", "Jazz", "Classical");
+	}
+	
+	@Test
+	void shouldNotHaveVideoGenres() {
+		
+		MediaFileGenres mediaFileGenres = videoFileInventory.getMediaFileGenres();
+		assertThat(mediaFileGenres).isNotNull();
+		
+		assertThat(mediaFileGenres.getGenres())
+			.isNotEmpty()
+			.contains("Genre absent");
 	}
 }

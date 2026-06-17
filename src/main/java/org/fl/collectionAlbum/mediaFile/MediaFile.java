@@ -28,6 +28,7 @@ import java.nio.file.Path;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.mediaFile.metadata.MediaFileMetadata;
 import org.fl.collectionAlbum.mediaFile.metadata.MetadataElement;
 
@@ -61,7 +62,8 @@ public abstract class MediaFile {
 	}
 	
 	public abstract MediaFileMetadata getMetadata();
-	public abstract boolean hasEquivalentStreamMetadata(MediaFile otherMediaFile);
+	public abstract boolean hasEquivalentStreamMetadata(MediaFile otherMediaFile);	
+	public abstract ContentNature getContentNature();
 
 	public Optional<Boolean> isValidMediaFile() {
 		return isValidMediaFile;

@@ -28,6 +28,7 @@ import java.nio.file.Path;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.format.AudioFileType;
+import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.mediaFile.metadata.AudioMetadata;
 import org.fl.collectionAlbum.mediaFile.metadata.AudioStreamMetadata;
 import org.fl.collectionAlbum.mediaFile.metadata.MediaFileMetadata;
@@ -81,5 +82,10 @@ public abstract class AudioFile extends MediaFile {
 		} else {
 			return false;
 		}		
+	}
+	
+	@Override
+	public ContentNature getContentNature() {
+		return ContentNature.AUDIO;
 	}
 }

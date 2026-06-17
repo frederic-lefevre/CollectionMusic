@@ -89,6 +89,16 @@ public class AudioMetadata implements MediaFileMetadata {
 		return formatSpecificMetadata;
 	}
 	
+	@Override
+	public String getGenre() {
+		return normalizedAudioMetadataTags.genre().value();
+	}
+	
+	@Override
+	public Long getDuration() {
+		return audioStreamMetadata.trackDuration().value();
+	}
+	
 	public AudioStreamMetadata getAudioStreamMetadata() {
 		return audioStreamMetadata;
 	}
@@ -96,5 +106,4 @@ public class AudioMetadata implements MediaFileMetadata {
 	public NormalizedAudioMetadataTags getNormalizedAudioMetadataTags() {
 		return normalizedAudioMetadataTags;
 	}
-
 }
