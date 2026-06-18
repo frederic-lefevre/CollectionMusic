@@ -54,4 +54,9 @@ public class VideoFile extends MediaFile {
 	public ContentNature getContentNature() {
 		return ContentNature.VIDEO;
 	}
+
+	@Override
+	public String getMediaStreamPattern() {
+		return null;
+	}
 }

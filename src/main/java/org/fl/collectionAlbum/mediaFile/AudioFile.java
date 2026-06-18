@@ -63,12 +63,12 @@ public abstract class AudioFile extends MediaFile {
 		
 		if (otherMediaFile instanceof AudioFile otherAudioFile) {
 			
-			if (audioMetadata == null) {
+			if (getAudioMetadata() == null) {
 				return otherAudioFile.getAudioMetadata() == null;
 			} else if (otherAudioFile.getAudioMetadata() == null) {
 				return false;
 			} else {
-				AudioStreamMetadata streamInfo =  audioMetadata.getAudioStreamMetadata();
+				AudioStreamMetadata streamInfo =  getAudioMetadata().getAudioStreamMetadata();
 				AudioStreamMetadata otherStreamInfo =   otherAudioFile.getAudioMetadata().getAudioStreamMetadata();
 				if (streamInfo == null) {
 					return otherStreamInfo == null;
@@ -87,5 +87,21 @@ public abstract class AudioFile extends MediaFile {
 	@Override
 	public ContentNature getContentNature() {
 		return ContentNature.AUDIO;
+	}
+	
+	@Override
+	public String getMediaStreamPattern() {
+		AudioMetadata metadata = getAudioMetadata();
+		if (metadata == null) {
+			return null;
+		} else {
+			AudioStreamMetadata streamInfo =  metadata.getAudioStreamMetadata();
+			return streamInfo.bitDepth().value() + "bits - " + 
+					streamInfo.samplingRate().value() + "Hz - " + 
+					streamInfo.bitRate().value() + "bits/s - " + 
+					streamInfo.numberOfChannels().value() + " channels - " +
+					(streamInfo.isLossless().value()?"sans perte":"avec perte"); 
+		}
+
 	}
 }
