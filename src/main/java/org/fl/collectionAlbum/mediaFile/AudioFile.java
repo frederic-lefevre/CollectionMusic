@@ -99,7 +99,7 @@ public abstract class AudioFile extends MediaFile {
 			return streamInfo.bitDepth().value() + "bits - " + 
 					streamInfo.samplingRate().value() + "Hz - " + 
 					streamInfo.bitRate().value() + "bits/s - " + 
-					streamInfo.numberOfChannels().value() + " channels - " +
+					streamInfo.numberOfChannels().value() + " canaux - " +
 					(streamInfo.isLossless().value()?"sans perte":"avec perte"); 
 		}
 
