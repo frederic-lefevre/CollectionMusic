@@ -22,41 +22,30 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.mediaFile;
+package org.fl.collectionAlbum.gui.renderer;
 
-import java.nio.file.Path;
+import java.awt.Font;
+import java.util.Objects;
 
-import org.fl.collectionAlbum.format.ContentNature;
-import org.fl.collectionAlbum.mediaFile.metadata.MediaFileMetadata;
-import org.fl.collectionAlbum.mediaFile.metadata.VideoMetadata;
+import javax.swing.SwingConstants;
 
-public class VideoFile extends MediaFile {
+import org.fl.util.swing.CustomTableCellRenderer;
 
-	private VideoMetadata videoMetadata;
-	
-	public VideoFile(Path filePath, String extension) {
-		super(filePath, extension);
-		videoMetadata = null;
+public class CollectionStringRenderer extends CustomTableCellRenderer {
+
+	private static final long serialVersionUID = 1L;
+
+	public CollectionStringRenderer(Font font) {
+		super(font, SwingConstants.LEFT);
 	}
 
 	@Override
-	public MediaFileMetadata getMetadata() {
-		// no parsing yet
-		return videoMetadata;
-	}
-	
-	@Override
-	public boolean hasEquivalentStreamMetadata(MediaFile otherMediaFile) {	
-		return (otherMediaFile instanceof VideoFile);
-	}
-
-	@Override
-	public ContentNature getContentNature() {
-		return ContentNature.VIDEO;
-	}
-
-	@Override
-	public String getMediaStreamPattern() {
-		return null;
+	public void valueProcessor(Object value) {
+		if (value == null) {
+			// This may happen when rescanning the album collection
+			setText("Valeur null");
+		} else {
+			setText(Objects.toString(value));
+		}
 	}
 }

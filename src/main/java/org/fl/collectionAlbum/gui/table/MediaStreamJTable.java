@@ -22,41 +22,35 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.mediaFile;
+package org.fl.collectionAlbum.gui.table;
 
-import java.nio.file.Path;
+import java.util.List;
+
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
 
 import org.fl.collectionAlbum.format.ContentNature;
-import org.fl.collectionAlbum.mediaFile.metadata.MediaFileMetadata;
-import org.fl.collectionAlbum.mediaFile.metadata.VideoMetadata;
+import org.fl.collectionAlbum.gui.adapter.MediaStreamPatternMouseAdapter;
+import org.fl.collectionAlbum.mediaFile.MediaStreamPatterns.MediaStreamPattern;
 
-public class VideoFile extends MediaFile {
+public class MediaStreamJTable extends AbstractCollectionTable<MediaStreamPattern> {
 
-	private VideoMetadata videoMetadata;
+	private static final long serialVersionUID = 1L;
 	
-	public VideoFile(Path filePath, String extension) {
-		super(filePath, extension);
-		videoMetadata = null;
-	}
-
-	@Override
-	public MediaFileMetadata getMetadata() {
-		// no parsing yet
-		return videoMetadata;
+	public MediaStreamJTable(MediaFileStreamTableModel model, ContentNature contentNature) {
+		super(model);
+		
+		addMouseListener(new MediaStreamPatternMouseAdapter(this, contentNature));
+		
+		int columnIdx = getColumnNumber(MediaFileStreamTableModel.MEDIA_FILE_NUMBER);
+		if (columnIdx >= 0) {
+			getRowSorter().setSortKeys(List.of(new RowSorter.SortKey(columnIdx, SortOrder.DESCENDING)));
+		} else {
+			throw new IllegalArgumentException("The colum to sort is not a column of this table: " + MediaFileStreamTableModel.MEDIA_FILE_NUMBER.name());
+		}
 	}
 	
-	@Override
-	public boolean hasEquivalentStreamMetadata(MediaFile otherMediaFile) {	
-		return (otherMediaFile instanceof VideoFile);
-	}
-
-	@Override
-	public ContentNature getContentNature() {
-		return ContentNature.VIDEO;
-	}
-
-	@Override
-	public String getMediaStreamPattern() {
-		return null;
+	public MediaStreamPattern getSelectedMediaStreamPattern() {
+		return getSelectedItem();
 	}
 }

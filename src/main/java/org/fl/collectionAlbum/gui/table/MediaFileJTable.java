@@ -33,7 +33,7 @@ public class MediaFileJTable extends AbstractCollectionTable<MediaFile> {
 	
 	public MediaFileJTable(MediaFileTableModel mediaFileTableModel) {
 		super(mediaFileTableModel);
-		
+
 		addMouseListener(new MediaFileMouseAdapter(this));
 	}
 

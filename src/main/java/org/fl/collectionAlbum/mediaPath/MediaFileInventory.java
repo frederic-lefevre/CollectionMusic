@@ -46,6 +46,7 @@ import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.mediaFile.MediaFile;
 import org.fl.collectionAlbum.mediaFile.MediaFileGenres;
+import org.fl.collectionAlbum.mediaFile.MediaStreamPatterns;
 
 public class MediaFileInventory {
 
@@ -61,6 +62,7 @@ public class MediaFileInventory {
 	private final List<MediaFilePath> mediaFilePathList;
 	private final List<MediaFile> mediaFileList;
 	private final MediaFileGenres mediaFileGenres;
+	private final MediaStreamPatterns mediaStreamPatterns;
 	
 	private final ContentNature contentNature;
 	private final Level multiFolderLoggingLevel;
@@ -75,6 +77,7 @@ public class MediaFileInventory {
 		mediaFilePathList = new ArrayList<>();
 		mediaFileList = new ArrayList<>();
 		mediaFileGenres = new MediaFileGenres();
+		mediaStreamPatterns = new MediaStreamPatterns();
 		isConnected = Files.exists(rootPath);
 	}
 
@@ -97,6 +100,7 @@ public class MediaFileInventory {
 		mediaFileList.clear();
 		mediaFilePathMap.clear();
 		mediaFileGenres.clearMediaFileGenres();
+		mediaStreamPatterns.clearMediaStreamPatterns();
 		isConnected = Files.exists(rootPath);
 	}
 	
@@ -144,6 +148,7 @@ public class MediaFileInventory {
 			if (mediaFile.getContentNature() == contentNature) {
 				mediaFileList.add(mediaFile);
 				mediaFileGenres.registerTrack(mediaFile);
+				mediaStreamPatterns.registerTrack(mediaFile);
 			} else {
 				albumLog.severe("Trying to put media file " + mediaFile.getFilePath() + " in " + contentNature.getNom() + " inventory (wrong content nature)");
 			}
@@ -206,6 +211,9 @@ public class MediaFileInventory {
 		return mediaFileGenres;
 	}
 
+	public MediaStreamPatterns getMediaStreamPatterns() {
+		return mediaStreamPatterns;
+	}
 	public boolean isConnected() {
 		return isConnected;
 	}

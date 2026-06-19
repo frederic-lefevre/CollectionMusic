@@ -39,6 +39,7 @@ import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.mediaFile.MediaFileGenres;
+import org.fl.collectionAlbum.mediaFile.MediaStreamPatterns;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -218,7 +219,6 @@ class MediaFileInventoryTest {
 		long audioFileNumber = audioFileInventory.getMediaFileNumber();
 		
 		assertThat(audioFileNumber).isGreaterThan(22000);
-		// System.out.println("Nombre de fichiers audio=" + audioFileNumber);
 	}
 	
 	
@@ -242,5 +242,24 @@ class MediaFileInventoryTest {
 		assertThat(mediaFileGenres.getGenres())
 			.isNotEmpty()
 			.contains("Genre absent");
+	}
+	
+	@Test
+	void shouldHaveAudioStreamPatterns() {
+		
+		MediaStreamPatterns mediaStreamPatterns = audioFileInventory.getMediaStreamPatterns();
+		assertThat(mediaStreamPatterns).isNotNull();
+		
+		assertThat(mediaStreamPatterns.getMediaStreamPatternList())
+			.anySatisfy(mediaStreamPattern -> 
+				assertThat(mediaStreamPattern.descriptionKey()).isEqualTo(" 24 bits -  96000 Hz - 2304000 bits/s - 2 canaux - sans perte"));
+	}
+	
+	@Test
+	void shouldNotHaveVideoStreamPatterns() {
+		MediaStreamPatterns mediaStreamPatterns = videoFileInventory.getMediaStreamPatterns();
+		assertThat(mediaStreamPatterns).isNotNull();
+		
+		assertThat(mediaStreamPatterns.getMediaStreamPatternList()).isEmpty();
 	}
 }

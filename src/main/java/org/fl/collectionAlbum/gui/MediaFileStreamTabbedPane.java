@@ -33,18 +33,18 @@ import javax.swing.JTabbedPane;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.format.ContentNature;
-import org.fl.collectionAlbum.gui.table.GenreJTable;
-import org.fl.collectionAlbum.gui.table.GenreTableModel;
+import org.fl.collectionAlbum.gui.table.MediaFileStreamTableModel;
+import org.fl.collectionAlbum.gui.table.MediaStreamJTable;
 import org.fl.collectionAlbum.mediaPath.MediaFileInventory;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 
-public class MediaFileGenreTabbedPane extends JTabbedPane {
+public class MediaFileStreamTabbedPane extends JTabbedPane {
 
 	private static final long serialVersionUID = 1L;
 
 	private final List<UpdatableElement> updatableElements;
 	
-	public MediaFileGenreTabbedPane() {
+	public MediaFileStreamTabbedPane() {
 		
 		super();
 		setTabPlacement(JTabbedPane.LEFT);
@@ -54,17 +54,17 @@ public class MediaFileGenreTabbedPane extends JTabbedPane {
 		Stream.of(ContentNature.values()).forEachOrdered(contentNature -> {
 
 			MediaFileInventory mediaFileInventory = MediaFilesInventories.getMediaFileInventory(contentNature);
-
-			GenreTableModel genreTableModel = new GenreTableModel(
-					mediaFileInventory.getMediaFileGenres().getGenresParameterList(), 
-					GenreTableModel.REGULAR_COLUMN);
-			updatableElements.add(genreTableModel);
-
-			GenreJTable genreTable = new GenreJTable(genreTableModel, contentNature);
-			JScrollPane genreScrollTable = new JScrollPane(genreTable);
-			genreScrollTable.setPreferredSize(Control.getMainSubPaneDimension());
 			
-			addTab(contentNature.getNom(), genreScrollTable);
+			MediaFileStreamTableModel mediaFileStreamTableModel = new MediaFileStreamTableModel(
+					mediaFileInventory.getMediaStreamPatterns().getMediaStreamPatternList(), 
+					MediaFileStreamTableModel.REGULAR_COLUMNS);
+			updatableElements.add(mediaFileStreamTableModel);
+			
+			MediaStreamJTable mediaStreamJTable = new MediaStreamJTable(mediaFileStreamTableModel, contentNature);
+			JScrollPane streamPatternsScrollPane = new JScrollPane(mediaStreamJTable);
+			streamPatternsScrollPane.setPreferredSize(Control.getMainSubPaneDimension());
+			
+			addTab(contentNature.getNom(), streamPatternsScrollPane);
 		});
 	}
 	
