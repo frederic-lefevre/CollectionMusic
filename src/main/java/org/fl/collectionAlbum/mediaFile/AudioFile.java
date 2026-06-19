@@ -103,17 +103,19 @@ public abstract class AudioFile extends MediaFile {
 			placeValue(streamInfoString, SAMPLING_RATE_END_IDX, streamInfo.samplingRate().value());
 			placeValue(streamInfoString, BIT_RATE_END_IDX, streamInfo.bitRate().value());
 			placeValue(streamInfoString, CHANNEL_END_IDX, streamInfo.numberOfChannels().value());
-			streamInfoString.replace(LOSSLESS_DEPTH_END_IDX-4, LOSSLESS_DEPTH_END_IDX, streamInfo.isLossless().value()?"sans":"avec");
+			streamInfoString.replace(LOSSLESS_DEPTH_END_IDX-4, LOSSLESS_DEPTH_END_IDX, streamInfo.isLossless().value()?SANS:AVEC);
 			return streamInfoString.toString();
 		}
 	}
 	
 	private static final String EMPTY_PATTERN = "    bits -        Hz -         bits/s -   canaux -      perte";
-	private static final int BIT_DEPTH_END_IDX = 3;
-	private static final int SAMPLING_RATE_END_IDX = 17;
-	private static final int BIT_RATE_END_IDX = 30;
-	private static final int CHANNEL_END_IDX = 41;
-	private static final int LOSSLESS_DEPTH_END_IDX = 55;
+	private static final int BIT_DEPTH_END_IDX = EMPTY_PATTERN.indexOf(" bits ");
+	private static final int SAMPLING_RATE_END_IDX = EMPTY_PATTERN.indexOf(" Hz");
+	private static final int BIT_RATE_END_IDX = EMPTY_PATTERN.indexOf(" bits/s");
+	private static final int CHANNEL_END_IDX = EMPTY_PATTERN.indexOf(" canaux");
+	private static final int LOSSLESS_DEPTH_END_IDX = EMPTY_PATTERN.indexOf(" perte");
+	private static final String SANS = "sans";
+	private static final String AVEC = "avec";
 	
 	private static StringBuilder placeValue(StringBuilder stringBuilder, int endIndex, Long value) {
 		String valueString = Long.toString(value);
