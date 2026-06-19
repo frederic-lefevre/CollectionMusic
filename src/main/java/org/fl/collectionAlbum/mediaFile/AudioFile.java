@@ -96,12 +96,15 @@ public abstract class AudioFile extends MediaFile {
 			return null;
 		} else {
 			AudioStreamMetadata streamInfo =  metadata.getAudioStreamMetadata();
-			return streamInfo.bitDepth().value() + "bits - " + 
-					streamInfo.samplingRate().value() + "Hz - " + 
-					streamInfo.bitRate().value() + "bits/s - " + 
-					streamInfo.numberOfChannels().value() + " canaux - " +
-					(streamInfo.isLossless().value()?"sans perte":"avec perte"); 
+			StringBuilder streamInfoString = new StringBuilder(64);
+			return streamInfoString
+				.append(streamInfo.bitDepth().value()).append( "bits - ")
+				.append(streamInfo.samplingRate().value()).append("Hz - ")
+				.append(streamInfo.bitRate().value()).append("bits/s - ")
+				.append(streamInfo.numberOfChannels().value()).append(" canaux - ")
+				.append(streamInfo.isLossless().value()?"sans perte":"avec perte")
+				.toString();	
 		}
-
 	}
+	
 }
