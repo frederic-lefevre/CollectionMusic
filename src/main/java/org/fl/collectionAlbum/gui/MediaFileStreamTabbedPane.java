@@ -28,9 +28,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
+import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.format.ContentNature;
+import org.fl.collectionAlbum.gui.table.MediaFileStreamTableModel;
+import org.fl.collectionAlbum.gui.table.MediaStreamJTable;
 import org.fl.collectionAlbum.mediaPath.MediaFileInventory;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 
@@ -51,6 +55,16 @@ public class MediaFileStreamTabbedPane extends JTabbedPane {
 
 			MediaFileInventory mediaFileInventory = MediaFilesInventories.getMediaFileInventory(contentNature);
 			
+			MediaFileStreamTableModel mediaFileStreamTableModel = new MediaFileStreamTableModel(
+					mediaFileInventory.getMediaStreamPatterns().getMediaStreamPatternList(), 
+					MediaFileStreamTableModel.REGULAR_COLUMNS);
+			updatableElements.add(mediaFileStreamTableModel);
+			
+			MediaStreamJTable mediaStreamJTable = new MediaStreamJTable(mediaFileStreamTableModel, contentNature);
+			JScrollPane streamPatternsScrollPane = new JScrollPane(mediaStreamJTable);
+			streamPatternsScrollPane.setPreferredSize(Control.getMainSubPaneDimension());
+			
+			addTab(contentNature.getNom(), streamPatternsScrollPane);
 		});
 	}
 	
