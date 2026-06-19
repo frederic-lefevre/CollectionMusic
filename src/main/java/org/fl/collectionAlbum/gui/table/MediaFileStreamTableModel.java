@@ -24,10 +24,12 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui.table;
 
+import java.awt.Font;
 import java.util.List;
 
 import org.fl.collectionAlbum.gui.UpdatableElement;
 import org.fl.collectionAlbum.gui.renderer.CollectionNumberRenderer;
+import org.fl.collectionAlbum.gui.renderer.CollectionStringRenderer;
 import org.fl.collectionAlbum.mediaFile.MediaStreamPatterns.MediaStreamPattern;
 import org.fl.collectionAlbum.utils.CollectionUtils;
 
@@ -35,8 +37,10 @@ public class MediaFileStreamTableModel  extends AbstractCollectionTableModel<Med
 
 	private static final long serialVersionUID = 1L;
 
+	private static final Font font = new Font(Font.MONOSPACED, Font.BOLD, 12);
+	
 	private static final TableColumnParameter<MediaStreamPattern> STREAM_PATTERN = 
-			new TableColumnParameter<>("Type de flux", null, 800, null, null, String.class, (s) -> s.descriptionKey());
+			new TableColumnParameter<>("Type de flux", null, 800, new CollectionStringRenderer(font), null, String.class, (s) -> s.descriptionKey());
 	public static final TableColumnParameter<MediaStreamPattern> MEDIA_FILE_NUMBER = 
 			new TableColumnParameter<>("Nombre de morceaux", null, 200, new CollectionNumberRenderer(), 
 					new CollectionUtils.IntegerComparator(), Integer.class, (s) -> s.mediaFileList().size());

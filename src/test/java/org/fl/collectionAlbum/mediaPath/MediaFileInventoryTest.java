@@ -252,7 +252,7 @@ class MediaFileInventoryTest {
 		
 		assertThat(mediaStreamPatterns.getMediaStreamPatternList())
 			.anySatisfy(mediaStreamPattern -> 
-				assertThat(mediaStreamPattern.descriptionKey()).isEqualTo("24bits - 96000Hz - 2304000bits/s - 2 canaux - sans perte"));
+				assertThat(mediaStreamPattern.descriptionKey()).isEqualTo(" 24 bits -  96000 Hz - 2304000 bits/s - 2 canaux - sans perte"));
 	}
 	
 	@Test

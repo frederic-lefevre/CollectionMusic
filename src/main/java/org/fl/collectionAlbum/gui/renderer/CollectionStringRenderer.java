@@ -22,22 +22,30 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.gui.table;
+package org.fl.collectionAlbum.gui.renderer;
 
-import org.fl.collectionAlbum.gui.adapter.MediaFileMouseAdapter;
-import org.fl.collectionAlbum.mediaFile.MediaFile;
+import java.awt.Font;
+import java.util.Objects;
 
-public class MediaFileJTable extends AbstractCollectionTable<MediaFile> {
+import javax.swing.SwingConstants;
+
+import org.fl.util.swing.CustomTableCellRenderer;
+
+public class CollectionStringRenderer extends CustomTableCellRenderer {
 
 	private static final long serialVersionUID = 1L;
-	
-	public MediaFileJTable(MediaFileTableModel mediaFileTableModel) {
-		super(mediaFileTableModel);
 
-		addMouseListener(new MediaFileMouseAdapter(this));
+	public CollectionStringRenderer(Font font) {
+		super(font, SwingConstants.LEFT);
 	}
 
-	public MediaFile getSelectedMediaFile() {
-		return getSelectedItem();
+	@Override
+	public void valueProcessor(Object value) {
+		if (value == null) {
+			// This may happen when rescanning the album collection
+			setText("Valeur null");
+		} else {
+			setText(Objects.toString(value));
+		}
 	}
 }

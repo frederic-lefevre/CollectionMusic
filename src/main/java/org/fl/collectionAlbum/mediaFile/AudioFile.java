@@ -96,15 +96,32 @@ public abstract class AudioFile extends MediaFile {
 			return null;
 		} else {
 			AudioStreamMetadata streamInfo =  metadata.getAudioStreamMetadata();
-			StringBuilder streamInfoString = new StringBuilder(64);
-			return streamInfoString
-				.append(streamInfo.bitDepth().value()).append( "bits - ")
-				.append(streamInfo.samplingRate().value()).append("Hz - ")
-				.append(streamInfo.bitRate().value()).append("bits/s - ")
-				.append(streamInfo.numberOfChannels().value()).append(" canaux - ")
-				.append(streamInfo.isLossless().value()?"sans perte":"avec perte")
-				.toString();	
+			
+			StringBuilder streamInfoString = new StringBuilder(EMPTY_PATTERN);
+			
+			placeValue(streamInfoString, BIT_DEPTH_END_IDX, streamInfo.bitDepth().value());
+			placeValue(streamInfoString, SAMPLING_RATE_END_IDX, streamInfo.samplingRate().value());
+			placeValue(streamInfoString, BIT_RATE_END_IDX, streamInfo.bitRate().value());
+			placeValue(streamInfoString, CHANNEL_END_IDX, streamInfo.numberOfChannels().value());
+			streamInfoString.replace(LOSSLESS_DEPTH_END_IDX-4, LOSSLESS_DEPTH_END_IDX, streamInfo.isLossless().value()?"sans":"avec");
+			return streamInfoString.toString();
 		}
 	}
 	
+	private static final String EMPTY_PATTERN = "    bits -        Hz -         bits/s -   canaux -      perte";
+	private static int BIT_DEPTH_END_IDX = 3;
+	private static int SAMPLING_RATE_END_IDX = 17;
+	private static int BIT_RATE_END_IDX = 30;
+	private static int CHANNEL_END_IDX = 41;
+	private static int LOSSLESS_DEPTH_END_IDX = 55;
+	
+	private static StringBuilder placeValue(StringBuilder stringBuilder, int endIndex, Long value) {
+		String valueString = Long.toString(value);
+		return stringBuilder.replace(endIndex - valueString.length(), endIndex, valueString);
+	}
+	
+	private static StringBuilder placeValue(StringBuilder stringBuilder, int endIndex, Integer value) {
+		String valueString = Integer.toString(value);
+		return stringBuilder.replace(endIndex - valueString.length(), endIndex, valueString);
+	}
 }
