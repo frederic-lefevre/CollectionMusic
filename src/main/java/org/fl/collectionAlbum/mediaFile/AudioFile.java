@@ -109,11 +109,11 @@ public abstract class AudioFile extends MediaFile {
 	}
 	
 	private static final String EMPTY_PATTERN = "    bits -        Hz -         bits/s -   canaux -      perte";
-	private static int BIT_DEPTH_END_IDX = 3;
-	private static int SAMPLING_RATE_END_IDX = 17;
-	private static int BIT_RATE_END_IDX = 30;
-	private static int CHANNEL_END_IDX = 41;
-	private static int LOSSLESS_DEPTH_END_IDX = 55;
+	private static final int BIT_DEPTH_END_IDX = 3;
+	private static final int SAMPLING_RATE_END_IDX = 17;
+	private static final int BIT_RATE_END_IDX = 30;
+	private static final int CHANNEL_END_IDX = 41;
+	private static final int LOSSLESS_DEPTH_END_IDX = 55;
 	
 	private static StringBuilder placeValue(StringBuilder stringBuilder, int endIndex, Long value) {
 		String valueString = Long.toString(value);
