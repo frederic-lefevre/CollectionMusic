@@ -24,7 +24,13 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui.table;
 
+import java.util.List;
+
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
+
 import org.fl.collectionAlbum.format.ContentNature;
+import org.fl.collectionAlbum.gui.adapter.MediaStreamPatternMouseAdapter;
 import org.fl.collectionAlbum.mediaFile.MediaStreamPatterns.MediaStreamPattern;
 
 public class MediaStreamJTable extends AbstractCollectionTable<MediaStreamPattern> {
@@ -34,9 +40,17 @@ public class MediaStreamJTable extends AbstractCollectionTable<MediaStreamPatter
 	public MediaStreamJTable(MediaFileStreamTableModel model, ContentNature contentNature) {
 		super(model);
 		
+		addMouseListener(new MediaStreamPatternMouseAdapter(this, contentNature));
+		
+		int columnIdx = getColumnNumber(MediaFileStreamTableModel.MEDIA_FILE_NUMBER);
+		if (columnIdx >= 0) {
+			getRowSorter().setSortKeys(List.of(new RowSorter.SortKey(columnIdx, SortOrder.DESCENDING)));
+		} else {
+			throw new IllegalArgumentException("The colum to sort is not a column of this table: " + MediaFileStreamTableModel.MEDIA_FILE_NUMBER.name());
+		}
 	}
 	
-	public MediaStreamPattern getSelected() {
+	public MediaStreamPattern getSelectedMediaStreamPattern() {
 		return getSelectedItem();
 	}
 }

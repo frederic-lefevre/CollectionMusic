@@ -68,7 +68,6 @@ public class MediaFileStreamTabbedPane extends JTabbedPane {
 		});
 	}
 	
-	
 	public List<UpdatableElement> getUpdatableElements() {
 		return updatableElements;
 	}

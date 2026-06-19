@@ -37,7 +37,7 @@ public class MediaFileStreamTableModel  extends AbstractCollectionTableModel<Med
 
 	private static final TableColumnParameter<MediaStreamPattern> STREAM_PATTERN = 
 			new TableColumnParameter<>("Type de flux", null, 800, null, null, String.class, (s) -> s.descriptionKey());
-	private static final TableColumnParameter<MediaStreamPattern> MEDIA_FILE_NUMBER = 
+	public static final TableColumnParameter<MediaStreamPattern> MEDIA_FILE_NUMBER = 
 			new TableColumnParameter<>("Nombre de morceaux", null, 200, new CollectionNumberRenderer(), 
 					new CollectionUtils.IntegerComparator(), Integer.class, (s) -> s.mediaFileList().size());
 	
