@@ -31,7 +31,6 @@ import java.util.stream.Stream;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 
-import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.gui.table.GenreJTable;
@@ -45,7 +44,7 @@ public class MediaFileGenreTabbedPane extends JTabbedPane {
 
 	private final List<UpdatableElement> updatableElements;
 	
-	public MediaFileGenreTabbedPane(CollectionAlbumContainer collectionAlbumContainer) {
+	public MediaFileGenreTabbedPane() {
 		
 		super();
 		setTabPlacement(JTabbedPane.LEFT);
