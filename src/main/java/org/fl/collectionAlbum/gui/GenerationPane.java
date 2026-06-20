@@ -156,8 +156,15 @@ public class GenerationPane extends JPanel {
 		// Media supports tab
 		MediaSupportsTabbedPane mediaSupportsTabbedPane = new MediaSupportsTabbedPane(collectionAlbumContainer, this);
 		collectionTabPanes.add(mediaSupportsTabbedPane, "Supports media");
-		mediaSupportsTabbedPane.getAlbumsTableModels().forEach(tableModel -> {
-			startReadCollection.addUpdatableElement(tableModel);
+		mediaSupportsTabbedPane.getUpdatableElements().forEach(updatableElement -> {
+			startReadCollection.addUpdatableElement(updatableElement);
+		});
+		
+		// Rangement tab
+		RangementTabbedPane rangementTabbedPane = new RangementTabbedPane(collectionAlbumContainer, this);
+		collectionTabPanes.add(rangementTabbedPane, "Rangement des albums");
+		rangementTabbedPane.getUpdatableElements().forEach(updatableElement -> {
+			startReadCollection.addUpdatableElement(updatableElement);
 		});
 		
 		// Calendriers

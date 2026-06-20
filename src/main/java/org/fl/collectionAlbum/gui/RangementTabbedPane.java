@@ -31,17 +31,17 @@ import java.util.stream.Stream;
 import javax.swing.JTabbedPane;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
-import org.fl.collectionAlbum.format.MediaSupports;
+import org.fl.collectionAlbum.format.Format;
 import org.fl.collectionAlbum.gui.table.AlbumTableColumns;
 import org.fl.collectionAlbum.gui.table.AlbumsScrollJTablePane;
 
-public class MediaSupportsTabbedPane extends JTabbedPane implements UpdatableElement {
+public class RangementTabbedPane extends JTabbedPane implements UpdatableElement {
 
 	private static final long serialVersionUID = 1L;
 	private final CollectionAlbumContainer collectionAlbumContainer;
 	private final List<UpdatableElement> updatableElements;
 
-	public MediaSupportsTabbedPane(CollectionAlbumContainer collectionAlbumContainer, GenerationPane generationPane) {
+	public RangementTabbedPane(CollectionAlbumContainer collectionAlbumContainer, GenerationPane generationPane) {
 		
 		super();
 		this.collectionAlbumContainer = collectionAlbumContainer;
@@ -50,29 +50,33 @@ public class MediaSupportsTabbedPane extends JTabbedPane implements UpdatableEle
 		updatableElements = new ArrayList<>();
 		updatableElements.add(this);
 		
-		Stream.of(MediaSupports.values()).forEachOrdered(mediaSupport -> {
+		Stream.of(Format.RangementSupportPhysique.values()).forEachOrdered(rangementSupportPhysique -> {
 			
 			AlbumsScrollJTablePane albumsScrollJTablePane =
-					new AlbumsScrollJTablePane(() -> collectionAlbumContainer.getAlbumsWithMediaSupport(mediaSupport).getAlbums(), 
+					new AlbumsScrollJTablePane(
+							() -> collectionAlbumContainer.getRangementAlbums(rangementSupportPhysique).sortRangementAlbum().getAlbums(), 
 							AlbumTableColumns.REGULAR_COLUMNS,
 							generationPane);
 			updatableElements.add(albumsScrollJTablePane.getAlbumsTableModel());
-			addTab(tabTitle(mediaSupport), albumsScrollJTablePane);
+			addTab(tabTitle(rangementSupportPhysique), albumsScrollJTablePane);
 		});
 	}
 	
 	public List<UpdatableElement> getUpdatableElements() {
 		return updatableElements;
 	}
-
+	
 	@Override
 	public void updateElement() {
-		Stream.of(MediaSupports.values()).forEachOrdered(mediaSupport -> {
-			setTitleAt(mediaSupport.ordinal(), tabTitle(mediaSupport));
-		});
+		Stream.of(Format.RangementSupportPhysique.values()).forEachOrdered(rangementSupportPhysique -> {
+			setTitleAt(rangementSupportPhysique.ordinal(), tabTitle(rangementSupportPhysique));
+		});	
 	}
-	
-	private String tabTitle(MediaSupports mediaSupport) {
-		return collectionAlbumContainer.getAlbumsWithMediaSupport(mediaSupport).getNombreAlbums() + " albums avec " + mediaSupport.getDescription();
+
+	private String tabTitle(Format.RangementSupportPhysique rangementSupportPhysique) {
+		return  rangementSupportPhysique.getOrdreDescription() +
+				" (" + 
+				collectionAlbumContainer.getRangementAlbums(rangementSupportPhysique).getNombreAlbums() +
+				" albums)";
 	}
 }
