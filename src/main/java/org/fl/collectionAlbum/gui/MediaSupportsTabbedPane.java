@@ -34,13 +34,12 @@ import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.format.MediaSupports;
 import org.fl.collectionAlbum.gui.table.AlbumTableColumns;
 import org.fl.collectionAlbum.gui.table.AlbumsScrollJTablePane;
-import org.fl.collectionAlbum.gui.table.AlbumsTableModel;
 
 public class MediaSupportsTabbedPane extends JTabbedPane implements UpdatableElement {
 
 	private static final long serialVersionUID = 1L;
 	private final CollectionAlbumContainer collectionAlbumContainer;
-	private final List<AlbumsTableModel> albumTableModels;
+	private final List<UpdatableElement> updatableElements;
 
 	public MediaSupportsTabbedPane(CollectionAlbumContainer collectionAlbumContainer, GenerationPane generationPane) {
 		
@@ -48,7 +47,8 @@ public class MediaSupportsTabbedPane extends JTabbedPane implements UpdatableEle
 		this.collectionAlbumContainer = collectionAlbumContainer;
 		
 		setTabPlacement(JTabbedPane.LEFT);
-		albumTableModels = new ArrayList<>();
+		updatableElements = new ArrayList<>();
+		updatableElements.add(this);
 		
 		Stream.of(MediaSupports.values()).forEachOrdered(mediaSupport -> {
 			
@@ -56,13 +56,13 @@ public class MediaSupportsTabbedPane extends JTabbedPane implements UpdatableEle
 					new AlbumsScrollJTablePane(() -> collectionAlbumContainer.getAlbumsWithMediaSupport(mediaSupport).getAlbums(), 
 							AlbumTableColumns.REGULAR_COLUMNS,
 							generationPane);
-			albumTableModels.add(albumsScrollJTablePane.getAlbumsTableModel());
+			updatableElements.add(albumsScrollJTablePane.getAlbumsTableModel());
 			addTab(tabTitle(mediaSupport), albumsScrollJTablePane);
 		});
 	}
 	
-	public List<AlbumsTableModel> getAlbumsTableModels() {
-		return albumTableModels;
+	public List<UpdatableElement> getUpdatableElements() {
+		return updatableElements;
 	}
 
 	@Override
