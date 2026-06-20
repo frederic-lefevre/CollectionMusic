@@ -57,7 +57,7 @@ public class MediaSupportsTabbedPane extends JTabbedPane implements UpdatableEle
 							AlbumTableColumns.REGULAR_COLUMNS,
 							generationPane);
 			albumTableModels.add(albumsScrollJTablePane.getAlbumsTableModel());
-			addTab(mediaSupport.getDescription() + ": " + collectionAlbumContainer.getAlbumsWithMediaSupport(mediaSupport).getNombreAlbums(), albumsScrollJTablePane);
+			addTab(tabTitle(mediaSupport), albumsScrollJTablePane);
 		});
 	}
 	
@@ -68,7 +68,11 @@ public class MediaSupportsTabbedPane extends JTabbedPane implements UpdatableEle
 	@Override
 	public void updateElement() {
 		Stream.of(MediaSupports.values()).forEachOrdered(mediaSupport -> {
-			setTitleAt(mediaSupport.ordinal(), mediaSupport.getDescription() + ": " + collectionAlbumContainer.getAlbumsWithMediaSupport(mediaSupport).getNombreAlbums());
+			setTitleAt(mediaSupport.ordinal(), tabTitle(mediaSupport));
 		});
+	}
+	
+	private String tabTitle(MediaSupports mediaSupport) {
+		return collectionAlbumContainer.getAlbumsWithMediaSupport(mediaSupport).getNombreAlbums() + " albums avec " + mediaSupport.getDescription();
 	}
 }
