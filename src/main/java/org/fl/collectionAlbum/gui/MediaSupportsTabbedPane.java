@@ -36,14 +36,17 @@ import org.fl.collectionAlbum.gui.table.AlbumTableColumns;
 import org.fl.collectionAlbum.gui.table.AlbumsScrollJTablePane;
 import org.fl.collectionAlbum.gui.table.AlbumsTableModel;
 
-public class MediaSupportsTabbedPane extends JTabbedPane {
+public class MediaSupportsTabbedPane extends JTabbedPane implements UpdatableElement {
 
 	private static final long serialVersionUID = 1L;
+	private final CollectionAlbumContainer collectionAlbumContainer;
 	private final List<AlbumsTableModel> albumTableModels;
 
 	public MediaSupportsTabbedPane(CollectionAlbumContainer collectionAlbumContainer, GenerationPane generationPane) {
 		
 		super();
+		this.collectionAlbumContainer = collectionAlbumContainer;
+		
 		setTabPlacement(JTabbedPane.LEFT);
 		albumTableModels = new ArrayList<>();
 		
@@ -54,11 +57,18 @@ public class MediaSupportsTabbedPane extends JTabbedPane {
 							AlbumTableColumns.REGULAR_COLUMNS,
 							generationPane);
 			albumTableModels.add(albumsScrollJTablePane.getAlbumsTableModel());
-			addTab(mediaSupport.getDescription(), albumsScrollJTablePane);
+			addTab(mediaSupport.getDescription() + ": " + collectionAlbumContainer.getAlbumsWithMediaSupport(mediaSupport).getNombreAlbums(), albumsScrollJTablePane);
 		});
 	}
 	
 	public List<AlbumsTableModel> getAlbumsTableModels() {
 		return albumTableModels;
+	}
+
+	@Override
+	public void updateElement() {
+		Stream.of(MediaSupports.values()).forEachOrdered(mediaSupport -> {
+			setTitleAt(mediaSupport.ordinal(), mediaSupport.getDescription() + ": " + collectionAlbumContainer.getAlbumsWithMediaSupport(mediaSupport).getNombreAlbums());
+		});
 	}
 }

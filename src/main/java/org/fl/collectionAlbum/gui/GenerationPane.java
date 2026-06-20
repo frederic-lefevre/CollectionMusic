@@ -156,6 +156,7 @@ public class GenerationPane extends JPanel {
 		// Media supports tab
 		MediaSupportsTabbedPane mediaSupportsTabbedPane = new MediaSupportsTabbedPane(collectionAlbumContainer, this);
 		collectionTabPanes.add(mediaSupportsTabbedPane, "Supports media");
+		startReadCollection.addUpdatableElement(mediaSupportsTabbedPane);
 		mediaSupportsTabbedPane.getAlbumsTableModels().forEach(tableModel -> {
 			startReadCollection.addUpdatableElement(tableModel);
 		});

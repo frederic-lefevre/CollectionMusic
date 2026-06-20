@@ -42,7 +42,7 @@ import org.fl.collectionAlbum.albums.ListeAlbum;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.gui.listener.ListAlbumListener;
 
-public class AlbumCharacteristicsScrollPane extends JScrollPane implements UpdatableElement  {
+public class AlbumCharacteristicsScrollPane extends JScrollPane implements UpdatableElement {
 
 	private static final long serialVersionUID = 1L;
 
