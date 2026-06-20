@@ -1,0 +1,82 @@
+/*
+ * MIT License
+
+Copyright (c) 2017, 2026 Frederic Lefevre
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+package org.fl.collectionAlbum.gui;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
+
+import javax.swing.JTabbedPane;
+
+import org.fl.collectionAlbum.CollectionAlbumContainer;
+import org.fl.collectionAlbum.format.Format;
+import org.fl.collectionAlbum.gui.table.AlbumTableColumns;
+import org.fl.collectionAlbum.gui.table.AlbumsScrollJTablePane;
+import org.fl.collectionAlbum.gui.table.AlbumsTableModel;
+
+public class RangementTabbedPane extends JTabbedPane implements UpdatableElement {
+
+	private static final long serialVersionUID = 1L;
+	private final CollectionAlbumContainer collectionAlbumContainer;
+	private final List<AlbumsTableModel> albumTableModels;
+
+	public RangementTabbedPane(CollectionAlbumContainer collectionAlbumContainer, GenerationPane generationPane) {
+		
+		super();
+		this.collectionAlbumContainer = collectionAlbumContainer;
+		
+		setTabPlacement(JTabbedPane.LEFT);
+		albumTableModels = new ArrayList<>();
+		
+		Stream.of(Format.RangementSupportPhysique.values()).forEachOrdered(rangementSupportPhysique -> {
+			
+			AlbumsScrollJTablePane albumsScrollJTablePane =
+					new AlbumsScrollJTablePane(
+							() -> collectionAlbumContainer.getRangementAlbums(rangementSupportPhysique).sortRangementAlbum().getAlbums(), 
+							AlbumTableColumns.REGULAR_COLUMNS,
+							generationPane);
+			albumTableModels.add(albumsScrollJTablePane.getAlbumsTableModel());
+			addTab(tabTitle(rangementSupportPhysique), albumsScrollJTablePane);
+		});
+	}
+	
+	public List<AlbumsTableModel> getAlbumsTableModels() {
+		return albumTableModels;
+	}
+	
+	@Override
+	public void updateElement() {
+		Stream.of(Format.RangementSupportPhysique.values()).forEachOrdered(rangementSupportPhysique -> {
+			setTitleAt(rangementSupportPhysique.ordinal(), tabTitle(rangementSupportPhysique));
+		});	
+	}
+
+	private String tabTitle(Format.RangementSupportPhysique rangementSupportPhysique) {
+		return  rangementSupportPhysique.getOrdreDescription() +
+				" (" + 
+				collectionAlbumContainer.getRangementAlbums(rangementSupportPhysique).getNombreAlbums() +
+				" albums)";
+	}
+}

@@ -161,6 +161,14 @@ public class GenerationPane extends JPanel {
 			startReadCollection.addUpdatableElement(tableModel);
 		});
 		
+		// Rangement tab
+		RangementTabbedPane rangementTabbedPane = new RangementTabbedPane(collectionAlbumContainer, this);
+		collectionTabPanes.add(rangementTabbedPane, "Rangement des albums");
+		startReadCollection.addUpdatableElement(rangementTabbedPane);
+		rangementTabbedPane.getAlbumsTableModels().forEach(tableModel -> {
+			startReadCollection.addUpdatableElement(tableModel);
+		});
+		
 		// Calendriers
 		CalendarsTabbedPane calendarsTabbedPane = new CalendarsTabbedPane(collectionAlbumContainer, this);
 		collectionTabPanes.add(calendarsTabbedPane, "Statistiques et calendrier");
