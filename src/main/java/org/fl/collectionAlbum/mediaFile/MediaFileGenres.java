@@ -49,10 +49,12 @@ public class MediaFileGenres {
 
 		private final String genre;
 		private final List<MediaFile> mediaFiles;
+		private final boolean isNormalizedGenre;
 		private long duration;
 
-		private GenreParameters(String genre) {
+		private GenreParameters(String genre, boolean isNormalizedGenre) {
 			this.genre = genre;
+			this.isNormalizedGenre = isNormalizedGenre;
 			mediaFiles = new ArrayList<>();
 			duration = 0;
 		}
@@ -61,6 +63,10 @@ public class MediaFileGenres {
 			return genre;
 		}
 
+		public boolean iNormalizedGenre() {
+			return isNormalizedGenre;
+		}
+		
 		public List<MediaFile> mediaFiles() {
 			return mediaFiles;
 		}
@@ -130,7 +136,7 @@ public class MediaFileGenres {
 		
 		GenreParameters genreParameters = genresMap.get(genre);
 		if (genreParameters == null) {
-			genreParameters = new GenreParameters(genre);
+			genreParameters = new GenreParameters(genre, normalizedFileGenres.contains(genre));
 			genresMap.put(genre, genreParameters);
 			genresParameterList.add(genreParameters);
 		}
