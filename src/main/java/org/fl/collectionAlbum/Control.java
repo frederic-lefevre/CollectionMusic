@@ -45,6 +45,7 @@ import org.fl.collectionAlbum.concerts.Concert;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.gui.CollectionAlbumGui;
+import org.fl.collectionAlbum.mediaFile.MediaFileGenres.GenreParameters;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.fl.collectionAlbum.metrics.CollectionMetricsHistory;
 import org.fl.collectionAlbum.metrics.ConcertMetricsHistory;
@@ -54,6 +55,7 @@ import org.fl.collectionAlbum.osAction.DiscogsReleaseCommandParameter;
 import org.fl.collectionAlbum.osAction.ListOfStringCommandParameter;
 import org.fl.collectionAlbum.osAction.StringCommandParameter;
 import org.fl.collectionAlbum.osAction.MediaFilePathCommandParameter;
+import org.fl.collectionAlbum.osAction.MediaFileGenreCommandParameter;
 import org.fl.collectionAlbum.osAction.OsAction;
 import org.fl.collectionAlbum.osAction.OsCommandAndOption;
 import org.fl.util.AdvancedProperties;
@@ -88,6 +90,7 @@ public class Control {
 	private List<OsAction<Concert>> osActionsOnConcert;
 	private List<OsAction<DiscogsAlbumRelease>> osActionsOnDiscogsRelease;
 	private List<OsAction<MediaFilePath>> osActionsOnMediaFilePath;
+	private Map<ContentNature, List<OsAction<GenreParameters>>> osActionsOnGenreParametersMap;
 	private OsAction<List<String>> displayUrlAction;
 	private OsAction<String> displayFolderAction;
 	private Path discogsCollectionCsvExportPath;
@@ -199,6 +202,10 @@ public class Control {
 			
 			osActionsOnDiscogsRelease = getOsActionsOnDiscogsRelease("album.discogs.command.");
 			osActionsOnMediaFilePath = getOsActionOnMediaFilePath("album.mediaFile.command.");
+			
+			osActionsOnGenreParametersMap = new HashMap<>();
+			Stream.of(ContentNature.values()).forEachOrdered(contentNature -> 
+					osActionsOnGenreParametersMap.put(contentNature, getOsActionOnGenreParameters("genre.command.", contentNature)));
 			
 			displayUrlAction = new OsAction<List<String>>(
 					collectionProperties.getProperty("album.showUrl.command.title"), 
@@ -325,6 +332,10 @@ public class Control {
 		return getInstance().osActionsOnMediaFilePath;
 	}
 	
+	public static List<OsAction<GenreParameters>> getOsActionOnGenreParameters(ContentNature contentNature) {
+		return getInstance().osActionsOnGenreParametersMap.get(contentNature);
+	}
+	
 	public static OsAction<List<String>> getDisplayUrlAction() {
 		return getInstance().displayUrlAction;
 	}
@@ -410,6 +421,15 @@ public class Control {
 				.map(prop -> new OsAction<MediaFilePath>(collectionProperties.getProperty(osCmdPropBase + prop + ".title"),
 						getOsCommandAndOption(collectionProperties.getProperty(osCmdPropBase + prop + ".cmd")),
 						MediaFilePathCommandParameter.valueOf(collectionProperties.getProperty(osCmdPropBase + prop + ".param"))))
+				.collect(Collectors.toList());
+	}
+	
+	private List<OsAction<GenreParameters>> getOsActionOnGenreParameters(String osCmdPropBase, ContentNature contentNature) {
+		
+		return collectionProperties.getKeysElements(osCmdPropBase).stream()
+				.map(prop -> new OsAction<GenreParameters>(collectionProperties.getProperty(osCmdPropBase + prop + ".title"),
+						getOsCommandAndOption(collectionProperties.getProperty(osCmdPropBase + prop + ".cmd")),
+						new MediaFileGenreCommandParameter(contentNature)))
 				.collect(Collectors.toList());
 	}
 }
