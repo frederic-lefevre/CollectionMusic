@@ -26,6 +26,7 @@ package org.fl.collectionAlbum.mediaFile;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -34,6 +35,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.mediaFile.metadata.MediaFileMetadata;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class MediaFileGenres {
 
@@ -66,10 +70,20 @@ public class MediaFileGenres {
 		}
 	};
 	
+	private final Set<String> normalizedFileGenres;
 	private final Map<String, GenreParameters> genresMap;
 	private final List<GenreParameters> genresParameterList;
 
 	public MediaFileGenres() {
+		this.normalizedFileGenres = new HashSet<String>();
+		genresMap = new HashMap<>();
+		genresParameterList = new ArrayList<>();
+	}
+	
+	@JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+	public MediaFileGenres( @JsonProperty("normalizedFileGenres")Set<String> normalizedFileGenres) {
+		
+		this.normalizedFileGenres = normalizedFileGenres;
 		genresMap = new HashMap<>();
 		genresParameterList = new ArrayList<>();
 	}

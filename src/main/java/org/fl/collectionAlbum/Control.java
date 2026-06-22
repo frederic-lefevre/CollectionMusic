@@ -96,6 +96,7 @@ public class Control {
 	private Dimension mainSubPaneDimension;
 	private Dimension infoWindowDimension;
 	private boolean readMediaFileMetadata;
+	private Map<ContentNature,Path> mediaFileGenresPaths;
    	
 	private Control() {
 	}
@@ -162,6 +163,7 @@ public class Control {
 			
 			mediaFileRootPaths = new HashMap<>();
 			mediaFileRootUris = new HashMap<>();
+			mediaFileGenresPaths = new HashMap<>();
 			Stream.of(ContentNature.values())
 				.forEachOrdered(contentNature -> 
 					{
@@ -176,6 +178,16 @@ public class Control {
 							
 						} catch (Exception e) {
 							albumLog.log(Level.SEVERE, "Wrong URI root for " + contentNature.name() + " files: " + mediaFileRootUriString, e);
+						}
+						
+						String mediaFileGenresUriString = collectionProperties.getProperty("album." + contentNature.name() + ".mediaFileGenres");
+						try {
+							
+							Path mediaFileGenresPath = FilesUtils.uriStringToAbsolutePath(mediaFileGenresUriString);
+							mediaFileGenresPaths.put(contentNature, mediaFileGenresPath);
+							
+						} catch (Exception e) {
+							albumLog.log(Level.SEVERE, "Wrong media file genres URI for " + contentNature.name() + " files: " + mediaFileGenresUriString, e);
 						}
 					});
 				
@@ -291,6 +303,10 @@ public class Control {
 	
 	public static URI getMediaFileRootUri(ContentNature contentNature) {
 		return getInstance().mediaFileRootUris.get(contentNature);
+	}
+	
+	public static Path getMediaFileGenresPath(ContentNature contentNature) {
+		return getInstance().mediaFileGenresPaths.get(contentNature);
 	}
 	
 	public static List<OsAction<Album>> getOsActionsOnAlbum() {

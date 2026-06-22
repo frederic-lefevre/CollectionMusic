@@ -77,6 +77,14 @@ class ControlTest {
 	}
 	
 	@Test
+	void controlMediaFileGenresFileTest() {
+		
+		Stream.of(ContentNature.values())
+			.forEach(contentNature ->
+				assertThat(Control.getMediaFileGenresPath(contentNature)).isNotNull().exists().isAbsolute().isRegularFile());
+	}
+	
+	@Test
 	void controlMediaPathFileUriTest() {
 		
 		Stream.of(ContentNature.values())

@@ -36,11 +36,13 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.format.ContentNature;
@@ -48,9 +50,13 @@ import org.fl.collectionAlbum.mediaFile.MediaFile;
 import org.fl.collectionAlbum.mediaFile.MediaFileGenres;
 import org.fl.collectionAlbum.mediaFile.MediaStreamPatterns;
 
+import tools.jackson.databind.ObjectMapper;
+
 public class MediaFileInventory {
 
 	private static final Logger albumLog = Logger.getLogger(MediaFileInventory.class.getName());
+	
+	private static final ObjectMapper mapper = new ObjectMapper();
 	
 	private static final String SEPARATOR = File.separator;
 	
@@ -61,7 +67,7 @@ public class MediaFileInventory {
 	// MediaFilePath and MediaFile values maintained as List to be displayed in a JTable
 	private final List<MediaFilePath> mediaFilePathList;
 	private final List<MediaFile> mediaFileList;
-	private final MediaFileGenres mediaFileGenres;
+	private MediaFileGenres mediaFileGenres;
 	private final MediaStreamPatterns mediaStreamPatterns;
 	
 	private final ContentNature contentNature;
@@ -76,7 +82,15 @@ public class MediaFileInventory {
 		mediaFilePathMap = new LinkedHashMap<>();
 		mediaFilePathList = new ArrayList<>();
 		mediaFileList = new ArrayList<>();
-		mediaFileGenres = new MediaFileGenres();
+		Path mediFileGenresPath = Control.getMediaFileGenresPath(contentNature);
+		
+		try {
+			mediaFileGenres = mapper.readValue(Files.newInputStream(mediFileGenresPath), MediaFileGenres.class);
+		} catch (Exception e) {
+			mediaFileGenres = new MediaFileGenres();
+			albumLog.log(Level.SEVERE, "Exception when reading MedieFile genres file " + Objects.toString(mediFileGenresPath), e);
+		}
+		
 		mediaStreamPatterns = new MediaStreamPatterns();
 		isConnected = Files.exists(rootPath);
 	}
