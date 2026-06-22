@@ -88,12 +88,9 @@ class MediaFileGenreTest {
 		
 		Path flacFilePath = FilesUtils.uriStringToAbsolutePath("file:///ForTests/CollectionMusique/f1.flac");
 		FlacAudioFile f1 = new FlacAudioFile(flacFilePath);
-		String genre = f1.getMetadata().getGenre();
-
 		mediaFileGenres.registerTrack(f1);
-		assertThat(mediaFileGenres.getGenres()).hasSize(1);
+		assertThat(mediaFileGenres.getGenres()).singleElement().isEqualTo(expectedGenre);
 
-		assertThat(mediaFileGenres.getGenreParameters("Jazz")).isNull();
 		assertThat(mediaFileGenres.getGenreParameters(expectedGenre))
 			.isNotNull()
 			.satisfies(genreParameters -> {
