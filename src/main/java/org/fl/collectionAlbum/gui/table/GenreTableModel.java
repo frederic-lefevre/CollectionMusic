@@ -27,6 +27,7 @@ package org.fl.collectionAlbum.gui.table;
 import java.util.List;
 
 import org.fl.collectionAlbum.gui.UpdatableElement;
+import org.fl.collectionAlbum.gui.renderer.CollectionBooleanRenderer;
 import org.fl.collectionAlbum.gui.renderer.CollectionNumberRenderer;
 import org.fl.collectionAlbum.gui.renderer.DurationRenderer;
 import org.fl.collectionAlbum.mediaFile.MediaFileGenres.GenreParameters;
@@ -44,8 +45,11 @@ public class GenreTableModel extends AbstractCollectionTableModel<GenreParameter
 	private static final TableColumnParameter<GenreParameters> TOTAL_DURATION = 
 			new TableColumnParameter<>("Durée totale", null, 200, new DurationRenderer(), 
 					new CollectionUtils.LongComparator(), Long.class, (g) -> g.duration());
-	
-	public static final GenericTableColumns<GenreParameters> REGULAR_COLUMN = new GenericTableColumns<>(List.of(GENRE, MEDIA_FILE_NUMBER, TOTAL_DURATION), 0);
+	private static final TableColumnParameter<GenreParameters> IS_NORMALIZED =
+			new TableColumnParameter<>("Genre normalisé", null, 150, new CollectionBooleanRenderer(),
+					null, Boolean.class, (g) -> g.iNormalizedGenre());
+			
+	public static final GenericTableColumns<GenreParameters> REGULAR_COLUMN = new GenericTableColumns<>(List.of(GENRE, MEDIA_FILE_NUMBER, TOTAL_DURATION, IS_NORMALIZED), 0);
 	
 	public GenreTableModel(List<GenreParameters> genreParametersList, GenericTableColumns<GenreParameters> genericTableColumns) {
 		super(genericTableColumns, genreParametersList);
