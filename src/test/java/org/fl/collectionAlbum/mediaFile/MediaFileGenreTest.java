@@ -28,6 +28,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import java.net.URISyntaxException;
 import java.nio.file.Path;
+import java.util.Set;
 
 import org.fl.util.file.FilesUtils;
 import org.junit.jupiter.api.Test;
@@ -69,11 +70,34 @@ class MediaFileGenreTest {
 			.isNotNull()
 			.satisfies(genreParameters -> {
 				assertThat(genreParameters.genre()).isEqualTo(expectedGenre);
+				assertThat(genreParameters.iNormalizedGenre()).isFalse();
 				assertThat(genreParameters.mediaFiles()).singleElement().isEqualTo(f1);
 				assertThat(genreParameters.duration()).isEqualTo(24240);
 			});
 		
 		mediaFileGenres.clearMediaFileGenres();
 		assertThat(mediaFileGenres.getGenres()).isEmpty();
+	}
+	
+	@Test
+	void testMusicalGenres2() throws URISyntaxException {
+		
+		final String expectedGenre = "Classical";
+		
+		MediaFileGenres mediaFileGenres = new MediaFileGenres(Set.of(expectedGenre));
+		
+		Path flacFilePath = FilesUtils.uriStringToAbsolutePath("file:///ForTests/CollectionMusique/f1.flac");
+		FlacAudioFile f1 = new FlacAudioFile(flacFilePath);
+		mediaFileGenres.registerTrack(f1);
+		assertThat(mediaFileGenres.getGenres()).singleElement().isEqualTo(expectedGenre);
+
+		assertThat(mediaFileGenres.getGenreParameters(expectedGenre))
+			.isNotNull()
+			.satisfies(genreParameters -> {
+				assertThat(genreParameters.genre()).isEqualTo(expectedGenre);
+				assertThat(genreParameters.iNormalizedGenre()).isTrue();
+				assertThat(genreParameters.mediaFiles()).singleElement().isEqualTo(f1);
+				assertThat(genreParameters.duration()).isEqualTo(24240);
+			});
 	}
 }

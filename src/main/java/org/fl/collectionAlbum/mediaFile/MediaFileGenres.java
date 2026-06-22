@@ -26,6 +26,7 @@ package org.fl.collectionAlbum.mediaFile;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -34,6 +35,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.mediaFile.metadata.MediaFileMetadata;
+
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class MediaFileGenres {
 
@@ -45,10 +49,12 @@ public class MediaFileGenres {
 
 		private final String genre;
 		private final List<MediaFile> mediaFiles;
+		private final boolean isNormalizedGenre;
 		private long duration;
 
-		private GenreParameters(String genre) {
+		private GenreParameters(String genre, boolean isNormalizedGenre) {
 			this.genre = genre;
+			this.isNormalizedGenre = isNormalizedGenre;
 			mediaFiles = new ArrayList<>();
 			duration = 0;
 		}
@@ -57,6 +63,10 @@ public class MediaFileGenres {
 			return genre;
 		}
 
+		public boolean iNormalizedGenre() {
+			return isNormalizedGenre;
+		}
+		
 		public List<MediaFile> mediaFiles() {
 			return mediaFiles;
 		}
@@ -66,10 +76,20 @@ public class MediaFileGenres {
 		}
 	};
 	
+	private final Set<String> normalizedFileGenres;
 	private final Map<String, GenreParameters> genresMap;
 	private final List<GenreParameters> genresParameterList;
 
 	public MediaFileGenres() {
+		this.normalizedFileGenres = new HashSet<String>();
+		genresMap = new HashMap<>();
+		genresParameterList = new ArrayList<>();
+	}
+	
+	@JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
+	public MediaFileGenres( @JsonProperty("normalizedFileGenres")Set<String> normalizedFileGenres) {
+		
+		this.normalizedFileGenres = normalizedFileGenres;
 		genresMap = new HashMap<>();
 		genresParameterList = new ArrayList<>();
 	}
@@ -116,7 +136,7 @@ public class MediaFileGenres {
 		
 		GenreParameters genreParameters = genresMap.get(genre);
 		if (genreParameters == null) {
-			genreParameters = new GenreParameters(genre);
+			genreParameters = new GenreParameters(genre, normalizedFileGenres.contains(genre));
 			genresMap.put(genre, genreParameters);
 			genresParameterList.add(genreParameters);
 		}

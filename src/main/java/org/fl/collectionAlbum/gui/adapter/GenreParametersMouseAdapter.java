@@ -24,33 +24,68 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui.adapter;
 
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
 import javax.swing.JOptionPane;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.SwingUtilities;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.format.ContentNature;
+import org.fl.collectionAlbum.gui.CollectionMenuItems;
 import org.fl.collectionAlbum.gui.table.GenreJTable;
 import org.fl.collectionAlbum.gui.table.MediaFileJTable;
 import org.fl.collectionAlbum.gui.table.MediaFileTableColumns;
 import org.fl.collectionAlbum.gui.table.MediaFileTableModel;
 import org.fl.collectionAlbum.mediaFile.MediaFile;
 import org.fl.collectionAlbum.mediaFile.MediaFileGenres.GenreParameters;
+import org.fl.collectionAlbum.osAction.OsAction;
 
 public class GenreParametersMouseAdapter extends MouseAdapter {
 
 	private final GenreJTable genreTable;
 	private final ContentNature contentNature;
+	private final JPopupMenu localJPopupMenu;
+	private final CollectionMenuItems<GenreParameters> genreParametersMenuItems;
 	
-	public GenreParametersMouseAdapter(GenreJTable genreTable, ContentNature contentNature) {
+	private static class GenreParametersCommandListener implements java.awt.event.ActionListener {
+
+		private final GenreJTable genreTable;
+		private final OsAction<GenreParameters> osAction;
+		
+		GenreParametersCommandListener(GenreJTable genreTable, OsAction<GenreParameters> osAction) {
+			this.genreTable = genreTable;
+			this.osAction = osAction;
+		}
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			GenreParameters selectedGenreParameters = genreTable.getSelectedGenreParameters();
+			
+			if (selectedGenreParameters != null) {
+				osAction.runOsAction(selectedGenreParameters);
+			}
+		}
+	}
+	
+	public GenreParametersMouseAdapter(GenreJTable genreTable, List<OsAction<GenreParameters>> osActions, ContentNature contentNature) {
 		super();
 		
 		this.genreTable = genreTable;
 		this.contentNature = contentNature;
+		this.localJPopupMenu = new JPopupMenu();
+		this.genreParametersMenuItems = new CollectionMenuItems<>();
+		
+		osActions.forEach(osAction -> 
+			genreParametersMenuItems.addMenuItem(
+					osAction.actionTitle(), 
+					new GenreParametersCommandListener(genreTable, osAction), 
+					osAction.commandParameter().getActionValidityPredicate(), 
+					localJPopupMenu));
 	}
 	
 	@Override
@@ -77,5 +112,26 @@ public class GenreParametersMouseAdapter extends MouseAdapter {
 				}
 			}
 		}
+	}
+	
+	@Override
+	public void mousePressed(MouseEvent evt) {
+		actionOnMousePressedOrReleased(evt);
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent evt) {
+		actionOnMousePressedOrReleased(evt);
+	}
+	
+	private void actionOnMousePressedOrReleased(MouseEvent evt) {
+		if (evt.isPopupTrigger()) {
+			enableMenuItems();
+			localJPopupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
+		} 
+	}
+	
+	private void enableMenuItems() {
+		genreParametersMenuItems.enableMenuItems( genreTable.getSelectedGenreParameters());
 	}
 }

@@ -1,5 +1,5 @@
 /*
- * MIT License
+ MIT License
 
 Copyright (c) 2017, 2026 Frederic Lefevre
 
@@ -20,38 +20,44 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-*/
+ */
 
-package org.fl.collectionAlbum.gui.table;
+package org.fl.collectionAlbum.osAction;
 
 import java.util.List;
-
-import javax.swing.RowSorter;
-import javax.swing.SortOrder;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.format.ContentNature;
-import org.fl.collectionAlbum.gui.adapter.GenreParametersMouseAdapter;
 import org.fl.collectionAlbum.mediaFile.MediaFileGenres.GenreParameters;
 
-public class GenreJTable extends AbstractCollectionTable<GenreParameters> {
-
-	private static final long serialVersionUID = 1L;
+public class MediaFileGenreCommandParameter implements OsActionCommandParameter<GenreParameters> {
 	
-	public GenreJTable(GenreTableModel genreTableModel, ContentNature contentNature) {
-		super(genreTableModel);
-		
-		addMouseListener(new GenreParametersMouseAdapter(this, Control.getOsActionOnGenreParameters(contentNature), contentNature));
-		
-		int columnIdx = getColumnNumber(GenreTableModel.MEDIA_FILE_NUMBER);
-		if (columnIdx >= 0) {
-			getRowSorter().setSortKeys(List.of(new RowSorter.SortKey(columnIdx, SortOrder.DESCENDING)));
-		} else {
-			throw new IllegalArgumentException("The colum to sort is not a column of this table: " + GenreTableModel.MEDIA_FILE_NUMBER.name());
-		}
+	private final ContentNature contentNature;
+	private List<String> mediaFileGenrePathList;
+	
+	public MediaFileGenreCommandParameter(ContentNature contentNature) {
+		this.contentNature = contentNature;
+		this.mediaFileGenrePathList = null;
 	}
 
-	public GenreParameters getSelectedGenreParameters() {
-		return getSelectedItem();
+	private List<String> mediaFileGenrePathList() {
+		// Lazy get to prevent initialization problem in Control class
+		if (mediaFileGenrePathList == null) {
+			mediaFileGenrePathList =  List.of(Control.getMediaFileGenresPath(contentNature).toAbsolutePath().toString());
+		}
+		return mediaFileGenrePathList;
 	}
+	
+	@Override
+	public Function<GenreParameters, List<String>> getParametersGetter() {
+		return (_) -> mediaFileGenrePathList();
+	}
+
+	@Override
+	public Predicate<GenreParameters> getActionValidityPredicate() {
+		return (_) -> true;
+	}
+
 }
