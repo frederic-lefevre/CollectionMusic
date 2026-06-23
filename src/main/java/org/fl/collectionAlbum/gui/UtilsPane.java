@@ -198,9 +198,18 @@ public class UtilsPane extends JPanel implements ActivableElement {
 			super();
 			
 			localJPopupMenu = new JPopupMenu();
-			JMenuItem albumSearchItem = new JMenuItem("des albums");
+			JMenuItem albumSearchItem = new JMenuItem("Rechercher des albums");
+			albumSearchItem.setFont(buttonFont);
+			albumSearchItem.setBackground(Color.GREEN);
 			albumSearchItem.addActionListener(new AlbumsSearchListener(generationPane, collectionAlbumContainer));
 			localJPopupMenu.add(albumSearchItem);
+			
+			localJPopupMenu.addSeparator();
+			
+			JMenuItem trackSearchItem = new JMenuItem("Rechercher des fichiers audio");
+			trackSearchItem.setFont(buttonFont);
+			trackSearchItem.setBackground(Color.GREEN);
+			localJPopupMenu.add(trackSearchItem);
 		}
 		
 		@Override
