@@ -53,7 +53,7 @@ public class UtilsPane extends JPanel implements ActivableElement {
 	private static final Font buttonFont = new Font("Verdana", Font.BOLD, 14);
 	private static final Font textFont = new Font("Verdana", Font.BOLD, 12);
 	
-	private final JButton albumsSearchButton;
+	private final JButton searchButton;
 	
 	private final JButton pickRandomAlbumsButton;
 	private final JComboBox<Integer> numberOfAlbumBox;
@@ -89,16 +89,16 @@ public class UtilsPane extends JPanel implements ActivableElement {
 		
 		showCollectionButton.addActionListener(showCollectionListener);
 
-		JPanel albumsSearchPanel = new JPanel();
+		JPanel searchPanel = new JPanel();
 		
-		albumsSearchButton = new JButton("Rechercher des albums");
-		albumsSearchButton.setFont(buttonFont);
-		albumsSearchButton.setBackground(Color.GREEN);
+		searchButton = new JButton("Rechercher des albums");
+		searchButton.setFont(buttonFont);
+		searchButton.setBackground(Color.GREEN);
 		
-		albumsSearchPanel.add(albumsSearchButton);
-		albumsSearchPanel.setBorder(new CompoundBorder(new LineBorder(Color.BLACK), new EmptyBorder(4, 0, 4, 0)));
-		albumsSearchPanel.setBackground(Color.WHITE);
-		add(albumsSearchPanel);
+		searchPanel.add(searchButton);
+		searchPanel.setBorder(new CompoundBorder(new LineBorder(Color.BLACK), new EmptyBorder(4, 0, 4, 0)));
+		searchPanel.setBackground(Color.WHITE);
+		add(searchPanel);
 		
 		JPanel choixAleatoirePane = new JPanel();
 		choixAleatoirePane.setLayout(new BoxLayout(choixAleatoirePane, BoxLayout.Y_AXIS));
@@ -127,7 +127,7 @@ public class UtilsPane extends JPanel implements ActivableElement {
 		pickRandomAlbumsPanel.add(pickRandomAlbumsButton);
 		pickRandomAlbumsPanel.setBorder(new EmptyBorder(0, 0, 0, 80));
 		
-		albumsSearchButton.addActionListener(new AlbumsSearchListener(generationPane, collectionAlbumContainer));
+		searchButton.addActionListener(new AlbumsSearchListener(generationPane, collectionAlbumContainer));
 		choixAleatoirePane.add(pickRandomAlbumsPanel);
 		
 		JPanel choixMethodPane = new JPanel();
@@ -177,12 +177,12 @@ public class UtilsPane extends JPanel implements ActivableElement {
 	@Override
 	public void activate() {
 		pickRandomAlbumsButton.setEnabled(true);
-		albumsSearchButton.setEnabled(true);
+		searchButton.setEnabled(true);
 	}
 
 	@Override
 	public void deactivate() {
 		pickRandomAlbumsButton.setEnabled(false);
-		albumsSearchButton.setEnabled(false);
+		searchButton.setEnabled(false);
 	}
 }
