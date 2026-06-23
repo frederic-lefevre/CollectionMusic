@@ -26,6 +26,8 @@ package org.fl.collectionAlbum.gui;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,7 +36,9 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -91,7 +95,7 @@ public class UtilsPane extends JPanel implements ActivableElement {
 
 		JPanel searchPanel = new JPanel();
 		
-		searchButton = new JButton("Rechercher des albums");
+		searchButton = new JButton("Rechercher ...");
 		searchButton.setFont(buttonFont);
 		searchButton.setBackground(Color.GREEN);
 		
@@ -127,7 +131,7 @@ public class UtilsPane extends JPanel implements ActivableElement {
 		pickRandomAlbumsPanel.add(pickRandomAlbumsButton);
 		pickRandomAlbumsPanel.setBorder(new EmptyBorder(0, 0, 0, 80));
 		
-		searchButton.addActionListener(new AlbumsSearchListener(generationPane, collectionAlbumContainer));
+		searchButton.addMouseListener(new SearchListener(generationPane, collectionAlbumContainer));
 		choixAleatoirePane.add(pickRandomAlbumsPanel);
 		
 		JPanel choixMethodPane = new JPanel();
@@ -184,5 +188,24 @@ public class UtilsPane extends JPanel implements ActivableElement {
 	public void deactivate() {
 		pickRandomAlbumsButton.setEnabled(false);
 		searchButton.setEnabled(false);
+	}
+	
+	private static class SearchListener extends MouseAdapter {
+
+		private final JPopupMenu localJPopupMenu;
+
+		SearchListener(GenerationPane generationPane, CollectionAlbumContainer collectionAlbumContainer) {
+			super();
+			
+			localJPopupMenu = new JPopupMenu();
+			JMenuItem albumSearchItem = new JMenuItem("des albums");
+			albumSearchItem.addActionListener(new AlbumsSearchListener(generationPane, collectionAlbumContainer));
+			localJPopupMenu.add(albumSearchItem);
+		}
+		
+		@Override
+		public void mousePressed(MouseEvent evt) {
+			localJPopupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
+		}
 	}
 }
