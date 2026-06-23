@@ -48,6 +48,7 @@ import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.gui.listener.AlbumsSearchListener;
+import org.fl.collectionAlbum.gui.listener.MediaFileSearchListener;
 import org.fl.collectionAlbum.gui.listener.OsActionListener;
 import org.fl.collectionAlbum.gui.listener.RandomAlbumsPickListener;
 import org.fl.collectionAlbum.rapportHtml.RapportStructuresAndNames;
@@ -211,6 +212,7 @@ public class UtilsPane extends JPanel implements ActivableElement {
 				JMenuItem trackSearchItem = new JMenuItem("Rechercher des fichiers " + contentNature.getNom());
 				trackSearchItem.setFont(buttonFont);
 				trackSearchItem.setBackground(Color.GREEN);
+				trackSearchItem.addActionListener(new MediaFileSearchListener(contentNature));
 				localJPopupMenu.add(trackSearchItem);
 			});
 		}
