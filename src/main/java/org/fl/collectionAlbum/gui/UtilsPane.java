@@ -30,6 +30,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -45,6 +46,7 @@ import javax.swing.border.LineBorder;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.Control;
+import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.gui.listener.AlbumsSearchListener;
 import org.fl.collectionAlbum.gui.listener.OsActionListener;
 import org.fl.collectionAlbum.gui.listener.RandomAlbumsPickListener;
@@ -204,12 +206,13 @@ public class UtilsPane extends JPanel implements ActivableElement {
 			albumSearchItem.addActionListener(new AlbumsSearchListener(generationPane, collectionAlbumContainer));
 			localJPopupMenu.add(albumSearchItem);
 			
-			localJPopupMenu.addSeparator();
-			
-			JMenuItem trackSearchItem = new JMenuItem("Rechercher des fichiers audio");
-			trackSearchItem.setFont(buttonFont);
-			trackSearchItem.setBackground(Color.GREEN);
-			localJPopupMenu.add(trackSearchItem);
+			Stream.of(ContentNature.values()).forEachOrdered(contentNature -> {
+				localJPopupMenu.addSeparator();		
+				JMenuItem trackSearchItem = new JMenuItem("Rechercher des fichiers " + contentNature.getNom());
+				trackSearchItem.setFont(buttonFont);
+				trackSearchItem.setBackground(Color.GREEN);
+				localJPopupMenu.add(trackSearchItem);
+			});
 		}
 		
 		@Override
