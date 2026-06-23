@@ -61,6 +61,7 @@ public class UtilsPane extends JPanel implements ActivableElement {
 	private static final Font textFont = new Font("Verdana", Font.BOLD, 12);
 	
 	private final JButton searchButton;
+	private final SearchListener searchListener;
 	
 	private final JButton pickRandomAlbumsButton;
 	private final JComboBox<Integer> numberOfAlbumBox;
@@ -134,7 +135,8 @@ public class UtilsPane extends JPanel implements ActivableElement {
 		pickRandomAlbumsPanel.add(pickRandomAlbumsButton);
 		pickRandomAlbumsPanel.setBorder(new EmptyBorder(0, 0, 0, 80));
 		
-		searchButton.addMouseListener(new SearchListener(generationPane, collectionAlbumContainer));
+		searchListener = new SearchListener(generationPane, collectionAlbumContainer);
+		searchButton.addMouseListener(searchListener);
 		choixAleatoirePane.add(pickRandomAlbumsPanel);
 		
 		JPanel choixMethodPane = new JPanel();
@@ -185,15 +187,17 @@ public class UtilsPane extends JPanel implements ActivableElement {
 	public void activate() {
 		pickRandomAlbumsButton.setEnabled(true);
 		searchButton.setEnabled(true);
+		searchListener.activate();
 	}
 
 	@Override
 	public void deactivate() {
 		pickRandomAlbumsButton.setEnabled(false);
 		searchButton.setEnabled(false);
+		searchListener.deactivate();
 	}
 	
-	private static class SearchListener extends MouseAdapter {
+	private static class SearchListener extends MouseAdapter implements ActivableElement {
 
 		private final JPopupMenu localJPopupMenu;
 
@@ -219,7 +223,19 @@ public class UtilsPane extends JPanel implements ActivableElement {
 		
 		@Override
 		public void mousePressed(MouseEvent evt) {
-			localJPopupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
+			if (localJPopupMenu.isEnabled()) {
+				localJPopupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
+			}
+		}
+
+		@Override
+		public void activate() {
+			localJPopupMenu.setEnabled(true);
+		}
+
+		@Override
+		public void deactivate() {
+			localJPopupMenu.setEnabled(false);
 		}
 	}
 }

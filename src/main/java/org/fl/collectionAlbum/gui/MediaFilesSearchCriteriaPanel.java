@@ -24,43 +24,58 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui;
 
-import java.util.ArrayList;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
 import java.util.List;
 
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
 
-import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.format.ContentNature;
-import org.fl.collectionAlbum.gui.table.MediaFileJTable;
-import org.fl.collectionAlbum.gui.table.MediaFileTableColumns;
 import org.fl.collectionAlbum.gui.table.MediaFileTableModel;
 import org.fl.collectionAlbum.mediaFile.MediaFile;
+import org.fl.collectionAlbum.mediaPath.MediaFileInventory;
+import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 
-public class MediaFilesSearchPane extends JPanel {
+public class MediaFilesSearchCriteriaPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	public MediaFilesSearchPane(ContentNature contentNature) {
+	private static final Font buttonFont = new Font("Verdana", Font.BOLD, 14);
+	
+	private final MediaFileTableModel mediaFileTableModel;
+	
+	public MediaFilesSearchCriteriaPanel(ContentNature contentNature, MediaFileTableModel mediaFileTableModel) {
 		super();
 		
-		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		this.mediaFileTableModel = mediaFileTableModel;
 		
-		List<MediaFile> searchResultMediaFiles = new ArrayList<>();
+		MediaFileInventory mediaFileInventory = MediaFilesInventories.getMediaFileInventory(contentNature);
 		
-		MediaFileTableModel mediaFileTableModel = 
-				new MediaFileTableModel(searchResultMediaFiles, MediaFileTableColumns.mediaColumnsParameters(contentNature));		
-		MediaFileJTable mediaFileJTable = new MediaFileJTable(mediaFileTableModel);
+		mediaFileTableModel.getMediaFileList();
 		
-		MediaFilesSearchCriteriaPanel searchCriteriaPanel = new MediaFilesSearchCriteriaPanel(contentNature, mediaFileTableModel);
+		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		
-		add(searchCriteriaPanel);
+		JButton mediaFilesSearchButton = new JButton("Rechercher");
+		mediaFilesSearchButton.setFont(buttonFont);
+		mediaFilesSearchButton.setBackground(Color.GREEN);
+		mediaFilesSearchButton.addActionListener(new MediaFilesSearchCriteriaListener());
 		
-		// Scroll pane to contain the media path table
-		JScrollPane mediaFileScrollTable = new JScrollPane(mediaFileJTable);
-		mediaFileScrollTable.setPreferredSize(Control.getMainSubPaneDimension());
+		add(mediaFilesSearchButton);
+	}
+	
+	private class MediaFilesSearchCriteriaListener implements java.awt.event.ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+			List<MediaFile> mediaFileListResult = mediaFileTableModel.getMediaFileList();
+			mediaFileListResult.clear();
+			
+			mediaFileTableModel.fireTableDataChanged();
+		}
 		
-		add(mediaFileScrollTable);
 	}
 }

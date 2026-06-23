@@ -44,6 +44,10 @@ public class MediaFileTableModel extends AbstractCollectionTableModel<MediaFile>
 		return  mediaFiles.get(rowIndex);
 	}
 	
+	public List<MediaFile> getMediaFileList() {
+		return getItemList();
+	}
+	
 	@Override
 	public void updateElement() {
 		fireTableDataChanged();
