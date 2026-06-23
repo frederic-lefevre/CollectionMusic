@@ -33,13 +33,11 @@ import org.fl.collectionAlbum.gui.MediaFilesSearchPane;
 
 public class MediaFileSearchListener implements java.awt.event.ActionListener {
 
-	
 	private final ContentNature contentNature;
 
 	public MediaFileSearchListener(ContentNature contentNature) {
 		
 		this.contentNature = contentNature;
-		
 	}
 	
 	@Override
