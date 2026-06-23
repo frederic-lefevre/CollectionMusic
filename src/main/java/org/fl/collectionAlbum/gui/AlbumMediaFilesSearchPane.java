@@ -45,7 +45,7 @@ import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 
-public class MediaFilesSearchPane extends JScrollPane {
+public class AlbumMediaFilesSearchPane extends JScrollPane {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -59,7 +59,7 @@ public class MediaFilesSearchPane extends JScrollPane {
 	private Map<ContentNature,JScrollPane> statusScrollPanels;
 	private Map<ContentNature,JPanel> mediaFilesPanels;
 	
-	public MediaFilesSearchPane(Album album, GenerationPane generationPane) {
+	public AlbumMediaFilesSearchPane(Album album, GenerationPane generationPane) {
 		
 		super();
 		
