@@ -26,42 +26,42 @@ package org.fl.collectionAlbum.gui;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
-import javax.swing.BoxLayout;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 
-import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.format.ContentNature;
-import org.fl.collectionAlbum.gui.table.MediaFileJTable;
-import org.fl.collectionAlbum.gui.table.MediaFileTableColumns;
 import org.fl.collectionAlbum.gui.table.MediaFileTableModel;
 import org.fl.collectionAlbum.mediaFile.MediaFile;
 
-public class MediaFilesSearchPane extends JPanel {
+public class VideoFileSearchCriteriaPanel extends MediaFilesSearchCriteriaPanel {
 
 	private static final long serialVersionUID = 1L;
+	
+	private final JTextField fileNameSearchedText;
+	
+	public VideoFileSearchCriteriaPanel(ContentNature contentNature, MediaFileTableModel mediaFileTableModel) {
+		super(contentNature, mediaFileTableModel);
+		
+		fileNameSearchedText = new JTextField();
+		
+		fillPanel();
+	}
 
-	public MediaFilesSearchPane(ContentNature contentNature) {
-		super();
+	@Override
+	protected void addSearchField() {
+		add(createTextFieldSearchPanel("Nom de fichier incluant les caractères", fileNameSearchedText));
+	}
+
+	@Override
+	protected List<Predicate<MediaFile>> getMediaFilePredicateList() {
 		
-		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		List<Predicate<MediaFile>> mediaFilePredicateList = new ArrayList<>();
+		String fileNameValue = getLowerCaseTextFieldValue(fileNameSearchedText);
+		if (fileNameValue != null) {
+			mediaFilePredicateList.add((m) -> m.getFileName().toString().toLowerCase().contains(fileNameValue));
+		}
 		
-		List<MediaFile> searchResultMediaFiles = new ArrayList<>();
-		
-		MediaFileTableModel mediaFileTableModel = 
-				new MediaFileTableModel(searchResultMediaFiles, MediaFileTableColumns.mediaColumnsParameters(contentNature));		
-		MediaFileJTable mediaFileJTable = new MediaFileJTable(mediaFileTableModel);
-			
-		add(switch (contentNature) {
-				case AUDIO -> new AudioFileSearchCriteriaPanel(contentNature, mediaFileTableModel);
-				case VIDEO -> new VideoFileSearchCriteriaPanel(contentNature, mediaFileTableModel);
-		});
-		
-		// Scroll pane to contain the media path table
-		JScrollPane mediaFileScrollTable = new JScrollPane(mediaFileJTable);
-		mediaFileScrollTable.setPreferredSize(Control.getMainSubPaneDimension());
-		
-		add(mediaFileScrollTable);
+		return mediaFilePredicateList;
 	}
 }
