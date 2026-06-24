@@ -50,7 +50,7 @@ public class VideoFileSearchCriteriaPanel extends MediaFilesSearchCriteriaPanel 
 
 	@Override
 	protected void addSearchField() {
-		add(createTextFieldSearchPanel("Nom de fichier incluant les caractères", fileNameSearchedText));
+		add(createSearchFieldPanel("Nom de fichier incluant les caractères", fileNameSearchedText));
 	}
 
 	@Override

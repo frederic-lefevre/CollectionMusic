@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import javax.swing.BoxLayout;
+import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -41,6 +42,12 @@ public class AudioFileSearchCriteriaPanel extends MediaFilesSearchCriteriaPanel 
 
 	private static final long serialVersionUID = 1L;
 	
+	private static final String NO_CHOICE = "";
+	private static final String LOSS_LESS = "Sans perte";
+	private static final String LOSSY = "Avec perte";
+	
+	private static final String[] LOSSLESS_CHOICES = {NO_CHOICE, LOSS_LESS, LOSSY};
+	
 	private final JTextField trackTitleSearchedText;
 	private final JTextField artistSearchedText;
 	private final JTextField albumSearchedText;
@@ -50,6 +57,7 @@ public class AudioFileSearchCriteriaPanel extends MediaFilesSearchCriteriaPanel 
 	private final JTextField sampleRateSearchedText;
 	private final JTextField bitRateSearchedText;
 	private final JTextField channelNumberSearchedText;
+	private final JComboBox<String> lossLessSearchComboBox;
 
 	public AudioFileSearchCriteriaPanel(ContentNature contentNature, MediaFileTableModel mediaFileTableModel) {
 		super(contentNature, mediaFileTableModel);
@@ -63,6 +71,8 @@ public class AudioFileSearchCriteriaPanel extends MediaFilesSearchCriteriaPanel 
 		sampleRateSearchedText = new JTextField(7);
 		bitRateSearchedText  = new JTextField(8);
 		channelNumberSearchedText = new JTextField(2);
+		lossLessSearchComboBox = new JComboBox<>(LOSSLESS_CHOICES);
+		lossLessSearchComboBox.setSelectedItem(NO_CHOICE);
 		
 		fillPanel();
 	}
@@ -75,18 +85,19 @@ public class AudioFileSearchCriteriaPanel extends MediaFilesSearchCriteriaPanel 
 		
 		JPanel normalizedTagsSearchPane = new JPanel();
 		normalizedTagsSearchPane.setLayout(new BoxLayout(normalizedTagsSearchPane, BoxLayout.X_AXIS));	
-		normalizedTagsSearchPane.add(createTextFieldSearchPanel("Titre incluant les caractères", trackTitleSearchedText));
-		normalizedTagsSearchPane.add(createTextFieldSearchPanel("Artiste incluant les caractères", artistSearchedText));
-		normalizedTagsSearchPane.add(createTextFieldSearchPanel("Album incluant les caractères", albumSearchedText));
-		normalizedTagsSearchPane.add(createTextFieldSearchPanel("Genre musical incluant les caractères", genreSearchedText));
+		normalizedTagsSearchPane.add(createSearchFieldPanel("Titre incluant les caractères", trackTitleSearchedText));
+		normalizedTagsSearchPane.add(createSearchFieldPanel("Artiste incluant les caractères", artistSearchedText));
+		normalizedTagsSearchPane.add(createSearchFieldPanel("Album incluant les caractères", albumSearchedText));
+		normalizedTagsSearchPane.add(createSearchFieldPanel("Genre musical incluant les caractères", genreSearchedText));
 		searchCriteriaPane.add(normalizedTagsSearchPane);
 		
 		JPanel streamInfoSearchPane = new JPanel();
 		streamInfoSearchPane.setLayout(new BoxLayout(streamInfoSearchPane, BoxLayout.X_AXIS));
-		streamInfoSearchPane.add(createTextFieldSearchPanel("Bits par échantillon", bitDepthSearchedText));
-		streamInfoSearchPane.add(createTextFieldSearchPanel("Echantillonnage (Hz)", sampleRateSearchedText));
-		streamInfoSearchPane.add(createTextFieldSearchPanel("Débit (Bits/s)", bitRateSearchedText));
-		streamInfoSearchPane.add(createTextFieldSearchPanel("Nombre de canaux", channelNumberSearchedText));
+		streamInfoSearchPane.add(createSearchFieldPanel("Bits par échantillon", bitDepthSearchedText));
+		streamInfoSearchPane.add(createSearchFieldPanel("Echantillonnage (Hz)", sampleRateSearchedText));
+		streamInfoSearchPane.add(createSearchFieldPanel("Débit (Bits/s)", bitRateSearchedText));
+		streamInfoSearchPane.add(createSearchFieldPanel("Nombre de canaux", channelNumberSearchedText));
+		streamInfoSearchPane.add(createSearchFieldPanel("Avec ou sans perte", lossLessSearchComboBox));
 		
 		searchCriteriaPane.add(streamInfoSearchPane);
 		
@@ -145,6 +156,12 @@ public class AudioFileSearchCriteriaPanel extends MediaFilesSearchCriteriaPanel 
 		if (channelNumberSampleValue != null) {
 			mediaFilePredicateList.add(
 					(m) -> ((AudioFile)m).getAudioMetadata().getAudioStreamMetadata().numberOfChannels().value().equals(channelNumberSampleValue));
+		}
+		
+		String losslessValue = (String)lossLessSearchComboBox.getSelectedItem();
+		if ((losslessValue != null) && !losslessValue.equals(NO_CHOICE)) {
+			mediaFilePredicateList.add(
+					(m) -> ((AudioFile)m).getAudioMetadata().getAudioStreamMetadata().isLossless().value().equals(losslessValue.equals(LOSS_LESS)));
 		}
 		return mediaFilePredicateList;
 	}

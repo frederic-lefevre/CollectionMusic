@@ -33,6 +33,7 @@ import java.util.function.Predicate;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -99,7 +100,7 @@ public abstract class MediaFilesSearchCriteriaPanel extends JPanel {
 		}
 	}
 	
-	protected static JPanel createTextFieldSearchPanel(String labelText, JTextField searchField) {
+	protected static JPanel createSearchFieldPanel(String labelText, JComponent searchField) {
 		JPanel searchPanel = new JPanel();
 		searchPanel.setLayout(new BoxLayout(searchPanel, BoxLayout.Y_AXIS));
 		JLabel searchLabel = new JLabel(labelText);
