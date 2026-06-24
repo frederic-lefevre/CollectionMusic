@@ -74,6 +74,7 @@ public class AudioFileSearchCriteriaPanel extends MediaFilesSearchCriteriaPanel 
 		if (trackArtistValue != null) {
 			mediaFilePredicateList.add(
 					(m) -> ((AudioFile)m).getAudioMetadata().getNormalizedAudioMetadataTags().artist().value().toLowerCase().contains(trackArtistValue) ||
+					((AudioFile)m).getAudioMetadata().getNormalizedAudioMetadataTags().composer().value().toLowerCase().contains(trackArtistValue) ||
 					((AudioFile)m).getAudioMetadata().getNormalizedAudioMetadataTags().albumArtist().value().toLowerCase().contains(trackArtistValue));
 		}
 		
