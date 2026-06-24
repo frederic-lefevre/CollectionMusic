@@ -47,6 +47,7 @@ public class AudioFileSearchCriteriaPanel extends MediaFilesSearchCriteriaPanel 
 	private final JTextField genreSearchedText;
 	
 	private final JTextField bitDepthSearchedText;
+	private final JTextField sampleRateSearchedText;
 
 	public AudioFileSearchCriteriaPanel(ContentNature contentNature, MediaFileTableModel mediaFileTableModel) {
 		super(contentNature, mediaFileTableModel);
@@ -57,6 +58,7 @@ public class AudioFileSearchCriteriaPanel extends MediaFilesSearchCriteriaPanel 
 		genreSearchedText = new JTextField();
 		
 		bitDepthSearchedText = new JTextField(2);
+		sampleRateSearchedText = new JTextField(7);
 		
 		fillPanel();
 	}
@@ -76,8 +78,9 @@ public class AudioFileSearchCriteriaPanel extends MediaFilesSearchCriteriaPanel 
 		searchCriteriaPane.add(normalizedTagsSearchPane);
 		
 		JPanel streamInfoSearchPane = new JPanel();
-		streamInfoSearchPane.setLayout(new BoxLayout(streamInfoSearchPane, BoxLayout.Y_AXIS));
+		streamInfoSearchPane.setLayout(new BoxLayout(streamInfoSearchPane, BoxLayout.X_AXIS));
 		streamInfoSearchPane.add(createTextFieldSearchPanel("Bits par échantillon", bitDepthSearchedText));
+		streamInfoSearchPane.add(createTextFieldSearchPanel("Echantillonnage (Hz)", sampleRateSearchedText));
 		
 		searchCriteriaPane.add(streamInfoSearchPane);
 		
@@ -118,6 +121,12 @@ public class AudioFileSearchCriteriaPanel extends MediaFilesSearchCriteriaPanel 
 		if (bitPerSampleValue != null) {
 			mediaFilePredicateList.add(
 					(m) -> ((AudioFile)m).getAudioMetadata().getAudioStreamMetadata().bitDepth().value().equals(bitPerSampleValue));
+		}
+		
+		Long sampleRateValue = getLongFieldValue(sampleRateSearchedText);
+		if (sampleRateValue != null) {
+			mediaFilePredicateList.add(
+					(m) -> ((AudioFile)m).getAudioMetadata().getAudioStreamMetadata().samplingRate().value().equals(sampleRateValue));
 		}
 		return mediaFilePredicateList;
 	}

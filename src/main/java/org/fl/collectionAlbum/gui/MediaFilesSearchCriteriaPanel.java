@@ -28,6 +28,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.Predicate;
 
 import javax.swing.BoxLayout;
@@ -108,11 +109,20 @@ public abstract class MediaFilesSearchCriteriaPanel extends JPanel {
 	}
 	
 	protected static Integer getIntegerFieldValue(JTextField textField) {
+		return getNumberFieldValue(textField, Integer::parseInt);
+
+	}
+	
+	protected static Long getLongFieldValue(JTextField textField) {
+		return getNumberFieldValue(textField, Long::parseLong);
+	}
+	
+	private static <T extends Number> T getNumberFieldValue(JTextField textField, Function<String, T> parseFunction) {
 		String value = textField.getText();
 		if ((value != null) && !value.isBlank()) {
 			try {
 				textField.setBackground(Color.WHITE);
-				return Integer.parseInt(value.strip());
+				return parseFunction.apply(value.strip());
 			} catch (NumberFormatException ex) {
 				textField.setText("");
 				textField.setBackground(Color.PINK);
