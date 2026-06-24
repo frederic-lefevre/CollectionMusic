@@ -27,14 +27,19 @@ package org.fl.collectionAlbum.gui;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.gui.table.MediaFileTableModel;
+import org.fl.collectionAlbum.mediaFile.AudioFile;
 import org.fl.collectionAlbum.mediaFile.MediaFile;
 import org.fl.collectionAlbum.mediaPath.MediaFileInventory;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
@@ -45,18 +50,41 @@ public class MediaFilesSearchCriteriaPanel extends JPanel {
 
 	private static final Font buttonFont = new Font("Verdana", Font.BOLD, 14);
 	
+	private final ContentNature contentNature;
 	private final MediaFileTableModel mediaFileTableModel;
+	
+	private final List<MediaFile> searchedMediaFileList;
+	
+	private final JTextField trackTitleSearchedText;
+	private final JTextField artistSearchedText;
+	private final JTextField albumSearchedText;
+	
+	private final JTextField fileNameSearchedText;
 	
 	public MediaFilesSearchCriteriaPanel(ContentNature contentNature, MediaFileTableModel mediaFileTableModel) {
 		super();
 		
+		this.contentNature = contentNature;
 		this.mediaFileTableModel = mediaFileTableModel;
+		searchedMediaFileList = mediaFileTableModel.getMediaFileList();
 		
-		MediaFileInventory mediaFileInventory = MediaFilesInventories.getMediaFileInventory(contentNature);
+		trackTitleSearchedText = new JTextField();
+		artistSearchedText = new JTextField();
+		albumSearchedText = new JTextField();
 		
-		mediaFileTableModel.getMediaFileList();
+		fileNameSearchedText = new JTextField();
 		
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+		
+		if (contentNature == ContentNature.AUDIO) {
+		
+			add(createTextFieldSearchPanel("Titre incluant les caractères", trackTitleSearchedText));
+			add(createTextFieldSearchPanel("Artiste incluant les caractères", artistSearchedText));
+			add(createTextFieldSearchPanel("Album incluant les caractères", albumSearchedText));
+
+		} else {
+			add(createTextFieldSearchPanel("Nom de fichier incluant les caractères", fileNameSearchedText));
+		}
 		
 		JButton mediaFilesSearchButton = new JButton("Rechercher");
 		mediaFilesSearchButton.setFont(buttonFont);
@@ -71,11 +99,58 @@ public class MediaFilesSearchCriteriaPanel extends JPanel {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			
-			List<MediaFile> mediaFileListResult = mediaFileTableModel.getMediaFileList();
-			mediaFileListResult.clear();
+			List<Predicate<MediaFile>> mediaFilePredicateList = new ArrayList<>();
 			
+			if (contentNature == ContentNature.AUDIO) {
+				
+				String trackTitleValue = getLowerCaseTextFieldValue(trackTitleSearchedText);
+				if (trackTitleValue != null) {
+					mediaFilePredicateList.add(
+							(m) -> ((AudioFile)m).getAudioMetadata().getNormalizedAudioMetadataTags().trackTitle().value().toLowerCase().contains(trackTitleValue));
+				}
+				
+				String trackArtistValue = getLowerCaseTextFieldValue(artistSearchedText);
+				if (trackArtistValue != null) {
+					mediaFilePredicateList.add(
+							(m) -> ((AudioFile)m).getAudioMetadata().getNormalizedAudioMetadataTags().artist().value().toLowerCase().contains(trackArtistValue) ||
+							((AudioFile)m).getAudioMetadata().getNormalizedAudioMetadataTags().albumArtist().value().toLowerCase().contains(trackArtistValue));
+				}
+				
+				String trackAlbumValue = getLowerCaseTextFieldValue(albumSearchedText);
+				if (trackAlbumValue != null) {
+					mediaFilePredicateList.add(
+							(m) -> ((AudioFile)m).getAudioMetadata().getNormalizedAudioMetadataTags().albumTitle().value().toLowerCase().contains(trackAlbumValue));
+				}
+			} else {
+				String fileNameValue = getLowerCaseTextFieldValue(fileNameSearchedText);
+				if (fileNameValue != null) {
+					mediaFilePredicateList.add((m) -> m.getFileName().toString().toLowerCase().contains(fileNameValue));
+				}
+			}
+			
+			MediaFileInventory mediaFileInventory = MediaFilesInventories.getMediaFileInventory(contentNature);
+			List<MediaFile> mediaFileListFound = mediaFileInventory.getMediaFileListSastisfying(mediaFilePredicateList);
+			searchedMediaFileList.clear();
+			searchedMediaFileList.addAll(mediaFileListFound);
 			mediaFileTableModel.fireTableDataChanged();
+		}		
+	}
+	
+	private static String getLowerCaseTextFieldValue(JTextField textField) {
+		String value = textField.getText();
+		if ((value != null) && !value.isBlank()) {
+			return value.strip().toLowerCase();
+		} else {
+			return null;
 		}
-		
+	}
+	
+	private static JPanel createTextFieldSearchPanel(String labelText, JTextField searchField) {
+		JPanel searchPanel = new JPanel();
+		searchPanel.setLayout(new BoxLayout(searchPanel, BoxLayout.Y_AXIS));
+		JLabel searchLabel = new JLabel(labelText);
+		searchPanel.add(searchLabel);
+		searchPanel.add(searchField);
+		return searchPanel;
 	}
 }
