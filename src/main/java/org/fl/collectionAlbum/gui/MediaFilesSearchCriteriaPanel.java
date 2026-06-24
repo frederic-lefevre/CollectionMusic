@@ -48,11 +48,15 @@ public abstract class MediaFilesSearchCriteriaPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
+	private static final String RESULTATS = " résultats";
+	
 	private static final Font buttonFont = new Font("Verdana", Font.BOLD, 14);
+	private static final Font nbResultsFont = new Font("Verdana", Font.BOLD, 12);
 	
 	private final ContentNature contentNature;
 	private final MediaFileTableModel mediaFileTableModel;	
 	private final List<MediaFile> searchedMediaFileList;
+	private final JLabel nbResultsLabel;
 	
 	public MediaFilesSearchCriteriaPanel(ContentNature contentNature, MediaFileTableModel mediaFileTableModel) {
 		super();
@@ -60,6 +64,9 @@ public abstract class MediaFilesSearchCriteriaPanel extends JPanel {
 		this.contentNature = contentNature;
 		this.mediaFileTableModel = mediaFileTableModel;
 		searchedMediaFileList = mediaFileTableModel.getMediaFileList();
+		nbResultsLabel = new JLabel(0 + RESULTATS);
+		nbResultsLabel.setFont(nbResultsFont);
+		nbResultsLabel.setForeground(Color.BLUE);
 		
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 	}
@@ -67,12 +74,19 @@ public abstract class MediaFilesSearchCriteriaPanel extends JPanel {
 	protected void fillPanel() {
 		addSearchField();
 		
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+		
 		JButton mediaFilesSearchButton = new JButton("Rechercher");
 		mediaFilesSearchButton.setFont(buttonFont);
 		mediaFilesSearchButton.setBackground(Color.GREEN);
 		mediaFilesSearchButton.addActionListener(new MediaFilesSearchCriteriaListener());
+		mediaFilesSearchButton.setAlignmentX(RIGHT_ALIGNMENT);
+		nbResultsLabel.setAlignmentX(RIGHT_ALIGNMENT);
+		buttonPanel.add(mediaFilesSearchButton);
+		buttonPanel.add(nbResultsLabel);
 		
-		add(mediaFilesSearchButton);
+		add(buttonPanel);
 	}
 	
 	protected abstract void addSearchField();
@@ -87,6 +101,7 @@ public abstract class MediaFilesSearchCriteriaPanel extends JPanel {
 			List<MediaFile> mediaFileListFound = mediaFileInventory.getMediaFileListSastisfying(getMediaFilePredicateList());
 			searchedMediaFileList.clear();
 			searchedMediaFileList.addAll(mediaFileListFound);
+			nbResultsLabel.setText(mediaFileListFound.size() + RESULTATS);
 			mediaFileTableModel.fireTableDataChanged();
 		}		
 	}
