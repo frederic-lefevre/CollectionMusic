@@ -106,4 +106,20 @@ public abstract class MediaFilesSearchCriteriaPanel extends JPanel {
 		searchPanel.add(searchField);
 		return searchPanel;
 	}
+	
+	protected static Integer getIntegerFieldValue(JTextField textField) {
+		String value = textField.getText();
+		if ((value != null) && !value.isBlank()) {
+			try {
+				textField.setBackground(Color.WHITE);
+				return Integer.parseInt(value.strip());
+			} catch (NumberFormatException ex) {
+				textField.setText("");
+				textField.setBackground(Color.PINK);
+				return null;
+			}
+		} else {
+			return null;
+		}
+	}
 }

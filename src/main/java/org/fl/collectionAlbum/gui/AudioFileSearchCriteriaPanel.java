@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
+import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -44,6 +45,8 @@ public class AudioFileSearchCriteriaPanel extends MediaFilesSearchCriteriaPanel 
 	private final JTextField artistSearchedText;
 	private final JTextField albumSearchedText;
 	private final JTextField genreSearchedText;
+	
+	private final JTextField bitDepthSearchedText;
 
 	public AudioFileSearchCriteriaPanel(ContentNature contentNature, MediaFileTableModel mediaFileTableModel) {
 		super(contentNature, mediaFileTableModel);
@@ -53,16 +56,32 @@ public class AudioFileSearchCriteriaPanel extends MediaFilesSearchCriteriaPanel 
 		albumSearchedText = new JTextField();
 		genreSearchedText = new JTextField();
 		
+		bitDepthSearchedText = new JTextField(2);
+		
 		fillPanel();
 	}
 
 	@Override
 	protected void addSearchField() {
 		
-		add(createTextFieldSearchPanel("Titre incluant les caractères", trackTitleSearchedText));
-		add(createTextFieldSearchPanel("Artiste incluant les caractères", artistSearchedText));
-		add(createTextFieldSearchPanel("Album incluant les caractères", albumSearchedText));
-		add(createTextFieldSearchPanel("Genre musical incluant les caractères", genreSearchedText));
+		JPanel searchCriteriaPane = new JPanel();
+		searchCriteriaPane.setLayout(new BoxLayout(searchCriteriaPane, BoxLayout.Y_AXIS));
+		
+		JPanel normalizedTagsSearchPane = new JPanel();
+		normalizedTagsSearchPane.setLayout(new BoxLayout(normalizedTagsSearchPane, BoxLayout.X_AXIS));	
+		normalizedTagsSearchPane.add(createTextFieldSearchPanel("Titre incluant les caractères", trackTitleSearchedText));
+		normalizedTagsSearchPane.add(createTextFieldSearchPanel("Artiste incluant les caractères", artistSearchedText));
+		normalizedTagsSearchPane.add(createTextFieldSearchPanel("Album incluant les caractères", albumSearchedText));
+		normalizedTagsSearchPane.add(createTextFieldSearchPanel("Genre musical incluant les caractères", genreSearchedText));
+		searchCriteriaPane.add(normalizedTagsSearchPane);
+		
+		JPanel streamInfoSearchPane = new JPanel();
+		streamInfoSearchPane.setLayout(new BoxLayout(streamInfoSearchPane, BoxLayout.Y_AXIS));
+		streamInfoSearchPane.add(createTextFieldSearchPanel("Bits par échantillon", bitDepthSearchedText));
+		
+		searchCriteriaPane.add(streamInfoSearchPane);
+		
+		add(searchCriteriaPane);
 	}
 
 	@Override
@@ -93,6 +112,12 @@ public class AudioFileSearchCriteriaPanel extends MediaFilesSearchCriteriaPanel 
 		if (genreAlbumValue != null) {
 			mediaFilePredicateList.add(
 					(m) -> ((AudioFile)m).getAudioMetadata().getNormalizedAudioMetadataTags().genre().value().toLowerCase().contains(genreAlbumValue));
+		}
+		
+		Integer bitPerSampleValue = getIntegerFieldValue(bitDepthSearchedText);
+		if (bitPerSampleValue != null) {
+			mediaFilePredicateList.add(
+					(m) -> ((AudioFile)m).getAudioMetadata().getAudioStreamMetadata().bitDepth().value().equals(bitPerSampleValue));
 		}
 		return mediaFilePredicateList;
 	}
