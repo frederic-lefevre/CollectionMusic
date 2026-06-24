@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import org.fl.collectionAlbum.format.ContentNature;
@@ -42,6 +43,7 @@ public class AudioFileSearchCriteriaPanel extends MediaFilesSearchCriteriaPanel 
 	private final JTextField trackTitleSearchedText;
 	private final JTextField artistSearchedText;
 	private final JTextField albumSearchedText;
+	private final JTextField genreSearchedText;
 
 	public AudioFileSearchCriteriaPanel(ContentNature contentNature, MediaFileTableModel mediaFileTableModel) {
 		super(contentNature, mediaFileTableModel);
@@ -49,15 +51,18 @@ public class AudioFileSearchCriteriaPanel extends MediaFilesSearchCriteriaPanel 
 		trackTitleSearchedText = new JTextField();
 		artistSearchedText = new JTextField();
 		albumSearchedText = new JTextField();
+		genreSearchedText = new JTextField();
 		
 		fillPanel();
 	}
 
 	@Override
 	protected void addSearchField() {
+		
 		add(createTextFieldSearchPanel("Titre incluant les caractères", trackTitleSearchedText));
 		add(createTextFieldSearchPanel("Artiste incluant les caractères", artistSearchedText));
-		add(createTextFieldSearchPanel("Album incluant les caractères", albumSearchedText));	
+		add(createTextFieldSearchPanel("Album incluant les caractères", albumSearchedText));
+		add(createTextFieldSearchPanel("Genre musical incluant les caractères", genreSearchedText));
 	}
 
 	@Override
@@ -82,6 +87,12 @@ public class AudioFileSearchCriteriaPanel extends MediaFilesSearchCriteriaPanel 
 		if (trackAlbumValue != null) {
 			mediaFilePredicateList.add(
 					(m) -> ((AudioFile)m).getAudioMetadata().getNormalizedAudioMetadataTags().albumTitle().value().toLowerCase().contains(trackAlbumValue));
+		}
+		
+		String genreAlbumValue = getLowerCaseTextFieldValue(genreSearchedText);
+		if (genreAlbumValue != null) {
+			mediaFilePredicateList.add(
+					(m) -> ((AudioFile)m).getAudioMetadata().getNormalizedAudioMetadataTags().genre().value().toLowerCase().contains(genreAlbumValue));
 		}
 		return mediaFilePredicateList;
 	}
