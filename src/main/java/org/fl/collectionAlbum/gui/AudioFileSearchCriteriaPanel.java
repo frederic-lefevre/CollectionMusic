@@ -48,6 +48,8 @@ public class AudioFileSearchCriteriaPanel extends MediaFilesSearchCriteriaPanel 
 	
 	private final JTextField bitDepthSearchedText;
 	private final JTextField sampleRateSearchedText;
+	private final JTextField bitRateSearchedText;
+	private final JTextField channelNumberSearchedText;
 
 	public AudioFileSearchCriteriaPanel(ContentNature contentNature, MediaFileTableModel mediaFileTableModel) {
 		super(contentNature, mediaFileTableModel);
@@ -59,6 +61,8 @@ public class AudioFileSearchCriteriaPanel extends MediaFilesSearchCriteriaPanel 
 		
 		bitDepthSearchedText = new JTextField(2);
 		sampleRateSearchedText = new JTextField(7);
+		bitRateSearchedText  = new JTextField(8);
+		channelNumberSearchedText = new JTextField(2);
 		
 		fillPanel();
 	}
@@ -81,6 +85,8 @@ public class AudioFileSearchCriteriaPanel extends MediaFilesSearchCriteriaPanel 
 		streamInfoSearchPane.setLayout(new BoxLayout(streamInfoSearchPane, BoxLayout.X_AXIS));
 		streamInfoSearchPane.add(createTextFieldSearchPanel("Bits par échantillon", bitDepthSearchedText));
 		streamInfoSearchPane.add(createTextFieldSearchPanel("Echantillonnage (Hz)", sampleRateSearchedText));
+		streamInfoSearchPane.add(createTextFieldSearchPanel("Débit (Bits/s)", bitRateSearchedText));
+		streamInfoSearchPane.add(createTextFieldSearchPanel("Nombre de canaux", channelNumberSearchedText));
 		
 		searchCriteriaPane.add(streamInfoSearchPane);
 		
@@ -127,6 +133,18 @@ public class AudioFileSearchCriteriaPanel extends MediaFilesSearchCriteriaPanel 
 		if (sampleRateValue != null) {
 			mediaFilePredicateList.add(
 					(m) -> ((AudioFile)m).getAudioMetadata().getAudioStreamMetadata().samplingRate().value().equals(sampleRateValue));
+		}
+		
+		Long bitRateValue = getLongFieldValue(bitRateSearchedText);
+		if (bitRateValue != null) {
+			mediaFilePredicateList.add(
+					(m) -> ((AudioFile)m).getAudioMetadata().getAudioStreamMetadata().bitRate().value().equals(bitRateValue));
+		}
+		
+		Integer channelNumberSampleValue = getIntegerFieldValue(channelNumberSearchedText);
+		if (channelNumberSampleValue != null) {
+			mediaFilePredicateList.add(
+					(m) -> ((AudioFile)m).getAudioMetadata().getAudioStreamMetadata().numberOfChannels().value().equals(channelNumberSampleValue));
 		}
 		return mediaFilePredicateList;
 	}
