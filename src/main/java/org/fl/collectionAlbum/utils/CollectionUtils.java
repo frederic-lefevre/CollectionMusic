@@ -319,32 +319,41 @@ public class CollectionUtils {
 	}
 	
 	public static ImageIcon buildAdjustedImageIcon(Path imagePath, int maxWidth, int maxHeight) {
-
-		try {
-			BufferedImage bufferedImage = ImageIO.read(imagePath.toFile());
-	
-			if (bufferedImage != null) {
-				return new ImageIcon(scaleImage(bufferedImage, maxWidth, maxHeight));
-			} else {
-				logger.log(Level.WARNING, "Image format problem: No image reader found for this image " + Objects.toString(imagePath));
-				return getImageForError(maxWidth, maxHeight);
-			}
-		} catch (Exception e) {
-			logger.log(Level.WARNING, "Exception when creating BufferedImage from file " + Objects.toString(imagePath), e);
-			return getImageForError(maxWidth, maxHeight);
+		BufferedImage bufferedImage = getImage(imagePath);
+		if (bufferedImage != null) {
+			return new ImageIcon(scaleImage(getImage(imagePath), maxWidth, maxHeight));
+		} else {
+			return new ImageIcon(scaleImage(getImageForError(), maxWidth, maxHeight), DESCRIPTION_FOR_IMAGE_ERROR);
 		}
 	}
 	
-	private static ImageIcon getImageForError(int maxWidth, int maxHeight) {
+	private static BufferedImage getImage(Path imagePath) {
+		try {
+			BufferedImage bufferedImage = ImageIO.read(imagePath.toFile());
+		
+			if (bufferedImage != null) {
+				return bufferedImage;
+			} else {
+				logger.log(Level.WARNING, "Image format problem: No image reader found for this image " + Objects.toString(imagePath));
+				return null;
+			}
+		} catch (Exception e) {
+			logger.log(Level.WARNING, "Exception when creating BufferedImage from file " + Objects.toString(imagePath), e);
+			return null;
+		}
+	}
+	
+	private static BufferedImage getImageForError() {
 		
 		if (IMAGE_FOR_ERROR == null) {
 			try {
 				IMAGE_FOR_ERROR = ImageIO.read(Control.getImageForErrorPath().toFile());				
 			} catch (Exception e2) {
 				logger.log(Level.WARNING, "Exception when creating BufferedImage for error " + Objects.toString(Control.getImageForErrorPath()), e2);
+				IMAGE_FOR_ERROR = new BufferedImage(400, 400, BufferedImage.TYPE_BYTE_GRAY);
 			}
 		}
-		return new ImageIcon(scaleImage(IMAGE_FOR_ERROR, maxWidth, maxHeight), DESCRIPTION_FOR_IMAGE_ERROR);
+		return IMAGE_FOR_ERROR;
 	}
 	
 	private static Image scaleImage(BufferedImage bufferedImage, int maxWidth, int maxHeight) {
