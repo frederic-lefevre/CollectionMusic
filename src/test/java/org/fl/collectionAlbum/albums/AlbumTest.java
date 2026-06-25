@@ -26,6 +26,7 @@ package org.fl.collectionAlbum.albums;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -57,6 +58,7 @@ import org.fl.collectionAlbum.format.LosslessAlbumAudioFiles;
 import org.fl.collectionAlbum.format.MediaSupports;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
+import org.fl.collectionAlbum.utils.CollectionUtils;
 import org.fl.collectionAlbum.utils.TemporalUtils;
 import org.fl.discogsInterface.inventory.InventoryCsvAlbum;
 import org.fl.util.FilterCounter;
@@ -135,6 +137,14 @@ class AlbumTest {
 		
 		assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(1);
 		assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.SEVERE)).isEqualTo(1);
+		
+		albumParserFilterCounter.stopLogCountAndFilter();
+		albumFilterCounter.stopLogCountAndFilter();
+		formatFilterCounter.stopLogCountAndFilter();
+		parserHelpersFilterCounter.stopLogCountAndFilter();
+		
+		
+		
 	}
 
 	private static final String albumStr1 = """
@@ -162,6 +172,8 @@ class AlbumTest {
 			  
 	@Test
 	void testAlbum1() throws DatabindException, JacksonException, URISyntaxException {
+		
+		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
 		
 		ObjectNode jAlbum = (ObjectNode)mapper.readTree(albumStr1);
 
@@ -197,7 +209,16 @@ class AlbumTest {
 
 		assertThat(album.getAllMediaFilePaths()).hasSameElementsAs(audioFiles);
 		
+		LogRecordCounter collectionUtilsFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(CollectionUtils.class.getName()));	
+		
 		assertThat(album.getCoverImagePath()).isNull();
+		
+		BufferedImage notFoundImage =  album.getSleeveImage();
+		assertThat(notFoundImage).isNotNull();
+		
+		assertThat(collectionUtilsFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(collectionUtilsFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
+		collectionUtilsFilterCounter.stopLogCountAndFilter();
 		
 		// Add the audio file path
 		AbstractAlbumsAudioFiles audioFile = (AbstractAlbumsAudioFiles) audioFiles.get(0);
@@ -222,6 +243,7 @@ class AlbumTest {
 		assertThat(album.getCoverImagePath())
 			.isNotNull()
 			.hasToString("E:\\Musique\\e\\Bill Evans\\Waltz for Debby\\cover.jpg");
+		assertThat(album.getSleeveImage()).isNotNull().isNotEqualTo(notFoundImage);
 		
 		// Get the json from the album (should be modified with the path)
 		ObjectNode modifiedJson = album.getJson();
@@ -360,11 +382,16 @@ class AlbumTest {
 					.satisfies(audioPath -> assertThat(audioPath.getPath()).hasToString("E:\\Musique\\e\\Bill Evans\\Portrait In Jazz"));
 			});
 		
+		assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
+		parserHelpersFilterCounter.stopLogCountAndFilter();
 	}
 	
 	@Test
 	void testAlbumPotentialMediaFilesSearch() throws DatabindException, JacksonException {
 
+		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
+		
 		ObjectNode jAlbum = (ObjectNode)mapper.readTree(albumStr1);
 
 		ListeArtiste la = new ListeArtiste();
@@ -381,6 +408,10 @@ class AlbumTest {
 		assertThat(album.hasProblem()).isTrue();
 		
 		assertThat(album.getContentNatures()).containsExactly(ContentNature.AUDIO);
+		
+		assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
+		parserHelpersFilterCounter.stopLogCountAndFilter();
 	}
 	
 	private static final String albumStr3 = """
@@ -498,6 +529,8 @@ class AlbumTest {
 	@Test
 	void testAlbumPotentialMediaFilesSearch2() throws DatabindException, JacksonException {
 
+		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
+		
 		ObjectNode jAlbum = (ObjectNode)mapper.readTree(albumStr2);
 
 		ListeArtiste la = new ListeArtiste();
@@ -528,20 +561,48 @@ class AlbumTest {
 		
 		assertThat(album.getContentNatures()).containsExactly(ContentNature.AUDIO);
 		assertThat(album.hasProblem()).isTrue();
+		
+		assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
+		parserHelpersFilterCounter.stopLogCountAndFilter();
 	}
 	
+	private static final String albumStr6 = """
+{ 
+  "titre": "Van Halen",
+  "format": {
+    "cd": 1,
+    "audioFiles": [
+      {
+        "bitDepth": 24,
+        "samplingRate": 192,
+        "source": "File",
+        "type": "FLAC",
+        "location" : [ "v/Van Halen/Van Halen [24 - 192]/" ]
+      }
+    ]
+  },
+  "groupe": [
+    {
+      "nom": "Van Halen"
+    }
+  ],
+  "enregistrement": [
+    "1977-09-01",
+    "1977-11-01"
+  ]
+}
+			""" ;
 	@Test
 	void testDiscogsProperties() throws DatabindException, JacksonException {
-
-		ObjectNode jAlbum = (ObjectNode)mapper.readTree(albumStr2);
+		
+		ObjectNode jAlbum = (ObjectNode)mapper.readTree(albumStr6);
 
 		ListeArtiste la = new ListeArtiste();
 		List<ListeArtiste> lla = new ArrayList<ListeArtiste>();
 		lla.add(la);
 
 		Album album = new Album(jAlbum, lla, Path.of("dummyPath"));
-		
-		assertThat(album.hasProblem()).isTrue();
 		
 		assertThat(album.getDiscogsLink()).isNull();
 		assertThat(album.getDiscogsFormatValidation()).isFalse();
@@ -575,7 +636,8 @@ class AlbumTest {
         "bitDepth": 24,
         "samplingRate": 192,
         "source": "File",
-        "type": "FLAC"
+        "type": "FLAC",
+        "location" : [ "v/Van Halen/Van Halen [24 - 192]/" ]
       }
     ]
   },
@@ -595,7 +657,7 @@ class AlbumTest {
 	
 	@Test
 	void testAcquisitionDate() throws DatabindException, JacksonException {
-
+		
 		ObjectNode jAlbum = (ObjectNode)mapper.readTree(albumStr4);
 
 		ListeArtiste la = new ListeArtiste();
@@ -619,7 +681,8 @@ class AlbumTest {
         "bitDepth": 24,
         "samplingRate": 192,
         "source": "File",
-        "type": "FLAC"
+        "type": "FLAC",
+        "location" : [ "v/Van Halen/Van Halen [24 - 192]/" ]
       }
     ]
   },

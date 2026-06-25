@@ -294,6 +294,7 @@ public class Album extends MusicArtefact {
 					.filter(Objects::nonNull)
 					.findFirst()
 					.orElse(null);
+			sleeveImage = CollectionUtils.getImage(sleevePath);
 			return sleevePath;
 		} else {
 			return null;
@@ -307,7 +308,7 @@ public class Album extends MusicArtefact {
 			if (imagePath == null) {
 				albumLog.warning("Image sleeve path null for " + getTitre());
 			}
-			sleeveImage = CollectionUtils.getImage(getCoverImagePath());
+			sleeveImage = CollectionUtils.getImage(imagePath);
 		}
 		return sleeveImage;
 	}
