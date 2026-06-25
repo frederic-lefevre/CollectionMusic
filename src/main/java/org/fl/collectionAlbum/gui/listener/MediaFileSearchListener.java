@@ -22,34 +22,30 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.gui.table;
+package org.fl.collectionAlbum.gui.listener;
 
-import java.util.List;
+import java.awt.event.ActionEvent;
 
-import org.fl.collectionAlbum.gui.UpdatableElement;
-import org.fl.collectionAlbum.mediaFile.MediaFile;
+import javax.swing.JOptionPane;
 
-public class MediaFileTableModel extends AbstractCollectionTableModel<MediaFile> implements UpdatableElement {
+import org.fl.collectionAlbum.format.ContentNature;
+import org.fl.collectionAlbum.gui.MediaFilesSearchPane;
 
-	private static final long serialVersionUID = 1L;
-	
-	private final List<MediaFile> mediaFiles;
-	
-	public MediaFileTableModel(List<MediaFile> mediaFiles, GenericTableColumns<MediaFile> columns) {
-		super(columns, mediaFiles);
-		this.mediaFiles = mediaFiles;	
-	}
+public class MediaFileSearchListener implements java.awt.event.ActionListener {
 
-	public MediaFile getMediaFileAt(int rowIndex) {
-		return  mediaFiles.get(rowIndex);
-	}
-	
-	public List<MediaFile> getMediaFileList() {
-		return getItemList();
+	private final ContentNature contentNature;
+
+	public MediaFileSearchListener(ContentNature contentNature) {
+		
+		this.contentNature = contentNature;
 	}
 	
 	@Override
-	public void updateElement() {
-		fireTableDataChanged();
+	public void actionPerformed(ActionEvent e) {
+		
+		MediaFilesSearchPane mediaFilesSearchPane = new MediaFilesSearchPane(contentNature);
+		
+		JOptionPane.showMessageDialog(null, mediaFilesSearchPane, "Recherche de fichiers " + contentNature.getNom(), JOptionPane.PLAIN_MESSAGE);
 	}
+
 }

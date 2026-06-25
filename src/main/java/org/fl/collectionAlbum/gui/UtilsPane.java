@@ -26,22 +26,29 @@ package org.fl.collectionAlbum.gui;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.Control;
+import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.gui.listener.AlbumsSearchListener;
+import org.fl.collectionAlbum.gui.listener.MediaFileSearchListener;
 import org.fl.collectionAlbum.gui.listener.OsActionListener;
 import org.fl.collectionAlbum.gui.listener.RandomAlbumsPickListener;
 import org.fl.collectionAlbum.rapportHtml.RapportStructuresAndNames;
@@ -53,7 +60,8 @@ public class UtilsPane extends JPanel implements ActivableElement {
 	private static final Font buttonFont = new Font("Verdana", Font.BOLD, 14);
 	private static final Font textFont = new Font("Verdana", Font.BOLD, 12);
 	
-	private final JButton albumsSearchButton;
+	private final JButton searchButton;
+	private final SearchListener searchListener;
 	
 	private final JButton pickRandomAlbumsButton;
 	private final JComboBox<Integer> numberOfAlbumBox;
@@ -89,16 +97,16 @@ public class UtilsPane extends JPanel implements ActivableElement {
 		
 		showCollectionButton.addActionListener(showCollectionListener);
 
-		JPanel albumsSearchPanel = new JPanel();
+		JPanel searchPanel = new JPanel();
 		
-		albumsSearchButton = new JButton("Rechercher des albums");
-		albumsSearchButton.setFont(buttonFont);
-		albumsSearchButton.setBackground(Color.GREEN);
+		searchButton = new JButton("Rechercher ...");
+		searchButton.setFont(buttonFont);
+		searchButton.setBackground(Color.GREEN);
 		
-		albumsSearchPanel.add(albumsSearchButton);
-		albumsSearchPanel.setBorder(new CompoundBorder(new LineBorder(Color.BLACK), new EmptyBorder(4, 0, 4, 0)));
-		albumsSearchPanel.setBackground(Color.WHITE);
-		add(albumsSearchPanel);
+		searchPanel.add(searchButton);
+		searchPanel.setBorder(new CompoundBorder(new LineBorder(Color.BLACK), new EmptyBorder(4, 0, 4, 0)));
+		searchPanel.setBackground(Color.WHITE);
+		add(searchPanel);
 		
 		JPanel choixAleatoirePane = new JPanel();
 		choixAleatoirePane.setLayout(new BoxLayout(choixAleatoirePane, BoxLayout.Y_AXIS));
@@ -127,7 +135,8 @@ public class UtilsPane extends JPanel implements ActivableElement {
 		pickRandomAlbumsPanel.add(pickRandomAlbumsButton);
 		pickRandomAlbumsPanel.setBorder(new EmptyBorder(0, 0, 0, 80));
 		
-		albumsSearchButton.addActionListener(new AlbumsSearchListener(generationPane, collectionAlbumContainer));
+		searchListener = new SearchListener(generationPane, collectionAlbumContainer);
+		searchButton.addMouseListener(searchListener);
 		choixAleatoirePane.add(pickRandomAlbumsPanel);
 		
 		JPanel choixMethodPane = new JPanel();
@@ -177,12 +186,56 @@ public class UtilsPane extends JPanel implements ActivableElement {
 	@Override
 	public void activate() {
 		pickRandomAlbumsButton.setEnabled(true);
-		albumsSearchButton.setEnabled(true);
+		searchButton.setEnabled(true);
+		searchListener.activate();
 	}
 
 	@Override
 	public void deactivate() {
 		pickRandomAlbumsButton.setEnabled(false);
-		albumsSearchButton.setEnabled(false);
+		searchButton.setEnabled(false);
+		searchListener.deactivate();
+	}
+	
+	private static class SearchListener extends MouseAdapter implements ActivableElement {
+
+		private final JPopupMenu localJPopupMenu;
+
+		SearchListener(GenerationPane generationPane, CollectionAlbumContainer collectionAlbumContainer) {
+			super();
+			
+			localJPopupMenu = new JPopupMenu();
+			JMenuItem albumSearchItem = new JMenuItem("Rechercher des albums");
+			albumSearchItem.setFont(buttonFont);
+			albumSearchItem.setBackground(Color.GREEN);
+			albumSearchItem.addActionListener(new AlbumsSearchListener(generationPane, collectionAlbumContainer));
+			localJPopupMenu.add(albumSearchItem);
+			
+			Stream.of(ContentNature.values()).forEachOrdered(contentNature -> {
+				localJPopupMenu.addSeparator();		
+				JMenuItem trackSearchItem = new JMenuItem("Rechercher des fichiers " + contentNature.getNom());
+				trackSearchItem.setFont(buttonFont);
+				trackSearchItem.setBackground(Color.GREEN);
+				trackSearchItem.addActionListener(new MediaFileSearchListener(contentNature));
+				localJPopupMenu.add(trackSearchItem);
+			});
+		}
+		
+		@Override
+		public void mousePressed(MouseEvent evt) {
+			if (localJPopupMenu.isEnabled()) {
+				localJPopupMenu.show(evt.getComponent(), evt.getX(), evt.getY());
+			}
+		}
+
+		@Override
+		public void activate() {
+			localJPopupMenu.setEnabled(true);
+		}
+
+		@Override
+		public void deactivate() {
+			localJPopupMenu.setEnabled(false);
+		}
 	}
 }

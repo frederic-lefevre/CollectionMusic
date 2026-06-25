@@ -22,34 +22,46 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.gui.table;
+package org.fl.collectionAlbum.gui;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
 
-import org.fl.collectionAlbum.gui.UpdatableElement;
+import javax.swing.JTextField;
+
+import org.fl.collectionAlbum.format.ContentNature;
+import org.fl.collectionAlbum.gui.table.MediaFileTableModel;
 import org.fl.collectionAlbum.mediaFile.MediaFile;
 
-public class MediaFileTableModel extends AbstractCollectionTableModel<MediaFile> implements UpdatableElement {
+public class VideoFileSearchCriteriaPanel extends MediaFilesSearchCriteriaPanel {
 
 	private static final long serialVersionUID = 1L;
 	
-	private final List<MediaFile> mediaFiles;
+	private final JTextField fileNameSearchedText;
 	
-	public MediaFileTableModel(List<MediaFile> mediaFiles, GenericTableColumns<MediaFile> columns) {
-		super(columns, mediaFiles);
-		this.mediaFiles = mediaFiles;	
+	public VideoFileSearchCriteriaPanel(ContentNature contentNature, MediaFileTableModel mediaFileTableModel) {
+		super(contentNature, mediaFileTableModel);
+		
+		fileNameSearchedText = new JTextField();
+		
+		fillPanel();
 	}
 
-	public MediaFile getMediaFileAt(int rowIndex) {
-		return  mediaFiles.get(rowIndex);
-	}
-	
-	public List<MediaFile> getMediaFileList() {
-		return getItemList();
-	}
-	
 	@Override
-	public void updateElement() {
-		fireTableDataChanged();
+	protected void addSearchField() {
+		add(createSearchFieldPanel("Nom de fichier incluant les caractères", fileNameSearchedText));
+	}
+
+	@Override
+	protected List<Predicate<MediaFile>> getMediaFilePredicateList() {
+		
+		List<Predicate<MediaFile>> mediaFilePredicateList = new ArrayList<>();
+		String fileNameValue = getLowerCaseTextFieldValue(fileNameSearchedText);
+		if (fileNameValue != null) {
+			mediaFilePredicateList.add((m) -> m.getFileName().toString().toLowerCase().contains(fileNameValue));
+		}
+		
+		return mediaFilePredicateList;
 	}
 }

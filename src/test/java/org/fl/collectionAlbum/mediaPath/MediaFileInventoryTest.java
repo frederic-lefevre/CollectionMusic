@@ -38,6 +38,8 @@ import org.fl.collectionAlbum.TestUtils;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.format.ContentNature;
+import org.fl.collectionAlbum.mediaFile.AudioFile;
+import org.fl.collectionAlbum.mediaFile.MediaFile;
 import org.fl.collectionAlbum.mediaFile.MediaFileGenres;
 import org.fl.collectionAlbum.mediaFile.MediaStreamPatterns;
 import org.junit.jupiter.api.BeforeAll;
@@ -261,5 +263,40 @@ class MediaFileInventoryTest {
 		assertThat(mediaStreamPatterns).isNotNull();
 		
 		assertThat(mediaStreamPatterns.getMediaStreamPatternList()).isEmpty();
+	}
+	
+	@Test
+	void shouldFindAllAudioFile() {
+		List<MediaFile> foundMediaFiles = audioFileInventory.getMediaFileListSastisfying(List.of(_ -> true));
+		assertThat(foundMediaFiles).isNotEmpty().hasSize(audioFileInventory.getMediaFileNumber());
+	}
+	
+	@Test
+	void shouldFindAllVideoFile() {
+		List<MediaFile> foundMediaFiles = videoFileInventory.getMediaFileListSastisfying(List.of(_ -> true));
+		assertThat(foundMediaFiles).isNotEmpty().hasSize(videoFileInventory.getMediaFileNumber());
+	}
+	
+	@Test
+	void shouldFindOneAudioFile() {
+		List<MediaFile> foundMediaFiles = audioFileInventory.getMediaFileListSastisfying(
+				List.of(_ -> true, 
+						(a) -> ((AudioFile)a).getAudioMetadata().getNormalizedAudioMetadataTags().artist().value().contains("Abercrombie"),
+						(a) -> ((AudioFile)a).getAudioMetadata().getNormalizedAudioMetadataTags().trackTitle().value().contains("Blue")));
+		assertThat(foundMediaFiles).isNotEmpty().hasSize(1);
+	}
+	
+	@Test
+	void shouldFindManyAudioFile() {
+		List<MediaFile> foundMediaFiles = audioFileInventory.getMediaFileListSastisfying(
+				List.of(_ -> true, 
+						(a) -> ((AudioFile)a).getAudioMetadata().getNormalizedAudioMetadataTags().trackTitle().value().contains("Blue")));
+		assertThat(foundMediaFiles).isNotEmpty().hasSizeGreaterThan(800);
+	}
+	
+	@Test
+	void shouldFindVideoFile() {
+		List<MediaFile> foundMediaFiles = videoFileInventory.getMediaFileListSastisfying(List.of(v -> v.getFileName().toString().contains("Yellow")));
+		assertThat(foundMediaFiles).isNotEmpty().hasSize(2);
 	}
 }

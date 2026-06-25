@@ -48,7 +48,7 @@ import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.ReleaseMatchRes
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.gui.DetailedAlbumAndDiscogsInfoPane;
 import org.fl.collectionAlbum.gui.GenerationPane;
-import org.fl.collectionAlbum.gui.MediaFilesSearchPane;
+import org.fl.collectionAlbum.gui.AlbumMediaFilesSearchPane;
 import org.fl.collectionAlbum.gui.table.MusicArtefactTable;
 
 public class AlbumCustomActionListener implements java.awt.event.ActionListener {
@@ -147,7 +147,7 @@ public class AlbumCustomActionListener implements java.awt.event.ActionListener 
 					break;
 				case MISSING_MEDIA_FILES_SEARCH:
 					
-					JOptionPane.showMessageDialog(null, new MediaFilesSearchPane(selectedAlbum, generationPane), customAction.getActionTitle(), JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, new AlbumMediaFilesSearchPane(selectedAlbum, generationPane), customAction.getActionTitle(), JOptionPane.INFORMATION_MESSAGE);
 					break;
 				default:
 					aLog.severe("Unkown custom action triggered for discogs release: " + customAction);
