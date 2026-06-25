@@ -52,7 +52,7 @@ public class RapportAlbum extends RapportMusicArtefact {
 		HtmlLinkList albumLink = new HtmlLinkList(RapportStructuresAndNames.getAccueils());
 		withHtmlLinkList(albumLink);
 		
-		Path coverPath = album.getCoverImage();
+		Path coverPath = album.getCoverImagePath();
 		if (coverPath != null) {
 			try {
 				withImageUri(coverPath.toUri().toString());

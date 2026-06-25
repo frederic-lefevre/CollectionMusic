@@ -64,7 +64,7 @@ public class Album extends MusicArtefact {
     private final Format formatAlbum;
     private final RangementSupportPhysique rangement;  
     private final boolean specificCompositionDates;   
-    private final Path sleevePath;
+    private Path sleevePath;
     private final TemporalAccessor acquisitionDate;
     private final Map<ContentNature, Set<MediaFilePath>> potentialMediaFilesPath;
     
@@ -278,12 +278,12 @@ public class Album extends MusicArtefact {
 		}
 	}
 	
-	public Path getCoverImage() {
+	public Path getCoverImagePath() {
 
 		if (sleevePath != null) {
 			return sleevePath;
 		} else if (hasMediaFiles()) {
-			return getAllMediaFilePaths().stream()
+			sleevePath = getAllMediaFilePaths().stream()
 					.map(mediaFile -> mediaFile.getMediaFilePaths())
 					.filter(Objects::nonNull)
 					.flatMap(Collection::stream)
@@ -291,6 +291,7 @@ public class Album extends MusicArtefact {
 					.filter(Objects::nonNull)
 					.findFirst()
 					.orElse(null);
+			return sleevePath;
 		} else {
 			return null;
 		}

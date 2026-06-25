@@ -197,7 +197,7 @@ class AlbumTest {
 
 		assertThat(album.getAllMediaFilePaths()).hasSameElementsAs(audioFiles);
 		
-		assertThat(album.getCoverImage()).isNull();
+		assertThat(album.getCoverImagePath()).isNull();
 		
 		// Add the audio file path
 		AbstractAlbumsAudioFiles audioFile = (AbstractAlbumsAudioFiles) audioFiles.get(0);
@@ -219,7 +219,7 @@ class AlbumTest {
 				.satisfies(audioPath -> assertThat(audioPath.getPath()).hasToString("E:\\Musique\\e\\Bill Evans\\Waltz for Debby"));
 		});
 
-		assertThat(album.getCoverImage())
+		assertThat(album.getCoverImagePath())
 			.isNotNull()
 			.hasToString("E:\\Musique\\e\\Bill Evans\\Waltz for Debby\\cover.jpg");
 		

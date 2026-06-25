@@ -206,7 +206,7 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 	
 	private JLabel getCoverImage(Album album) {
 		
-		Path coverImagePath = album.getCoverImage();
+		Path coverImagePath = album.getCoverImagePath();
 		if (coverImagePath != null) {
 			return CollectionUtils.getAdjustedImageLabel(coverImagePath, MAX_COVER_WIDTH, MAX_COVER_HEIGHT);
 		} else {
