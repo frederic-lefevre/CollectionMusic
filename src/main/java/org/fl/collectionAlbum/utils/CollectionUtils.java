@@ -28,7 +28,7 @@ import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
-import java.io.IOException;
+import java.awt.image.BufferedImage;
 import java.net.URI;
 import java.nio.file.Path;
 import java.time.temporal.TemporalAccessor;
@@ -68,6 +68,9 @@ public class CollectionUtils {
 	
 	private static final String VIRGULE = ", ";
 	private static final String SEPARATEUR = "<br/>";
+	
+	private static BufferedImage IMAGE_FOR_ERROR = null;
+	private static final String DESCRIPTION_FOR_IMAGE_ERROR = "Image en erreur";
 	
 	public static String getHtmlForString(String s) {
 		
@@ -306,27 +309,48 @@ public class CollectionUtils {
 	}
 	
 	public static JLabel getAdjustedImageLabel(Path imagePath, int maxWidth, int maxHeight) {
-		try {
-			return new JLabel(buildAdjustedImageIcon(imagePath, maxWidth, maxHeight));
-		} catch (IOException e) {
-			return new JLabel("Fichier image non trouvé: " + Objects.toString(imagePath));
-		}
-	}
-	
-	public static ImageIcon getAdjustedImageIcon(Path imagePath, int maxWidth, int maxHeight) {
-		try {	
-			return buildAdjustedImageIcon(imagePath, maxWidth, maxHeight);
-		} catch (Exception e) {
-			logger.log(Level.WARNING, "Exception when build ImageIcon for path " +  Objects.toString(imagePath), e);
-			return null;
-		}
-	}
-	
-	public static ImageIcon buildAdjustedImageIcon(Path imagePath, int maxWidth, int maxHeight) throws IOException {
 
-		ImageIcon image = new ImageIcon(ImageIO.read(imagePath.toFile()));
-		final int imageWidth = image.getIconWidth();
-		final int imageHeight = image.getIconHeight();
+		ImageIcon imageIcon = buildAdjustedImageIcon(imagePath, maxWidth, maxHeight);
+		if (imageIcon != null) {
+			return new JLabel(imageIcon);
+		} else {
+			return new JLabel("Fichier image en erreur: " + Objects.toString(imagePath));
+		}
+	}
+	
+	public static ImageIcon buildAdjustedImageIcon(Path imagePath, int maxWidth, int maxHeight) {
+
+		try {
+			BufferedImage bufferedImage = ImageIO.read(imagePath.toFile());
+	
+			if (bufferedImage != null) {
+				return new ImageIcon(scaleImage(bufferedImage, maxWidth, maxHeight));
+			} else {
+				logger.log(Level.WARNING, "Image format problem: No image reader found for this image " + Objects.toString(imagePath));
+				return getImageForError(maxWidth, maxHeight);
+			}
+		} catch (Exception e) {
+			logger.log(Level.WARNING, "Exception when creating BufferedImage from file " + Objects.toString(imagePath), e);
+			return getImageForError(maxWidth, maxHeight);
+		}
+	}
+	
+	private static ImageIcon getImageForError(int maxWidth, int maxHeight) {
+		
+		if (IMAGE_FOR_ERROR == null) {
+			try {
+				IMAGE_FOR_ERROR = ImageIO.read(Control.getImageForErrorPath().toFile());				
+			} catch (Exception e2) {
+				logger.log(Level.WARNING, "Exception when creating BufferedImage for error " + Objects.toString(Control.getImageForErrorPath()), e2);
+			}
+		}
+		return new ImageIcon(scaleImage(IMAGE_FOR_ERROR, maxWidth, maxHeight), DESCRIPTION_FOR_IMAGE_ERROR);
+	}
+	
+	private static Image scaleImage(BufferedImage bufferedImage, int maxWidth, int maxHeight) {
+		
+		final int imageWidth = bufferedImage.getWidth();
+		final int imageHeight = bufferedImage.getHeight();
 		int adjustedImageWidth;
 		int adjustedImageHeight;
 		if (imageWidth > imageHeight) {
@@ -336,7 +360,7 @@ public class CollectionUtils {
 			adjustedImageHeight = maxHeight;
 			adjustedImageWidth = (imageWidth* maxHeight)/imageHeight;
 		}
-		return new ImageIcon(image.getImage().getScaledInstance(adjustedImageWidth, adjustedImageHeight, Image.SCALE_SMOOTH));
+		return bufferedImage.getScaledInstance(adjustedImageWidth, adjustedImageHeight, Image.SCALE_DEFAULT);
 	}
 	
 	private static final Font verdana = new Font("Verdana", Font.BOLD, 14);

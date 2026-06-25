@@ -59,15 +59,13 @@ public class CollectionImageRenderer extends CustomTableCellRenderer {
 			mLog.fine("Null value in Dates Album cell. Should be an Album");
 			setText("Valeur null");
 		} else if (value instanceof Path imagePath) {
-			ImageIcon imageIcon = CollectionUtils.getAdjustedImageIcon(imagePath, width, height);
+			ImageIcon imageIcon = CollectionUtils.buildAdjustedImageIcon(imagePath, width, height);
 			
 			if (imageIcon != null) {
 				setIcon(imageIcon);
 			} else {
-				setText("Erreur");
+				setText("Erreur!");
 			}
-		}
-		
+		}		
 	}
-
 }
