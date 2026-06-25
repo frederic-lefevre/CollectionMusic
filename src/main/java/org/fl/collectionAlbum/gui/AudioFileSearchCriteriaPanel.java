@@ -28,10 +28,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
+import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.EtchedBorder;
 
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.gui.table.MediaFileTableModel;
@@ -84,7 +86,8 @@ public class AudioFileSearchCriteriaPanel extends MediaFilesSearchCriteriaPanel 
 		searchCriteriaPane.setLayout(new BoxLayout(searchCriteriaPane, BoxLayout.Y_AXIS));
 		
 		JPanel normalizedTagsSearchPane = new JPanel();
-		normalizedTagsSearchPane.setLayout(new BoxLayout(normalizedTagsSearchPane, BoxLayout.X_AXIS));	
+		normalizedTagsSearchPane.setLayout(new BoxLayout(normalizedTagsSearchPane, BoxLayout.X_AXIS));
+		normalizedTagsSearchPane.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
 		normalizedTagsSearchPane.add(createSearchFieldPanel("Titre incluant les caractères", trackTitleSearchedText));
 		normalizedTagsSearchPane.add(createSearchFieldPanel("Artiste incluant les caractères", artistSearchedText));
 		normalizedTagsSearchPane.add(createSearchFieldPanel("Album incluant les caractères", albumSearchedText));
@@ -93,6 +96,7 @@ public class AudioFileSearchCriteriaPanel extends MediaFilesSearchCriteriaPanel 
 		
 		JPanel streamInfoSearchPane = new JPanel();
 		streamInfoSearchPane.setLayout(new BoxLayout(streamInfoSearchPane, BoxLayout.X_AXIS));
+		streamInfoSearchPane.setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
 		streamInfoSearchPane.add(createSearchFieldPanel("Bits par échantillon", bitDepthSearchedText));
 		streamInfoSearchPane.add(createSearchFieldPanel("Echantillonnage (Hz)", sampleRateSearchedText));
 		streamInfoSearchPane.add(createSearchFieldPanel("Débit (Bits/s)", bitRateSearchedText));
