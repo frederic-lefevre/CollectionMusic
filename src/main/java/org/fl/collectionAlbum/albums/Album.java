@@ -24,6 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.albums;
 
+import java.awt.image.BufferedImage;
 import java.nio.file.Path;
 import java.time.temporal.TemporalAccessor;
 import java.util.Collection;
@@ -50,6 +51,7 @@ import org.fl.collectionAlbum.format.Format.RangementSupportPhysique;
 import org.fl.collectionAlbum.json.AlbumParser;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
+import org.fl.collectionAlbum.utils.CollectionUtils;
 import org.fl.collectionAlbum.utils.FuzzyPeriod;
 
 import tools.jackson.databind.node.ObjectNode;
@@ -65,6 +67,7 @@ public class Album extends MusicArtefact {
     private final RangementSupportPhysique rangement;  
     private final boolean specificCompositionDates;   
     private Path sleevePath;
+    private BufferedImage sleeveImage;
     private final TemporalAccessor acquisitionDate;
     private final Map<ContentNature, Set<MediaFilePath>> potentialMediaFilesPath;
     
@@ -295,6 +298,18 @@ public class Album extends MusicArtefact {
 		} else {
 			return null;
 		}
+	}
+	
+	public BufferedImage getSleeveImage() {
+		
+		if (sleeveImage == null) {
+			Path imagePath = getCoverImagePath();
+			if (imagePath == null) {
+				albumLog.warning("Image sleeve path null for " + getTitre());
+			}
+			sleeveImage = CollectionUtils.getImage(getCoverImagePath());
+		}
+		return sleeveImage;
 	}
 	
     public TemporalAccessor getAcquisitionDate() {

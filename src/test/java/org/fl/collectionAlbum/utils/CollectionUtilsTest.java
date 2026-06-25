@@ -64,7 +64,7 @@ class CollectionUtilsTest {
 		
 		int width = 100;
 		int height = 100;
-		ImageIcon imageIcon = CollectionUtils.buildAdjustedImageIcon(Path.of("dummyPath"), width, height);
+		ImageIcon imageIcon = CollectionUtils.buildAdjustedImageIcon(CollectionUtils.getImage(Path.of("dummyPath")), width, height);
 		assertThat(imageIcon).isNotNull();
 		assertThat(imageIcon.getIconWidth()).isEqualTo(width);
 		assertThat(imageIcon.getIconHeight()).isEqualTo(height);
@@ -74,6 +74,22 @@ class CollectionUtilsTest {
 		assertThat(filterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
 	}
 	
+	@Test
+	void testUnexistantPathImageIcon2() {
+		
+		LogRecordCounter filterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger( CollectionUtils.class.getName()));	
+		
+		int width = 100;
+		int height = 100;
+		ImageIcon imageIcon = CollectionUtils.buildAdjustedImageIcon(CollectionUtils.getImage(null), width, height);
+		assertThat(imageIcon).isNotNull();
+		assertThat(imageIcon.getIconWidth()).isEqualTo(width);
+		assertThat(imageIcon.getIconHeight()).isEqualTo(height);
+		assertThat(imageIcon.getDescription()).isEqualTo("Image non trouvée");
+		
+		assertThat(filterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(filterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
+	}
 	
 	@Test
 	void testWrongImageFormat() throws URISyntaxException {
@@ -85,7 +101,7 @@ class CollectionUtilsTest {
 		
 		int width = 100;
 		int height = 100;
-		ImageIcon imageIcon = CollectionUtils.buildAdjustedImageIcon(imgFilePath, width, height);
+		ImageIcon imageIcon = CollectionUtils.buildAdjustedImageIcon(CollectionUtils.getImage(imgFilePath), width, height);
 		assertThat(imageIcon).isNotNull();
 		assertThat(imageIcon.getIconWidth()).isEqualTo(width);
 		assertThat(imageIcon.getIconHeight()).isEqualTo(height);
@@ -105,7 +121,7 @@ class CollectionUtilsTest {
 		
 		int width = 100;
 		int height = 100;
-		ImageIcon imageIcon = CollectionUtils.buildAdjustedImageIcon(imgFilePath, width, height);
+		ImageIcon imageIcon = CollectionUtils.buildAdjustedImageIcon(CollectionUtils.getImage(imgFilePath), width, height);
 		assertThat(imageIcon).isNotNull();
 		assertThat(imageIcon.getIconWidth()).isEqualTo(width);
 		assertThat(imageIcon.getIconHeight()).isEqualTo(height);

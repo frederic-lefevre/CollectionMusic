@@ -25,7 +25,7 @@ SOFTWARE.
 package org.fl.collectionAlbum.gui.renderer;
 
 import java.awt.Font;
-import java.nio.file.Path;
+import java.awt.image.BufferedImage;
 import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
@@ -56,10 +56,10 @@ public class CollectionImageRenderer extends CustomTableCellRenderer {
 	public void valueProcessor(Object value) {
 		if (value == null) {
 			// This may happen when rescanning the album collection
-			mLog.fine("Null value in Dates Album cell. Should be an Album");
+			mLog.fine("Null value in Image cell. Should be a BufferedImage");
 			setText("Valeur null");
-		} else if (value instanceof Path imagePath) {
-			ImageIcon imageIcon = CollectionUtils.buildAdjustedImageIcon(imagePath, width, height);
+		} else if (value instanceof BufferedImage image) {
+			ImageIcon imageIcon = CollectionUtils.buildAdjustedImageIcon(image, width, height);
 			
 			if (imageIcon != null) {
 				setIcon(imageIcon);

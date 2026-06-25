@@ -24,7 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui.table;
 
-import java.nio.file.Path;
+import java.awt.image.BufferedImage;
 import java.time.temporal.TemporalAccessor;
 import java.util.List;
 import java.util.Optional;
@@ -54,7 +54,7 @@ public class AlbumTableColumns {
 	
 	private static final TableColumnParameter<Album> POCHETTE = 
 			new TableColumnParameter<>("<html>Pochettes<br/>des albums</html>", null, POCHETTE_WIDTH, 
-					new CollectionImageRenderer(POCHETTE_WIDTH, POCHETTE_HEIGHT), null, Path.class, Album::getCoverImagePath);
+					new CollectionImageRenderer(POCHETTE_WIDTH, POCHETTE_HEIGHT), null, BufferedImage.class, Album::getSleeveImage);
 	
 	private static final TableColumnParameter<Album> TITRE = 
 			new TableColumnParameter<>("<html>Titres des<br/>albums</html>", null, 250, new StringToHtmlRenderer(), null, String.class, Album::getTitre);

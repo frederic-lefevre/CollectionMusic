@@ -71,6 +71,8 @@ public class CollectionUtils {
 	
 	private static BufferedImage IMAGE_FOR_ERROR = null;
 	private static final String DESCRIPTION_FOR_IMAGE_ERROR = "Image en erreur";
+	private static BufferedImage IMAGE_FOR_IMAGE_NOT_FOUND = null;
+	private static final String DESCRIPTION_FOR_IMAGE_NOT_FOUND = "Image non trouvée";
 	
 	public static String getHtmlForString(String s) {
 		
@@ -309,37 +311,51 @@ public class CollectionUtils {
 	}
 	
 	public static JLabel getAdjustedImageLabel(Path imagePath, int maxWidth, int maxHeight) {
+		return getAdjustedImageLabel(getImage(imagePath), maxWidth, maxHeight);
+	}
+	
+	public static JLabel getAdjustedImageLabel(BufferedImage bufferedImage, int maxWidth, int maxHeight) {
 
-		ImageIcon imageIcon = buildAdjustedImageIcon(imagePath, maxWidth, maxHeight);
+		ImageIcon imageIcon = buildAdjustedImageIcon(bufferedImage, maxWidth, maxHeight);
 		if (imageIcon != null) {
 			return new JLabel(imageIcon);
 		} else {
-			return new JLabel("Fichier image en erreur: " + Objects.toString(imagePath));
+			return new JLabel("Fichier image en erreur");
 		}
 	}
 	
-	public static ImageIcon buildAdjustedImageIcon(Path imagePath, int maxWidth, int maxHeight) {
-		BufferedImage bufferedImage = getImage(imagePath);
+	public static ImageIcon buildAdjustedImageIcon(BufferedImage bufferedImage, int maxWidth, int maxHeight) {
 		if (bufferedImage != null) {
-			return new ImageIcon(scaleImage(getImage(imagePath), maxWidth, maxHeight));
+			if(bufferedImage == getImageForError()) {
+				return new ImageIcon(scaleImage(bufferedImage, maxWidth, maxHeight), DESCRIPTION_FOR_IMAGE_ERROR);
+			} else if (bufferedImage == getImageForImageNotFound()) {
+				return new ImageIcon(scaleImage(bufferedImage, maxWidth, maxHeight), DESCRIPTION_FOR_IMAGE_NOT_FOUND);
+			} else {
+				return new ImageIcon(scaleImage(bufferedImage, maxWidth, maxHeight));
+			}
 		} else {
+			logger.warning( "Image to adjust is null");
 			return new ImageIcon(scaleImage(getImageForError(), maxWidth, maxHeight), DESCRIPTION_FOR_IMAGE_ERROR);
 		}
 	}
 	
-	private static BufferedImage getImage(Path imagePath) {
+	public static BufferedImage getImage(Path imagePath) {
+		if (imagePath == null) {
+			logger.warning( "Null image path");
+			return getImageForImageNotFound();
+		}
 		try {
 			BufferedImage bufferedImage = ImageIO.read(imagePath.toFile());
 		
 			if (bufferedImage != null) {
 				return bufferedImage;
 			} else {
-				logger.log(Level.WARNING, "Image format problem: No image reader found for this image " + Objects.toString(imagePath));
-				return null;
+				logger.warning("Image format problem: No image reader found for this image " + Objects.toString(imagePath));
+				return getImageForError();
 			}
 		} catch (Exception e) {
 			logger.log(Level.WARNING, "Exception when creating BufferedImage from file " + Objects.toString(imagePath), e);
-			return null;
+			return getImageForError();
 		}
 	}
 	
@@ -354,6 +370,19 @@ public class CollectionUtils {
 			}
 		}
 		return IMAGE_FOR_ERROR;
+	}
+	
+	private static BufferedImage getImageForImageNotFound() {
+		
+		if (IMAGE_FOR_IMAGE_NOT_FOUND == null) {
+			try {
+				IMAGE_FOR_IMAGE_NOT_FOUND = ImageIO.read(Control.getImageForImageNotFoundPath().toFile());				
+			} catch (Exception e2) {
+				logger.log(Level.WARNING, "Exception when creating BufferedImage for error " + Objects.toString(Control.getImageForErrorPath()), e2);
+				IMAGE_FOR_IMAGE_NOT_FOUND = new BufferedImage(400, 400, BufferedImage.TYPE_BYTE_GRAY);
+			}
+		}
+		return IMAGE_FOR_IMAGE_NOT_FOUND;
 	}
 	
 	private static Image scaleImage(BufferedImage bufferedImage, int maxWidth, int maxHeight) {
