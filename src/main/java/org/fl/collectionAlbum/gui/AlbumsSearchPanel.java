@@ -54,7 +54,9 @@ public class AlbumsSearchPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 
 	private static final Font buttonFont = new Font("Verdana", Font.BOLD, 14);
+	private static final Font nbResultsFont = new Font("Verdana", Font.BOLD, 12);
 	
+	private static final String RESULTATS = " résultats";
 	private static final Dimension SEARCH_LABEL_DIMENSION = new Dimension(400, 25);
 	private static final Dimension SEARCH_TEXT_DIMENSION = new Dimension(400, 30);
 	
@@ -67,6 +69,7 @@ public class AlbumsSearchPanel extends JPanel {
 	
 	private final JTextField titreAlbumSearchedText;
 	private final JTextField auteursAlbumSearchedText;
+	private final JLabel nbResultsLabel;
 	
 	private final LocalDate albumOldestRecordingDate;
 	private final LocalDate albumMostRecentRecordingDate;
@@ -134,12 +137,22 @@ public class AlbumsSearchPanel extends JPanel {
 		searchCriteriaPanel.add(dateComposition);
 		searchCriteriaPanel.add(dateAcquisition);
 		
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.setLayout(new BoxLayout(buttonPanel, BoxLayout.Y_AXIS));
+		
 		JButton albumsSearchButton = new JButton("Rechercher");
-		
-		searchCriteriaPanel.add(albumsSearchButton);
-		
 		albumsSearchButton.setFont(buttonFont);
 		albumsSearchButton.setBackground(Color.GREEN);
+		albumsSearchButton.setAlignmentX(RIGHT_ALIGNMENT);
+		
+		nbResultsLabel = new JLabel(0 + RESULTATS);
+		nbResultsLabel.setFont(nbResultsFont);
+		nbResultsLabel.setForeground(Color.BLUE);
+		nbResultsLabel.setAlignmentX(RIGHT_ALIGNMENT);
+		
+		buttonPanel.add(albumsSearchButton);
+		buttonPanel.add(nbResultsLabel);
+		searchCriteriaPanel.add(buttonPanel);
 		
 		add(searchCriteriaPanel);
 		
@@ -165,6 +178,7 @@ public class AlbumsSearchPanel extends JPanel {
 			
 			searchResultAlbums.clear();
 			searchResultAlbums.addAll(listeAlbumsFound.getAlbums());
+			nbResultsLabel.setText(listeAlbumsFound.getNombreAlbums() + RESULTATS);
 			albumsTableModel.fireTableDataChanged();
 		}
 		
