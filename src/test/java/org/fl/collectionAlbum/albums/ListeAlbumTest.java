@@ -97,7 +97,9 @@ class ListeAlbumTest {
 				    "bitDepth": 16 , 
 				    "samplingRate" : 44.1, 
 				    "source" : "MOFI Fidelity Sound Lab", 
-				    "type" : "FLAC" }]
+				    "type" : "FLAC",
+			   		"location" : [ "e/Bill Evans/Portrait In Jazz/" ] 
+			   		}]
 			     }, 
 			  "auteurCompositeurs": [ 
 			    {  
@@ -122,7 +124,8 @@ class ListeAlbumTest {
         "bitDepth": 24,
         "samplingRate": 192,
         "source": "File",
-        "type": "FLAC"
+        "type": "FLAC",
+      "location" : [ "v/Van Halen/Van Halen [24 - 192]/" ]
       }
     ]
   },
@@ -182,7 +185,7 @@ class ListeAlbumTest {
 				try {
 					return (ObjectNode)mapper.readTree((String)albumJson);
 				} catch (JacksonException e) {
-					fail("Exception when parsing album json");
+					fail("Exception when parsing album json: " + albumJson);
 					return null;
 				}
 			})
