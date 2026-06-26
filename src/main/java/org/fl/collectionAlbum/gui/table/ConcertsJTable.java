@@ -60,4 +60,9 @@ public class ConcertsJTable extends MusicArtefactTable<Concert> {
 	public boolean isDiscogsReleaseColumnSelected() {
 		return false;
 	}
+
+	@Override
+	public boolean isAlbumCoverColumnSelected() {
+		return false;
+	}
 }

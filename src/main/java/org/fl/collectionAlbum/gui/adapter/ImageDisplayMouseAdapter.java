@@ -24,7 +24,6 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui.adapter;
 
-import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -41,7 +40,6 @@ import javax.swing.ImageIcon;
 public class ImageDisplayMouseAdapter extends MouseAdapter {
 
 	private final BufferedImage bufferedImage;
-	private static final Dimension metadataWindowDimension = Control.getInfoWindowDimension();
 	
 	public ImageDisplayMouseAdapter(BufferedImage bufferedImage) {
 		super();
@@ -59,7 +57,7 @@ public class ImageDisplayMouseAdapter extends MouseAdapter {
 		
 		JLabel imageLabel = new JLabel(new ImageIcon(bufferedImage));
 		JScrollPane imageScrollPanel = new JScrollPane(imageLabel);
-		imageScrollPanel.setPreferredSize(metadataWindowDimension);
+		imageScrollPanel.setPreferredSize(Control.getInfoWindowDimension());
 		
 		JOptionPane.showMessageDialog(null, imageScrollPanel, "", JOptionPane.PLAIN_MESSAGE);
 	}

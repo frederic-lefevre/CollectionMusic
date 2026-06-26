@@ -37,5 +37,6 @@ public abstract class MusicArtefactTable<T extends MusicArtefact> extends Abstra
 	public abstract T getSelectedMusicArtefact();
 	public abstract boolean isArtistsColumnSelected();
 	public abstract boolean isDiscogsReleaseColumnSelected();
+	public abstract boolean isAlbumCoverColumnSelected();
 	public abstract boolean isLieuColumnSelected();
 }
