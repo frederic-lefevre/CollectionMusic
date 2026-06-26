@@ -48,7 +48,7 @@ public class DetailedConcertInfoPane extends JScrollPane {
 	private static final long serialVersionUID = 1L;
 	
 	private static final int MAX_TICKET_WIDTH = 1400;
-	private static final int MAX_TICKET_HEIGHT = 800;
+	private static final int MAX_TICKET_HEIGHT = 700;
 	
 	private static final Logger logger = Logger.getLogger(DetailedConcertInfoPane.class.getName());
 	
