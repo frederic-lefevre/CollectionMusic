@@ -33,15 +33,21 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.TestUtils;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.format.ContentNature;
+import org.fl.collectionAlbum.json.ParserHelpers;
 import org.fl.collectionAlbum.mediaFile.AudioFile;
 import org.fl.collectionAlbum.mediaFile.MediaFile;
 import org.fl.collectionAlbum.mediaFile.MediaFileGenres;
 import org.fl.collectionAlbum.mediaFile.MediaStreamPatterns;
+import org.fl.collectionAlbum.utils.CollectionImage;
+import org.fl.util.FilterCounter;
+import org.fl.util.FilterCounter.LogRecordCounter;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -91,6 +97,10 @@ class MediaFileInventoryTest {
 				 } 
 				""" ;
 		
+		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(ParserHelpers.class.getName()));
+		LogRecordCounter collectionImageFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(CollectionImage.class.getName()));
+		LogRecordCounter albumFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(Album.class.getName()));
+		
 		ObjectNode jAlbum = (ObjectNode)mapper.readTree(albumStr1);
 
 		ListeArtiste la = new ListeArtiste();
@@ -111,6 +121,16 @@ class MediaFileInventoryTest {
 				assertThat(audioPath.getCoverPath()).isNotNull().isEqualTo(Paths.get("E:\\Musique\\e\\Bill Evans\\Portrait In Jazz\\cover.jpg"));
 				assertThat(audioPath.getMediaFileExtension()).isEqualTo("flac");
 			});
+		
+		assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
+		parserHelpersFilterCounter.stopLogCountAndFilter();
+		assertThat(collectionImageFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(collectionImageFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
+		collectionImageFilterCounter.stopLogCountAndFilter();
+		assertThat(albumFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(albumFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
+		albumFilterCounter.stopLogCountAndFilter();
 	}
 
 	@Test
@@ -147,6 +167,10 @@ class MediaFileInventoryTest {
 }
 				""" ;
 		
+		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(ParserHelpers.class.getName()));
+		LogRecordCounter collectionImageFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(CollectionImage.class.getName()));
+		LogRecordCounter albumFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(Album.class.getName()));
+		
 		ObjectNode jAlbum = (ObjectNode)mapper.readTree(albumStr1);
 
 		ListeArtiste la = new ListeArtiste();
@@ -175,12 +199,28 @@ class MediaFileInventoryTest {
 				assertThat(videoPath.getPath().toString().contains("A Bigger Bang"));
 				assertThat(videoPath.getContentNature()).isEqualTo(ContentNature.VIDEO);
 			});
+		
+		assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(2);
+		assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(2);
+		parserHelpersFilterCounter.stopLogCountAndFilter();
+		assertThat(collectionImageFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(collectionImageFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
+		collectionImageFilterCounter.stopLogCountAndFilter();
+		assertThat(albumFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(albumFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
+		albumFilterCounter.stopLogCountAndFilter();
 	}
 
 	@Test
 	void shouldNotFindVideoPath() {
 		
+		LogRecordCounter mediaFileInventoryFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(MediaFileInventory.class.getName()));
+		
 		assertThat(videoFileInventory.validateMediaFilePath(Paths.get("E:\\Musique\\e\\Bill Evans\\Portrait In Jazz"))).isNull();
+		
+		assertThat(mediaFileInventoryFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(mediaFileInventoryFilterCounter.getLogRecordCount(Level.SEVERE)).isEqualTo(1);
+		mediaFileInventoryFilterCounter.stopLogCountAndFilter();
 	}
 	
 	@Test
@@ -192,13 +232,20 @@ class MediaFileInventoryTest {
 	@Test
 	void shouldNotFindAudioPath() {
 		
+		LogRecordCounter mediaFileInventoryFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(MediaFileInventory.class.getName()));
+		
 		assertThat(audioFileInventory.validateMediaFilePath(Paths.get("E:\\Musique\\e\\Bill Evans\\Does Not Exists"))).isNull();
+		
+		assertThat(mediaFileInventoryFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(mediaFileInventoryFilterCounter.getLogRecordCount(Level.SEVERE)).isEqualTo(1);
+		mediaFileInventoryFilterCounter.stopLogCountAndFilter();
 	}
 	
 	@Test
 	void shouldNotFindRootPath() throws URISyntaxException {
 		
 		// Should log that root path is disconnected and remember that, do all operation accordingly ****
+		LogRecordCounter mediaFileInventoryFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(MediaFileInventory.class.getName()));
 		
 		MediaFileInventory disconnectedMediaFileInventory =
 				new MediaFileInventory(Paths.get(new URI("file:///M:/Musique")), null, false);
@@ -207,12 +254,22 @@ class MediaFileInventoryTest {
 		assertThat(disconnectedMediaFileInventory.isConnected()).isFalse();
 		
 		disconnectedMediaFileInventory.scanMediaFilePaths();
+		
+		assertThat(mediaFileInventoryFilterCounter.getLogRecordCount()).isEqualTo(2);
+		assertThat(mediaFileInventoryFilterCounter.getLogRecordCount(Level.SEVERE)).isEqualTo(2);
+		mediaFileInventoryFilterCounter.stopLogCountAndFilter();
 	}
 	
 	@Test
 	void shouldNotValidatePath() throws URISyntaxException {
 		
-		assertThat(audioFileInventory.validateMediaFilePath(Paths.get("E:\\XX\\e\\Bill Evans\\Portrait In Jazz"))).isNull();	
+		LogRecordCounter mediaFileInventoryFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(MediaFileInventory.class.getName()));
+		
+		assertThat(audioFileInventory.validateMediaFilePath(Paths.get("E:\\XX\\e\\Bill Evans\\Portrait In Jazz"))).isNull();
+		
+		assertThat(mediaFileInventoryFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(mediaFileInventoryFilterCounter.getLogRecordCount(Level.SEVERE)).isEqualTo(1);
+		mediaFileInventoryFilterCounter.stopLogCountAndFilter();
 	}
 	
 	@Test
