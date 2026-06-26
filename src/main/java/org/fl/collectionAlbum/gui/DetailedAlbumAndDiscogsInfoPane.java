@@ -45,8 +45,10 @@ import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory;
+import org.fl.collectionAlbum.gui.adapter.ImageDisplayMouseAdapter;
 import org.fl.collectionAlbum.gui.listener.MediaFilePathActionListener;
 import org.fl.collectionAlbum.gui.listener.OsActionListener;
+import org.fl.collectionAlbum.utils.CollectionImage;
 import org.fl.collectionAlbum.utils.CollectionUtils;
 
 public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
@@ -204,6 +206,9 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 	}
 	
 	private JLabel getCoverImage(Album album) {
-		return album.getSleeveImage().getAdjustedImageLabel(MAX_COVER_WIDTH, MAX_COVER_HEIGHT);
+		CollectionImage sleeveImage = album.getSleeveImage();
+		JLabel sleeveImageLabel = album.getSleeveImage().getAdjustedImageLabel(MAX_COVER_WIDTH, MAX_COVER_HEIGHT);
+		sleeveImageLabel.addMouseListener(new ImageDisplayMouseAdapter(sleeveImage.getBufferedImage()));
+		return sleeveImageLabel;
 	}
 }
