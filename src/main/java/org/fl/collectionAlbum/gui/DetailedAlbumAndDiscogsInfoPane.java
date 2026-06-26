@@ -27,7 +27,6 @@ package org.fl.collectionAlbum.gui;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
-import java.nio.file.Path;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -205,12 +204,6 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 	}
 	
 	private JLabel getCoverImage(Album album) {
-		
-		Path coverImagePath = album.getCoverImage();
-		if (coverImagePath != null) {
-			return CollectionUtils.getAdjustedImageLabel(coverImagePath, MAX_COVER_WIDTH, MAX_COVER_HEIGHT);
-		} else {
-			return new JLabel("Couverture de l'album non disponible");
-		}
+		return album.getSleeveImage().getAdjustedImageLabel(MAX_COVER_WIDTH, MAX_COVER_HEIGHT);
 	}
 }

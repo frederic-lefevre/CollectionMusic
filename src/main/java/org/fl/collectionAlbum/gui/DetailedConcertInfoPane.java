@@ -26,19 +26,18 @@ package org.fl.collectionAlbum.gui;
 
 import java.awt.Font;
 import java.net.URISyntaxException;
-import java.nio.file.Path;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.BoxLayout;
 import javax.swing.JEditorPane;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.concerts.Concert;
+import org.fl.collectionAlbum.utils.CollectionImage;
 import org.fl.collectionAlbum.utils.CollectionUtils;
 import org.fl.util.file.FilesUtils;
 
@@ -77,16 +76,14 @@ public class DetailedConcertInfoPane extends JScrollPane {
 				}
 			})
 			.filter(Objects::nonNull)
-			.forEach(ticketImagePath -> infosPane.add(getTicketImage(ticketImagePath)));
+			.map(ticketImagePath -> new CollectionImage(ticketImagePath))
+			.map(collectionImage -> collectionImage.getAdjustedImageLabel(MAX_TICKET_WIDTH, MAX_TICKET_HEIGHT))
+			.forEach(imageLabel -> infosPane.add(imageLabel));
 			
 		if (concert.hasUrlLinks()) {
 			infosPane.add(CollectionUtils.urlLinkPanel(concert));
 		}
 		
 		setViewportView(infosPane);
-	}
-	
-	private JLabel getTicketImage(Path ticketImagePath) {
-		return CollectionUtils.getAdjustedImageLabel(ticketImagePath, MAX_TICKET_WIDTH, MAX_TICKET_HEIGHT);
 	}
 }

@@ -25,13 +25,11 @@ SOFTWARE.
 package org.fl.collectionAlbum.gui.renderer;
 
 import java.awt.Font;
-import java.nio.file.Path;
 import java.util.logging.Logger;
 
-import javax.swing.ImageIcon;
 import javax.swing.SwingConstants;
 
-import org.fl.collectionAlbum.utils.CollectionUtils;
+import org.fl.collectionAlbum.utils.CollectionImage;
 import org.fl.util.swing.CustomTableCellRenderer;
 
 public class CollectionImageRenderer extends CustomTableCellRenderer {
@@ -56,18 +54,12 @@ public class CollectionImageRenderer extends CustomTableCellRenderer {
 	public void valueProcessor(Object value) {
 		if (value == null) {
 			// This may happen when rescanning the album collection
-			mLog.fine("Null value in Dates Album cell. Should be an Album");
+			mLog.fine("Null value in Image cell. Should be a BufferedImage");
 			setText("Valeur null");
-		} else if (value instanceof Path imagePath) {
-			ImageIcon imageIcon = CollectionUtils.getAdjustedImageIcon(imagePath, width, height);
-			
-			if (imageIcon != null) {
-				setIcon(imageIcon);
-			} else {
-				setText("Erreur");
-			}
-		}
-		
+		} else if (value instanceof CollectionImage collectionImage) {
+			setIcon(collectionImage.buildAdjustedImageIcon(width, height));
+		} else {
+			mLog.severe("Invalid value type in Sleeve Image cell. Should be CollectionImage but is " + value.getClass().getName());
+		}			
 	}
-
 }

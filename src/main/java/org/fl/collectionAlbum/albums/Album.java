@@ -50,6 +50,8 @@ import org.fl.collectionAlbum.format.Format.RangementSupportPhysique;
 import org.fl.collectionAlbum.json.AlbumParser;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
+import org.fl.collectionAlbum.utils.CollectionImage;
+import org.fl.collectionAlbum.utils.CollectionImage.ImageStatus;
 import org.fl.collectionAlbum.utils.FuzzyPeriod;
 
 import tools.jackson.databind.node.ObjectNode;
@@ -64,9 +66,9 @@ public class Album extends MusicArtefact {
     private final Format formatAlbum;
     private final RangementSupportPhysique rangement;  
     private final boolean specificCompositionDates;   
-    private final Path sleevePath;
     private final TemporalAccessor acquisitionDate;
     private final Map<ContentNature, Set<MediaFilePath>> potentialMediaFilesPath;
+    private CollectionImage sleeveImage;
     
 	public Album(ObjectNode albumJson, List<ListeArtiste> knownArtistes, Path jsonFilePath) {
 
@@ -91,8 +93,14 @@ public class Album extends MusicArtefact {
 			albumLog.severe("Pas de rangement trouvé pour l'album " + getTitre());
 		}
 		
-		sleevePath = AlbumParser.getAlbumSleevePath(albumJson);
 		acquisitionDate = AlbumParser.getAcquisitionDate(albumJson);
+		
+		sleeveImage = buildSleeveImage(AlbumParser.getAlbumSleevePath(albumJson));
+		if (sleeveImage.getImageStatus() == ImageStatus.NOT_FOUND) {
+			albumLog.warning("Sleeve image not found for for album \"" + titre +"\", json path=" + Objects.toString(jsonFilePath));
+		} else if (sleeveImage.getImageStatus() == ImageStatus.IN_ERROR) {
+			albumLog.warning("Sleeve image build in error for album \"" + titre +"\", json path=" + Objects.toString(jsonFilePath));
+		}
 	}
     
     public String getTitre() {
@@ -241,7 +249,21 @@ public class Album extends MusicArtefact {
 		return formatAlbum.getAllMediaFilePaths();
 	}
 	
-	private boolean validatePotentialMediaFilePath(Set<MediaFilePath> potentialMediaFilePath, ContentNature contentNature) {
+	private CollectionImage buildSleeveImage(Path sleevePath) {
+		if ((sleevePath == null)  && (hasMediaFiles())) {
+			sleevePath = getAllMediaFilePaths().stream()
+					.map(mediaFile -> mediaFile.getMediaFilePaths())
+					.filter(Objects::nonNull)
+					.flatMap(Collection::stream)
+					.map(MediaFilePath::getCoverPath)
+					.filter(Objects::nonNull)
+					.findFirst()
+					.orElse(null);
+		}
+		return new CollectionImage(sleevePath);
+	}
+	
+	protected boolean validatePotentialMediaFilePath(Set<MediaFilePath> potentialMediaFilePath, ContentNature contentNature) {
 		
 		if (potentialMediaFilePath == null) {
 			albumLog.severe("Trying to validate " + contentNature.getNom() + " file path with null value for album " + getTitre());
@@ -262,6 +284,10 @@ public class Album extends MusicArtefact {
 					mediaFiles.get(0).setMediaFilePath(potentialMediaFilePath, Control.getMediaFileRootUri(contentNature));
 
 					potentialMediaFilePath = null;
+					if (sleeveImage.getImageStatus() == ImageStatus.NOT_FOUND) {
+						// maybe we can get the cover image in the new linked MediaFilePath
+						sleeveImage = buildSleeveImage(null);
+					}
 					return true;
 					
 				} else {
@@ -278,22 +304,12 @@ public class Album extends MusicArtefact {
 		}
 	}
 	
-	public Path getCoverImage() {
-
-		if (sleevePath != null) {
-			return sleevePath;
-		} else if (hasMediaFiles()) {
-			return getAllMediaFilePaths().stream()
-					.map(mediaFile -> mediaFile.getMediaFilePaths())
-					.filter(Objects::nonNull)
-					.flatMap(Collection::stream)
-					.map(MediaFilePath::getCoverPath)
-					.filter(Objects::nonNull)
-					.findFirst()
-					.orElse(null);
-		} else {
-			return null;
-		}
+	public Path getCoverImagePath() {
+		return sleeveImage.getImagePath();
+	}
+	
+	public CollectionImage getSleeveImage() {
+		return sleeveImage;
 	}
 	
     public TemporalAccessor getAcquisitionDate() {

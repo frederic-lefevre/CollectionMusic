@@ -32,6 +32,8 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
@@ -40,6 +42,9 @@ import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.concerts.Concert;
 import org.fl.collectionAlbum.concerts.LieuxDesConcerts;
+import org.fl.collectionAlbum.utils.CollectionImage;
+import org.fl.util.FilterCounter;
+import org.fl.util.FilterCounter.LogRecordCounter;
 import org.fl.util.file.FilesUtils;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -130,6 +135,9 @@ class RapportStructuresAndNamesTest {
 	@Test
 	void test3() throws DatabindException, JacksonException {
 
+		LogRecordCounter collectionImageFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(CollectionImage.class.getName()));
+		LogRecordCounter albumFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(Album.class.getName()));
+		
 		ObjectNode jAlbum = (ObjectNode)mapper.readTree(albumStr1);
 
 		ListeArtiste la = new ListeArtiste();
@@ -160,6 +168,13 @@ class RapportStructuresAndNamesTest {
 
 		URI pInfoAlbum2 = RapportStructuresAndNames.getAlbumRapportRelativeUri(album2);
 		assertThat(pInfoAlbum2).hasToString("albums/i0.html");
+		
+		assertThat(collectionImageFilterCounter.getLogRecordCount()).isEqualTo(2);
+		assertThat(collectionImageFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(2);
+		collectionImageFilterCounter.stopLogCountAndFilter();
+		assertThat(albumFilterCounter.getLogRecordCount()).isEqualTo(2);
+		assertThat(albumFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(2);
+		albumFilterCounter.stopLogCountAndFilter();
 	}
 	
 	private static final String concertStr1 = """

@@ -96,6 +96,8 @@ public class Control {
 	private Path discogsCollectionCsvExportPath;
 	private String discogsBaseUrlForRelease;
 	private String cssForGui;
+	private Path errorImagePath;
+	private Path imageNotFoundImagePath;
 	private Dimension mainSubPaneDimension;
 	private Dimension infoWindowDimension;
 	private boolean readMediaFileMetadata;
@@ -218,6 +220,10 @@ public class Control {
 					new StringCommandParameter());
 			
 			cssForGui = collectionProperties.getFileContentFromURI("album.cssForGui", Charset.defaultCharset());
+			
+			// Get image for error
+			errorImagePath = FilesUtils.uriStringToAbsolutePath(collectionProperties.getProperty("album.errorImg"));
+			imageNotFoundImagePath = FilesUtils.uriStringToAbsolutePath(collectionProperties.getProperty("album.imageNotFoundImg"));
 			
 			readMediaFileMetadata = collectionProperties.getBoolean("mediaFile.readMetadata", false);
 						
@@ -354,6 +360,14 @@ public class Control {
 	
 	public static String getCssForGui() {
 		return getInstance().cssForGui;
+	}
+	
+	public static Path getImageForErrorPath() {
+		return getInstance().errorImagePath;
+	}
+	
+	public static Path getImageForImageNotFoundPath() {
+		return getInstance().imageNotFoundImagePath;
 	}
 	
 	public static boolean isReadMediaFileMetadata() {

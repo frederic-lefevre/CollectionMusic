@@ -66,10 +66,13 @@ class FormatTest {
 		assertThat(formatFilterCounter.getLogRecordCount(Level.SEVERE)).isEqualTo(1);
 		assertThat(formatFilterCounter.getLogRecords()).singleElement()
 			.satisfies(logRecord -> assertThat(logRecord.getMessage()).isEqualTo("Rangement du support physiques non trouvé"));
+		formatFilterCounter.stopLogCountAndFilter();
 	}
 	
 	@Test
 	void test1() throws DatabindException, JacksonException {
+		
+		LogRecordCounter formatFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(Format.class.getName()));	
 		
 		String formatStr1 = "{}" ;
 		ObjectNode jf1 = (ObjectNode)mapper.readTree(formatStr1);
@@ -82,10 +85,16 @@ class FormatTest {
 		assertThat(format1.hasContentNature(ContentNature.AUDIO)).isFalse();
 		
 		assertThat(format1.hasError()).isTrue();
+		
+		assertThat(formatFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(formatFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
+		formatFilterCounter.stopLogCountAndFilter();
 	}
 
 	@Test
-	void testPoidsNul() throws DatabindException, JacksonException {
+	void testPoidsNull() throws DatabindException, JacksonException {
+		
+		LogRecordCounter formatFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(Format.class.getName()));	
 		
 		String formatStr1 = "{\"cd\": 0 }" ;
 		ObjectNode jf1 = (ObjectNode)mapper.readTree(formatStr1);
@@ -100,6 +109,10 @@ class FormatTest {
 		assertThat(format1.hasMediaFilePaths(ContentNature.VIDEO)).isFalse();
 		
 		assertThat(format1.hasError()).isTrue();
+		
+		assertThat(formatFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(formatFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
+		formatFilterCounter.stopLogCountAndFilter();
 	}
 	
 	@Test
@@ -222,7 +235,8 @@ class FormatTest {
 				    "bitDepth": 32 , 
 				    "samplingRate" : 192, 
 				    "source" : "MOFI Fidelity Sound Lab", 
-				    "type" : "FLAC" }]
+				    "type" : "FLAC",
+				    "location": ["b/The Beatles/Magical Mystery Tour" ] }]
 				}
 				""";
 		
@@ -269,7 +283,8 @@ class FormatTest {
 				    "bitDepth": 16 , 
 				    "samplingRate" : 44.1, 
 				    "source" : "MOFI Fidelity Sound Lab", 
-				    "type" : "FLAC" }]
+				    "type" : "FLAC",
+				    "location": [ "b/The Beatles/Magical Mystery Tour" ] }]
 				}
 				""";
 		
@@ -313,12 +328,14 @@ class FormatTest {
 				    "samplingRate" : 44.1, 
 				    "source" : "MOFI Fidelity Sound Lab", 
 				    "type" : "MP3",
-				    "note" : "Mix Bob Smith" },
+				    "note" : "Mix Bob Smith",
+				    "location": [ "w/Doc Watson/Doc Watson on Stage [MP3 192 kbps]" ] },
 				    {
 				    "bitDepth": 24 , 
 				    "samplingRate" : 88, 
 				    "source" : "CD", 
-				    "type" : "FLAC" }]
+				    "type" : "FLAC",
+				    "location": [ "b/The Beatles/Magical Mystery Tour" ] }]
 				}
 				""";
 		
@@ -384,13 +401,16 @@ class FormatTest {
 				    "bitDepth": 16 , 
 				    "samplingRate" : 44.1, 
 				    "source" : "MOFI Fidelity Sound Lab", 
-				    "type" : "FLAC" }],
+				    "type" : "FLAC",
+				    "location": [ "b/The Beatles/Magical Mystery Tour" ] }],
 				"videoFiles" : [{
 					"width": 720, 
 					"height" : 480,
 					"type" : "MKV", 
 					"source" : "DVD",
-					"note" : "version noir et blanc" }]
+					"note" : "version noir et blanc",
+				  	"location" : [ "d/Bob Dylan/No Direction Home - Martin Scorcese/NoDirectionHome/", "d/Bob Dylan/No Direction Home - Martin Scorcese/NoDirectionHome2/" ]
+				    }]
 				}
 				""";
 		
@@ -451,13 +471,15 @@ class FormatTest {
 					"height" : 480,
 					"type" : "MP4", 
 					"source" : "DVD",
-					"note" : "version noir et blanc" },
+					"note" : "version noir et blanc",
+      "location" : [ "b/The Beatles/Yellow Submarine/" ] },
 					{
 					"width": 1920, 
 					"height" : 1024,
 					"type" : "MKV", 
 					"source" : "Bluray",
-					"note" : "version couleur" }
+					"note" : "version couleur",
+      "location" : [ "d/Bob Dylan/No Direction Home - Martin Scorcese/NoDirectionHome/", "d/Bob Dylan/No Direction Home - Martin Scorcese/NoDirectionHome2/" ] }
 					]
 				}
 				""";
@@ -503,6 +525,8 @@ class FormatTest {
 	@Test
 	void test10() throws DatabindException, JacksonException {
 		
+		LogRecordCounter formatFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(Format.class.getName()));	
+		
 		String formatStr1 = "{\"bluray\": 3 }" ;
 		ObjectNode jf1 = (ObjectNode)mapper.readTree(formatStr1);
 		Format format1 = new Format(jf1) ;
@@ -516,6 +540,10 @@ class FormatTest {
 		assertThat(format1.getContentNatures()).isEmpty();
 		
 		assertThat(format1.hasError()).isTrue();
+		
+		assertThat(formatFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(formatFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
+		formatFilterCounter.stopLogCountAndFilter();
 	}
 	
 	@Test
