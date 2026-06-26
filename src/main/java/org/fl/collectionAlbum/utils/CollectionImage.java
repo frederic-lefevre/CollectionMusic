@@ -128,12 +128,12 @@ public class CollectionImage {
 		final int imageHeight = bufferedImage.getHeight();
 		int adjustedImageWidth;
 		int adjustedImageHeight;
-		if (imageWidth > imageHeight) {
+		if (maxWidth * imageHeight < maxHeight * imageWidth) {
 			adjustedImageWidth = maxWidth;
-			adjustedImageHeight = (imageHeight * maxWidth)/imageWidth;
+			adjustedImageHeight = (imageHeight * maxWidth) / imageWidth;
 		} else {
+			adjustedImageWidth = (imageWidth * maxHeight) / imageHeight;
 			adjustedImageHeight = maxHeight;
-			adjustedImageWidth = (imageWidth* maxHeight)/imageHeight;
 		}
 		return bufferedImage.getScaledInstance(adjustedImageWidth, adjustedImageHeight, Image.SCALE_DEFAULT);
 	}

@@ -52,13 +52,13 @@ public class AlbumTableColumns {
 	private static final int POCHETTE_WIDTH = 85;
 	private static final int POCHETTE_HEIGHT = 85;
 	
-	private static final TableColumnParameter<Album> POCHETTE = 
+	protected static final TableColumnParameter<Album> POCHETTE = 
 			new TableColumnParameter<>("<html>Pochettes<br/>des albums</html>", null, POCHETTE_WIDTH, 
 					new CollectionImageRenderer(POCHETTE_WIDTH, POCHETTE_HEIGHT), null, CollectionImage.class, Album::getSleeveImage);
 	
 	private static final TableColumnParameter<Album> TITRE = 
 			new TableColumnParameter<>("<html>Titres des<br/>albums</html>", null, 250, new StringToHtmlRenderer(), null, String.class, Album::getTitre);
-	public static final TableColumnParameter<Album> AUTEURS = 
+	protected static final TableColumnParameter<Album> AUTEURS = 
 			new TableColumnParameter<>("Auteurs", null, 550, new AuteurListRenderer(), new RangementComparator(), Album.class, (a) -> a);
 	private static final TableColumnParameter<Album> FORMAT = 
 			new TableColumnParameter<>("Formats", null, 100, null, null, String.class,
@@ -70,7 +70,7 @@ public class AlbumTableColumns {
 			new TableColumnParameter<>("Fichiers media", null, 140, new MediaFilesRenderer(), new AlbumMediaFilesStatusComparator(),  Album.class, (a) -> a);
 	private static final TableColumnParameter<Album> PROBLEM = 
 			new TableColumnParameter<>("Problème", null, 70, new CollectionBooleanRenderer(), null, Boolean.class, Album::hasProblem);
-	public static final TableColumnParameter<Album> DISCOGS = 
+	protected static final TableColumnParameter<Album> DISCOGS = 
 			new TableColumnParameter<>("<html>Discogs<br/>release</html>", null, 60, null, null, String.class, (a) -> Optional.ofNullable(a.getDiscogsLink()).orElse(""));
 	private static final TableColumnParameter<Album> POIDS = 
 			new TableColumnParameter<>("Poids", null, 50, 

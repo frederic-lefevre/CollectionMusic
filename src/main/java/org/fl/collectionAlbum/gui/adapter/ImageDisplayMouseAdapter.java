@@ -22,21 +22,43 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.gui.table;
+package org.fl.collectionAlbum.gui.adapter;
 
-import org.fl.collectionAlbum.MusicArtefact;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 
-public abstract class MusicArtefactTable<T extends MusicArtefact> extends AbstractCollectionTable<T> {
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
 
-	private static final long serialVersionUID = 1L;
+import org.fl.collectionAlbum.Control;
 
-	public MusicArtefactTable(AbstractCollectionTableModel<T> collectionTableModel) {
-		super(collectionTableModel);
+import javax.swing.ImageIcon;
+
+public class ImageDisplayMouseAdapter extends MouseAdapter {
+
+	private final BufferedImage bufferedImage;
+	
+	public ImageDisplayMouseAdapter(BufferedImage bufferedImage) {
+		super();
+		this.bufferedImage = bufferedImage;
 	}
 	
-	public abstract T getSelectedMusicArtefact();
-	public abstract boolean isArtistsColumnSelected();
-	public abstract boolean isDiscogsReleaseColumnSelected();
-	public abstract boolean isAlbumCoverColumnSelected();
-	public abstract boolean isLieuColumnSelected();
+	@Override
+	public void mouseClicked(MouseEvent evt) {
+		if (SwingUtilities.isLeftMouseButton(evt) && (evt.getClickCount() > 1)) {
+			doubleClickAction();
+		}
+	}
+	
+	private void doubleClickAction() {
+		
+		JLabel imageLabel = new JLabel(new ImageIcon(bufferedImage));
+		JScrollPane imageScrollPanel = new JScrollPane(imageLabel);
+		imageScrollPanel.setPreferredSize(Control.getInfoWindowDimension());
+		
+		JOptionPane.showMessageDialog(null, imageScrollPanel, "", JOptionPane.PLAIN_MESSAGE);
+	}
 }

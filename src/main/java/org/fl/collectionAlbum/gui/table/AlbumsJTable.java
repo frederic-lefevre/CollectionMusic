@@ -75,4 +75,9 @@ public class AlbumsJTable extends MusicArtefactTable<Album> {
 	public boolean isLieuColumnSelected() {
 		return false;
 	}
+
+	@Override
+	public boolean isAlbumCoverColumnSelected() {
+		return isColumnSelected(AlbumTableColumns.POCHETTE);
+	}
 }

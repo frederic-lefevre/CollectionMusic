@@ -32,11 +32,13 @@ import java.util.logging.Logger;
 
 import javax.swing.BoxLayout;
 import javax.swing.JEditorPane;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.concerts.Concert;
+import org.fl.collectionAlbum.gui.adapter.ImageDisplayMouseAdapter;
 import org.fl.collectionAlbum.utils.CollectionImage;
 import org.fl.collectionAlbum.utils.CollectionUtils;
 import org.fl.util.file.FilesUtils;
@@ -46,7 +48,7 @@ public class DetailedConcertInfoPane extends JScrollPane {
 	private static final long serialVersionUID = 1L;
 	
 	private static final int MAX_TICKET_WIDTH = 1400;
-	private static final int MAX_TICKET_HEIGHT = 800;
+	private static final int MAX_TICKET_HEIGHT = 700;
 	
 	private static final Logger logger = Logger.getLogger(DetailedConcertInfoPane.class.getName());
 	
@@ -77,7 +79,11 @@ public class DetailedConcertInfoPane extends JScrollPane {
 			})
 			.filter(Objects::nonNull)
 			.map(ticketImagePath -> new CollectionImage(ticketImagePath))
-			.map(collectionImage -> collectionImage.getAdjustedImageLabel(MAX_TICKET_WIDTH, MAX_TICKET_HEIGHT))
+			.map(collectionImage -> { 
+				JLabel ticketImageLabel = collectionImage.getAdjustedImageLabel(MAX_TICKET_WIDTH, MAX_TICKET_HEIGHT); 
+				ticketImageLabel.addMouseListener(new ImageDisplayMouseAdapter(collectionImage.getBufferedImage()));
+				return ticketImageLabel;
+			})
 			.forEach(imageLabel -> infosPane.add(imageLabel));
 			
 		if (concert.hasUrlLinks()) {

@@ -27,7 +27,10 @@ package org.fl.collectionAlbum.gui.adapter;
 import java.util.List;
 import java.util.stream.Stream;
 
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
@@ -40,6 +43,7 @@ import org.fl.collectionAlbum.gui.listener.OsActionListener;
 import org.fl.collectionAlbum.gui.listener.AlbumCustomActionListener.CustomAlbumAction;
 import org.fl.collectionAlbum.gui.table.MusicArtefactTable;
 import org.fl.collectionAlbum.osAction.OsAction;
+import org.fl.collectionAlbum.utils.CollectionImage;
 
 public class AlbumMouseAdapter extends MusicArtefactMouseAdapter<Album> {
 	
@@ -67,11 +71,21 @@ public class AlbumMouseAdapter extends MusicArtefactMouseAdapter<Album> {
 			(new OsActionListener<>(List.of(Control.getDiscogsBaseUrlForRelease() + release.getInventoryCsvAlbum().getReleaseId()), Control.getDisplayUrlAction()))
 				.actionPerformed(null);
 
+		} else if (musicArtefactTable.isAlbumCoverColumnSelected()) {
+			
+			CollectionImage sleeveImage = selectedMusicArtefact.getSleeveImage();
+			if (sleeveImage != null) {
+				JLabel imageLabel = new JLabel(new ImageIcon(selectedMusicArtefact.getSleeveImage().getBufferedImage()));
+				JScrollPane imageScrollPanel = new JScrollPane(imageLabel);
+				imageScrollPanel.setPreferredSize(Control.getInfoWindowDimension());
+				JOptionPane.showMessageDialog(null, imageScrollPanel, "", JOptionPane.PLAIN_MESSAGE);
+			}
+			
 		} else if (CustomAlbumAction.DETAILED_INFO_DISPLAY.getDisplayable().test(selectedMusicArtefact)) {
 			JOptionPane.showMessageDialog(null, 
 					new DetailedAlbumAndDiscogsInfoPane(selectedMusicArtefact),
 					CustomAlbumAction.DETAILED_INFO_DISPLAY.getActionTitle(), 
-					JOptionPane.INFORMATION_MESSAGE);
-		}
+					JOptionPane.INFORMATION_MESSAGE);	
+		} 
 	}
 }
