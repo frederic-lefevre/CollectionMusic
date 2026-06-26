@@ -90,7 +90,7 @@ class AlbumTest {
 	void testEmptyAlbum() {
 
 		LogRecordCounter albumParserFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.AlbumParser"));		
-		LogRecordCounter albumFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.albums.Album"));	
+		LogRecordCounter albumFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(Album.class.getName()));	
 		LogRecordCounter formatFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.format.Format"));	
 		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
 		LogRecordCounter collectionImageFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(CollectionImage.class.getName()));
@@ -129,8 +129,9 @@ class AlbumTest {
 		assertThat(albumParserFilterCounter.getLogRecordCount()).isEqualTo(2);
 		assertThat(albumParserFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(2);
 		
-		assertThat(albumFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(albumFilterCounter.getLogRecordCount()).isEqualTo(2);
 		assertThat(albumFilterCounter.getLogRecordCount(Level.SEVERE)).isEqualTo(1);
+		assertThat(albumFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
 		
 		assertThat(formatFilterCounter.getLogRecordCount()).isEqualTo(1);
 		assertThat(formatFilterCounter.getLogRecordCount(Level.SEVERE)).isEqualTo(1);
@@ -175,7 +176,8 @@ class AlbumTest {
 	void testAlbum1() throws DatabindException, JacksonException, URISyntaxException {
 		
 		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
-		LogRecordCounter collectionImageFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(CollectionImage.class.getName()));	
+		LogRecordCounter collectionImageFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(CollectionImage.class.getName()));
+		LogRecordCounter albumFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(Album.class.getName()));
 		
 		ObjectNode jAlbum = (ObjectNode)mapper.readTree(albumStr1);
 
@@ -387,6 +389,9 @@ class AlbumTest {
 		assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(1);
 		assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
 		parserHelpersFilterCounter.stopLogCountAndFilter();
+		assertThat(albumFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(albumFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
+		albumFilterCounter.stopLogCountAndFilter();
 	}
 	
 	@Test
@@ -394,6 +399,7 @@ class AlbumTest {
 
 		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
 		LogRecordCounter collectionImageFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(CollectionImage.class.getName()));
+		LogRecordCounter albumFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(Album.class.getName()));
 		
 		ObjectNode jAlbum = (ObjectNode)mapper.readTree(albumStr1);
 
@@ -418,6 +424,9 @@ class AlbumTest {
 		assertThat(collectionImageFilterCounter.getLogRecordCount()).isEqualTo(1);
 		assertThat(collectionImageFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
 		collectionImageFilterCounter.stopLogCountAndFilter();
+		assertThat(albumFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(albumFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
+		albumFilterCounter.stopLogCountAndFilter();
 	}
 	
 	private static final String albumStr3 = """
@@ -537,6 +546,7 @@ class AlbumTest {
 
 		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
 		LogRecordCounter collectionImageFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(CollectionImage.class.getName()));
+		LogRecordCounter albumFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(Album.class.getName()));
 		
 		ObjectNode jAlbum = (ObjectNode)mapper.readTree(albumStr2);
 
@@ -575,6 +585,9 @@ class AlbumTest {
 		assertThat(collectionImageFilterCounter.getLogRecordCount()).isEqualTo(1);
 		assertThat(collectionImageFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
 		collectionImageFilterCounter.stopLogCountAndFilter();
+		assertThat(albumFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(albumFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
+		albumFilterCounter.stopLogCountAndFilter();
 	}
 	
 	private static final String albumStr6 = """
