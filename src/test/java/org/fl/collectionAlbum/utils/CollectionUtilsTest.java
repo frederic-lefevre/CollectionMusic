@@ -26,107 +26,21 @@ package org.fl.collectionAlbum.utils;
 
 import static org.assertj.core.api.Assertions.*;
 
-import java.net.URISyntaxException;
-import java.nio.file.Path;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.swing.ImageIcon;
-
-import org.fl.util.FilterCounter;
-import org.fl.util.FilterCounter.LogRecordCounter;
-import org.fl.util.file.FilesUtils;
 import org.junit.jupiter.api.Test;
 
 class CollectionUtilsTest {
 
 	@Test
-	void testNullPathImageIcon() {
+	void testNullHtmlForString() {
 		
-		LogRecordCounter filterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger( CollectionUtils.class.getName()));	
-		
-		int width = 100;
-		int height = 100;
-		ImageIcon imageIcon = CollectionUtils.buildAdjustedImageIcon(null, width, height);
-		assertThat(imageIcon).isNotNull();
-		assertThat(imageIcon.getIconWidth()).isEqualTo(width);
-		assertThat(imageIcon.getIconHeight()).isEqualTo(height);
-		assertThat(imageIcon.getDescription()).isEqualTo("Image en erreur");
-		
-		assertThat(filterCounter.getLogRecordCount()).isEqualTo(1);
-		assertThat(filterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
+		String htmlResult = CollectionUtils.getHtmlForString(null);
+		assertThat(htmlResult).isNotNull();
 	}
 	
 	@Test
-	void testUnexistantPathImageIcon() {
+	void testHtmlForString() {
 		
-		LogRecordCounter filterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger( CollectionUtils.class.getName()));	
-		
-		int width = 100;
-		int height = 100;
-		ImageIcon imageIcon = CollectionUtils.buildAdjustedImageIcon(CollectionUtils.getImage(Path.of("dummyPath")), width, height);
-		assertThat(imageIcon).isNotNull();
-		assertThat(imageIcon.getIconWidth()).isEqualTo(width);
-		assertThat(imageIcon.getIconHeight()).isEqualTo(height);
-		assertThat(imageIcon.getDescription()).isEqualTo("Image en erreur");
-		
-		assertThat(filterCounter.getLogRecordCount()).isEqualTo(1);
-		assertThat(filterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
-	}
-	
-	@Test
-	void testUnexistantPathImageIcon2() {
-		
-		LogRecordCounter filterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger( CollectionUtils.class.getName()));	
-		
-		int width = 100;
-		int height = 100;
-		ImageIcon imageIcon = CollectionUtils.buildAdjustedImageIcon(CollectionUtils.getImage(null), width, height);
-		assertThat(imageIcon).isNotNull();
-		assertThat(imageIcon.getIconWidth()).isEqualTo(width);
-		assertThat(imageIcon.getIconHeight()).isEqualTo(height);
-		assertThat(imageIcon.getDescription()).isEqualTo("Image non trouvée");
-		
-		assertThat(filterCounter.getLogRecordCount()).isEqualTo(1);
-		assertThat(filterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
-	}
-	
-	@Test
-	void testWrongImageFormat() throws URISyntaxException {
-		
-		Path imgFilePath = FilesUtils.uriStringToAbsolutePath("file:///ForTests/CollectionMusique/img_bad.jpg");		
-		assertThat(imgFilePath).exists();
-		
-		LogRecordCounter filterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger( CollectionUtils.class.getName()));	
-		
-		int width = 100;
-		int height = 100;
-		ImageIcon imageIcon = CollectionUtils.buildAdjustedImageIcon(CollectionUtils.getImage(imgFilePath), width, height);
-		assertThat(imageIcon).isNotNull();
-		assertThat(imageIcon.getIconWidth()).isEqualTo(width);
-		assertThat(imageIcon.getIconHeight()).isEqualTo(height);
-		assertThat(imageIcon.getDescription()).isEqualTo("Image en erreur");
-		
-		assertThat(filterCounter.getLogRecordCount()).isEqualTo(1);
-		assertThat(filterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
-	}
-	
-	@Test
-	void testGoodImageFormat() throws URISyntaxException {
-		
-		Path imgFilePath = FilesUtils.uriStringToAbsolutePath("file:///ForTests/CollectionMusique/cover.jpg");		
-		assertThat(imgFilePath).exists();
-		
-		LogRecordCounter filterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger( CollectionUtils.class.getName()));	
-		
-		int width = 100;
-		int height = 100;
-		ImageIcon imageIcon = CollectionUtils.buildAdjustedImageIcon(CollectionUtils.getImage(imgFilePath), width, height);
-		assertThat(imageIcon).isNotNull();
-		assertThat(imageIcon.getIconWidth()).isEqualTo(width);
-		assertThat(imageIcon.getIconHeight()).isEqualTo(height);
-		assertThat(imageIcon.getDescription()).isNull();
-		
-		assertThat(filterCounter.getLogRecordCount()).isZero();
+		String htmlResult = CollectionUtils.getHtmlForString("toto");
+		assertThat(htmlResult).isNotNull().contains("toto");
 	}
 }

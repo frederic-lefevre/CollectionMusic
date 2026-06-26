@@ -26,7 +26,6 @@ package org.fl.collectionAlbum.albums;
 
 import static org.assertj.core.api.Assertions.*;
 
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -58,7 +57,7 @@ import org.fl.collectionAlbum.format.LosslessAlbumAudioFiles;
 import org.fl.collectionAlbum.format.MediaSupports;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
-import org.fl.collectionAlbum.utils.CollectionUtils;
+import org.fl.collectionAlbum.utils.CollectionImage;
 import org.fl.collectionAlbum.utils.TemporalUtils;
 import org.fl.discogsInterface.inventory.InventoryCsvAlbum;
 import org.fl.util.FilterCounter;
@@ -94,6 +93,7 @@ class AlbumTest {
 		LogRecordCounter albumFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.albums.Album"));	
 		LogRecordCounter formatFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.format.Format"));	
 		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
+		LogRecordCounter collectionImageFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(CollectionImage.class.getName()));
 		
 		ListeArtiste la = new ListeArtiste();
 		List<ListeArtiste> lla = new ArrayList<ListeArtiste>();
@@ -138,13 +138,14 @@ class AlbumTest {
 		assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(1);
 		assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.SEVERE)).isEqualTo(1);
 		
+		assertThat(collectionImageFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(collectionImageFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
+		
 		albumParserFilterCounter.stopLogCountAndFilter();
 		albumFilterCounter.stopLogCountAndFilter();
 		formatFilterCounter.stopLogCountAndFilter();
 		parserHelpersFilterCounter.stopLogCountAndFilter();
-		
-		
-		
+		collectionImageFilterCounter.stopLogCountAndFilter();
 	}
 
 	private static final String albumStr1 = """
@@ -174,13 +175,14 @@ class AlbumTest {
 	void testAlbum1() throws DatabindException, JacksonException, URISyntaxException {
 		
 		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
+		LogRecordCounter collectionImageFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(CollectionImage.class.getName()));	
 		
 		ObjectNode jAlbum = (ObjectNode)mapper.readTree(albumStr1);
 
 		ListeArtiste la = new ListeArtiste();
 		List<ListeArtiste> lla = new ArrayList<ListeArtiste>();
 		lla.add(la);
-
+		
 		Album album = new Album(jAlbum, lla, Path.of("dummyPath"));
 		
 		testAlbumProperties(album, la);
@@ -209,29 +211,26 @@ class AlbumTest {
 
 		assertThat(album.getAllMediaFilePaths()).hasSameElementsAs(audioFiles);
 		
-		LogRecordCounter collectionUtilsFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(CollectionUtils.class.getName()));	
-		
 		assertThat(album.getCoverImagePath()).isNull();
 		
-		BufferedImage notFoundImage =  album.getSleeveImage();
+		CollectionImage notFoundImage =  album.getSleeveImage();
 		assertThat(notFoundImage).isNotNull();
+		assertThat(notFoundImage.getImageStatus()).isEqualTo(CollectionImage.ImageStatus.NOT_FOUND);
 		
-		assertThat(collectionUtilsFilterCounter.getLogRecordCount()).isEqualTo(1);
-		assertThat(collectionUtilsFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
-		collectionUtilsFilterCounter.stopLogCountAndFilter();
+		assertThat(collectionImageFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(collectionImageFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
+		collectionImageFilterCounter.stopLogCountAndFilter();
 		
 		// Add the audio file path
-		AbstractAlbumsAudioFiles audioFile = (AbstractAlbumsAudioFiles) audioFiles.get(0);
-		audioFile.setMediaFilePath(
-				Set.of(TestUtils.createMediaFile(
+		album.validatePotentialMediaFilePath(Set.of(TestUtils.createMediaFile(
 						Paths.get("E:/Musique/e/Bill Evans/Waltz for Debby/"), 
 						ContentNature.AUDIO, 
 						List.of(), 
 						Paths.get("E:/Musique/e/Bill Evans/Waltz for Debby/cover.jpg"), 
 						"flac", 
 						false)),
-				Control.getMediaFileRootUri(ContentNature.AUDIO));
-		
+				ContentNature.AUDIO);
+
 		assertThat(album.getFormatAlbum().getMediaFilePaths(ContentNature.AUDIO)).singleElement().satisfies(audio -> {
 			assertThat(audio.hasMissingOrInvalidMediaFilePath()).isFalse();
 			assertThat(audio.getMediaFilePaths())
@@ -243,7 +242,10 @@ class AlbumTest {
 		assertThat(album.getCoverImagePath())
 			.isNotNull()
 			.hasToString("E:\\Musique\\e\\Bill Evans\\Waltz for Debby\\cover.jpg");
-		assertThat(album.getSleeveImage()).isNotNull().isNotEqualTo(notFoundImage);
+		
+		CollectionImage sleeveImage = album.getSleeveImage();
+		assertThat(sleeveImage).isNotNull().isNotEqualTo(notFoundImage);
+		assertThat(sleeveImage.getImageStatus()).isEqualTo(CollectionImage.ImageStatus.OK);
 		
 		// Get the json from the album (should be modified with the path)
 		ObjectNode modifiedJson = album.getJson();
@@ -391,6 +393,7 @@ class AlbumTest {
 	void testAlbumPotentialMediaFilesSearch() throws DatabindException, JacksonException {
 
 		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
+		LogRecordCounter collectionImageFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(CollectionImage.class.getName()));
 		
 		ObjectNode jAlbum = (ObjectNode)mapper.readTree(albumStr1);
 
@@ -412,6 +415,9 @@ class AlbumTest {
 		assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(1);
 		assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
 		parserHelpersFilterCounter.stopLogCountAndFilter();
+		assertThat(collectionImageFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(collectionImageFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
+		collectionImageFilterCounter.stopLogCountAndFilter();
 	}
 	
 	private static final String albumStr3 = """
@@ -530,6 +536,7 @@ class AlbumTest {
 	void testAlbumPotentialMediaFilesSearch2() throws DatabindException, JacksonException {
 
 		LogRecordCounter parserHelpersFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.json.ParserHelpers"));
+		LogRecordCounter collectionImageFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(CollectionImage.class.getName()));
 		
 		ObjectNode jAlbum = (ObjectNode)mapper.readTree(albumStr2);
 
@@ -565,6 +572,9 @@ class AlbumTest {
 		assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(1);
 		assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
 		parserHelpersFilterCounter.stopLogCountAndFilter();
+		assertThat(collectionImageFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(collectionImageFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
+		collectionImageFilterCounter.stopLogCountAndFilter();
 	}
 	
 	private static final String albumStr6 = """

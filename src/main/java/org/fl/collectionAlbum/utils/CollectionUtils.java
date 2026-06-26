@@ -27,22 +27,14 @@ package org.fl.collectionAlbum.utils;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
 import java.net.URI;
-import java.nio.file.Path;
 import java.time.temporal.TemporalAccessor;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Objects;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -64,15 +56,8 @@ import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 
 public class CollectionUtils {
 	
-	private static final Logger logger = Logger.getLogger(CollectionUtils.class.getName());
-	
 	private static final String VIRGULE = ", ";
 	private static final String SEPARATEUR = "<br/>";
-	
-	private static BufferedImage IMAGE_FOR_ERROR = null;
-	private static final String DESCRIPTION_FOR_IMAGE_ERROR = "Image en erreur";
-	private static BufferedImage IMAGE_FOR_IMAGE_NOT_FOUND = null;
-	private static final String DESCRIPTION_FOR_IMAGE_NOT_FOUND = "Image non trouvée";
 	
 	public static String getHtmlForString(String s) {
 		
@@ -162,8 +147,7 @@ public class CollectionUtils {
 		return new StringBuilder()
 				.append("<html><head><style>")
 				.append(Control.getCssForGui())
-				.append("</style></head><body>");
-		
+				.append("</style></head><body>");	
 	}
 	
 	public static String getSimpleHtml(Concert concert) {
@@ -309,98 +293,7 @@ public class CollectionUtils {
 			return Integer.compare(o1, o2);
 		}	
 	}
-	
-	public static JLabel getAdjustedImageLabel(Path imagePath, int maxWidth, int maxHeight) {
-		return getAdjustedImageLabel(getImage(imagePath), maxWidth, maxHeight);
-	}
-	
-	public static JLabel getAdjustedImageLabel(BufferedImage bufferedImage, int maxWidth, int maxHeight) {
 
-		ImageIcon imageIcon = buildAdjustedImageIcon(bufferedImage, maxWidth, maxHeight);
-		if (imageIcon != null) {
-			return new JLabel(imageIcon);
-		} else {
-			return new JLabel("Fichier image en erreur");
-		}
-	}
-	
-	public static ImageIcon buildAdjustedImageIcon(BufferedImage bufferedImage, int maxWidth, int maxHeight) {
-		if (bufferedImage != null) {
-			if(bufferedImage == getImageForError()) {
-				return new ImageIcon(scaleImage(bufferedImage, maxWidth, maxHeight), DESCRIPTION_FOR_IMAGE_ERROR);
-			} else if (bufferedImage == getImageForImageNotFound()) {
-				return new ImageIcon(scaleImage(bufferedImage, maxWidth, maxHeight), DESCRIPTION_FOR_IMAGE_NOT_FOUND);
-			} else {
-				return new ImageIcon(scaleImage(bufferedImage, maxWidth, maxHeight));
-			}
-		} else {
-			logger.warning( "Image to adjust is null");
-			return new ImageIcon(scaleImage(getImageForError(), maxWidth, maxHeight), DESCRIPTION_FOR_IMAGE_ERROR);
-		}
-	}
-	
-	public static BufferedImage getImage(Path imagePath) {
-		if (imagePath == null) {
-			logger.warning( "Null image path");
-			return getImageForImageNotFound();
-		}
-		try {
-			BufferedImage bufferedImage = ImageIO.read(imagePath.toFile());
-		
-			if (bufferedImage != null) {
-				return bufferedImage;
-			} else {
-				logger.warning("Image format problem: No image reader found for this image " + Objects.toString(imagePath));
-				return getImageForError();
-			}
-		} catch (Exception e) {
-			logger.log(Level.WARNING, "Exception when creating BufferedImage from file " + Objects.toString(imagePath), e);
-			return getImageForError();
-		}
-	}
-	
-	private static BufferedImage getImageForError() {
-		
-		if (IMAGE_FOR_ERROR == null) {
-			try {
-				IMAGE_FOR_ERROR = ImageIO.read(Control.getImageForErrorPath().toFile());				
-			} catch (Exception e2) {
-				logger.log(Level.WARNING, "Exception when creating BufferedImage for error " + Objects.toString(Control.getImageForErrorPath()), e2);
-				IMAGE_FOR_ERROR = new BufferedImage(400, 400, BufferedImage.TYPE_BYTE_GRAY);
-			}
-		}
-		return IMAGE_FOR_ERROR;
-	}
-	
-	private static BufferedImage getImageForImageNotFound() {
-		
-		if (IMAGE_FOR_IMAGE_NOT_FOUND == null) {
-			try {
-				IMAGE_FOR_IMAGE_NOT_FOUND = ImageIO.read(Control.getImageForImageNotFoundPath().toFile());				
-			} catch (Exception e2) {
-				logger.log(Level.WARNING, "Exception when creating BufferedImage for error " + Objects.toString(Control.getImageForErrorPath()), e2);
-				IMAGE_FOR_IMAGE_NOT_FOUND = new BufferedImage(400, 400, BufferedImage.TYPE_BYTE_GRAY);
-			}
-		}
-		return IMAGE_FOR_IMAGE_NOT_FOUND;
-	}
-	
-	private static Image scaleImage(BufferedImage bufferedImage, int maxWidth, int maxHeight) {
-		
-		final int imageWidth = bufferedImage.getWidth();
-		final int imageHeight = bufferedImage.getHeight();
-		int adjustedImageWidth;
-		int adjustedImageHeight;
-		if (imageWidth > imageHeight) {
-			adjustedImageWidth = maxWidth;
-			adjustedImageHeight = (imageHeight * maxWidth)/imageWidth;
-		} else {
-			adjustedImageHeight = maxHeight;
-			adjustedImageWidth = (imageWidth* maxHeight)/imageHeight;
-		}
-		return bufferedImage.getScaledInstance(adjustedImageWidth, adjustedImageHeight, Image.SCALE_DEFAULT);
-	}
-	
 	private static final Font verdana = new Font("Verdana", Font.BOLD, 14);
 	
 	public static JPanel urlLinkPanel(MusicArtefact musicArtefact) {

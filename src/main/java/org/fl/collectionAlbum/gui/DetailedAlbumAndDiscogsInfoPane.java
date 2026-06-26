@@ -204,6 +204,6 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 	}
 	
 	private JLabel getCoverImage(Album album) {
-		return CollectionUtils.getAdjustedImageLabel(album.getSleeveImage(), MAX_COVER_WIDTH, MAX_COVER_HEIGHT);
+		return album.getSleeveImage().getAdjustedImageLabel(MAX_COVER_WIDTH, MAX_COVER_HEIGHT);
 	}
 }
