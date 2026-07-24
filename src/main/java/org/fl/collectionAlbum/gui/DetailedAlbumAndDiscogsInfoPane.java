@@ -38,6 +38,7 @@ import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 
@@ -51,7 +52,7 @@ import org.fl.collectionAlbum.gui.listener.OsActionListener;
 import org.fl.collectionAlbum.utils.CollectionImage;
 import org.fl.collectionAlbum.utils.CollectionUtils;
 
-public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
+public class DetailedAlbumAndDiscogsInfoPane extends JTabbedPane {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -65,31 +66,30 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 		
 		super();
 		setPreferredSize(Control.getInfoWindowDimension());
-		JPanel infosPane = new JPanel();
-		infosPane.setLayout(new BoxLayout(infosPane, BoxLayout.Y_AXIS));
-		
-		infosPane.add(releaseInfos(release));
-		infosPane.add(albumsInfos(release.getCollectionAlbums()));
-		setViewportView(infosPane);
+		addTab("Discogs release", releaseInfos(release));
+		addAlbumsTab(release.getCollectionAlbums());
 	}
 
 	public DetailedAlbumAndDiscogsInfoPane(Album album) {
 		
 		super();
 		setPreferredSize(Control.getInfoWindowDimension());
-		JPanel infosPane = new JPanel();
-		infosPane.setLayout(new BoxLayout(infosPane, BoxLayout.Y_AXIS));
-		
-		infosPane.add(albumsInfos(Set.of(album)));
+		addTab("Album", albumsInfos(Set.of(album)));
 		
 		String discogsReleaseId = album.getDiscogsLink();					
 		if (discogsReleaseId != null) {
-			infosPane.add(releaseInfos(DiscogsInventory.getDiscogsAlbumRelease(discogsReleaseId)));			
+			addTab("Discogs release", releaseInfos(DiscogsInventory.getDiscogsAlbumRelease(discogsReleaseId)));			
 		}
-		setViewportView(infosPane);
 	}
 	
-	private JPanel releaseInfos(DiscogsAlbumRelease release) {
+	private void addAlbumsTab(Set<Album> albums) {
+		if (albums.size() > 1) {
+			addTab("Albums", albumsInfos(albums));
+		} else {
+			addTab("Album", albumsInfos(albums));
+		}
+	}
+	private JScrollPane releaseInfos(DiscogsAlbumRelease release) {
 		
 		String releaseInfo;
 		if (release == null) {
@@ -120,16 +120,16 @@ public class DetailedAlbumAndDiscogsInfoPane extends JScrollPane {
 		
 		releasePane.add(showDiscogsRelease);
 		
-		return releasePane;
+		return new JScrollPane(releasePane);
 	}
 	
-	private JPanel albumsInfos(Set<Album> albums) {
+	private JScrollPane albumsInfos(Set<Album> albums) {
 		
 		JPanel albumsPane = new JPanel();
 		albumsPane.setLayout(new BoxLayout(albumsPane, BoxLayout.Y_AXIS));
 		albums.forEach(album -> albumsPane.add(albumInfo(album)));
 		
-		return albumsPane;
+		return new JScrollPane(albumsPane);
 	}
 	
 	private JPanel albumInfo(Album album) {
