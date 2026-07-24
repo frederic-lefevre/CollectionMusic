@@ -111,7 +111,7 @@ public class AlbumCustomActionListener implements java.awt.event.ActionListener 
 			
 				case DETAILED_INFO_DISPLAY:
 					
-					JOptionPane.showMessageDialog(null, new DetailedAlbumAndDiscogsInfoPane(selectedAlbum), customAction.getActionTitle(), JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, new DetailedAlbumAndDiscogsInfoPane(selectedAlbum, generationPane), customAction.getActionTitle(), JOptionPane.PLAIN_MESSAGE);
 					break;
 					
 				case DISCOGS_RELEASE_SEARCH:

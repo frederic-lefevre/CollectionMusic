@@ -113,7 +113,7 @@ public class DiscogsReleaseCustomActionListener implements java.awt.event.Action
 				case SHOW_INFO:
 					
 					// Show informations in popup message
-					JOptionPane.showMessageDialog(null, new DetailedAlbumAndDiscogsInfoPane(release), customAction.getActionTitle(), JOptionPane.INFORMATION_MESSAGE);
+					JOptionPane.showMessageDialog(null, new DetailedAlbumAndDiscogsInfoPane(release, generationPane), customAction.getActionTitle(), JOptionPane.PLAIN_MESSAGE);
 				
 					break;
 					

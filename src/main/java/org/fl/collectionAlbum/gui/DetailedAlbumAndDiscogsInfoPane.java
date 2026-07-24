@@ -44,11 +44,14 @@ import javax.swing.border.EmptyBorder;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
+import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory;
 import org.fl.collectionAlbum.gui.adapter.ImageDisplayMouseAdapter;
 import org.fl.collectionAlbum.gui.listener.MediaFilePathActionListener;
 import org.fl.collectionAlbum.gui.listener.OsActionListener;
+import org.fl.collectionAlbum.gui.table.ArtistesScrollJTablePane;
+import org.fl.collectionAlbum.gui.table.ArtistesTableColumns;
 import org.fl.collectionAlbum.utils.CollectionImage;
 import org.fl.collectionAlbum.utils.CollectionUtils;
 
@@ -62,7 +65,7 @@ public class DetailedAlbumAndDiscogsInfoPane extends JTabbedPane {
 	private static final int MAX_COVER_WIDTH = 400;
 	private static final int MAX_COVER_HEIGHT = 400;
 	
-	public DetailedAlbumAndDiscogsInfoPane(DiscogsAlbumRelease release) {
+	public DetailedAlbumAndDiscogsInfoPane(DiscogsAlbumRelease release, GenerationPane generationPane) {
 		
 		super();
 		setPreferredSize(Control.getInfoWindowDimension());
@@ -70,7 +73,7 @@ public class DetailedAlbumAndDiscogsInfoPane extends JTabbedPane {
 		addAlbumsTab(release.getCollectionAlbums());
 	}
 
-	public DetailedAlbumAndDiscogsInfoPane(Album album) {
+	public DetailedAlbumAndDiscogsInfoPane(Album album, GenerationPane generationPane) {
 		
 		super();
 		setPreferredSize(Control.getInfoWindowDimension());
@@ -80,6 +83,8 @@ public class DetailedAlbumAndDiscogsInfoPane extends JTabbedPane {
 		if (discogsReleaseId != null) {
 			addTab("Discogs release", releaseInfos(DiscogsInventory.getDiscogsAlbumRelease(discogsReleaseId)));			
 		}
+		addArtistesTab(album.getAllArtists(), generationPane);
+
 	}
 	
 	private void addAlbumsTab(Set<Album> albums) {
@@ -210,5 +215,13 @@ public class DetailedAlbumAndDiscogsInfoPane extends JTabbedPane {
 		JLabel sleeveImageLabel = album.getSleeveImage().getAdjustedImageLabel(MAX_COVER_WIDTH, MAX_COVER_HEIGHT);
 		sleeveImageLabel.addMouseListener(new ImageDisplayMouseAdapter(sleeveImage.getBufferedImage()));
 		return sleeveImageLabel;
+	}
+	
+	private void addArtistesTab(List<Artiste> artistes, GenerationPane generationPane) {
+		if (artistes.size() == 1) {
+			addTab("Artiste", new ArtisteInformationPanel(artistes.get(0), generationPane));
+		} else if (artistes.size() > 1) {
+			addTab("Artistes", new ArtistesScrollJTablePane(artistes, ArtistesTableColumns.REGULAR_COLUMNS, generationPane));
+		}
 	}
 }

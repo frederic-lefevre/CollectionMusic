@@ -83,9 +83,9 @@ public class AlbumMouseAdapter extends MusicArtefactMouseAdapter<Album> {
 			
 		} else if (CustomAlbumAction.DETAILED_INFO_DISPLAY.getDisplayable().test(selectedMusicArtefact)) {
 			JOptionPane.showMessageDialog(null, 
-					new DetailedAlbumAndDiscogsInfoPane(selectedMusicArtefact),
+					new DetailedAlbumAndDiscogsInfoPane(selectedMusicArtefact, generationPane),
 					CustomAlbumAction.DETAILED_INFO_DISPLAY.getActionTitle(), 
-					JOptionPane.INFORMATION_MESSAGE);	
+					JOptionPane.PLAIN_MESSAGE);	
 		} 
 	}
 }
