@@ -46,9 +46,14 @@ public class CollectionFormatPane extends JScrollPane {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final Dimension SIMPLE_CELL_DIMENSION = new Dimension(120,30);
-	private static final Dimension DOUBLE_CELL_DIMENSION = new Dimension(120,60);
-	private static final Dimension FORMAT_PANE_DIMENSION = new Dimension(1820,180);
+	private static final int COLUMN_NUMBER = MediaSupports.values().length;
+	private static final int ROW_NUMBER = 5;
+	private static final int ROW_HEIGHT = 30;
+	private static final int ROW_WIDTH = 120;
+	
+	private static final Dimension SIMPLE_CELL_DIMENSION = new Dimension(ROW_WIDTH,ROW_HEIGHT);
+	private static final Dimension DOUBLE_CELL_DIMENSION = new Dimension(ROW_WIDTH,ROW_HEIGHT*2);
+	private static final Dimension FORMAT_PANE_DIMENSION = new Dimension(COLUMN_NUMBER*ROW_WIDTH + 20,ROW_NUMBER*(ROW_HEIGHT + 2) + 20);
 	
 	private static final EnumMap<MediaSupportCategories, Set<MediaSupports>> supportCategoriesMap = new EnumMap<>(MediaSupportCategories.class);
 	
