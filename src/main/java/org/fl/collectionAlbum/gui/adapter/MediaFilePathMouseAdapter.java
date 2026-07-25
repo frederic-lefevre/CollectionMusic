@@ -121,9 +121,9 @@ public class MediaFilePathMouseAdapter extends MouseAdapter {
 				if (albums.size() == 1) {
 					Album album = albums.iterator().next();
 					JOptionPane.showMessageDialog(null, 
-							new DetailedAlbumAndDiscogsInfoPane(album),
+							new DetailedAlbumAndDiscogsInfoPane(album, generationPane),
 							CustomAlbumAction.DETAILED_INFO_DISPLAY.getActionTitle(), 
-							JOptionPane.INFORMATION_MESSAGE);
+							JOptionPane.PLAIN_MESSAGE);
 				} else {
 					
 					AlbumsScrollJTablePane albumsScrollJTablePane = 

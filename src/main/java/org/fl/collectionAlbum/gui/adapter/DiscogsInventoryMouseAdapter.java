@@ -48,6 +48,7 @@ public class DiscogsInventoryMouseAdapter extends MouseAdapter {
 
 	private final DiscogsReleaseJTable discogsReleaseJTable;
 	private final JPopupMenu localJPopupMenu;
+	private final GenerationPane generationPane;
 	
 	private final CollectionMenuItems<DiscogsAlbumRelease> discogsReleaseMenuItems;
 	
@@ -55,6 +56,7 @@ public class DiscogsInventoryMouseAdapter extends MouseAdapter {
 		
 		super();
 		this.discogsReleaseJTable = discogsReleaseJTable;
+		this.generationPane = generationPane;
 		localJPopupMenu = new JPopupMenu();
 		
 		discogsReleaseMenuItems = new CollectionMenuItems<>();
@@ -108,8 +110,8 @@ public class DiscogsInventoryMouseAdapter extends MouseAdapter {
 		DiscogsAlbumRelease release = discogsReleaseJTable.getSelectedDisocgsRelease();
 		if (release != null) {
 			JOptionPane.showMessageDialog(null, 
-				new DetailedAlbumAndDiscogsInfoPane(release),
-				DiscogsReleaseCustomActionListener.CustomAction.SHOW_INFO.getActionTitle(), JOptionPane.INFORMATION_MESSAGE);
+				new DetailedAlbumAndDiscogsInfoPane(release, generationPane),
+				DiscogsReleaseCustomActionListener.CustomAction.SHOW_INFO.getActionTitle(), JOptionPane.PLAIN_MESSAGE);
 		}
 	}
 	

@@ -102,8 +102,10 @@ public class CollectionUtils {
 					.append("</span><br/>");
 			} else {
 				auteurCssClass = "artiste";
+				String datesCssClass = "artistesmall";
 				artistes.forEach(artiste ->
-						buf.append("<span class=\"").append(auteurCssClass).append("\">").append(artiste.getNomComplet()).append("</span><br/>")
+						buf.append("<span class=\"").append(auteurCssClass).append("\">").append(artiste.getNomComplet()).append("</span>")
+						.append("<span class=\"").append(datesCssClass).append("\">").append(artiste.getDates()).append("</span><br/>")
 					);
 			}
 			

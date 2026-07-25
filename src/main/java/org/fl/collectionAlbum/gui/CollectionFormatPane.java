@@ -34,6 +34,7 @@ import java.util.Set;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 
 import org.fl.collectionAlbum.format.Format;
 import org.fl.collectionAlbum.format.MediaSupportCategories;
@@ -41,12 +42,18 @@ import org.fl.collectionAlbum.format.MediaSupports;
 import org.fl.collectionAlbum.utils.CollectionUtils;
 import org.fl.collectionAlbum.utils.JLabelBuilder;
 
-public class CollectionFormatPane extends JPanel {
+public class CollectionFormatPane extends JScrollPane {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final Dimension SIMPLE_CELL_DIMENSION = new Dimension(120,30);
-	private static final Dimension DOUBLE_CELL_DIMENSION = new Dimension(120,60);
+	private static final int COLUMN_NUMBER = MediaSupports.values().length;
+	private static final int ROW_NUMBER = 5;
+	private static final int ROW_HEIGHT = 30;
+	private static final int ROW_WIDTH = 120;
+	
+	private static final Dimension SIMPLE_CELL_DIMENSION = new Dimension(ROW_WIDTH,ROW_HEIGHT);
+	private static final Dimension DOUBLE_CELL_DIMENSION = new Dimension(ROW_WIDTH,ROW_HEIGHT*2);
+	private static final Dimension FORMAT_PANE_DIMENSION = new Dimension(COLUMN_NUMBER*ROW_WIDTH + 20,ROW_NUMBER*(ROW_HEIGHT + 2) + 20);
 	
 	private static final EnumMap<MediaSupportCategories, Set<MediaSupports>> supportCategoriesMap = new EnumMap<>(MediaSupportCategories.class);
 	
@@ -64,12 +71,16 @@ public class CollectionFormatPane extends JPanel {
 	public CollectionFormatPane(Format format) {
 		super();
 		
+		setPreferredSize(FORMAT_PANE_DIMENSION);
+		
+		JPanel formatPane = new JPanel();
+		
 		GridBagLayout layout = new GridBagLayout();
 		GridBagConstraints constraints = new GridBagConstraints();
 		
-		setLayout(layout);
-		setBackground(Color.WHITE);
-		setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+		formatPane.setLayout(layout);
+		formatPane.setBackground(Color.WHITE);
+		formatPane.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
 		
 		MediaSupports[] mediaSupports = MediaSupports.values();
 		for (int colIdx = 0; colIdx < mediaSupports.length; colIdx++) {
@@ -79,7 +90,7 @@ public class CollectionFormatPane extends JPanel {
 			constraints.gridwidth = 1;
 			constraints.gridheight = 2;
 
-			add(CollectionUtils.createGridCellLabel(layout, constraints, 
+			formatPane.add(CollectionUtils.createGridCellLabel(layout, constraints, 
 					JLabelBuilder.builder()
 						.text(CollectionUtils.getHtmlForString(mediaSupports[colIdx].getDescription()))
 						.preferredSize(DOUBLE_CELL_DIMENSION)
@@ -89,7 +100,7 @@ public class CollectionFormatPane extends JPanel {
 			constraints.gridy = 2;
 			constraints.gridheight = 1;
 			
-			add(CollectionUtils.createGridCellLabel(layout, constraints, 
+			formatPane.add(CollectionUtils.createGridCellLabel(layout, constraints, 
 					JLabelBuilder.builder()
 						.text(Format.poidsToString(format.getNb(mediaSupports[colIdx])))
 						.preferredSize(SIMPLE_CELL_DIMENSION)
@@ -107,7 +118,7 @@ public class CollectionFormatPane extends JPanel {
 			constraints.gridwidth = supportCategoriesMap.get(mediaSupportCategory).size();
 			Dimension cellDimension = new Dimension(120*constraints.gridwidth,30);
 
-			add(CollectionUtils.createGridCellLabel(layout, constraints, 
+			formatPane.add(CollectionUtils.createGridCellLabel(layout, constraints, 
 					JLabelBuilder.builder()
 						.text(mediaSupportCategory.getDescription())
 						.preferredSize(cellDimension)
@@ -116,7 +127,7 @@ public class CollectionFormatPane extends JPanel {
 
 			constraints.gridy = 4;
 			
-			add(CollectionUtils.createGridCellLabel(layout, constraints, 
+			formatPane.add(CollectionUtils.createGridCellLabel(layout, constraints, 
 					JLabelBuilder.builder()
 						.text(Format.poidsToString(format.getSupportsPhysiquesNumbers().get(mediaSupportCategory)))
 						.preferredSize(cellDimension)
@@ -124,5 +135,6 @@ public class CollectionFormatPane extends JPanel {
 			
 			colIdx = colIdx + constraints.gridwidth;
 		}
+		setViewportView(formatPane);
 	}	
 }
