@@ -51,6 +51,7 @@ public class AlbumCharacteristicsScrollPane extends JScrollPane implements Updat
 	
 	private static final String AUDIO_CHARACTERISTICS_TITLE = "Caractéristiques des numérisations des albums";
 	private static final String CONTENT_NATURE_CHARACTERISTICS_TITLE = "Albums par nature de contenu";
+	private static final String DISCOGS_CHARACTERISTICS_TITLE = "Albums avec et sans release discogs";
 	
 	private static final Dimension AUDIO_CHARACTERISTICS_DIMENSION = new Dimension(800,500);
 	private static final Dimension CONTENT_NATURE_DIMENSION = new Dimension(800,320);
@@ -108,12 +109,12 @@ public class AlbumCharacteristicsScrollPane extends JScrollPane implements Updat
 		albumsAudioPanel.add(pLabel);
 		albumsAudioPanel.add(albumsAudioCharacteristicsPanel);
 		
-		JPanel albumContentNaturePanel = new JPanel();
-		albumContentNaturePanel.setLayout(new BoxLayout(albumContentNaturePanel, BoxLayout.Y_AXIS));
-		albumContentNaturePanel.setBorder(BorderFactory.createCompoundBorder(
+		JPanel albumCharacteristicsRightPanel = new JPanel();
+		albumCharacteristicsRightPanel.setLayout(new BoxLayout(albumCharacteristicsRightPanel, BoxLayout.Y_AXIS));
+		albumCharacteristicsRightPanel.setBorder(BorderFactory.createCompoundBorder(
 				BorderFactory.createEtchedBorder(EtchedBorder.RAISED), 
 				BorderFactory.createEmptyBorder(40, 30, 40, 30)));
-		albumContentNaturePanel.setPreferredSize(CONTENT_NATURE_DIMENSION);
+		albumCharacteristicsRightPanel.setPreferredSize(CONTENT_NATURE_DIMENSION);
 		
 		JPanel pLabel2 = new JPanel();
 		JLabel albumsContentNatureLabel = new JLabel(CONTENT_NATURE_CHARACTERISTICS_TITLE);
@@ -121,7 +122,7 @@ public class AlbumCharacteristicsScrollPane extends JScrollPane implements Updat
 		pLabel2.add(albumsContentNatureLabel);
 		
 		JPanel albumsContentNatureCharacteristicsPanel = new JPanel();
-		albumsContentNatureCharacteristicsPanel.setLayout(new GridLayout(0, 2, 50, 150));
+		albumsContentNatureCharacteristicsPanel.setLayout(new GridLayout(0, 2, 50, 80));
 		
 		Arrays.stream(ContentNature.values()).forEachOrdered(contentNature -> {
 			ListeAlbum albumsWithOnlyContentNature = collectionAlbumContainer.getAlbumsWithOnlyContentNature(contentNature).sortRangementAlbum();
@@ -130,11 +131,25 @@ public class AlbumCharacteristicsScrollPane extends JScrollPane implements Updat
 		ListeAlbum albumsWithMixedContentNature = collectionAlbumContainer.getAlbumsWithMixedContentNature().sortRangementAlbum();
 		addCharacteristic("Albums avec plusieurs types de contenus", albumsWithMixedContentNature, albumsContentNatureCharacteristicsPanel);
 		
-		albumContentNaturePanel.add(pLabel2);
-		albumContentNaturePanel.add(albumsContentNatureCharacteristicsPanel);
+		albumCharacteristicsRightPanel.add(pLabel2);
+		albumCharacteristicsRightPanel.add(albumsContentNatureCharacteristicsPanel);
+		
+		JPanel pLabel3 = new JPanel();
+		JLabel albumsDiscogsLabel = new JLabel(DISCOGS_CHARACTERISTICS_TITLE);
+		albumsDiscogsLabel.setFont(TITLE_FONT);
+		albumsDiscogsLabel.setBorder(BorderFactory.createEmptyBorder(20, 0, 0, 0));
+		pLabel3.add(albumsDiscogsLabel);
+		
+		JPanel albumsDiscogsPresencePanel = new JPanel();
+		albumsDiscogsPresencePanel.setLayout(new GridLayout(0, 2, 50, 80));
+		addCharacteristic("Albums avec release discogs", collectionAlbumContainer.getAlbumsWithDiscogsRelease().sortRangementAlbum(), albumsDiscogsPresencePanel);
+		addCharacteristic("Albums sans release discogs", collectionAlbumContainer.getAlbumsMissingDiscogsRelease().sortRangementAlbum(), albumsDiscogsPresencePanel);
+		
+		albumCharacteristicsRightPanel.add(pLabel3);
+		albumCharacteristicsRightPanel.add(albumsDiscogsPresencePanel);
 		
 		albumsCaracteristicsPanel.add(albumsAudioPanel);
-		albumsCaracteristicsPanel.add(albumContentNaturePanel);
+		albumsCaracteristicsPanel.add(albumCharacteristicsRightPanel);
 	}
 	
 	private void addCharacteristic(String characteristicTitle, ListeAlbum albums, JPanel panel) {
