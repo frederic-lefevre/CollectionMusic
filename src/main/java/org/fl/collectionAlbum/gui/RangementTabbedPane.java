@@ -24,10 +24,12 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui;
 
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
@@ -38,6 +40,9 @@ import org.fl.collectionAlbum.gui.table.AlbumsScrollJTablePane;
 public class RangementTabbedPane extends JTabbedPane implements UpdatableElement {
 
 	private static final long serialVersionUID = 1L;
+	
+	private static final Dimension TAB_TITLE_DIMENSION = new Dimension(460, 30);
+	
 	private final CollectionAlbumContainer collectionAlbumContainer;
 	private final List<UpdatableElement> updatableElements;
 
@@ -58,7 +63,9 @@ public class RangementTabbedPane extends JTabbedPane implements UpdatableElement
 							AlbumTableColumns.REGULAR_COLUMNS,
 							generationPane);
 			updatableElements.add(albumsScrollJTablePane.getAlbumsTableModel());
-			addTab(tabTitle(rangementSupportPhysique), albumsScrollJTablePane);
+			int tabCount = getTabCount();
+			add(albumsScrollJTablePane, tabCount);
+			setTabComponentAt(tabCount, tabLabel(rangementSupportPhysique));
 		});
 	}
 	
@@ -69,14 +76,16 @@ public class RangementTabbedPane extends JTabbedPane implements UpdatableElement
 	@Override
 	public void updateElement() {
 		Stream.of(Format.RangementSupportPhysique.values()).forEachOrdered(rangementSupportPhysique -> {
-			setTitleAt(rangementSupportPhysique.ordinal(), tabTitle(rangementSupportPhysique));
+			setTabComponentAt(rangementSupportPhysique.ordinal(), tabLabel(rangementSupportPhysique));
 		});	
 	}
 
-	private String tabTitle(Format.RangementSupportPhysique rangementSupportPhysique) {
-		return  rangementSupportPhysique.getOrdreDescription() +
+	private JLabel tabLabel(Format.RangementSupportPhysique rangementSupportPhysique) {
+		JLabel titleLabel = new JLabel( rangementSupportPhysique.getOrdreDescription() +
 				" (" + 
 				collectionAlbumContainer.getRangementAlbums(rangementSupportPhysique).getNombreAlbums() +
-				" albums)";
+				" albums)", JLabel.LEFT);
+		titleLabel.setPreferredSize(TAB_TITLE_DIMENSION);
+		return titleLabel;
 	}
 }
