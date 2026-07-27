@@ -91,7 +91,7 @@ public class AlbumCharacteristicsScrollPane extends JScrollPane implements Updat
 		pLabel.add(albumsAudioCharacteristicsLabel);
 		
 		JPanel albumsAudioCharacteristicsPanel = new JPanel();
-		albumsAudioCharacteristicsPanel.setLayout(new GridLayout(0, 2, 50, 60));
+		albumsAudioCharacteristicsPanel.setLayout(new GridLayout(0, 2, 50, 30));
 		
 		ListeAlbum albumsWithAudio = collectionAlbumContainer.getAlbumsWithAudioFile().sortRangementAlbum();
 		addCharacteristic("Albums avec fichiers audio", albumsWithAudio, albumsAudioCharacteristicsPanel);
@@ -153,7 +153,7 @@ public class AlbumCharacteristicsScrollPane extends JScrollPane implements Updat
 	}
 	
 	private void addCharacteristic(String characteristicTitle, ListeAlbum albums, JPanel panel) {
-		JButton buttonTitle = new JButton(characteristicTitle);
+		JButton buttonTitle = new JButton("<html><p>" + characteristicTitle + "</p></html>");
 		buttonTitle.setFont(FONT);
 		buttonTitle.addActionListener(new ListAlbumListener(characteristicTitle, albums.getAlbums(), generationPane));
 		panel.add(buttonTitle);
