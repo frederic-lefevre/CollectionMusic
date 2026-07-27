@@ -24,10 +24,12 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui;
 
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
@@ -38,6 +40,9 @@ import org.fl.collectionAlbum.gui.table.AlbumsScrollJTablePane;
 public class MediaSupportsTabbedPane extends JTabbedPane implements UpdatableElement {
 
 	private static final long serialVersionUID = 1L;
+	
+	private static final Dimension TAB_TITLE_DIMENSION = new Dimension(460, 20);
+	
 	private final CollectionAlbumContainer collectionAlbumContainer;
 	private final List<UpdatableElement> updatableElements;
 
@@ -57,7 +62,10 @@ public class MediaSupportsTabbedPane extends JTabbedPane implements UpdatableEle
 							AlbumTableColumns.REGULAR_COLUMNS,
 							generationPane);
 			updatableElements.add(albumsScrollJTablePane.getAlbumsTableModel());
-			addTab(tabTitle(mediaSupport), albumsScrollJTablePane);
+			
+			int tabCount = getTabCount();
+			add(albumsScrollJTablePane, tabCount);
+			setTabComponentAt(tabCount, tabLabel(mediaSupport));
 		});
 	}
 	
@@ -68,11 +76,14 @@ public class MediaSupportsTabbedPane extends JTabbedPane implements UpdatableEle
 	@Override
 	public void updateElement() {
 		Stream.of(MediaSupports.values()).forEachOrdered(mediaSupport -> {
-			setTitleAt(mediaSupport.ordinal(), tabTitle(mediaSupport));
+			setTabComponentAt(mediaSupport.ordinal(), tabLabel(mediaSupport));
 		});
 	}
 	
-	private String tabTitle(MediaSupports mediaSupport) {
-		return collectionAlbumContainer.getAlbumsWithMediaSupport(mediaSupport).getNombreAlbums() + " albums avec " + mediaSupport.getDescription();
+	private JLabel tabLabel(MediaSupports mediaSupport) {
+		JLabel titleLabel = new JLabel(
+				collectionAlbumContainer.getAlbumsWithMediaSupport(mediaSupport).getNombreAlbums() + " albums avec " + mediaSupport.getDescription());
+		titleLabel.setPreferredSize(TAB_TITLE_DIMENSION);
+		return titleLabel;
 	}
 }

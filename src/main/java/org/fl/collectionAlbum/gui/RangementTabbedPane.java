@@ -81,7 +81,7 @@ public class RangementTabbedPane extends JTabbedPane implements UpdatableElement
 	}
 
 	private JLabel tabLabel(Format.RangementSupportPhysique rangementSupportPhysique) {
-		JLabel titleLabel = new JLabel( rangementSupportPhysique.getOrdreDescription() +
+		JLabel titleLabel = new JLabel(rangementSupportPhysique.getOrdreDescription() +
 				" (" + 
 				collectionAlbumContainer.getRangementAlbums(rangementSupportPhysique).getNombreAlbums() +
 				" albums)", JLabel.LEFT);
