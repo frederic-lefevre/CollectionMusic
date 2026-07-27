@@ -92,6 +92,9 @@ public class AlbumCharacteristicsScrollPane extends JScrollPane implements Updat
 		
 		JPanel albumsAudioCharacteristicsPanel = new JPanel();
 		albumsAudioCharacteristicsPanel.setLayout(new GridLayout(0, 2, 50, 30));
+		albumsAudioCharacteristicsPanel.setBorder(BorderFactory.createCompoundBorder(
+				BorderFactory.createEtchedBorder(EtchedBorder.RAISED), 
+				BorderFactory.createEmptyBorder(4, 4, 4, 4)));
 		
 		ListeAlbum albumsWithAudio = collectionAlbumContainer.getAlbumsWithAudioFile().sortRangementAlbum();
 		addCharacteristic("Albums avec fichiers audio", albumsWithAudio, albumsAudioCharacteristicsPanel);
@@ -123,6 +126,10 @@ public class AlbumCharacteristicsScrollPane extends JScrollPane implements Updat
 		
 		JPanel albumsContentNatureCharacteristicsPanel = new JPanel();
 		albumsContentNatureCharacteristicsPanel.setLayout(new GridLayout(0, 2, 50, 80));
+		albumsContentNatureCharacteristicsPanel.setBorder(BorderFactory.createCompoundBorder(
+				BorderFactory.createEtchedBorder(EtchedBorder.RAISED), 
+				BorderFactory.createEmptyBorder(4, 4, 4, 4)));
+		
 		
 		Arrays.stream(ContentNature.values()).forEachOrdered(contentNature -> {
 			ListeAlbum albumsWithOnlyContentNature = collectionAlbumContainer.getAlbumsWithOnlyContentNature(contentNature).sortRangementAlbum();
@@ -142,6 +149,9 @@ public class AlbumCharacteristicsScrollPane extends JScrollPane implements Updat
 		
 		JPanel albumsDiscogsPresencePanel = new JPanel();
 		albumsDiscogsPresencePanel.setLayout(new GridLayout(0, 2, 50, 80));
+		albumsDiscogsPresencePanel.setBorder(BorderFactory.createCompoundBorder(
+				BorderFactory.createEtchedBorder(EtchedBorder.RAISED), 
+				BorderFactory.createEmptyBorder(4, 4, 4, 4)));
 		addCharacteristic("Albums avec release discogs", collectionAlbumContainer.getAlbumsWithDiscogsRelease().sortRangementAlbum(), albumsDiscogsPresencePanel);
 		addCharacteristic("Albums sans release discogs", collectionAlbumContainer.getAlbumsMissingDiscogsRelease().sortRangementAlbum(), albumsDiscogsPresencePanel);
 		
