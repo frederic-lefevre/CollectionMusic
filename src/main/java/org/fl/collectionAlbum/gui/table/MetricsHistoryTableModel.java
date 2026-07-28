@@ -102,7 +102,12 @@ public class MetricsHistoryTableModel extends AbstractTableModel implements Upda
 		} else {
 			// Following columns are metric numbers
 			String metricKey = metricsKeysAttributes.get(columnIndex - 1).getMetricKey();
-			return Format.poidsToString(metrics.getMetrics().get(metricKey));
+			String poidsString = Format.poidsToString(metrics.getMetrics().get(metricKey));
+			if (rowIndex == 0) {
+				return "<html><h2>" + poidsString + "</h2></html>";
+			} else {
+				return poidsString;
+			}
 		}
 	}
 
