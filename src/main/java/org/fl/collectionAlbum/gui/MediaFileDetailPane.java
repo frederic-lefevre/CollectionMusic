@@ -89,17 +89,17 @@ public class MediaFileDetailPane extends JScrollPane {
 		MediaFileMetadata metadata = mediaFile.getMetadata();
 		if (metadata != null) {
 			
-			infosPane.add(metadataPanel("Metadata du flux", metadata.getStreamMetadata()));
-			infosPane.add(metadataPanel("Metadata normalisées du contenu", metadata.getNormalizedTags()));
-			infosPane.add(metadataPanel("Metadata supplémentaires du contenu", metadata.getAdditionalTags()));
-			infosPane.add(metadataPanel("Metadata spécifiques au format media", metadata.getFormatSpecificMetadata()));
+			infosPane.add(metadataPanel("Metadata du flux", metadata.getStreamMetadata(), false));
+			infosPane.add(metadataPanel("Metadata normalisées du contenu", metadata.getNormalizedTags(), false));
+			infosPane.add(metadataPanel("Metadata supplémentaires du contenu", metadata.getAdditionalTags(), true));
+			infosPane.add(metadataPanel("Metadata spécifiques au format media", metadata.getFormatSpecificMetadata(), true));
 		}
 		
 		add(infosPane);
 		setViewportView(infosPane);
 	}
 	
-	private static JPanel metadataPanel(String titre, Map<String, MetadataElement<?>> metadataMap) {
+	private static JPanel metadataPanel(String titre, Map<String, MetadataElement<?>> metadataMap, boolean printNullOrEmpty) {
 
 		JPanel metadataPane = new JPanel();
 		metadataPane.setLayout(new GridBagLayout());
@@ -128,7 +128,7 @@ public class MediaFileDetailPane extends JScrollPane {
 		} else {
 			metadataPane.add(titreMetadata, gridConstraints);
 			metadataMap.values().stream()
-				.filter(m -> (m.value() != null) && !m.value().toString().isBlank())
+				.filter(m -> printNullOrEmpty || ((m.value() != null) && !m.value().toString().isBlank()))
 				.forEach(m -> {
 						gridConstraints.gridx = 0;
 						gridConstraints.gridy++;
@@ -147,7 +147,12 @@ public class MediaFileDetailPane extends JScrollPane {
 		gridConstraints.gridwidth = 1;
 		gridConstraints.weightx =0;
 		pane.add(titreLbl, gridConstraints);
-		JLabel valueLbl = new JLabel(value);
+		JLabel valueLbl = new JLabel();
+		if ((value == null) || value.isBlank()) {
+			valueLbl.setText("valeur null ou vide");
+		} else {
+			valueLbl.setText(value);
+		}
 		valueLbl.setFont(verdana);
 		gridConstraints.gridx++;
 		gridConstraints.gridwidth = 2;
@@ -166,7 +171,9 @@ public class MediaFileDetailPane extends JScrollPane {
 	private static <T> String metadataValuePrinter(MetadataElement<T> metadata) {
 		
 		T value =  metadata.value();
-		if (value instanceof Long longValue) {
+		if (value == null) {
+			return "valeur nulle";
+		} else if (value instanceof Long longValue) {
 			if (metadata.name().equals(AudioStreamMetadata.TRACK_DURATION)) {
 				return TemporalUtils.durationToString(longValue);
 			} else {
