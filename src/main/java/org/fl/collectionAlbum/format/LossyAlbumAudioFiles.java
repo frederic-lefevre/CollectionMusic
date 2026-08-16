@@ -38,6 +38,8 @@ public class LossyAlbumAudioFiles extends AbstractAlbumsAudioFiles {
 
 	private static final String BIT_RATE_TITLE = "Bit rate";
 	
+	private static final MetadataElement<Boolean> LOSSY = new MetadataElement<>(AudioStreamMetadata.IS_LOSSLESS, false);
+	
 	private final double bitRate;  // in kbits/s
 	private final boolean matchesMediaFilesMetadata;
 	
@@ -49,15 +51,15 @@ public class LossyAlbumAudioFiles extends AbstractAlbumsAudioFiles {
 		if ((mediaFilePaths == null) || mediaFilePaths.isEmpty()) {
 			matchesMediaFilesMetadata = true;
 		} else {
+			
+			MetadataElement<Long> samplingRateMetadata = new MetadataElement<>(AudioStreamMetadata.SAMPLING_RATE, (long)(samplingRate*1000));
+			MetadataElement<Long> bitDepthMetadata = new MetadataElement<>(AudioStreamMetadata.BIT_RATE,  (long)(bitRate*1000));
 			matchesMediaFilesMetadata = mediaFilePaths.stream()
 					.map(m -> m.getMediaFiles())
 					.filter(Objects::nonNull)
 					.filter(m -> !m.isEmpty())
 					.map(m -> m.get(0))
-					.allMatch(mediaFile -> mediaFile.haveMetadata(
-							new MetadataElement<>(AudioStreamMetadata.IS_LOSSLESS, false),
-							new MetadataElement<>(AudioStreamMetadata.SAMPLING_RATE, (long)(samplingRate*1000)),
-							new MetadataElement<>(AudioStreamMetadata.BIT_RATE,  (long)(bitRate*1000))));
+					.allMatch(mediaFile -> mediaFile.haveMetadata(LOSSY, samplingRateMetadata, bitDepthMetadata));
 		}
 	}
 
