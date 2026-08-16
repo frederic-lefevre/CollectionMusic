@@ -24,6 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.format;
 
+import java.util.Collection;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiConsumer;
@@ -57,7 +58,7 @@ public class LosslessAlbumAudioFiles extends AbstractAlbumsAudioFiles {
 				.map(m -> m.getMediaFiles())
 				.filter(Objects::nonNull)
 				.filter(m -> !m.isEmpty())
-				.map(m -> m.get(0))
+				.flatMap(Collection::stream)
 				.allMatch(mediaFile -> mediaFile.haveMetadata(
 						new MetadataElement<>(AudioStreamMetadata.IS_LOSSLESS, true),
 						new MetadataElement<>(AudioStreamMetadata.SAMPLING_RATE, (long)(samplingRate*1000)),
