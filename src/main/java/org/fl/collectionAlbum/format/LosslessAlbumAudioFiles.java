@@ -42,6 +42,8 @@ public class LosslessAlbumAudioFiles extends AbstractAlbumsAudioFiles {
 	private static final int HIGH_RES_BIT_DEPTH_THRESHOLD = 16;
 	private static final long HIGH_RES_SAMPLING_RATE_THRESHOLD = 48;
 	
+	private static final MetadataElement<Boolean> LOSSLESS = new MetadataElement<>(AudioStreamMetadata.IS_LOSSLESS, true);
+	
 	private final int bitDepth;
 	private final boolean matchesMediaFilesMetadata;
 	
@@ -54,15 +56,15 @@ public class LosslessAlbumAudioFiles extends AbstractAlbumsAudioFiles {
 		if ((mediaFilePaths == null) || mediaFilePaths.isEmpty()) {
 			matchesMediaFilesMetadata = true;
 		} else {
+			
+			MetadataElement<Long> samplingRateMetadata = new MetadataElement<>(AudioStreamMetadata.SAMPLING_RATE, (long)(samplingRate*1000));
+			MetadataElement<Integer> bitDepthMetadata = new MetadataElement<>(AudioStreamMetadata.BIT_DEPTH, bitDepth);
 			matchesMediaFilesMetadata = mediaFilePaths.stream()
 				.map(m -> m.getMediaFiles())
 				.filter(Objects::nonNull)
 				.filter(m -> !m.isEmpty())
 				.flatMap(Collection::stream)
-				.allMatch(mediaFile -> mediaFile.haveMetadata(
-						new MetadataElement<>(AudioStreamMetadata.IS_LOSSLESS, true),
-						new MetadataElement<>(AudioStreamMetadata.SAMPLING_RATE, (long)(samplingRate*1000)),
-						new MetadataElement<>(AudioStreamMetadata.BIT_DEPTH, bitDepth)));
+				.allMatch(mediaFile -> mediaFile.haveMetadata(LOSSLESS, samplingRateMetadata, bitDepthMetadata));
 		}
 	}
 
