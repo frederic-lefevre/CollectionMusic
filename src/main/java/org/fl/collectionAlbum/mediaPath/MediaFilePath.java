@@ -40,6 +40,7 @@ public class MediaFilePath {
 	private final Path mediaFilesPath;
 	private final ContentNature contentNature;
 	private final Set<Album> albumsSet;
+	private final Set<String> sourceSet;  // where does the files comes from. There should be one and only one element
 	private final Path coverPath;
 	private final List<MediaFile> mediaFiles;
 	private final Optional<Boolean> hasEquivalentMetadata;
@@ -51,6 +52,7 @@ public class MediaFilePath {
 		this.contentNature = contentNature;
 		this.mediaFiles = mediaFiles;
 		albumsSet = new HashSet<>();
+		sourceSet = new HashSet<String>();
 		this.mediaFileExtension = mediaFileExtension;
 		this.coverPath = coverPath;
 			
@@ -84,8 +86,16 @@ public class MediaFilePath {
 		albumsSet.add(album);
 	}
 	
+	public void addSource(String source) {
+		sourceSet.add(source);
+	}
+	
 	public Set<Album> getAlbumSet() {
 		return albumsSet;
+	}
+	
+	public Set<String> getSourceSet() {
+		return sourceSet;
 	}
 	
 	public int getMediaFileNumber() {

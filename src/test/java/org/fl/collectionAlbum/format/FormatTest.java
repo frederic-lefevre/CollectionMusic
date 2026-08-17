@@ -236,7 +236,7 @@ class FormatTest {
 				    "samplingRate" : 192, 
 				    "source" : "MOFI Fidelity Sound Lab", 
 				    "type" : "FLAC",
-				    "location": ["b/The Beatles/Magical Mystery Tour" ] }]
+				    "location": ["b/Art Blakey/Moanin'" ] }]
 				}
 				""";
 		
@@ -284,7 +284,7 @@ class FormatTest {
 				    "samplingRate" : 44.1, 
 				    "source" : "MOFI Fidelity Sound Lab", 
 				    "type" : "FLAC",
-				    "location": [ "b/The Beatles/Magical Mystery Tour" ] }]
+				    "location": [ "b/Bela Bartok/Orchestral Music - Ivan Fischer" ] }]
 				}
 				""";
 		
@@ -329,13 +329,13 @@ class FormatTest {
 				    "source" : "MOFI Fidelity Sound Lab", 
 				    "type" : "MP3",
 				    "note" : "Mix Bob Smith",
-				    "location": [ "w/Doc Watson/Doc Watson on Stage [MP3 192 kbps]" ] },
+				    "location": [ "w/Doc Watson/On Stage [MP3 192]" ] },
 				    {
 				    "bitDepth": 24 , 
 				    "samplingRate" : 88, 
 				    "source" : "CD", 
 				    "type" : "FLAC",
-				    "location": [ "b/The Beatles/Magical Mystery Tour" ] }]
+				    "location": [ "b/Black Sabbath/Black Sabbath" ] }]
 				}
 				""";
 		
@@ -409,7 +409,7 @@ class FormatTest {
 					"type" : "MKV", 
 					"source" : "DVD",
 					"note" : "version noir et blanc",
-				  	"location" : [ "d/Bob Dylan/No Direction Home - Martin Scorcese/NoDirectionHome/", "d/Bob Dylan/No Direction Home - Martin Scorcese/NoDirectionHome2/" ]
+				  	"location" : [ "d/Bob Dylan/Modern Times Bonus DVD/" ]
 				    }]
 				}
 				""";

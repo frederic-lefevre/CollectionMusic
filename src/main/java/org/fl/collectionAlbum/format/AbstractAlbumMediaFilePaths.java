@@ -63,7 +63,7 @@ public abstract class AbstractAlbumMediaFilePaths {
 		this.source = source;
 		this.note = note;
 		this.mediaFilePaths = mediaFilePaths;
-		
+
 		checkMediaFilePaths();
 	}
 	
@@ -144,6 +144,14 @@ public abstract class AbstractAlbumMediaFilePaths {
 			missingOrInvalidMediaFilePath = false;
 			
 			mediaFilePathNotFound = mediaFilePaths.stream().anyMatch(mediaFilePath -> !Files.exists(mediaFilePath.getPath()));
+			
+			mediaFilePaths.forEach(m -> {
+				m.addSource(source); 
+				
+				if (m.getSourceSet().size() != 1) {
+					logger.warning("Multiple source declaration for media file path" + m.getPath());
+				}
+			});
 		}
 	}
 	
