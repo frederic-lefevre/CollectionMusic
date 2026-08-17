@@ -113,8 +113,6 @@ public class LosslessAlbumAudioFiles extends AbstractAlbumAudioFiles {
 	}
 
 	// "Les metadata dans la déclaration de l'album correspondent aux metadata des fichiers audio"
-	// Seul le 1er fichier audio est vérifié, donc il faut croiser cette information avec la cohérence des
-	// metadata des fichiers audio du même répertoire
 	@Override
 	public boolean matchesMediaFilesMetadata() {
 		return matchesMediaFilesMetadata;

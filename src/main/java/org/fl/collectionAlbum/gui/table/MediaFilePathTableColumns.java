@@ -25,11 +25,9 @@ SOFTWARE.
 package org.fl.collectionAlbum.gui.table;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.fl.collectionAlbum.gui.renderer.AlbumsRenderer;
 import org.fl.collectionAlbum.gui.renderer.CollectionBooleanRenderer;
-import org.fl.collectionAlbum.gui.renderer.CollectionOptionalBooleanRenderer;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.fl.collectionAlbum.mediaPath.MediaFilePathAlbumComparator;
 import org.fl.collectionAlbum.utils.CollectionUtils;
@@ -61,10 +59,12 @@ public class MediaFilePathTableColumns {
 			<li>Nombre de canaux
 			<li>Débits (échantillons ou bit/secondes)
 			<li>Nombre de bits des échantillons
-			</ul></html>
+			</ul>
+			<p>Et elles correspondent aux metadata déclarées dabs les albums</p>
+			</html>
 			""", 
 					90, 
-					new CollectionOptionalBooleanRenderer(), null, Optional.class, MediaFilePath::hasEquivalentStreamMetadata);
+					new CollectionBooleanRenderer(), null, Boolean.class, m -> m.getAlbumSet().stream().allMatch(a -> a. matchesMediaFileMetadata()));
 	
 	private static final List<TableColumnParameter<MediaFilePath>> REGULAR_COLUMNS_LIST = List.of(
 			PATH, ALBUMS, FILE_NUMBER, PRESENCE_POCHETTE, MEDIA_TYPE, METADATA_CHECK
