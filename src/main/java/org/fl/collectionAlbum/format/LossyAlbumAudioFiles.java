@@ -89,6 +89,11 @@ public class LossyAlbumAudioFiles extends AbstractAlbumAudioFiles {
 	}
 	
 	@Override
+	public String displayMediaFileSummaryWithExtension() {
+		return displayMediaFileSummary();
+	}
+	
+	@Override
 	public String displayMediaFileDetail(String separator, boolean withPrefix) {		
 		return fileDetail(separator, particularDetail, (sb, s) -> appendCommonAudioFileDetail(sb, s, withPrefix));
 	}

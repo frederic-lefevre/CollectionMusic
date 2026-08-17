@@ -73,6 +73,7 @@ public abstract class AbstractAlbumMediaFilePaths {
 	public abstract boolean matchesMediaFilesMetadata();
 	
 	public abstract String displayMediaFileSummary();
+	public abstract String displayMediaFileSummaryWithExtension();
 	
 	public String getSource() {
 		return source;
@@ -184,5 +185,4 @@ public abstract class AbstractAlbumMediaFilePaths {
 		commonDetailBuilder.accept(audioFilesDetails, separator);
 		return audioFilesDetails.toString();
 	}
-
 }

@@ -465,7 +465,7 @@ public class Format {
 	}
 	
 	public String displayMediaFilesSummaryCompact() {
-		return displayMediaFileInformation(getAllMediaFilePaths(), (af) -> af.displayMediaFileSummary(), "<br/>", true);
+		return displayMediaFileInformation(getAllMediaFilePaths(), (af) -> af.displayMediaFileSummaryWithExtension(), "<br/>", true);
 		
 	}
 	

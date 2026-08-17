@@ -95,7 +95,7 @@ public class AlbumTableColumns {
 					(a) -> a);
 	
 	private static final TableColumnParameter<Album> MEDIA_FILES_TYPES = 
-			new TableColumnParameter<>("<html>Fichiers<br/>media</html>", null, 80, 
+			new TableColumnParameter<>("<html>Fichiers<br/>media</html>", null, 90, 
 					new StringToHtmlRenderer(), null, String.class, (a) -> a.getFormatAlbum().displayMediaFilesSummaryCompact());
 
 	private static final List<TableColumnParameter<Album>> REGULAR_COLUMN_LIST = List.of(
