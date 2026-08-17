@@ -105,6 +105,15 @@ public class LosslessAlbumAudioFiles extends AbstractAlbumAudioFiles {
 	}
 
 	@Override
+	public String displayMediaFileSummaryWithExtension() {
+		StringBuilder audioFilesSummary = new StringBuilder();
+		audioFilesSummary.append(getType().getExtension()).append(" ");
+		audioFilesSummary.append(getBitDepth()).append("-");
+		audioFilesSummary.append(Double.valueOf(getSamplingRate()).intValue());
+		return audioFilesSummary.toString();
+	}
+	
+	@Override
 	public String displayMediaFileDetailTitles(String separator) {
 		StringBuilder audioFilesDetailTitles = new StringBuilder();
 		audioFilesDetailTitles.append(BIT_DEPTH_TITLE).append(separator);
