@@ -82,7 +82,7 @@ class AlbumTest {
 	@BeforeAll
 	static void initInventory() {
 		MediaFilesInventories.clearInventories();
-		TestUtils.scanMediaFilePaths(false);
+		TestUtils.scanMediaFilePaths(true);
 		DiscogsInventory.buildDiscogsInventory();
 	}
 	

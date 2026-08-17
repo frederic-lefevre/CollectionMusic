@@ -24,7 +24,6 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.format;
 
-import java.util.Collection;
 import java.util.Objects;
 import java.util.Set;
 import java.util.function.BiConsumer;
@@ -55,12 +54,15 @@ public class LossyAlbumAudioFiles extends AbstractAlbumAudioFiles {
 			
 			MetadataElement<Long> samplingRateMetadata = new MetadataElement<>(AudioStreamMetadata.SAMPLING_RATE, (long)(samplingRate*1000));
 			MetadataElement<Long> bitDepthMetadata = new MetadataElement<>(AudioStreamMetadata.BIT_RATE,  (long)(bitRate*1000));
-			matchesMediaFilesMetadata = mediaFilePaths.stream()
-					.map(m -> m.getMediaFiles())
-					.filter(Objects::nonNull)
-					.filter(m -> !m.isEmpty())
-					.flatMap(Collection::stream)
-					.allMatch(mediaFile -> mediaFile.haveMetadata(LOSSY, samplingRateMetadata, bitDepthMetadata));
+			
+			matchesMediaFilesMetadata = 
+					mediaFilePaths.stream().allMatch(m -> m.hasEquivalentStreamMetadata().orElse(false)) &&
+					mediaFilePaths.stream()
+						.map(m -> m.getMediaFiles())
+						.filter(Objects::nonNull)
+						.filter(m -> !m.isEmpty())
+						.map(m -> m.get(0))
+						.allMatch(mediaFile -> mediaFile.haveMetadata(LOSSY, samplingRateMetadata, bitDepthMetadata));
 		}
 	}
 
