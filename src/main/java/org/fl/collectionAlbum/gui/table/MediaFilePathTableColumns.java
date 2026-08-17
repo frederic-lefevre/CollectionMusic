@@ -49,6 +49,9 @@ public class MediaFilePathTableColumns {
 	private static final TableColumnParameter<MediaFilePath> MEDIA_TYPE = 
 			new TableColumnParameter<>("<html>Type de<br/>media</html>", null, 70, null, null, String.class, MediaFilePath::getMediaFileExtension);
 	
+	private static final TableColumnParameter<MediaFilePath> SOURCE = 
+			new TableColumnParameter<>("<html>Source</html>", null, 100, null, null, String.class,  MediaFilePath::getUniqueSouce);
+	
 	private static final TableColumnParameter<MediaFilePath> METADATA_CHECK = 
 			new TableColumnParameter<>("<html>Metadata<br>equivalentes</html>", 
 					"""
@@ -67,7 +70,7 @@ public class MediaFilePathTableColumns {
 					new CollectionBooleanRenderer(), null, Boolean.class, m -> m.getAlbumSet().stream().allMatch(a -> a. matchesMediaFileMetadata()));
 	
 	private static final List<TableColumnParameter<MediaFilePath>> REGULAR_COLUMNS_LIST = List.of(
-			PATH, ALBUMS, FILE_NUMBER, PRESENCE_POCHETTE, MEDIA_TYPE, METADATA_CHECK
+			PATH, ALBUMS, FILE_NUMBER, PRESENCE_POCHETTE, MEDIA_TYPE, METADATA_CHECK, SOURCE
 			);
 	
 	public static final GenericTableColumns<MediaFilePath> REGULAR_COLUMNS = new GenericTableColumns<>(REGULAR_COLUMNS_LIST, 0);

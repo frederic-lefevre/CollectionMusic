@@ -98,6 +98,18 @@ public class MediaFilePath {
 		return sourceSet;
 	}
 	
+	public String getUniqueSouce() {
+		
+		if (sourceSet.size() == 1) {
+			// normal case, only one source
+			// Other cases are errors in albums json
+			return sourceSet.iterator().next();
+		} else if (sourceSet.isEmpty()) {
+			return "Pas de source";
+		} else {
+			return "Source multiple";
+		}
+	}
 	public int getMediaFileNumber() {
 		return mediaFiles.size();
 	}
