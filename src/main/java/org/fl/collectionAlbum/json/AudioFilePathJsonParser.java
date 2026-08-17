@@ -30,7 +30,7 @@ import java.util.Set;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.JsonMusicProperties;
-import org.fl.collectionAlbum.format.AbstractAlbumsAudioFiles;
+import org.fl.collectionAlbum.format.AbstractAlbumAudioFiles;
 import org.fl.collectionAlbum.format.AudioFileType;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.format.LosslessAlbumAudioFiles;
@@ -58,7 +58,7 @@ public class AudioFilePathJsonParser extends AbstractMediaFileParser {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public AbstractAlbumsAudioFiles parseMediaFile(ObjectNode audioFilePathJson) {
+	public AbstractAlbumAudioFiles parseMediaFile(ObjectNode audioFilePathJson) {
 
 		if (audioFilePathJson != null) {
 			

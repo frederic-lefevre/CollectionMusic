@@ -35,7 +35,7 @@ import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
 import tools.jackson.databind.node.ObjectNode;
 
-public class LosslessAlbumAudioFiles extends AbstractAlbumsAudioFiles {
+public class LosslessAlbumAudioFiles extends AbstractAlbumAudioFiles {
 
 	private static final String BIT_DEPTH_TITLE = "Bit depth";
 	

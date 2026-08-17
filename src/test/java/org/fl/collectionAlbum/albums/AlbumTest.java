@@ -50,7 +50,7 @@ import org.fl.collectionAlbum.artistes.ListeArtiste;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.MatchResultType;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.ReleaseMatchResult;
-import org.fl.collectionAlbum.format.AbstractAlbumsAudioFiles;
+import org.fl.collectionAlbum.format.AbstractAlbumAudioFiles;
 import org.fl.collectionAlbum.format.AbstractAlbumMediaFilePaths;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.format.LosslessAlbumAudioFiles;
@@ -196,7 +196,7 @@ class AlbumTest {
 		List<? extends AbstractAlbumMediaFilePaths> audioFiles = album.getFormatAlbum().getMediaFilePaths(ContentNature.AUDIO);
 		assertThat(audioFiles).isNotNull()
 			.singleElement()
-			.asInstanceOf(InstanceOfAssertFactories.type(AbstractAlbumsAudioFiles.class))
+			.asInstanceOf(InstanceOfAssertFactories.type(AbstractAlbumAudioFiles.class))
 			.satisfies(audio -> {
 				assertThat(audio.hasMissingOrInvalidMediaFilePath()).isTrue();
 				assertThat(audio.isLossLess()).isTrue();
@@ -267,7 +267,7 @@ class AlbumTest {
 		
 		assertThat(album2.getFormatAlbum().getMediaFilePaths(ContentNature.AUDIO)).isNotNull()
 			.singleElement()
-			.asInstanceOf(InstanceOfAssertFactories.type(AbstractAlbumsAudioFiles.class))
+			.asInstanceOf(InstanceOfAssertFactories.type(AbstractAlbumAudioFiles.class))
 			.satisfies(audio -> {
 				assertThat(audio.hasMissingOrInvalidMediaFilePath()).isFalse();
 				assertThat(audio.isLossLess()).isTrue();
@@ -286,7 +286,7 @@ class AlbumTest {
 			});
 		
 		// Fix the audio file path
-		AbstractAlbumsAudioFiles audioFile2 = (AbstractAlbumsAudioFiles) album2.getFormatAlbum().getMediaFilePaths(ContentNature.AUDIO).get(0);
+		AbstractAlbumAudioFiles audioFile2 = (AbstractAlbumAudioFiles) album2.getFormatAlbum().getMediaFilePaths(ContentNature.AUDIO).get(0);
 		audioFile2.setMediaFilePath(
 				Set.of(TestUtils.createMediaFile(
 						Paths.get("E:/Musique/e/Bill Evans/Portrait In Jazz/"), 
@@ -325,7 +325,7 @@ class AlbumTest {
 		
 		assertThat(album3.getFormatAlbum().getMediaFilePaths(ContentNature.AUDIO)).isNotNull()
 			.singleElement()
-			.asInstanceOf(InstanceOfAssertFactories.type(AbstractAlbumsAudioFiles.class))
+			.asInstanceOf(InstanceOfAssertFactories.type(AbstractAlbumAudioFiles.class))
 			.satisfies(audio -> {
 				assertThat(audio.hasMissingOrInvalidMediaFilePath()).isFalse();
 				assertThat(audio.isLossLess()).isTrue();
@@ -368,7 +368,7 @@ class AlbumTest {
 		
 		assertThat(album4.getFormatAlbum().getMediaFilePaths(ContentNature.AUDIO)).isNotNull()
 			.singleElement()
-			.asInstanceOf(InstanceOfAssertFactories.type(AbstractAlbumsAudioFiles.class))
+			.asInstanceOf(InstanceOfAssertFactories.type(AbstractAlbumAudioFiles.class))
 			.satisfies(audio -> {
 				assertThat(audio.hasMissingOrInvalidMediaFilePath()).isFalse();
 				assertThat(audio.isLossLess()).isTrue();

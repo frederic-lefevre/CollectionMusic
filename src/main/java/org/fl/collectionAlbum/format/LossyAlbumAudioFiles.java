@@ -35,7 +35,7 @@ import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
 import tools.jackson.databind.node.ObjectNode;
 
-public class LossyAlbumAudioFiles extends AbstractAlbumsAudioFiles {
+public class LossyAlbumAudioFiles extends AbstractAlbumAudioFiles {
 
 	private static final String BIT_RATE_TITLE = "Bit rate";
 	
