@@ -65,6 +65,7 @@ public abstract class MediaFile {
 	public abstract boolean hasEquivalentStreamMetadata(MediaFile otherMediaFile);	
 	public abstract ContentNature getContentNature();
 	public abstract String getMediaStreamPattern();
+	public abstract String getMediaStreamShortPattern();
 
 	public Optional<Boolean> isValidMediaFile() {
 		return isValidMediaFile;

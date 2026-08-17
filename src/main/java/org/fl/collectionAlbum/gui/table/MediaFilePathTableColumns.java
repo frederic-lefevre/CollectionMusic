@@ -47,7 +47,7 @@ public class MediaFilePathTableColumns {
 			new TableColumnParameter<>("<html>Image de la<br>pochette</html>", null, 90, new CollectionBooleanRenderer(), null, Boolean.class, MediaFilePath::hasCover);
 	
 	private static final TableColumnParameter<MediaFilePath> MEDIA_TYPE = 
-			new TableColumnParameter<>("<html>Type de<br/>media</html>", null, 70, null, null, String.class, MediaFilePath::getMediaFileExtension);
+			new TableColumnParameter<>("<html>Type de<br/>media</html>", null, 100, null, null, String.class, MediaFilePath::getStreamInfo);
 	
 	private static final TableColumnParameter<MediaFilePath> SOURCE = 
 			new TableColumnParameter<>("<html>Source</html>", null, 100, null, null, String.class,  MediaFilePath::getUniqueSouce);

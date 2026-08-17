@@ -60,7 +60,7 @@ public class MediaFilePath {
 			hasEquivalentMetadata = Optional.of(
 					(mediaFiles == null) ||
 					mediaFiles.isEmpty() ||
-					mediaFiles.stream().allMatch(m -> mediaFiles.get(0).hasEquivalentStreamMetadata(m)));
+					mediaFiles.stream().allMatch(m -> mediaFiles.getFirst().hasEquivalentStreamMetadata(m)));
 		} else {
 			hasEquivalentMetadata = Optional.empty();
 		}
@@ -110,6 +110,15 @@ public class MediaFilePath {
 			return "Source multiple";
 		}
 	}
+	
+	public String getStreamInfo() {
+		if (hasEquivalentMetadata.orElse(false)) {
+			return mediaFiles.getFirst().getMediaStreamShortPattern();
+		} else {
+			return "";
+		}
+	}
+	
 	public int getMediaFileNumber() {
 		return mediaFiles.size();
 	}
