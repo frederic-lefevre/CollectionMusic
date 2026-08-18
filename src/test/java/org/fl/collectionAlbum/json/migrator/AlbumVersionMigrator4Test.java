@@ -232,21 +232,21 @@ class AlbumVersionMigrator4Test {
       "source" : "CD",
       "type" : "FLAC",
       "note" : "Remaster Bernie Grundman. Son compressé. Qualité inferieure",
-      "location" : [ "E:\\\\Musique\\\\h\\\\Jimi Hendrix\\\\Electric Ladyland\\\\Electric Ladyland (50th, CD, 2018)" ]
+      "location" : [ "E:\\\\Musique\\\\h\\\\Jimi Hendrix\\\\Electric Ladyland\\\\50th, CD, 2018" ]
     }, {
       "bitDepth" : 24,
       "samplingRate" : 96,
       "source" : "Bluray 2.0",
       "type" : "FLAC",
       "note" : "Remaster Bernie Grundman. Son compressé. Qualité inferieure",
-      "location" : [ "E:\\\\Musique\\\\h\\\\Jimi Hendrix\\\\Electric Ladyland\\\\Electric Ladyland [Bluray 2_0, 2018 24-96]" ]
+      "location" : [ "E:\\\\Musique\\\\h\\\\Jimi Hendrix\\\\Electric Ladyland\\\\Bluray 2_0, 2018 24-96" ]
     }, {
       "bitDepth" : 24,
       "samplingRate" : 176.4,
       "source" : "Bluray 5.1",
       "type" : "FLAC",
       "note" : "Remaster Bernie Grundman, Remix Eddie Kramer",
-      "location" : [ "E:\\\\Musique\\\\h\\\\Jimi Hendrix\\\\Electric Ladyland\\\\Electric Ladyland [Bluray 5_1, 2018, 24 176]" ]
+      "location" : [ "E:\\\\Musique\\\\h\\\\Jimi Hendrix\\\\Electric Ladyland\\\\Bluray 5_1, 2018, 24 176" ]
     }, {
       "bitDepth" : 16,
       "samplingRate" : 44.1,
@@ -297,17 +297,17 @@ class AlbumVersionMigrator4Test {
 				jsonAudioFile -> { 
 					JsonNode locationsJson = jsonAudioFile.get( JsonMusicProperties.LOCATION);
 					assertThat(locationsJson).isNotNull().singleElement().satisfies(locationJson -> 
-						assertThat(locationJson.asString()).isEqualTo("h/Jimi Hendrix/Electric Ladyland/Electric Ladyland (50th, CD, 2018)/"));					
+						assertThat(locationJson.asString()).isEqualTo("h/Jimi Hendrix/Electric Ladyland/50th, CD, 2018/"));					
 				},
 				jsonAudioFile -> {
 					JsonNode locationsJson = jsonAudioFile.get( JsonMusicProperties.LOCATION);
 					assertThat(locationsJson).isNotNull().singleElement().satisfies(locationJson -> 
-						assertThat(locationJson.asString()).isEqualTo("h/Jimi Hendrix/Electric Ladyland/Electric Ladyland [Bluray 2_0, 2018 24-96]/"));		
+						assertThat(locationJson.asString()).isEqualTo("h/Jimi Hendrix/Electric Ladyland/Bluray 2_0, 2018 24-96/"));		
 				},
 				jsonAudioFile -> {
 					JsonNode locationsJson = jsonAudioFile.get( JsonMusicProperties.LOCATION);
 					assertThat(locationsJson).isNotNull().singleElement().satisfies(locationJson -> 
-						assertThat(locationJson.asString()).isEqualTo("h/Jimi Hendrix/Electric Ladyland/Electric Ladyland [Bluray 5_1, 2018, 24 176]/"));		
+						assertThat(locationJson.asString()).isEqualTo("h/Jimi Hendrix/Electric Ladyland/Bluray 5_1, 2018, 24 176/"));		
 				},
 				jsonAudioFile -> {
 					JsonNode locationsJson = jsonAudioFile.get( JsonMusicProperties.LOCATION);
@@ -418,6 +418,8 @@ class AlbumVersionMigrator4Test {
 					assertThat(locationsJson).isNotNull().singleElement().satisfies(locationJson -> 
 						assertThat(locationJson.asString()).isEqualTo("b/Black Sabbath/Sabbath Bloody Sabbath [24 176]/"));		
 				});
+		
+		migratorFilterCounter.stopLogCountAndFilter();
 	}
 	
 	private static final String albumStr6 = """
@@ -494,12 +496,10 @@ class AlbumVersionMigrator4Test {
 		assertThat(migratorFilterCounter.getLogRecords()).singleElement().satisfies(
 				logRecord -> assertThat(logRecord.getMessage()).contains("Media files location missing"));
 		
-		if (parserHelpersFilterCounter.isLoggable(Level.INFO)) {
-			assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(1);
-			assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.INFO)).isEqualTo(1);
-			assertThat(parserHelpersFilterCounter.getLogRecords()).singleElement().satisfies(
-					logRecord -> assertThat(logRecord.getMessage()).contains("No property location"));
-		}
+		assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
+		assertThat(parserHelpersFilterCounter.getLogRecords()).singleElement().satisfies(
+				logRecord -> assertThat(logRecord.getMessage()).contains("No property location"));
 		
 		assertThat(migratedAlbum).isNotNull();
 
@@ -519,6 +519,9 @@ class AlbumVersionMigrator4Test {
 		
 		JsonNode jsonAudioFile = jsonAudioFiles.get(0);
 		assertThat(jsonAudioFile.get( JsonMusicProperties.LOCATION)).isNull();
+		
+		migratorFilterCounter.stopLogCountAndFilter();
+		parserHelpersFilterCounter.stopLogCountAndFilter();
 	}
 	
 	private JsonNode assertAndGetFormatJson(String albumStr) throws DatabindException, JacksonException {
