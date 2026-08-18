@@ -418,6 +418,8 @@ class AlbumVersionMigrator4Test {
 					assertThat(locationsJson).isNotNull().singleElement().satisfies(locationJson -> 
 						assertThat(locationJson.asString()).isEqualTo("b/Black Sabbath/Sabbath Bloody Sabbath [24 176]/"));		
 				});
+		
+		migratorFilterCounter.stopLogCountAndFilter();
 	}
 	
 	private static final String albumStr6 = """
@@ -494,12 +496,10 @@ class AlbumVersionMigrator4Test {
 		assertThat(migratorFilterCounter.getLogRecords()).singleElement().satisfies(
 				logRecord -> assertThat(logRecord.getMessage()).contains("Media files location missing"));
 		
-		if (parserHelpersFilterCounter.isLoggable(Level.INFO)) {
-			assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(1);
-			assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.INFO)).isEqualTo(1);
-			assertThat(parserHelpersFilterCounter.getLogRecords()).singleElement().satisfies(
-					logRecord -> assertThat(logRecord.getMessage()).contains("No property location"));
-		}
+		assertThat(parserHelpersFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(parserHelpersFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
+		assertThat(parserHelpersFilterCounter.getLogRecords()).singleElement().satisfies(
+				logRecord -> assertThat(logRecord.getMessage()).contains("No property location"));
 		
 		assertThat(migratedAlbum).isNotNull();
 
@@ -519,6 +519,9 @@ class AlbumVersionMigrator4Test {
 		
 		JsonNode jsonAudioFile = jsonAudioFiles.get(0);
 		assertThat(jsonAudioFile.get( JsonMusicProperties.LOCATION)).isNull();
+		
+		migratorFilterCounter.stopLogCountAndFilter();
+		parserHelpersFilterCounter.stopLogCountAndFilter();
 	}
 	
 	private JsonNode assertAndGetFormatJson(String albumStr) throws DatabindException, JacksonException {
