@@ -96,7 +96,7 @@ class DiscogsAlbumReleaseMatcherTest {
         "source": "CD",
         "type": "FLAC",
         "location": [
-          "h/Jimi Hendrix/Electric Ladyland/Electric Ladyland [823 359-2W. Germany - 1984]"
+          "h/Jimi Hendrix/Electric Ladyland/823 359-2W. Germany - 1984"
         ]
       }
     ]
@@ -133,7 +133,7 @@ class DiscogsAlbumReleaseMatcherTest {
         "type": "FLAC",
         "note": "Remaster Ocean view",
         "location": [
-          "h/Jimi Hendrix/Electric Ladyland/Electric Ladyland [847 233-2, Polygram 1993]"
+          "h/Jimi Hendrix/Electric Ladyland/847 233-2, Polygram 1993"
         ]
       }
     ]
