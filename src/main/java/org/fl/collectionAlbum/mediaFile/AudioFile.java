@@ -90,6 +90,28 @@ public abstract class AudioFile extends MediaFile {
 	}
 	
 	@Override
+	public String getMediaStreamShortPattern() {
+		
+		AudioMetadata metadata = getAudioMetadata();
+		if (metadata == null) {
+			return null;
+		} else {
+			AudioStreamMetadata streamInfo =  metadata.getAudioStreamMetadata();
+			
+			StringBuilder streamInfoString = new StringBuilder();
+			streamInfoString.append(getExtension()).append(" ");
+			int bitDepth = streamInfo.bitDepth().value();
+			if (bitDepth != 0) {
+				streamInfoString.append(bitDepth).append("-");
+				streamInfoString.append(streamInfo.samplingRate().value() / 1000);
+			} else {
+				streamInfoString.append(streamInfo.bitRate().value() / 1000);
+			}
+			return streamInfoString.toString();
+		}
+	}
+	
+	@Override
 	public String getMediaStreamPattern() {
 		AudioMetadata metadata = getAudioMetadata();
 		if (metadata == null) {
@@ -104,6 +126,7 @@ public abstract class AudioFile extends MediaFile {
 			placeValue(streamInfoString, BIT_RATE_END_IDX, streamInfo.bitRate().value());
 			placeValue(streamInfoString, CHANNEL_END_IDX, streamInfo.numberOfChannels().value());
 			streamInfoString.replace(LOSSLESS_DEPTH_END_IDX-4, LOSSLESS_DEPTH_END_IDX, streamInfo.isLossless().value()?SANS:AVEC);
+			streamInfoString.append(" - ").append(getExtension());
 			return streamInfoString.toString();
 		}
 	}

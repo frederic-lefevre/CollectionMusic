@@ -59,4 +59,9 @@ public class VideoFile extends MediaFile {
 	public String getMediaStreamPattern() {
 		return null;
 	}
+
+	@Override
+	public String getMediaStreamShortPattern() {
+		return null;
+	}
 }

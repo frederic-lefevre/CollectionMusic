@@ -25,11 +25,9 @@ SOFTWARE.
 package org.fl.collectionAlbum.gui.table;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.fl.collectionAlbum.gui.renderer.AlbumsRenderer;
 import org.fl.collectionAlbum.gui.renderer.CollectionBooleanRenderer;
-import org.fl.collectionAlbum.gui.renderer.CollectionOptionalBooleanRenderer;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.fl.collectionAlbum.mediaPath.MediaFilePathAlbumComparator;
 import org.fl.collectionAlbum.utils.CollectionUtils;
@@ -37,19 +35,22 @@ import org.fl.collectionAlbum.utils.CollectionUtils;
 public class MediaFilePathTableColumns {
 
 	private static final TableColumnParameter<MediaFilePath> PATH = 
-			new TableColumnParameter<>("<html>Chemins des fichiers<br>media</html>", null, 700, null, null, String.class, m -> m.getPath().toString());
+			new TableColumnParameter<>("<html>Chemins des fichiers<br>media</html>", null, 600, null, null, String.class, m -> m.getPath().toString());
 	
 	public static final TableColumnParameter<MediaFilePath> ALBUMS = 
-			new TableColumnParameter<>("Albums", null, 680, new AlbumsRenderer(), new MediaFilePathAlbumComparator(), MediaFilePath.class, (m) -> m);
+			new TableColumnParameter<>("Albums", null, 580, new AlbumsRenderer(), new MediaFilePathAlbumComparator(), MediaFilePath.class, (m) -> m);
 	
 	private static final TableColumnParameter<MediaFilePath> FILE_NUMBER = 
-			new TableColumnParameter<>("<html>Nombre de<br>medias</html>", null, 100, null, new CollectionUtils.IntegerComparator(), Integer.class, MediaFilePath::getMediaFileNumber);
+			new TableColumnParameter<>("<html>Nombre de<br/>medias</html>", null, 80, null, new CollectionUtils.IntegerComparator(), Integer.class, MediaFilePath::getMediaFileNumber);
 	
 	private static final TableColumnParameter<MediaFilePath> PRESENCE_POCHETTE = 
-			new TableColumnParameter<>("<html>Image de la<br>pochette</html>", null, 100, new CollectionBooleanRenderer(), null, Boolean.class, MediaFilePath::hasCover);
+			new TableColumnParameter<>("<html>Image de la<br>pochette</html>", null, 90, new CollectionBooleanRenderer(), null, Boolean.class, MediaFilePath::hasCover);
 	
 	private static final TableColumnParameter<MediaFilePath> MEDIA_TYPE = 
-			new TableColumnParameter<>("Type de media", null, 100, null, null, String.class, MediaFilePath::getMediaFileExtension);
+			new TableColumnParameter<>("<html>Type de<br/>media</html>", null, 100, null, null, String.class, MediaFilePath::getStreamInfo);
+	
+	private static final TableColumnParameter<MediaFilePath> SOURCE = 
+			new TableColumnParameter<>("<html>Source</html>", null, 100, null, null, String.class,  MediaFilePath::getUniqueSouce);
 	
 	private static final TableColumnParameter<MediaFilePath> METADATA_CHECK = 
 			new TableColumnParameter<>("<html>Metadata<br>equivalentes</html>", 
@@ -61,13 +62,15 @@ public class MediaFilePathTableColumns {
 			<li>Nombre de canaux
 			<li>Débits (échantillons ou bit/secondes)
 			<li>Nombre de bits des échantillons
-			</ul></html>
+			</ul>
+			<p>Et elles correspondent aux metadata déclarées dabs les albums</p>
+			</html>
 			""", 
-					100, 
-					new CollectionOptionalBooleanRenderer(), null, Optional.class, MediaFilePath::hasEquivalentStreamMetadata);
+					90, 
+					new CollectionBooleanRenderer(), null, Boolean.class, m -> m.getAlbumSet().stream().allMatch(a -> a. matchesMediaFileMetadata()));
 	
 	private static final List<TableColumnParameter<MediaFilePath>> REGULAR_COLUMNS_LIST = List.of(
-			PATH, ALBUMS, FILE_NUMBER, PRESENCE_POCHETTE, MEDIA_TYPE, METADATA_CHECK
+			PATH, ALBUMS, FILE_NUMBER, PRESENCE_POCHETTE, MEDIA_TYPE, METADATA_CHECK, SOURCE
 			);
 	
 	public static final GenericTableColumns<MediaFilePath> REGULAR_COLUMNS = new GenericTableColumns<>(REGULAR_COLUMNS_LIST, 0);

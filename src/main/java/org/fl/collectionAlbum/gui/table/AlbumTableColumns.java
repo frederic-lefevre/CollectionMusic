@@ -93,12 +93,9 @@ public class AlbumTableColumns {
 					new AlbumAcquisitionDateComparator(), 
 					Album.class, 
 					(a) -> a);
-	private static final TableColumnParameter<Album> METADATA_MATCH = 
-			new TableColumnParameter<>("<html>Metadata<br/>exactes</html>", "Les metadata dans la déclaration de l'album correspondent aux metadata des fichiers audio", 80,
-					new CollectionBooleanRenderer(), null, Boolean.class, Album::matchesMediaFileMetadata);
 	
 	private static final TableColumnParameter<Album> MEDIA_FILES_TYPES = 
-			new TableColumnParameter<>("<html>Fichiers<br/>media</html>", null, 80, 
+			new TableColumnParameter<>("<html>Fichiers<br/>media</html>", null, 90, 
 					new StringToHtmlRenderer(), null, String.class, (a) -> a.getFormatAlbum().displayMediaFilesSummaryCompact());
 
 	private static final List<TableColumnParameter<Album>> REGULAR_COLUMN_LIST = List.of(
@@ -114,14 +111,14 @@ public class AlbumTableColumns {
 			AlbumTableColumns.TITRE, 
 			AlbumTableColumns.AUTEURS, 
 			AlbumTableColumns.FORMAT,
-			AlbumTableColumns.MEDIA_FILES, 
+			AlbumTableColumns.MEDIA_FILES,
+			AlbumTableColumns.MEDIA_FILES_TYPES,
 			AlbumTableColumns.PROBLEM,
 			AlbumTableColumns.DISCOGS,
 			AlbumTableColumns.POIDS,
 			AlbumTableColumns.ENREGISTREMENT,
 			AlbumTableColumns.COMPOSITION,
-			AlbumTableColumns.ACQUISITION,
-			AlbumTableColumns.METADATA_MATCH);
+			AlbumTableColumns.ACQUISITION);
 	
 	private static final List<TableColumnParameter<Album>> ACQUISITION_COLUMN_LIST = List.of(
 			AlbumTableColumns.TITRE, 

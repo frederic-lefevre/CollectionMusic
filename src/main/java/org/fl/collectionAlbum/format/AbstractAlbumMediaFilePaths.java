@@ -63,7 +63,7 @@ public abstract class AbstractAlbumMediaFilePaths {
 		this.source = source;
 		this.note = note;
 		this.mediaFilePaths = mediaFilePaths;
-		
+
 		checkMediaFilePaths();
 	}
 	
@@ -73,6 +73,7 @@ public abstract class AbstractAlbumMediaFilePaths {
 	public abstract boolean matchesMediaFilesMetadata();
 	
 	public abstract String displayMediaFileSummary();
+	public abstract String displayMediaFileSummaryWithExtension();
 	
 	public String getSource() {
 		return source;
@@ -143,6 +144,14 @@ public abstract class AbstractAlbumMediaFilePaths {
 			missingOrInvalidMediaFilePath = false;
 			
 			mediaFilePathNotFound = mediaFilePaths.stream().anyMatch(mediaFilePath -> !Files.exists(mediaFilePath.getPath()));
+			
+			mediaFilePaths.forEach(m -> {
+				m.addSource(source); 
+				
+				if (m.getSourceSet().size() != 1) {
+					logger.warning("Multiple source declaration for media file path" + m.getPath());
+				}
+			});
 		}
 	}
 	
@@ -184,5 +193,4 @@ public abstract class AbstractAlbumMediaFilePaths {
 		commonDetailBuilder.accept(audioFilesDetails, separator);
 		return audioFilesDetails.toString();
 	}
-
 }

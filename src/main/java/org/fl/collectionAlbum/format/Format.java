@@ -269,14 +269,14 @@ public class Format {
 	public boolean hasOnlyLossLessAudio() {
 		return 	hasMediaFilePaths(ContentNature.AUDIO) &&
 				getMediaFilePaths(ContentNature.AUDIO).stream()
-					.map(mediaFile -> (AbstractAlbumsAudioFiles)mediaFile)
+					.map(mediaFile -> (AbstractAlbumAudioFiles)mediaFile)
 					.allMatch(audioFile -> audioFile.isLossLess());
 	}
 	
 	public boolean hasHighResAudio() {
 		return hasMediaFilePaths(ContentNature.AUDIO) && 
 				getMediaFilePaths(ContentNature.AUDIO).stream()
-				.map(mediaFile -> (AbstractAlbumsAudioFiles)mediaFile)
+				.map(mediaFile -> (AbstractAlbumAudioFiles)mediaFile)
 			   	.anyMatch(audioFile -> audioFile.isHighRes());
 	}
 	
@@ -465,7 +465,7 @@ public class Format {
 	}
 	
 	public String displayMediaFilesSummaryCompact() {
-		return displayMediaFileInformation(getAllMediaFilePaths(), (af) -> af.displayMediaFileSummary(), "<br/>", true);
+		return displayMediaFileInformation(getAllMediaFilePaths(), (af) -> af.displayMediaFileSummaryWithExtension(), "<br/>", true);
 		
 	}
 	
@@ -479,10 +479,10 @@ public class Format {
 		return allMediaFilePaths;
 	}
 	
-	public List<String> printAudioFilesCsvParts(String csvSeparator, Predicate<AbstractAlbumsAudioFiles> audioFileFilter) {
+	public List<String> printAudioFilesCsvParts(String csvSeparator, Predicate<AbstractAlbumAudioFiles> audioFileFilter) {
 		if (hasMediaFilePaths(ContentNature.AUDIO)) {
 			return getMediaFilePaths(ContentNature.AUDIO).stream()
-					.map(mediaFile -> (AbstractAlbumsAudioFiles)mediaFile)
+					.map(mediaFile -> (AbstractAlbumAudioFiles)mediaFile)
 					.filter(audioFileFilter)
 					.map(af -> af.displayMediaFileDetail(csvSeparator, false))
 					.collect(Collectors.toList());
@@ -491,10 +491,10 @@ public class Format {
 		}
 	}
 	
-	public List<String> printAudioFilesCsvTitles(String csvSeparator, Predicate<AbstractAlbumsAudioFiles> audioFileFilter) {
+	public List<String> printAudioFilesCsvTitles(String csvSeparator, Predicate<AbstractAlbumAudioFiles> audioFileFilter) {
 		if (hasMediaFilePaths(ContentNature.AUDIO)) {
 			return getMediaFilePaths(ContentNature.AUDIO).stream()
-					.map(mediaFile -> (AbstractAlbumsAudioFiles)mediaFile)
+					.map(mediaFile -> (AbstractAlbumAudioFiles)mediaFile)
 					.filter(audioFileFilter)
 					.map(af -> af.displayMediaFileDetailTitles(csvSeparator))
 					.distinct()

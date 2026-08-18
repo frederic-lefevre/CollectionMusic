@@ -127,7 +127,7 @@ public class MediaFilePathMouseAdapter extends MouseAdapter {
 				} else {
 					
 					AlbumsScrollJTablePane albumsScrollJTablePane = 
-							new AlbumsScrollJTablePane(albums.stream().toList(), AlbumTableColumns.REGULAR_COLUMNS, generationPane);
+							new AlbumsScrollJTablePane(albums.stream().toList(), AlbumTableColumns.POCHETTE_COLUMNS, generationPane);
 					JOptionPane.showMessageDialog(null, albumsScrollJTablePane, "Albums correspondants", JOptionPane.PLAIN_MESSAGE);
 				}
 			} else {

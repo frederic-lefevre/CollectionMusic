@@ -34,9 +34,11 @@ import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
 import tools.jackson.databind.node.ObjectNode;
 
-public class LossyAlbumAudioFiles extends AbstractAlbumsAudioFiles {
+public class LossyAlbumAudioFiles extends AbstractAlbumAudioFiles {
 
 	private static final String BIT_RATE_TITLE = "Bit rate";
+	
+	private static final MetadataElement<Boolean> LOSSY = new MetadataElement<>(AudioStreamMetadata.IS_LOSSLESS, false);
 	
 	private final double bitRate;  // in kbits/s
 	private final boolean matchesMediaFilesMetadata;
@@ -49,15 +51,18 @@ public class LossyAlbumAudioFiles extends AbstractAlbumsAudioFiles {
 		if ((mediaFilePaths == null) || mediaFilePaths.isEmpty()) {
 			matchesMediaFilesMetadata = true;
 		} else {
-			matchesMediaFilesMetadata = mediaFilePaths.stream()
-					.map(m -> m.getMediaFiles())
-					.filter(Objects::nonNull)
-					.filter(m -> !m.isEmpty())
-					.map(m -> m.get(0))
-					.allMatch(mediaFile -> mediaFile.haveMetadata(
-							new MetadataElement<>(AudioStreamMetadata.IS_LOSSLESS, false),
-							new MetadataElement<>(AudioStreamMetadata.SAMPLING_RATE, (long)(samplingRate*1000)),
-							new MetadataElement<>(AudioStreamMetadata.BIT_RATE,  (long)(bitRate*1000))));
+			
+			MetadataElement<Long> samplingRateMetadata = new MetadataElement<>(AudioStreamMetadata.SAMPLING_RATE, (long)(samplingRate*1000));
+			MetadataElement<Long> bitDepthMetadata = new MetadataElement<>(AudioStreamMetadata.BIT_RATE,  (long)(bitRate*1000));
+			
+			matchesMediaFilesMetadata = 
+					mediaFilePaths.stream().allMatch(m -> m.hasEquivalentStreamMetadata().orElse(false)) &&
+					mediaFilePaths.stream()
+						.map(m -> m.getMediaFiles())
+						.filter(Objects::nonNull)
+						.filter(m -> !m.isEmpty())
+						.map(m -> m.get(0))
+						.allMatch(mediaFile -> mediaFile.haveMetadata(LOSSY, samplingRateMetadata, bitDepthMetadata));
 		}
 	}
 
@@ -81,6 +86,11 @@ public class LossyAlbumAudioFiles extends AbstractAlbumsAudioFiles {
 		audioFilesSummary.append(getType().name()).append(" ");
 		audioFilesSummary.append(Double.valueOf(getBitRate()).intValue());
 		return audioFilesSummary.toString();
+	}
+	
+	@Override
+	public String displayMediaFileSummaryWithExtension() {
+		return displayMediaFileSummary();
 	}
 	
 	@Override

@@ -34,12 +34,14 @@ import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 
 import tools.jackson.databind.node.ObjectNode;
 
-public class LosslessAlbumAudioFiles extends AbstractAlbumsAudioFiles {
+public class LosslessAlbumAudioFiles extends AbstractAlbumAudioFiles {
 
 	private static final String BIT_DEPTH_TITLE = "Bit depth";
 	
 	private static final int HIGH_RES_BIT_DEPTH_THRESHOLD = 16;
 	private static final long HIGH_RES_SAMPLING_RATE_THRESHOLD = 48;
+	
+	private static final MetadataElement<Boolean> LOSSLESS = new MetadataElement<>(AudioStreamMetadata.IS_LOSSLESS, true);
 	
 	private final int bitDepth;
 	private final boolean matchesMediaFilesMetadata;
@@ -53,15 +55,18 @@ public class LosslessAlbumAudioFiles extends AbstractAlbumsAudioFiles {
 		if ((mediaFilePaths == null) || mediaFilePaths.isEmpty()) {
 			matchesMediaFilesMetadata = true;
 		} else {
-			matchesMediaFilesMetadata = mediaFilePaths.stream()
-				.map(m -> m.getMediaFiles())
-				.filter(Objects::nonNull)
-				.filter(m -> !m.isEmpty())
-				.map(m -> m.get(0))
-				.allMatch(mediaFile -> mediaFile.haveMetadata(
-						new MetadataElement<>(AudioStreamMetadata.IS_LOSSLESS, true),
-						new MetadataElement<>(AudioStreamMetadata.SAMPLING_RATE, (long)(samplingRate*1000)),
-						new MetadataElement<>(AudioStreamMetadata.BIT_DEPTH, bitDepth)));
+			
+			MetadataElement<Long> samplingRateMetadata = new MetadataElement<>(AudioStreamMetadata.SAMPLING_RATE, (long)(samplingRate*1000));
+			MetadataElement<Integer> bitDepthMetadata = new MetadataElement<>(AudioStreamMetadata.BIT_DEPTH, bitDepth);
+
+			matchesMediaFilesMetadata = 
+					mediaFilePaths.stream().allMatch(m -> m.hasEquivalentStreamMetadata().orElse(false)) &&
+					mediaFilePaths.stream()
+						.map(m -> m.getMediaFiles())
+						.filter(Objects::nonNull)
+						.filter(m -> !m.isEmpty())
+						.map(m -> m.get(0))
+						.allMatch(mediaFile -> mediaFile.haveMetadata(LOSSLESS, samplingRateMetadata, bitDepthMetadata));
 		}
 	}
 
@@ -100,6 +105,15 @@ public class LosslessAlbumAudioFiles extends AbstractAlbumsAudioFiles {
 	}
 
 	@Override
+	public String displayMediaFileSummaryWithExtension() {
+		StringBuilder audioFilesSummary = new StringBuilder();
+		audioFilesSummary.append(getType().getExtension()).append(" ");
+		audioFilesSummary.append(getBitDepth()).append("-");
+		audioFilesSummary.append(Double.valueOf(getSamplingRate()).intValue());
+		return audioFilesSummary.toString();
+	}
+	
+	@Override
 	public String displayMediaFileDetailTitles(String separator) {
 		StringBuilder audioFilesDetailTitles = new StringBuilder();
 		audioFilesDetailTitles.append(BIT_DEPTH_TITLE).append(separator);
@@ -108,8 +122,6 @@ public class LosslessAlbumAudioFiles extends AbstractAlbumsAudioFiles {
 	}
 
 	// "Les metadata dans la déclaration de l'album correspondent aux metadata des fichiers audio"
-	// Seul le 1er fichier audio est vérifié, donc il faut croiser cette information avec la cohérence des
-	// metadata des fichiers audio du même répertoire
 	@Override
 	public boolean matchesMediaFilesMetadata() {
 		return matchesMediaFilesMetadata;

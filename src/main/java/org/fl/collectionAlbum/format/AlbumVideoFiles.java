@@ -83,6 +83,14 @@ public class AlbumVideoFiles extends AbstractAlbumMediaFilePaths {
 	}
 
 	@Override
+	public String displayMediaFileSummaryWithExtension() {
+		StringBuilder videoFilesSummary = new StringBuilder();
+		videoFilesSummary.append(getType().getExtension()).append(" ");
+		videoFilesSummary.append(getHeight()).append("p");
+		return videoFilesSummary.toString();
+	}
+	
+	@Override
 	public String displayMediaFileDetailTitles(String separator) {
 		StringBuilder videoFilesDetailTitles = new StringBuilder();
 		videoFilesDetailTitles.append(WIDTH_TITLE).append(separator);

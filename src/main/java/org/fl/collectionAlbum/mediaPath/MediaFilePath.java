@@ -40,6 +40,7 @@ public class MediaFilePath {
 	private final Path mediaFilesPath;
 	private final ContentNature contentNature;
 	private final Set<Album> albumsSet;
+	private final Set<String> sourceSet;  // where does the files comes from. There should be one and only one element
 	private final Path coverPath;
 	private final List<MediaFile> mediaFiles;
 	private final Optional<Boolean> hasEquivalentMetadata;
@@ -51,6 +52,7 @@ public class MediaFilePath {
 		this.contentNature = contentNature;
 		this.mediaFiles = mediaFiles;
 		albumsSet = new HashSet<>();
+		sourceSet = new HashSet<String>();
 		this.mediaFileExtension = mediaFileExtension;
 		this.coverPath = coverPath;
 			
@@ -58,7 +60,7 @@ public class MediaFilePath {
 			hasEquivalentMetadata = Optional.of(
 					(mediaFiles == null) ||
 					mediaFiles.isEmpty() ||
-					mediaFiles.stream().allMatch(m -> mediaFiles.get(0).hasEquivalentStreamMetadata(m)));
+					mediaFiles.stream().allMatch(m -> mediaFiles.getFirst().hasEquivalentStreamMetadata(m)));
 		} else {
 			hasEquivalentMetadata = Optional.empty();
 		}
@@ -84,8 +86,37 @@ public class MediaFilePath {
 		albumsSet.add(album);
 	}
 	
+	public void addSource(String source) {
+		sourceSet.add(source);
+	}
+	
 	public Set<Album> getAlbumSet() {
 		return albumsSet;
+	}
+	
+	public Set<String> getSourceSet() {
+		return sourceSet;
+	}
+	
+	public String getUniqueSouce() {
+		
+		if (sourceSet.size() == 1) {
+			// normal case, only one source
+			// Other cases are errors in albums json
+			return sourceSet.iterator().next();
+		} else if (sourceSet.isEmpty()) {
+			return "Pas de source";
+		} else {
+			return "Source multiple";
+		}
+	}
+	
+	public String getStreamInfo() {
+		if (hasEquivalentMetadata.orElse(false)) {
+			return mediaFiles.getFirst().getMediaStreamShortPattern();
+		} else {
+			return "";
+		}
 	}
 	
 	public int getMediaFileNumber() {
