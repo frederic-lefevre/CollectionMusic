@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.fl</groupId>
 	<artifactId>collection-music</artifactId>
-	<version>10.20.1</version>
+	<version>10.21.0</version>
 
 	<dependencyManagement>
 		<dependencies>
@@ -22,12 +22,12 @@
 		<dependency>
 			<groupId>org.fl</groupId>
 			<artifactId>FlUtils</artifactId>
-			<version>12.1.0</version>
+			<version>12.1.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.fl</groupId>
   			<artifactId>discogsInterface</artifactId>
-  			<version>0.4.0</version>
+  			<version>0.5.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
