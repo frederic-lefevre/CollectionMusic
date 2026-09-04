@@ -22,26 +22,37 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.discogs;
+package org.fl.collectionAlbum.metrics;
 
-import static org.assertj.core.api.Assertions.*;
+import java.io.IOException;
+import java.nio.file.Path;
 
-import org.fl.collectionAlbum.disocgs.DiscogsCollectionValue;
-import org.fl.collectionAlbum.disocgs.DiscogsInterface;
-import org.junit.jupiter.api.Test;
+public class DiscogsMetricsHistory extends MetricsHistory {
 
-class DiscogsInterfaceTest {
-
-	@Test
-	void shouldReturnCollectionValue() {
-		
-		DiscogsCollectionValue collectionValue =  DiscogsInterface.collectionValue();
-		
-		assertThat(collectionValue).isNotNull();
-		assertThat(collectionValue.maxValue()).isPositive();
-
-		System.out.println(collectionValue.maxValue());
-		System.out.println(collectionValue.medianValue());
-		System.out.println(collectionValue.minValue());
+	private static final String METRIC_NAME = "Evolution de la collection Discogs";
+	
+	private static final String MAX_VALUE = "Valeur élevée";
+	private static final String MEDIAN_VALUE = "Valeur médiane";
+	private static final String MIN_VALUE = "Valeur faible";
+	
+	// Singleton
+	private static DiscogsMetricsHistory discogsMetricsHistory;
+	
+	public static DiscogsMetricsHistory buildDiscogsMetricsHistory(Path storagePath) throws IOException {
+		if (discogsMetricsHistory == null) {
+			discogsMetricsHistory = new DiscogsMetricsHistory(storagePath);
+		}
+		return discogsMetricsHistory;
 	}
+	
+	private DiscogsMetricsHistory(Path storagePath) throws IOException {
+		super(storagePath, METRIC_NAME);
+	}
+
+	@Override
+	public MetricAttributesList getMetricsAttributes() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

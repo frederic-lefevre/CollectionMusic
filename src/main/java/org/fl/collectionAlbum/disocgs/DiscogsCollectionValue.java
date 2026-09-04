@@ -22,26 +22,33 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-package org.fl.collectionAlbum.discogs;
+package org.fl.collectionAlbum.disocgs;
 
-import static org.assertj.core.api.Assertions.*;
+import java.text.NumberFormat;
+import java.text.ParseException;
+import java.util.Locale;
 
-import org.fl.collectionAlbum.disocgs.DiscogsCollectionValue;
-import org.fl.collectionAlbum.disocgs.DiscogsInterface;
-import org.junit.jupiter.api.Test;
+import org.fl.discogsInterface.CollectionValue;
 
-class DiscogsInterfaceTest {
+public record DiscogsCollectionValue(double maxValue, double medianValue, double minValue) {
 
-	@Test
-	void shouldReturnCollectionValue() {
+	public static DiscogsCollectionValue convertDiscogsValue(CollectionValue collectionValue) throws ParseException {
+		return new DiscogsCollectionValue(
+				parseDiscogsValue(collectionValue.maximum()),
+				parseDiscogsValue(collectionValue.median()),
+				parseDiscogsValue(collectionValue.minimum())
+				);
+	}
+	
+	private static final String EURO = "€";	
+	private static final NumberFormat valueFormat = NumberFormat.getInstance(Locale.US);
+	
+	private static double parseDiscogsValue(String value) throws ParseException {
 		
-		DiscogsCollectionValue collectionValue =  DiscogsInterface.collectionValue();
-		
-		assertThat(collectionValue).isNotNull();
-		assertThat(collectionValue.maxValue()).isPositive();
-
-		System.out.println(collectionValue.maxValue());
-		System.out.println(collectionValue.medianValue());
-		System.out.println(collectionValue.minValue());
+		if (value.startsWith(EURO)) {
+			return valueFormat.parse(value.substring(1)).doubleValue();
+		} else {
+			throw new IllegalArgumentException("Unsupported Discogs collection value: " + value);
+		}
 	}
 }

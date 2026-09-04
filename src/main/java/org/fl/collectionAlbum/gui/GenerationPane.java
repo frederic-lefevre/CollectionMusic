@@ -177,7 +177,11 @@ public class GenerationPane extends JPanel {
 		// Collection metrics history
 		CollectionMetricsTabbedPane collectionMetricsTabPanes = 
 				new CollectionMetricsTabbedPane(
-						List.of(Control.getCollectionMetricsHsitory(), Control.getConcertMetricsHsitory(), Control.getMediaFileMetricsHsitory()), 
+						List.of(
+							Control.getCollectionMetricsHsitory(), 
+							Control.getConcertMetricsHsitory(), 
+							Control.getMediaFileMetricsHsitory(),
+							Control.getDiscogsMetricsHsitory()), 
 						collectionAlbumContainer, 
 						this);
 

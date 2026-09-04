@@ -49,6 +49,7 @@ import org.fl.collectionAlbum.mediaFile.MediaFileGenres.GenreParameters;
 import org.fl.collectionAlbum.mediaPath.MediaFilePath;
 import org.fl.collectionAlbum.metrics.CollectionMetricsHistory;
 import org.fl.collectionAlbum.metrics.ConcertMetricsHistory;
+import org.fl.collectionAlbum.metrics.DiscogsMetricsHistory;
 import org.fl.collectionAlbum.metrics.MediaFileMetricsHistory;
 import org.fl.collectionAlbum.osAction.MusicArtefactCommandParameter;
 import org.fl.collectionAlbum.osAction.DiscogsReleaseCommandParameter;
@@ -78,6 +79,7 @@ public class Control {
 	private CollectionMetricsHistory collectionMetricsHsitory;
 	private ConcertMetricsHistory concertMetricsHsitory;
 	private MediaFileMetricsHistory mediaFileMetricsHistory;
+	private DiscogsMetricsHistory discogsMetricsHistory;
 	private Path rapportPath;
 	private Path oldRapportPath;
 	private String albumSleevesImgUri;
@@ -153,6 +155,12 @@ public class Control {
 						FilesUtils.uriStringToAbsolutePath(collectionProperties.getProperty("mediaFile.historyFolder.name")));
 			} catch (IOException e) {
 				albumLog.log(Level.SEVERE, "IOException accessinng media file metrics history folder", e);
+			}
+			try {
+			discogsMetricsHistory = DiscogsMetricsHistory.buildDiscogsMetricsHistory(
+					FilesUtils.uriStringToAbsolutePath(collectionProperties.getProperty("discogs.historyFolder.name")));
+			} catch (IOException e) {
+				albumLog.log(Level.SEVERE, "IOException accessinng discogs file metrics history folder", e);
 			}
 			
 			// get the album sleeves images path (this is storing the sleeves images when the sleeve image of the media files is
@@ -300,6 +308,10 @@ public class Control {
 	
 	public static MediaFileMetricsHistory getMediaFileMetricsHsitory() {
 		return getInstance().mediaFileMetricsHistory;
+	}
+	
+	public static DiscogsMetricsHistory getDiscogsMetricsHsitory() {
+		return getInstance().discogsMetricsHistory;
 	}
 	
 	public static String getAlbumSleevesImgUri() {

@@ -24,6 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.disocgs;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.Control;
@@ -45,7 +46,7 @@ public class DiscogsInterface {
 	}
 	
 	private final DiscogsApi discogsApi;
-	private CollectionValue collectionValue;
+	private DiscogsCollectionValue collectionValue;
 	
 	private DiscogsInterface() {
 		
@@ -69,7 +70,11 @@ public class DiscogsInterface {
 		if (collectionValueResponse == null) {
 			logger.severe("Null response returned by discogsApi.collectionValue()");
 		} else {
-			collectionValue = collectionValueResponse.value();
+			try {
+				collectionValue = DiscogsCollectionValue.convertDiscogsValue(collectionValueResponse.value());
+			} catch (Exception e) {
+				logger.log(Level.SEVERE, "Exception parsing discogs collection value:\n" + collectionValueResponse.rawResponse());
+			}
 		}
 	}
 	
@@ -77,7 +82,7 @@ public class DiscogsInterface {
 		discogsInterfaceInstance = null;
 	}
 	
-	public static CollectionValue collectionValue() {
+	public static DiscogsCollectionValue collectionValue() {
 		return getInstance().collectionValue;
 	}
 }
