@@ -95,6 +95,8 @@ public class Control {
 	private OsAction<String> displayFolderAction;
 	private Path discogsCollectionCsvExportPath;
 	private String discogsBaseUrlForRelease;
+	private String discogsUserName;
+	private String discogsUserToken;
 	private String cssForGui;
 	private Path errorImagePath;
 	private Path imageNotFoundImagePath;
@@ -165,6 +167,8 @@ public class Control {
 						
 			discogsCollectionCsvExportPath = FilesUtils.uriStringToAbsolutePath(collectionProperties.getProperty("album.discogs.collection.csvExport"));
 			discogsBaseUrlForRelease = collectionProperties.getProperty("album.discogs.baseUrl.release");
+			discogsUserName = collectionProperties.getFileContentFromURI("album.discogs.userName.file", Charset.defaultCharset());
+			discogsUserToken = collectionProperties.getFileContentFromURI("album.discogs.userToken.file", Charset.defaultCharset());
 			
 			mediaFileRootPaths = new HashMap<>();
 			mediaFileRootUris = new HashMap<>();
@@ -356,6 +360,14 @@ public class Control {
 
 	public static String getDiscogsBaseUrlForRelease() {
 		return getInstance().discogsBaseUrlForRelease;
+	}
+	
+	public static String getDiscogsUserName() {
+		return getInstance().discogsUserName;
+	}
+	
+	public static String getDiscogsUserToken() {
+		return getInstance().discogsUserToken;
 	}
 	
 	public static String getCssForGui() {
