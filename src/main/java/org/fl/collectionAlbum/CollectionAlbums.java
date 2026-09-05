@@ -37,6 +37,7 @@ import java.util.logging.Logger;
 
 import javax.swing.SwingWorker;
 
+import org.fl.collectionAlbum.disocgs.DiscogsInterface;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory;
 import org.fl.collectionAlbum.gui.AbstractColorableTabbedPane;
 import org.fl.collectionAlbum.gui.ProgressInformation;
@@ -92,7 +93,8 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 		MediaFilesInventories.clearInventories();
 		
 		publish(new ProgressInformation(DISCOGS_INVENTORY, DISCOGS_INVENTORY_PROGRESS, ""));
-		DiscogsInventory.buildDiscogsInventory();
+		DiscogsInterface.clear();
+		DiscogsInventory.buildDiscogsInventory();		
 		
 		publish(new ProgressInformation(LECTURE_ALBUM, EN_EXAMEN, ""));
 		albumsContainer.reset();
