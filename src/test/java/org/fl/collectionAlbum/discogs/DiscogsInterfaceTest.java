@@ -28,6 +28,7 @@ import static org.assertj.core.api.Assertions.*;
 
 import org.fl.collectionAlbum.disocgs.DiscogsCollectionValue;
 import org.fl.collectionAlbum.disocgs.DiscogsInterface;
+import org.fl.discogsInterface.Currency;
 import org.fl.discogsInterface.UserProfile;
 import org.junit.jupiter.api.Test;
 
@@ -52,7 +53,7 @@ class DiscogsInterfaceTest {
 		UserProfile userProfile = DiscogsInterface.userProfile();
 		
 		assertThat(userProfile).isNotNull();
-		assertThat(userProfile.currency()).isEqualTo("EUR");
+		assertThat(userProfile.currency()).isEqualTo(Currency.EUR);
 		assertThat(userProfile.numCollection()).isGreaterThan(1500);
 	}
 }
