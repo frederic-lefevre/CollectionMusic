@@ -157,7 +157,7 @@ public class Control {
 				albumLog.log(Level.SEVERE, "IOException accessinng media file metrics history folder", e);
 			}
 			try {
-			discogsMetricsHistory = DiscogsMetricsHistory.buildDiscogsMetricsHistory(
+				discogsMetricsHistory = DiscogsMetricsHistory.buildDiscogsMetricsHistory(
 					FilesUtils.uriStringToAbsolutePath(collectionProperties.getProperty("discogs.historyFolder.name")));
 			} catch (IOException e) {
 				albumLog.log(Level.SEVERE, "IOException accessinng discogs file metrics history folder", e);

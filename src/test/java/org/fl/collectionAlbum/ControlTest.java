@@ -68,6 +68,10 @@ class ControlTest {
 			.satisfies(metricsHistory -> assertThat(metricsHistory.getMetricsHistory()).isNotNull());
 		assertThat(Control.getConcertMetricsHsitory()).isNotNull()
 			.satisfies(metricsHistory -> assertThat(metricsHistory.getMetricsHistory()).isNotNull());
+		assertThat(Control.getMediaFileMetricsHsitory()).isNotNull()
+			.satisfies(metricsHistory -> assertThat(metricsHistory.getMetricsHistory()).isNotNull());
+		assertThat(Control.getDiscogsMetricsHsitory()).isNotNull()
+			.satisfies(metricsHistory -> assertThat(metricsHistory.getMetricsHistory()).isNotNull());
 	}
 	
 	@Test
