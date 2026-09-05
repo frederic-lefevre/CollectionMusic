@@ -52,8 +52,11 @@ public class DiscogsMetricsHistory extends MetricsHistory<DiscogsInterface> {
 	
 	@Override
 	protected Metrics getMetricsFromSource(long ts, DiscogsInterface metricsSource) {
-		// TODO Auto-generated method stub
 		return new Metrics(ts, 		Map.of(
+				NB_RELEASE, (double)DiscogsInterface.userProfile().numCollection(),
+				MAX_VALUE, DiscogsInterface.collectionValue().maxValue(),
+				MEDIAN_VALUE, DiscogsInterface.collectionValue().medianValue(),
+				MIN_VALUE, DiscogsInterface.collectionValue().minValue()
 				));
 	}
 	
