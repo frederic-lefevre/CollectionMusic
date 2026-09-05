@@ -49,10 +49,10 @@ public class MetricsHistoryTableModel extends AbstractTableModel implements Upda
 	
 	private static final String DATE_COLUMN_HEADER = "Date";
 	
-	private final MetricsHistory metricsHistory;
+	private final MetricsHistory<?> metricsHistory;
 	private final MetricAttributesList metricsKeysAttributes;
 	
-	public MetricsHistoryTableModel(MetricsHistory metricsHistory) {
+	public MetricsHistoryTableModel(MetricsHistory<?> metricsHistory) {
 		super();
 		this.metricsHistory = metricsHistory;
 		metricsKeysAttributes = metricsHistory.getMetricsAttributes();

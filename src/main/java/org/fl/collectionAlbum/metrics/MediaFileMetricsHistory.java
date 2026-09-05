@@ -32,7 +32,7 @@ import java.util.Map;
 import org.fl.collectionAlbum.format.ContentNature;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
 
-public class MediaFileMetricsHistory extends MetricsHistory {
+public class MediaFileMetricsHistory extends MetricsHistory<MediaFilesInventories> {
 
 	private static final String METRIC_NAME = "Evolution des fichiers media";
 	
@@ -52,15 +52,8 @@ public class MediaFileMetricsHistory extends MetricsHistory {
 		return mediaFileMetricsHistory;
 	}
 	
-	public Metrics addPresentMediaFileMetricsToHistory(long ts) {
-		return addPresentMetricsToHistory(getMediaFileMetrics(ts));
-	}
-	
-	public void setPresentMetricsIfNew(long ts) {
-		setPresentMetricsIfNew(getMediaFileMetrics(ts));
-	}
-	
-	private Metrics getMediaFileMetrics(long ts) {	
+	@Override
+	protected Metrics getMetricsFromSource(long ts, MediaFilesInventories metricsSource) {
 
 		return new Metrics(ts, 		Map.of(
 				NB_AUDIO_PATH, (double)MediaFilesInventories.getMediaFileInventory(ContentNature.AUDIO).getNbMediaPath(),

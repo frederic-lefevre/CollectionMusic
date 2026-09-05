@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -53,19 +54,19 @@ public class CollectionMetricsTabbedPane extends AbstractColorableTabbedPane {
 	
 	private static final Dimension SCROLL_TABLE_DIMENSION = new Dimension(1820, 650);
 	
-	private final List<MetricsHistory> metricsHistoryList;
+	private final MetricsHistory<?>[] metricsHistories;
 	private final List<UpdatableElement> tableModelList;
 	
-	private final Map<Component, MetricsHistory> componentMap;
+	private final Map<Component, MetricsHistory<?>> componentMap;
 	
-	public CollectionMetricsTabbedPane(List<MetricsHistory> metricsHistoryList, CollectionAlbumContainer collectionAlbumContainer, GenerationPane generationPane) {
+	public CollectionMetricsTabbedPane(CollectionAlbumContainer collectionAlbumContainer, GenerationPane generationPane, MetricsHistory<?>... metricsHistories) {
 		super();
 
-		this.metricsHistoryList = metricsHistoryList;
+		this.metricsHistories = metricsHistories;
 		this.tableModelList = new ArrayList<>();
 		this.componentMap = new HashMap<>();
 		
-		for (MetricsHistory metricHistory : metricsHistoryList) {
+		for (MetricsHistory<?> metricHistory : metricsHistories) {
 			MetricsHistoryTableModel metricHistoryTableModel = new MetricsHistoryTableModel(metricHistory);
 			tableModelList.add(metricHistoryTableModel);
 			JTable metricsHistoryTable = new JTable(metricHistoryTableModel);
@@ -96,7 +97,7 @@ public class CollectionMetricsTabbedPane extends AbstractColorableTabbedPane {
 		return tableModelList;
 	}
 	
-	private MetricsHistory getMetricHistoryAt(int idx) {
+	private MetricsHistory<?> getMetricHistoryAt(int idx) {
 		if ((idx < 0) || (idx > getTabCount() -1)) {
 			throw new IllegalArgumentException("Invalid tab number for MetricsHistory tabs");
 		} else {
@@ -105,12 +106,12 @@ public class CollectionMetricsTabbedPane extends AbstractColorableTabbedPane {
 	}
 	
 	public boolean metricsHasEvolved() {
-		return metricsHistoryList.stream().anyMatch(MetricsHistory::hasEvolved);
+		return Stream.of(metricsHistories).anyMatch(MetricsHistory::hasEvolved);
 	}
 	
 	@Override
 	protected Color getBackgroundColorFor(int idx) {
-		MetricsHistory metricsHistory = getMetricHistoryAt(idx);
+		MetricsHistory<?> metricsHistory = getMetricHistoryAt(idx);
 		if ((metricsHistory != null) &&  getMetricHistoryAt(idx).hasEvolved()) {
 			return METRICS_TAB_BACKGROUND_COLOR_HIGHLIGHT;
 		} else {
@@ -120,7 +121,7 @@ public class CollectionMetricsTabbedPane extends AbstractColorableTabbedPane {
 	}
 	@Override
 	protected Color getForegroundColorFor(int idx) {
-		MetricsHistory metricsHistory = getMetricHistoryAt(idx);
+		MetricsHistory<?> metricsHistory = getMetricHistoryAt(idx);
 		if ((metricsHistory != null) &&  metricsHistory.hasEvolved()) {
 			return METRICS_TAB_FOREGROUND_COLOR_HIGHLIGHT;
 		} else {

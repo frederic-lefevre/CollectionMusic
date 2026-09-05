@@ -95,7 +95,7 @@ class CollectionAlbumsTest {
 		pickRandomAlbumsAssert(() -> albumsContainer.pickRandomAlbumsViaArtiste(nbAlbumsJustBelowTotal), nbAlbumsJustBelowTotal);
 		
 		// Test album metrics
-		Metrics collectionMetrics = Control.getCollectionMetricsHsitory().getCollectionMetrics(0, albumsContainer);
+		Metrics collectionMetrics = Control.getCollectionMetricsHsitory().getMetricsFromSource(0, albumsContainer);
 		
 		assertThat(collectionMetrics.getMetricTimeStamp()).isZero();
 		assertThat(collectionMetrics.getMetrics()).hasSize(12);
@@ -114,7 +114,7 @@ class CollectionAlbumsTest {
 		assertThat(collectionMetrics.getMetrics().get("nombreArtiste")).isNotNull().isGreaterThan(738);
 		
 		// Test concert metrics
-		Metrics concertMetrics = Control.getConcertMetricsHsitory().getConcertMetrics(0, albumsContainer);
+		Metrics concertMetrics = Control.getConcertMetricsHsitory().getMetricsFromSource(0, albumsContainer);
 		assertThat(concertMetrics.getMetricTimeStamp()).isZero();
 		assertThat(concertMetrics.getMetrics()).hasSize(2);
 		

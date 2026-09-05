@@ -44,7 +44,7 @@ import org.fl.util.json.JsonUtils;
 
 import tools.jackson.databind.ObjectMapper;
 
-public abstract class MetricsHistory {
+public abstract class MetricsHistory<T> {
 
 	private static final MetricsDateComparator metricsDateComparator = new MetricsDateComparator();
 	private static final ObjectMapper mapper = new ObjectMapper();
@@ -104,12 +104,6 @@ public abstract class MetricsHistory {
 	public boolean hasEvolved() {
 		return presentMetrics != null;
 	}
-	
-	public void setPresentMetricsIfNew(Metrics presentMetrics) {
-		if (metricsHistory.stream().allMatch(m -> !m.hasSameMetricsAs(presentMetrics))) {
-			this.presentMetrics = presentMetrics;
-		}
-	}
 
 	protected boolean addAndWriteNewMetricsToHistory(Metrics metrics) {
 	
@@ -129,17 +123,7 @@ public abstract class MetricsHistory {
 			return false;
 		}
 	}
-	
-	protected Metrics addPresentMetricsToHistory(Metrics metrics) {
-		if (addAndWriteNewMetricsToHistory(metrics)) {
-			this.presentMetrics = null;
-			return metrics;
-		} else {
-			return null;
-		}
-		
-	}
-	
+
 	private boolean hasMetricsCompatibleWithMetricNames(Metrics metrics) {
 		return ((metrics.getMetrics().size() == getMetricsAttributes().size()) &&
 				metrics.getMetrics().keySet().stream().allMatch(key -> getMetricsAttributes().containsKey(key)));
@@ -150,7 +134,25 @@ public abstract class MetricsHistory {
 		return metricsHistory;
 	}
 	
+	protected abstract Metrics getMetricsFromSource(long ts, T metricsSource);
 	public abstract MetricAttributesList getMetricsAttributes();
+	
+	public Metrics addPresentMetricsToHistory(long ts, T metricsSource) {	
+		Metrics metrics = getMetricsFromSource(ts, metricsSource);
+		if (addAndWriteNewMetricsToHistory(metrics)) {
+			this.presentMetrics = null;
+			return metrics;
+		} else {
+			return null;
+		}
+	}
+	
+	public void setPresentMetricsIfNew(long ts, T metricsSource) {
+		Metrics metrics = getMetricsFromSource(ts, metricsSource);
+		if (metricsHistory.stream().allMatch(m -> !m.hasSameMetricsAs(metrics))) {
+			this.presentMetrics = metrics;
+		}
+	}
 	
 	public static class MetricAttributesList extends ArrayList<MetricAttributes> {
 

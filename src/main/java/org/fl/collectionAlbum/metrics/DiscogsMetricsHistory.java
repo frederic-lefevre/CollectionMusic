@@ -26,14 +26,19 @@ package org.fl.collectionAlbum.metrics;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.List;
+import java.util.Map;
 
-public class DiscogsMetricsHistory extends MetricsHistory {
+import org.fl.collectionAlbum.disocgs.DiscogsInterface;
+
+public class DiscogsMetricsHistory extends MetricsHistory<DiscogsInterface> {
 
 	private static final String METRIC_NAME = "Evolution de la collection Discogs";
 	
-	private static final String MAX_VALUE = "Valeur élevée";
-	private static final String MEDIAN_VALUE = "Valeur médiane";
-	private static final String MIN_VALUE = "Valeur faible";
+	private static final String NB_RELEASE = "nbRelease";
+	private static final String MAX_VALUE = "maxValue";
+	private static final String MEDIAN_VALUE = "medianValue";
+	private static final String MIN_VALUE = "minValue";
 	
 	// Singleton
 	private static DiscogsMetricsHistory discogsMetricsHistory;
@@ -45,14 +50,23 @@ public class DiscogsMetricsHistory extends MetricsHistory {
 		return discogsMetricsHistory;
 	}
 	
+	@Override
+	protected Metrics getMetricsFromSource(long ts, DiscogsInterface metricsSource) {
+		// TODO Auto-generated method stub
+		return new Metrics(ts, 		Map.of(
+				));
+	}
+	
 	private DiscogsMetricsHistory(Path storagePath) throws IOException {
 		super(storagePath, METRIC_NAME);
 	}
 
 	@Override
 	public MetricAttributesList getMetricsAttributes() {
-		// TODO Auto-generated method stub
-		return null;
+		return new MetricAttributesList(List.of(
+				new MetricAttributes(NB_RELEASE, "Nombre de releases", 300),
+				new MetricAttributes(MAX_VALUE, "Valeur élevée (€)", 300),
+				new MetricAttributes(MEDIAN_VALUE, "Valeur médiane (€)", 300),
+				new MetricAttributes(MIN_VALUE, "Valeur faible (€)", 300)));
 	}
-
 }

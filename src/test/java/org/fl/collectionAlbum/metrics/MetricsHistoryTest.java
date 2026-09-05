@@ -66,7 +66,11 @@ class MetricsHistoryTest {
 		}
 	}
 	
-	private static class TestMetricsHistory extends MetricsHistory {
+	private static final String ALBUMS = "albums";
+	private static final String ARTISTES = "Artistes";
+	
+	private record TestMetricsSource(double nbAlbums, double nbArtistes) {};
+	private static class TestMetricsHistory extends MetricsHistory<TestMetricsSource> {
 
 		protected static final String METRIC_NAME = "Metric name for test";
 		
@@ -77,8 +81,13 @@ class MetricsHistoryTest {
 		@Override
 		public MetricAttributesList getMetricsAttributes() {			
 			return new MetricAttributesList(List.of(
-					new MetricAttributes("albums", "Nombre album", 300), 
-					new MetricAttributes("Artiste", "Nombre artiste", 300)));
+					new MetricAttributes(ALBUMS, "Nombre album", 300), 
+					new MetricAttributes(ARTISTES, "Nombre artiste", 300)));
+		}
+
+		@Override
+		public Metrics getMetricsFromSource(long ts, TestMetricsSource metricsSource) {
+			return new Metrics(ts, 		Map.of(ALBUMS, metricsSource.nbAlbums, ARTISTES, metricsSource.nbArtistes));
 		}		
 	}
 	
@@ -149,13 +158,13 @@ class MetricsHistoryTest {
 				
 		assertThat(historyPath1).isEmptyDirectory();
 		
-		MetricsHistory metricsHistory = new TestMetricsHistory(historyPath1);
+		TestMetricsHistory metricsHistory = new TestMetricsHistory(historyPath1);
 		
 		assertThat(metricsHistory).isNotNull();	
 		assertThat(metricsHistory.getMetricsHistory()).isEmpty();
 		assertThat(historyPath1).isEmptyDirectory();
 		
-		assertThat(metricsHistory.addAndWriteNewMetricsToHistory(new Metrics(now, Map.of("albums", 10.0, "Artiste", 5.0))))
+		assertThat(metricsHistory.addAndWriteNewMetricsToHistory(new Metrics(now, Map.of(ALBUMS, 10.0, ARTISTES, 5.0))))
 			.isTrue();
 		
 		assertThat(historyPath1).isNotEmptyDirectory();
@@ -163,7 +172,7 @@ class MetricsHistoryTest {
 			.satisfies(metrics -> {
 					assertThat(metrics.getMetricTimeStamp()).isEqualTo(now);
 					assertThat(metrics.getMetrics()).containsExactlyInAnyOrderEntriesOf(
-							Map.of("albums", 10.0, "Artiste", 5.0)
+							Map.of(ALBUMS, 10.0, ARTISTES, 5.0)
 							);
 				});
 	}
@@ -171,10 +180,10 @@ class MetricsHistoryTest {
 	@Test
 	void testMetricsHistoryOrder() throws IOException {
 		
-		Metrics todayMetrics = new Metrics(now, Map.of("albums", 10.0, "Artiste", 5.0));
-		Metrics yesterdayMetrics = new Metrics(yesterday, Map.of("albums", 8.0, "Artiste", 5.0));
+		Metrics todayMetrics = new Metrics(now, Map.of(ALBUMS, 10.0, ARTISTES, 5.0));
+		Metrics yesterdayMetrics = new Metrics(yesterday, Map.of(ALBUMS, 8.0, ARTISTES, 5.0));
 		
-		MetricsHistory metricsHistory = new TestMetricsHistory(historyPath2);
+		TestMetricsHistory metricsHistory = new TestMetricsHistory(historyPath2);
 		assertThat(metricsHistory.getName()).isEqualTo(TestMetricsHistory.METRIC_NAME);
 		
 		assertThat(metricsHistory.addAndWriteNewMetricsToHistory(todayMetrics)).isTrue();
@@ -184,23 +193,27 @@ class MetricsHistoryTest {
 			.satisfiesExactly(
 					metricNow -> { 
 						assertThat(metricNow.getMetricTimeStamp()).isEqualTo(now);
-						assertThat(metricNow.hasSameMetricsAs(new Metrics(0, Map.of("albums", 10.0, "Artiste", 5.0))));
+						assertThat(metricNow.hasSameMetricsAs(new Metrics(0, Map.of(ALBUMS, 10.0, ARTISTES, 5.0))));
 					},
 					metricYesterday -> { 
 						assertThat(metricYesterday.getMetricTimeStamp()).isEqualTo(yesterday);
-						assertThat(metricYesterday.hasSameMetricsAs(new Metrics(0, Map.of("albums", 8.0, "Artiste", 5.0))));
+						assertThat(metricYesterday.hasSameMetricsAs(new Metrics(0, Map.of(ALBUMS, 8.0, ARTISTES, 5.0))));
 					});
 	}
 	
 	@Test
 	void testAddingSameMetricsTwice() throws IOException {
 		
-		Metrics todayMetrics = new Metrics(now, Map.of("albums", 10.0, "Artiste", 5.0));
-		Metrics todayMetrics2 = new Metrics(now, Map.of("albums", 10.0, "Artiste", 5.0));
-		Metrics yesterdayMetrics = new Metrics(yesterday, Map.of("albums", 8.0, "Artiste", 5.0));
-		Metrics twoDaysAgoMetrics = new Metrics(twoDaysAgo, Map.of("albums", 8.0, "Artiste", 5.0));
+		final TestMetricsSource todayMetricsSource = new TestMetricsSource(10.0, 5.0);
 		
-		MetricsHistory metricsHistory = new TestMetricsHistory(historyPath3);
+		Metrics todayMetrics = new Metrics(now, Map.of(ALBUMS, todayMetricsSource.nbAlbums, ARTISTES, todayMetricsSource.nbArtistes));
+		Metrics todayMetrics2 = new Metrics(now, Map.of(ALBUMS, todayMetricsSource.nbAlbums, ARTISTES, todayMetricsSource.nbArtistes));
+		Metrics yesterdayMetrics = new Metrics(yesterday, Map.of(ALBUMS, 8.0, ARTISTES, 5.0));
+		Metrics twoDaysAgoMetrics = new Metrics(twoDaysAgo, Map.of(ALBUMS, 8.0, ARTISTES, 5.0));
+		
+		
+		
+		TestMetricsHistory metricsHistory = new TestMetricsHistory(historyPath3);
 		
 		assertThat(metricsHistory.addAndWriteNewMetricsToHistory(twoDaysAgoMetrics)).isTrue();
 		assertThat(metricsHistory.addAndWriteNewMetricsToHistory(yesterdayMetrics)).isFalse();
@@ -211,54 +224,55 @@ class MetricsHistoryTest {
 			.satisfiesExactly(
 					metricNow -> { 
 						assertThat(metricNow.getMetricTimeStamp()).isEqualTo(now);
-						assertThat(metricNow.hasSameMetricsAs(new Metrics(0, Map.of("albums", 10.0, "Artiste", 5.0))));
+						assertThat(metricNow.hasSameMetricsAs(new Metrics(0, Map.of(ALBUMS, 10.0, ARTISTES, 5.0))));
 					},
 					metricTwoDaysAgo -> { 
 						assertThat(metricTwoDaysAgo.getMetricTimeStamp()).isEqualTo(twoDaysAgo);
-						assertThat(metricTwoDaysAgo.hasSameMetricsAs(new Metrics(0, Map.of("albums", 8.0, "Artiste", 5.0))));
+						assertThat(metricTwoDaysAgo.hasSameMetricsAs(new Metrics(0, Map.of(ALBUMS, 8.0, ARTISTES, 5.0))));
 					});
 		assertThat(metricsHistory.getPresentMetrics()).isNull();
 		assertThat(metricsHistory.hasEvolved()).isFalse();
 		
-		metricsHistory.setPresentMetricsIfNew(todayMetrics);
+		metricsHistory.setPresentMetricsIfNew(now, todayMetricsSource);
 		assertThat(metricsHistory.getPresentMetrics()).isNull();
 		assertThat(metricsHistory.hasEvolved()).isFalse();
 		
-		Metrics newPresentyMetrics = new Metrics(now, Map.of("albums", 11.0, "Artiste", 5.0));
+		final TestMetricsSource newPresentMetricsSource = new TestMetricsSource(11.0, 5.0);
+		Metrics newPresentMetrics = new Metrics(now, Map.of(ALBUMS, newPresentMetricsSource.nbAlbums, ARTISTES, newPresentMetricsSource.nbArtistes));
 		
-		metricsHistory.setPresentMetricsIfNew(newPresentyMetrics);
+		metricsHistory.setPresentMetricsIfNew(now, newPresentMetricsSource);
 		assertThat(metricsHistory.getPresentMetrics())
 			.isNotNull()
 			.satisfies(metricNow -> {
 				assertThat(metricNow.getMetricTimeStamp()).isEqualTo(now);
-				assertThat(metricNow.hasSameMetricsAs(new Metrics(0, Map.of("albums", 11.0, "Artiste", 5.0))));
+				assertThat(metricNow.hasSameMetricsAs(new Metrics(0, Map.of(ALBUMS, newPresentMetricsSource.nbAlbums, ARTISTES, newPresentMetricsSource.nbArtistes))));
 			});
 		assertThat(metricsHistory.hasEvolved()).isTrue();
 		
-		metricsHistory.addAndWriteNewMetricsToHistory(newPresentyMetrics);
+		metricsHistory.addAndWriteNewMetricsToHistory(newPresentMetrics);
 		
 		assertThat(metricsHistory.getMetricsHistory()).hasSize(3)
 			.satisfiesExactly(
 				metricPresent -> { 
 					assertThat(metricPresent.getMetricTimeStamp()).isEqualTo(now);
-					assertThat(metricPresent.hasSameMetricsAs(new Metrics(0, Map.of("albums", 11.0, "Artiste", 5.0))));
+					assertThat(metricPresent.hasSameMetricsAs(new Metrics(0, Map.of(ALBUMS, 11.0, ARTISTES, 5.0))));
 				},
 				metricNow -> { 
 					assertThat(metricNow.getMetricTimeStamp()).isEqualTo(now);
-					assertThat(metricNow.hasSameMetricsAs(new Metrics(0, Map.of("albums", 10.0, "Artiste", 5.0))));
+					assertThat(metricNow.hasSameMetricsAs(new Metrics(0, Map.of(ALBUMS, 10.0, ARTISTES, 5.0))));
 				},
 				metricTwoDaysAgo -> { 
 					assertThat(metricTwoDaysAgo.getMetricTimeStamp()).isEqualTo(twoDaysAgo);
-					assertThat(metricTwoDaysAgo.hasSameMetricsAs(new Metrics(0, Map.of("albums", 8.0, "Artiste", 5.0))));
+					assertThat(metricTwoDaysAgo.hasSameMetricsAs(new Metrics(0, Map.of(ALBUMS, 8.0, ARTISTES, 5.0))));
 				});
 	}
 	
 	@Test
 	void testAddingIncompatibleMetrics() throws IOException {
 		
-		Metrics todayMetrics = new Metrics(now, Map.of("albums", 10.0, "Auteurs", 5.0));
+		Metrics todayMetrics = new Metrics(now, Map.of(ALBUMS, 10.0, "Auteurs", 5.0));
 		
-		MetricsHistory metricsHistory = new TestMetricsHistory(historyPath4);
+		TestMetricsHistory metricsHistory = new TestMetricsHistory(historyPath4);
 		
 		LogRecordCounter filterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.metrics.MetricsHistory"));
 		
@@ -275,10 +289,10 @@ class MetricsHistoryTest {
 	@Test
 	void testAddingIncompatibleMetrics2() throws IOException {
 		
-		Metrics yesterdayMetrics = new Metrics(yesterday, Map.of("albums", 8.0, "Artiste", 5.0));
-		Metrics todayMetrics = new Metrics(now, Map.of("albums", 10.0, "Auteurs", 5.0));
+		Metrics yesterdayMetrics = new Metrics(yesterday, Map.of(ALBUMS, 8.0, ARTISTES, 5.0));
+		Metrics todayMetrics = new Metrics(now, Map.of(ALBUMS, 10.0, "Auteurs", 5.0));
 		
-		MetricsHistory metricsHistory = new TestMetricsHistory(historyPath5);
+		TestMetricsHistory metricsHistory = new TestMetricsHistory(historyPath5);
 		metricsHistory.addAndWriteNewMetricsToHistory(yesterdayMetrics);
 		
 		LogRecordCounter filterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.metrics.MetricsHistory"));
@@ -296,9 +310,9 @@ class MetricsHistoryTest {
 	@Test
 	void testAddingIncompatibleMetrics3() throws IOException {
 		
-		Metrics todayMetrics = new Metrics(now, Map.of("albums", 10.0, "Artiste", 5.0, "Auteurs", 5.0));
+		Metrics todayMetrics = new Metrics(now, Map.of(ALBUMS, 10.0, ARTISTES, 5.0, "Auteurs", 5.0));
 		
-		MetricsHistory metricsHistory = new TestMetricsHistory(historyPath4);
+		TestMetricsHistory metricsHistory = new TestMetricsHistory(historyPath4);
 		
 		LogRecordCounter filterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger("org.fl.collectionAlbum.metrics.MetricsHistory"));
 		
@@ -317,19 +331,27 @@ class MetricsHistoryTest {
 				
 		assertThat(historyPath6).isEmptyDirectory();
 		
-		MetricsHistory metricsHistory = new TestMetricsHistory(historyPath6);
+		TestMetricsHistory metricsHistory = new TestMetricsHistory(historyPath6);
 		
 		assertThat(metricsHistory).isNotNull();	
 		assertThat(metricsHistory.getMetricsHistory()).isEmpty();
 		assertThat(historyPath6).isEmptyDirectory();
 		
-		Metrics addedMetrics = new Metrics(now, Map.of("albums", 10.0, "Artiste", 5.0));
-		metricsHistory.setPresentMetricsIfNew(addedMetrics);
-		assertThat(metricsHistory.getPresentMetrics()).isNotNull().isEqualTo(addedMetrics);
+		final TestMetricsSource addedMetrics = new TestMetricsSource(10.0, 5.0);
+		metricsHistory.setPresentMetricsIfNew(now, addedMetrics);
+		assertThat(metricsHistory.getPresentMetrics()).isNotNull().satisfies(metrics -> {
+			assertThat(metrics.getMetricTimeStamp()).isEqualTo(now);
+			assertThat(metrics.getMetrics().get(ALBUMS)).isEqualTo(addedMetrics.nbAlbums());
+			assertThat(metrics.getMetrics().get(ARTISTES)).isEqualTo(addedMetrics.nbArtistes());
+		});
 		
-		Metrics resultMetrics = metricsHistory.addPresentMetricsToHistory(addedMetrics);
+		Metrics resultMetrics = metricsHistory.addPresentMetricsToHistory(now, addedMetrics);
 		
-		assertThat(resultMetrics).isNotNull().isEqualTo(addedMetrics);
+		assertThat(resultMetrics).isNotNull().satisfies(metrics -> {
+			assertThat(metrics.getMetricTimeStamp()).isEqualTo(now);
+			assertThat(metrics.getMetrics().get(ALBUMS)).isEqualTo(addedMetrics.nbAlbums());
+			assertThat(metrics.getMetrics().get(ARTISTES)).isEqualTo(addedMetrics.nbArtistes());
+		});
 		assertThat(metricsHistory.getPresentMetrics()).isNull();
 		
 		assertThat(historyPath6).isNotEmptyDirectory();
@@ -337,7 +359,7 @@ class MetricsHistoryTest {
 			.satisfies(metrics -> {
 					assertThat(metrics.getMetricTimeStamp()).isEqualTo(now);
 					assertThat(metrics.getMetrics()).containsExactlyInAnyOrderEntriesOf(
-							Map.of("albums", 10.0, "Artiste", 5.0)
+							Map.of(ALBUMS, 10.0, ARTISTES, 5.0)
 							);
 				});
 	}
@@ -347,25 +369,37 @@ class MetricsHistoryTest {
 				
 		assertThat(historyPath7).isEmptyDirectory();
 		
-		MetricsHistory metricsHistory = new TestMetricsHistory(historyPath7);
+		TestMetricsHistory metricsHistory = new TestMetricsHistory(historyPath7);
 		
 		assertThat(metricsHistory).isNotNull();	
 		assertThat(metricsHistory.getMetricsHistory()).isEmpty();
 		assertThat(historyPath7).isEmptyDirectory();
 		
-		final Metrics addedMetrics = new Metrics(now, Map.of("albums", 10.0, "Artiste", 5.0));
-		final Metrics resultMetrics = metricsHistory.addPresentMetricsToHistory(addedMetrics);
+		final TestMetricsSource addedMetrics = new TestMetricsSource(10.0, 5.0);
+		final Metrics resultMetrics = metricsHistory.addPresentMetricsToHistory(now, addedMetrics);
 
-		assertThat(resultMetrics).isNotNull().isEqualTo(addedMetrics);
+		assertThat(resultMetrics).isNotNull().satisfies(metrics -> {
+			assertThat(metrics.getMetricTimeStamp()).isEqualTo(now);
+			assertThat(metrics.getMetrics().get(ALBUMS)).isEqualTo(addedMetrics.nbAlbums());
+			assertThat(metrics.getMetrics().get(ARTISTES)).isEqualTo(addedMetrics.nbArtistes());
+		});
 		
-		final Metrics presentMetrics = new Metrics(now, Map.of("albums", 11.0, "Artiste", 5.0));
-		metricsHistory.setPresentMetricsIfNew(presentMetrics);
-		assertThat(metricsHistory.getPresentMetrics()).isNotNull().isEqualTo(presentMetrics);
+		final TestMetricsSource presentMetrics = new TestMetricsSource(11.0, 5.0);
+		metricsHistory.setPresentMetricsIfNew(now, presentMetrics);
+		assertThat(metricsHistory.getPresentMetrics()).isNotNull().satisfies(metrics -> {
+			assertThat(metrics.getMetricTimeStamp()).isEqualTo(now);
+			assertThat(metrics.getMetrics().get(ALBUMS)).isEqualTo(presentMetrics.nbAlbums());
+			assertThat(metrics.getMetrics().get(ARTISTES)).isEqualTo(presentMetrics.nbArtistes());
+		});
 		
-		final Metrics addedMetrics2 = new Metrics(now, Map.of("albums", 10.0, "Artiste", 5.0));
-		final Metrics resultMetrics2 = metricsHistory.addPresentMetricsToHistory(addedMetrics2);
+		final TestMetricsSource addedMetrics2 = new TestMetricsSource(10.0, 5.0);
+		final Metrics resultMetrics2 = metricsHistory.addPresentMetricsToHistory(now, addedMetrics2);
 		
 		assertThat(resultMetrics2).isNull();
-		assertThat(metricsHistory.getPresentMetrics()).isNotNull().isEqualTo(presentMetrics);
+		assertThat(metricsHistory.getPresentMetrics()).isNotNull().satisfies(metrics -> {
+			assertThat(metrics.getMetricTimeStamp()).isEqualTo(now);
+			assertThat(metrics.getMetrics().get(ALBUMS)).isEqualTo(presentMetrics.nbAlbums());
+			assertThat(metrics.getMetrics().get(ARTISTES)).isEqualTo(presentMetrics.nbArtistes());
+		});
 	}
 }

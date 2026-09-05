@@ -118,7 +118,7 @@ public class CollectionAlbums extends SwingWorker<CollectionAlbumContainer,Progr
 		long now = System.currentTimeMillis();
 		Control.getCollectionMetricsHsitory().setPresentMetricsIfNew(now, albumsContainer);
 		Control.getConcertMetricsHsitory().setPresentMetricsIfNew(now, albumsContainer);
-		Control.getMediaFileMetricsHsitory().setPresentMetricsIfNew(now);
+		Control.getMediaFileMetricsHsitory().setPresentMetricsIfNew(now, null);
 		
 		return albumsContainer;
 	}
