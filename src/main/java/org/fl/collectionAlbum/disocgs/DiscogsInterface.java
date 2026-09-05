@@ -31,6 +31,7 @@ import org.fl.collectionAlbum.Control;
 import org.fl.discogsInterface.CollectionValue;
 import org.fl.discogsInterface.DiscogsApi;
 import org.fl.discogsInterface.DiscogsApi.DiscogsApiResponse;
+import org.fl.discogsInterface.UserProfile;
 
 public class DiscogsInterface {
 
@@ -47,6 +48,7 @@ public class DiscogsInterface {
 	
 	private final DiscogsApi discogsApi;
 	private DiscogsCollectionValue collectionValue;
+	private UserProfile userProfile;
 	
 	private DiscogsInterface() {
 		
@@ -76,6 +78,13 @@ public class DiscogsInterface {
 				logger.log(Level.SEVERE, "Exception parsing discogs collection value:\n" + collectionValueResponse.rawResponse());
 			}
 		}
+		
+		DiscogsApiResponse<UserProfile> userProfileResponse = discogsApi.userProfile();
+		if (userProfileResponse == null) {		
+			logger.severe("Null response returned by discogsApi.userProfile()");
+		} else {
+			userProfile = userProfileResponse.value();
+		}
 	}
 	
 	public static void clear() {
@@ -84,5 +93,9 @@ public class DiscogsInterface {
 	
 	public static DiscogsCollectionValue collectionValue() {
 		return getInstance().collectionValue;
+	}
+	
+	public static UserProfile userProfile() {
+		return getInstance().userProfile;
 	}
 }
