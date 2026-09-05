@@ -26,6 +26,7 @@ package org.fl.collectionAlbum.disocgs;
 
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.List;
 import java.util.Locale;
 
 import org.fl.discogsInterface.CollectionValue;
@@ -40,12 +41,13 @@ public record DiscogsCollectionValue(double maxValue, double medianValue, double
 				);
 	}
 	
-	private static final String EURO = "€";	
+	private static List<Character> supportedCurrencies = List.of('€', '$', '£');
+	
 	private static final NumberFormat valueFormat = NumberFormat.getInstance(Locale.US);
 	
 	private static double parseDiscogsValue(String value) throws ParseException {
 		
-		if (value.startsWith(EURO)) {
+		if (supportedCurrencies.contains(value.charAt(0))) {
 			return valueFormat.parse(value.substring(1)).doubleValue();
 		} else {
 			throw new IllegalArgumentException("Unsupported Discogs collection value: " + value);
