@@ -41,10 +41,6 @@ class DiscogsInterfaceTest {
 		
 		assertThat(collectionValue).isNotNull();
 		assertThat(collectionValue.maxValue()).isPositive();
-
-		System.out.println(collectionValue.maxValue());
-		System.out.println(collectionValue.medianValue());
-		System.out.println(collectionValue.minValue());
 	}
 	
 	@Test
