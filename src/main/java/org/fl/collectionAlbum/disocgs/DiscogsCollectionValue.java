@@ -24,33 +24,18 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.disocgs;
 
-import java.text.NumberFormat;
 import java.text.ParseException;
-import java.util.List;
-import java.util.Locale;
 
 import org.fl.discogsInterface.CollectionValue;
+import org.fl.discogsInterface.Currency;
 
 public record DiscogsCollectionValue(double maxValue, double medianValue, double minValue) {
 
-	public static DiscogsCollectionValue convertDiscogsValue(CollectionValue collectionValue) throws ParseException {
+	public static DiscogsCollectionValue convertDiscogsValue(CollectionValue collectionValue, Currency currency) throws ParseException {
 		return new DiscogsCollectionValue(
-				parseDiscogsValue(collectionValue.maximum()),
-				parseDiscogsValue(collectionValue.median()),
-				parseDiscogsValue(collectionValue.minimum())
+				Currency.priceWithCurrencyToDouble(collectionValue.maximum(), currency),
+				Currency.priceWithCurrencyToDouble(collectionValue.median(), currency),
+				Currency.priceWithCurrencyToDouble(collectionValue.minimum(), currency)
 				);
-	}
-	
-	private static List<Character> supportedCurrencies = List.of('€', '$', '£');
-	
-	private static final NumberFormat valueFormat = NumberFormat.getInstance(Locale.US);
-	
-	private static double parseDiscogsValue(String value) throws ParseException {
-		
-		if (supportedCurrencies.contains(value.charAt(0))) {
-			return valueFormat.parse(value.substring(1)).doubleValue();
-		} else {
-			throw new IllegalArgumentException("Unsupported Discogs collection value: " + value);
-		}
 	}
 }

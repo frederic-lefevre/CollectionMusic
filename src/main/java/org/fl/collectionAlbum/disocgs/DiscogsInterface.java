@@ -68,23 +68,24 @@ public class DiscogsInterface {
 		}
 		discogsApi = discogsApiBuilder.build();
 		
-		DiscogsApiResponse<CollectionValue> collectionValueResponse = discogsApi.collectionValue();
-		if (collectionValueResponse == null) {
-			logger.severe("Null response returned by discogsApi.collectionValue()");
-		} else {
-			try {
-				collectionValue = DiscogsCollectionValue.convertDiscogsValue(collectionValueResponse.value());
-			} catch (Exception e) {
-				logger.log(Level.SEVERE, "Exception parsing discogs collection value:\n" + collectionValueResponse.rawResponse());
-			}
-		}
-		
 		DiscogsApiResponse<UserProfile> userProfileResponse = discogsApi.userProfile();
 		if (userProfileResponse == null) {		
 			logger.severe("Null response returned by discogsApi.userProfile()");
 		} else {
 			userProfile = userProfileResponse.value();
 		}
+		
+		DiscogsApiResponse<CollectionValue> collectionValueResponse = discogsApi.collectionValue();
+		if (collectionValueResponse == null) {
+			logger.severe("Null response returned by discogsApi.collectionValue()");
+		} else {
+			try {
+				collectionValue = DiscogsCollectionValue.convertDiscogsValue(collectionValueResponse.value(), userProfile.currency());
+			} catch (Exception e) {
+				logger.log(Level.SEVERE, "Exception parsing discogs collection value:\n" + collectionValueResponse.rawResponse());
+			}
+		}
+		
 	}
 	
 	public static void clear() {
