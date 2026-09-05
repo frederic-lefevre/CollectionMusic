@@ -174,12 +174,15 @@ public class GenerationPane extends JPanel {
 			startReadCollection.addUpdatableElement(updatableElement);
 		});
 		
-		// Collection metrics history
+		// Collection metrics history		
 		CollectionMetricsTabbedPane collectionMetricsTabPanes = 
 				new CollectionMetricsTabbedPane(
-						List.of(Control.getCollectionMetricsHsitory(), Control.getConcertMetricsHsitory(), Control.getMediaFileMetricsHsitory()), 
 						collectionAlbumContainer, 
-						this);
+						this,
+						Control.getCollectionMetricsHsitory(), 
+						Control.getConcertMetricsHsitory(), 
+						Control.getMediaFileMetricsHsitory(),
+						Control.getDiscogsMetricsHsitory());
 
 		startReadCollection.addColorableTabbedPane(List.of(collectionMetricsTabPanes, collectionTabPanes));
 		startGenerationSite.addColorableTabbedPane(List.of(collectionMetricsTabPanes, collectionTabPanes));

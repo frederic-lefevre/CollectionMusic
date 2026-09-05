@@ -54,6 +54,8 @@ class ControlTest {
 		assertThat(Control.getAlbumSleevesImgUri()).isNotNull().isNotEmpty();
 		assertThat(Control.getConcertTicketImgUri()).isNotNull().isNotEmpty();
 		assertThat(Control.getCssForGui()).isNotNull().isNotEmpty();
+		assertThat(Control.getDiscogsUserName()).isNotNull().isNotEmpty();
+		assertThat(Control.getDiscogsUserToken()).isNotNull().isNotEmpty();
 		
 		assertThat(Control.getDisplayFolderAction()).isNotNull();
 		assertThat(Control.getDisplayUrlAction()).isNotNull();
@@ -65,6 +67,10 @@ class ControlTest {
 		assertThat(Control.getCollectionMetricsHsitory()).isNotNull()
 			.satisfies(metricsHistory -> assertThat(metricsHistory.getMetricsHistory()).isNotNull());
 		assertThat(Control.getConcertMetricsHsitory()).isNotNull()
+			.satisfies(metricsHistory -> assertThat(metricsHistory.getMetricsHistory()).isNotNull());
+		assertThat(Control.getMediaFileMetricsHsitory()).isNotNull()
+			.satisfies(metricsHistory -> assertThat(metricsHistory.getMetricsHistory()).isNotNull());
+		assertThat(Control.getDiscogsMetricsHsitory()).isNotNull()
 			.satisfies(metricsHistory -> assertThat(metricsHistory.getMetricsHistory()).isNotNull());
 	}
 	

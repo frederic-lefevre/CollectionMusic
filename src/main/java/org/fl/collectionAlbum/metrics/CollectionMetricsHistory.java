@@ -35,7 +35,7 @@ import java.util.stream.Stream;
 import org.fl.collectionAlbum.CollectionAlbumContainer;
 import org.fl.collectionAlbum.format.MediaSupportCategories;
 
-public class CollectionMetricsHistory extends MetricsHistory {
+public class CollectionMetricsHistory extends MetricsHistory<CollectionAlbumContainer> {
 
 	private static final String METRIC_NAME = "Evolution des albums";
 	
@@ -53,15 +53,8 @@ public class CollectionMetricsHistory extends MetricsHistory {
 		return collectionMetricsHistory;
 	}
 	
-	public Metrics addPresentCollectionMetricsToHistory(long ts, CollectionAlbumContainer collectionAlbumContainer) {
-		return addPresentMetricsToHistory(getCollectionMetrics(ts, collectionAlbumContainer));
-	}
-	
-	public void setPresentMetricsIfNew(long ts, CollectionAlbumContainer collectionAlbumContainer) {
-		setPresentMetricsIfNew(getCollectionMetrics(ts, collectionAlbumContainer));
-	}
-	
-	public Metrics getCollectionMetrics(long ts, CollectionAlbumContainer collectionAlbumContainer) {
+	@Override
+	public Metrics getMetricsFromSource(long ts, CollectionAlbumContainer collectionAlbumContainer) {
 		
 		Map<String, Double> collectionMetrics = new HashMap<>();
 		

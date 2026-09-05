@@ -29,42 +29,47 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
-import org.fl.collectionAlbum.CollectionAlbumContainer;
+import org.fl.collectionAlbum.disocgs.DiscogsInterface;
 
-public class ConcertMetricsHistory extends MetricsHistory<CollectionAlbumContainer> {
+public class DiscogsMetricsHistory extends MetricsHistory<DiscogsInterface> {
 
-	private static final String METRIC_NAME = "Evolution des concerts";
+	private static final String METRIC_NAME = "Evolution de la collection Discogs";
 	
-	private static final String NB_ARTISTE = "nombreArtiste";
-	private static final String NB_CONCERT = "nombreConcert";
+	private static final String NB_RELEASE = "nbRelease";
+	private static final String MAX_VALUE = "maxValue";
+	private static final String MEDIAN_VALUE = "medianValue";
+	private static final String MIN_VALUE = "minValue";
 	
 	// Singleton
-	private static ConcertMetricsHistory concertMetricsHistory;
+	private static DiscogsMetricsHistory discogsMetricsHistory;
 	
-	public static ConcertMetricsHistory buildConcertMetricsHistory(Path storagePath) throws IOException {
-		
-		if (concertMetricsHistory == null) {
-			concertMetricsHistory = new ConcertMetricsHistory(storagePath);
+	public static DiscogsMetricsHistory buildDiscogsMetricsHistory(Path storagePath) throws IOException {
+		if (discogsMetricsHistory == null) {
+			discogsMetricsHistory = new DiscogsMetricsHistory(storagePath);
 		}
-		return concertMetricsHistory;
+		return discogsMetricsHistory;
 	}
 	
 	@Override
-	public Metrics getMetricsFromSource(long ts, CollectionAlbumContainer collectionAlbumContainer) {	
-
+	protected Metrics getMetricsFromSource(long ts, DiscogsInterface metricsSource) {
 		return new Metrics(ts, 		Map.of(
-				NB_ARTISTE, (double)collectionAlbumContainer.getConcertsArtistes().getNombreArtistes(),
-				NB_CONCERT, (double)collectionAlbumContainer.getConcerts().getNombreConcerts()));
+				NB_RELEASE, (double)DiscogsInterface.userProfile().numCollection(),
+				MAX_VALUE, DiscogsInterface.collectionValue().maxValue(),
+				MEDIAN_VALUE, DiscogsInterface.collectionValue().medianValue(),
+				MIN_VALUE, DiscogsInterface.collectionValue().minValue()
+				));
 	}
 	
-	private ConcertMetricsHistory(Path storagePath) throws IOException {
+	private DiscogsMetricsHistory(Path storagePath) throws IOException {
 		super(storagePath, METRIC_NAME);
 	}
 
 	@Override
 	public MetricAttributesList getMetricsAttributes() {
 		return new MetricAttributesList(List.of(
-				new MetricAttributes(NB_CONCERT, "Nombre de concerts", 300), 
-				new MetricAttributes(NB_ARTISTE, "Nombre d'artistes", 300)));
+				new MetricAttributes(NB_RELEASE, "Nombre de releases", 300),
+				new MetricAttributes(MAX_VALUE, "Valeur élevée (€)", 300),
+				new MetricAttributes(MEDIAN_VALUE, "Valeur médiane (€)", 300),
+				new MetricAttributes(MIN_VALUE, "Valeur faible (€)", 300)));
 	}
 }
