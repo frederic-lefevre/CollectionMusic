@@ -60,11 +60,21 @@ class DiscogsInterfaceTest {
 		String releaseId = "8706129";
 		
 		Release release = DiscogsInterface.release(releaseId);
+		assertThat(release).isNotNull();
 		assertThat(release.id()).isEqualTo(releaseId);
 		assertThat(release.title()).isEqualTo("The Allman Brothers Band At Fillmore East");
 		assertThat(release.country()).isEqualTo("France");
 		assertThat(release.notes()).isNotBlank();
 		assertThat(release.tracklist()).isNotNull().hasSize(7)
 			.anySatisfy(track -> assertThat(track.title()).isEqualTo("Statesboro Blues"));
+	}
+	
+	@Test
+	void shouldNotGetRelease() {
+		
+		String releaseId = "8706129x";
+		
+		Release release = DiscogsInterface.release(releaseId);
+		assertThat(release).isNull();
 	}
 }
