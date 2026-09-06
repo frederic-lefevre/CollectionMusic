@@ -295,8 +295,7 @@ public class CollectionUtils {
 				buf.append("<li>").append(track.position()).append(" ").append(track.title()).append("   ").append(track.duration());
 				List<Artist> artists = track.extraartists();
 				if (artists != null) {
-					buf.append("<p>&nbsp;&nbsp;");
-					artists.forEach(artist -> addPropertyInfo(buf, artist.role(), artist.name()));
+					artists.forEach(artist -> addPropertyInfo(buf.append("<p>&nbsp;&nbsp;"), artist.role(), artist.name()));
 				}
 				buf.append("</li>");
 			}
