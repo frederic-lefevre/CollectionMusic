@@ -103,19 +103,7 @@ public class DetailedAlbumAndDiscogsInfoPane extends JTabbedPane {
 		releasePane.setLayout(new BoxLayout(releasePane, BoxLayout.X_AXIS));
 		
 		releasePane.add(releaseInfosFromDiscogs(release));
-		
-		JButton showDiscogsRelease = new JButton("Montrer la release sur le site Discogs"); 
-		showDiscogsRelease.setFont(verdana);
-		showDiscogsRelease.setBackground(Color.GREEN);
-		showDiscogsRelease.setAlignmentX(Component.CENTER_ALIGNMENT);
-		
-		OsActionListener<List<String>> showDiscogsReleasenListener = 
-				new OsActionListener<>(List.of(Control.getDiscogsBaseUrlForRelease() + release.inventoryCsvAlbum().getReleaseId()), Control.getDisplayUrlAction());
-		
-		showDiscogsRelease.addActionListener(showDiscogsReleasenListener);
-		
-		releasePane.add(showDiscogsRelease);
-		
+		releasePane.add(releaseOtherInfo(release));	
 		return releasePane;
 	}
 	
@@ -127,6 +115,29 @@ public class DetailedAlbumAndDiscogsInfoPane extends JTabbedPane {
 		infoRelease.setEditable(false);
 		infoRelease.setFont(monospaced);
 		return new JScrollPane(infoRelease);
+	}
+	
+	private JPanel releaseOtherInfo(DiscogsAlbumRelease release) {
+		
+		JPanel releasePane = new JPanel();
+		releasePane.setLayout(new BoxLayout(releasePane, BoxLayout.Y_AXIS));
+		
+		Set<Album> albums = release.getCollectionAlbums();
+		if ((albums != null) && !albums.isEmpty()) {
+			releasePane.add(getCoverImage(albums.iterator().next()));
+		}
+		
+		JButton showDiscogsRelease = new JButton("Montrer la release sur le site Discogs"); 
+		showDiscogsRelease.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
+		OsActionListener<List<String>> showDiscogsReleasenListener = 
+				new OsActionListener<>(List.of(Control.getDiscogsBaseUrlForRelease() + release.inventoryCsvAlbum().getReleaseId()), Control.getDisplayUrlAction());
+		
+		showDiscogsRelease.addActionListener(showDiscogsReleasenListener);
+		
+		releasePane.add(showDiscogsRelease);
+		
+		return releasePane;
 	}
 	
 	private JScrollPane albumsInfos(Set<Album> albums) {
