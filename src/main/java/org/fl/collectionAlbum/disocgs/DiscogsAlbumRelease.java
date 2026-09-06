@@ -175,7 +175,7 @@ public class DiscogsAlbumRelease {
 		return formatMatchMap.get(supportPhysique);
 	}
 	
-	public String getInfo(boolean displayLinkedAlbums) {
+	public String getInfo() {
 		
 		StringBuilder info = new StringBuilder();
 		
@@ -197,7 +197,7 @@ public class DiscogsAlbumRelease {
 		if ((collectionAlbums == null) || collectionAlbums.isEmpty()) {
 			info.append("\n-------------------------------------\n  Non lié à un album de la collection\n");
 			
-		} else if (displayLinkedAlbums){
+		} else {
 			info.append("\n-------------------------------------\n  Albums de la collection liés\n");
 			
 			collectionAlbums.forEach(collectionAlbum -> 
@@ -205,7 +205,6 @@ public class DiscogsAlbumRelease {
 					.append("\n-------------------------------------\n")
 				);
 		}
-		
 		return info.toString();
 	}
 	

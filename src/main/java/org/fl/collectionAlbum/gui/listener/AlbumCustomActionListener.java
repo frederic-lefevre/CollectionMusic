@@ -164,7 +164,7 @@ public class AlbumCustomActionListener implements java.awt.event.ActionListener 
 	
 		JTextArea infoPotentialRelease = new JTextArea(0, 150);
 		infoPotentialRelease.setEditable(false);
-		infoPotentialRelease.setText(release.getInfo(true));
+		infoPotentialRelease.setText(release.getInfo());
 		infoPotentialRelease.setFont(monospaced);
 		potentialReleasePane.add(infoPotentialRelease);
 		
