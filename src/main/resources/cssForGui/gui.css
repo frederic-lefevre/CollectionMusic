@@ -48,3 +48,9 @@ td.mediako {
 	color: white;
 	background: red;
 }
+
+li.trackhead {
+	list-style: none;
+	background: silver;
+	font-weight: bold;
+}

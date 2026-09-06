@@ -54,6 +54,7 @@ import org.fl.collectionAlbum.gui.listener.OsActionListener;
 import org.fl.collectionAlbum.gui.table.ArtistesScrollJTablePane;
 import org.fl.collectionAlbum.gui.table.ArtistesTableColumns;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
+import org.fl.discogsInterface.Artist;
 import org.fl.discogsInterface.Release;
 import org.fl.discogsInterface.inventory.InventoryCsvAlbum;
 
@@ -286,13 +287,30 @@ public class CollectionUtils {
 			buf.append("<span class=\"artiste\">").append(artist.name()).append("</span><br/>");
 		}));
 		
+		buf.append("<h3>Titres:</h3><ul>");
+		Optional.ofNullable(release.tracklist()).ifPresent(tracks -> tracks.forEach(track -> {
+			if ("heading".equals(track.type())) {
+				buf.append("<li class=\"trackhead\">").append(track.title()).append("</li>");
+			} else {
+				buf.append("<li>").append(track.position()).append(" ").append(track.title());
+				List<Artist> artists = track.extraartists();
+				if (artists != null) {
+					buf.append("<p>");
+					artists.forEach(artist -> addPropertyInfo(buf, artist.role(), artist.name()));
+					buf.append("<p>");
+				}
+				buf.append("</li>");
+			}
+		}));
+		buf.append("</ul>");
+		
 		buf.append("<h3>Format:</h3><ul>");
 		Optional.ofNullable(release.formats()).ifPresent(formats -> formats.forEach(format -> {
 			buf.append("<li>").append(format.qty()).append(" x ").append(format.name()).append(" ").append(format.descriptions());
 		}));
 		buf.append("</ul>");
 		
-		buf.append("<h3>Labels, compagnies ...:</h3><ul>");
+		buf.append("<h3>Labels, sociétés...:</h3><ul>");
 		Optional.ofNullable(release.labels()).ifPresent(labels -> labels.forEach(label -> {
 			buf.append("<li>").append(label.entityTypeName()).append(" - ").append(label.name()).append(" - ").append(label.catno());
 		}));
@@ -302,9 +320,10 @@ public class CollectionUtils {
 		buf.append("</ul>");
 		
 		buf.append("<h3>Date de sortie: ").append(release.released()).append("</h3>");
-		buf.append("<h3>Release id Discogs: ").append(release.id()).append("</h3>");
+		addPropertyInfo(buf, "Release id Discogs", release.id());
+		addPropertyInfo(buf, "Pays", release.country());
 		addPropertyInfo(buf, "Dossier de collection", inventoryCsvAlbum.getCollectionFolder());
-		addPropertyInfo(buf, "Date d'ajout", inventoryCsvAlbum.getDateAdded());
+		addPropertyInfo(buf, "Date d'ajout dans la collection", inventoryCsvAlbum.getDateAdded());
 		addPropertyInfo(buf, "Etat du media", inventoryCsvAlbum.getCollectionMediaCondition());
 		addPropertyInfo(buf, "Etat de la pochette", inventoryCsvAlbum.getCollectionSleeveCondition());
 		addPropertyInfo(buf, "Notes", inventoryCsvAlbum.getCollectionNotes());
