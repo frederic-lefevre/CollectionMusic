@@ -97,7 +97,7 @@ public class DetailedAlbumAndDiscogsInfoPane extends JTabbedPane {
 		}
 	}
 	
-	private JScrollPane releaseInfos(DiscogsAlbumRelease release) {
+	private JPanel releaseInfos(DiscogsAlbumRelease release) {
 		
 		JPanel releasePane = new JPanel();
 		releasePane.setLayout(new BoxLayout(releasePane, BoxLayout.X_AXIS));
@@ -116,7 +116,7 @@ public class DetailedAlbumAndDiscogsInfoPane extends JTabbedPane {
 		
 		releasePane.add(showDiscogsRelease);
 		
-		return new JScrollPane(releasePane);
+		return releasePane;
 	}
 	
 	private JScrollPane releaseInfosFromDiscogs(DiscogsAlbumRelease release) {
