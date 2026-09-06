@@ -32,10 +32,14 @@ import org.fl.discogsInterface.Currency;
 public record DiscogsCollectionValue(double maxValue, double medianValue, double minValue) {
 
 	public static DiscogsCollectionValue convertDiscogsValue(CollectionValue collectionValue, Currency currency) throws ParseException {
-		return new DiscogsCollectionValue(
-				Currency.priceWithCurrencyToDouble(collectionValue.maximum(), currency),
-				Currency.priceWithCurrencyToDouble(collectionValue.median(), currency),
-				Currency.priceWithCurrencyToDouble(collectionValue.minimum(), currency)
-				);
+		if (collectionValue != null) {
+			return new DiscogsCollectionValue(
+					Currency.priceWithCurrencyToDouble(collectionValue.maximum(), currency),
+					Currency.priceWithCurrencyToDouble(collectionValue.median(), currency),
+					Currency.priceWithCurrencyToDouble(collectionValue.minimum(), currency)
+					);
+		} else {
+			return null;
+		}
 	}
 }

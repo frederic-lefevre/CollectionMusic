@@ -139,7 +139,7 @@ public abstract class MetricsHistory<T> {
 	
 	public Metrics addPresentMetricsToHistory(long ts, T metricsSource) {	
 		Metrics metrics = getMetricsFromSource(ts, metricsSource);
-		if (addAndWriteNewMetricsToHistory(metrics)) {
+		if ((metrics != null) &&  addAndWriteNewMetricsToHistory(metrics)) {
 			this.presentMetrics = null;
 			return metrics;
 		} else {
@@ -149,7 +149,7 @@ public abstract class MetricsHistory<T> {
 	
 	public void setPresentMetricsIfNew(long ts, T metricsSource) {
 		Metrics metrics = getMetricsFromSource(ts, metricsSource);
-		if (metricsHistory.stream().allMatch(m -> !m.hasSameMetricsAs(metrics))) {
+		if ((metrics != null) &&  metricsHistory.stream().allMatch(m -> !m.hasSameMetricsAs(metrics))) {
 			this.presentMetrics = metrics;
 		}
 	}

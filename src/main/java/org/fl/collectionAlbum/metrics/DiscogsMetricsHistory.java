@@ -29,7 +29,9 @@ import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
+import org.fl.collectionAlbum.disocgs.DiscogsCollectionValue;
 import org.fl.collectionAlbum.disocgs.DiscogsInterface;
+import org.fl.discogsInterface.UserProfile;
 
 public class DiscogsMetricsHistory extends MetricsHistory<DiscogsInterface> {
 
@@ -52,12 +54,19 @@ public class DiscogsMetricsHistory extends MetricsHistory<DiscogsInterface> {
 	
 	@Override
 	protected Metrics getMetricsFromSource(long ts, DiscogsInterface metricsSource) {
-		return new Metrics(ts, 		Map.of(
-				NB_RELEASE, (double)DiscogsInterface.userProfile().numCollection(),
-				MAX_VALUE, DiscogsInterface.collectionValue().maxValue(),
-				MEDIAN_VALUE, DiscogsInterface.collectionValue().medianValue(),
-				MIN_VALUE, DiscogsInterface.collectionValue().minValue()
-				));
+
+		UserProfile userProfile = DiscogsInterface.userProfile();
+		DiscogsCollectionValue collectionValue = DiscogsInterface.collectionValue();
+		if ((userProfile == null) || (collectionValue == null)) {
+			return null;
+		} else {
+			return new Metrics(ts, 		Map.of(
+					NB_RELEASE, (double)DiscogsInterface.userProfile().numCollection(),
+					MAX_VALUE, DiscogsInterface.collectionValue().maxValue(),
+					MEDIAN_VALUE, DiscogsInterface.collectionValue().medianValue(),
+					MIN_VALUE, DiscogsInterface.collectionValue().minValue()
+					));
+		}
 	}
 	
 	private DiscogsMetricsHistory(Path storagePath) throws IOException {
