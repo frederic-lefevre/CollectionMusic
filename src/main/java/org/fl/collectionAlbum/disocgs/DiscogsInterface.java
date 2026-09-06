@@ -82,22 +82,19 @@ public class DiscogsInterface {
 	}
 	
 	private UserProfile getUserProfile(DiscogsApi discogsApi) {
+		
 		DiscogsApiResponse<UserProfile> userProfileResponse = discogsApi.userProfile();
-		if (userProfileResponse == null) {		
-			logger.severe("Null response returned by discogsApi.userProfile()");
-			return null;
-		} else {
+		if (checkDiscogsApiResponse(userProfileResponse, "discogsApi.userProfile()", "")) {
 			return userProfileResponse.value();
+		} else {
+			return null;
 		}
 	}
 	
 	private DiscogsCollectionValue getCollectionValue(DiscogsApi discogsApi, UserProfile userProfile) {
 		
 		DiscogsApiResponse<CollectionValue> collectionValueResponse = discogsApi.collectionValue();
-		if (collectionValueResponse == null) {
-			logger.severe("Null response returned by discogsApi.collectionValue()");
-			return null;
-		} else {
+		if (checkDiscogsApiResponse(collectionValueResponse, "discogsApi.collectionValue()", "")) {
 			Currency currency;
 			if (userProfile == null) {
 				logger.warning("Discogs user profile is null. Collection value is in EURO currency");
@@ -109,22 +106,38 @@ public class DiscogsInterface {
 			try {
 				return DiscogsCollectionValue.convertDiscogsValue(collectionValueResponse.value(), currency);
 			} catch (Exception e) {
-				logger.log(Level.SEVERE, "Exception parsing discogs collection value:\n" + collectionValueResponse.rawResponse());
+				logger.log(Level.SEVERE, "Exception parsing discogs collection value:\n" + collectionValueResponse.rawResponse(), e);
 				return null;
 			}
+		} else {
+			return null;
 		}
 	}
 	
 	private Release getRelease(String releaseId) {
 
 		DiscogsApiResponse<Release> releaseResponse = discogsApi.release(releaseId);
-		if (releaseResponse == null) {
-			logger.severe("Null response returned by discogsApi.collectionValue()");
+		if (checkDiscogsApiResponse(releaseResponse, "discogsApi.release()", releaseId)) {
+			return releaseResponse.value();
+		} else {
 			return null;
-		} else if (releaseResponse.statusCode() == 404){
-			logger.severe("Release " + releaseId + " not found on discogs");
 		}
-		return releaseResponse.value();
+	}
+	
+	private boolean checkDiscogsApiResponse(DiscogsApiResponse<?> response, String call, String resource) {
+
+		if (response == null) {
+			logger.severe("Null response returned by " + call + " " + resource);
+			return false;
+		} else if (response.statusCode() == 404){
+			logger.severe(call + " " + resource + " not found on discogs\n" + response.rawResponse());
+			return false;
+		} else if ((response.statusCode() < 200) || (response.statusCode()) >= 300) {
+			logger.severe(call + " " + resource + " call error.\n" + response.rawResponse() + "\nStatus code: " + response.statusCode());
+			return false;
+		} else {
+			return true;
+		}
 	}
 	
 	public static void clear() {
