@@ -290,12 +290,12 @@ public class CollectionUtils {
 		buf.append("<h3>Titres:</h3><ul>");
 		Optional.ofNullable(release.tracklist()).ifPresent(tracks -> tracks.forEach(track -> {
 			if ("heading".equals(track.type())) {
-				buf.append("<li class=\"trackhead\"> ").append(track.title()).append("</li>");
+				buf.append("<li class=\"trackhead\">&nbsp;").append(track.title()).append("</li>");
 			} else {
 				buf.append("<li>").append(track.position()).append(" ").append(track.title()).append("   ").append(track.duration());
 				List<Artist> artists = track.extraartists();
 				if (artists != null) {
-					buf.append("<p>      ");
+					buf.append("<p>&nbsp;&nbsp;");
 					artists.forEach(artist -> addPropertyInfo(buf, artist.role(), artist.name()));
 				}
 				buf.append("</li>");

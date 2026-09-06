@@ -25,7 +25,6 @@ SOFTWARE.
 package org.fl.collectionAlbum.gui;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Font;
 import java.util.Collection;
 import java.util.List;
@@ -124,11 +123,12 @@ public class DetailedAlbumAndDiscogsInfoPane extends JTabbedPane {
 		
 		Set<Album> albums = release.getCollectionAlbums();
 		if ((albums != null) && !albums.isEmpty()) {
-			releasePane.add(getCoverImage(albums.iterator().next()));
+			JLabel coverImage = getCoverImage(albums.iterator().next());
+			coverImage.setBorder(new EmptyBorder(10, 0, 10, 0));
+			releasePane.add(coverImage);
 		}
 		
 		JButton showDiscogsRelease = new JButton("Montrer la release sur le site Discogs"); 
-		showDiscogsRelease.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		OsActionListener<List<String>> showDiscogsReleasenListener = 
 				new OsActionListener<>(List.of(Control.getDiscogsBaseUrlForRelease() + release.inventoryCsvAlbum().getReleaseId()), Control.getDisplayUrlAction());
