@@ -50,7 +50,7 @@ td.mediako {
 }
 
 li.trackhead {
-	list-style: none;
+	list-style-type: none;
 	background: silver;
 	font-weight: bold;
 }
