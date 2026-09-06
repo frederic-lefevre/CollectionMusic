@@ -81,7 +81,7 @@ public class DiscogsInventory {
 		Inventory.parseCsvFile(disocgsInventoryCsvPath, albumLog).forEach(csvRelease -> discogsAlbumReleases.add(new DiscogsAlbumRelease(csvRelease)));
 		
 		discogsAlbumReleaseMap.clear();
-		discogsAlbumReleases.forEach(release -> discogsAlbumReleaseMap.put(release.getInventoryCsvAlbum().getReleaseId(), release));
+		discogsAlbumReleases.forEach(release -> discogsAlbumReleaseMap.put(release.inventoryCsvAlbum().getReleaseId(), release));
 	}
 	
 	public static DiscogsAlbumRelease getDiscogsAlbumRelease(String releaseId) {		

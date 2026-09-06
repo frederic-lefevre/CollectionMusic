@@ -39,7 +39,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
-import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 
 import org.fl.collectionAlbum.Control;
@@ -97,24 +96,13 @@ public class DetailedAlbumAndDiscogsInfoPane extends JTabbedPane {
 			addTab("Album", albumsInfos(albums));
 		}
 	}
+	
 	private JScrollPane releaseInfos(DiscogsAlbumRelease release) {
-		
-		String releaseInfo;
-		if (release == null) {
-			releaseInfo = "Release inconnue dans l'inventaire des releases Discogs";
-		} else {
-			releaseInfo = release.getInfo(false);
-		}
 		
 		JPanel releasePane = new JPanel();
 		releasePane.setLayout(new BoxLayout(releasePane, BoxLayout.X_AXIS));
 		
-		JTextArea infoRelease = new JTextArea(releaseInfo);
-		infoRelease.setEditable(false);
-		infoRelease.setFont(monospaced);
-		infoRelease.setBorder(BorderFactory.createMatteBorder(1,1,1,1,Color.BLACK));
-		
-		releasePane.add(new JScrollPane(infoRelease));
+		releasePane.add(releaseInfosFromDiscogs(release));
 		
 		JButton showDiscogsRelease = new JButton("Montrer la release sur le site Discogs"); 
 		showDiscogsRelease.setFont(verdana);
@@ -122,13 +110,23 @@ public class DetailedAlbumAndDiscogsInfoPane extends JTabbedPane {
 		showDiscogsRelease.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		OsActionListener<List<String>> showDiscogsReleasenListener = 
-				new OsActionListener<>(List.of(Control.getDiscogsBaseUrlForRelease() + release.getInventoryCsvAlbum().getReleaseId()), Control.getDisplayUrlAction());
+				new OsActionListener<>(List.of(Control.getDiscogsBaseUrlForRelease() + release.inventoryCsvAlbum().getReleaseId()), Control.getDisplayUrlAction());
 		
 		showDiscogsRelease.addActionListener(showDiscogsReleasenListener);
 		
 		releasePane.add(showDiscogsRelease);
 		
 		return new JScrollPane(releasePane);
+	}
+	
+	private JScrollPane releaseInfosFromDiscogs(DiscogsAlbumRelease release) {
+		
+		JEditorPane infoRelease = new JEditorPane();
+		infoRelease.setContentType("text/html");
+		infoRelease.setText(CollectionUtils.getHtmlForDiscogsRelease(release.discogsRelease(), release.inventoryCsvAlbum()));
+		infoRelease.setEditable(false);
+		infoRelease.setFont(monospaced);
+		return new JScrollPane(infoRelease);
 	}
 	
 	private JScrollPane albumsInfos(Set<Album> albums) {

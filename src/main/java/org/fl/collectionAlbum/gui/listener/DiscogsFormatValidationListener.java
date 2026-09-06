@@ -62,7 +62,7 @@ public class DiscogsFormatValidationListener implements ActionListener {
 			generationPane.rescanNeeded();
 			
 		} else {
-			aLog.severe("Trying to set discogs format validation for a discogs release that is not linked to an album or that has no format mismatch problem. Release id=" + release.getInventoryCsvAlbum().getReleaseId());
+			aLog.severe("Trying to set discogs format validation for a discogs release that is not linked to an album or that has no format mismatch problem. Release id=" + release.inventoryCsvAlbum().getReleaseId());
 		}
 		
 	}

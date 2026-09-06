@@ -68,7 +68,7 @@ public class AlbumMouseAdapter extends MusicArtefactMouseAdapter<Album> {
 				
 			DiscogsAlbumRelease release = DiscogsInventory.getDiscogsAlbumRelease(discogsReleaseId);
  
-			(new OsActionListener<>(List.of(Control.getDiscogsBaseUrlForRelease() + release.getInventoryCsvAlbum().getReleaseId()), Control.getDisplayUrlAction()))
+			(new OsActionListener<>(List.of(Control.getDiscogsBaseUrlForRelease() + release.inventoryCsvAlbum().getReleaseId()), Control.getDisplayUrlAction()))
 				.actionPerformed(null);
 
 		} else if (musicArtefactTable.isAlbumCoverColumnSelected()) {

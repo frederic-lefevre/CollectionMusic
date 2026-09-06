@@ -45,15 +45,15 @@ public class DisocgsReleaseTableModel extends AbstractCollectionTableModel<Disco
 	private static final FormatCompatibilityResult.FormatCompatibilityComparator FORMAT_COMPATIBILITY_COMPARATOR = new FormatCompatibilityResult.FormatCompatibilityComparator();
 	
 	private static final TableColumnParameter<DiscogsAlbumRelease> ID = 
-			new TableColumnParameter<>("Id", null, 70, null, null, String.class, (d) -> d.getInventoryCsvAlbum().getReleaseId());
+			new TableColumnParameter<>("Id", null, 70, null, null, String.class, (d) -> d.inventoryCsvAlbum().getReleaseId());
 	private static final TableColumnParameter<DiscogsAlbumRelease> ARTISTES = 
-			new TableColumnParameter<>("Auteurs", null, 700, null, null, String.class, (d) -> d.getInventoryCsvAlbum().getArtists().stream().collect(Collectors.joining(",")));
+			new TableColumnParameter<>("Auteurs", null, 700, null, null, String.class, (d) -> d.inventoryCsvAlbum().getArtists().stream().collect(Collectors.joining(",")));
 	private static final TableColumnParameter<DiscogsAlbumRelease> TITLE = 
-			new TableColumnParameter<>("Titre de l'album", null, 580, null, null, String.class, (d) -> d.getInventoryCsvAlbum().getTitle());
+			new TableColumnParameter<>("Titre de l'album", null, 580, null, null, String.class, (d) -> d.inventoryCsvAlbum().getTitle());
 	private static final TableColumnParameter<DiscogsAlbumRelease> FORMAT = 
-			new TableColumnParameter<>("Formats", null, 200, null, null, String.class, (d) -> d.getInventoryCsvAlbum().getFormats().stream().collect(Collectors.joining(",")));
+			new TableColumnParameter<>("Formats", null, 200, null, null, String.class, (d) -> d.inventoryCsvAlbum().getFormats().stream().collect(Collectors.joining(",")));
 	private static final TableColumnParameter<DiscogsAlbumRelease> DATE_AJOUT = 
-			new TableColumnParameter<>("Date ajout", null, 90, new DateRenderer(discogsDateFormatter), null, String.class, (d) -> d.getInventoryCsvAlbum().getDateAdded());
+			new TableColumnParameter<>("Date ajout", null, 90, new DateRenderer(discogsDateFormatter), null, String.class, (d) -> d.inventoryCsvAlbum().getDateAdded());
 	private static final TableColumnParameter<DiscogsAlbumRelease> ALBUM_LINKED = 
 			new TableColumnParameter<>("Lié à un album", null, 100, new CollectionBooleanRenderer(), null, Boolean.class, (d) -> d.isLinkedToAlbum());
 	private static final TableColumnParameter<DiscogsAlbumRelease> FORMAT_MATCH = 

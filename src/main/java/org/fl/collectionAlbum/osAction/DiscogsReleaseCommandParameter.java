@@ -35,8 +35,8 @@ import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
 public enum DiscogsReleaseCommandParameter implements OsActionCommandParameter<DiscogsAlbumRelease> {
 
 	DISCOGS_RELEASE_INFO( 
-			(release) -> List.of(Control.getDiscogsBaseUrlForRelease() + release.getInventoryCsvAlbum().getReleaseId()),
-			(release) -> release.getInventoryCsvAlbum().getReleaseId() != null
+			(release) -> List.of(Control.getDiscogsBaseUrlForRelease() + release.inventoryCsvAlbum().getReleaseId()),
+			(release) -> release.inventoryCsvAlbum().getReleaseId() != null
 			),
 	ALBUMS_JSON(
 			(release) -> release.getCollectionAlbums().stream()

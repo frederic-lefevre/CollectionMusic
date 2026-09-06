@@ -31,6 +31,7 @@ import java.net.URI;
 import java.time.temporal.TemporalAccessor;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -53,6 +54,8 @@ import org.fl.collectionAlbum.gui.listener.OsActionListener;
 import org.fl.collectionAlbum.gui.table.ArtistesScrollJTablePane;
 import org.fl.collectionAlbum.gui.table.ArtistesTableColumns;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
+import org.fl.discogsInterface.Release;
+import org.fl.discogsInterface.inventory.InventoryCsvAlbum;
 
 public class CollectionUtils {
 	
@@ -270,6 +273,49 @@ public class CollectionUtils {
 		});
 		buf.append("</table></body></html>");
 		return buf.toString();		
+	}
+	
+	public static String getHtmlForDiscogsRelease(Release release, InventoryCsvAlbum inventoryCsvAlbum) {
+		
+		StringBuilder buf = getStringBuilderWithHtmlBegin();
+		
+		buf.append("<h1").append(release.title()).append("</h1");
+		buf.append("<h3>Artistes:</h3>");
+		
+		Optional.ofNullable(release.artists()).ifPresent(artists -> artists.forEach(artist -> {
+			buf.append("<span class=\"artiste\">").append(artist.name()).append("</span><br/>");
+		}));
+		
+		buf.append("<h3>Format:</h3><ul>");
+		Optional.ofNullable(release.formats()).ifPresent(formats -> formats.forEach(format -> {
+			buf.append("<li>").append(format.qty()).append(" x ").append(format.name()).append(" ").append(format.descriptions());
+		}));
+		buf.append("</ul>");
+		
+		buf.append("<h3>Labels, compagnies ...:</h3><ul>");
+		Optional.ofNullable(release.labels()).ifPresent(labels -> labels.forEach(label -> {
+			buf.append("<li>").append(label.entityTypeName()).append(" - ").append(label.name()).append(" - ").append(label.catno());
+		}));
+		Optional.ofNullable(release.companies()).ifPresent(companies -> companies.forEach(company -> {
+			buf.append("<li>").append(company.entityTypeName()).append(" - ").append(company.name()).append(" - ").append(company.catno());
+		}));
+		buf.append("</ul>");
+		
+		buf.append("<h3>Date de sortie: ").append(release.released()).append("</h3>");
+		buf.append("<h3>Release id Discogs: ").append(release.id()).append("</h3>");
+		addPropertyInfo(buf, "Dossier de collection", inventoryCsvAlbum.getCollectionFolder());
+		addPropertyInfo(buf, "Date d'ajout", inventoryCsvAlbum.getDateAdded());
+		addPropertyInfo(buf, "Etat du media", inventoryCsvAlbum.getCollectionMediaCondition());
+		addPropertyInfo(buf, "Etat de la pochette", inventoryCsvAlbum.getCollectionSleeveCondition());
+		addPropertyInfo(buf, "Notes", inventoryCsvAlbum.getCollectionNotes());
+		addPropertyInfo(buf, "Notation", inventoryCsvAlbum.getRating());
+		
+		buf.append("</body></html>");
+		return buf.toString();	
+	}
+	
+	private static void addPropertyInfo(StringBuilder info, String name, Object value) {
+		info.append("<h6>").append(name).append(": ").append(Optional.ofNullable(value).map(v -> v.toString()).orElse("valeur null")).append("</h6>");
 	}
 	
 	public static class LongComparator implements Comparator<Long> {
