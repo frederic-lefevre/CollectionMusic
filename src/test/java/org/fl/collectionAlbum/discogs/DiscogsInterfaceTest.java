@@ -26,11 +26,16 @@ package org.fl.collectionAlbum.discogs;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.fl.collectionAlbum.disocgs.DiscogsCollectionValue;
 import org.fl.collectionAlbum.disocgs.DiscogsInterface;
 import org.fl.discogsInterface.Currency;
 import org.fl.discogsInterface.Release;
 import org.fl.discogsInterface.UserProfile;
+import org.fl.util.FilterCounter;
+import org.fl.util.FilterCounter.LogRecordCounter;
 import org.junit.jupiter.api.Test;
 
 class DiscogsInterfaceTest {
@@ -74,7 +79,16 @@ class DiscogsInterfaceTest {
 		
 		String releaseId = "8706129x";
 		
+		LogRecordCounter discogsInterfaceFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(DiscogsInterface.class.getName()));	
+		
 		Release release = DiscogsInterface.release(releaseId);
 		assertThat(release).isNull();
+		
+		assertThat(discogsInterfaceFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(discogsInterfaceFilterCounter.getLogRecordCount(Level.SEVERE)).isEqualTo(1);
+		assertThat(discogsInterfaceFilterCounter.getLogRecords()).singleElement()
+			.satisfies(logRecord -> assertThat(logRecord.getMessage()).contains(releaseId + " not found on discogs"));
+		discogsInterfaceFilterCounter.stopLogCountAndFilter();
+		
 	}
 }
