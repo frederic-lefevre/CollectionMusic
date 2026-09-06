@@ -279,7 +279,7 @@ public class CollectionUtils {
 		
 		StringBuilder buf = getStringBuilderWithHtmlBegin();
 		
-		buf.append("<h1").append(release.title()).append("</h1");
+		buf.append("<h1>").append(release.title()).append("</h1>");
 		buf.append("<h3>Artistes:</h3>");
 		
 		Optional.ofNullable(release.artists()).ifPresent(artists -> artists.forEach(artist -> {
@@ -315,7 +315,7 @@ public class CollectionUtils {
 	}
 	
 	private static void addPropertyInfo(StringBuilder info, String name, Object value) {
-		info.append("<h6>").append(name).append(": ").append(Optional.ofNullable(value).map(v -> v.toString()).orElse("valeur null")).append("</h6>");
+		info.append(name).append(": ").append(Optional.ofNullable(value).map(v -> v.toString()).orElse("valeur null")).append("<br/>");
 	}
 	
 	public static class LongComparator implements Comparator<Long> {
