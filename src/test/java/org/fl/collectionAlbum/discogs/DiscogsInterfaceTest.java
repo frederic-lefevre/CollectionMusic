@@ -29,6 +29,7 @@ import static org.assertj.core.api.Assertions.*;
 import org.fl.collectionAlbum.disocgs.DiscogsCollectionValue;
 import org.fl.collectionAlbum.disocgs.DiscogsInterface;
 import org.fl.discogsInterface.Currency;
+import org.fl.discogsInterface.Release;
 import org.fl.discogsInterface.UserProfile;
 import org.junit.jupiter.api.Test;
 
@@ -51,5 +52,19 @@ class DiscogsInterfaceTest {
 		assertThat(userProfile).isNotNull();
 		assertThat(userProfile.currency()).isEqualTo(Currency.EUR);
 		assertThat(userProfile.numCollection()).isGreaterThan(1500);
+	}
+	
+	@Test
+	void shouldGetRelease() {
+		
+		String releaseId = "8706129";
+		
+		Release release = DiscogsInterface.release(releaseId);
+		assertThat(release.id()).isEqualTo(releaseId);
+		assertThat(release.title()).isEqualTo("The Allman Brothers Band At Fillmore East");
+		assertThat(release.country()).isEqualTo("France");
+		assertThat(release.notes()).isNotBlank();
+		assertThat(release.tracklist()).isNotNull().hasSize(7)
+			.anySatisfy(track -> assertThat(track.title()).isEqualTo("Statesboro Blues"));
 	}
 }

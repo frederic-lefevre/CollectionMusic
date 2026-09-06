@@ -32,6 +32,7 @@ import org.fl.discogsInterface.CollectionValue;
 import org.fl.discogsInterface.Currency;
 import org.fl.discogsInterface.DiscogsApi;
 import org.fl.discogsInterface.DiscogsApi.DiscogsApiResponse;
+import org.fl.discogsInterface.Release;
 import org.fl.discogsInterface.UserProfile;
 
 public class DiscogsInterface {
@@ -114,6 +115,18 @@ public class DiscogsInterface {
 		}
 	}
 	
+	private Release getRelease(String releaseId) {
+
+		DiscogsApiResponse<Release> releaseResponse = discogsApi.release(releaseId);
+		if (releaseResponse == null) {
+			logger.severe("Null response returned by discogsApi.collectionValue()");
+			return null;
+		} else if (releaseResponse.statusCode() == 404){
+			logger.severe("Release " + releaseId + " not found on discogs");
+		}
+		return releaseResponse.value();
+	}
+	
 	public static void clear() {
 		discogsInterfaceInstance = null;
 	}
@@ -124,5 +137,9 @@ public class DiscogsInterface {
 	
 	public static UserProfile userProfile() {
 		return getInstance().userProfile;
+	}
+	
+	public static Release release(String releaseId) {
+		return getInstance().getRelease(releaseId);
 	}
 }
