@@ -291,11 +291,12 @@ public class CollectionUtils {
 			if ("heading".equals(track.type())) {
 				buf.append("<li class=\"trackhead\">&nbsp;").append(track.title()).append("</li>");
 			} else {
-				buf.append("<li>").append(track.position()).append(" ").append(track.title()).append("   ").append(track.duration());
-				Optional.ofNullable(track.extraartists()).ifPresent(artists -> artists.forEach(artist -> 
-					addPropertyInfo(buf.append("<p>&nbsp;&nbsp;"), artist.role(), artist.name())
-				));				
-				buf.append("</li>");
+				buf.append("<li>").append(track.position()).append(" - <b>").append(track.title()).append("</b> - ").append(track.duration());
+				Optional.ofNullable(track.extraartists()).ifPresent(artists -> {
+					buf.append("<br/>");
+					artists.forEach(artist -> addPropertyInfo(buf.append("&nbsp;&nbsp;"), artist.role(), artist.name()));
+				});				
+				buf.append("<hr/></li>");
 			}
 		}));
 		buf.append("</ul>");
