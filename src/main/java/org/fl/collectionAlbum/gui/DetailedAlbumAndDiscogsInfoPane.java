@@ -39,6 +39,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
@@ -53,6 +55,7 @@ import org.fl.collectionAlbum.gui.table.ArtistesScrollJTablePane;
 import org.fl.collectionAlbum.gui.table.ArtistesTableColumns;
 import org.fl.collectionAlbum.utils.CollectionImage;
 import org.fl.collectionAlbum.utils.CollectionUtils;
+import org.fl.discogsInterface.Release;
 
 public class DetailedAlbumAndDiscogsInfoPane extends JTabbedPane {
 
@@ -64,29 +67,62 @@ public class DetailedAlbumAndDiscogsInfoPane extends JTabbedPane {
 	private static final int MAX_COVER_WIDTH = 400;
 	private static final int MAX_COVER_HEIGHT = 400;
 	
+	private static final String WAIT_MESSAGE = "<html><body>Requête envoyée à discogs ....</body></html>";
+	private static final String ERROR_MESSAGE = "<html><body>Erreur de communication avec discogs .... Reéssayer</body></html>";
+	
+	private final int releaseTabIndex = 1;
+	private final DiscogsAlbumRelease release;
+	private JEditorPane releaseInfoFromDiscogs;
+	private boolean releaseInfoDisplayed;
+	
 	public DetailedAlbumAndDiscogsInfoPane(DiscogsAlbumRelease release, GenerationPane generationPane) {
 		
 		super();
+		this.release = release;
+		releaseInfoDisplayed = false;
 		setPreferredSize(Control.getInfoWindowDimension());
-		addTab("Discogs release", releaseInfos(release));
 		addAlbumsTab(release.getCollectionAlbums());
+		addTab("Discogs release", releaseInfos(release));
 		addArtistesTab(
 				release.getCollectionAlbums().stream().map(Album::getAllArtists).flatMap(artistList -> artistList.stream()).toList(), 
 				generationPane);
+		addChangeListener(new ReleaseTabListener());
 	}
 
 	public DetailedAlbumAndDiscogsInfoPane(Album album, GenerationPane generationPane) {
 		
 		super();
+		releaseInfoDisplayed = false;
 		setPreferredSize(Control.getInfoWindowDimension());
 		addTab("Album", albumsInfos(Set.of(album)));
 		
 		String discogsReleaseId = album.getDiscogsLink();					
 		if (discogsReleaseId != null) {
+			this.release = DiscogsInventory.getDiscogsAlbumRelease(discogsReleaseId);
 			addTab("Discogs release", releaseInfos(DiscogsInventory.getDiscogsAlbumRelease(discogsReleaseId)));			
+		} else {
+			this.release = null;
 		}
 		addArtistesTab(album.getAllArtists(), generationPane);
+		
+		addChangeListener(new ReleaseTabListener());
+	}
+	
+	// To lazily populate release tab
+	private class ReleaseTabListener implements ChangeListener {
 
+		@Override
+		public void stateChanged(ChangeEvent e) {
+            if ((getSelectedIndex() == releaseTabIndex) && (release != null) && (releaseInfoFromDiscogs != null) && !releaseInfoDisplayed) {
+            	Release discogsRelease = release.discogsRelease();
+            	if (discogsRelease != null) {
+                	releaseInfoFromDiscogs.setText(CollectionUtils.getHtmlForDiscogsRelease(discogsRelease, release.inventoryCsvAlbum()));
+                	releaseInfoDisplayed = true;
+            	} else {
+            		releaseInfoFromDiscogs.setText(ERROR_MESSAGE);
+            	}
+            }
+		}		
 	}
 	
 	private void addAlbumsTab(Set<Album> albums) {
@@ -109,13 +145,13 @@ public class DetailedAlbumAndDiscogsInfoPane extends JTabbedPane {
 	
 	private JScrollPane releaseInfosFromDiscogs(DiscogsAlbumRelease release) {
 		
-		JEditorPane infoRelease = new JEditorPane();
-		infoRelease.setContentType("text/html");
-		infoRelease.setText(CollectionUtils.getHtmlForDiscogsRelease(release.discogsRelease(), release.inventoryCsvAlbum()));
-		infoRelease.setEditable(false);
-		infoRelease.setFont(monospaced);
-		infoRelease.addHyperlinkListener(new CollectionHyperLinkListener());
-		return new JScrollPane(infoRelease);
+		releaseInfoFromDiscogs = new JEditorPane();
+		releaseInfoFromDiscogs.setContentType("text/html");
+		releaseInfoFromDiscogs.setText(WAIT_MESSAGE);
+		releaseInfoFromDiscogs.setEditable(false);
+		releaseInfoFromDiscogs.setFont(monospaced);
+		releaseInfoFromDiscogs.addHyperlinkListener(new CollectionHyperLinkListener());
+		return new JScrollPane(releaseInfoFromDiscogs);
 	}
 	
 	private JPanel releaseOtherInfo(DiscogsAlbumRelease release) {
