@@ -54,7 +54,6 @@ import org.fl.collectionAlbum.gui.listener.OsActionListener;
 import org.fl.collectionAlbum.gui.table.ArtistesScrollJTablePane;
 import org.fl.collectionAlbum.gui.table.ArtistesTableColumns;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
-import org.fl.discogsInterface.Artist;
 import org.fl.discogsInterface.Release;
 import org.fl.discogsInterface.inventory.InventoryCsvAlbum;
 
@@ -283,9 +282,9 @@ public class CollectionUtils {
 		buf.append("<h1>").append(release.title()).append("</h1>");
 		buf.append("<h3>Artistes:</h3>");
 		
-		Optional.ofNullable(release.artists()).ifPresent(artists -> artists.forEach(artist -> {
-			buf.append("<span class=\"artiste\">").append(artist.name()).append("</span><br/>");
-		}));
+		Optional.ofNullable(release.artists()).ifPresent(artists -> artists.forEach(artist ->
+			buf.append("<span class=\"artiste\">").append(artist.name()).append("</span><br/>")
+		));
 		
 		buf.append("<h3>Titres:</h3><ul>");
 		Optional.ofNullable(release.tracklist()).ifPresent(tracks -> tracks.forEach(track -> {
@@ -293,30 +292,47 @@ public class CollectionUtils {
 				buf.append("<li class=\"trackhead\">&nbsp;").append(track.title()).append("</li>");
 			} else {
 				buf.append("<li>").append(track.position()).append(" ").append(track.title()).append("   ").append(track.duration());
-				List<Artist> artists = track.extraartists();
-				if (artists != null) {
-					artists.forEach(artist -> addPropertyInfo(buf.append("<p>&nbsp;&nbsp;"), artist.role(), artist.name()));
-				}
+				Optional.ofNullable(track.extraartists()).ifPresent(artists -> artists.forEach(artist -> 
+					addPropertyInfo(buf.append("<p>&nbsp;&nbsp;"), artist.role(), artist.name())
+				));				
 				buf.append("</li>");
 			}
 		}));
 		buf.append("</ul>");
 		
 		buf.append("<h3>Format:</h3><ul>");
-		Optional.ofNullable(release.formats()).ifPresent(formats -> formats.forEach(format -> {
-			buf.append("<li>").append(format.qty()).append(" x ").append(format.name()).append(" ").append(format.descriptions());
-		}));
+		Optional.ofNullable(release.formats()).ifPresent(formats -> formats.forEach(format ->
+			buf.append("<li>").append(format.qty()).append(" x ").append(format.name()).append(" ").append(format.descriptions())
+		));
 		buf.append("</ul>");
 		
+		buf.append("<h3>Genre, Style:</h3><ul>")
+			.append("<li>Genre: ").append(release.genres())
+			.append("<li>Style: ").append(release.styles())
+			.append("</ul>");
+		
+		buf.append("<h3>Crédits:</h3><ul>");
+		Optional.ofNullable(release.extraartists()).ifPresent(artists -> artists.forEach(artist -> 
+			buf.append("<li>").append(artist.role()).append(" - ").append(artist.name())
+		));
+		buf.append("</ul>");
+				
 		buf.append("<h3>Labels, sociétés...:</h3><ul>");
-		Optional.ofNullable(release.labels()).ifPresent(labels -> labels.forEach(label -> {
-			buf.append("<li>").append(label.entityTypeName()).append(" - ").append(label.name()).append(" - ").append(label.catno());
-		}));
-		Optional.ofNullable(release.companies()).ifPresent(companies -> companies.forEach(company -> {
-			buf.append("<li>").append(company.entityTypeName()).append(" - ").append(company.name()).append(" - ").append(company.catno());
-		}));
+		Optional.ofNullable(release.labels()).ifPresent(labels -> labels.forEach(label ->
+			buf.append("<li>").append(label.entityTypeName()).append(" - ").append(label.name()).append(" - ").append(label.catno())
+		));
+		Optional.ofNullable(release.companies()).ifPresent(companies -> companies.forEach(company ->
+			buf.append("<li>").append(company.entityTypeName()).append(" - ").append(company.name()).append(" - ").append(company.catno())
+		));
 		buf.append("</ul>");
 		
+		buf.append("<h3>Codes barres et autres identifiants:</h3><ul>");
+		Optional.ofNullable(release.identifiers()).ifPresent(identifiers -> identifiers.forEach(id ->
+			buf.append("<li>").append(id.type()).append(" (").append(id.description()).append("): ").append(id.value())
+		));
+		buf.append("</ul>");
+		
+		buf.append("<h3>Notes:</h3><p>").append(release.notes()).append("</p>");		
 		buf.append("<h3>Date de sortie: ").append(release.released()).append("</h3>");
 		addPropertyInfo(buf, "Release id Discogs", release.id());
 		addPropertyInfo(buf, "Pays", release.country());
@@ -328,6 +344,7 @@ public class CollectionUtils {
 		addPropertyInfo(buf, "Notation", inventoryCsvAlbum.getRating());
 		
 		buf.append("</body></html>");
+		System.out.println(buf.toString());
 		return buf.toString();	
 	}
 	
