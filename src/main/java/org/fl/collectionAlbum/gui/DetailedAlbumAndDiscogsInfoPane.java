@@ -29,6 +29,7 @@ import java.awt.Font;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
@@ -39,14 +40,13 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.border.EmptyBorder;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
 import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory;
+import org.fl.collectionAlbum.disocgs.DiscogsReleaseRequest;
 import org.fl.collectionAlbum.gui.adapter.ImageDisplayMouseAdapter;
 import org.fl.collectionAlbum.gui.listener.CollectionHyperLinkListener;
 import org.fl.collectionAlbum.gui.listener.MediaFilePathActionListener;
@@ -55,11 +55,12 @@ import org.fl.collectionAlbum.gui.table.ArtistesScrollJTablePane;
 import org.fl.collectionAlbum.gui.table.ArtistesTableColumns;
 import org.fl.collectionAlbum.utils.CollectionImage;
 import org.fl.collectionAlbum.utils.CollectionUtils;
-import org.fl.discogsInterface.Release;
 
 public class DetailedAlbumAndDiscogsInfoPane extends JTabbedPane {
 
 	private static final long serialVersionUID = 1L;
+	
+	private static final Logger logger = Logger.getLogger(DetailedAlbumAndDiscogsInfoPane.class.getName());
 	
 	private static final Font verdana = new Font("Verdana", Font.BOLD, 14);
 	private static final Font monospaced = new Font("monospaced", Font.BOLD, 14);
@@ -68,61 +69,34 @@ public class DetailedAlbumAndDiscogsInfoPane extends JTabbedPane {
 	private static final int MAX_COVER_HEIGHT = 400;
 	
 	private static final String WAIT_MESSAGE = "<html><body>Requête envoyée à discogs ....</body></html>";
-	private static final String ERROR_MESSAGE = "<html><body>Erreur de communication avec discogs .... Reéssayer</body></html>";
-	
-	private final int releaseTabIndex = 1;
-	private final DiscogsAlbumRelease release;
-	private JEditorPane releaseInfoFromDiscogs;
-	private boolean releaseInfoDisplayed;
 	
 	public DetailedAlbumAndDiscogsInfoPane(DiscogsAlbumRelease release, GenerationPane generationPane) {
 		
 		super();
-		this.release = release;
-		releaseInfoDisplayed = false;
 		setPreferredSize(Control.getInfoWindowDimension());
 		addAlbumsTab(release.getCollectionAlbums());
 		addTab("Discogs release", releaseInfos(release));
 		addArtistesTab(
 				release.getCollectionAlbums().stream().map(Album::getAllArtists).flatMap(artistList -> artistList.stream()).toList(), 
 				generationPane);
-		addChangeListener(new ReleaseTabListener());
 	}
 
 	public DetailedAlbumAndDiscogsInfoPane(Album album, GenerationPane generationPane) {
 		
 		super();
-		releaseInfoDisplayed = false;
 		setPreferredSize(Control.getInfoWindowDimension());
 		addTab("Album", albumsInfos(Set.of(album)));
 		
 		String discogsReleaseId = album.getDiscogsLink();					
 		if (discogsReleaseId != null) {
-			this.release = DiscogsInventory.getDiscogsAlbumRelease(discogsReleaseId);
-			addTab("Discogs release", releaseInfos(DiscogsInventory.getDiscogsAlbumRelease(discogsReleaseId)));			
-		} else {
-			this.release = null;
+			DiscogsAlbumRelease release = DiscogsInventory.getDiscogsAlbumRelease(discogsReleaseId);
+			if (release != null) {
+				addTab("Discogs release", releaseInfos(release));
+			} else {
+				logger.warning("La release discogs référencé dans l'album " + album.getTitre() + " n'est pas dans l'inventaire discogs (csv)");
+			}
 		}
 		addArtistesTab(album.getAllArtists(), generationPane);
-		
-		addChangeListener(new ReleaseTabListener());
-	}
-	
-	// To lazily populate release tab
-	private class ReleaseTabListener implements ChangeListener {
-
-		@Override
-		public void stateChanged(ChangeEvent e) {
-            if ((getSelectedIndex() == releaseTabIndex) && (release != null) && (releaseInfoFromDiscogs != null) && !releaseInfoDisplayed) {
-            	Release discogsRelease = release.discogsRelease();
-            	if (discogsRelease != null) {
-                	releaseInfoFromDiscogs.setText(CollectionUtils.getHtmlForDiscogsRelease(discogsRelease, release.inventoryCsvAlbum()));
-                	releaseInfoDisplayed = true;
-            	} else {
-            		releaseInfoFromDiscogs.setText(ERROR_MESSAGE);
-            	}
-            }
-		}		
 	}
 	
 	private void addAlbumsTab(Set<Album> albums) {
@@ -145,12 +119,15 @@ public class DetailedAlbumAndDiscogsInfoPane extends JTabbedPane {
 	
 	private JScrollPane releaseInfosFromDiscogs(DiscogsAlbumRelease release) {
 		
-		releaseInfoFromDiscogs = new JEditorPane();
+		JEditorPane releaseInfoFromDiscogs = new JEditorPane();
 		releaseInfoFromDiscogs.setContentType("text/html");
-		releaseInfoFromDiscogs.setText(WAIT_MESSAGE);
 		releaseInfoFromDiscogs.setEditable(false);
 		releaseInfoFromDiscogs.setFont(monospaced);
 		releaseInfoFromDiscogs.addHyperlinkListener(new CollectionHyperLinkListener());
+		releaseInfoFromDiscogs.setText(WAIT_MESSAGE);
+		DiscogsReleaseRequest discogsReleaseRequest = new DiscogsReleaseRequest(release, releaseInfoFromDiscogs);
+		discogsReleaseRequest.execute();
+		
 		return new JScrollPane(releaseInfoFromDiscogs);
 	}
 	
