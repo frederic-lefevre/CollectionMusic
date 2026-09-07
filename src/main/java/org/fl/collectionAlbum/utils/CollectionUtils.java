@@ -333,7 +333,7 @@ public class CollectionUtils {
 		));
 		buf.append("</ul>");
 		
-		buf.append("<h3>Notes:</h3><p>").append(release.notes()).append("</p>");		
+		buf.append("<h3>Notes:</h3><pre>").append(release.notes()).append("</pre>");		
 		buf.append("<h3>Date de sortie: ").append(release.released()).append("</h3>");
 		addPropertyInfo(buf, "Release id Discogs", release.id());
 		addPropertyInfo(buf, "Pays", release.country());
@@ -345,7 +345,6 @@ public class CollectionUtils {
 		addPropertyInfo(buf, "Notation", inventoryCsvAlbum.getRating());
 		
 		buf.append("</body></html>");
-		System.out.println(buf.toString());
 		return buf.toString();	
 	}
 	
