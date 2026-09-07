@@ -46,6 +46,7 @@ import org.fl.collectionAlbum.artistes.Artiste;
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
 import org.fl.collectionAlbum.disocgs.DiscogsInventory;
 import org.fl.collectionAlbum.gui.adapter.ImageDisplayMouseAdapter;
+import org.fl.collectionAlbum.gui.listener.CollectionHyperLinkListener;
 import org.fl.collectionAlbum.gui.listener.MediaFilePathActionListener;
 import org.fl.collectionAlbum.gui.listener.OsActionListener;
 import org.fl.collectionAlbum.gui.table.ArtistesScrollJTablePane;
@@ -113,6 +114,7 @@ public class DetailedAlbumAndDiscogsInfoPane extends JTabbedPane {
 		infoRelease.setText(CollectionUtils.getHtmlForDiscogsRelease(release.discogsRelease(), release.inventoryCsvAlbum()));
 		infoRelease.setEditable(false);
 		infoRelease.setFont(monospaced);
+		infoRelease.addHyperlinkListener(new CollectionHyperLinkListener());
 		return new JScrollPane(infoRelease);
 	}
 	

@@ -97,6 +97,8 @@ public class Control {
 	private OsAction<String> displayFolderAction;
 	private Path discogsCollectionCsvExportPath;
 	private String discogsBaseUrlForRelease;
+	private String discogsBaseUrlForArtist;
+	private String discogsBaseUrlForLabel;
 	private String discogsUserName;
 	private String discogsUserToken;
 	private String cssForGui;
@@ -175,6 +177,8 @@ public class Control {
 						
 			discogsCollectionCsvExportPath = FilesUtils.uriStringToAbsolutePath(collectionProperties.getProperty("album.discogs.collection.csvExport"));
 			discogsBaseUrlForRelease = collectionProperties.getProperty("album.discogs.baseUrl.release");
+			discogsBaseUrlForArtist = collectionProperties.getProperty("album.discogs.baseUrl.artist");
+			discogsBaseUrlForLabel = collectionProperties.getProperty("album.discogs.baseUrl.label");
 			discogsUserName = collectionProperties.getFileContentFromURI("album.discogs.userName.file", Charset.defaultCharset());
 			discogsUserToken = collectionProperties.getFileContentFromURI("album.discogs.userToken.file", Charset.defaultCharset());
 			
@@ -372,6 +376,14 @@ public class Control {
 
 	public static String getDiscogsBaseUrlForRelease() {
 		return getInstance().discogsBaseUrlForRelease;
+	}
+	
+	public static String getDiscogsBaseUrlForArtist() {
+		return getInstance().discogsBaseUrlForArtist;
+	}
+	
+	public static String getDiscogsBaseUrlForLabel() {
+		return getInstance().discogsBaseUrlForLabel;
 	}
 	
 	public static String getDiscogsUserName() {

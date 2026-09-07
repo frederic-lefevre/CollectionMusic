@@ -54,6 +54,8 @@ import org.fl.collectionAlbum.gui.listener.OsActionListener;
 import org.fl.collectionAlbum.gui.table.ArtistesScrollJTablePane;
 import org.fl.collectionAlbum.gui.table.ArtistesTableColumns;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
+import org.fl.discogsInterface.Artist;
+import org.fl.discogsInterface.Label;
 import org.fl.discogsInterface.Release;
 import org.fl.discogsInterface.inventory.InventoryCsvAlbum;
 
@@ -294,7 +296,11 @@ public class CollectionUtils {
 				buf.append("<li>").append(track.position()).append(" - <b>").append(track.title()).append("</b> - ").append(track.duration());
 				Optional.ofNullable(track.extraartists()).ifPresent(artists -> {
 					buf.append("<br/>");
-					artists.forEach(artist -> addPropertyInfo(buf.append("&nbsp;&nbsp;"), artist.role(), artist.name()));
+					artists.forEach(artist -> {
+						buf.append("&nbsp;&nbsp;").append(artist.role()).append(": ");
+						appendDiscogsHyperlink(buf, artist);
+						buf.append("<br/>");
+					});
 				});				
 				buf.append("<hr/></li>");
 			}
@@ -313,18 +319,23 @@ public class CollectionUtils {
 			.append("</ul>");
 		
 		buf.append("<h3>Crédits:</h3><ul>");
-		Optional.ofNullable(release.extraartists()).ifPresent(artists -> artists.forEach(artist -> 
-			buf.append("<li>").append(artist.role()).append(" - ").append(artist.name())
-		));
+		Optional.ofNullable(release.extraartists()).ifPresent(artists -> artists.forEach(artist -> {
+			buf.append("<li>").append(artist.role()).append(" - ");
+			appendDiscogsHyperlink(buf, artist);
+		}));
 		buf.append("</ul>");
 				
 		buf.append("<h3>Labels, sociétés...:</h3><ul>");
-		Optional.ofNullable(release.labels()).ifPresent(labels -> labels.forEach(label ->
-			buf.append("<li>").append(label.entityTypeName()).append(" - ").append(label.name()).append(" - ").append(label.catno())
-		));
-		Optional.ofNullable(release.companies()).ifPresent(companies -> companies.forEach(company ->
-			buf.append("<li>").append(company.entityTypeName()).append(" - ").append(company.name()).append(" - ").append(company.catno())
-		));
+		Optional.ofNullable(release.labels()).ifPresent(labels -> labels.forEach(label -> {
+			buf.append("<li>").append(label.entityTypeName()).append(" - ");
+			appendDiscogsHyperlink(buf, label);
+			buf.append(" - ").append(label.catno());
+		}));
+		Optional.ofNullable(release.companies()).ifPresent(companies -> companies.forEach(company -> {
+			buf.append("<li>").append(company.entityTypeName()).append(" - ");
+			appendDiscogsHyperlink(buf, company);
+			buf.append(" - ").append(company.catno());
+		}));
 		buf.append("</ul>");
 		
 		buf.append("<h3>Codes barres et autres identifiants:</h3><ul>");
@@ -346,6 +357,24 @@ public class CollectionUtils {
 		
 		buf.append("</body></html>");
 		return buf.toString();	
+	}
+	
+	private static void appendDiscogsHyperlink(StringBuilder buf, Artist artist) {
+		if ((artist.id() !=0)) {
+			buf.append("<a class=\"hyperlink\" href=\"").append(Control.getDiscogsBaseUrlForArtist()).append(artist.id()).append("\">")
+				.append(artist.name()).append("</a>");
+		} else {
+			buf.append(artist.name());
+		}
+	}
+	
+	private static void appendDiscogsHyperlink(StringBuilder buf, Label label) {
+		if ((label.id() != 0)) {
+			buf.append("<a class=\"hyperlink\" href=\"").append(Control.getDiscogsBaseUrlForLabel()).append(label.id()).append("\">")
+				.append(label.name()).append("</a>");
+		} else {
+			buf.append(label.name());
+		}
 	}
 	
 	private static void addPropertyInfo(StringBuilder info, String name, Object value) {

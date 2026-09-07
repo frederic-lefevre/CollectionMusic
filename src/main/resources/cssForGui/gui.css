@@ -54,3 +54,10 @@ li.trackhead {
 	background: silver;
 	font-weight: bold;
 }
+
+a.hyperlink {
+	color: blue;
+	text-decoration: underline;
+	font-style: normal;
+	pointer-events: auto;
+}
