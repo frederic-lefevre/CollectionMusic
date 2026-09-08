@@ -73,9 +73,9 @@ public class DetailedAlbumAndDiscogsInfoPane extends JTabbedPane {
 	public DetailedAlbumAndDiscogsInfoPane(DiscogsAlbumRelease release, GenerationPane generationPane) {
 		
 		super();
-		setPreferredSize(Control.getInfoWindowDimension());
-		addAlbumsTab(release.getCollectionAlbums());
+		setPreferredSize(Control.getInfoWindowDimension());		
 		addTab("Discogs release", releaseInfos(release));
+		addAlbumsTab(release.getCollectionAlbums());
 		addArtistesTab(
 				release.getCollectionAlbums().stream().map(Album::getAllArtists).flatMap(artistList -> artistList.stream()).toList(), 
 				generationPane);
