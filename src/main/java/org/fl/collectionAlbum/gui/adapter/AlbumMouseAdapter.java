@@ -34,8 +34,6 @@ import javax.swing.JScrollPane;
 
 import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.albums.Album;
-import org.fl.collectionAlbum.disocgs.DiscogsAlbumRelease;
-import org.fl.collectionAlbum.disocgs.DiscogsInventory;
 import org.fl.collectionAlbum.gui.DetailedAlbumAndDiscogsInfoPane;
 import org.fl.collectionAlbum.gui.GenerationPane;
 import org.fl.collectionAlbum.gui.listener.AlbumCustomActionListener;
@@ -66,9 +64,7 @@ public class AlbumMouseAdapter extends MusicArtefactMouseAdapter<Album> {
 		
 		if (musicArtefactTable.isDiscogsReleaseColumnSelected() && (discogsReleaseId != null) && !discogsReleaseId.isEmpty()) {
 				
-			DiscogsAlbumRelease release = DiscogsInventory.getDiscogsAlbumRelease(discogsReleaseId);
- 
-			(new OsActionListener<>(List.of(Control.getDiscogsBaseUrlForRelease() + release.getInventoryCsvAlbum().getReleaseId()), Control.getDisplayUrlAction()))
+			(new OsActionListener<>(List.of(Control.getDiscogsBaseUrlForRelease() + discogsReleaseId), Control.getDisplayUrlAction()))
 				.actionPerformed(null);
 
 		} else if (musicArtefactTable.isAlbumCoverColumnSelected()) {

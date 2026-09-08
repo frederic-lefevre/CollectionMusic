@@ -31,6 +31,7 @@ import java.net.URI;
 import java.time.temporal.TemporalAccessor;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -53,6 +54,10 @@ import org.fl.collectionAlbum.gui.listener.OsActionListener;
 import org.fl.collectionAlbum.gui.table.ArtistesScrollJTablePane;
 import org.fl.collectionAlbum.gui.table.ArtistesTableColumns;
 import org.fl.collectionAlbum.mediaPath.MediaFilesInventories;
+import org.fl.discogsInterface.Artist;
+import org.fl.discogsInterface.Label;
+import org.fl.discogsInterface.Release;
+import org.fl.discogsInterface.inventory.InventoryCsvAlbum;
 
 public class CollectionUtils {
 	
@@ -270,6 +275,110 @@ public class CollectionUtils {
 		});
 		buf.append("</table></body></html>");
 		return buf.toString();		
+	}
+	
+	public static String getHtmlForDiscogsRelease(Release release, InventoryCsvAlbum inventoryCsvAlbum) {
+		
+		StringBuilder buf = getStringBuilderWithHtmlBegin();
+		
+		buf.append("<h1>").append(release.title()).append("</h1>");
+		buf.append("<h3>Artistes:</h3>");
+		
+		Optional.ofNullable(release.artists()).ifPresent(artists -> artists.forEach(artist ->
+			buf.append("<span class=\"artiste\">").append(artist.name()).append("</span><br/>")
+		));
+		
+		buf.append("<h3>Titres:</h3><ul>");
+		Optional.ofNullable(release.tracklist()).ifPresent(tracks -> tracks.forEach(track -> {
+			if ("heading".equals(track.type())) {
+				buf.append("<li class=\"trackhead\">&nbsp;").append(track.title()).append("</li>");
+			} else {
+				buf.append("<li>").append(track.position()).append(" - <b>").append(track.title()).append("</b> - ").append(track.duration());
+				Optional.ofNullable(track.extraartists()).ifPresent(artists -> {
+					buf.append("<br/>");
+					artists.forEach(artist -> {
+						buf.append("&nbsp;&nbsp;").append(artist.role()).append(": ");
+						appendDiscogsHyperlink(buf, artist);
+						buf.append("<br/>");
+					});
+				});				
+				buf.append("<hr/></li>");
+			}
+		}));
+		buf.append("</ul>");
+		
+		buf.append("<h3>Format:</h3><ul>");
+		Optional.ofNullable(release.formats()).ifPresent(formats -> formats.forEach(format ->
+			buf.append("<li>").append(format.qty()).append(" x ").append(format.name()).append(" ").append(format.descriptions())
+		));
+		buf.append("</ul>");
+		
+		buf.append("<h3>Genre, Style:</h3><ul>")
+			.append("<li>Genre: ").append(release.genres())
+			.append("<li>Style: ").append(release.styles())
+			.append("</ul>");
+		
+		buf.append("<h3>Crédits:</h3><ul>");
+		Optional.ofNullable(release.extraartists()).ifPresent(artists -> artists.forEach(artist -> {
+			buf.append("<li>").append(artist.role()).append(" - ");
+			appendDiscogsHyperlink(buf, artist);
+		}));
+		buf.append("</ul>");
+				
+		buf.append("<h3>Labels, sociétés...:</h3><ul>");
+		Optional.ofNullable(release.labels()).ifPresent(labels -> labels.forEach(label -> {
+			buf.append("<li>").append(label.entityTypeName()).append(" - ");
+			appendDiscogsHyperlink(buf, label);
+			buf.append(" - ").append(label.catno());
+		}));
+		Optional.ofNullable(release.companies()).ifPresent(companies -> companies.forEach(company -> {
+			buf.append("<li>").append(company.entityTypeName()).append(" - ");
+			appendDiscogsHyperlink(buf, company);
+			buf.append(" - ").append(company.catno());
+		}));
+		buf.append("</ul>");
+		
+		buf.append("<h3>Codes barres et autres identifiants:</h3><ul>");
+		Optional.ofNullable(release.identifiers()).ifPresent(identifiers -> identifiers.forEach(id ->
+			buf.append("<li>").append(id.type()).append(" (").append(id.description()).append("): ").append(id.value())
+		));
+		buf.append("</ul>");
+		
+		buf.append("<h3>Notes:</h3><pre>").append(release.notes()).append("</pre>");		
+		buf.append("<h3>Date de sortie: ").append(release.released()).append("</h3>");
+		addPropertyInfo(buf, "Release id Discogs", release.id());
+		addPropertyInfo(buf, "Pays", release.country());
+		addPropertyInfo(buf, "Dossier de collection", inventoryCsvAlbum.getCollectionFolder());
+		addPropertyInfo(buf, "Date d'ajout dans la collection", inventoryCsvAlbum.getDateAdded());
+		addPropertyInfo(buf, "Etat du media", inventoryCsvAlbum.getCollectionMediaCondition());
+		addPropertyInfo(buf, "Etat de la pochette", inventoryCsvAlbum.getCollectionSleeveCondition());
+		addPropertyInfo(buf, "Notes", inventoryCsvAlbum.getCollectionNotes());
+		addPropertyInfo(buf, "Notation", inventoryCsvAlbum.getRating());
+		
+		buf.append("</body></html>");
+		return buf.toString();	
+	}
+	
+	private static void appendDiscogsHyperlink(StringBuilder buf, Artist artist) {
+		if ((artist.id() !=0)) {
+			buf.append("<a class=\"hyperlink\" href=\"").append(Control.getDiscogsBaseUrlForArtist()).append(artist.id()).append("\">")
+				.append(artist.name()).append("</a>");
+		} else {
+			buf.append(artist.name());
+		}
+	}
+	
+	private static void appendDiscogsHyperlink(StringBuilder buf, Label label) {
+		if ((label.id() != 0)) {
+			buf.append("<a class=\"hyperlink\" href=\"").append(Control.getDiscogsBaseUrlForLabel()).append(label.id()).append("\">")
+				.append(label.name()).append("</a>");
+		} else {
+			buf.append(label.name());
+		}
+	}
+	
+	private static void addPropertyInfo(StringBuilder info, String name, Object value) {
+		info.append(name).append(": ").append(Optional.ofNullable(value).map(v -> v.toString()).orElse("valeur null")).append("<br/>");
 	}
 	
 	public static class LongComparator implements Comparator<Long> {

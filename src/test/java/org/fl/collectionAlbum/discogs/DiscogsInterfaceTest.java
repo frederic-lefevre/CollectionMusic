@@ -1,0 +1,94 @@
+/*
+ * MIT License
+
+Copyright (c) 2017, 2026 Frederic Lefevre
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+package org.fl.collectionAlbum.discogs;
+
+import static org.assertj.core.api.Assertions.*;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import org.fl.collectionAlbum.disocgs.DiscogsCollectionValue;
+import org.fl.collectionAlbum.disocgs.DiscogsInterface;
+import org.fl.discogsInterface.Currency;
+import org.fl.discogsInterface.Release;
+import org.fl.discogsInterface.UserProfile;
+import org.fl.util.FilterCounter;
+import org.fl.util.FilterCounter.LogRecordCounter;
+import org.junit.jupiter.api.Test;
+
+class DiscogsInterfaceTest {
+
+	@Test
+	void shouldReturnCollectionValue() {
+		
+		DiscogsCollectionValue collectionValue =  DiscogsInterface.collectionValue();
+		
+		assertThat(collectionValue).isNotNull();
+		assertThat(collectionValue.maxValue()).isPositive();
+	}
+	
+	@Test
+	void shouldReturnUserProfile() {
+		
+		UserProfile userProfile = DiscogsInterface.userProfile();
+		
+		assertThat(userProfile).isNotNull();
+		assertThat(userProfile.currency()).isEqualTo(Currency.EUR);
+		assertThat(userProfile.numCollection()).isGreaterThan(1500);
+	}
+	
+	@Test
+	void shouldGetRelease() {
+		
+		String releaseId = "8706129";
+		
+		Release release = DiscogsInterface.release(releaseId);
+		assertThat(release).isNotNull();
+		assertThat(release.id()).isEqualTo(releaseId);
+		assertThat(release.title()).isEqualTo("The Allman Brothers Band At Fillmore East");
+		assertThat(release.country()).isEqualTo("France");
+		assertThat(release.notes()).isNotBlank();
+		assertThat(release.tracklist()).isNotNull().hasSize(7)
+			.anySatisfy(track -> assertThat(track.title()).isEqualTo("Statesboro Blues"));
+	}
+	
+	@Test
+	void shouldNotGetRelease() {
+		
+		String releaseId = "8706129x";
+		
+		LogRecordCounter discogsInterfaceFilterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(DiscogsInterface.class.getName()));	
+		
+		Release release = DiscogsInterface.release(releaseId);
+		assertThat(release).isNull();
+		
+		assertThat(discogsInterfaceFilterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(discogsInterfaceFilterCounter.getLogRecordCount(Level.SEVERE)).isEqualTo(1);
+		assertThat(discogsInterfaceFilterCounter.getLogRecords()).singleElement()
+			.satisfies(logRecord -> assertThat(logRecord.getMessage()).contains(releaseId + " not found on discogs"));
+		discogsInterfaceFilterCounter.stopLogCountAndFilter();
+		
+	}
+}

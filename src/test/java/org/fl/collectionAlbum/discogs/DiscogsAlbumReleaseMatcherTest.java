@@ -240,9 +240,9 @@ class DiscogsAlbumReleaseMatcherTest {
 		assertThat(releaseMatchResult.getMatchingReleases())
 			.isNotNull().singleElement()
 			.satisfies(release -> {
-				assertThat(release.getInventoryCsvAlbum().getArtists()).contains("Soft Machine");
-				assertThat(release.getInventoryCsvAlbum().getTitle().toLowerCase()).isEqualTo("third");
-				assertThat(release.getInventoryCsvAlbum().getFormats()).anyMatch(format -> format.contains("LP"));
+				assertThat(release.inventoryCsvAlbum().getArtists()).contains("Soft Machine");
+				assertThat(release.inventoryCsvAlbum().getTitle().toLowerCase()).isEqualTo("third");
+				assertThat(release.inventoryCsvAlbum().getFormats()).anyMatch(format -> format.contains("LP"));
 			});
 		
 		DiscogsAlbumRelease thirdRelease = releaseMatchResult.getMatchingReleases().iterator().next();
@@ -285,9 +285,9 @@ class DiscogsAlbumReleaseMatcherTest {
 		assertThat(releaseMatchResult.getMatchingReleases())
 			.isNotNull().hasSizeGreaterThan(1)
 			.allSatisfy(release -> {
-				assertThat(release.getInventoryCsvAlbum().getArtists()).anyMatch(artist -> artist.contains("Jimi Hendrix"));
-				assertThat(release.getInventoryCsvAlbum().getTitle().toLowerCase()).isEqualTo("electric ladyland");
-				assertThat(release.getInventoryCsvAlbum().getFormats()).anyMatch(format -> format.contains("CD"));
+				assertThat(release.inventoryCsvAlbum().getArtists()).anyMatch(artist -> artist.contains("Jimi Hendrix"));
+				assertThat(release.inventoryCsvAlbum().getTitle().toLowerCase()).isEqualTo("electric ladyland");
+				assertThat(release.inventoryCsvAlbum().getFormats()).anyMatch(format -> format.contains("CD"));
 			});
 
 	}
@@ -301,9 +301,9 @@ class DiscogsAlbumReleaseMatcherTest {
 		assertThat(releaseMatchResult.getMatchingReleases())
 			.isNotNull().singleElement()
 			.satisfies(release -> {
-				assertThat(release.getInventoryCsvAlbum().getArtists()).contains("Soft Machine");
-				assertThat(release.getInventoryCsvAlbum().getTitle().toLowerCase()).isEqualTo("third");
-				assertThat(release.getInventoryCsvAlbum().getFormats()).anyMatch(format -> format.contains("LP"));
+				assertThat(release.inventoryCsvAlbum().getArtists()).contains("Soft Machine");
+				assertThat(release.inventoryCsvAlbum().getTitle().toLowerCase()).isEqualTo("third");
+				assertThat(release.inventoryCsvAlbum().getFormats()).anyMatch(format -> format.contains("LP"));
 			});
 	}
 	

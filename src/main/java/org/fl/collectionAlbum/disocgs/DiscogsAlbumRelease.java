@@ -39,6 +39,7 @@ import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.AlbumMatchResul
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.MatchResultType;
 import org.fl.collectionAlbum.format.Format;
 import org.fl.collectionAlbum.format.MediaSupportCategories;
+import org.fl.discogsInterface.Release;
 import org.fl.discogsInterface.inventory.InventoryCsvAlbum;
 
 public class DiscogsAlbumRelease {
@@ -56,10 +57,12 @@ public class DiscogsAlbumRelease {
 	
 	private final InventoryCsvAlbum inventoryCsvAlbum;
 	private final Set<Album> collectionAlbums;
+	private Release discogsRelease;
 	
 	protected DiscogsAlbumRelease(InventoryCsvAlbum inventoryCsvAlbum) {
 		this.inventoryCsvAlbum = inventoryCsvAlbum;
 		collectionAlbums = new HashSet<>();
+		discogsRelease = null;
 	}
 
 	public Set<Album> getCollectionAlbums() {
@@ -74,7 +77,7 @@ public class DiscogsAlbumRelease {
 		this.collectionAlbums.add(collectionAlbum);
 	}
 
-	public InventoryCsvAlbum getInventoryCsvAlbum() {
+	public InventoryCsvAlbum inventoryCsvAlbum() {
 		return inventoryCsvAlbum;
 	}
 	
@@ -138,8 +141,8 @@ public class DiscogsAlbumRelease {
 	
 	public boolean isAlbumAuteursAndTitleMatching(Album album) {
 		
-		return (getInventoryCsvAlbum().getTitle().toLowerCase().contains(album.getTitre().toLowerCase()) &&
-				getInventoryCsvAlbum().getArtists().stream()
+		return (inventoryCsvAlbum().getTitle().toLowerCase().contains(album.getTitre().toLowerCase()) &&
+				inventoryCsvAlbum().getArtists().stream()
 					.anyMatch(artist -> album.getAuteurs().stream().map(Artiste::getNomComplet)
 							.anyMatch(albumArtist -> artist.contains(albumArtist))));
 
@@ -154,7 +157,7 @@ public class DiscogsAlbumRelease {
 	
 	private boolean isSupportPhysiquePresent(MediaSupportCategories supportPhysique, Double quantity) {
 		
-		return getInventoryCsvAlbum().getFormats().stream()
+		return inventoryCsvAlbum().getFormats().stream()
 			.anyMatch(inventoryCsvAlbumFormat -> isSupportPhysiquePresent(inventoryCsvAlbumFormat, supportPhysique, quantity));
 	}
 	
@@ -172,7 +175,7 @@ public class DiscogsAlbumRelease {
 		return formatMatchMap.get(supportPhysique);
 	}
 	
-	public String getInfo(boolean displayLinkedAlbums) {
+	public String getInfo() {
 		
 		StringBuilder info = new StringBuilder();
 		
@@ -194,7 +197,7 @@ public class DiscogsAlbumRelease {
 		if ((collectionAlbums == null) || collectionAlbums.isEmpty()) {
 			info.append("\n-------------------------------------\n  Non lié à un album de la collection\n");
 			
-		} else if (displayLinkedAlbums){
+		} else {
 			info.append("\n-------------------------------------\n  Albums de la collection liés\n");
 			
 			collectionAlbums.forEach(collectionAlbum -> 
@@ -202,8 +205,15 @@ public class DiscogsAlbumRelease {
 					.append("\n-------------------------------------\n")
 				);
 		}
-		
 		return info.toString();
+	}
+	
+	public Release discogsRelease() {
+		
+		if ((discogsRelease == null) && (inventoryCsvAlbum != null)) {
+			discogsRelease = DiscogsInterface.release(inventoryCsvAlbum.getReleaseId());
+		}
+		return discogsRelease;
 	}
 	
 	public String getFormatsInfo() {

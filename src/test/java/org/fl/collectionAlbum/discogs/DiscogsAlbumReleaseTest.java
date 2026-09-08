@@ -62,7 +62,7 @@ class DiscogsAlbumReleaseTest {
 	private static DiscogsAlbumRelease getDiscogsAlbumRelease(String titre) {
 		
 		return DiscogsInventory.getDiscogsInventory().stream()
-			.filter(i -> i.getInventoryCsvAlbum().getTitle().equals(titre))
+			.filter(i -> i.inventoryCsvAlbum().getTitle().equals(titre))
 			.findFirst().get();
 	}
 

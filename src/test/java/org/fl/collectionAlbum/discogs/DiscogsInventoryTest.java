@@ -60,13 +60,13 @@ class DiscogsInventoryTest {
 		assertThat(inventory).isNotNull().hasSize(releaseCount);
 		
 		List<DiscogsAlbumRelease> inventoryJaco = inventory.stream()
-				.filter(album -> album.getInventoryCsvAlbum().getArtists().contains("Jaco Pastorius"))
+				.filter(album -> album.inventoryCsvAlbum().getArtists().contains("Jaco Pastorius"))
 				.collect(Collectors.toList());
 		
 		assertThat(inventoryJaco)
 			.anySatisfy(album -> {
 				
-				InventoryCsvAlbum csvAlbum = album.getInventoryCsvAlbum();
+				InventoryCsvAlbum csvAlbum = album.inventoryCsvAlbum();
 				assertThat(csvAlbum.getArtists()).isNotNull().singleElement()
 					.satisfies(artist -> assertThat(artist).isEqualTo("Jaco Pastorius"));
 				assertThat(csvAlbum.getCatalogNumbers()).isNotNull().singleElement()
@@ -99,7 +99,7 @@ class DiscogsInventoryTest {
 	void shouldGetRelease() {
 		
 		assertThat(DiscogsInventory.getDiscogsAlbumRelease(JACO_RELEASE_ID)).isNotNull()
-			.satisfies(album -> assertThat(album.getInventoryCsvAlbum().getTitle()).isEqualTo(JACO_ALBUM_TITLE));
+			.satisfies(album -> assertThat(album.inventoryCsvAlbum().getTitle()).isEqualTo(JACO_ALBUM_TITLE));
 	}
 	
 	@Test

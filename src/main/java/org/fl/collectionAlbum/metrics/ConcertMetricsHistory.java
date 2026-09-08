@@ -31,7 +31,7 @@ import java.util.Map;
 
 import org.fl.collectionAlbum.CollectionAlbumContainer;
 
-public class ConcertMetricsHistory extends MetricsHistory {
+public class ConcertMetricsHistory extends MetricsHistory<CollectionAlbumContainer> {
 
 	private static final String METRIC_NAME = "Evolution des concerts";
 	
@@ -49,15 +49,8 @@ public class ConcertMetricsHistory extends MetricsHistory {
 		return concertMetricsHistory;
 	}
 	
-	public Metrics addPresentConcertMetricsToHistory(long ts, CollectionAlbumContainer collectionAlbumContainer) {	
-		return addPresentMetricsToHistory(getConcertMetrics(ts, collectionAlbumContainer));
-	}
-	
-	public void setPresentMetricsIfNew(long ts, CollectionAlbumContainer collectionAlbumContainer) {
-		setPresentMetricsIfNew(getConcertMetrics(ts, collectionAlbumContainer));
-	}
-	
-	public Metrics getConcertMetrics(long ts, CollectionAlbumContainer collectionAlbumContainer) {	
+	@Override
+	public Metrics getMetricsFromSource(long ts, CollectionAlbumContainer collectionAlbumContainer) {	
 
 		return new Metrics(ts, 		Map.of(
 				NB_ARTISTE, (double)collectionAlbumContainer.getConcertsArtistes().getNombreArtistes(),

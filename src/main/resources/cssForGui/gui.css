@@ -48,3 +48,16 @@ td.mediako {
 	color: white;
 	background: red;
 }
+
+li.trackhead {
+	list-style-type: none;
+	background: silver;
+	font-weight: bold;
+}
+
+a.hyperlink {
+	color: blue;
+	text-decoration: underline;
+	font-style: normal;
+	pointer-events: auto;
+}

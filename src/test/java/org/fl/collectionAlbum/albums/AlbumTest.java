@@ -490,7 +490,7 @@ class AlbumTest {
 		
 		assertThat(releaseMatchResult.getMatchingReleases()).isNotNull().singleElement()
 			.satisfies(discogsRelease -> {
-				InventoryCsvAlbum csvRelease = discogsRelease.getInventoryCsvAlbum();
+				InventoryCsvAlbum csvRelease = discogsRelease.inventoryCsvAlbum();
 				assertThat(csvRelease.getArtists()).singleElement().isEqualTo("The Beatles");
 				assertThat(csvRelease.getReleaseId()).isEqualTo("2519903");
 			});

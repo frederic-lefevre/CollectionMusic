@@ -57,7 +57,7 @@ public class ReleaseValidationListener implements ActionListener {
 		String presentDiscogsLink = album.getDiscogsLink();
 		if ((presentDiscogsLink == null) || (presentDiscogsLink.isEmpty())) {
 			
-			album.setDiscogsLink(release.getInventoryCsvAlbum().getReleaseId());
+			album.setDiscogsLink(release.inventoryCsvAlbum().getReleaseId());
 			release.addCollectionAlbums(album);
 			album.writeJson();
 			potentialReleasesPane.removeAll();
@@ -66,7 +66,7 @@ public class ReleaseValidationListener implements ActionListener {
 			
 		} else {
 			
-			aLog.severe("Trying to set a discogs link that is already set. Release=" + release.getInventoryCsvAlbum().getReleaseId() + " Album=" + album.getTitre());
+			aLog.severe("Trying to set a discogs link that is already set. Release=" + release.inventoryCsvAlbum().getReleaseId() + " Album=" + album.getTitre());
 		}
 	}
 
