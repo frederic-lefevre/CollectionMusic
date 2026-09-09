@@ -110,7 +110,7 @@ public class CollectionImage {
 					status = ImageStatus.IN_ERROR;
 				}
 			} catch (Exception e) {
-				logger.log(Level.WARNING, "Exception when creating BufferedImage from file " + Objects.toString(imageUrl), e);
+				logger.log(Level.WARNING, "Exception when creating BufferedImage from URL " + Objects.toString(imageUrl), e);
 				image = getImageForError();
 				status = ImageStatus.IN_ERROR;
 			}
