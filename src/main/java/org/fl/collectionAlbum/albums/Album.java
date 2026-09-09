@@ -109,8 +109,7 @@ public class Album extends MusicArtefact {
 			albumLog.warning("Sleeve image not found for for album \"" + titre +"\", json path=" + Objects.toString(jsonFilePath));
 		} else if (sleeveImage.getImageStatus() == ImageStatus.IN_ERROR) {
 			albumLog.warning("Sleeve image build in error for album \"" + titre +"\", json path=" + Objects.toString(jsonFilePath));
-		}
-		
+		}	
 	}
     
     public String getTitre() {
