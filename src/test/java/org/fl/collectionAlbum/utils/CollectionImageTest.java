@@ -191,7 +191,7 @@ class CollectionImageTest {
 		
 		LogRecordCounter filterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(CollectionImage.class.getName()));
 		
-		String releaseId = "8706129";	
+		String releaseId = "8706129";
 		Release release = DiscogsInterface.release(releaseId);
 		assertThat(release).isNotNull();
 		List<Image> images = release.images();
