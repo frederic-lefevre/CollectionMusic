@@ -172,8 +172,8 @@ class RapportStructuresAndNamesTest {
 		assertThat(collectionImageFilterCounter.getLogRecordCount()).isEqualTo(2);
 		assertThat(collectionImageFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(2);
 		collectionImageFilterCounter.stopLogCountAndFilter();
-		assertThat(albumFilterCounter.getLogRecordCount()).isEqualTo(2);
-		assertThat(albumFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(2);
+		assertThat(albumFilterCounter.getLogRecordCount()).isEqualTo(4);
+		assertThat(albumFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(4);
 		albumFilterCounter.stopLogCountAndFilter();
 	}
 	

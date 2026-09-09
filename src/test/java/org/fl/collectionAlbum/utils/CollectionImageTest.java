@@ -47,10 +47,11 @@ class CollectionImageTest {
 		
 		int width = 100;
 		int height = 100;
-		CollectionImage collectionImage = new CollectionImage(null);
+		Path nullPath = null;
+		CollectionImage collectionImage = new CollectionImage(nullPath);
 		assertThat(collectionImage).isNotNull();
 		assertThat(collectionImage.getImageStatus()).isEqualTo(CollectionImage.ImageStatus.NOT_FOUND);
-		assertThat(collectionImage.getImagePath()).isNull();
+		assertThat(collectionImage.getBufferedImage()).isNotNull();
 		
 		ImageIcon imageIcon = collectionImage.buildAdjustedImageIcon(width, height);
 		assertThat(imageIcon).isNotNull();
@@ -73,6 +74,7 @@ class CollectionImageTest {
 		CollectionImage collectionImage = new CollectionImage(Path.of("dummyPath"));
 		assertThat(collectionImage).isNotNull();
 		assertThat(collectionImage.getImageStatus()).isEqualTo(CollectionImage.ImageStatus.IN_ERROR);
+		assertThat(collectionImage.getBufferedImage()).isNotNull();
 		
 		ImageIcon imageIcon = collectionImage.buildAdjustedImageIcon(width, height);
 		assertThat(imageIcon).isNotNull();
@@ -98,7 +100,7 @@ class CollectionImageTest {
 		CollectionImage collectionImage = new CollectionImage(imgFilePath);
 		assertThat(collectionImage).isNotNull();
 		assertThat(collectionImage.getImageStatus()).isEqualTo(CollectionImage.ImageStatus.IN_ERROR);
-		assertThat(collectionImage.getImagePath().toString()).isEqualTo("C:\\ForTests\\CollectionMusique\\img_bad.jpg");
+		assertThat(collectionImage.getBufferedImage()).isNotNull();
 		
 		ImageIcon imageIcon = collectionImage.buildAdjustedImageIcon(width, height);
 		assertThat(imageIcon).isNotNull();
@@ -124,7 +126,7 @@ class CollectionImageTest {
 		CollectionImage collectionImage = new CollectionImage(imgFilePath);
 		assertThat(collectionImage).isNotNull();
 		assertThat(collectionImage.getImageStatus()).isEqualTo(CollectionImage.ImageStatus.OK);
-		assertThat(collectionImage.getImagePath().toString()).isEqualTo("C:\\ForTests\\CollectionMusique\\cover.jpg");
+		assertThat(collectionImage.getBufferedImage()).isNotNull();
 		
 		ImageIcon imageIcon = collectionImage.buildAdjustedImageIcon(width, height);
 		assertThat(imageIcon).isNotNull();

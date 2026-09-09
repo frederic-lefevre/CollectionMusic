@@ -26,6 +26,8 @@ package org.fl.collectionAlbum.utils;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.io.IOError;
+import java.net.URL;
 import java.nio.file.Path;
 import java.util.Objects;
 import java.util.logging.Level;
@@ -48,55 +50,81 @@ public class CollectionImage {
 	
 	public enum ImageStatus {OK, NOT_FOUND, IN_ERROR};
 	
-	private final Path imagePath;
+	private final URL imageUrl;
 	private final BufferedImage bufferedImage;
 	private final ImageStatus imageStatus;
 	
 	public CollectionImage(Path imagePath) {
 		
-		this.imagePath = imagePath;
 		if (imagePath == null) {
 			logger.warning( "Null image path");
+			this.imageUrl = null;
 			imageStatus = ImageStatus.NOT_FOUND;
 			bufferedImage = getImageForImageNotFound();
 		} else {
+			
+			URL imgUrl;
+			try {
+				imgUrl = imagePath.toUri().toURL();
+			} catch (IOError e) {
+				imgUrl = null;
+				logger.log(Level.SEVERE, "IOError converting image path to URL " + Objects.toString(imagePath), e);
+			} catch (Exception e) {
+				imgUrl = null;
+				logger.log(Level.SEVERE, "Exception converting image path to URL " + Objects.toString(imagePath), e);
+			}
+			
+			this.imageUrl = imgUrl;;
+			ResultImage resultImage = getImage(imageUrl);
+			this.bufferedImage = resultImage.bufferedImage();
+			this.imageStatus = resultImage.imageStatus();
+		}
+	}
+
+	public CollectionImage(URL imageUrl) {		
+		this.imageUrl = imageUrl;
+		ResultImage resultImage = getImage(imageUrl);
+		this.bufferedImage = resultImage.bufferedImage();
+		this.imageStatus = resultImage.imageStatus();
+	}
+
+	private record ResultImage(BufferedImage bufferedImage, ImageStatus imageStatus) {};
+	
+	private ResultImage getImage(URL imageUrl) {
+		
+		if (imageUrl == null) {
+			logger.warning( "Null image url");
+			return new ResultImage(getImageForImageNotFound(), ImageStatus.NOT_FOUND);
+		} else {
+
 			BufferedImage image;
 			ImageStatus status;
 			try {
-				image = ImageIO.read(imagePath.toFile());
-			
+				image = ImageIO.read(imageUrl);
+				
 				if (image != null) {
 					status = ImageStatus.OK;
 				} else {
-					logger.warning("Image format problem: No image reader found for this image " + Objects.toString(imagePath));
+					logger.warning("Image format problem: No image reader found for this image " + Objects.toString(imageUrl));
 					image = getImageForError();
 					status = ImageStatus.IN_ERROR;
 				}
 			} catch (Exception e) {
-				logger.log(Level.WARNING, "Exception when creating BufferedImage from file " + Objects.toString(imagePath), e);
+				logger.log(Level.WARNING, "Exception when creating BufferedImage from file " + Objects.toString(imageUrl), e);
 				image = getImageForError();
 				status = ImageStatus.IN_ERROR;
 			}
-			bufferedImage = image;
-			imageStatus = status;
+			return new ResultImage(image, status);
 		}
 	}
-
 	
-	public Path getImagePath() {
-		return imagePath;
-	}
-
-
 	public BufferedImage getBufferedImage() {
 		return bufferedImage;
 	}
 
-
 	public ImageStatus getImageStatus() {
 		return imageStatus;
 	}
-
 
 	public ImageIcon buildAdjustedImageIcon(int maxWidth, int maxHeight) {
 		if (bufferedImage != null) {
@@ -106,7 +134,7 @@ public class CollectionImage {
 			case IN_ERROR -> new ImageIcon(scaleImage(maxWidth, maxHeight), DESCRIPTION_FOR_IMAGE_ERROR);
 			};
 		} else {
-			String message = "Unexpected null image for path " + Objects.toString(imagePath);
+			String message = "Unexpected null image for path " + Objects.toString(imageUrl);
 			logger.severe( message);
 			throw new RuntimeException(message);
 		}
