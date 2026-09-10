@@ -91,6 +91,16 @@ public class DiscogsInterface {
 		}
 	}
 	
+	private String getRawUserProfile() {
+		
+		DiscogsApiResponse<UserProfile> userProfileResponse = discogsApi.userProfile();
+		if (checkDiscogsApiResponse(userProfileResponse, "discogsApi.userProfile()", "")) {
+			return userProfileResponse.rawResponse();
+		} else {
+			return null;
+		}
+	}
+	
 	private DiscogsCollectionValue getCollectionValue(DiscogsApi discogsApi, UserProfile userProfile) {
 		
 		DiscogsApiResponse<CollectionValue> collectionValueResponse = discogsApi.collectionValue();
@@ -160,6 +170,10 @@ public class DiscogsInterface {
 	
 	public static UserProfile userProfile() {
 		return getInstance().userProfile;
+	}
+	
+	public static String rawUserProfile() {
+		return getInstance().getRawUserProfile();
 	}
 	
 	public static Release release(String releaseId) {

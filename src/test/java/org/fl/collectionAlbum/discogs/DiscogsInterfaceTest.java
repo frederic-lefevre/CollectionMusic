@@ -100,4 +100,11 @@ class DiscogsInterfaceTest {
 		String releaseJson = DiscogsInterface.rawRelease(releaseId);
 		assertThat(releaseJson).isNotNull().contains("The Allman Brothers Band At Fillmore East");
 	}
+	
+	@Test
+	void shouldGetRawUserProfile() {
+
+		String rawUserProfileJson = DiscogsInterface.rawUserProfile();
+		assertThat(rawUserProfileJson).isNotNull().contains("frederic.bn.lefevre");
+	}
 }
