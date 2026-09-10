@@ -35,7 +35,7 @@ import javax.swing.JToggleButton;
 
 import org.fl.collectionAlbum.Control;
 
-public class ApplicationOptionsPane extends JPanel {
+public class ApplicationToolsPane extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -45,7 +45,7 @@ public class ApplicationOptionsPane extends JPanel {
 	
 	JToggleButton scanMediaMetadataButton;
 	
-	public ApplicationOptionsPane() {
+	public ApplicationToolsPane() {
 		super();
 		
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
