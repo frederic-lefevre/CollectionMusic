@@ -25,15 +25,18 @@ SOFTWARE.
 package org.fl.collectionAlbum.gui;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
 import javax.swing.BoxLayout;
+import javax.swing.JButton;
 import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 import javax.swing.JToggleButton;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
@@ -48,13 +51,16 @@ public class ApplicationToolsPane extends JPanel {
 	private static final Font verdana = new Font("Verdana", Font.BOLD, 16);
 	private static final Font monospaced = new Font("monospaced", Font.BOLD, 14);
 	
+	private static final Dimension RELEASE_ID_TEXT_DIMENSION = new Dimension(100, 25);
+	
 	private static final String OPTION_LABEL = "Options";
 	private static final String DISCOGS_LABEL = "Réponses Discogs brutes";
 	private static final String SCAN_METADATA_LABEL = "Lire les meta-données des fichiers media ";
 	private static final String YES_TITLE = "Oui";
 	private static final String NO_TITLE = "Non";
 	
-	JToggleButton scanMediaMetadataButton;
+	private final JToggleButton scanMediaMetadataButton;
+	private final JTextField releaseIdField;
 	
 	public ApplicationToolsPane() {
 		super();
@@ -91,6 +97,17 @@ public class ApplicationToolsPane extends JPanel {
 		discogsRawResponseLabel.setOpaque(true);
 		discogsRawResponseLabel.setBorder(new CompoundBorder(new MatteBorder(4, 0, 2, 0, Color.BLACK), new EmptyBorder(10, 50, 15, 50)));
 		commandPanel.add(discogsRawResponseLabel);
+		
+		JPanel releaseGetPane = new JPanel();
+		
+		releaseIdField = new JTextField();
+		releaseIdField.setPreferredSize(RELEASE_ID_TEXT_DIMENSION);
+		releaseGetPane.add(releaseIdField);
+		
+		JButton releaseGetButton = new JButton("Release");
+		releaseGetPane.add(releaseGetButton);
+		
+		commandPanel.add(releaseGetPane);
 		
 		add(commandPanel);
 		
