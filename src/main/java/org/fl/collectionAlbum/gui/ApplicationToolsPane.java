@@ -129,9 +129,14 @@ public class ApplicationToolsPane extends JPanel {
 		
 		JButton releaseGetButton = new JButton("Release");
 		releaseGetButton.addActionListener(new ReleaseGetListener());
-		releaseGetPane.add(releaseGetButton);
-		
+		releaseGetPane.add(releaseGetButton);		
 		commandPanel.add(releaseGetPane);
+		
+		JPanel userProfilePane = new JPanel();
+		JButton userProfileButton = new JButton("Profil utilisateur");
+		userProfileButton.addActionListener(new UserProfileGetListener());
+		userProfilePane.add(userProfileButton);
+		commandPanel.add(userProfilePane);
 		
 		add(commandPanel);
 		
@@ -174,6 +179,16 @@ public class ApplicationToolsPane extends JPanel {
 			String releaseId = releaseIdField.getText();
 			resultPane.setText(WAIT_MESSAGE);
 			DiscogsRawResponseGetter rawReleaseGetter = new DiscogsRawResponseGetter(() -> DiscogsInterface.rawRelease(releaseId));
+			rawReleaseGetter.execute();
+		}
+	}
+	
+	private class UserProfileGetListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			resultPane.setText(WAIT_MESSAGE);
+			DiscogsRawResponseGetter rawReleaseGetter = new DiscogsRawResponseGetter(() -> DiscogsInterface.rawUserProfile());
 			rawReleaseGetter.execute();
 		}
 	}
