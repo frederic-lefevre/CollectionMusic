@@ -54,7 +54,9 @@ public class ApplicationToolsPane extends JPanel {
 	private static final Font verdana = new Font("Verdana", Font.BOLD, 16);
 	private static final Font monospaced = new Font("monospaced", Font.BOLD, 14);
 	
+	private static final Dimension COMMAND_PANEL_DIMENSION = new Dimension(300, 900);
 	private static final Dimension RELEASE_ID_TEXT_DIMENSION = new Dimension(100, 25);
+	private static final Dimension RELEASE_JSON_TEXT_DIMENSION = new Dimension(1600, 900);
 	
 	private static final String OPTION_LABEL = "Options";
 	private static final String DISCOGS_LABEL = "Réponses Discogs brutes";
@@ -72,6 +74,8 @@ public class ApplicationToolsPane extends JPanel {
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		JPanel commandPanel = new JPanel();
 		commandPanel.setLayout(new BoxLayout(commandPanel, BoxLayout.Y_AXIS));
+		commandPanel.setPreferredSize(COMMAND_PANEL_DIMENSION);
+		commandPanel.setMaximumSize(COMMAND_PANEL_DIMENSION);
 		
 		JLabel optionTitle = new JLabel(OPTION_LABEL);
 		optionTitle.setFont(verdana);
@@ -118,9 +122,13 @@ public class ApplicationToolsPane extends JPanel {
 		
 		resultPane = new JEditorPane();
 		resultPane.setEditable(false);
+		resultPane.setContentType("text/html");
 		resultPane.setFont(monospaced);
+		resultPane.setMinimumSize(RELEASE_JSON_TEXT_DIMENSION);
+		JScrollPane resultScrollPane =  new JScrollPane(resultPane);
+		resultScrollPane.setMinimumSize(RELEASE_JSON_TEXT_DIMENSION);
 		
-		add(new JScrollPane(resultPane));
+		add(resultScrollPane);
 	}
 
 	private void setButtonAppearence(JToggleButton toogleButton) {
@@ -149,7 +157,7 @@ public class ApplicationToolsPane extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			
 			String releaseId = releaseIdField.getText();
-			resultPane.setText(DiscogsInterface.rawRelease(releaseId));
+			resultPane.setText("<html><body><pre>" + DiscogsInterface.rawRelease(releaseId) + "</pre></body></html>");
 			
 		}
 	}
