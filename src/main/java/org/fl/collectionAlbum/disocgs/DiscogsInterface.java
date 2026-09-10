@@ -69,8 +69,8 @@ public class DiscogsInterface {
 			discogsApiBuilder.token(userToken);
 		}
 		discogsApi = discogsApiBuilder.build();
-		userProfile = getUserProfile(discogsApi);
-		collectionValue = getCollectionValue(discogsApi, userProfile);
+		userProfile = getUserProfile();
+		collectionValue = getCollectionValue(userProfile);
 		
 		if (userName != null) {
 			if (userProfile == null) {
@@ -81,7 +81,7 @@ public class DiscogsInterface {
 		}
 	}
 	
-	private UserProfile getUserProfile(DiscogsApi discogsApi) {
+	private UserProfile getUserProfile() {
 		
 		DiscogsApiResponse<UserProfile> userProfileResponse = discogsApi.userProfile();
 		if (checkDiscogsApiResponse(userProfileResponse, "discogsApi.userProfile()", "")) {
@@ -91,7 +91,17 @@ public class DiscogsInterface {
 		}
 	}
 	
-	private DiscogsCollectionValue getCollectionValue(DiscogsApi discogsApi, UserProfile userProfile) {
+	private String getRawUserProfile() {
+		
+		DiscogsApiResponse<UserProfile> userProfileResponse = discogsApi.userProfile();
+		if (checkDiscogsApiResponse(userProfileResponse, "discogsApi.userProfile()", "")) {
+			return userProfileResponse.rawResponse();
+		} else {
+			return null;
+		}
+	}
+	
+	private DiscogsCollectionValue getCollectionValue(UserProfile userProfile) {
 		
 		DiscogsApiResponse<CollectionValue> collectionValueResponse = discogsApi.collectionValue();
 		if (checkDiscogsApiResponse(collectionValueResponse, "discogsApi.collectionValue()", "")) {
@@ -114,11 +124,31 @@ public class DiscogsInterface {
 		}
 	}
 	
+	private String getRawCollectionValue() {
+		
+		DiscogsApiResponse<CollectionValue> collectionValueResponse = discogsApi.collectionValue();
+		if (checkDiscogsApiResponse(collectionValueResponse, "discogsApi.collectionValue()", "")) {
+			return collectionValueResponse.rawResponse();
+		} else {
+			return null;
+		}
+	}
+	
 	private Release getRelease(String releaseId) {
 
 		DiscogsApiResponse<Release> releaseResponse = discogsApi.release(releaseId);
 		if (checkDiscogsApiResponse(releaseResponse, "discogsApi.release()", releaseId)) {
 			return releaseResponse.value();
+		} else {
+			return null;
+		}
+	}
+	
+	private String getRawRelease(String releaseId) {
+
+		DiscogsApiResponse<Release> releaseResponse = discogsApi.release(releaseId);
+		if (checkDiscogsApiResponse(releaseResponse, "discogsApi.release()", releaseId)) {
+			return releaseResponse.rawResponse();
 		} else {
 			return null;
 		}
@@ -148,11 +178,23 @@ public class DiscogsInterface {
 		return getInstance().collectionValue;
 	}
 	
+	public static String rawCollectionValue() {
+		return getInstance().getRawCollectionValue();
+	}
+	
 	public static UserProfile userProfile() {
 		return getInstance().userProfile;
 	}
 	
+	public static String rawUserProfile() {
+		return getInstance().getRawUserProfile();
+	}
+	
 	public static Release release(String releaseId) {
 		return getInstance().getRelease(releaseId);
+	}
+	
+	public static String rawRelease(String releaseId) {
+		return getInstance().getRawRelease(releaseId);
 	}
 }

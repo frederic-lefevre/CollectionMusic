@@ -91,4 +91,29 @@ class DiscogsInterfaceTest {
 		discogsInterfaceFilterCounter.stopLogCountAndFilter();
 		
 	}
+	
+	@Test
+	void shouldGetRawRelease() {
+		
+		String releaseId = "8706129";
+		
+		String releaseJson = DiscogsInterface.rawRelease(releaseId);
+		assertThat(releaseJson).isNotNull().contains("The Allman Brothers Band At Fillmore East");
+	}
+	
+	@Test
+	void shouldGetRawUserProfile() {
+
+		String rawUserProfileJson = DiscogsInterface.rawUserProfile();
+		assertThat(rawUserProfileJson).isNotNull().contains("frederic.bn.lefevre");
+	}
+	
+	@Test
+	void shouldGetRawCollectionValue() {
+
+		String rawCollectionValueJson = DiscogsInterface.rawCollectionValue();
+		assertThat(rawCollectionValueJson).isNotNull().contains("maximum");
+		
+		System.out.println(rawCollectionValueJson);
+	}
 }

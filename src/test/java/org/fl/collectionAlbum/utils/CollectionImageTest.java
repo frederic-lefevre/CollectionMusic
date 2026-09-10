@@ -26,13 +26,20 @@ package org.fl.collectionAlbum.utils;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.ImageIcon;
 
+import org.fl.collectionAlbum.disocgs.DiscogsInterface;
+import org.fl.discogsInterface.Image;
+import org.fl.discogsInterface.Release;
 import org.fl.util.FilterCounter;
 import org.fl.util.FilterCounter.LogRecordCounter;
 import org.fl.util.file.FilesUtils;
@@ -47,16 +54,57 @@ class CollectionImageTest {
 		
 		int width = 100;
 		int height = 100;
-		CollectionImage collectionImage = new CollectionImage(null);
+		Path nullPath = null;
+		CollectionImage collectionImage = new CollectionImage(nullPath);
 		assertThat(collectionImage).isNotNull();
 		assertThat(collectionImage.getImageStatus()).isEqualTo(CollectionImage.ImageStatus.NOT_FOUND);
-		assertThat(collectionImage.getImagePath()).isNull();
+		assertThat(collectionImage.getBufferedImage()).isNotNull();
 		
 		ImageIcon imageIcon = collectionImage.buildAdjustedImageIcon(width, height);
 		assertThat(imageIcon).isNotNull();
 		assertThat(imageIcon.getIconWidth()).isEqualTo(width);
 		assertThat(imageIcon.getIconHeight()).isEqualTo(height);
 		assertThat(imageIcon.getDescription()).isEqualTo("Image non trouvée");
+		
+		assertThat(filterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(filterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
+		filterCounter.stopLogCountAndFilter();
+	}
+	
+	@Test
+	void testNullUrl() {
+		
+		LogRecordCounter filterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(CollectionImage.class.getName()));	
+		
+		int width = 100;
+		int height = 100;
+		URL nullUrl = null;
+		CollectionImage collectionImage = new CollectionImage(nullUrl);
+		assertThat(collectionImage).isNotNull();
+		assertThat(collectionImage.getImageStatus()).isEqualTo(CollectionImage.ImageStatus.NOT_FOUND);
+		assertThat(collectionImage.getBufferedImage()).isNotNull();
+		
+		ImageIcon imageIcon = collectionImage.buildAdjustedImageIcon(width, height);
+		assertThat(imageIcon).isNotNull();
+		assertThat(imageIcon.getIconWidth()).isEqualTo(width);
+		assertThat(imageIcon.getIconHeight()).isEqualTo(height);
+		assertThat(imageIcon.getDescription()).isEqualTo("Image non trouvée");
+		
+		assertThat(filterCounter.getLogRecordCount()).isEqualTo(1);
+		assertThat(filterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
+		filterCounter.stopLogCountAndFilter();
+	}
+	
+	@Test
+	void test404Url() throws MalformedURLException, URISyntaxException {
+		
+		LogRecordCounter filterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(CollectionImage.class.getName()));	
+		
+		URL nullUrl = new URI("http://www.google.com/404").toURL();
+		CollectionImage collectionImage = new CollectionImage(nullUrl);
+		assertThat(collectionImage).isNotNull();
+		assertThat(collectionImage.getImageStatus()).isEqualTo(CollectionImage.ImageStatus.IN_ERROR);
+		assertThat(collectionImage.getBufferedImage()).isNotNull();
 		
 		assertThat(filterCounter.getLogRecordCount()).isEqualTo(1);
 		assertThat(filterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
@@ -73,6 +121,7 @@ class CollectionImageTest {
 		CollectionImage collectionImage = new CollectionImage(Path.of("dummyPath"));
 		assertThat(collectionImage).isNotNull();
 		assertThat(collectionImage.getImageStatus()).isEqualTo(CollectionImage.ImageStatus.IN_ERROR);
+		assertThat(collectionImage.getBufferedImage()).isNotNull();
 		
 		ImageIcon imageIcon = collectionImage.buildAdjustedImageIcon(width, height);
 		assertThat(imageIcon).isNotNull();
@@ -98,7 +147,7 @@ class CollectionImageTest {
 		CollectionImage collectionImage = new CollectionImage(imgFilePath);
 		assertThat(collectionImage).isNotNull();
 		assertThat(collectionImage.getImageStatus()).isEqualTo(CollectionImage.ImageStatus.IN_ERROR);
-		assertThat(collectionImage.getImagePath().toString()).isEqualTo("C:\\ForTests\\CollectionMusique\\img_bad.jpg");
+		assertThat(collectionImage.getBufferedImage()).isNotNull();
 		
 		ImageIcon imageIcon = collectionImage.buildAdjustedImageIcon(width, height);
 		assertThat(imageIcon).isNotNull();
@@ -124,13 +173,41 @@ class CollectionImageTest {
 		CollectionImage collectionImage = new CollectionImage(imgFilePath);
 		assertThat(collectionImage).isNotNull();
 		assertThat(collectionImage.getImageStatus()).isEqualTo(CollectionImage.ImageStatus.OK);
-		assertThat(collectionImage.getImagePath().toString()).isEqualTo("C:\\ForTests\\CollectionMusique\\cover.jpg");
+		assertThat(collectionImage.getBufferedImage()).isNotNull();
 		
 		ImageIcon imageIcon = collectionImage.buildAdjustedImageIcon(width, height);
 		assertThat(imageIcon).isNotNull();
 		assertThat(imageIcon.getIconWidth()).isEqualTo(width);
 		assertThat(imageIcon.getIconHeight()).isEqualTo(height);
 		assertThat(imageIcon.getDescription()).isNull();
+		
+		assertThat(filterCounter.getLogRecordCount()).isZero();
+		filterCounter.stopLogCountAndFilter();
+	}
+	
+	
+	@Test
+	void testImageFromDiscogs() throws MalformedURLException, URISyntaxException {
+		
+		LogRecordCounter filterCounter = FilterCounter.getLogRecordCounter(Logger.getLogger(CollectionImage.class.getName()));
+		
+		String releaseId = "8706129";
+		Release release = DiscogsInterface.release(releaseId);
+		assertThat(release).isNotNull();
+		List<Image> images = release.images();
+		assertThat(images).isNotNull().isNotEmpty();
+		
+		Image primaryImage = images.stream().filter(i -> i.type().equals("primary")).findFirst().orElse(null);
+		assertThat(primaryImage).isNotNull();
+		
+		String imgUriString = primaryImage.uri();
+		assertThat(imgUriString).isNotNull().isNotBlank();
+		
+		URL imageUrl = new URI(imgUriString).toURL();
+		CollectionImage collectionImage = new CollectionImage(imageUrl);
+		assertThat(collectionImage).isNotNull();
+		assertThat(collectionImage.getImageStatus()).isEqualTo(CollectionImage.ImageStatus.OK);
+		assertThat(collectionImage.getBufferedImage()).isNotNull();
 		
 		assertThat(filterCounter.getLogRecordCount()).isZero();
 		filterCounter.stopLogCountAndFilter();

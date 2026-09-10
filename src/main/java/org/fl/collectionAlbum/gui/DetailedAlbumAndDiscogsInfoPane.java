@@ -68,13 +68,11 @@ public class DetailedAlbumAndDiscogsInfoPane extends JTabbedPane {
 	private static final int MAX_COVER_WIDTH = 400;
 	private static final int MAX_COVER_HEIGHT = 400;
 	
-	private static final String WAIT_MESSAGE = "<html><body>Requête envoyée à discogs ....</body></html>";
-	
 	public DetailedAlbumAndDiscogsInfoPane(DiscogsAlbumRelease release, GenerationPane generationPane) {
 		
 		super();
 		setPreferredSize(Control.getInfoWindowDimension());		
-		addTab("Discogs release", releaseInfos(release));
+		addTab("Discogs release", new ReleasePanel(release));
 		addAlbumsTab(release.getCollectionAlbums());
 		addArtistesTab(
 				release.getCollectionAlbums().stream().map(Album::getAllArtists).flatMap(artistList -> artistList.stream()).toList(), 
@@ -91,7 +89,7 @@ public class DetailedAlbumAndDiscogsInfoPane extends JTabbedPane {
 		if (discogsReleaseId != null) {
 			DiscogsAlbumRelease release = DiscogsInventory.getDiscogsAlbumRelease(discogsReleaseId);
 			if (release != null) {
-				addTab("Discogs release", releaseInfos(release));
+				addTab("Discogs release", new ReleasePanel(release));
 			} else {
 				logger.warning("La release discogs référencé dans l'album " + album.getTitre() + " n'est pas dans l'inventaire discogs (csv)");
 			}
@@ -107,52 +105,54 @@ public class DetailedAlbumAndDiscogsInfoPane extends JTabbedPane {
 		}
 	}
 	
-	private JPanel releaseInfos(DiscogsAlbumRelease release) {
+	public static class ReleasePanel extends JPanel {
 		
-		JPanel releasePane = new JPanel();
-		releasePane.setLayout(new BoxLayout(releasePane, BoxLayout.X_AXIS));
+		private static final long serialVersionUID = 1L;
+		private static final String WAIT_MESSAGE = "<html><body>Requête envoyée à discogs ....</body></html>";
 		
-		releasePane.add(releaseInfosFromDiscogs(release));
-		releasePane.add(releaseOtherInfo(release));	
-		return releasePane;
-	}
-	
-	private JScrollPane releaseInfosFromDiscogs(DiscogsAlbumRelease release) {
+		private final JEditorPane releaseTextInfoFromDiscogs;
+		private final JLabel coverImageLabel;
 		
-		JEditorPane releaseInfoFromDiscogs = new JEditorPane();
-		releaseInfoFromDiscogs.setContentType("text/html");
-		releaseInfoFromDiscogs.setEditable(false);
-		releaseInfoFromDiscogs.setFont(monospaced);
-		releaseInfoFromDiscogs.addHyperlinkListener(new CollectionHyperLinkListener());
-		releaseInfoFromDiscogs.setText(WAIT_MESSAGE);
-		DiscogsReleaseRequest discogsReleaseRequest = new DiscogsReleaseRequest(release, releaseInfoFromDiscogs);
-		discogsReleaseRequest.execute();
-		
-		return new JScrollPane(releaseInfoFromDiscogs);
-	}
-	
-	private JPanel releaseOtherInfo(DiscogsAlbumRelease release) {
-		
-		JPanel releasePane = new JPanel();
-		releasePane.setLayout(new BoxLayout(releasePane, BoxLayout.Y_AXIS));
-		
-		Set<Album> albums = release.getCollectionAlbums();
-		if ((albums != null) && !albums.isEmpty()) {
-			JLabel coverImage = getCoverImage(albums.iterator().next());
-			coverImage.setBorder(new EmptyBorder(10, 0, 10, 0));
-			releasePane.add(coverImage);
+		private ReleasePanel(DiscogsAlbumRelease release) {
+			super();
+			setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+			
+			releaseTextInfoFromDiscogs = new JEditorPane();
+			releaseTextInfoFromDiscogs.setContentType("text/html");
+			releaseTextInfoFromDiscogs.setEditable(false);
+			releaseTextInfoFromDiscogs.setFont(monospaced);
+			releaseTextInfoFromDiscogs.addHyperlinkListener(new CollectionHyperLinkListener());
+			releaseTextInfoFromDiscogs.setText(WAIT_MESSAGE);
+			add(new JScrollPane(releaseTextInfoFromDiscogs));
+			
+			JPanel releasePane = new JPanel();
+			releasePane.setLayout(new BoxLayout(releasePane, BoxLayout.Y_AXIS));
+			
+			coverImageLabel = new JLabel();
+			coverImageLabel.setBorder(new EmptyBorder(10, 0, 10, 0));
+			releasePane.add(coverImageLabel);
+			
+			JButton showDiscogsRelease = new JButton("Montrer la release sur le site Discogs"); 
+			
+			OsActionListener<List<String>> showDiscogsReleasenListener = 
+					new OsActionListener<>(List.of(Control.getDiscogsBaseUrlForRelease() + release.inventoryCsvAlbum().getReleaseId()), Control.getDisplayUrlAction());
+			
+			showDiscogsRelease.addActionListener(showDiscogsReleasenListener);
+			
+			releasePane.add(showDiscogsRelease);
+			add(releasePane);
+			
+			DiscogsReleaseRequest discogsReleaseRequest = new DiscogsReleaseRequest(release, this);
+			discogsReleaseRequest.execute();
 		}
 		
-		JButton showDiscogsRelease = new JButton("Montrer la release sur le site Discogs"); 
+		public void setReleaseTextInfo(String text) {
+			releaseTextInfoFromDiscogs.setText(text);
+		}
 		
-		OsActionListener<List<String>> showDiscogsReleasenListener = 
-				new OsActionListener<>(List.of(Control.getDiscogsBaseUrlForRelease() + release.inventoryCsvAlbum().getReleaseId()), Control.getDisplayUrlAction());
-		
-		showDiscogsRelease.addActionListener(showDiscogsReleasenListener);
-		
-		releasePane.add(showDiscogsRelease);
-		
-		return releasePane;
+		public void setReleaseCoverImage(CollectionImage coverImage) {
+			coverImageLabel.setIcon(coverImage.buildAdjustedImageIcon(MAX_COVER_WIDTH, MAX_COVER_HEIGHT));
+		}
 	}
 	
 	private JScrollPane albumsInfos(Set<Album> albums) {
@@ -239,7 +239,7 @@ public class DetailedAlbumAndDiscogsInfoPane extends JTabbedPane {
 	
 	private JLabel getCoverImage(Album album) {
 		CollectionImage sleeveImage = album.getSleeveImage();
-		JLabel sleeveImageLabel = album.getSleeveImage().getAdjustedImageLabel(MAX_COVER_WIDTH, MAX_COVER_HEIGHT);
+		JLabel sleeveImageLabel = sleeveImage.getAdjustedImageLabel(MAX_COVER_WIDTH, MAX_COVER_HEIGHT);
 		sleeveImageLabel.addMouseListener(new ImageDisplayMouseAdapter(sleeveImage.getBufferedImage()));
 		return sleeveImageLabel;
 	}

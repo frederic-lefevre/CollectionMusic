@@ -24,53 +24,86 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.disocgs;
 
+import java.net.URI;
+import java.net.URL;
+import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.SwingWorker;
-import javax.swing.text.JTextComponent;
 
+import org.fl.collectionAlbum.gui.DetailedAlbumAndDiscogsInfoPane.ReleasePanel;
+import org.fl.collectionAlbum.utils.CollectionImage;
 import org.fl.collectionAlbum.utils.CollectionUtils;
+import org.fl.discogsInterface.Image;
 import org.fl.discogsInterface.Release;
 
-public class DiscogsReleaseRequest extends SwingWorker<Release, String> {
+public class DiscogsReleaseRequest extends SwingWorker<DiscogsReleaseRequest.ReleaseRequestResult, String> {
 
 	private static final String ERROR_MESSAGE = "<html><body>Erreur de communication avec discogs .... Reéssayer</body></html>";
 	
 	private static final Logger logger = Logger.getLogger(DiscogsReleaseRequest.class.getName());
 	
 	private final DiscogsAlbumRelease discogsAlbumRelease;
-	private final JTextComponent textComponent;
+	private final ReleasePanel releasePanel;
 	
-	public DiscogsReleaseRequest(DiscogsAlbumRelease discogsAlbumRelease, JTextComponent textComponent) {
+	public DiscogsReleaseRequest(DiscogsAlbumRelease discogsAlbumRelease, ReleasePanel releasePanel) {
 		this.discogsAlbumRelease = discogsAlbumRelease;
-		this.textComponent = textComponent;
+		this.releasePanel = releasePanel;
 	}
 	
+	record ReleaseRequestResult(Release release, CollectionImage collectionImage) {};
+	
 	@Override
-	protected Release doInBackground() throws Exception {
+	protected ReleaseRequestResult doInBackground() {
 		
 		if (discogsAlbumRelease == null) {
 			return null;
 		} else {
-			return discogsAlbumRelease.discogsRelease();
+			Release release = discogsAlbumRelease.discogsRelease();	
+			CollectionImage coverImage = new CollectionImage(getCoverURL(release.images()));			
+			return new ReleaseRequestResult(release, coverImage);
 		}
 	}
 
+	private URL getCoverURL(List<Image> imageList) {
+		if ((imageList == null) || imageList.isEmpty()) {
+			return null;
+		} else {
+			return imageList.stream()
+					.filter(image -> image.type().equals("primary"))
+					.findFirst()
+					.map(image ->  getCoverUrl(image.uri()))
+					.orElseGet(() -> getCoverUrl(imageList.getFirst().uri()));	
+		}
+	}
+	
+	private URL getCoverUrl(String uriString) {
+		try {
+			return new URI(uriString).toURL();
+		} catch (Exception e) {
+			logger.log(Level.SEVERE, "Exception getting image URL from URI " + Objects.toString(uriString), e);
+			return null;
+		}
+	}
+	
 	@Override
 	public void done() {
 		
 		try {
-			Release release = get();
-			if (release != null) {
-				textComponent.setText(CollectionUtils.getHtmlForDiscogsRelease(release, discogsAlbumRelease.inventoryCsvAlbum()));
+			ReleaseRequestResult releaseRequestResult = get();
+			if (releaseRequestResult.release() != null) {
+				releasePanel.setReleaseTextInfo(CollectionUtils.getHtmlForDiscogsRelease(releaseRequestResult.release(), discogsAlbumRelease.inventoryCsvAlbum()));
 			} else {
-				textComponent.setText(ERROR_MESSAGE);
+				releasePanel.setReleaseTextInfo(ERROR_MESSAGE);
 			}
+			releasePanel.setReleaseCoverImage(releaseRequestResult.collectionImage());
 		} catch (InterruptedException | ExecutionException e) {
 			logger.log(Level.SEVERE, "DiscogsReleaseRequest exception", e);
-			textComponent.setText(ERROR_MESSAGE);
+			releasePanel.setReleaseTextInfo(ERROR_MESSAGE);
+			releasePanel.setReleaseCoverImage(new CollectionImage((URL)null));
 		}
 	}
 }
