@@ -49,6 +49,7 @@ public class ApplicationToolsPane extends JPanel {
 	private static final Font monospaced = new Font("monospaced", Font.BOLD, 14);
 	
 	private static final String OPTION_LABEL = "Options";
+	private static final String DISCOGS_LABEL = "Réponses Discogs brutes";
 	private static final String SCAN_METADATA_LABEL = "Lire les meta-données des fichiers media ";
 	private static final String YES_TITLE = "Oui";
 	private static final String NO_TITLE = "Non";
@@ -66,8 +67,7 @@ public class ApplicationToolsPane extends JPanel {
 		optionTitle.setFont(verdana);
 		optionTitle.setBackground(Color.WHITE);
 		optionTitle.setOpaque(true);
-		optionTitle.setBorder(new CompoundBorder(new MatteBorder(0, 0, 2, 0, Color.BLACK), new EmptyBorder(2, 50, 15, 50)));
-		
+		optionTitle.setBorder(new CompoundBorder(new MatteBorder(4, 0, 2, 0, Color.BLACK), new EmptyBorder(10, 50, 15, 50)));
 		commandPanel.add(optionTitle);
 		
 		JPanel scanMediaOptionPanel = new JPanel();
@@ -84,6 +84,13 @@ public class ApplicationToolsPane extends JPanel {
 		scanMediaOptionPanel.add(scanMediaMetadataButton);
 		
 		commandPanel.add(scanMediaOptionPanel);
+		
+		JLabel discogsRawResponseLabel = new JLabel(DISCOGS_LABEL);
+		discogsRawResponseLabel.setFont(verdana);
+		discogsRawResponseLabel.setBackground(Color.WHITE);
+		discogsRawResponseLabel.setOpaque(true);
+		discogsRawResponseLabel.setBorder(new CompoundBorder(new MatteBorder(4, 0, 2, 0, Color.BLACK), new EmptyBorder(10, 50, 15, 50)));
+		commandPanel.add(discogsRawResponseLabel);
 		
 		add(commandPanel);
 		
