@@ -30,8 +30,10 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
 import javax.swing.BoxLayout;
+import javax.swing.JEditorPane;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JToggleButton;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
@@ -44,6 +46,7 @@ public class ApplicationToolsPane extends JPanel {
 	private static final long serialVersionUID = 1L;
 	
 	private static final Font verdana = new Font("Verdana", Font.BOLD, 16);
+	private static final Font monospaced = new Font("monospaced", Font.BOLD, 14);
 	
 	private static final String OPTION_LABEL = "Options";
 	private static final String SCAN_METADATA_LABEL = "Lire les meta-données des fichiers media ";
@@ -82,7 +85,13 @@ public class ApplicationToolsPane extends JPanel {
 		
 		commandPanel.add(scanMediaOptionPanel);
 		
-		add(commandPanel);	
+		add(commandPanel);
+		
+		JEditorPane resultPane = new JEditorPane();
+		resultPane.setEditable(false);
+		resultPane.setFont(monospaced);
+		
+		add(new JScrollPane(resultPane));
 	}
 
 	private void setButtonAppearence(JToggleButton toogleButton) {
