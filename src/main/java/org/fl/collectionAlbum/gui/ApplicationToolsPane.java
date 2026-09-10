@@ -56,7 +56,7 @@ public class ApplicationToolsPane extends JPanel {
 	
 	private static final Dimension COMMAND_PANEL_DIMENSION = new Dimension(300, 900);
 	private static final Dimension RELEASE_ID_TEXT_DIMENSION = new Dimension(100, 25);
-	private static final Dimension RELEASE_JSON_TEXT_DIMENSION = new Dimension(1600, 900);
+	private static final Dimension RELEASE_JSON_TEXT_DIMENSION = new Dimension(1500, 900);
 	
 	private static final String OPTION_LABEL = "Options";
 	private static final String DISCOGS_LABEL = "Réponses Discogs brutes";
@@ -82,11 +82,13 @@ public class ApplicationToolsPane extends JPanel {
 		optionTitle.setBackground(Color.WHITE);
 		optionTitle.setOpaque(true);
 		optionTitle.setBorder(new CompoundBorder(new MatteBorder(4, 0, 2, 0, Color.BLACK), new EmptyBorder(10, 50, 15, 50)));
-		commandPanel.add(optionTitle);
+		JPanel optionTitlePanel = new JPanel();
+		optionTitlePanel.add(optionTitle);
+		commandPanel.add(optionTitlePanel);
 		
 		JPanel scanMediaOptionPanel = new JPanel();
 		scanMediaOptionPanel.setLayout(new BoxLayout(scanMediaOptionPanel, BoxLayout.X_AXIS));
-		scanMediaOptionPanel.setBorder(new EmptyBorder(10, 0, 10, 0));
+		scanMediaOptionPanel.setBorder(new EmptyBorder(10, 0, 30, 0));
 		
 		JLabel scanMediaMetadataLabel = new JLabel(SCAN_METADATA_LABEL);
 		scanMediaMetadataButton = new JToggleButton(NO_TITLE);
@@ -103,8 +105,10 @@ public class ApplicationToolsPane extends JPanel {
 		discogsRawResponseLabel.setFont(verdana);
 		discogsRawResponseLabel.setBackground(Color.WHITE);
 		discogsRawResponseLabel.setOpaque(true);
-		discogsRawResponseLabel.setBorder(new CompoundBorder(new MatteBorder(4, 0, 2, 0, Color.BLACK), new EmptyBorder(10, 50, 15, 50)));
-		commandPanel.add(discogsRawResponseLabel);
+		discogsRawResponseLabel.setBorder(new CompoundBorder(new MatteBorder(4, 0, 2, 0, Color.BLACK), new EmptyBorder(10, 20, 15, 20)));
+		JPanel discogsRawResponsePanel = new JPanel();
+		discogsRawResponsePanel.add(discogsRawResponseLabel);
+		commandPanel.add(discogsRawResponsePanel);
 		
 		JPanel releaseGetPane = new JPanel();
 		
