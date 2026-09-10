@@ -138,6 +138,11 @@ public class ApplicationToolsPane extends JPanel {
 		userProfilePane.add(userProfileButton);
 		commandPanel.add(userProfilePane);
 		
+		JPanel colectionValuePane = new JPanel();
+		JButton collectionValueButton = new JButton("Valeur de la collection");
+		collectionValueButton.addActionListener(new CollectionValueGetListener());
+		colectionValuePane.add(collectionValueButton);
+		commandPanel.add(colectionValuePane);
 		add(commandPanel);
 		
 		resultPane = new JEditorPane();
@@ -190,6 +195,16 @@ public class ApplicationToolsPane extends JPanel {
 			resultPane.setText(WAIT_MESSAGE);
 			DiscogsRawResponseGetter rawReleaseGetter = new DiscogsRawResponseGetter(() -> DiscogsInterface.rawUserProfile());
 			rawReleaseGetter.execute();
+		}
+	}
+	
+	private class CollectionValueGetListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			resultPane.setText(WAIT_MESSAGE);
+			DiscogsRawResponseGetter rawCollectionValueGetter = new DiscogsRawResponseGetter(() -> DiscogsInterface.rawCollectionValue());
+			rawCollectionValueGetter.execute();
 		}
 	}
 	
