@@ -25,6 +25,7 @@ SOFTWARE.
 package org.fl.collectionAlbum.gui;
 
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
@@ -32,6 +33,9 @@ import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JToggleButton;
+import javax.swing.border.CompoundBorder;
+import javax.swing.border.EmptyBorder;
+import javax.swing.border.MatteBorder;
 
 import org.fl.collectionAlbum.Control;
 
@@ -39,6 +43,9 @@ public class ApplicationToolsPane extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	
+	private static final Font verdana = new Font("Verdana", Font.BOLD, 16);
+	
+	private static final String OPTION_LABEL = "Options";
 	private static final String SCAN_METADATA_LABEL = "Lire les meta-données des fichiers media ";
 	private static final String YES_TITLE = "Oui";
 	private static final String NO_TITLE = "Non";
@@ -49,14 +56,33 @@ public class ApplicationToolsPane extends JPanel {
 		super();
 		
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+		JPanel commandPanel = new JPanel();
+		commandPanel.setLayout(new BoxLayout(commandPanel, BoxLayout.Y_AXIS));
+		
+		JLabel optionTitle = new JLabel(OPTION_LABEL);
+		optionTitle.setFont(verdana);
+		optionTitle.setBackground(Color.WHITE);
+		optionTitle.setOpaque(true);
+		optionTitle.setBorder(new CompoundBorder(new MatteBorder(0, 0, 2, 0, Color.BLACK), new EmptyBorder(2, 50, 15, 50)));
+		
+		commandPanel.add(optionTitle);
+		
+		JPanel scanMediaOptionPanel = new JPanel();
+		scanMediaOptionPanel.setLayout(new BoxLayout(scanMediaOptionPanel, BoxLayout.X_AXIS));
+		scanMediaOptionPanel.setBorder(new EmptyBorder(10, 0, 10, 0));
+		
 		JLabel scanMediaMetadataLabel = new JLabel(SCAN_METADATA_LABEL);
 		scanMediaMetadataButton = new JToggleButton(NO_TITLE);
 		scanMediaMetadataButton.setSelected(Control.isReadMediaFileMetadata());
 		setButtonAppearence(scanMediaMetadataButton);
 		
 		scanMediaMetadataButton.addItemListener(new ReadMetadataOptionListener());
-		add(scanMediaMetadataLabel);
-		add(scanMediaMetadataButton);
+		scanMediaOptionPanel.add(scanMediaMetadataLabel);
+		scanMediaOptionPanel.add(scanMediaMetadataButton);
+		
+		commandPanel.add(scanMediaOptionPanel);
+		
+		add(commandPanel);	
 	}
 
 	private void setButtonAppearence(JToggleButton toogleButton) {
