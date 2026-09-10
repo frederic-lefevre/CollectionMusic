@@ -68,8 +68,6 @@ public class DetailedAlbumAndDiscogsInfoPane extends JTabbedPane {
 	private static final int MAX_COVER_WIDTH = 400;
 	private static final int MAX_COVER_HEIGHT = 400;
 	
-
-	
 	public DetailedAlbumAndDiscogsInfoPane(DiscogsAlbumRelease release, GenerationPane generationPane) {
 		
 		super();
