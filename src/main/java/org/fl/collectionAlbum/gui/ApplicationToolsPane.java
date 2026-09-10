@@ -31,6 +31,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.concurrent.ExecutionException;
+import java.util.function.Supplier;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -40,6 +44,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JToggleButton;
+import javax.swing.SwingWorker;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
@@ -51,6 +56,8 @@ public class ApplicationToolsPane extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	
+	private Logger logger = Logger.getLogger(ApplicationToolsPane.class.getName());
+	
 	private static final Font verdana = new Font("Verdana", Font.BOLD, 16);
 	private static final Font monospaced = new Font("monospaced", Font.BOLD, 14);
 	
@@ -58,6 +65,10 @@ public class ApplicationToolsPane extends JPanel {
 	private static final Dimension RELEASE_ID_TEXT_DIMENSION = new Dimension(100, 25);
 	private static final Dimension RELEASE_JSON_TEXT_DIMENSION = new Dimension(1500, 900);
 	
+	private static final String HTML_PRE_BEGIN = "<html><body><pre>";
+	private static final String HTML_PRE_END = "</pre></body></html>";
+	private static final String WAIT_MESSAGE = "<html><body>Requête envoyée à discogs ....</body></html>";
+	private static final String ERROR_MESSAGE = "<html><body>Erreur de communication avec discogs .... Reéssayer</body></html>";
 	private static final String OPTION_LABEL = "Options";
 	private static final String DISCOGS_LABEL = "Réponses Discogs brutes";
 	private static final String SCAN_METADATA_LABEL = "Lire les meta-données des fichiers media ";
@@ -161,8 +172,38 @@ public class ApplicationToolsPane extends JPanel {
 		public void actionPerformed(ActionEvent e) {
 			
 			String releaseId = releaseIdField.getText();
-			resultPane.setText("<html><body><pre>" + DiscogsInterface.rawRelease(releaseId) + "</pre></body></html>");
-			
+			resultPane.setText(WAIT_MESSAGE);
+			DiscogsRawResponseGetter rawReleaseGetter = new DiscogsRawResponseGetter(() -> DiscogsInterface.rawRelease(releaseId));
+			rawReleaseGetter.execute();
+		}
+	}
+	
+	private class DiscogsRawResponseGetter extends SwingWorker<String, String> {
+
+		private final Supplier<String> discogsApiCall;
+		
+		DiscogsRawResponseGetter(Supplier<String> discogsApiCall) {
+			this.discogsApiCall = discogsApiCall;
+		}
+		
+		@Override
+		protected String doInBackground() throws Exception {	
+			return discogsApiCall.get();
+		}
+		
+		@Override
+		public void done() {
+			try {
+				String jsonResult = get();
+				if (jsonResult == null) {
+					resultPane.setText(ERROR_MESSAGE);
+				} else {
+					resultPane.setText(HTML_PRE_BEGIN + jsonResult + HTML_PRE_END);
+				}
+			} catch (InterruptedException | ExecutionException e) {
+				logger.log(Level.SEVERE, "DiscogsReleaseRequest exception", e);
+				resultPane.setText(ERROR_MESSAGE);
+			}
 		}
 	}
 }
