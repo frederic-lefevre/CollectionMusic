@@ -69,8 +69,8 @@ public class DiscogsInterface {
 			discogsApiBuilder.token(userToken);
 		}
 		discogsApi = discogsApiBuilder.build();
-		userProfile = getUserProfile(discogsApi);
-		collectionValue = getCollectionValue(discogsApi, userProfile);
+		userProfile = getUserProfile();
+		collectionValue = getCollectionValue(userProfile);
 		
 		if (userName != null) {
 			if (userProfile == null) {
@@ -81,7 +81,7 @@ public class DiscogsInterface {
 		}
 	}
 	
-	private UserProfile getUserProfile(DiscogsApi discogsApi) {
+	private UserProfile getUserProfile() {
 		
 		DiscogsApiResponse<UserProfile> userProfileResponse = discogsApi.userProfile();
 		if (checkDiscogsApiResponse(userProfileResponse, "discogsApi.userProfile()", "")) {
@@ -101,7 +101,7 @@ public class DiscogsInterface {
 		}
 	}
 	
-	private DiscogsCollectionValue getCollectionValue(DiscogsApi discogsApi, UserProfile userProfile) {
+	private DiscogsCollectionValue getCollectionValue(UserProfile userProfile) {
 		
 		DiscogsApiResponse<CollectionValue> collectionValueResponse = discogsApi.collectionValue();
 		if (checkDiscogsApiResponse(collectionValueResponse, "discogsApi.collectionValue()", "")) {
@@ -119,6 +119,16 @@ public class DiscogsInterface {
 				logger.log(Level.SEVERE, "Exception parsing discogs collection value:\n" + collectionValueResponse.rawResponse(), e);
 				return null;
 			}
+		} else {
+			return null;
+		}
+	}
+	
+	private String getRawCollectionValue() {
+		
+		DiscogsApiResponse<CollectionValue> collectionValueResponse = discogsApi.collectionValue();
+		if (checkDiscogsApiResponse(collectionValueResponse, "discogsApi.collectionValue()", "")) {
+			return collectionValueResponse.rawResponse();
 		} else {
 			return null;
 		}
@@ -166,6 +176,10 @@ public class DiscogsInterface {
 	
 	public static DiscogsCollectionValue collectionValue() {
 		return getInstance().collectionValue;
+	}
+	
+	public static String rawCollectionValue() {
+		return getInstance().getRawCollectionValue();
 	}
 	
 	public static UserProfile userProfile() {

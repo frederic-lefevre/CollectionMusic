@@ -107,4 +107,13 @@ class DiscogsInterfaceTest {
 		String rawUserProfileJson = DiscogsInterface.rawUserProfile();
 		assertThat(rawUserProfileJson).isNotNull().contains("frederic.bn.lefevre");
 	}
+	
+	@Test
+	void shouldGetRawCollectionValue() {
+
+		String rawCollectionValueJson = DiscogsInterface.rawCollectionValue();
+		assertThat(rawCollectionValueJson).isNotNull().contains("maximum");
+		
+		System.out.println(rawCollectionValueJson);
+	}
 }
