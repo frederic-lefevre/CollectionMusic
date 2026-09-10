@@ -124,6 +124,16 @@ public class DiscogsInterface {
 		}
 	}
 	
+	private String getRawRelease(String releaseId) {
+
+		DiscogsApiResponse<Release> releaseResponse = discogsApi.release(releaseId);
+		if (checkDiscogsApiResponse(releaseResponse, "discogsApi.release()", releaseId)) {
+			return releaseResponse.rawResponse();
+		} else {
+			return null;
+		}
+	}
+	
 	private boolean checkDiscogsApiResponse(DiscogsApiResponse<?> response, String call, String resource) {
 
 		if (response == null) {
@@ -154,5 +164,9 @@ public class DiscogsInterface {
 	
 	public static Release release(String releaseId) {
 		return getInstance().getRelease(releaseId);
+	}
+	
+	public static String rawRelease(String releaseId) {
+		return getInstance().getRawRelease(releaseId);
 	}
 }

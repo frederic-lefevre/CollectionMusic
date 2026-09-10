@@ -91,4 +91,13 @@ class DiscogsInterfaceTest {
 		discogsInterfaceFilterCounter.stopLogCountAndFilter();
 		
 	}
+	
+	@Test
+	void shouldGetRawRelease() {
+		
+		String releaseId = "8706129";
+		
+		String releaseJson = DiscogsInterface.rawRelease(releaseId);
+		assertThat(releaseJson).isNotNull().contains("The Allman Brothers Band At Fillmore East");
+	}
 }
