@@ -27,6 +27,8 @@ package org.fl.collectionAlbum.gui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
@@ -43,6 +45,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
 import org.fl.collectionAlbum.Control;
+import org.fl.collectionAlbum.disocgs.DiscogsInterface;
 
 public class ApplicationToolsPane extends JPanel {
 
@@ -61,6 +64,7 @@ public class ApplicationToolsPane extends JPanel {
 	
 	private final JToggleButton scanMediaMetadataButton;
 	private final JTextField releaseIdField;
+	private final JEditorPane resultPane;
 	
 	public ApplicationToolsPane() {
 		super();
@@ -105,13 +109,14 @@ public class ApplicationToolsPane extends JPanel {
 		releaseGetPane.add(releaseIdField);
 		
 		JButton releaseGetButton = new JButton("Release");
+		releaseGetButton.addActionListener(new ReleaseGetListener());
 		releaseGetPane.add(releaseGetButton);
 		
 		commandPanel.add(releaseGetPane);
 		
 		add(commandPanel);
 		
-		JEditorPane resultPane = new JEditorPane();
+		resultPane = new JEditorPane();
 		resultPane.setEditable(false);
 		resultPane.setFont(monospaced);
 		
@@ -135,7 +140,17 @@ public class ApplicationToolsPane extends JPanel {
 			
 			Control.setReadMediaFileMetadata(scanMediaMetadataButton.isSelected());
 			setButtonAppearence(scanMediaMetadataButton);	
+		}	
+	}
+	
+	private class ReleaseGetListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+			String releaseId = releaseIdField.getText();
+			resultPane.setText(DiscogsInterface.rawRelease(releaseId));
+			
 		}
-		
 	}
 }
