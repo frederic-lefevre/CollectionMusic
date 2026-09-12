@@ -24,14 +24,19 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.disocgs;
 
+import java.net.URI;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.Control;
+import org.fl.collectionAlbum.utils.CollectionImage.ImageStatus;
+import org.fl.collectionAlbum.utils.CollectionImage.ResultImage;
 import org.fl.discogsInterface.CollectionValue;
 import org.fl.discogsInterface.Currency;
 import org.fl.discogsInterface.DiscogsApi;
 import org.fl.discogsInterface.DiscogsApi.DiscogsApiResponse;
+import org.fl.discogsInterface.DiscogsApi.DiscogsImageResponse;
 import org.fl.discogsInterface.Release;
 import org.fl.discogsInterface.UserProfile;
 
@@ -154,6 +159,21 @@ public class DiscogsInterface {
 		}
 	}
 	
+	private ResultImage getImage(URI imageUri) {
+		DiscogsImageResponse imageResponse = discogsApi.image(imageUri);
+		if (imageResponse == null) {
+			logger.severe("Null response returned by discogsApi.image() on " + Objects.toString(imageUri));
+			return new ResultImage(null, ImageStatus.IN_ERROR);
+		} else if (imageResponse.statusCode() == 404) {
+			logger.severe("discogs image not found " + Objects.toString(imageUri));
+			return new ResultImage(null, ImageStatus.NOT_FOUND);
+		} else if ((imageResponse.statusCode() < 200) || (imageResponse.statusCode() >= 300)) {
+			return new ResultImage(null, ImageStatus.IN_ERROR);
+		} else {
+			return new ResultImage(imageResponse.image(), ImageStatus.OK);
+		}
+	}
+		
 	private boolean checkDiscogsApiResponse(DiscogsApiResponse<?> response, String call, String resource) {
 
 		if (response == null) {
@@ -162,7 +182,7 @@ public class DiscogsInterface {
 		} else if (response.statusCode() == 404){
 			logger.severe(call + " " + resource + " not found on discogs\n" + response.rawResponse());
 			return false;
-		} else if ((response.statusCode() < 200) || (response.statusCode()) >= 300) {
+		} else if ((response.statusCode() < 200) || (response.statusCode() >= 300)) {
 			logger.severe(call + " " + resource + " call error.\n" + response.rawResponse() + "\nStatus code: " + response.statusCode());
 			return false;
 		} else {
@@ -196,5 +216,9 @@ public class DiscogsInterface {
 	
 	public static String rawRelease(String releaseId) {
 		return getInstance().getRawRelease(releaseId);
+	}
+	
+	public static ResultImage image(URI imageUri) {
+		return getInstance().getImage(imageUri);
 	}
 }

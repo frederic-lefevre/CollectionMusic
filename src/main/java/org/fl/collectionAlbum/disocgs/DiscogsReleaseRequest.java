@@ -36,6 +36,8 @@ import javax.swing.SwingWorker;
 
 import org.fl.collectionAlbum.gui.DetailedAlbumAndDiscogsInfoPane.ReleasePanel;
 import org.fl.collectionAlbum.utils.CollectionImage;
+import org.fl.collectionAlbum.utils.CollectionImage.ImageStatus;
+import org.fl.collectionAlbum.utils.CollectionImage.ResultImage;
 import org.fl.collectionAlbum.utils.CollectionUtils;
 import org.fl.discogsInterface.Image;
 import org.fl.discogsInterface.Release;
@@ -62,29 +64,38 @@ public class DiscogsReleaseRequest extends SwingWorker<DiscogsReleaseRequest.Rel
 		if (discogsAlbumRelease == null) {
 			return null;
 		} else {
-			Release release = discogsAlbumRelease.discogsRelease();	
-			CollectionImage coverImage = new CollectionImage(getCoverURL(release.images()));			
+			Release release = discogsAlbumRelease.discogsRelease();
+			URI coverUri = getCoverURI(release.images());
+			
+			CollectionImage coverImage;
+			if (coverUri == null) {
+				coverImage = new CollectionImage(new ResultImage(null, ImageStatus.IN_ERROR));	
+			} else {
+				ResultImage resultImage = DiscogsInterface.image(coverUri);
+				coverImage = new CollectionImage(resultImage);	
+			}
+		
 			return new ReleaseRequestResult(release, coverImage);
 		}
 	}
 
-	private URL getCoverURL(List<Image> imageList) {
+	private URI getCoverURI(List<Image> imageList) {
 		if ((imageList == null) || imageList.isEmpty()) {
 			return null;
 		} else {
 			return imageList.stream()
 					.filter(image -> image.type().equals("primary"))
 					.findFirst()
-					.map(image ->  getCoverUrl(image.uri()))
-					.orElseGet(() -> getCoverUrl(imageList.getFirst().uri()));	
+					.map(image ->  getCoverUri(image.uri()))
+					.orElseGet(() -> getCoverUri(imageList.getFirst().uri()));	
 		}
 	}
 	
-	private URL getCoverUrl(String uriString) {
+	private URI getCoverUri(String uriString) {
 		try {
-			return new URI(uriString).toURL();
+			return new URI(uriString);
 		} catch (Exception e) {
-			logger.log(Level.SEVERE, "Exception getting image URL from URI " + Objects.toString(uriString), e);
+			logger.log(Level.SEVERE, "Exception getting image URI " + Objects.toString(uriString), e);
 			return null;
 		}
 	}

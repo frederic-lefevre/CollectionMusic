@@ -88,7 +88,15 @@ public class CollectionImage {
 		this.imageStatus = resultImage.imageStatus();
 	}
 
-	private record ResultImage(BufferedImage bufferedImage, ImageStatus imageStatus) {};
+	// For discogs images, images must not be downloaded directly, but through discogs interface
+	public CollectionImage(ResultImage resultImage) {
+		
+		this.imageUrl = null;
+		this.bufferedImage = resultImage.bufferedImage();
+		this.imageStatus = resultImage.imageStatus();
+	}
+	
+	public record ResultImage(BufferedImage bufferedImage, ImageStatus imageStatus) {};
 	
 	private ResultImage getImage(URL imageUrl) {
 		
