@@ -113,7 +113,5 @@ class DiscogsInterfaceTest {
 
 		String rawCollectionValueJson = DiscogsInterface.rawCollectionValue();
 		assertThat(rawCollectionValueJson).isNotNull().contains("maximum");
-		
-		System.out.println(rawCollectionValueJson);
 	}
 }

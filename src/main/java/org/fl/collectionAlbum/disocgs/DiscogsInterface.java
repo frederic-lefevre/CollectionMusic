@@ -167,6 +167,9 @@ public class DiscogsInterface {
 		} else if (imageResponse.statusCode() == 404) {
 			logger.severe("discogs image not found " + Objects.toString(imageUri));
 			return new ResultImage(null, ImageStatus.NOT_FOUND);
+		} else if (imageResponse.statusCode() == DiscogsApi.TOO_MANY_REQUEST_CODE) {
+			logger.warning("Too many image request sent to discogs");
+			return new ResultImage(null, ImageStatus.TOO_MANY_REQUEST);
 		} else if ((imageResponse.statusCode() < 200) || (imageResponse.statusCode() >= 300)) {
 			return new ResultImage(null, ImageStatus.IN_ERROR);
 		} else {
@@ -181,6 +184,9 @@ public class DiscogsInterface {
 			return false;
 		} else if (response.statusCode() == 404){
 			logger.severe(call + " " + resource + " not found on discogs\n" + response.rawResponse());
+			return false;
+		} else if (response.statusCode() == DiscogsApi.TOO_MANY_REQUEST_CODE){
+			logger.warning("Too many request sent to discogs");
 			return false;
 		} else if ((response.statusCode() < 200) || (response.statusCode() >= 300)) {
 			logger.severe(call + " " + resource + " call error.\n" + response.rawResponse() + "\nStatus code: " + response.statusCode());

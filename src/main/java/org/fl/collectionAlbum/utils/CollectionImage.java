@@ -47,8 +47,10 @@ public class CollectionImage {
 	private static final String DESCRIPTION_FOR_IMAGE_ERROR = "Image en erreur";
 	private static BufferedImage IMAGE_FOR_IMAGE_NOT_FOUND = null;
 	private static final String DESCRIPTION_FOR_IMAGE_NOT_FOUND = "Image non trouvée";
+	private static BufferedImage IMAGE_FOR_IMAGE_TOO_MANY_REQUEST = null;
+	private static final String DESCRIPTION_FOR_IMAGE_TOO_MANY_REQUEST = "Trop de demande d'images discogs. Attendre 1 minute.";
 	
-	public enum ImageStatus {OK, NOT_FOUND, IN_ERROR};
+	public enum ImageStatus {OK, NOT_FOUND, IN_ERROR, TOO_MANY_REQUEST};
 	
 	private final URL imageUrl;
 	private final BufferedImage bufferedImage;
@@ -92,8 +94,12 @@ public class CollectionImage {
 	public CollectionImage(ResultImage resultImage) {
 		
 		this.imageUrl = null;
-		this.bufferedImage = resultImage.bufferedImage();
 		this.imageStatus = resultImage.imageStatus();
+		if (imageStatus == ImageStatus.TOO_MANY_REQUEST) {
+			this.bufferedImage = getImageForTooManyDiscogsRequest();
+		} else {
+			this.bufferedImage = resultImage.bufferedImage();
+		}
 	}
 	
 	public record ResultImage(BufferedImage bufferedImage, ImageStatus imageStatus) {};
@@ -140,6 +146,7 @@ public class CollectionImage {
 			case OK -> new ImageIcon(scaleImage(maxWidth, maxHeight));
 			case NOT_FOUND -> new ImageIcon(scaleImage(maxWidth, maxHeight), DESCRIPTION_FOR_IMAGE_NOT_FOUND);
 			case IN_ERROR -> new ImageIcon(scaleImage(maxWidth, maxHeight), DESCRIPTION_FOR_IMAGE_ERROR);
+			case TOO_MANY_REQUEST -> new ImageIcon(scaleImage(maxWidth, maxHeight), DESCRIPTION_FOR_IMAGE_TOO_MANY_REQUEST);
 			};
 		} else {
 			String message = "Unexpected null image for path " + Objects.toString(imageUrl);
@@ -191,10 +198,22 @@ public class CollectionImage {
 			try {
 				IMAGE_FOR_IMAGE_NOT_FOUND = ImageIO.read(Control.getImageForImageNotFoundPath().toFile());				
 			} catch (Exception e) {
-				logger.log(Level.WARNING, "Exception when creating BufferedImage for error " + Objects.toString(Control.getImageForErrorPath()), e);
+				logger.log(Level.WARNING, "Exception when creating BufferedImage for error " + Objects.toString(Control.getImageForImageNotFoundPath()), e);
 				IMAGE_FOR_IMAGE_NOT_FOUND = new BufferedImage(400, 400, BufferedImage.TYPE_BYTE_GRAY);
 			}
 		}
 		return IMAGE_FOR_IMAGE_NOT_FOUND;
+	}
+	
+	private static BufferedImage getImageForTooManyDiscogsRequest() {	
+		if (IMAGE_FOR_IMAGE_TOO_MANY_REQUEST == null) {
+			try {
+				IMAGE_FOR_IMAGE_TOO_MANY_REQUEST = ImageIO.read(Control.getImageForTooManyDiscogsRequestPath().toFile());				
+			} catch (Exception e) {
+				logger.log(Level.WARNING, "Exception when creating BufferedImage for error " + Objects.toString(Control.getImageForTooManyDiscogsRequestPath()), e);
+				IMAGE_FOR_IMAGE_TOO_MANY_REQUEST = new BufferedImage(400, 400, BufferedImage.TYPE_BYTE_GRAY);
+			}
+		}
+		return IMAGE_FOR_IMAGE_TOO_MANY_REQUEST;
 	}
 }
