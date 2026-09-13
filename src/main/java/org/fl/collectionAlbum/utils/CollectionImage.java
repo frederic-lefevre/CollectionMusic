@@ -143,10 +143,10 @@ public class CollectionImage {
 	public ImageIcon buildAdjustedImageIcon(int maxWidth, int maxHeight) {
 		if (bufferedImage != null) {
 			return switch (imageStatus) {
-			case OK -> new ImageIcon(scaleImage(maxWidth, maxHeight));
-			case NOT_FOUND -> new ImageIcon(scaleImage(maxWidth, maxHeight), DESCRIPTION_FOR_IMAGE_NOT_FOUND);
-			case IN_ERROR -> new ImageIcon(scaleImage(maxWidth, maxHeight), DESCRIPTION_FOR_IMAGE_ERROR);
-			case TOO_MANY_REQUEST -> new ImageIcon(scaleImage(maxWidth, maxHeight), DESCRIPTION_FOR_IMAGE_TOO_MANY_REQUEST);
+			case OK -> new ImageIcon(scaleImage(bufferedImage, maxWidth, maxHeight));
+			case NOT_FOUND -> new ImageIcon(scaleImage(bufferedImage, maxWidth, maxHeight), DESCRIPTION_FOR_IMAGE_NOT_FOUND);
+			case IN_ERROR -> new ImageIcon(scaleImage(bufferedImage, maxWidth, maxHeight), DESCRIPTION_FOR_IMAGE_ERROR);
+			case TOO_MANY_REQUEST -> new ImageIcon(scaleImage(bufferedImage, maxWidth, maxHeight), DESCRIPTION_FOR_IMAGE_TOO_MANY_REQUEST);
 			};
 		} else {
 			String message = "Unexpected null image for path " + Objects.toString(imageUrl);
@@ -165,7 +165,7 @@ public class CollectionImage {
 		}
 	}
 	
-	private Image scaleImage(int maxWidth, int maxHeight) {
+	private static Image scaleImage(BufferedImage bufferedImage, int maxWidth, int maxHeight) {
 		
 		final int imageWidth = bufferedImage.getWidth();
 		final int imageHeight = bufferedImage.getHeight();
