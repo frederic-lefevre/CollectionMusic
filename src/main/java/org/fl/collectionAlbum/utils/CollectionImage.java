@@ -43,14 +43,42 @@ public class CollectionImage {
 
 	private static final Logger logger = Logger.getLogger(CollectionImage.class.getName());
 	
-	private static BufferedImage IMAGE_FOR_ERROR = null;
 	private static final String DESCRIPTION_FOR_IMAGE_ERROR = "Image en erreur";
-	private static BufferedImage IMAGE_FOR_IMAGE_NOT_FOUND = null;
 	private static final String DESCRIPTION_FOR_IMAGE_NOT_FOUND = "Image non trouvée";
-	private static BufferedImage IMAGE_FOR_IMAGE_TOO_MANY_REQUEST = null;
 	private static final String DESCRIPTION_FOR_IMAGE_TOO_MANY_REQUEST = "Trop de demande d'images discogs. Attendre 1 minute.";
 	
-	public enum ImageStatus {OK, NOT_FOUND, IN_ERROR, TOO_MANY_REQUEST};
+	public enum ImageStatus {
+		OK(null, null), 
+		NOT_FOUND(Control.getImageForImageNotFoundPath(), DESCRIPTION_FOR_IMAGE_NOT_FOUND), 
+		IN_ERROR(Control.getImageForErrorPath(), DESCRIPTION_FOR_IMAGE_ERROR), 
+		TOO_MANY_REQUEST(Control.getImageForTooManyDiscogsRequestPath(), DESCRIPTION_FOR_IMAGE_TOO_MANY_REQUEST);
+		
+		private final Path imagePath;
+		private final String description;
+		private BufferedImage bufferedImage;
+		
+		private ImageStatus(Path imagePath, String message) {
+			this.imagePath = imagePath;
+			this.description = message;
+			this.bufferedImage = null;
+		}
+		
+		private BufferedImage bufferedImage() {
+			if (this.bufferedImage == null) {
+				try {
+					this.bufferedImage = ImageIO.read(this.imagePath.toFile());				
+				} catch (Exception e) {
+					logger.log(Level.WARNING, "Exception when creating BufferedImage for error " + this.imagePath, e);
+					this.bufferedImage = new BufferedImage(400, 400, BufferedImage.TYPE_BYTE_GRAY);
+				}
+			}
+			return this.bufferedImage;
+		}
+		
+		private ImageIcon imageIcon(int maxWidth, int maxHeight) {
+			return  new ImageIcon(scaleImage(this.bufferedImage, maxWidth, maxHeight), this.description);
+		}
+	};
 	
 	private final URL imageUrl;
 	private final BufferedImage bufferedImage;
@@ -62,7 +90,7 @@ public class CollectionImage {
 			logger.warning( "Null image path");
 			this.imageUrl = null;
 			imageStatus = ImageStatus.NOT_FOUND;
-			bufferedImage = getImageForImageNotFound();
+			bufferedImage = ImageStatus.NOT_FOUND.bufferedImage();
 		} else {
 			
 			URL imgUrl;
@@ -96,7 +124,7 @@ public class CollectionImage {
 		this.imageUrl = null;
 		this.imageStatus = resultImage.imageStatus();
 		if (imageStatus == ImageStatus.TOO_MANY_REQUEST) {
-			this.bufferedImage = getImageForTooManyDiscogsRequest();
+			this.bufferedImage =  ImageStatus.TOO_MANY_REQUEST.bufferedImage();
 		} else {
 			this.bufferedImage = resultImage.bufferedImage();
 		}
@@ -108,7 +136,7 @@ public class CollectionImage {
 		
 		if (imageUrl == null) {
 			logger.warning( "Null image url");
-			return new ResultImage(getImageForImageNotFound(), ImageStatus.NOT_FOUND);
+			return new ResultImage(ImageStatus.NOT_FOUND.bufferedImage(), ImageStatus.NOT_FOUND);
 		} else {
 
 			BufferedImage image;
@@ -120,12 +148,12 @@ public class CollectionImage {
 					status = ImageStatus.OK;
 				} else {
 					logger.warning("Image format problem: No image reader found for this image " + Objects.toString(imageUrl));
-					image = getImageForError();
+					image = ImageStatus.IN_ERROR.bufferedImage();
 					status = ImageStatus.IN_ERROR;
 				}
 			} catch (Exception e) {
 				logger.log(Level.WARNING, "Exception when creating BufferedImage from URL " + Objects.toString(imageUrl), e);
-				image = getImageForError();
+				image = ImageStatus.IN_ERROR.bufferedImage();
 				status = ImageStatus.IN_ERROR;
 			}
 			return new ResultImage(image, status);
@@ -144,9 +172,9 @@ public class CollectionImage {
 		if (bufferedImage != null) {
 			return switch (imageStatus) {
 			case OK -> new ImageIcon(scaleImage(bufferedImage, maxWidth, maxHeight));
-			case NOT_FOUND -> new ImageIcon(scaleImage(bufferedImage, maxWidth, maxHeight), DESCRIPTION_FOR_IMAGE_NOT_FOUND);
-			case IN_ERROR -> new ImageIcon(scaleImage(bufferedImage, maxWidth, maxHeight), DESCRIPTION_FOR_IMAGE_ERROR);
-			case TOO_MANY_REQUEST -> new ImageIcon(scaleImage(bufferedImage, maxWidth, maxHeight), DESCRIPTION_FOR_IMAGE_TOO_MANY_REQUEST);
+			case NOT_FOUND -> ImageStatus.NOT_FOUND.imageIcon(maxWidth, maxHeight);
+			case IN_ERROR -> ImageStatus.IN_ERROR.imageIcon(maxWidth, maxHeight);
+			case TOO_MANY_REQUEST -> ImageStatus.TOO_MANY_REQUEST.imageIcon(maxWidth, maxHeight);
 			};
 		} else {
 			String message = "Unexpected null image for path " + Objects.toString(imageUrl);
@@ -179,41 +207,5 @@ public class CollectionImage {
 			adjustedImageHeight = maxHeight;
 		}
 		return bufferedImage.getScaledInstance(adjustedImageWidth, adjustedImageHeight, Image.SCALE_DEFAULT);
-	}
-	
-	private static BufferedImage getImageForError() {		
-		if (IMAGE_FOR_ERROR == null) {
-			try {
-				IMAGE_FOR_ERROR = ImageIO.read(Control.getImageForErrorPath().toFile());				
-			} catch (Exception e) {
-				logger.log(Level.WARNING, "Exception when creating BufferedImage for error " + Objects.toString(Control.getImageForErrorPath()), e);
-				IMAGE_FOR_ERROR = new BufferedImage(400, 400, BufferedImage.TYPE_BYTE_GRAY);
-			}
-		}
-		return IMAGE_FOR_ERROR;
-	}
-	
-	private static BufferedImage getImageForImageNotFound() {	
-		if (IMAGE_FOR_IMAGE_NOT_FOUND == null) {
-			try {
-				IMAGE_FOR_IMAGE_NOT_FOUND = ImageIO.read(Control.getImageForImageNotFoundPath().toFile());				
-			} catch (Exception e) {
-				logger.log(Level.WARNING, "Exception when creating BufferedImage for error " + Objects.toString(Control.getImageForImageNotFoundPath()), e);
-				IMAGE_FOR_IMAGE_NOT_FOUND = new BufferedImage(400, 400, BufferedImage.TYPE_BYTE_GRAY);
-			}
-		}
-		return IMAGE_FOR_IMAGE_NOT_FOUND;
-	}
-	
-	private static BufferedImage getImageForTooManyDiscogsRequest() {	
-		if (IMAGE_FOR_IMAGE_TOO_MANY_REQUEST == null) {
-			try {
-				IMAGE_FOR_IMAGE_TOO_MANY_REQUEST = ImageIO.read(Control.getImageForTooManyDiscogsRequestPath().toFile());				
-			} catch (Exception e) {
-				logger.log(Level.WARNING, "Exception when creating BufferedImage for error " + Objects.toString(Control.getImageForTooManyDiscogsRequestPath()), e);
-				IMAGE_FOR_IMAGE_TOO_MANY_REQUEST = new BufferedImage(400, 400, BufferedImage.TYPE_BYTE_GRAY);
-			}
-		}
-		return IMAGE_FOR_IMAGE_TOO_MANY_REQUEST;
 	}
 }
