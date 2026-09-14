@@ -132,14 +132,27 @@ public class DetailedAlbumAndDiscogsInfoPane extends JTabbedPane {
 			coverImageLabel.setBorder(new EmptyBorder(10, 0, 10, 0));
 			releasePane.add(coverImageLabel);
 			
-			JButton showDiscogsRelease = new JButton("Montrer la release sur le site Discogs"); 
+			JLabel titreAllImages = new JLabel("Toutes les photos de l'album (pochettes, ...etc) :");
+			titreAllImages.setBorder(new EmptyBorder(10, 0, 10, 0));
+			titreAllImages.setFont(verdana);
+			releasePane.add(titreAllImages);
+			
+			JButton showAllImagesButton = new JButton("Montrer toutes les photos");
+			releasePane.add(showAllImagesButton);
+			
+			JLabel showDiscogsRelease = new JLabel("Détails de la release sur le site discogs :");
+			showDiscogsRelease.setBorder(new EmptyBorder(10, 0, 10, 0));
+			showDiscogsRelease.setFont(verdana);
+			releasePane.add(showDiscogsRelease);
+			
+			JButton showDiscogsReleaseButton = new JButton("Montrer la release sur le site Discogs"); 
 			
 			OsActionListener<List<String>> showDiscogsReleasenListener = 
 					new OsActionListener<>(List.of(Control.getDiscogsBaseUrlForRelease() + release.inventoryCsvAlbum().getReleaseId()), Control.getDisplayUrlAction());
 			
-			showDiscogsRelease.addActionListener(showDiscogsReleasenListener);
+			showDiscogsReleaseButton.addActionListener(showDiscogsReleasenListener);
 			
-			releasePane.add(showDiscogsRelease);
+			releasePane.add(showDiscogsReleaseButton);
 			add(releasePane);
 			
 			DiscogsReleaseRequest discogsReleaseRequest = new DiscogsReleaseRequest(release, this);
