@@ -197,8 +197,8 @@ class CollectionImageTest {
 		List<Image> images = release.images();
 		assertThat(images).isNotNull().isNotEmpty();
 		
-		Image primaryImage = images.stream().filter(i -> i.type().equals("primary")).findFirst().orElse(null);
-		assertThat(primaryImage).isNotNull();
+		Image primaryImage = images.getFirst();
+		assertThat(primaryImage).isNotNull().satisfies(i -> assertThat(i.type()).isEqualTo("primary"));
 		
 		String imgUriString = primaryImage.uri();
 		assertThat(imgUriString).isNotNull().isNotBlank();

@@ -83,20 +83,12 @@ public class DiscogsReleaseRequest extends SwingWorker<DiscogsReleaseRequest.Rel
 		if ((imageList == null) || imageList.isEmpty()) {
 			return null;
 		} else {
-			return imageList.stream()
-					.filter(image -> image.type().equals("primary"))
-					.findFirst()
-					.map(image ->  getCoverUri(image.uri()))
-					.orElseGet(() -> getCoverUri(imageList.getFirst().uri()));	
-		}
-	}
-	
-	private URI getCoverUri(String uriString) {
-		try {
-			return new URI(uriString);
-		} catch (Exception e) {
-			logger.log(Level.SEVERE, "Exception getting image URI " + Objects.toString(uriString), e);
-			return null;
+			try {
+				return new URI(imageList.getFirst().uri());
+			} catch (Exception e) {
+				logger.log(Level.SEVERE, "Exception getting image URI " + Objects.toString(imageList.getFirst().uri()), e);
+				return null;
+			}	
 		}
 	}
 	
