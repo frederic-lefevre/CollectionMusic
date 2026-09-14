@@ -25,6 +25,8 @@ SOFTWARE.
 package org.fl.collectionAlbum.disocgs;
 
 import java.net.URI;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -37,6 +39,7 @@ import org.fl.discogsInterface.Currency;
 import org.fl.discogsInterface.DiscogsApi;
 import org.fl.discogsInterface.DiscogsApi.DiscogsApiResponse;
 import org.fl.discogsInterface.DiscogsApi.DiscogsImageResponse;
+import org.fl.discogsInterface.Image;
 import org.fl.discogsInterface.Release;
 import org.fl.discogsInterface.UserProfile;
 
@@ -139,10 +142,44 @@ public class DiscogsInterface {
 		}
 	}
 	
-	private Release getRelease(String releaseId) {
+	private static final String PRIMARY = "primary";
+	
+	private static boolean isPrimary(Image image) {
+		return (image != null) && PRIMARY.equals(image.type());
+	}
+	
+	private static class ReleaseImageComparator implements Comparator<Image> {
+
+		@Override
+		public int compare(Image i1, Image i2) {
+			
+			boolean o1Primary = isPrimary(i1);
+			boolean o2Primary = isPrimary(i2);
+			if (o1Primary && o2Primary) {
+				return 0;
+			} else if (o1Primary) {
+				return -1;
+			} else if (o2Primary) {
+				return 1;
+			} else {
+				return 0;
+			}
+		}		
+	}
+	
+	private static final ReleaseImageComparator releaseImageComparator = new ReleaseImageComparator();
+	
+ 	private Release getRelease(String releaseId) {
 
 		DiscogsApiResponse<Release> releaseResponse = discogsApi.release(releaseId);
 		if (checkDiscogsApiResponse(releaseResponse, "discogsApi.release()", releaseId)) {
+			Release release = releaseResponse.value();
+			if (release != null) {
+				List<Image> images = release.images();
+				if (images != null) {
+					images.sort(releaseImageComparator);
+				}
+			}
 			return releaseResponse.value();
 		} else {
 			return null;

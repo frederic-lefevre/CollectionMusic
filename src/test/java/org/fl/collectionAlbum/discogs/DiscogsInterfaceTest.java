@@ -72,6 +72,9 @@ class DiscogsInterfaceTest {
 		assertThat(release.notes()).isNotBlank();
 		assertThat(release.tracklist()).isNotNull().hasSize(7)
 			.anySatisfy(track -> assertThat(track.title()).isEqualTo("Statesboro Blues"));
+		
+		assertThat(release.images()).isNotNull().isNotEmpty();
+		assertThat(release.images().getFirst().type()).isEqualTo("primary");
 	}
 	
 	@Test
