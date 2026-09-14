@@ -180,7 +180,7 @@ public class DiscogsInterface {
 					images.sort(releaseImageComparator);
 				}
 			}
-			return releaseResponse.value();
+			return release;
 		} else {
 			return null;
 		}
