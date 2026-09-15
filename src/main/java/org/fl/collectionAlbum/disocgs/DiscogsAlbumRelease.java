@@ -24,13 +24,18 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.disocgs;
 
+import java.net.URI;
 import java.util.AbstractMap;
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import org.fl.collectionAlbum.albums.Album;
@@ -39,10 +44,16 @@ import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.AlbumMatchResul
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.MatchResultType;
 import org.fl.collectionAlbum.format.Format;
 import org.fl.collectionAlbum.format.MediaSupportCategories;
+import org.fl.collectionAlbum.utils.CollectionImage;
+import org.fl.collectionAlbum.utils.CollectionImage.ImageStatus;
+import org.fl.collectionAlbum.utils.CollectionImage.ResultImage;
+import org.fl.discogsInterface.Image;
 import org.fl.discogsInterface.Release;
 import org.fl.discogsInterface.inventory.InventoryCsvAlbum;
 
 public class DiscogsAlbumRelease {
+	
+	private static final Logger logger = Logger.getLogger(DiscogsAlbumRelease.class.getName());
 	
 	private static final EnumMap<MediaSupportCategories,String> formatMatchMap = new EnumMap<>(Map.ofEntries( 
 			new AbstractMap.SimpleEntry<MediaSupportCategories,String>(MediaSupportCategories.CD, "CD"), 
@@ -58,11 +69,15 @@ public class DiscogsAlbumRelease {
 	private final InventoryCsvAlbum inventoryCsvAlbum;
 	private final Set<Album> collectionAlbums;
 	private Release discogsRelease;
+	private List<CollectionImage> releaseCollectionImages;
+	private CollectionImage coverImage;
 	
 	protected DiscogsAlbumRelease(InventoryCsvAlbum inventoryCsvAlbum) {
 		this.inventoryCsvAlbum = inventoryCsvAlbum;
 		collectionAlbums = new HashSet<>();
 		discogsRelease = null;
+		coverImage = null;
+		releaseCollectionImages = null;
 	}
 
 	public Set<Album> getCollectionAlbums() {
@@ -212,8 +227,42 @@ public class DiscogsAlbumRelease {
 		
 		if ((discogsRelease == null) && (inventoryCsvAlbum != null)) {
 			discogsRelease = DiscogsInterface.release(inventoryCsvAlbum.getReleaseId());
+			
+			if (discogsRelease == null) {
+				coverImage = new CollectionImage(new ResultImage(null, ImageStatus.NOT_FOUND));	
+			} else {
+				URI coverUri = getCoverURI(discogsRelease.images());
+				if (coverUri == null) {
+					coverImage = new CollectionImage(new ResultImage(null, ImageStatus.IN_ERROR));	
+				} else {
+					ResultImage resultImage = DiscogsInterface.image(coverUri);
+					coverImage = new CollectionImage(resultImage);	
+				}
+			}
+			releaseCollectionImages = new ArrayList<CollectionImage>();
+			releaseCollectionImages.add(coverImage);
 		}
 		return discogsRelease;
+	}
+	
+	public CollectionImage coverImage() {
+		if (coverImage == null) {
+			discogsRelease();
+		}
+		return coverImage;
+	}
+	
+	private URI getCoverURI(List<Image> imageList) {
+		if ((imageList == null) || imageList.isEmpty()) {
+			return null;
+		} else {
+			try {
+				return new URI(imageList.getFirst().uri());
+			} catch (Exception e) {
+				logger.log(Level.SEVERE, "Exception getting image URI " + Objects.toString(imageList.getFirst().uri()), e);
+				return null;
+			}	
+		}
 	}
 	
 	public String getFormatsInfo() {

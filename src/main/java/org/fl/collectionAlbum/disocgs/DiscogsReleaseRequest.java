@@ -24,10 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.disocgs;
 
-import java.net.URI;
 import java.net.URL;
-import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -36,10 +33,7 @@ import javax.swing.SwingWorker;
 
 import org.fl.collectionAlbum.gui.DetailedAlbumAndDiscogsInfoPane.ReleasePanel;
 import org.fl.collectionAlbum.utils.CollectionImage;
-import org.fl.collectionAlbum.utils.CollectionImage.ImageStatus;
-import org.fl.collectionAlbum.utils.CollectionImage.ResultImage;
 import org.fl.collectionAlbum.utils.CollectionUtils;
-import org.fl.discogsInterface.Image;
 import org.fl.discogsInterface.Release;
 
 public class DiscogsReleaseRequest extends SwingWorker<DiscogsReleaseRequest.ReleaseRequestResult, String> {
@@ -65,30 +59,7 @@ public class DiscogsReleaseRequest extends SwingWorker<DiscogsReleaseRequest.Rel
 			return null;
 		} else {
 			Release release = discogsAlbumRelease.discogsRelease();
-			URI coverUri = getCoverURI(release.images());
-			
-			CollectionImage coverImage;
-			if (coverUri == null) {
-				coverImage = new CollectionImage(new ResultImage(null, ImageStatus.IN_ERROR));	
-			} else {
-				ResultImage resultImage = DiscogsInterface.image(coverUri);
-				coverImage = new CollectionImage(resultImage);	
-			}
-		
-			return new ReleaseRequestResult(release, coverImage);
-		}
-	}
-
-	private URI getCoverURI(List<Image> imageList) {
-		if ((imageList == null) || imageList.isEmpty()) {
-			return null;
-		} else {
-			try {
-				return new URI(imageList.getFirst().uri());
-			} catch (Exception e) {
-				logger.log(Level.SEVERE, "Exception getting image URI " + Objects.toString(imageList.getFirst().uri()), e);
-				return null;
-			}	
+			return new ReleaseRequestResult(release, discogsAlbumRelease.coverImage());
 		}
 	}
 	
