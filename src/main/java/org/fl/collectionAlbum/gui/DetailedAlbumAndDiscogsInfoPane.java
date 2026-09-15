@@ -49,6 +49,7 @@ import org.fl.collectionAlbum.disocgs.DiscogsInventory;
 import org.fl.collectionAlbum.disocgs.DiscogsReleaseRequest;
 import org.fl.collectionAlbum.gui.adapter.ImageDisplayMouseAdapter;
 import org.fl.collectionAlbum.gui.listener.CollectionHyperLinkListener;
+import org.fl.collectionAlbum.gui.listener.ImageBrowserActionListener;
 import org.fl.collectionAlbum.gui.listener.MediaFilePathActionListener;
 import org.fl.collectionAlbum.gui.listener.OsActionListener;
 import org.fl.collectionAlbum.gui.table.ArtistesScrollJTablePane;
@@ -138,6 +139,7 @@ public class DetailedAlbumAndDiscogsInfoPane extends JTabbedPane {
 			releasePane.add(titreAllImages);
 			
 			JButton showAllImagesButton = new JButton("Montrer toutes les photos");
+			showAllImagesButton.addActionListener(new ImageBrowserActionListener());
 			releasePane.add(showAllImagesButton);
 			
 			JLabel showDiscogsRelease = new JLabel("Détails de la release sur le site discogs :");
