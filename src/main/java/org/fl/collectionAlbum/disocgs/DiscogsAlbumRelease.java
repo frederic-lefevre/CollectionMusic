@@ -34,6 +34,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -194,13 +195,11 @@ public class DiscogsAlbumRelease {
 	
 	public String getInfo() {
 		
-		StringBuilder info = new StringBuilder();
-		
+		StringBuilder info = new StringBuilder();		
 		info.append("Release Discogs:\n");
 		addPropertyInfo(info, "releaseId", inventoryCsvAlbum.getReleaseId());
 		addPropertyInfo(info, "Titre", inventoryCsvAlbum.getTitle());
 		addPropertyInfo(info, "Artistes", inventoryCsvAlbum.getArtists());
-		addPropertyInfo(info, "Formats", inventoryCsvAlbum.getFormats());
 		addPropertyInfo(info, "Labels", inventoryCsvAlbum.getLabels());
 		addPropertyInfo(info, "Numéros de catalogues", inventoryCsvAlbum.getCatalogNumbers());
 		addPropertyInfo(info, "Notation", inventoryCsvAlbum.getRating());
@@ -211,17 +210,7 @@ public class DiscogsAlbumRelease {
 		addPropertyInfo(info, "Etat de la pochette", inventoryCsvAlbum.getCollectionSleeveCondition());
 		addPropertyInfo(info, "Notes", inventoryCsvAlbum.getCollectionNotes());
 		
-		if ((collectionAlbums == null) || collectionAlbums.isEmpty()) {
-			info.append("\n-------------------------------------\n  Non lié à un album de la collection\n");
-			
-		} else {
-			info.append("\n-------------------------------------\n  Albums de la collection liés\n");
-			
-			collectionAlbums.forEach(collectionAlbum -> 
-				info.append(collectionAlbum.getJsonString())
-					.append("\n-------------------------------------\n")
-				);
-		}
+		addFormatsInfo(info, album -> album.getJsonString());
 		return info.toString();
 	}
 	
@@ -270,10 +259,14 @@ public class DiscogsAlbumRelease {
 	}
 	
 	public String getFormatsInfo() {
+		 return addFormatsInfo(new StringBuilder(), 
+			 collectionAlbum -> collectionAlbum.getTitre() + ": " + collectionAlbum.getFormatAlbum().displaySupportPhysiquesNumbers())
+			 .toString();
+	}
+	
+	private StringBuilder addFormatsInfo(StringBuilder info, Function<Album, String> albumStringTransformer) {
 		
-		StringBuilder info = new StringBuilder();
 		addPropertyInfo(info, "Discogs release formats", inventoryCsvAlbum.getFormats());
-		
 		if ((collectionAlbums == null) || collectionAlbums.isEmpty()) {
 			info.append("\n-------------------------------------\n  Non lié à un album de la collection\n");
 			
@@ -281,11 +274,11 @@ public class DiscogsAlbumRelease {
 			info.append("\n-------------------------------------\n  Albums de la collection liés\n");
 			
 			collectionAlbums.forEach(collectionAlbum -> 
-				info.append(collectionAlbum.getTitre()).append(": ").append(collectionAlbum.getFormatAlbum().displaySupportPhysiquesNumbers())
-					.append("\n")
+				info.append(albumStringTransformer.apply(collectionAlbum))
+					.append("\n-------------------------------------\n")
 				);
 		}
-		return info.toString();
+		return info;
 	}
 	
 	private static void addPropertyInfo(StringBuilder info, String name, Object value) {
