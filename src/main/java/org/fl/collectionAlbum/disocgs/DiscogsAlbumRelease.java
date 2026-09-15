@@ -66,6 +66,8 @@ public class DiscogsAlbumRelease {
 			new AbstractMap.SimpleEntry<MediaSupportCategories,String>(MediaSupportCategories.DVD, "DVD"),
 			new AbstractMap.SimpleEntry<MediaSupportCategories,String>(MediaSupportCategories.BluRay, "Blu-ray")));
 	
+	private static final CollectionImage IMAGE_NOT_LOADED = new CollectionImage(new ResultImage(null, ImageStatus.NOT_LOADED));
+	
 	private final InventoryCsvAlbum inventoryCsvAlbum;
 	private final Set<Album> collectionAlbums;
 	private Release discogsRelease;
@@ -228,19 +230,19 @@ public class DiscogsAlbumRelease {
 		if ((discogsRelease == null) && (inventoryCsvAlbum != null)) {
 			discogsRelease = DiscogsInterface.release(inventoryCsvAlbum.getReleaseId());
 			
+			releaseCollectionImages = new ArrayList<CollectionImage>();
 			if (discogsRelease == null) {
-				coverImage = new CollectionImage(new ResultImage(null, ImageStatus.NOT_FOUND));	
+				coverImage = new CollectionImage(new ResultImage(null, ImageStatus.NOT_FOUND));
 			} else {
-				URI coverUri = getCoverURI(discogsRelease.images());
-				if (coverUri == null) {
-					coverImage = new CollectionImage(new ResultImage(null, ImageStatus.IN_ERROR));	
+				List<Image> images = discogsRelease.images();
+				if ((images != null) && !images.isEmpty()) {
+					images.forEach(_ -> releaseCollectionImages.add(IMAGE_NOT_LOADED));
+					coverImage = getCollectionImage(images, 0);
+					releaseCollectionImages.set(0, coverImage);
 				} else {
-					ResultImage resultImage = DiscogsInterface.image(coverUri);
-					coverImage = new CollectionImage(resultImage);	
+					coverImage = new CollectionImage(new ResultImage(null, ImageStatus.NOT_FOUND));
 				}
 			}
-			releaseCollectionImages = new ArrayList<CollectionImage>();
-			releaseCollectionImages.add(coverImage);
 		}
 		return discogsRelease;
 	}
@@ -252,15 +254,17 @@ public class DiscogsAlbumRelease {
 		return coverImage;
 	}
 	
-	private URI getCoverURI(List<Image> imageList) {
-		if ((imageList == null) || imageList.isEmpty()) {
-			return null;
+	private CollectionImage getCollectionImage(List<Image> imageList, int index) {
+		if ((imageList == null) || (index > imageList.size() -1)) {
+			return new CollectionImage(new ResultImage(null, ImageStatus.NOT_FOUND));
 		} else {
 			try {
-				return new URI(imageList.getFirst().uri());
+				URI imageUri =  new URI(imageList.get(index).uri());
+				ResultImage resultImage = DiscogsInterface.image(imageUri);
+				return  new CollectionImage(resultImage);
 			} catch (Exception e) {
-				logger.log(Level.SEVERE, "Exception getting image URI " + Objects.toString(imageList.getFirst().uri()), e);
-				return null;
+				logger.log(Level.SEVERE, "Exception getting image URI " + Objects.toString(imageList.get(index).uri()), e);
+				return new CollectionImage(new ResultImage(null, ImageStatus.IN_ERROR));
 			}	
 		}
 	}

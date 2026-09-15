@@ -45,11 +45,13 @@ public class CollectionImage {
 	
 	private static final String DESCRIPTION_FOR_IMAGE_ERROR = "Image en erreur";
 	private static final String DESCRIPTION_FOR_IMAGE_NOT_FOUND = "Image non trouvée";
+	private static final String DESCRIPTION_FOR_IMAGE_NOT_LOADED = "Image non chargée";
 	private static final String DESCRIPTION_FOR_IMAGE_TOO_MANY_REQUEST = "Trop de demande d'images discogs. Attendre 1 minute.";
 	
 	public enum ImageStatus {
 		OK(null, null), 
-		NOT_FOUND(Control.getImageForImageNotFoundPath(), DESCRIPTION_FOR_IMAGE_NOT_FOUND), 
+		NOT_FOUND(Control.getImageForImageNotFoundPath(), DESCRIPTION_FOR_IMAGE_NOT_FOUND),
+		NOT_LOADED(Control.getImageForImageNotLoadedPath(), DESCRIPTION_FOR_IMAGE_NOT_LOADED), 
 		IN_ERROR(Control.getImageForErrorPath(), DESCRIPTION_FOR_IMAGE_ERROR), 
 		TOO_MANY_REQUEST(Control.getImageForTooManyDiscogsRequestPath(), DESCRIPTION_FOR_IMAGE_TOO_MANY_REQUEST);
 		
@@ -173,6 +175,7 @@ public class CollectionImage {
 			return switch (imageStatus) {
 			case OK -> new ImageIcon(scaleImage(bufferedImage, maxWidth, maxHeight));
 			case NOT_FOUND -> ImageStatus.NOT_FOUND.imageIcon(maxWidth, maxHeight);
+			case NOT_LOADED -> ImageStatus.NOT_LOADED.imageIcon(maxWidth, maxHeight);
 			case IN_ERROR -> ImageStatus.IN_ERROR.imageIcon(maxWidth, maxHeight);
 			case TOO_MANY_REQUEST -> ImageStatus.TOO_MANY_REQUEST.imageIcon(maxWidth, maxHeight);
 			};
