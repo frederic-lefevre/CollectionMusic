@@ -26,8 +26,14 @@ package org.fl.collectionAlbum.gui;
 
 import javax.swing.JPanel;
 
+import org.fl.collectionAlbum.Control;
+
 public class ImageBrowserPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
+	public ImageBrowserPanel() {
+		super();
+		setPreferredSize(Control.getInfoWindowDimension());	
+	}
 }

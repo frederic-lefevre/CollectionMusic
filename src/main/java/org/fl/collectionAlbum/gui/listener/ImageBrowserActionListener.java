@@ -32,7 +32,7 @@ import javax.swing.JOptionPane;
 import org.fl.collectionAlbum.gui.ImageBrowserPanel;
 
 public class ImageBrowserActionListener implements ActionListener {
-
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
