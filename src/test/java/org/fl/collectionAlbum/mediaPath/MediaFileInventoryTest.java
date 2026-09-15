@@ -128,8 +128,8 @@ class MediaFileInventoryTest {
 		assertThat(collectionImageFilterCounter.getLogRecordCount()).isEqualTo(1);
 		assertThat(collectionImageFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
 		collectionImageFilterCounter.stopLogCountAndFilter();
-		assertThat(albumFilterCounter.getLogRecordCount()).isEqualTo(1);
-		assertThat(albumFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
+		assertThat(albumFilterCounter.getLogRecordCount()).isEqualTo(2);
+		assertThat(albumFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(2);
 		albumFilterCounter.stopLogCountAndFilter();
 	}
 
@@ -206,8 +206,8 @@ class MediaFileInventoryTest {
 		assertThat(collectionImageFilterCounter.getLogRecordCount()).isEqualTo(1);
 		assertThat(collectionImageFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
 		collectionImageFilterCounter.stopLogCountAndFilter();
-		assertThat(albumFilterCounter.getLogRecordCount()).isEqualTo(1);
-		assertThat(albumFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(1);
+		assertThat(albumFilterCounter.getLogRecordCount()).isEqualTo(2);
+		assertThat(albumFilterCounter.getLogRecordCount(Level.WARNING)).isEqualTo(2);
 		albumFilterCounter.stopLogCountAndFilter();
 	}
 
