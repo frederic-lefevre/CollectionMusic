@@ -74,6 +74,7 @@ public class DiscogsReleaseRequest extends SwingWorker<DiscogsReleaseRequest.Rel
 				releasePanel.setReleaseTextInfo(ERROR_MESSAGE);
 			}
 			releasePanel.setReleaseCoverImage(releaseRequestResult.collectionImage());
+			releasePanel.configureImageBrowserButton(discogsAlbumRelease.getImageUriList());
 		} catch (InterruptedException | ExecutionException e) {
 			logger.log(Level.SEVERE, "DiscogsReleaseRequest exception", e);
 			releasePanel.setReleaseTextInfo(ERROR_MESSAGE);

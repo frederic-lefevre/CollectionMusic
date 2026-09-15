@@ -26,6 +26,8 @@ package org.fl.collectionAlbum.gui.listener;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.net.URI;
+import java.util.List;
 
 import javax.swing.JOptionPane;
 
@@ -33,10 +35,16 @@ import org.fl.collectionAlbum.gui.ImageBrowserPanel;
 
 public class ImageBrowserActionListener implements ActionListener {
 	
+	private final List<URI> imageUriList;
+	
+	public ImageBrowserActionListener(List<URI> imageUriList) {
+		this.imageUriList = imageUriList;
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		JOptionPane.showMessageDialog(null, new ImageBrowserPanel(), "Images", JOptionPane.PLAIN_MESSAGE);
+		JOptionPane.showMessageDialog(null, new ImageBrowserPanel(imageUriList), "Images", JOptionPane.PLAIN_MESSAGE);
 	}
 
 }

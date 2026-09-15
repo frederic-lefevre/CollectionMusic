@@ -26,6 +26,7 @@ package org.fl.collectionAlbum.gui;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.net.URI;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -113,6 +114,7 @@ public class DetailedAlbumAndDiscogsInfoPane extends JTabbedPane {
 		
 		private final JEditorPane releaseTextInfoFromDiscogs;
 		private final JLabel coverImageLabel;
+		private final JButton showAllImagesButton;
 		
 		private ReleasePanel(DiscogsAlbumRelease release) {
 			super();
@@ -138,8 +140,8 @@ public class DetailedAlbumAndDiscogsInfoPane extends JTabbedPane {
 			titreAllImages.setFont(verdana);
 			releasePane.add(titreAllImages);
 			
-			JButton showAllImagesButton = new JButton("Montrer toutes les photos");
-			showAllImagesButton.addActionListener(new ImageBrowserActionListener());
+			showAllImagesButton = new JButton("Montrer toutes les photos");
+			showAllImagesButton.setEnabled(false);
 			releasePane.add(showAllImagesButton);
 			
 			JLabel showDiscogsRelease = new JLabel("Détails de la release sur le site discogs :");
@@ -167,6 +169,11 @@ public class DetailedAlbumAndDiscogsInfoPane extends JTabbedPane {
 		
 		public void setReleaseCoverImage(CollectionImage coverImage) {
 			coverImageLabel.setIcon(coverImage.buildAdjustedImageIcon(MAX_COVER_WIDTH, MAX_COVER_HEIGHT));
+		}
+		
+		public void configureImageBrowserButton(List<URI> imageUriList) {
+			showAllImagesButton.setEnabled(true);
+			showAllImagesButton.addActionListener(new ImageBrowserActionListener(imageUriList));
 		}
 	}
 	

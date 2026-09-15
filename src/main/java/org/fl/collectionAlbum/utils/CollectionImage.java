@@ -82,6 +82,11 @@ public class CollectionImage {
 		}
 	};
 	
+	public static final CollectionImage IMAGE_NOT_LOADED = new CollectionImage(new ResultImage(ImageStatus.NOT_LOADED.bufferedImage(), ImageStatus.NOT_LOADED));
+	public static final CollectionImage IMAGE_IN_ERROR = new CollectionImage(new ResultImage(ImageStatus.IN_ERROR.bufferedImage(), ImageStatus.IN_ERROR));
+	public static final CollectionImage IMAGE_NOT_FOUND = new CollectionImage(new ResultImage(ImageStatus.NOT_FOUND.bufferedImage(), ImageStatus.NOT_FOUND));
+	public static final CollectionImage IMAGE_TOO_MANY_REQUEST = new CollectionImage(new ResultImage(ImageStatus.TOO_MANY_REQUEST.bufferedImage(), ImageStatus.TOO_MANY_REQUEST));
+	
 	private final URL imageUrl;
 	private final BufferedImage bufferedImage;
 	private final ImageStatus imageStatus;
@@ -125,10 +130,10 @@ public class CollectionImage {
 		
 		this.imageUrl = null;
 		this.imageStatus = resultImage.imageStatus();
-		if (imageStatus == ImageStatus.TOO_MANY_REQUEST) {
-			this.bufferedImage =  ImageStatus.TOO_MANY_REQUEST.bufferedImage();
-		} else {
+		if (imageStatus == ImageStatus.OK) {
 			this.bufferedImage = resultImage.bufferedImage();
+		} else {
+			this.bufferedImage = imageStatus.bufferedImage();
 		}
 	}
 	

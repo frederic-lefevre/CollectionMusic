@@ -46,7 +46,6 @@ import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.MatchResultType
 import org.fl.collectionAlbum.format.Format;
 import org.fl.collectionAlbum.format.MediaSupportCategories;
 import org.fl.collectionAlbum.utils.CollectionImage;
-import org.fl.collectionAlbum.utils.CollectionImage.ImageStatus;
 import org.fl.collectionAlbum.utils.CollectionImage.ResultImage;
 import org.fl.discogsInterface.Image;
 import org.fl.discogsInterface.Release;
@@ -67,12 +66,9 @@ public class DiscogsAlbumRelease {
 			new AbstractMap.SimpleEntry<MediaSupportCategories,String>(MediaSupportCategories.DVD, "DVD"),
 			new AbstractMap.SimpleEntry<MediaSupportCategories,String>(MediaSupportCategories.BluRay, "Blu-ray")));
 	
-	private static final CollectionImage IMAGE_NOT_LOADED = new CollectionImage(new ResultImage(null, ImageStatus.NOT_LOADED));
-	
 	private final InventoryCsvAlbum inventoryCsvAlbum;
 	private final Set<Album> collectionAlbums;
 	private Release discogsRelease;
-	private List<CollectionImage> releaseCollectionImages;
 	private CollectionImage coverImage;
 	
 	protected DiscogsAlbumRelease(InventoryCsvAlbum inventoryCsvAlbum) {
@@ -80,7 +76,6 @@ public class DiscogsAlbumRelease {
 		collectionAlbums = new HashSet<>();
 		discogsRelease = null;
 		coverImage = null;
-		releaseCollectionImages = null;
 	}
 
 	public Set<Album> getCollectionAlbums() {
@@ -219,17 +214,14 @@ public class DiscogsAlbumRelease {
 		if ((discogsRelease == null) && (inventoryCsvAlbum != null)) {
 			discogsRelease = DiscogsInterface.release(inventoryCsvAlbum.getReleaseId());
 			
-			releaseCollectionImages = new ArrayList<CollectionImage>();
 			if (discogsRelease == null) {
-				coverImage = new CollectionImage(new ResultImage(null, ImageStatus.NOT_FOUND));
+				coverImage = CollectionImage.IMAGE_NOT_FOUND;
 			} else {
 				List<Image> images = discogsRelease.images();
 				if ((images != null) && !images.isEmpty()) {
-					images.forEach(_ -> releaseCollectionImages.add(IMAGE_NOT_LOADED));
-					coverImage = getCollectionImage(images, 0);
-					releaseCollectionImages.set(0, coverImage);
+					coverImage = getCoverImage(images);
 				} else {
-					coverImage = new CollectionImage(new ResultImage(null, ImageStatus.NOT_FOUND));
+					coverImage = CollectionImage.IMAGE_NOT_FOUND;
 				}
 			}
 		}
@@ -243,18 +235,33 @@ public class DiscogsAlbumRelease {
 		return coverImage;
 	}
 	
-	private CollectionImage getCollectionImage(List<Image> imageList, int index) {
-		if ((imageList == null) || (index > imageList.size() -1)) {
-			return new CollectionImage(new ResultImage(null, ImageStatus.NOT_FOUND));
+	private CollectionImage getCoverImage(List<Image> imageList) {
+		try {
+			URI imageUri =  new URI(imageList.getFirst().uri());
+			ResultImage resultImage = DiscogsInterface.image(imageUri);
+			return new CollectionImage(resultImage);
+		} catch (Exception e) {
+			logger.log(Level.SEVERE, "Exception getting image URI " + Objects.toString(imageList.getFirst().uri()), e);
+			return CollectionImage.IMAGE_IN_ERROR;
+		}			
+	}
+	
+	public List<URI> getImageUriList() {
+		List<Image> images = discogsRelease.images();
+		if (images == null) {
+			return new ArrayList<>();
 		} else {
-			try {
-				URI imageUri =  new URI(imageList.get(index).uri());
-				ResultImage resultImage = DiscogsInterface.image(imageUri);
-				return  new CollectionImage(resultImage);
-			} catch (Exception e) {
-				logger.log(Level.SEVERE, "Exception getting image URI " + Objects.toString(imageList.get(index).uri()), e);
-				return new CollectionImage(new ResultImage(null, ImageStatus.IN_ERROR));
-			}	
+			return images.stream()
+					.map(image -> {
+						try {
+							return new URI(image.uri());
+						} catch (Exception e) {
+							logger.log(Level.SEVERE, "Exception getting image URI " + Objects.toString(image.uri()), e);
+							return null;
+						}
+					})
+					.filter(Objects::nonNull)
+					.toList();
 		}
 	}
 	
