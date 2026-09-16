@@ -175,7 +175,8 @@ public class DetailedAlbumAndDiscogsInfoPane extends JTabbedPane {
 		
 		public void configureImageBrowserButton(List<URI> imageUriList) {
 			showAllImagesButton.setEnabled(true);
-			showAllImagesButton.addActionListener(new ImageBrowserActionListener(imageUriList, "Images de l'album " + release.inventoryCsvAlbum().getTitle()));
+			showAllImagesButton.addActionListener(
+					new ImageBrowserActionListener(imageUriList, "Images de l'album " + release.inventoryCsvAlbum().getTitle(), Control.getInfoWindowDimension()));
 		}
 	}
 	

@@ -37,7 +37,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 
-import org.fl.collectionAlbum.Control;
 import org.fl.collectionAlbum.disocgs.DiscogsImageReleaseRequester;
 import org.fl.collectionAlbum.utils.CollectionImage;
 
@@ -77,9 +76,9 @@ public class ImageBrowserPanel extends JPanel {
 	
 	private final JLabel currentImageLabel;
 	
-	public ImageBrowserPanel(List<URI> imageUriList) {
+	public ImageBrowserPanel(List<URI> imageUriList, Dimension panelDimension) {
 		super();
-		setPreferredSize(Control.getInfoWindowDimension());
+		setPreferredSize(panelDimension);
 		setLayout(new BoxLayout(this,  BoxLayout.Y_AXIS));
 		
 		JPanel currentImagePanel = new JPanel();

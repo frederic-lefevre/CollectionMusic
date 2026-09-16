@@ -24,6 +24,7 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui.listener;
 
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.URI;
@@ -37,16 +38,18 @@ public class ImageBrowserActionListener implements ActionListener {
 	
 	private final List<URI> imageUriList;
 	private final String title;
+	private final Dimension panelDimension;
 	
-	public ImageBrowserActionListener(List<URI> imageUriList, String title) {
+	public ImageBrowserActionListener(List<URI> imageUriList, String title, Dimension panelDimension) {
 		this.imageUriList = imageUriList;
 		this.title = title;
+		this.panelDimension = panelDimension;
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		JOptionPane.showMessageDialog(null, new ImageBrowserPanel(imageUriList), title, JOptionPane.PLAIN_MESSAGE);
+		JOptionPane.showMessageDialog(null, new ImageBrowserPanel(imageUriList, panelDimension), title, JOptionPane.PLAIN_MESSAGE);
 	}
 
 }
