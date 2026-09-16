@@ -26,6 +26,7 @@ package org.fl.collectionAlbum.disocgs;
 
 import java.net.URI;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -33,11 +34,15 @@ import javax.swing.SwingWorker;
 
 import org.fl.collectionAlbum.gui.ImageBrowserPanel.LabelImage;
 import org.fl.collectionAlbum.utils.CollectionImage;
+import org.fl.collectionAlbum.utils.CollectionImage.ImageStatus;
 import org.fl.collectionAlbum.utils.CollectionImage.ResultImage;
 
 public class DiscogsImageReleaseRequester extends SwingWorker<CollectionImage, String> {
 
 	private static final Logger logger = Logger.getLogger(DiscogsImageReleaseRequester.class.getName());
+	
+	private static final int MAX_RETRY = 5;
+	private static final int WAIT_TIME = 60;
 	
 	private final URI imageUri;
 	private final LabelImage labelImage;
@@ -50,7 +55,18 @@ public class DiscogsImageReleaseRequester extends SwingWorker<CollectionImage, S
 	@Override
 	protected CollectionImage doInBackground() throws Exception {
 		
-		ResultImage resultImage = DiscogsInterface.image(imageUri);
+		int nbRetry = 0;
+		boolean success = false;
+		ResultImage resultImage = new ResultImage(null, ImageStatus.NOT_LOADED);
+		while (!success && (nbRetry < MAX_RETRY)) {
+			resultImage = DiscogsInterface.image(imageUri);
+			if (resultImage.imageStatus() == ImageStatus.TOO_MANY_REQUEST) {
+				nbRetry++;
+				TimeUnit.SECONDS.sleep(WAIT_TIME);
+			} else {
+				success = true;
+			}
+		}
 		return new CollectionImage(resultImage);
 	}
 
@@ -58,9 +74,10 @@ public class DiscogsImageReleaseRequester extends SwingWorker<CollectionImage, S
 	public void done() {
 		
 		try {
+			
 			CollectionImage collectionImage = get();	
 			labelImage.setCollectionImage(collectionImage);
-			
+
 		} catch (Exception e) {
 			logger.log(Level.SEVERE, "Exception when getting discogs image with uri " + Objects.toIdentityString(imageUri), e);
 			labelImage.setCollectionImage(CollectionImage.IMAGE_IN_ERROR);
