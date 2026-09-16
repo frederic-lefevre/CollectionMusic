@@ -24,10 +24,14 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.gui;
 
+import java.awt.Dimension;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.net.URI;
 import java.util.List;
 
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -43,6 +47,9 @@ public class ImageBrowserPanel extends JPanel {
 
 	private static final int IMAGE_WIDTH = 85;
 	private static final int IMAGE_HEIGHT = 85;
+	
+	private static final Dimension CURRENT_IMAGE_PANEL_DIMENSION = new Dimension(1800, 700);
+	private static final Dimension ALL_IMAGE_PANEL_DIMENSION = new Dimension(1800, 100);
 	
 	public static class LabelImage {
 		
@@ -68,15 +75,19 @@ public class ImageBrowserPanel extends JPanel {
 		}
 	};
 	
-	private final JPanel currentImagePanel;
+	private final JLabel currentImageLabel;
 	
 	public ImageBrowserPanel(List<URI> imageUriList) {
 		super();
 		setPreferredSize(Control.getInfoWindowDimension());
 		setLayout(new BoxLayout(this,  BoxLayout.Y_AXIS));
 		
-		currentImagePanel = new JPanel();
-		add(currentImagePanel);
+		JPanel currentImagePanel = new JPanel();
+		currentImageLabel = new JLabel();
+		currentImagePanel.add(currentImageLabel);
+		JScrollPane currentImageScrollPanel = new JScrollPane(currentImagePanel);
+		currentImageScrollPanel.setPreferredSize(CURRENT_IMAGE_PANEL_DIMENSION);
+		add(currentImageScrollPanel);
 		
 		JPanel allImagesPanel = new JPanel();
 		allImagesPanel.setLayout(new BoxLayout(allImagesPanel, BoxLayout.X_AXIS));
@@ -87,11 +98,29 @@ public class ImageBrowserPanel extends JPanel {
 				JLabel label = new JLabel();
 				LabelImage labelImage = new LabelImage(label, CollectionImage.IMAGE_NOT_LOADED);
 				label.setBorder(new EmptyBorder(5, 5, 5, 5));
+				label.addMouseListener(new ThumbnailMouseAdapter(labelImage));
 				allImagesPanel.add(label);
 				DiscogsImageReleaseRequester discogsImageReleaseRequester = new DiscogsImageReleaseRequester(uri, labelImage);
 				discogsImageReleaseRequester.execute();
 			});
 		}
-		add(new JScrollPane(allImagesPanel));
+		JScrollPane allImagesScrollPanel = new JScrollPane(allImagesPanel);
+		allImagesScrollPanel.setPreferredSize(ALL_IMAGE_PANEL_DIMENSION);
+		add(allImagesScrollPanel);
+	}
+	
+	private class ThumbnailMouseAdapter extends MouseAdapter {
+		
+		private final LabelImage labelImage;
+		
+		private ThumbnailMouseAdapter(LabelImage labelImage) {
+			super();
+			this.labelImage = labelImage;
+		}
+		
+		@Override
+		public void mouseClicked(MouseEvent evt) {
+			currentImageLabel.setIcon(new ImageIcon(labelImage.collectionImage.getBufferedImage()));
+		}
 	}
 }
