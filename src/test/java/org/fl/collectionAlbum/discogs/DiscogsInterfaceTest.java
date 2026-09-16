@@ -72,6 +72,9 @@ class DiscogsInterfaceTest {
 		assertThat(release.notes()).isNotBlank();
 		assertThat(release.tracklist()).isNotNull().hasSize(7)
 			.anySatisfy(track -> assertThat(track.title()).isEqualTo("Statesboro Blues"));
+		
+		assertThat(release.images()).isNotNull().isNotEmpty();
+		assertThat(release.images().getFirst().type()).isEqualTo("primary");
 	}
 	
 	@Test
@@ -90,5 +93,28 @@ class DiscogsInterfaceTest {
 			.satisfies(logRecord -> assertThat(logRecord.getMessage()).contains(releaseId + " not found on discogs"));
 		discogsInterfaceFilterCounter.stopLogCountAndFilter();
 		
+	}
+	
+	@Test
+	void shouldGetRawRelease() {
+		
+		String releaseId = "8706129";
+		
+		String releaseJson = DiscogsInterface.rawRelease(releaseId);
+		assertThat(releaseJson).isNotNull().contains("The Allman Brothers Band At Fillmore East");
+	}
+	
+	@Test
+	void shouldGetRawUserProfile() {
+
+		String rawUserProfileJson = DiscogsInterface.rawUserProfile();
+		assertThat(rawUserProfileJson).isNotNull().contains("frederic.bn.lefevre");
+	}
+	
+	@Test
+	void shouldGetRawCollectionValue() {
+
+		String rawCollectionValueJson = DiscogsInterface.rawCollectionValue();
+		assertThat(rawCollectionValueJson).isNotNull().contains("maximum");
 	}
 }

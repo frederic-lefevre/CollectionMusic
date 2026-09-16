@@ -24,13 +24,19 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.disocgs;
 
+import java.net.URI;
 import java.util.AbstractMap;
+import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import org.fl.collectionAlbum.albums.Album;
@@ -39,10 +45,15 @@ import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.AlbumMatchResul
 import org.fl.collectionAlbum.disocgs.DiscogsAlbumReleaseMatcher.MatchResultType;
 import org.fl.collectionAlbum.format.Format;
 import org.fl.collectionAlbum.format.MediaSupportCategories;
+import org.fl.collectionAlbum.utils.CollectionImage;
+import org.fl.collectionAlbum.utils.CollectionImage.ResultImage;
+import org.fl.discogsInterface.Image;
 import org.fl.discogsInterface.Release;
 import org.fl.discogsInterface.inventory.InventoryCsvAlbum;
 
 public class DiscogsAlbumRelease {
+	
+	private static final Logger logger = Logger.getLogger(DiscogsAlbumRelease.class.getName());
 	
 	private static final EnumMap<MediaSupportCategories,String> formatMatchMap = new EnumMap<>(Map.ofEntries( 
 			new AbstractMap.SimpleEntry<MediaSupportCategories,String>(MediaSupportCategories.CD, "CD"), 
@@ -58,11 +69,13 @@ public class DiscogsAlbumRelease {
 	private final InventoryCsvAlbum inventoryCsvAlbum;
 	private final Set<Album> collectionAlbums;
 	private Release discogsRelease;
+	private CollectionImage coverImage;
 	
 	protected DiscogsAlbumRelease(InventoryCsvAlbum inventoryCsvAlbum) {
 		this.inventoryCsvAlbum = inventoryCsvAlbum;
 		collectionAlbums = new HashSet<>();
 		discogsRelease = null;
+		coverImage = null;
 	}
 
 	public Set<Album> getCollectionAlbums() {
@@ -177,13 +190,11 @@ public class DiscogsAlbumRelease {
 	
 	public String getInfo() {
 		
-		StringBuilder info = new StringBuilder();
-		
+		StringBuilder info = new StringBuilder();		
 		info.append("Release Discogs:\n");
 		addPropertyInfo(info, "releaseId", inventoryCsvAlbum.getReleaseId());
 		addPropertyInfo(info, "Titre", inventoryCsvAlbum.getTitle());
 		addPropertyInfo(info, "Artistes", inventoryCsvAlbum.getArtists());
-		addPropertyInfo(info, "Formats", inventoryCsvAlbum.getFormats());
 		addPropertyInfo(info, "Labels", inventoryCsvAlbum.getLabels());
 		addPropertyInfo(info, "Numéros de catalogues", inventoryCsvAlbum.getCatalogNumbers());
 		addPropertyInfo(info, "Notation", inventoryCsvAlbum.getRating());
@@ -194,17 +205,7 @@ public class DiscogsAlbumRelease {
 		addPropertyInfo(info, "Etat de la pochette", inventoryCsvAlbum.getCollectionSleeveCondition());
 		addPropertyInfo(info, "Notes", inventoryCsvAlbum.getCollectionNotes());
 		
-		if ((collectionAlbums == null) || collectionAlbums.isEmpty()) {
-			info.append("\n-------------------------------------\n  Non lié à un album de la collection\n");
-			
-		} else {
-			info.append("\n-------------------------------------\n  Albums de la collection liés\n");
-			
-			collectionAlbums.forEach(collectionAlbum -> 
-				info.append(collectionAlbum.getJsonString())
-					.append("\n-------------------------------------\n")
-				);
-		}
+		addFormatsInfo(info, album -> album.getJsonString());
 		return info.toString();
 	}
 	
@@ -212,15 +213,67 @@ public class DiscogsAlbumRelease {
 		
 		if ((discogsRelease == null) && (inventoryCsvAlbum != null)) {
 			discogsRelease = DiscogsInterface.release(inventoryCsvAlbum.getReleaseId());
+			
+			if (discogsRelease == null) {
+				coverImage = CollectionImage.IMAGE_NOT_FOUND;
+			} else {
+				List<Image> images = discogsRelease.images();
+				if ((images != null) && !images.isEmpty()) {
+					coverImage = getCoverImage(images);
+				} else {
+					coverImage = CollectionImage.IMAGE_NOT_FOUND;
+				}
+			}
 		}
 		return discogsRelease;
 	}
 	
+	public CollectionImage coverImage() {
+		if (coverImage == null) {
+			discogsRelease();
+		}
+		return coverImage;
+	}
+	
+	private CollectionImage getCoverImage(List<Image> imageList) {
+		try {
+			URI imageUri =  new URI(imageList.getFirst().uri());
+			ResultImage resultImage = DiscogsInterface.image(imageUri);
+			return new CollectionImage(resultImage);
+		} catch (Exception e) {
+			logger.log(Level.SEVERE, "Exception getting image URI " + Objects.toString(imageList.getFirst().uri()), e);
+			return CollectionImage.IMAGE_IN_ERROR;
+		}			
+	}
+	
+	public List<URI> getImageUriList() {
+		List<Image> images = discogsRelease.images();
+		if (images == null) {
+			return new ArrayList<>();
+		} else {
+			return images.stream()
+					.map(image -> {
+						try {
+							return new URI(image.uri());
+						} catch (Exception e) {
+							logger.log(Level.SEVERE, "Exception getting image URI " + Objects.toString(image.uri()), e);
+							return null;
+						}
+					})
+					.filter(Objects::nonNull)
+					.toList();
+		}
+	}
+	
 	public String getFormatsInfo() {
+		 return addFormatsInfo(new StringBuilder(), 
+			 collectionAlbum -> collectionAlbum.getTitre() + ": " + collectionAlbum.getFormatAlbum().displaySupportPhysiquesNumbers())
+			 .toString();
+	}
+	
+	private StringBuilder addFormatsInfo(StringBuilder info, Function<Album, String> albumStringTransformer) {
 		
-		StringBuilder info = new StringBuilder();
 		addPropertyInfo(info, "Discogs release formats", inventoryCsvAlbum.getFormats());
-		
 		if ((collectionAlbums == null) || collectionAlbums.isEmpty()) {
 			info.append("\n-------------------------------------\n  Non lié à un album de la collection\n");
 			
@@ -228,11 +281,11 @@ public class DiscogsAlbumRelease {
 			info.append("\n-------------------------------------\n  Albums de la collection liés\n");
 			
 			collectionAlbums.forEach(collectionAlbum -> 
-				info.append(collectionAlbum.getTitre()).append(": ").append(collectionAlbum.getFormatAlbum().displaySupportPhysiquesNumbers())
-					.append("\n")
+				info.append(albumStringTransformer.apply(collectionAlbum))
+					.append("\n-------------------------------------\n")
 				);
 		}
-		return info.toString();
+		return info;
 	}
 	
 	private static void addPropertyInfo(StringBuilder info, String name, Object value) {

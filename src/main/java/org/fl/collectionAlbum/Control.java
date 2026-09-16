@@ -104,6 +104,8 @@ public class Control {
 	private String cssForGui;
 	private Path errorImagePath;
 	private Path imageNotFoundImagePath;
+	private Path imageNotLoadedImagePath;
+	private Path tooManyDiscogsRequestImagePath;
 	private Dimension mainSubPaneDimension;
 	private Dimension infoWindowDimension;
 	private boolean readMediaFileMetadata;
@@ -240,6 +242,8 @@ public class Control {
 			// Get image for error
 			errorImagePath = FilesUtils.uriStringToAbsolutePath(collectionProperties.getProperty("album.errorImg"));
 			imageNotFoundImagePath = FilesUtils.uriStringToAbsolutePath(collectionProperties.getProperty("album.imageNotFoundImg"));
+			imageNotLoadedImagePath = FilesUtils.uriStringToAbsolutePath(collectionProperties.getProperty("album.imageNotLoadedImg"));
+			tooManyDiscogsRequestImagePath = FilesUtils.uriStringToAbsolutePath(collectionProperties.getProperty("album.tooManyDiscogsRequestImg"));
 			
 			readMediaFileMetadata = collectionProperties.getBoolean("mediaFile.readMetadata", false);
 						
@@ -404,6 +408,14 @@ public class Control {
 	
 	public static Path getImageForImageNotFoundPath() {
 		return getInstance().imageNotFoundImagePath;
+	}
+	
+	public static Path getImageForImageNotLoadedPath() {
+		return getInstance().imageNotLoadedImagePath;
+	}
+	
+	public static Path getImageForTooManyDiscogsRequestPath() {
+		return getInstance().tooManyDiscogsRequestImagePath;
 	}
 	
 	public static boolean isReadMediaFileMetadata() {

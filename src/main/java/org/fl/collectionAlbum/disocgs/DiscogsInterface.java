@@ -24,14 +24,22 @@ SOFTWARE.
 
 package org.fl.collectionAlbum.disocgs;
 
+import java.net.URI;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.fl.collectionAlbum.Control;
+import org.fl.collectionAlbum.utils.CollectionImage.ImageStatus;
+import org.fl.collectionAlbum.utils.CollectionImage.ResultImage;
 import org.fl.discogsInterface.CollectionValue;
 import org.fl.discogsInterface.Currency;
 import org.fl.discogsInterface.DiscogsApi;
 import org.fl.discogsInterface.DiscogsApi.DiscogsApiResponse;
+import org.fl.discogsInterface.DiscogsApi.DiscogsImageResponse;
+import org.fl.discogsInterface.Image;
 import org.fl.discogsInterface.Release;
 import org.fl.discogsInterface.UserProfile;
 
@@ -69,8 +77,8 @@ public class DiscogsInterface {
 			discogsApiBuilder.token(userToken);
 		}
 		discogsApi = discogsApiBuilder.build();
-		userProfile = getUserProfile(discogsApi);
-		collectionValue = getCollectionValue(discogsApi, userProfile);
+		userProfile = getUserProfile();
+		collectionValue = getCollectionValue(userProfile);
 		
 		if (userName != null) {
 			if (userProfile == null) {
@@ -81,7 +89,7 @@ public class DiscogsInterface {
 		}
 	}
 	
-	private UserProfile getUserProfile(DiscogsApi discogsApi) {
+	private UserProfile getUserProfile() {
 		
 		DiscogsApiResponse<UserProfile> userProfileResponse = discogsApi.userProfile();
 		if (checkDiscogsApiResponse(userProfileResponse, "discogsApi.userProfile()", "")) {
@@ -91,7 +99,17 @@ public class DiscogsInterface {
 		}
 	}
 	
-	private DiscogsCollectionValue getCollectionValue(DiscogsApi discogsApi, UserProfile userProfile) {
+	private String getRawUserProfile() {
+		
+		DiscogsApiResponse<UserProfile> userProfileResponse = discogsApi.userProfile();
+		if (checkDiscogsApiResponse(userProfileResponse, "discogsApi.userProfile()", "")) {
+			return userProfileResponse.rawResponse();
+		} else {
+			return null;
+		}
+	}
+	
+	private DiscogsCollectionValue getCollectionValue(UserProfile userProfile) {
 		
 		DiscogsApiResponse<CollectionValue> collectionValueResponse = discogsApi.collectionValue();
 		if (checkDiscogsApiResponse(collectionValueResponse, "discogsApi.collectionValue()", "")) {
@@ -114,16 +132,88 @@ public class DiscogsInterface {
 		}
 	}
 	
-	private Release getRelease(String releaseId) {
-
-		DiscogsApiResponse<Release> releaseResponse = discogsApi.release(releaseId);
-		if (checkDiscogsApiResponse(releaseResponse, "discogsApi.release()", releaseId)) {
-			return releaseResponse.value();
+	private String getRawCollectionValue() {
+		
+		DiscogsApiResponse<CollectionValue> collectionValueResponse = discogsApi.collectionValue();
+		if (checkDiscogsApiResponse(collectionValueResponse, "discogsApi.collectionValue()", "")) {
+			return collectionValueResponse.rawResponse();
 		} else {
 			return null;
 		}
 	}
 	
+	private static final String PRIMARY = "primary";
+	
+	private static boolean isPrimary(Image image) {
+		return (image != null) && PRIMARY.equals(image.type());
+	}
+	
+	private static class ReleaseImageComparator implements Comparator<Image> {
+
+		@Override
+		public int compare(Image i1, Image i2) {
+			
+			boolean o1Primary = isPrimary(i1);
+			boolean o2Primary = isPrimary(i2);
+			if (o1Primary && o2Primary) {
+				return 0;
+			} else if (o1Primary) {
+				return -1;
+			} else if (o2Primary) {
+				return 1;
+			} else {
+				return 0;
+			}
+		}		
+	}
+	
+	private static final ReleaseImageComparator releaseImageComparator = new ReleaseImageComparator();
+	
+ 	private Release getRelease(String releaseId) {
+
+		DiscogsApiResponse<Release> releaseResponse = discogsApi.release(releaseId);
+		if (checkDiscogsApiResponse(releaseResponse, "discogsApi.release()", releaseId)) {
+			Release release = releaseResponse.value();
+			if (release != null) {
+				List<Image> images = release.images();
+				if (images != null) {
+					images.sort(releaseImageComparator);
+				}
+			}
+			return release;
+		} else {
+			return null;
+		}
+	}
+	
+	private String getRawRelease(String releaseId) {
+
+		DiscogsApiResponse<Release> releaseResponse = discogsApi.release(releaseId);
+		if (checkDiscogsApiResponse(releaseResponse, "discogsApi.release()", releaseId)) {
+			return releaseResponse.rawResponse();
+		} else {
+			return null;
+		}
+	}
+	
+	private ResultImage getImage(URI imageUri) {
+		DiscogsImageResponse imageResponse = discogsApi.image(imageUri);
+		if (imageResponse == null) {
+			logger.severe("Null response returned by discogsApi.image() on " + Objects.toString(imageUri));
+			return new ResultImage(null, ImageStatus.IN_ERROR);
+		} else if (imageResponse.statusCode() == 404) {
+			logger.severe("discogs image not found " + Objects.toString(imageUri));
+			return new ResultImage(null, ImageStatus.NOT_FOUND);
+		} else if (imageResponse.statusCode() == DiscogsApi.TOO_MANY_REQUEST_CODE) {
+			logger.warning("Too many image request sent to discogs");
+			return new ResultImage(null, ImageStatus.TOO_MANY_REQUEST);
+		} else if ((imageResponse.statusCode() < 200) || (imageResponse.statusCode() >= 300)) {
+			return new ResultImage(null, ImageStatus.IN_ERROR);
+		} else {
+			return new ResultImage(imageResponse.image(), ImageStatus.OK);
+		}
+	}
+		
 	private boolean checkDiscogsApiResponse(DiscogsApiResponse<?> response, String call, String resource) {
 
 		if (response == null) {
@@ -132,7 +222,10 @@ public class DiscogsInterface {
 		} else if (response.statusCode() == 404){
 			logger.severe(call + " " + resource + " not found on discogs\n" + response.rawResponse());
 			return false;
-		} else if ((response.statusCode() < 200) || (response.statusCode()) >= 300) {
+		} else if (response.statusCode() == DiscogsApi.TOO_MANY_REQUEST_CODE){
+			logger.warning("Too many request sent to discogs");
+			return false;
+		} else if ((response.statusCode() < 200) || (response.statusCode() >= 300)) {
 			logger.severe(call + " " + resource + " call error.\n" + response.rawResponse() + "\nStatus code: " + response.statusCode());
 			return false;
 		} else {
@@ -148,11 +241,27 @@ public class DiscogsInterface {
 		return getInstance().collectionValue;
 	}
 	
+	public static String rawCollectionValue() {
+		return getInstance().getRawCollectionValue();
+	}
+	
 	public static UserProfile userProfile() {
 		return getInstance().userProfile;
 	}
 	
+	public static String rawUserProfile() {
+		return getInstance().getRawUserProfile();
+	}
+	
 	public static Release release(String releaseId) {
 		return getInstance().getRelease(releaseId);
+	}
+	
+	public static String rawRelease(String releaseId) {
+		return getInstance().getRawRelease(releaseId);
+	}
+	
+	public static ResultImage image(URI imageUri) {
+		return getInstance().getImage(imageUri);
 	}
 }

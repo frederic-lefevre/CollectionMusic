@@ -1,0 +1,87 @@
+/*
+ * MIT License
+
+Copyright (c) 2017, 2026 Frederic Lefevre
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+
+package org.fl.collectionAlbum.disocgs;
+
+import java.net.URI;
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.swing.SwingWorker;
+
+import org.fl.collectionAlbum.gui.ImageBrowserPanel.LabelImage;
+import org.fl.collectionAlbum.utils.CollectionImage;
+import org.fl.collectionAlbum.utils.CollectionImage.ImageStatus;
+import org.fl.collectionAlbum.utils.CollectionImage.ResultImage;
+
+public class DiscogsImageReleaseRequester extends SwingWorker<CollectionImage, String> {
+
+	private static final Logger logger = Logger.getLogger(DiscogsImageReleaseRequester.class.getName());
+	
+	private static final int MAX_RETRY = 5;
+	private static final int WAIT_TIME = 60;
+	
+	private final URI imageUri;
+	private final LabelImage labelImage;
+	
+	public DiscogsImageReleaseRequester(URI imageUri, LabelImage labelImage) {
+		this.imageUri = imageUri;
+		this.labelImage = labelImage;
+	}
+	
+	@Override
+	protected CollectionImage doInBackground() throws Exception {
+		
+		int nbRetry = 0;
+		boolean success = false;
+		ResultImage resultImage = new ResultImage(null, ImageStatus.NOT_LOADED);
+		while (!success && (nbRetry < MAX_RETRY)) {
+			resultImage = DiscogsInterface.image(imageUri);
+			if (resultImage.imageStatus() == ImageStatus.TOO_MANY_REQUEST) {
+				nbRetry++;
+				TimeUnit.SECONDS.sleep(WAIT_TIME);
+			} else {
+				success = true;
+			}
+		}
+		return new CollectionImage(resultImage);
+	}
+
+	@Override
+	public void done() {
+		
+		try {
+			
+			CollectionImage collectionImage = get();	
+			labelImage.setCollectionImage(collectionImage);
+
+		} catch (Exception e) {
+			logger.log(Level.SEVERE, "Exception when getting discogs image with uri " + Objects.toIdentityString(imageUri), e);
+			labelImage.setCollectionImage(CollectionImage.IMAGE_IN_ERROR);
+		}
+		
+	}
+}
