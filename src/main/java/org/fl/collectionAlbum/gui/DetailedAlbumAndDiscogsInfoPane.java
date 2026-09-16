@@ -115,9 +115,11 @@ public class DetailedAlbumAndDiscogsInfoPane extends JTabbedPane {
 		private final JEditorPane releaseTextInfoFromDiscogs;
 		private final JLabel coverImageLabel;
 		private final JButton showAllImagesButton;
+		private final DiscogsAlbumRelease release;
 		
 		private ReleasePanel(DiscogsAlbumRelease release) {
 			super();
+			this.release = release;
 			setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 			
 			releaseTextInfoFromDiscogs = new JEditorPane();
@@ -173,7 +175,7 @@ public class DetailedAlbumAndDiscogsInfoPane extends JTabbedPane {
 		
 		public void configureImageBrowserButton(List<URI> imageUriList) {
 			showAllImagesButton.setEnabled(true);
-			showAllImagesButton.addActionListener(new ImageBrowserActionListener(imageUriList));
+			showAllImagesButton.addActionListener(new ImageBrowserActionListener(imageUriList, "Images de l'album " + release.inventoryCsvAlbum().getTitle()));
 		}
 	}
 	

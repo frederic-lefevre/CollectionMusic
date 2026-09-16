@@ -36,15 +36,17 @@ import org.fl.collectionAlbum.gui.ImageBrowserPanel;
 public class ImageBrowserActionListener implements ActionListener {
 	
 	private final List<URI> imageUriList;
+	private final String title;
 	
-	public ImageBrowserActionListener(List<URI> imageUriList) {
+	public ImageBrowserActionListener(List<URI> imageUriList, String title) {
 		this.imageUriList = imageUriList;
+		this.title = title;
 	}
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 
-		JOptionPane.showMessageDialog(null, new ImageBrowserPanel(imageUriList), "Images", JOptionPane.PLAIN_MESSAGE);
+		JOptionPane.showMessageDialog(null, new ImageBrowserPanel(imageUriList), title, JOptionPane.PLAIN_MESSAGE);
 	}
 
 }
