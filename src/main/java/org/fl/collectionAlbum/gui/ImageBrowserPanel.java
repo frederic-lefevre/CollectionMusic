@@ -45,11 +45,11 @@ public class ImageBrowserPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 
-	private static final int IMAGE_WIDTH = 85;
-	private static final int IMAGE_HEIGHT = 85;
+	private static final int THUMBNAIL_IMAGE_WIDTH = 85;
+	private static final int THUMBNAIL_IMAGE_HEIGHT = 85;
 	
 	private static final Dimension CURRENT_IMAGE_PANEL_DIMENSION = new Dimension(1800, 700);
-	private static final Dimension ALL_IMAGE_PANEL_DIMENSION = new Dimension(1800, 100);
+	private static final Dimension ALL_THUMBNAIL_IMAGE_PANEL_DIMENSION = new Dimension(1800, 100);
 	
 	public static class LabelImage {
 		
@@ -71,7 +71,7 @@ public class ImageBrowserPanel extends JPanel {
 
 		public void setCollectionImage(CollectionImage collectionImage) {
 			this.collectionImage = collectionImage;
-			jLabel.setIcon(collectionImage.buildAdjustedImageIcon(IMAGE_WIDTH, IMAGE_HEIGHT));
+			jLabel.setIcon(collectionImage.buildAdjustedImageIcon(THUMBNAIL_IMAGE_WIDTH, THUMBNAIL_IMAGE_HEIGHT));
 		}
 	};
 	
@@ -89,24 +89,24 @@ public class ImageBrowserPanel extends JPanel {
 		currentImageScrollPanel.setPreferredSize(CURRENT_IMAGE_PANEL_DIMENSION);
 		add(currentImageScrollPanel);
 		
-		JPanel allImagesPanel = new JPanel();
-		allImagesPanel.setLayout(new BoxLayout(allImagesPanel, BoxLayout.X_AXIS));
+		JPanel allThumbnailImagesPanel = new JPanel();
+		allThumbnailImagesPanel.setLayout(new BoxLayout(allThumbnailImagesPanel, BoxLayout.X_AXIS));
 		
 		if ((imageUriList != null) && !imageUriList.isEmpty()) {
 			imageUriList.forEach(uri -> {
 				
-				JLabel label = new JLabel();
-				LabelImage labelImage = new LabelImage(label, CollectionImage.IMAGE_NOT_LOADED);
-				label.setBorder(new EmptyBorder(5, 5, 5, 5));
-				label.addMouseListener(new ThumbnailMouseAdapter(labelImage));
-				allImagesPanel.add(label);
+				JLabel thumbnailLabel = new JLabel();
+				LabelImage labelImage = new LabelImage(thumbnailLabel, CollectionImage.IMAGE_NOT_LOADED);
+				thumbnailLabel.setBorder(new EmptyBorder(5, 5, 5, 5));
+				thumbnailLabel.addMouseListener(new ThumbnailMouseAdapter(labelImage));
+				allThumbnailImagesPanel.add(thumbnailLabel);
 				DiscogsImageReleaseRequester discogsImageReleaseRequester = new DiscogsImageReleaseRequester(uri, labelImage);
 				discogsImageReleaseRequester.execute();
 			});
 		}
-		JScrollPane allImagesScrollPanel = new JScrollPane(allImagesPanel);
-		allImagesScrollPanel.setPreferredSize(ALL_IMAGE_PANEL_DIMENSION);
-		add(allImagesScrollPanel);
+		JScrollPane allThumbnailImagesScrollPanel = new JScrollPane(allThumbnailImagesPanel);
+		allThumbnailImagesScrollPanel.setPreferredSize(ALL_THUMBNAIL_IMAGE_PANEL_DIMENSION);
+		add(allThumbnailImagesScrollPanel);
 	}
 	
 	private class ThumbnailMouseAdapter extends MouseAdapter {
