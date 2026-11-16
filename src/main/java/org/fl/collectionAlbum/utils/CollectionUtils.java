@@ -350,6 +350,10 @@ public class CollectionUtils {
 		Optional.ofNullable(release.notes()).ifPresent(notes -> buf.append(notes));
 		buf.append("</pre>");
 			
+		buf.append("<h3>Pays: ");
+		Optional.ofNullable(release.country()).ifPresent(country -> buf.append(country));
+		buf.append("</h3>");
+		
 		buf.append("<h3>Date de sortie: ");
 		Optional.ofNullable(release.released()).ifPresent(dateReleased -> buf.append(dateReleased));
 		buf.append("</h3>");
