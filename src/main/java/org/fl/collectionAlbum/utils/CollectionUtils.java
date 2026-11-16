@@ -358,6 +358,7 @@ public class CollectionUtils {
 		Optional.ofNullable(release.released()).ifPresent(dateReleased -> buf.append(dateReleased));
 		buf.append("</h3>");
 		
+		buf.append("<h3>Informations provenant de la colection Discogs:</h3>");
 		addPropertyInfo(buf, "Release id Discogs", release.id());
 		addPropertyInfo(buf, "Pays", release.country());
 		addPropertyInfo(buf, "Dossier de collection", inventoryCsvAlbum.getCollectionFolder());
