@@ -339,9 +339,11 @@ public class CollectionUtils {
 		buf.append("</ul>");
 		
 		buf.append("<h3>Codes barres et autres identifiants:</h3><ul>");
-		Optional.ofNullable(release.identifiers()).ifPresent(identifiers -> identifiers.forEach(id ->
-			buf.append("<li>").append(id.type()).append(" (").append(id.description()).append("): ").append(id.value())
-		));
+		Optional.ofNullable(release.identifiers()).ifPresent(identifiers -> identifiers.forEach(id -> {
+			buf.append("<li>").append(id.type());
+			Optional.ofNullable(id.description()).ifPresent(description -> buf.append(" (").append(description).append(")"));
+			buf.append(": ").append(id.value());
+		}));
 		buf.append("</ul>");
 		
 		buf.append("<h3>Notes:</h3><pre>");
