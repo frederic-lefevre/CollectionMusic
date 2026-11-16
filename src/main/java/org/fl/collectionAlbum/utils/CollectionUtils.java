@@ -344,8 +344,14 @@ public class CollectionUtils {
 		));
 		buf.append("</ul>");
 		
-		buf.append("<h3>Notes:</h3><pre>").append(release.notes()).append("</pre>");		
-		buf.append("<h3>Date de sortie: ").append(release.released()).append("</h3>");
+		buf.append("<h3>Notes:</h3><pre>");
+		Optional.ofNullable(release.notes()).ifPresent(notes -> buf.append(notes));
+		buf.append("</pre>");
+			
+		buf.append("<h3>Date de sortie: ");
+		Optional.ofNullable(release.released()).ifPresent(dateReleased -> buf.append(dateReleased));
+		buf.append("</h3>");
+		
 		addPropertyInfo(buf, "Release id Discogs", release.id());
 		addPropertyInfo(buf, "Pays", release.country());
 		addPropertyInfo(buf, "Dossier de collection", inventoryCsvAlbum.getCollectionFolder());
