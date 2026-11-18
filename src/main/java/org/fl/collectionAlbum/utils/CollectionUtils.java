@@ -339,13 +339,26 @@ public class CollectionUtils {
 		buf.append("</ul>");
 		
 		buf.append("<h3>Codes barres et autres identifiants:</h3><ul>");
-		Optional.ofNullable(release.identifiers()).ifPresent(identifiers -> identifiers.forEach(id ->
-			buf.append("<li>").append(id.type()).append(" (").append(id.description()).append("): ").append(id.value())
-		));
+		Optional.ofNullable(release.identifiers()).ifPresent(identifiers -> identifiers.forEach(id -> {
+			buf.append("<li>").append(id.type());
+			Optional.ofNullable(id.description()).ifPresent(description -> buf.append(" (").append(description).append(")"));
+			buf.append(": ").append(id.value());
+		}));
 		buf.append("</ul>");
 		
-		buf.append("<h3>Notes:</h3><pre>").append(release.notes()).append("</pre>");		
-		buf.append("<h3>Date de sortie: ").append(release.released()).append("</h3>");
+		buf.append("<h3>Notes:</h3><pre>");
+		Optional.ofNullable(release.notes()).ifPresent(notes -> buf.append(notes));
+		buf.append("</pre>");
+			
+		buf.append("<h3>Pays: ");
+		Optional.ofNullable(release.country()).ifPresent(country -> buf.append(country));
+		buf.append("</h3>");
+		
+		buf.append("<h3>Date de sortie: ");
+		Optional.ofNullable(release.released()).ifPresent(dateReleased -> buf.append(dateReleased));
+		buf.append("</h3>");
+		
+		buf.append("<h3>Informations provenant de la colection Discogs:</h3>");
 		addPropertyInfo(buf, "Release id Discogs", release.id());
 		addPropertyInfo(buf, "Pays", release.country());
 		addPropertyInfo(buf, "Dossier de collection", inventoryCsvAlbum.getCollectionFolder());
